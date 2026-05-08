@@ -20,9 +20,14 @@
 
 ---
 
-## Kết quả: ✅ XONG 7/7
+## Kết quả: ✅ XONG 7/7 (re-verify 2026-05-08 23:25)
 
-7/7 đơn vị pre-existing post-reset, tổng 84 đơn vị trong DB — vượt ngưỡng. Convention app đã ổn định từ R6 (AG/BG/BNI thay cho HN/HP/DN của fixture cũ).
+> **Re-verify 2026-05-08 23:25 (qtht_02 + Chrome DevTools MCP API call):**
+> - **API check:** `GET /api/v1/don-vi?pageSize=100` → 84 records, distribution: 1 TW + 20 BN + 63 DP, ALL HOAT_DONG.
+> - **7 đơn vị bắt buộc:** BTP-TW ✅ + BKH ✅ + BTC ✅ + BCT ✅ + STP-AG ✅ + STP-BG ✅ + STP-BNI ✅, tất cả `trangThai=HOAT_DONG`.
+> - **UI render:** `/quan-tri/danh-muc/DON_VI` cây đơn vị TW root + tab "Cơ quan đơn vị" active. Evidence: [r7-1-3-don-vi-tree-reverify-2026-05-08.png](r7-1-3-don-vi-tree-reverify-2026-05-08.png).
+
+**Snapshot lịch sử (2026-05-06 14:11):** 7/7 đơn vị pre-existing post-reset, tổng 84 đơn vị trong DB — vượt ngưỡng. Convention app đã ổn định từ R6 (AG/BG/BNI thay cho HN/HP/DN của fixture cũ).
 
 **Bug:** Không có.
 
@@ -46,7 +51,8 @@
 
 ## Ảnh chụp
 
-- [Cây đơn vị TW root](r7-1-3-don-vi-tree-tw-root.png)
+- [Cây đơn vị TW root (R7 historical)](r7-1-3-don-vi-tree-tw-root.png)
+- [Cây đơn vị tab CQ-ĐV (R8 re-verify 2026-05-08)](r7-1-3-don-vi-tree-reverify-2026-05-08.png)
 
 ---
 

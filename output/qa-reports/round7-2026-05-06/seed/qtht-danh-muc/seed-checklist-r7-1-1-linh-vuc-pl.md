@@ -20,11 +20,16 @@
 
 ---
 
-## Kết quả: ✅ XONG 12/6+
+## Kết quả: ✅ XONG 10/10 SRS (re-verify 2026-05-08 22:55)
 
-12 LV pre-existing post-reset 2026-05-05 — vượt ngưỡng 6 LV fixture. Cover đầy đủ 6 LV core + 6 LV mở rộng (Hôn nhân/Hành chính/Hình sự/Dân sự/Khiếu nại/Đầu tư).
+> **Re-verify 2026-05-08 22:55 sau BUG-DM-LVPL-001 R8 lần 4 close (qtht_02 + Chrome DevTools MCP):**
+> - **Layer 1 — DM master `/quan-tri/danh-muc/LINH_VUC_PL`:** table render đúng **10/10 LV SRS line 204** (THUE/LAO_DONG/DAT_DAI/DAN_SU/**THUONG_MAI**/HINH_SU/HANH_CHINH/SHTT/**DOANH_NGHIEP**/**DAU_TU**), pagination "1-10/10 mục", tất cả switch checked = KICH_HOAT. Bỏ 3 non-SRS (HON_NHAN_GIA_DINH/KINH_DOANH_TM/KHIEU_NAI_TO_CAO), thêm THUONG_MAI. Evidence: [r7-1-1-reverify-2026-05-08-layer1-dm-10-lv-srs.png](r7-1-1-reverify-2026-05-08-layer1-dm-10-lv-srs.png).
+> - **Layer 2 — Dropdown filter MPH `/quan-tri/cau-hinh?tab=mau-phan-hoi`:** filter "Lĩnh vực PL" mở dropdown render **10 options sync DM master** (Thuế/Lao động/Đất đai/Dân sự/**Thương mại**/Hình sự/Hành chính/Sở hữu trí tuệ/**Doanh nghiệp**/**Đầu tư**). Sub-bug FE hardcode/cache đã đóng. Evidence: [r7-1-1-reverify-2026-05-08-layer2-dropdown-mph-10-lv.png](r7-1-1-reverify-2026-05-08-layer2-dropdown-mph-10-lv.png).
+> - **Cascade unblock:** R7.2.1 (12 MPH cover 6 LV × 2) + R7.2.2/R7.2.6/R7.2.11 sẵn sàng re-attempt với fixture v2.7.2.
 
-**Bug:** Không có.
+**Snapshot lịch sử (2026-05-06 14:08):** 12 LV pre-existing post-reset 2026-05-05 — vượt ngưỡng 6 LV fixture. Cover đầy đủ 6 LV core + 6 LV mở rộng. Sau dev fix R8 lần 4, DM gọn về đúng 10 LV SRS.
+
+**Bug:** [bug-report-seed-r7-1-1-dm-linh-vuc-pl.md](../../bug-reports/qtht-danh-muc/bug-report-seed-r7-1-1-dm-linh-vuc-pl.md) — 1/1 đóng (BUG-DM-LVPL-001 Closed-verified R8 lần 4 2026-05-08).
 
 ---
 
@@ -51,7 +56,9 @@
 
 ## Ảnh chụp
 
-- [LV table 12 records](r7-1-1-linh-vuc-pl-12records.png)
+- [LV table 12 records (R7 historical)](r7-1-1-linh-vuc-pl-12records.png)
+- [Layer 1 DM master 10 LV SRS (R8 re-verify 2026-05-08)](r7-1-1-reverify-2026-05-08-layer1-dm-10-lv-srs.png)
+- [Layer 2 dropdown MPH 10 LV sync (R8 re-verify 2026-05-08)](r7-1-1-reverify-2026-05-08-layer2-dropdown-mph-10-lv.png)
 
 ---
 

@@ -19,9 +19,13 @@
 
 ---
 
-## Kết quả: ✅ XONG 4/4
+## Kết quả: ✅ XONG 4/4 (re-verify 2026-05-08 23:35)
 
-4 SLA pre-existing post-reset, đầy đủ field + hệ số 2.0 + cảnh báo 50/90% + 2 toggle email/app đều bật.
+> **Re-verify 2026-05-08 23:35 (qtht_02 + Chrome DevTools MCP API + UI):**
+> - **API check:** `GET /api/v1/cau-hinh/sla` → 4 records (HOI_DAP/HO_SO_HT/HO_SO_TT/VU_VIEC), thoiHanNgay khớp seed (10/15/10/10), `canhBao1PhanTram=50` + `canhBao2PhanTram=90` + `quaHanHeSo=2` + `guiEmailCanhBao=true` + `guiThongBaoApp=true` cho cả 4 record.
+> - **UI render:** `/quan-tri/cau-hinh` tab "Thời hạn xử lý (SLA)" → table 4/4 mục, vùng cảnh báo 0-50% / 50-90% / 90-100%, hệ số 2, switch Email + App đều checked. Evidence: [r7-1-4-sla-reverify-2026-05-08-4loai.png](r7-1-4-sla-reverify-2026-05-08-4loai.png).
+
+**Snapshot lịch sử (2026-05-06 14:13):** 4 SLA pre-existing post-reset, đầy đủ field + hệ số 2.0 + cảnh báo 50/90% + 2 toggle email/app đều bật.
 
 **Bug:** Không có.
 
@@ -44,7 +48,8 @@
 
 ## Ảnh chụp
 
-- [Cấu hình SLA tab — 4 loại yêu cầu](r7-1-4-sla-4-loai-he-so-2.png)
+- [Cấu hình SLA tab — 4 loại yêu cầu (R7 historical)](r7-1-4-sla-4-loai-he-so-2.png)
+- [Cấu hình SLA tab — 4 loại yêu cầu (R8 re-verify 2026-05-08)](r7-1-4-sla-reverify-2026-05-08-4loai.png)
 
 ---
 

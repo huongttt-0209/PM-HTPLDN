@@ -39,7 +39,7 @@
 | # | Module | File | Tasks | Status | Phase / Task IDs |
 |:-:|---|---|:-:|---|---|
 | 1 | Pre-test | [todo-pre-test.md](todo-pre-test.md) | 7 | ✅7 | **P0** ✅R7.0.1..7 |
-| 2 | QTHT — Quản trị hệ thống | [todo-qtht.md](todo-qtht.md) | 16 | ✅9 🟢2 ⚠️4 🚫1 | **P1** ✅R7.1.1, ✅R7.1.2, ✅R7.1.3, ✅R7.1.4, ⚠️R7.1.5, ✅R7.1.6<br>**P2** 🚫R7.2.1, ⚠️R7.2.9, 🟢R7.2.9b<br>**P5** 🟢R7.5.5<br>**P7** ⚠️R7.7.8, ✅R7.7.8a, ⚠️R7.7.8b, ✅R7.7.8c, ✅R7.7.8d, ✅R7.7.8e |
+| 2 | QTHT — Quản trị hệ thống | [todo-qtht.md](todo-qtht.md) | 16 | ✅11 ⚠️5 | **P1** ✅R7.1.1, ✅R7.1.2, ✅R7.1.3, ✅R7.1.4, ⚠️R7.1.5, ✅R7.1.6<br>**P2** ✅R7.2.1, ⚠️R7.2.9, ⚠️R7.2.9b<br>**P5** ✅R7.5.5<br>**P7** ⚠️R7.7.8, ✅R7.7.8a, ⚠️R7.7.8b, ✅R7.7.8c, ✅R7.7.8d, ✅R7.7.8e |
 | 3 | TC TV — Tổ chức tư vấn | [todo-tc-tv.md](todo-tc-tv.md) | 4 | 🟢2 ⚠️2 | **P2** ⚠️R7.2.2, ⚠️R7.2.3<br>**P4** 🟢R7.4.A6<br>**P7** 🟢R7.7.4.6 |
 | 4 | Doanh nghiệp | [todo-doanh-nghiep.md](todo-doanh-nghiep.md) | 4 | ✅2 🟢1 ⚠️1 | **P2** ✅R7.2.4<br>**P3** ✅R7.3.4<br>**P5** 🟢R7.5.2<br>**P7** ⚠️R7.7.4 |
 | 5 | TVV + CG | [todo-tvv-cg.md](todo-tvv-cg.md) | 7 | ✅3 🟢1 ⚠️2 ❌1 | **P2** ✅R7.2.5, ✅R7.2.6<br>**P4** ⚠️R7.4.A1, 🟢R7.4.A1.6, ✅R7.4.A1-CG, ⚠️R7.4.A2<br>**P7** ❌R7.7.2 |
