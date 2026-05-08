@@ -17,7 +17,14 @@
 
 ## Tổng hợp
 
-**Verdict:** ⚠️ **PASS 7/8 + 1 defer** — Self-reg DN happy path hoạt động + 6 ERR-REG-* validation work nhưng có 5 bug cần BA review.
+**Verdict (R7 2026-05-07):** ⚠️ **PASS 7/8 + 1 defer** — Self-reg DN happy path hoạt động + 6 ERR-REG-* validation work nhưng có 5 bug cần BA review.
+
+> **Re-verify R8 2026-05-09 01:04 (Chrome DevTools MCP, no auth required):**
+> - **Form structure (TC01) closed-persist:** Field "Tên đăng nhập" readonly với placeholder "Sẽ tự cập nhật theo Mã số thuế" ✅. Cam kết checkbox visible. Form ~28 fields đầy đủ (13 required + ~15 optional). BUG-FR22-001(a) Closed-verified persist.
+> - **BUG-FR22-002 (TC02) closed-persist:** Fill MST `1234567890123` (13 chữ số chi nhánh) → inline error "Mã số thuế phải đúng 10 chữ số (theo TT 105/2020/TT-BTC). Chi nhánh không tự đăng ký riêng." Match SRS line 1074 ERR-REG-01a EXACTLY. Evidence: [r7-7-8b-reverify-2026-05-09-mst-13-inline-error.png](r7-7-8b-reverify-2026-05-09-mst-13-inline-error.png).
+> - **TC04 email trùng vẫn defer R8:** BE schema giờ require `captchaToken` (CAPTCHA invisible, FE auto-generate). Direct API test không khả thi không có captcha. UI form full submit có thể bị BE rate-limit (3 req/60s). TC04 status = same R7 (defer, không phải bug).
+> - **BUG-FR22-001(b) / 003 / 004 / 005:** không re-verify trực tiếp R8 — defer chờ BA confirm/clarify (errCode naming, checksum rule, WRN-DN-01 quy mô-lao động).
+> - **R8 verdict:** ⚠️ giữ partial — 2 bug closed (FR22-001a + FR22-002) persist, 4 bug Open chờ BA decision (FR22-001b/003/004/005). No regression. Total 7/8 PASS + 1 defer giữ nguyên.
 
 ### Test result
 

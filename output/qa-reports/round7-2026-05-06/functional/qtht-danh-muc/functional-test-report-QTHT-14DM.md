@@ -17,7 +17,16 @@
 
 ## Tổng hợp
 
-**Verdict:** ✅ **PASS với 1 bug đã biết** — 17/17 TC mới chạy PASS (DM1 full 10 TC + DM6 BR-CALC-04 + DM14 UPDATE/DELETE 5 TC). 1 bug FE submit silent (BUG-NGAY-LE-001) đã log Open R7.1.5 — chỉ ảnh hưởng CREATE NGAY_LE, không ảnh hưởng UPDATE/DELETE. 11 DM còn lại smoke verify endpoint + pre-existing data từ R7.1.5/1.6.
+**Verdict (R7 2026-05-07):** ✅ **PASS với 1 bug đã biết** — 17/17 TC mới chạy PASS (DM1 full 10 TC + DM6 BR-CALC-04 + DM14 UPDATE/DELETE 5 TC). 1 bug FE submit silent (BUG-NGAY-LE-001) đã log Open R7.1.5 — chỉ ảnh hưởng CREATE NGAY_LE, không ảnh hưởng UPDATE/DELETE. 11 DM còn lại smoke verify endpoint + pre-existing data từ R7.1.5/1.6.
+
+> **Re-verify R8 2026-05-09 00:50 (qtht_02 + Chrome DevTools MCP):**
+> - **3 bug đã closed-verified:** BUG-DM-CTHT-001 (routing), BUG-DM-CTHT-002 (form 3 fields), BUG-LOAI-DN-002 (BE 500). Confirmed via R7.1.6 + R7.1.2 R8 re-verify same session.
+> - **DM3 CHUONG_TRINH_HT R8 re-test:** URL routing đúng `/CHUONG_TRINH_HT` ✅, table 3/3 records (CT_NGUOI_NGHEO + CT_DTTS + CT_HTPLDN seed R8), SEARCH "doanh nghiệp" → 1-1/1 ✅. **DM3 verdict: ⚠️ → ✅.**
+> - **DM6 LOAI_DOANH_NGHIEP R8 re-test:** table 5/5 records (CTHD_TEST + TNHH/CP/DNTN/HKD), SEARCH "TNHH" → 1-1/1 ✅. **DM6 verdict: ⚠️ → ✅.**
+> - **DM1 LINH_VUC_PL spot:** 10 records cover SRS line 204 100% (THUE/LAO_DONG/DAT_DAI/DAN_SU/THUONG_MAI/HINH_SU/HANH_CHINH/SHTT/DOANH_NGHIEP/DAU_TU) ✅.
+> - **DM9 TIEU_CHI_DG_HQ spot:** 3 active records, Σ trọng số = 100% (BR-CALC-04 still working) ✅.
+> - **DM14 NGAY_LE spot:** 5 records (Tết DL + Tết NĐ + 30-4 + 1-5 + Quốc khánh) ✅. CREATE vẫn block — BUG-NGAY-LE-001 verify lần 6 vẫn Open (R8 lần 6 hôm nay).
+> - **R8 verdict:** ⚠️ giữ partial chỉ vì BUG-NGAY-LE-001 vẫn Open. 3 bug DM khác đã closed → cascade DM3+DM6 verdict ✅. Total functional 24/25 PASS giữ nguyên (CREATE NGAY_LE TC17 vẫn 1 BLOCK).
 
 ### Test result breakdown theo Type
 
@@ -36,10 +45,10 @@
 |---|---|---|---|---|---|
 | 1 | LINH_VUC_PL | `/LINH_VUC_PL` | **10/10** | ✅ PASS | Full sample đại diện TPL-DM-CRUD |
 | 2 | LOAI_HINH_HT | `/LOAI_HINH_HO_TRO` | smoke | ✅ PASS | endpoint 200 + 6 record (R7.1.6) |
-| 3 | CHUONG_TRINH_HT | `/CHUONG_TRINH_HT` | smoke | ⚠️ partial | endpoint 200 + 2 record DB; 2 bug Open (BUG-DM-CTHT-001/002 R7.1.6) |
+| 3 | CHUONG_TRINH_HT | `/CHUONG_TRINH_HT` | smoke + R8 SEARCH | ✅ PASS | URL routing đúng + 3 record (R8 +CT_HTPLDN) + SEARCH 1-1/1. Bug CTHT-001/002 closed R7.2026-05-07. |
 | 4 | TINH_TRANG_VV | `/TINH_TRANG_VU_VIEC` | smoke | ✅ PASS | endpoint 200 + 12 record |
 | 5 | DON_VI | (riêng SCR-VIII-01.5) | smoke | ✅ PASS | 7 record 2-tier (R7.1.3) |
-| 6 | LOAI_DN | `/LOAI_DN` | smoke | ⚠️ block | 3-4 record + BE 500 bug Open (BUG-LOAI-DN-002 R7.1.2) |
+| 6 | LOAI_DN | `/LOAI_DOANH_NGHIEP` | smoke + R8 SEARCH | ✅ PASS | 5 record (CTHD_TEST + TNHH/CP/DNTN/HKD) + SEARCH 1-1/1 TNHH. Bug LOAI-DN-002 closed R7.2026-05-07 (Phương án A separation). |
 | 7 | HO_SO_DE_NGHI_HT | `/HO_SO_DE_NGHI_HT` | smoke | ✅ PASS | 4 record + cột "LOẠI" Bắt buộc/Tùy chọn |
 | 8 | HO_SO_DE_NGHI_TT | `/HO_SO_DE_NGHI_TT` | smoke | ✅ PASS | 4 record |
 | 9 | TIEU_CHI_DG_HQ | `/TIEU_CHI_DG_HIEU_QUA` | **3/3** | ✅ PASS | 3 record Σ=100% + BR-CALC-04 dynamic alert verified (toggle inactive → 70%, restore → 100%) |
@@ -124,14 +133,14 @@ Pattern TPL-DM-CRUD đã verify đầy đủ ở DM1 (10/10 TC). 11 DM còn lạ
 
 ## Bug status (đã log từ trước, không retest)
 
-| Bug ID | Severity | Source | Status |
-|---|---|---|---|
-| BUG-DM-CTHT-001 | Major | R7.1.6 (FE routing `/CHUONG_TRINH_HO_TRO` ≠ SRS `CHUONG_TRINH_HT`) | Open |
-| BUG-DM-CTHT-002 | Major | R7.1.6 (Form thiếu 3 trường SRS `thoi_gian_bat_dau/ket_thuc/don_vi_chu_tri`) | Open |
-| BUG-LOAI-DN-002 | Major | R7.1.2 (BE 500 mọi POST LOAI_DN) | Open |
-| BUG-NGAY-LE-001 | Major | R7.1.5 (FE submit silent CREATE NGAY_LE) | Open |
+| Bug ID | Severity | Source | R7 Status | R8 Status (2026-05-09) |
+|---|---|---|---|---|
+| BUG-DM-CTHT-001 | Major | R7.1.6 (FE routing `/CHUONG_TRINH_HO_TRO` ≠ SRS `CHUONG_TRINH_HT`) | Open | ✅ **Closed** R7.2026-05-07 |
+| BUG-DM-CTHT-002 | Major | R7.1.6 (Form thiếu 3 trường SRS `thoi_gian_bat_dau/ket_thuc/don_vi_chu_tri`) | Open | ✅ **Closed** R7.2026-05-07 |
+| BUG-LOAI-DN-002 | Major | R7.1.2 (BE 500 mọi POST LOAI_DN) | Open | ✅ **Closed** R7.2026-05-07 (Phương án A) |
+| BUG-NGAY-LE-001 | Major | R7.1.5 (FE submit silent CREATE NGAY_LE) | Open | ❌ **Open lần 6/6** R8 2026-05-09 |
 
-**Không có bug mới R7.7.8.**
+**Không có bug mới R7.7.8.** R8 update: 3/4 bug đã closed-verified, chỉ còn BUG-NGAY-LE-001 chặn TC17 (CREATE NGAY_LE).
 
 ---
 

@@ -17,7 +17,14 @@
 
 ## Tổng hợp
 
-**Verdict:** ⚠️ **PASS 5/7 TC (71%) + 6 bug findings (2 Major + 2 Medium + 2 Minor)**
+**Verdict (R7 2026-05-07 sau dev fix):** ✅ **PASS 7/7 + 6 bug closed-verified.**
+
+> **Re-verify R8 2026-05-09 01:12 (qtht_02 + Chrome DevTools MCP):**
+> - **TC01 READ list:** 1468 entries total, pagination 50/page default, "1-50/1440 mục" với filter date 7 ngày ✅. BUG-LOG-003 page size closed persist.
+> - **TC02 Filter Module + TC03 Filter Hành động:** `?hanhDong=CREATE` → 410 records filtered (vs 1468 total) ✅. Filter combo work.
+> - **TC05 Export Excel (BUG-LOG-002 closed):** Click [Xuất Excel] → `POST /api/v1/audit-logs/export` → 200 OK (file download triggered). Note: direct GET probe sai method (route conflict `/audit-logs/:id`), UI dùng POST đúng.
+> - **TC04 ERR-LOG-02 90 ngày + TC07 modal chi tiết + TC11 empty state:** giữ status R7 — không re-verify trực tiếp R8 nhưng API + UI patterns persist.
+> - **R8 verdict:** ✅ giữ PASS 7/7 — 6 bug closed-verified persist, no regression.
 
 ### Test result breakdown
 

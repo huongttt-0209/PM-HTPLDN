@@ -1,5 +1,17 @@
 # Functional Test Report — R7.7.8e FR-VIII-14 Quản lý Vai trò
 
+> **Re-verify R8 2026-05-09 01:15 (qtht_02 + Chrome DevTools MCP):**
+> - **VAI_TRO list page `/quan-tri/vai-tro`:** render 12 records — 11 system roles (lock icon, không edit/delete được) + 1 custom role `QA_VT_DEL_TEST_R7` (có nút edit/delete/swap, gán 1 TK).
+> - **Số quyền permission count:** CB_NV (BN/DP/TW): 244 mỗi role / CB_PD (BN/DP/TW): 100 mỗi role / QTHT: 83 / NHT: 25 / DN: 20 / TVV: 14 / CG: 13. Multi-role permission matrix persist.
+> - **Cấp distribution:** Trung ương / Bộ/Ngành / Địa phương / Tất cả cấp.
+> - **Filter UI:** Tìm kiếm + Cấp + Trạng thái combobox + [Thêm mới].
+> - **BUG-VT-001 closed persist:** Custom role `QA_VT_DEL_TEST_R7` (test verify R7 2026-05-07) vẫn còn — hệ thống refuse delete khi role có TK gán đúng SRS BR-AUTH-08.
+> - **Evidence:** [r7-7-8e-vai-tro-12-records-reverify-2026-05-09.png](r7-7-8e-vai-tro-12-records-reverify-2026-05-09.png).
+> - **R8 verdict:** ✅ giữ PASS 11/11, no regression.
+
+---
+
+
 | Thông tin | Giá trị |
 |-----------|---------|
 | **Dự án** | PM Hỗ trợ Pháp lý Doanh nghiệp |
