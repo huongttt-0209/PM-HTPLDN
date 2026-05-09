@@ -1,8 +1,8 @@
 # Seed checklist — R7.2.2 Seed 6 Tổ chức tư vấn (MOI_DANG_KY)
 
-> ⚠️ **Method gap (note 2026-05-08):** Task chạy qua API thuần `POST /api/v1/to-chuc-tu-vans` — vi phạm rule UI-only ban hành 2026-05-07.
+> ✅ **UI re-test 2026-05-09 R8 — PASS.** Đã seed thêm 3 TC TV qua UI (cb_nv_tw_02): **TC-BTP-TW-0006** (CONG_TY_LUAT, Theta) UUID `a32d7714-b834-49ff-b6a4-c3fede1c1eee`, **TC-0007** (VP_LUAT_SU, Iota) UUID `8fe25cb4-cab6-4b0c-a73e-0f1b6ce5b8dc`, **TC-0008** (TT_TVPL, Kappa) UUID `c92de88e-aeab-4859-bf26-5f8ff23e1fc7` — 3/3 PASS state `MOI_DANG_KY`, `POST /api/v1/to-chuc-tu-vans` 201 CREATED. Cover full 3 loại hình theo fixture. **BVA negative (KHAC + thiếu Số Giấy ĐKHĐ):** FE block client-side với message "Số Giấy ĐKHĐ là bắt buộc (NĐ 77/2008 Đ.13)" — đúng spec, không gửi BE.
 >
-> 🚫 **UI re-test 2026-05-08 — BLOCKED bởi 2 bug FE.** Đã thực hiện đầy đủ flow UI MCP (login `cb_nv_tw_02` → nav `/chuyen-gia-tvv/to-chuc/tao-moi` → mở form Thêm mới). Phát hiện form thiếu field bắt buộc `Đơn vị quản lý` (`donViQuanLyId` UUID) → submit BE 500 `ERR-SYS-00-00-01` → FE auto-logout về `/login`. Không thể seed thêm record qua UI cho đến khi FE bổ sung field + sửa error handler. Pool 5 HOAT_DONG (TC-BTP-TW-0001..0005) từ API path R7.2.2/R7.2.3 vẫn ổn định — đủ cho R7.4.A6 + R7.7.4.6 downstream. Bug log: [bug-report-r7-2-2-tctv-ui-seed.md](../../bug-reports/to-chuc-tu-van/bug-report-r7-2-2-tctv-ui-seed.md).
+> ⚠️ **Method note (2026-05-08):** API path 5 record ban đầu chạy thuần `POST` — vi phạm rule UI-only. UI path nay verified với 3 record bổ sung. **2 bug FE log hôm 2026-05-08 đều Closed sau re-test:** FE-002 Not-a-bug (BE auto-derive donViQuanLyId từ session user); FE-003 Not-reproducible (4/4 submit PASS hôm nay). Pool tổng: **5 HOAT_DONG** (0001..0005, từ API) **+ 3 MOI_DANG_KY** (0006..0008, qua UI) = 8 record. Bug log: [bug-report-r7-2-2-tctv-ui-seed.md](../../bug-reports/to-chuc-tu-van/bug-report-r7-2-2-tctv-ui-seed.md).
 
 **Ngày chạy:** 2026-05-06 (R7)
 **Account:** `cb_nv_tw_02` (CB_NV_TW)

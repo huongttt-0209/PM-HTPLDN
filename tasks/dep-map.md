@@ -13,8 +13,8 @@
 | Task ID | File |
 |---|---|
 | R7.0.1..7 | [todo-pre-test.md](todo-pre-test.md) |
-| R7.1.1..6, R7.2.1, R7.2.9, R7.5.5, R7.7.8, R7.7.8a..e | [todo-qtht.md](todo-qtht.md) |
-| R7.2.5, R7.2.6, R7.4.A1, R7.4.A1-CG, R7.4.A2, R7.7.2 | [todo-tvv-cg.md](todo-tvv-cg.md) |
+| R7.1.1..6, R7.2.1, R7.2.9, R7.2.9b, R7.5.5, R7.7.8, R7.7.8a..e | [todo-qtht.md](todo-qtht.md) |
+| R7.2.5, R7.2.6, R7.4.A1, R7.4.A1.6, R7.4.A1-CG, R7.4.A2, R7.7.2 | [todo-tvv-cg.md](todo-tvv-cg.md) |
 | R7.2.7, R7.7.4.5 | [todo-nht.md](todo-nht.md) |
 | R7.2.2, R7.2.3, R7.4.A6, R7.7.4.6 | [todo-tc-tv.md](todo-tc-tv.md) |
 | R7.2.4, R7.3.4, R7.5.2, R7.7.4 | [todo-doanh-nghiep.md](todo-doanh-nghiep.md) |
@@ -39,7 +39,9 @@
 
 | Entity / State | Producer task | File |
 |---|---|---|
-| ≥1 NHT HOAT_DONG | R7.2.7 (seed) + R7.2.9 ⚠️ (mail kích hoạt — API thuần, defer R8 UI) | nht / qtht |
+| ≥1 NHT HOAT_DONG | R7.2.7 (seed) + R7.2.9 ⚠️ (mail kích hoạt — API thuần, R8 probe ly_13 CG login UI ✅) + R7.2.9b 🟢 (UI E2E mail click + login + view per role) | nht / qtht |
+| ≥1 TAI_KHOAN HOAT_DONG (login functional) | R7.2.9 ⚠️ (set MK API) + R7.2.9b 🟢 (UI flow + view chức năng đúng role) | qtht |
+| BE timing gate TK creation = chỉ ở CHO_KICH_HOAT (FR-VIII-15) | R7.4.A1.6 🟢 (probe TC1 ✅ verify 0 TK pre-CKH; TC2-4 chờ chạy) | tvv-cg |
 | ≥1 TC TV HOAT_DONG | R7.2.3 ⚠️ (phê duyệt — 4/5 API, defer R8 UI) | tc-tv |
 | ≥1 DN | R7.2.4 | doanh-nghiep |
 | ≥1 TVV/CG MOI_DANG_KY | R7.2.5, R7.2.6 | tvv-cg |
@@ -122,7 +124,8 @@ R7.3.1 (seed) + R7.3.1.MoB (mẫu) + R7.3.1.TVN (escalate)
 | R7.4.A3 (vu-viec.md) | R7.3.14 (hop-dong-tv.md), R7.7.13 (bao-cao.md), R7.7.14 (hop-dong-tv.md), R7.5.2 (doanh-nghiep.md), R7.5.4 (bao-cao.md) | VV HOAN_THANH cần cho HĐ TV, BC04, cross-module DN |
 | R7.4.A1 (tvv-cg.md) | R7.3.14 (hop-dong-tv.md) | TVV active để gắn HĐ TV |
 | R7.2.3 ⚠️ (tc-tv.md) | R7.4.A3 (vu-viec.md), R7.4.A4 (hoi-dap.md) | TC TV HOAT_DONG cần cho phân công VV/HD — pool đủ state nhưng method API; consumer đọc state OK, R8 re-test UI defer |
-| R7.2.7 + R7.2.9 ⚠️ (nht/qtht.md) | R7.4.A3 (vu-viec.md), R7.7.4.5 (nht.md) | NHT HOAT_DONG cần cho phân công VV — R7.2.9 API thuần, defer R8 UI |
+| R7.2.7 + R7.2.9 ⚠️ + R7.2.9b 🟢 (nht/qtht.md) | R7.4.A3 (vu-viec.md), R7.7.4.5 (nht.md) | NHT HOAT_DONG cần cho phân công VV — R7.2.9 API thuần probe CG ✅, R7.2.9b UI E2E 3 role chờ chạy |
+| R7.4.A1.6 🟢 (tvv-cg.md) | R7.4.A1, R7.4.A2, R7.7.2 (tvv-cg.md) | Gate verify timing TK creation + dual-state sync TVV.HOAT_DONG ↔ TK.HOAT_DONG |
 | R7.2.4 (doanh-nghiep.md) | R7.4.A3-DN-BS (vu-viec.md), R7.7.3-PRIVACY (vu-viec.md) | DN data cho DN bổ sung HS + privacy test |
 | R7.6.1 (chi-tra.md) | R7.5.2 (doanh-nghiep.md), R7.7.12.2/3 (chi-tra.md) | HSCT các state cho cross-module DN + sub-task |
 | R7.6.4 (ct-htpldn.md) | R7.5.1 (dashboard.md), R7.7.7 (dashboard.md), R7.7.16 (cross-cutting.md) | CT count cần cho KPI + Dashboard + API test |

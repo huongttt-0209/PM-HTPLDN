@@ -1,0 +1,17 @@
+# TC3 — Mail trigger timing probe
+# Date: 2026-05-08
+# Total inbox: 80
+
+--- Cohort A: MOI_DANG_KY (CG batch 2 + TVV batch 2) — expect 0 mail ---
+CG-23..28 (chuyen 23-28)                           | expect: 0        | actual:   0 | ✅ PASS
+TVV-0017..0022 (tvv_btp_tw_001[7-9]|002[0-2])      | expect: 0        | actual:   0 | ✅ PASS
+--- Cohort B: CHO_KICH_HOAT (28 hot-role _05..08) — expect ≥1 mail per ---
+cb_pd_dp_08                                        | expect: 1+       | actual:   1 | ✅ PASS
+cb_nv_tw_08                                        | expect: 1+       | actual:   1 | ✅ PASS
+qtht_08                                            | expect: 1+       | actual:   1 | ✅ PASS
+cb_pd_dp_07                                        | expect: 1+       | actual:   1 | ✅ PASS
+cb_pd_dp_06                                        | expect: 1+       | actual:   1 | ✅ PASS
+cb_pd_dp_05                                        | expect: 1+       | actual:   1 | ✅ PASS
+--- Cohort C: HOAT_DONG (đã set MK qua mail) — có mail kích hoạt cũ ---
+vu_sau_06 (TVV-0013)                               | expect: 1+       | actual:   1 | ✅ PASS
+ly Mười Ba (CG-0001)                               | expect: 1+       | actual:   1 | ✅ PASS

@@ -4,6 +4,62 @@ File ghi lại vấn đề thực tế gặp khi chạy QA + bài học áp dụ
 
 ---
 
+## 2026-05-09 — BA chốt QTHT KHÔNG có quyền tạo NHT (đóng 2 bug Invalid)
+
+**Vấn đề trước:**
+- R7.7.4.5 NHT functional log 2 bug Major (BUG-NHT-001 "QTHT thiếu CRUD UI" + BUG-NHT-002 "Modal thiếu field Đơn vị tự do cho QTHT") dựa vào SRS srs-fr-04 §SCR-IV-NHT-01/02 (line 1737-1738, 1781-1782) ghi rõ "QTHT thêm/sửa/xóa NHT toàn hệ thống".
+- QA giả định spec đúng → log bug "permission inversion" Major P0.
+
+**BA chốt 2026-05-09:**
+- QTHT KHÔNG có quyền thêm/sửa/xóa NHT. Chỉ Read.
+- CRUD NHT thuộc CB Nghiệp vụ (cùng đơn vị, BR-AUTH-08 lock).
+- UI ẩn buttons Add/Edit/Delete/Swap với QTHT là **design đúng**.
+
+**Tác động xử lý:**
+- BUG-NHT-001 + BUG-NHT-002 đóng INVALID (re-classify, giữ lịch sử).
+- BUG-NHT-003 (mail link broken) + BUG-NHT-004 (thiếu tab Bồi dưỡng) + BUG-NHT-005 (toast lỗi duplicate) giữ Open — không liên quan permission.
+- functional-test-report-r7-7-4-5: NHT-001 QTHT path + NHT-007 sửa đơn vị → N/A. Pass rate 17% → 33% (3/9 active).
+- permission-matrix.md QTHT/NGUOI_HO_TRO row đổi từ ✅ CRUD → 👁️ R + flag CHANGED.
+- todo-nht.md cập nhật Kết quả + Bug closed count 0/5 → 2/5.
+
+**Bài học áp dụng:**
+1. **Spec ambiguous (UI ẩn nút trái spec) → hỏi BA trước khi log bug permission**, đặc biệt khi UI behavior không chỉ là "thiếu nút" mà còn align với BR-AUTH-08 / một role khác có CRUD.
+2. SRS srs-fr-04 lines 1737-1738 + 1781-1782 + 2403-2409 là **outdated** — chờ BA update SRS để tránh QA cycle sau lại dựa vào spec cũ.
+3. Phân biệt: "UI thiếu nút" (có thể là design đúng theo permission) vs "API trả 403/500" (rõ ràng bug). Test permission UI bằng đúng role có quyền theo SCR — đã có rule trong CLAUDE.md, lần này QA test bằng cb_nv_tw_03 ra đầy đủ button (đúng role) → OK; nhưng kết luận "QTHT thiếu UI = bug" sai vì giả định QTHT là root.
+
+---
+
+## 2026-05-08 — Probe TK creation timing (FR-VIII-15) + qtht_02 OTP bypass anomaly
+
+**Probe TC1 R7.4.A1.6 — TK creation timing đúng spec FR-VIII-15:**
+- Query `qtht_01` → `/quan-tri/tai-khoan` total=59 TK toàn hệ thống.
+- Cross-check 3 cohort:
+  - 6 CG batch 2 MOI_DANG_KY (CG-0023..0028) → **0 TK** (đúng — không tạo pre-mature)
+  - 6 TVV batch 2 MOI_DANG_KY (TVV-0017..0022) → **0 TK** (đúng)
+  - TVV-0013 CHO_KICH_HOAT (R7.4.A1) → **1 TK CHO_KICH_HOAT** (đúng — auto-tạo TK qua FR-VIII-15 step 6 khi state = CKH)
+  - 6 CG batch 1 HOAT_DONG (CG-0001..0006) → **6 TK HOAT_DONG** (đúng — TK active sau set MK)
+- **Kết luận:** BE timing đúng spec. KHÔNG phải bug. Khắc phục concern trước đó "có pre-mature tạo TK ở MDK không".
+
+**Anomaly qtht_02 OTP bypass:**
+- Login `qtht_02` + password `Secret@123` PASS, nhận OTP screen, fill OTP `666666` → BE trả 400 Bad Request.
+- Login `qtht_01` + same flow → OTP `666666` work bình thường.
+- Workaround: dùng `qtht_01` cho query TK admin scope.
+- **Cần raise:** OTP bypass có specific allowlist account hay rate-limit per account? Log riêng nếu repeat ở task sau.
+
+**ly_13 (CG-0001) login UI E2E ✅ — unlock CG flow:**
+- TK đã set MK qua API thuần ở R7.2.9 vẫn login UI MCP `Secret@123` + OTP `666666` → dashboard.
+- Sidebar 2 menu (Đào tạo + Tư vấn), KHÔNG có QTHT/Mạng lưới/Hỏi đáp/Vụ việc/Chi trả → permission đúng role CG.
+- TVCS module render data scope đúng (1 record CG mình tham gia).
+- URL force `/quan-tri/danh-muc` → FE redirect `/dashboard`.
+- **Kết luận:** API path R7.2.9 không phải fake pass — TK 9/9 functional cho login UI + permission FE. Phần thiếu (click mail link UI + form set MK qua UI) dồn task R7.2.9b.
+
+**Bài học:**
+1. **Probe trước khi log bug timing** — concern "có pre-mature tạo TK ko?" nếu skip probe → có thể log bug ảo. 1 query qtht_01 = unlock toàn bộ concern, ROI cao.
+2. **API path PASS không loại trừ UI E2E test** — phải verify thêm "TK functional cho login UI + permission đúng role + URL force protect" mới đủ E2E. R7.2.9b cover gap UI click mail + UI form set MK.
+3. **OTP bypass anomaly** — không assume `666666` work cho mọi account QTHT. Fallback `qtht_01` nếu `qtht_02` fail. Memory `feedback_prefer_account_02_runs` giữ nguyên (default _02), chỉ note exception cho QTHT OTP path.
+
+---
+
 ## 2026-05-08 — 7 task R7 vi phạm rule UI-only — flip ⚠️ retroactive defer R8 re-test
 
 **Vấn đề:**

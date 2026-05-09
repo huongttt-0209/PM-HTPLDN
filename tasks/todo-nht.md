@@ -18,16 +18,15 @@
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P2** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.2.7](#r7-2-7) |
-| **P7** | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 🟢[R7.7.4.5](#r7-7-4-5) |
-| **Tổng** | **2** | **1** | **0** | **1** | **0** | **0** | **0** | **0** |  |
+| **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.4.5](#r7-7-4-5) |
+| **Tổng** | **2** | **0** | **0** | **1** | **1** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
 - ✅ **R7.2.7** 🆕 Seed 3 NHT qua FR-IV-NHT-01 <a id="r7-2-7"></a>
-  - **Kết quả:** PASS 3/3 R1 + 5/5 R8 retry. Pool 4→11 (CHO_KICH_HOAT:8 + HOAT_DONG:3). [seed-checklist-r7-2-7-nht.md](../output/qa-reports/round7-2026-05-06/seed/tu-van-vien-cg/seed-checklist-r7-2-7-nht.md)
-  - **Note R8:** retry route `/nguoi-ho-tro` với CB_NV_TW/BN/DP → 5 NHT (BTP-TW + BKH/BTC + STP-BG/BNI). QTHT không thấy route — chỉ tạo được qua API.
+  - **Kết quả:** PASS 3/3 R1 + 5/5 R8. Seed qua CB_NV_TW/BN/DP — QTHT không có quyền tạo NHT (BA chốt 2026-05-09). [seed-checklist-r7-2-7-nht.md](../output/qa-reports/round7-2026-05-06/seed/tu-van-vien-cg/seed-checklist-r7-2-7-nht.md)
 
-- 🟢 **R7.7.4.5** 🆕 NHT functional 10 TC `[need: full 100%]` <a id="r7-7-4-5"></a>
-  - **Cần:** R7.2.7 ✅ · R7.2.9 ⚠️ · ≥1 NHT `HOAT_DONG` (✓3)
-  - **Spec:** FR-IV-NHT-01 — CRUD + permission + workflow kích hoạt
+- ⚠️ **R7.7.4.5** 🆕 NHT functional 12 TC `[~82% — 9/11 active PASS, 2 BLOCKED chờ BA + 1 N/A]` <a id="r7-7-4-5"></a>
+  - **Kết quả:** ⚠️ 9/11 PASS — R8 add NHT-005/006/009/010/012; NHT-008/011 BLOCKED chờ BA VV linkage. [functional-test-report-r7-7-4-5-nht.md](../output/qa-reports/round7-2026-05-06/functional/nguoi-ho-tro/functional-test-report-r7-7-4-5-nht.md)
+  - **Bug:** [bug-report-r7-7-4-5-nht.md](../output/qa-reports/round7-2026-05-06/bug-reports/nguoi-ho-tro/bug-report-r7-7-4-5-nht.md) — 2/5 đóng (BUG-001/002 Invalid · BUG-003 Major P1 host hardcoded + BUG-004/005 Minor Open)

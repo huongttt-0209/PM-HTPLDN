@@ -26,19 +26,19 @@
 
 ## Tasks
 
-- ✅ **R7.2.4** ✏️ Seed DN — acceptance filter-based v3.5 <a id="r7-2-4"></a>
-  - **Kết quả:** PASS 36 DN cover 3 quy mô × 3 ngành (verified MCP). [seed-checklist-r7-2-4-dn.md](../output/qa-reports/round7-2026-05-06/seed/doanh-nghiep/seed-checklist-r7-2-4-dn.md)
-  - **Bug:** [bug-report-seed-r7-2-4-throttle.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/bug-report-seed-r7-2-4-throttle.md) — 2/2 đóng (THROTTLE-001 + LOAI-DN-002 Closed-verified R8 2026-05-07)
+- ✅ **R7.2.4** ✏️ Seed Doanh nghiệp (DN) — acceptance theo filter (chuẩn v3.5) <a id="r7-2-4"></a>
+  - **Kết quả:** PASS 25 DN — 9/9 combo quy mô × ngành cover (R8 2026-05-09 verify pool drift 36→23 + seed 2 DN UI gap-fill VUA×CN). [r7-2-4-r8-verify-report.md](../output/qa-reports/round8-2026-05-08/seed/doanh-nghiep/r7-2-4-r8-verify-report.md)
+  - **Bug:** [bug-report-seed-r7-2-4-throttle.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/bug-report-seed-r7-2-4-throttle.md) — 2/2 đóng (THROTTLE-001 + LOAI-DN-002 đã verify Closed lần R8 ngày 2026-05-07).
 
-- ✅ **R7.3.4** 🔄 Seed HSPL DN cover 5 loại × 3 state × multi-DN + STP-AG scope <a id="r7-3-4"></a>
-  - **Kết quả:** PASS 23 record cover 5/5 loại + 3/3 state + 11 DN. R8 STP-AG + NHT-self-create. [seed-checklist-r7-3-4-hspl.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-3-4-hspl.md)
-  - **Bug:** 6 bug đề xuất log (HSPL-001 NHT permission overgrant Major, HSPL-002 BR-AUTH-10 missing VV layer Major, HSPL-003 GET detail 500 Critical, HSPL-004 list filter inconsistent Minor, HSPL-005 keyword param ignored Minor, HSPL-006 unaccent Major).
-  - **Downstream unblock:** TV-017/018/019/020/056 ✅ ready · TV-053 ⚠️ partial (cần R7.4.A3 VV linkage) · TV-054 ⚠️ ready (verify negative bug) · TV-055 🚫 (BUG-HSPL-003 Critical).
+- ✅ **R7.3.4** 🔄 Seed Hồ sơ pháp lý (HSPL) của DN — cover 5 loại × 3 trạng thái × nhiều DN + scope Sở Tư pháp An Giang (STP-AG) <a id="r7-3-4"></a>
+  - **Kết quả:** PASS 23 record cover 5/5 loại + 3/3 trạng thái + 11 DN. R8 thêm scope STP-AG + NHT tự tạo HSPL. [seed-checklist-r7-3-4-hspl.md](../output/qa-reports/round7-2026-05-06/seed/seed-checklist-r7-3-4-hspl.md)
+  - **Bug:** 6 bug đề xuất log — HSPL-001 NHT vượt quyền (Major), HSPL-002 BR-AUTH-10 thiếu kiểm tra ở layer Vụ việc (Major), HSPL-003 `GET` detail trả 500 (Critical), HSPL-004 filter list không nhất quán (Minor), HSPL-005 param `keyword` bị bỏ qua (Minor), HSPL-006 search không bỏ dấu (unaccent) (Major).
+  - **Downstream unblock:** TV-017/018/019/020/056 ✅ ready · TV-053 ⚠️ partial (cần R7.4.A3 link Vụ việc) · TV-054 ⚠️ ready (verify lại bug âm tính) · TV-055 🚫 (chặn bởi BUG-HSPL-003 Critical).
 
-- 🟢 **R7.5.2** 🔄 Cross-module DN: Tab #2 HSPL + Tab #3 KPI + Tab #4 Chi trả `[need: R7.3.4, R7.4.A3, R7.6.1]` <a id="r7-5-2"></a>
-  - **Cần:** R7.3.4 ✅ · R7.4.A3 🟢 · R7.6.1 🚫 · ≥1 record/tab cross-module
+- 🟢 **R7.5.2** 🔄 Cross-module DN — Tab #2 HSPL + Tab #3 KPI + Tab #4 Chi trả `[need: R7.3.4, R7.4.A3, R7.6.1]` <a id="r7-5-2"></a>
+  - **Cần:** R7.3.4 ✅ · R7.4.A3 🟢 · R7.6.1 🚫 · ≥1 record / tab cross-module
 
-- ⚠️ **R7.7.4** ✏️ DN 17 TC v3.5 (4 TC mới DN-021..024) `[need: R7.2.4]` <a id="r7-7-4"></a>
-  - **Cần:** R7.2.4 ✅ · DM TINH_THANH ✅ · DM LINH_VUC_KINH_DOANH (✗ rỗng)
-  - **Kết quả:** ⚠️ 9/17 PASS — 3 BUG-DEPLOY Major/Minor + 1🤷 DN-006 soft delete. [bug-report-r7-7-4-deploy-gap.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/bug-report-r7-7-4-deploy-gap.md)
+- ⚠️ **R7.7.4** ✏️ Functional DN — 17 TC chuẩn v3.5 (4 TC mới DN-021..024) `[need: R7.2.4]` <a id="r7-7-4"></a>
+  - **Cần:** R7.2.4 ✅ · Danh mục `TINH_THANH` ✅ · Danh mục `LINH_VUC_KINH_DOANH` (✗ rỗng)
+  - **Kết quả:** ⚠️ 9/17 PASS — 3 bug deploy gap (Major/Minor) + 1 🤷 DN-006 lỗi soft delete. [bug-report-r7-7-4-deploy-gap.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/bug-report-r7-7-4-deploy-gap.md)
   - **Bug:** [bug-report-r7-7-4-deploy-gap.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/bug-report-r7-7-4-deploy-gap.md) — 0/3 đóng (2 Major + 1 Minor Open).

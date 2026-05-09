@@ -48,7 +48,12 @@ tasks:
   R7.2.9:
     entities: [TVV, CG, NHT]
     state_change: advance
-    note: Click mail kích hoạt → HOAT_DONG
+    note: Click mail kích hoạt → HOAT_DONG (API thuần — probe ly_13 CG login UI ✅ 2026-05-08)
+
+  R7.2.9b:
+    entities: [TVV, CG, NHT]
+    state_change: advance
+    note: UI E2E mail click + login + view chức năng đúng role (FR-VIII-26 + SCR-IV/SCR-IV-NHT) — 3 role × 4 step
 
   # ═══ R7.3.x — Seed Tier 2 ═══
   R7.3.1:
@@ -128,7 +133,12 @@ tasks:
   R7.4.A1-CG:
     entities: [CG]
     state_change: advance
-    note: 8 CG → DANG_HOAT_DONG
+    note: 8 CG → HOAT_DONG (rename từ DANG_HOAT_DONG verified R8b 2026-05-08)
+
+  R7.4.A1.6:
+    entities: [TVV, CG, TAI_KHOAN]
+    state_change: none
+    note: Gate verify TK creation timing (FR-VIII-15) + negative login pre-CKH + mail trigger + dual-state sync. TC1 probe ✅ 2026-05-08, TC2-4 chờ chạy.
 
   R7.4.A2:
     entities: [TVV]

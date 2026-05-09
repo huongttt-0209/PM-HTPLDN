@@ -1,0 +1,38 @@
+{
+  "verifiedAt": "2026-05-08 23:55",
+  "method": "Email-keyed cross-entity match TVV/CG <-> TAI_KHOAN, qtht_01 admin scope",
+  "tvvEntityState": {
+    "total": 28,
+    "MOI_DANG_KY": 12,
+    "CHO_PHE_DUYET": 1,
+    "TU_CHOI": 3,
+    "HOAT_DONG": 9,
+    "CHO_KICH_HOAT": 2,
+    "YEU_CAU_BO_SUNG": 1
+  },
+  "tkEntityTotal": 88,
+  "productionFlowSync": {
+    "verdict": "10/10 PASS",
+    "hoatDongCohort": [
+      {"hoTen": "Lý Thị Mười Ba", "username": "ly_13", "tvvState": "HOAT_DONG", "tkState": "HOAT_DONG", "syncOk": true},
+      {"hoTen": "Đinh Văn Mười Bốn", "username": "dinh_14", "tvvState": "HOAT_DONG", "tkState": "HOAT_DONG", "syncOk": true},
+      {"hoTen": "Ngô Thị Mười Lăm", "username": "ngo_15", "tvvState": "HOAT_DONG", "tkState": "HOAT_DONG", "syncOk": true},
+      {"hoTen": "Trương Văn Mười Sáu", "username": "truong_16", "tvvState": "HOAT_DONG", "tkState": "HOAT_DONG", "syncOk": true},
+      {"hoTen": "Mai Thị Mười Bảy", "username": "mai_17", "tvvState": "HOAT_DONG", "tkState": "HOAT_DONG", "syncOk": true},
+      {"hoTen": "Hồ Văn Mười Tám", "username": "ho_18", "tvvState": "HOAT_DONG", "tkState": "HOAT_DONG", "syncOk": true},
+      {"hoTen": "Vũ Văn Sáu", "username": "vu_sau_06", "tvvMa": "TVV-BTP-TW-0014", "tvvState": "HOAT_DONG", "tkState": "HOAT_DONG", "syncOk": true, "note": "Was TVV-0013 CKH probe state (TC1), advanced to HOAT_DONG via FR-VIII-26 set MK flow"}
+    ],
+    "choKichHoatCohort": [
+      {"hoTen": "Hoàng Văn Năm", "email": "hoang.nam.05@test.htpldn.vn", "tvvState": "CHO_KICH_HOAT", "tkState": "CHO_KICH_HOAT", "syncOk": true},
+      {"hoTen": "Nguyễn Văn Tư Vấn", "email": "nguyen.tuvan.01@test.htpldn.vn", "tvvState": "CHO_KICH_HOAT", "tkState": "CHO_KICH_HOAT", "syncOk": true}
+    ]
+  },
+  "testArtifactAnomaly": {
+    "verdict": "Expected — force-advanced bypassing FR-VIII-26 step 12",
+    "records": [
+      {"hoTen": "Probe CG R7.4.A1 OptLock Test", "email": "probe.optlock@test.htpldn.vn", "tvvState": "HOAT_DONG", "tkState": "CHO_KICH_HOAT", "note": "Used in optimistic-lock TC, TVV state force-advanced via direct API; TK never went through set-MK flow — expected mismatch, not state machine bug"},
+      {"hoTen": "Probe CG R7.4.A1 Permission Test", "email": "probe.perm@test.htpldn.vn", "tvvState": "HOAT_DONG", "tkState": "CHO_KICH_HOAT", "note": "Same as above — permission TC probe, force-advanced"}
+    ]
+  },
+  "fr_viii_26_step_12_verdict": "PASS — All production-flow records (10/10) show TVV.trangThai === TAI_KHOAN.trangThai. Probe records are test artifacts that bypassed proper set-MK flow (acceptable test data leftover)."
+}

@@ -1,12 +1,12 @@
 # TODO — Cross-cutting (SLA / API / Edge BR / Permission / Profile)
 
-> File module của [`todo.md`](todo.md) master. Tổng **9 task**.
+> File module của [`todo.md`](todo.md) master. Tổng **10 task**.
 >
 > **Tham chiếu shared:** [`state-snapshot.md`](state-snapshot.md) · [`dep-map.md`](dep-map.md) · [`lessons-learned.md`](lessons-learned.md)
 >
 > **Trạng thái icon:** 🟢 sẵn sàng · 🔵 đang làm · ✅ xong · ⚠️ partial · 🚫 block · ⏳ chờ upstream
 >
-> **Task IDs:** R7.5.3, R7.7.16, R7.7.17, R7.8.1, R7.8.2, R7.8.3, R7.8.4, R7.8.5, R7.8.6
+> **Task IDs:** R7.5.3, R7.7.16, R7.7.17, R7.8.1, R7.8.2, R7.8.3, R7.8.4, R7.8.5, R7.8.6, R7.8.7
 
 ---
 
@@ -19,8 +19,8 @@
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P5** | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | ⏳[R7.5.3](#r7-5-3) |
 | **P7** | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 🟢[R7.7.16](#r7-7-16) · ⏳[R7.7.17](#r7-7-17) |
-| **P8** | 6 | 2 | 0 | 1 | 3 | 0 | 0 | 0 | ✅[R7.8.1](#r7-8-1) · ⚠️[R7.8.2](#r7-8-2) · ⚠️[R7.8.3](#r7-8-3) · ⚠️[R7.8.4](#r7-8-4) · 🟢[R7.8.5](#r7-8-5) · 🟢[R7.8.6](#r7-8-6) |
-| **Tổng** | **9** | **3** | **0** | **1** | **3** | **0** | **2** | **0** |  |
+| **P8** | 7 | 2 | 0 | 1 | 3 | 0 | 1 | 0 | ✅[R7.8.1](#r7-8-1) · ⚠️[R7.8.2](#r7-8-2) · ⚠️[R7.8.3](#r7-8-3) · ⚠️[R7.8.4](#r7-8-4) · 🟢[R7.8.5](#r7-8-5) · 🟢[R7.8.6](#r7-8-6) · ⏳[R7.8.7](#r7-8-7) |
+| **Tổng** | **10** | **3** | **0** | **1** | **3** | **0** | **3** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -50,3 +50,8 @@
 
 - 🟢 **R7.8.6** 🆕 Verify UC renumber +4 offset FR-11 (UC120-142 → UC124-146 do FR-VIII-22..25 chiếm UC120-123) `[~0% — ready, 23 UC × 11 role × 1 BC = 253 entries]` <a id="r7-8-6"></a>
   - **Spec:** [permission-matrix-by-role.md](../output/permission-matrix-by-role.md) FR-IX block + 7.11-bao-cao-thong-ke.md UC ref khớp v3.5; CHANGELOG §srs-fr-11 Thay đổi 1
+
+- ⏳ **R7.8.7** 🆕 E2E DN full luồng đăng ký → đánh giá → chi trả (12 bước cross-module, 5 seam handoff) `[need: R7.7.8b, R7.7.8c, R7.4.A3, R7.4.A3-PUBLIC, R7.4.A3-DN-BS, R7.7.3, R7.7.4, R7.5.2]` <a id="r7-8-7"></a>
+  - **Cần:** 8 task upstream ✅ · 1 DN test fresh chưa đăng ký · VNeID Tier 2 sandbox · 5 role (DN / CB NV / CB PD / NHT / TVV-CG) · 1 chu kỳ chi trả CT HTPLDN
+  - **Spec:** 12 bước: (1) FR-VIII-22 đăng ký 21 trường → (2) FR-VIII-26 kích hoạt + reset MK → (3) DN login chuyên trang VNeID Tier 2 → (4) FR-V.I-02 SCR-V.I-04 tạo VV → (5) FR-V.I-06 CB NV kiểm tra HS → (6) FR-V.I-09 phân công BR-CALC-04 → (7) FR-V.I-15/16 NHT/TVV xử lý → (8) FR-V.I-13 CB PD duyệt → (9) FR-V.I-NEW-05 công khai PLQG (optional) → (10) FR-V.I-14 DN nhận TB → (11) FR-V.I-17 UC67 DN đánh giá → (12) FR-V.II chi trả
+  - **Mục đích:** catch integration bug ẩn ở 5 seam handoff (FR22→FR26 mail, FR26→FR-V.I-02 sync MST, FR-V.I-02→FR-V.I-09 BR-CALC-04, VV `HOAN_THANH`→FR-V.II Chi trả, VV `HOAN_THANH`→FR-V.I-17 Đánh giá) — risk không cover bằng test rời FR. R7 verified 3 BUG-DEPLOY Major + 6 audit deploy gap đều seam-bugs.
