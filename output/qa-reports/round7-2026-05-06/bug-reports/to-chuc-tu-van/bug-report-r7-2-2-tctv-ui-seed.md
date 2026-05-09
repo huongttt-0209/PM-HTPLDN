@@ -14,24 +14,26 @@
 
 ## Tổng hợp
 
-Phát hiện **2 bug** khi re-test seed TC TV qua UI (rule UI-only 2026-05-07): **1 Critical** form thiếu field bắt buộc `Đơn vị quản lý` → không thể submit TC TV qua UI; **1 Major** FE auto-logout khi BE error 500 → mất session.
+Bug log 2026-05-08 phát hiện 2 bug (1 Critical + 1 Major). **Re-test 2026-05-09 R8 cả 2 bug đều Closed:** FE-002 không phải bug (BE auto-derive `donViQuanLyId` từ session user — observation đúng nhưng severity classify sai); FE-003 không tái hiện (4/4 submit PASS 201). UI seed path verified: TC-BTP-TW-0006/0007/0008 created qua UI thành công + BVA negative FE-block đúng SRS.
 
-### Severity breakdown
+### Severity breakdown (sau re-test 2026-05-09)
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 2    | 1        | 1     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed |
+|------|----------|-------|--------|-------|---------|--------|
+| 2    | 0        | 0     | 0      | 0     | 0       | **2**  |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-TCTV-FE-002 | Critical | P0 | UI/UX | R7.2.2-UI | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` FR-IV-NEW-01 §Inputs (TC TV bắt buộc `donViQuanLyId` UUID) | TC TV form thiếu field "Đơn vị quản lý" → không tạo được TC TV qua UI | Open |
-| BUG-TCTV-FE-003 | Major | P1 | UI/UX | R7.2.2-UI | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` FR-IV-NEW-01 §Error Handling (BE error không được kick session) | FE auto-logout sau BE response 500 trên submit TC TV form | Open |
+| ~~BUG-TCTV-FE-002~~ | ~~Critical~~ | ~~P0~~ | UI/UX | R7.2.2-UI | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` FR-IV-NEW-01 §Inputs | Form thiếu field "Đơn vị quản lý" — re-test 2026-05-09: BE auto-derive từ user session → KHÔNG block UI seed | **Closed (Not-a-bug)** |
+| ~~BUG-TCTV-FE-003~~ | ~~Major~~ | ~~P1~~ | UI/UX | R7.2.2-UI | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` FR-IV-NEW-01 §Error Handling | FE auto-logout sau BE 500 — re-test 2026-05-09: 4/4 submit PASS 201, không tái hiện | **Closed (Not-reproducible)** |
 
 ---
 
-## BUG-TCTV-FE-002 — TC TV form thiếu field "Đơn vị quản lý" → không tạo được TC TV qua UI
+## ~~BUG-TCTV-FE-002~~ [CLOSED — Not-a-bug] — Form thiếu field "Đơn vị quản lý" (BE auto-derive)
+
+> **Re-test:** 2026-05-09 R8 — ✅ Closed (Not-a-bug). Form vẫn render 13 field (không có "Đơn vị quản lý") nhưng BE auto-derive `donViQuanLyId` từ session user `cb_nv_tw_02` (TW Cục BTP). Đã seed 3 TC TV qua UI thành công: TC-BTP-TW-0006 (CONG_TY_LUAT) UUID `a32d7714-b834-49ff-b6a4-c3fede1c1eee`, TC-0007 (VP_LUAT_SU) UUID `8fe25cb4-cab6-4b0c-a73e-0f1b6ce5b8dc`, TC-0008 (TT_TVPL) UUID `c92de88e-aeab-4859-bf26-5f8ff23e1fc7` — đều state `Mới đăng ký` đúng SM-TCTV. Severity hôm 2026-05-08 đánh giá Critical là sai — chỉ là UX gap (could display read-only "Đơn vị: TW Cục BTP" as informational), không block luồng. Screenshot list pool 3 record mới: [r7-2-2-ui-pool-3-moi-dang-ky-2026-05-09.png](../../seed/to-chuc-tu-van/image/r7-2-2-ui-pool-3-moi-dang-ky-2026-05-09.png).
 
 ### Mô tả
 
@@ -80,7 +82,9 @@ Khi `cb_nv_tw_02` mở form Thêm mới Tổ chức tư vấn (`/chuyen-gia-tvv/
 
 ---
 
-## BUG-TCTV-FE-003 — FE auto-logout sau BE response 500 trên submit TC TV form
+## ~~BUG-TCTV-FE-003~~ [CLOSED — Not-reproducible] — FE auto-logout sau BE 500
+
+> **Re-test:** 2026-05-09 R8 — ✅ Closed (Not-reproducible). 4/4 submit form `POST /api/v1/to-chuc-tu-vans` trả 201 CREATED (reqid 184/195/201 + 1 BVA FE-block không gửi BE). Không có 500. Không bị kick về `/login`. Pattern hôm 2026-05-08 nhiều khả năng do BE instability transient hoặc JWT timing trong session fill chậm — không reproducible với fill_form nhanh hôm nay (~30s/form < JWT TTL).
 
 ### Mô tả
 

@@ -17,27 +17,25 @@
 
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
-| **P2** | 2 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | ⚠️[R7.2.2](#r7-2-2) · ⚠️[R7.2.3](#r7-2-3) |
-| **P4** | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 🟢[R7.4.A6](#r7-4-a6) |
-| **P7** | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 🟢[R7.7.4.6](#r7-7-4-6) |
-| **Tổng** | **4** | **2** | **0** | **0** | **2** | **0** | **0** | **0** |  |
+| **P2** | 2 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | ✅[R7.2.2](#r7-2-2) · ✅[R7.2.3](#r7-2-3) |
+| **P4** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.4.A6](#r7-4-a6) |
+| **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.4.6](#r7-7-4-6) |
+| **Tổng** | **4** | **0** | **0** | **3** | **1** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
-- ⚠️ **R7.2.2** 🆕 Seed 6 Tổ chức tư vấn `[~0% UI — UI re-test 2026-05-08 BLOCKED 2 bug FE, pool 5 từ API ổn]` <a id="r7-2-2"></a>
-  - **Kết quả:** API path PASS 5/5 + 1 BVA-422. UI re-test 2026-05-08 BLOCKED — form thiếu `Đơn vị quản lý`, BE 500, FE auto-logout. [seed-checklist-r7-2-2-tc-tv.md](../output/qa-reports/round7-2026-05-06/seed/to-chuc-tu-van/seed-checklist-r7-2-2-tc-tv.md)
-  - **Bug:** [bug-report-seed-r7-2-2-tctv-lv-dropdown.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/bug-report-seed-r7-2-2-tctv-lv-dropdown.md) 1/1 đóng + [bug-report-r7-2-2-tctv-ui-seed.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/bug-report-r7-2-2-tctv-ui-seed.md) 0/2 đóng (FE-002 Critical thiếu donViQuanLyId, FE-003 Major auto-logout 500).
-  - **Note:** account `cb_nv_tw_02`. Pool 5 HOAT_DONG ổn định, R7.4.A6 + R7.7.4.6 không bị block.
+- ✅ **R7.2.2** 🆕 Seed 6 Tổ chức tư vấn (TC TV) <a id="r7-2-2"></a>
+  - **Kết quả:** UI re-test 2026-05-09 PASS 3/3 loại hình (TC-0006/0007/0008 MOI_DANG_KY) + BVA FE-block đúng spec. Pool 5 HOAT_DONG + 3 MOI_DANG_KY. [seed-checklist-r7-2-2-tc-tv.md](../output/qa-reports/round7-2026-05-06/seed/to-chuc-tu-van/seed-checklist-r7-2-2-tc-tv.md)
+  - **Bug:** [bug-report-seed-r7-2-2-tctv-lv-dropdown.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/bug-report-seed-r7-2-2-tctv-lv-dropdown.md) 1/1 đóng + [bug-report-r7-2-2-tctv-ui-seed.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/bug-report-r7-2-2-tctv-ui-seed.md) 2/2 đóng (FE-002 Not-a-bug, FE-003 Not-reproducible).
+  - **Note:** account `cb_nv_tw_02`. UI path verified, downstream R7.4.A6 + R7.7.4.6 unblock.
 
-- ⚠️ **R7.2.3** 🆕 Phê duyệt TC TV → HOAT_DONG `[~20% UI — 1/5 record qua UI, 4/5 API; re-test UI per rule]` <a id="r7-2-3"></a>
-  - **Kết quả:** PASS 5/5 → HOAT_DONG nhưng 4/5 dùng API — vi phạm rule, cần re-test UI. [seed-checklist-r7-2-3-phe-duyet-tc-tv.md](../output/qa-reports/round7-2026-05-06/seed/to-chuc-tu-van/seed-checklist-r7-2-3-phe-duyet-tc-tv.md)
-  - **Spec:** FR-IV-NEW-04 — `cb_pd_tw_02`. 5 transition còn lại + UI evidence → R7.4.A6.
+- ✅ **R7.2.3** 🆕 Phê duyệt TC TV chuyển sang trạng thái `HOAT_DONG` <a id="r7-2-3"></a>
+  - **Kết quả:** PASS 8/8 HOAT_DONG. R8 add 3 record (TC-0006/0007/0008) qua UI cb_nv_tw_02 + cb_pd_tw_02. Method gap đóng. [seed-checklist-r7-2-3-phe-duyet-tc-tv.md](../output/qa-reports/round7-2026-05-06/seed/to-chuc-tu-van/seed-checklist-r7-2-3-phe-duyet-tc-tv.md)
 
-- 🟢 **R7.4.A6** 🆕 Workflow SM-TCTV 8 transition `[need: cb_nv_tw_02 + cb_pd_tw_02 unlocked]` <a id="r7-4-a6"></a>
-  - **Cần:** R7.2.2 ⚠️ · `cb_nv_tw_02` + `cb_pd_tw_02` unlocked
-  - **Spec:** SM-TCTV (srs-fr-04 line 2323) + flow-module §2b (line 136-151).
+- ✅ **R7.4.A6** 🆕 Workflow state machine TC TV — 8 transition <a id="r7-4-a6"></a>
+  - **Kết quả:** PASS 8/8 transition UI MCP. TC-0009 mới qua 4 trans (1+3+4+2), TC-0008 round trip TAM_DUNG, TC-0007 round trip VO_HIEU_HOA. [workflow-test-report-r7-4-a6-tctv.md](../output/qa-reports/round7-2026-05-06/workflow/to-chuc-tu-van/workflow-test-report-r7-4-a6-tctv.md)
 
-- 🟢 **R7.7.4.6** 🆕 TC TV functional 10 TC `[full 100%]` <a id="r7-7-4-6"></a>
-  - **Cần:** ≥1 TC TV `HOAT_DONG` (✓5)
-  - **Spec:** CRUD + permission + phê duyệt edge case. Pool seed do R7.2.3 ⚠️ (API) — state đủ test, method gap thuộc task gốc.
+- ⚠️ **R7.7.4.6** 🆕 TC TV functional — 10 TC `[~80% — 8/10 đạt + 1 sai spec FE + 1 lỗi critical]` <a id="r7-7-4-6"></a>
+  - **Kết quả:** 8/10 đạt (TC-001/002/003/004/006/017/018/025) + TC-010 ⚠️ Sai spec FE + TC-022 ❌ QTHT bypass DELETE xóa TC-0009. [functional-test-report-r7-7-4-6-tctv.md](../output/qa-reports/round7-2026-05-06/functional/to-chuc-tu-van/functional-test-report-r7-7-4-6-tctv.md)
+  - **Bug:** [bug-report-r7-7-4-6-tctv.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/bug-report-r7-7-4-6-tctv.md) — 0/2 đóng (Critical 1 + Minor 1).

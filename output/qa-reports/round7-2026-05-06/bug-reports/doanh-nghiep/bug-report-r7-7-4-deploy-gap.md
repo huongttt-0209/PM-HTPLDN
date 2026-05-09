@@ -34,6 +34,8 @@ Phát hiện **3** lỗi deploy gap v3.5 chặn DN-022 (multi-select Lĩnh vực
 
 ## BUG-FR07-DEPLOY-001 — DM `LINH_VUC_KINH_DOANH` rỗng (0 record) + entity DOANH_NGHIEP_LINH_VUC M-N chưa migrate
 
+> **Re-test:** 2026-05-08 R7 — ❌ STILL OPEN. `GET /api/v1/danh-muc/tree?loaiDanhMuc=LINH_VUC_KINH_DOANH` vẫn 200 + `count=0`. `GET /api/v1/doanh-nghieps/{DN-BCT-001}` vẫn trả `linhVucKinhDoanh: null` (string đơn), KHÔNG có `linhVucIds[]` / `linhVucs[]`. Account `cb_nv_tw_02`. Evidence: API trace MCP `evaluate_script` 2026-05-08 15:02 UTC.
+
 ### Mô tả
 
 Khi pre-flight audit form Sửa DN qua MCP, BE trả `/api/v1/danh-muc/tree?loaiDanhMuc=LINH_VUC_KINH_DOANH` HTTP 200 nhưng `data: []` (0 record). Đồng thời API GET `/api/v1/doanh-nghieps/{id}` trả field `linhVucKinhDoanh: null` ở 23/23 record dạng **string đơn**, KHÔNG phải mảng `linhVucIds[]` theo schema v3.5 #9. Suy ra entity bridge M-N `DOANH_NGHIEP_LINH_VUC` chưa migrate sang BE.
@@ -87,6 +89,8 @@ So sánh: `LOAI_DOANH_NGHIEP` tree trả 5 record (TNHH/CP/DNTN/HKD/CTHD_TEST). 
 
 ## BUG-FR07-DEPLOY-002 — UI Lĩnh vực KD trên form Sửa + filter danh sách vẫn là textbox (chưa multi-select)
 
+> **Re-test:** 2026-05-08 R7 — ❌ STILL OPEN. Filter `/doanh-nghiep/danh-sach` field "Lĩnh vực KD" (uid `4_20`) vẫn textbox đơn; form Sửa DN-BCT-001 field "Lĩnh vực kinh doanh" (uid `5_37`) vẫn textbox đơn. So sánh cùng form: Loại DN (uid `5_23`), Quy mô (uid `5_28`), Ngành nghề (uid `5_33`), Tỉnh/Thành (uid `5_50`) — tất cả `combobox haspopup="listbox"`. Account `cb_nv_tw_02`. Evidence: [r7-7-4-retest-baseline-list-2026-05-08.png](r7-7-4-retest-baseline-list-2026-05-08.png) + [r7-7-4-retest-edit-form-2026-05-08.png](r7-7-4-retest-edit-form-2026-05-08.png).
+
 ### Mô tả
 
 UI form Sửa DN (`/doanh-nghiep/{id}/chinh-sua`) field "Lĩnh vực kinh doanh" render là `<input type="text">` đơn (uid `8_69`). UI filter danh sách (`/doanh-nghiep/danh-sach`) cũng render textbox (uid `4_20`). Cả 2 vị trí đáng lẽ phải là multi-select theo SRS v3.5 #9 (FR-V.III-01 Inputs row 26 + SCR-V.III-02 row 26 + SCR-V.III-01 row 10).
@@ -138,6 +142,8 @@ uid=4_20 textbox "Lĩnh vực KD"                 ← textbox đơn
 ---
 
 ## BUG-FR07-DEPLOY-003 — TINH_THANH chưa migrate sang entity E32 riêng (vẫn ở DANH_MUC tree)
+
+> **Re-test:** 2026-05-08 R7 — ❌ STILL OPEN. `GET /api/v1/tinh-thanhs?pageSize=5` vẫn 404 `ERR-SYS-00-04-01` ("Cannot GET /api/v1/tinh-thanhs"). `GET /api/v1/danh-muc/tree?loaiDanhMuc=TINH_THANH` vẫn 200 + 63 record với keys `[id, ma, ten, moTa, thuTu, trangThai, danhMucChaId, duLieuMoRong, version, children]` — KHÔNG có `vungMien`. Account `cb_nv_tw_02`. Evidence: API trace MCP `evaluate_script` 2026-05-08 15:02 UTC.
 
 ### Mô tả
 

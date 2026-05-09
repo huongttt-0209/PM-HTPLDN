@@ -23,9 +23,9 @@
 | 5 | Verification (KPI/cross/SLA/audit) | 5 | 3 | - | - | - | - | 2 |
 | 6 | Workflow đầu ra hậu kỳ (Chi trả/TVN/CT) | 5 | - | - | 1 | - | 1 | 3 |
 | 7 | Functional 17 module + 2 NEW + **4 sub-task FR-06 v3.5** | 30 | 9 | - | 4 | 6 | 2 | 9 |
-| 8 | Cross-cutting + Profile + Permission +**R7.8.6 UC renumber FR-11 v3.5** | 6 | 2 | - | 1 | 3 | - | - |
+| 8 | Cross-cutting + Profile + Permission +**R7.8.6 UC renumber FR-11 v3.5** +**R7.8.7 E2E DN full luồng** | 7 | 2 | - | 1 | 3 | - | 1 |
 | Trụ E | Monitor unblock | 4 | - | - | 2 | 1 | - | 1 |
-| **Tổng** | | **111** | **19** | **0** | **43** | **17** | **11** | **19** |
+| **Tổng** | | **112** | **19** | **0** | **43** | **17** | **11** | **20** |
 
 ---
 
@@ -40,10 +40,10 @@
 |:-:|---|---|:-:|---|---|
 | 1 | Pre-test | [todo-pre-test.md](todo-pre-test.md) | 7 | ✅7 | **P0** ✅R7.0.1..7 |
 | 2 | QTHT — Quản trị hệ thống | [todo-qtht.md](todo-qtht.md) | 16 | ✅9 🟢2 ⚠️4 🚫1 | **P1** ✅R7.1.1, ✅R7.1.2, ✅R7.1.3, ✅R7.1.4, ⚠️R7.1.5, ✅R7.1.6<br>**P2** 🚫R7.2.1, ⚠️R7.2.9, 🟢R7.2.9b<br>**P5** 🟢R7.5.5<br>**P7** ⚠️R7.7.8, ✅R7.7.8a, ⚠️R7.7.8b, ✅R7.7.8c, ✅R7.7.8d, ✅R7.7.8e |
-| 3 | TC TV — Tổ chức tư vấn | [todo-tc-tv.md](todo-tc-tv.md) | 4 | 🟢2 ⚠️2 | **P2** ⚠️R7.2.2, ⚠️R7.2.3<br>**P4** 🟢R7.4.A6<br>**P7** 🟢R7.7.4.6 |
+| 3 | TC TV — Tổ chức tư vấn | [todo-tc-tv.md](todo-tc-tv.md) | 4 | ✅3 ⚠️1 | **P2** ✅R7.2.2, ✅R7.2.3<br>**P4** ✅R7.4.A6<br>**P7** ⚠️R7.7.4.6 |
 | 4 | Doanh nghiệp | [todo-doanh-nghiep.md](todo-doanh-nghiep.md) | 4 | ✅2 🟢1 ⚠️1 | **P2** ✅R7.2.4<br>**P3** ✅R7.3.4<br>**P5** 🟢R7.5.2<br>**P7** ⚠️R7.7.4 |
-| 5 | TVV + CG | [todo-tvv-cg.md](todo-tvv-cg.md) | 7 | ✅3 🟢1 ⚠️2 ❌1 | **P2** ✅R7.2.5, ✅R7.2.6<br>**P4** ⚠️R7.4.A1, 🟢R7.4.A1.6, ✅R7.4.A1-CG, ⚠️R7.4.A2<br>**P7** ❌R7.7.2 |
-| 6 | NHT — Người hỗ trợ | [todo-nht.md](todo-nht.md) | 2 | ✅1 🟢1 | **P2** ✅R7.2.7<br>**P7** 🟢R7.7.4.5 |
+| 5 | TVV + CG | [todo-tvv-cg.md](todo-tvv-cg.md) | 7 | ✅5 ⚠️1 ❌1 | **P2** ✅R7.2.5, ✅R7.2.6<br>**P4** ✅R7.4.A1, ✅R7.4.A1.6, ✅R7.4.A1-CG, ⚠️R7.4.A2<br>**P7** ❌R7.7.2 |
+| 6 | NHT — Người hỗ trợ | [todo-nht.md](todo-nht.md) | 2 | ✅1 ⚠️1 | **P2** ✅R7.2.7<br>**P7** ⚠️R7.7.4.5 |
 | 7 | Hỏi đáp | [todo-hoi-dap.md](todo-hoi-dap.md) | 5 | ✅1 🟢1 ⚠️1 🚫2 | **P3** ⚠️R7.3.1, ✅R7.3.1.MoB, 🟢R7.3.1.TVN<br>**P4** 🚫R7.4.A4<br>**P7** 🚫R7.7.1 |
 | 8 | Vụ việc | [todo-vu-viec.md](todo-vu-viec.md) | 6 | 🟢1 ⚠️1 ⏳4 | **P3** ⚠️R7.3.2<br>**P4** 🟢R7.4.A3, ⏳R7.4.A3-DN-BS, ⏳R7.4.A3-PUBLIC<br>**P7** ⏳R7.7.3, ⏳R7.7.3-PRIVACY |
 | 9 | TVCS — Tư vấn chuyên sâu | [todo-tvcs.md](todo-tvcs.md) | 3 | ⚠️3 | **P3** ⚠️R7.3.3<br>**P4** ⚠️R7.4.A5<br>**P7** ⚠️R7.7.5 |
@@ -57,9 +57,9 @@
 | 17 | CT HTPLDN | [todo-ct-htpldn.md](todo-ct-htpldn.md) | 5 | ✅2 ⚠️2 🚫1 | **P6** ⚠️R7.6.4, 🚫R7.6.5<br>**P7** ✅R7.7.15, ⚠️R7.7.15.b<br>**Trụ E** ✅R7.E2 |
 | 18 | Dashboard | [todo-dashboard.md](todo-dashboard.md) | 2 | 🟢2 | **P5** 🟢R7.5.1<br>**P7** 🟢R7.7.7 |
 | 19 | Báo cáo | [todo-bao-cao.md](todo-bao-cao.md) | 2 | 🟢1 ❌1 | **P5** ❌R7.5.4<br>**P7** 🟢R7.7.13 |
-| 20 | Cross-cutting (SLA / API / Permission / Profile) | [todo-cross-cutting.md](todo-cross-cutting.md) | 9 | ✅1 🟢3 ⚠️3 ⏳2 | **P5** ⏳R7.5.3<br>**P7** 🟢R7.7.16, ⏳R7.7.17<br>**P8** ✅R7.8.1, ⚠️R7.8.2, ⚠️R7.8.3, ⚠️R7.8.4, 🟢R7.8.5, 🟢R7.8.6 |
+| 20 | Cross-cutting (SLA / API / Permission / Profile) | [todo-cross-cutting.md](todo-cross-cutting.md) | 10 | ✅1 🟢3 ⚠️3 ⏳3 | **P5** ⏳R7.5.3<br>**P7** 🟢R7.7.16, ⏳R7.7.17<br>**P8** ✅R7.8.1, ⚠️R7.8.2, ⚠️R7.8.3, ⚠️R7.8.4, 🟢R7.8.5, 🟢R7.8.6, ⏳R7.8.7 |
 
-**Tổng:** 114 task / 20 module.
+**Tổng:** 115 task / 20 module.
 <!-- END: module-index -->
 
 ## Shared file (toàn cục)
