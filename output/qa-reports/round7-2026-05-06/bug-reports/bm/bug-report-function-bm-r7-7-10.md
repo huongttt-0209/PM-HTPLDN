@@ -26,14 +26,18 @@ Phát hiện **2** lỗi mới trong functional test R7.7.10 (preview/download M
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-BM-007 | Critical | P0 | Integration | BM-007 + BM-008 | `FR-VII-04 §Processing — Xem trực tuyến` + `§Processing — Tải về` | Preview + Download BM dùng MinIO presigned URL trỏ `localhost:9000` → user browser không kết nối được (`ERR_CONNECTION_REFUSED`) | Open (R8 confirmed) |
-| BUG-BM-008 | Medium | P2 | UI/UX | BM-016 | `FR-VII-04 §Error Handling E1` (ERR-BM-01 "Chỉ chấp nhận file doc, docx, xls, xlsx") | Form Thêm BM upload file `.txt` → FE silent rejected (ẩn file khỏi upload list) nhưng KHÔNG hiển thị toast/error message → user không biết file không hợp lệ | Open |
+| BUG-BM-007 | Critical | P0 | Integration | BM-007 + BM-008 | `FR-VII-04 §Processing — Xem trực tuyến` + `§Processing — Tải về` | Preview + Download BM dùng MinIO presigned URL trỏ `localhost:9000` → user browser không kết nối được (`ERR_CONNECTION_REFUSED`) | **Open (R8 lần 3 vẫn reproduced — dev claim sai)** |
+| BUG-BM-008 | Medium | P2 | UI/UX | BM-016 | `FR-VII-04 §Error Handling E1` (ERR-BM-01 "Chỉ chấp nhận file doc, docx, xls, xlsx") | Form Thêm BM upload file `.txt` → FE silent rejected (ẩn file khỏi upload list) nhưng KHÔNG hiển thị toast/error message → user không biết file không hợp lệ | **Open (R8 lần 3 vẫn reproduced — dev claim sai)** |
 
 ---
 
 ## BUG-BM-007 — Preview + Download Biểu mẫu trỏ MinIO `localhost:9000` không reachable
 
 > **Re-test 2026-05-08 R8:** ❌ **VẪN OPEN**. Account `cb_nv_tw_02`. Tạo BM mới + click Xem trước → BE redirect 302 đến `http://localhost:9000/htpldn/...?X-Amz-...` → `net::ERR_CONNECTION_REFUSED`. Cấu hình MinIO public host vẫn sai. Evidence: `screenshots/r8-verify-2026-05-08-bm-007-localhost-still.png` + network reqid 227-230.
+>
+> **Re-test 2026-05-09 R8 lần 2:** ❌ **VẪN OPEN**. Account `cb_nv_tw_02`. BM-20260509-001 (`8a7211a6-7368-49d1-bb39-e9b5078b1037`, TM SHTT đã CONG_KHAI sau R7.4.C1 R8 lần 2). GET `/api/v1/bieu-maus/{id}/download` → 302 → `http://localhost:9000/htpldn/00000000-0000-4000-8000-000000000001/2026/05/f39d316d-bf34-4f8b-9d35-3f989ada4c8f/test-bm-r7-4-c1.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&...`. 2 lần redirect gặp `net::ERR_ABORTED` + `net::ERR_CONNECTION_REFUSED`. MinIO `MINIO_PUBLIC_HOST` vẫn `localhost:9000` chưa đổi. Evidence: `image/r8-bm-007-localhost-still-r8l2.png` + reqid 464-467.
+>
+> **Re-test 2026-05-09 R8 lần 3 (sau dev claim fix):** ❌ **VẪN OPEN — dev claim sai**. Account `cb_nv_tw_02` (cache clear toàn diện + SW unregister + hard reload + fresh login per memory `feedback_clear_cache_before_verify_fe_fix`). BM-20260509-001 cùng id. GET `/api/v1/bieu-maus/{id}/download` reqid=804 → 302 → reqid=805 GET **`http://localhost:9000/htpldn/00000000-0000-4000-8000-000000000001/2026/05/f39d316d-bf34-4f8b-9d35-3f989ada4c8f/test-bm-r7-4-c1.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260509T125509Z&...`** → `net::ERR_ABORTED`. Cấu hình BE `MINIO_PUBLIC_HOST` chưa được đổi từ `localhost:9000` sang IP server `103.172.236.130:9000`. Bug giữ Open chờ dev verify lại config thật + restart service.
 
 ### Mô tả
 
@@ -70,6 +74,10 @@ HEAD http://localhost:9000/...
 ---
 
 ## BUG-BM-008 — Form Thêm BM silent reject file invalid (không có toast/error)
+
+> **Re-test 2026-05-09 R8 lần 2:** ❌ **VẪN OPEN**. Account `cb_nv_tw_02`. Form `/bieu-mau/them-moi`. Upload file `test-bm-invalid.txt` (36B) qua field "File biểu mẫu" (uid `45_58`). DOM check 1.5s sau upload: `toastCount=0, toastTexts=[], errCount=0, errTexts=[], fileItemCount=0, fileItems=[]`. FE filter client-side, file không xuất hiện trong upload list, KHÔNG có toast/notification/inline error. Evidence: `image/r8-bm-008-silent-reject-r8l2.png`.
+>
+> **Re-test 2026-05-09 R8 lần 3 (sau dev claim fix):** ❌ **VẪN OPEN — dev claim sai**. Account `cb_nv_tw_02` (cache clear toàn diện trước test). Form `/bieu-mau/them-moi` (verify BUG-BM-001 đã add Switch CR-01). Upload `test-bm-invalid.txt` 36B qua uid `6_58`. DOM check 2s sau: `toastCount=0, toastTexts=[], errCount=0, errTexts=[], fileItemCount=0, fileItems=[], allMessages=[]` (kiểm cả `.ant-message-notice` + `.ant-notification-notice`). FE vẫn silent reject — không add toast `ERR-BM-01` "Chỉ chấp nhận file doc, docx, xls, xlsx". Evidence: `image/r8l3-bm-008-still-silent.png`.
 
 ### Mô tả
 

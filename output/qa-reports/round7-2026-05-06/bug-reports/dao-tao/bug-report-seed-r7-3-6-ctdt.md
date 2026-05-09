@@ -21,6 +21,7 @@
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
 | ~~BUG-CTDT-FE-01~~ | Major | P1 | UI/UX | R7.3.6 | `srs-fr-03-dao-tao.md FR-III-01 Inputs row 3` + `Processing Bước 3` + `AC ERR-CTDT-05` | Form CTĐT thiếu field bắt buộc `keHoachId` → submit BE 422 silent | **Closed** |
+| BUG-CTDT-NAME-02 | Major | P1 | BE / Validation | R7.3.6 variant 6 | `srs-fr-03-dao-tao.md FR-III-01 Inputs row 2` (ten_chuong_trinh varchar 500, không có constraint regex) | BE reject 422 `Tên không hợp lệ` cho tên hợp lệ — pattern reject ngầm chỉ accept "Chương trình đào tạo ..." prefix, FE form normalize khác curl | **Open** |
 
 ---
 
@@ -84,3 +85,73 @@ Response: ERR-VAL-SYS-00-01 / keHoachId must be a UUID
 ---
 
 *Bug report generated: 2026-05-07 | QA Automation via Claude Code*
+
+---
+
+## BUG-CTDT-NAME-02 — BE reject 422 cho tên CTĐT hợp lệ (pattern reject ngầm)
+
+> **Phát hiện:** 2026-05-09 R9 final khi seed variant 6 R7.3.6 cấp ĐP STP-BG.
+
+### Mô tả
+
+Form Tạo CTĐT submit qua UI với tên có Vietnamese diacritics đầy đủ nhưng BE trả 422 `ERR-VAL-SYS-00-01` field `tenChuongTrinh` message `Tên không hợp lệ (chuỗi không có nội dung — vui lòng nhập tên đầy đủ)`. Tên KHÔNG rỗng — message misleading. Probe pattern phát hiện BE chỉ accept tên bắt đầu bằng full phrase `Chương trình đào tạo ...`. Đồng thời FE form có hiện tượng normalize tên khác hẳn payload curl direct (cùng tên, UI 422 nhưng curl 201).
+
+### Bước tái hiện
+
+1. Login `cb_nv_dp_02 / Secret@123` + OTP `666666`.
+2. Sidebar → Quản lý đào tạo → Chương trình đào tạo → Thêm mới.
+3. Điền form:
+   - Tên: `CTĐT 2026 - PL Doanh nghiệp cấp ĐP - STP Bắc Giang` (có Vietnamese diacritics đầy đủ)
+   - Kế hoạch năm: `KH ĐT năm 2026 - Cấp DP (STP Bắc Giang) - R8`
+   - Lĩnh vực: Doanh nghiệp
+   - Ngân sách: 180000000 VNĐ
+   - Số khóa: 2
+   - Mục tiêu, Mô tả: bất kỳ ≥10 ký tự
+4. Click Tạo chương trình → quan sát.
+
+### Kết quả mong đợi
+
+`POST /api/v1/chuong-trinh-dao-taos` trả 201 Created, record state `DU_THAO`. SRS `FR-III-01 Inputs row 2` định nghĩa `ten_chuong_trinh: varchar(500)` không có constraint regex hay required prefix.
+
+### Kết quả thực tế
+
+`POST /api/v1/chuong-trinh-dao-taos` trả 422 với:
+
+```json
+{
+  "success": false,
+  "error": {
+    "code": "ERR-VAL-SYS-00-01",
+    "field": "tenChuongTrinh",
+    "message": "Tên không hợp lệ (chuỗi không có nội dung — vui lòng nhập tên đầy đủ)",
+    "details": [{ "field": "tenChuongTrinh", "message": "Tên không hợp lệ ..." }]
+  }
+}
+```
+
+**Probe pattern reject (curl direct, cùng JSON shape, đổi tên):**
+
+| Tên thử | Đường gửi | Kết quả | Note |
+|---|---|:-:|---|
+| `CTĐT 2026 - PL Doanh nghiệp cấp ĐP - STP Bắc Giang` | UI form | ❌ 422 | Có Vietnamese diacritics đầy đủ |
+| `CTDT 2026 - Phap luat doanh nghiep cap DP STP Bac Giang` | UI form | ❌ 422 | ASCII no diacritics |
+| `Chuong trinh dao tao DP Bac Giang` | curl | ❌ 422 | ASCII no diacritics |
+| `CTDT cap DP - linh vuc DN - STP Bac Giang R9` | curl | ❌ 422 | ASCII có abbrev "CTDT" |
+| `Chương trình đào tạo cấp ĐP - STP Bắc Giang` | curl | ✅ 201 | Full phrase prefix |
+| `Chương trình đào tạo cấp ĐP - STP Bắc Giang` | UI form | ✅ 201 | Cùng tên trên UI cũng PASS |
+| `Chương trình đào tạo cấp ĐP - Sở Tư pháp Bắc Giang` | curl | ✅ 201 | "Sở Tư pháp" full phrase |
+| `Chương trình đào tạo cấp ĐP - Sở Tư pháp Bắc Giang` | UI form | ❌ 422 | **Cùng chuỗi UI form FAIL** |
+
+**Hai pattern reject ngầm phát hiện:**
+
+1. **BE rule không tài liệu hóa:** tên phải bắt đầu bằng full phrase "Chương trình đào tạo" để vượt validator. Mọi tên có "CTĐT" abbreviation hoặc ASCII no-diacritic đều bị 422 với message "không có nội dung".
+2. **FE inconsistency:** cùng chuỗi gửi qua UI form vs curl direct cho 2 kết quả khác nhau (UI ❌ vs curl ✅) — nghi FE strip/normalize diacritics hoặc whitespace trước khi POST.
+
+### Bằng chứng
+
+- `reqid=1759 POST /chuong-trinh-dao-taos [422]` — UI lần 1 (CTĐT abbrev)
+- `reqid=1761 POST /chuong-trinh-dao-taos [422]` — UI lần 2 (ASCII)
+- `reqid=1768 POST /chuong-trinh-dao-taos [201]` — curl probe lần 3 (full phrase) ✅
+- `reqid=1773 POST /chuong-trinh-dao-taos [422]` — UI lần 3 (Sở Tư pháp)
+- `reqid=1776 POST /chuong-trinh-dao-taos [201]` — UI lần 4 (STP rút gọn) ✅ → variant 6 created (`CTDT-STP-BG-2026-0001`)
+- Screenshot variant 6 PASS: [r7-3-6-variant-6-dp-stp-bg-pass.png](../../seed/dao-tao/r7-3-6-variant-6-dp-stp-bg-pass.png)

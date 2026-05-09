@@ -25,13 +25,13 @@
 
 ## Tasks
 
-- ✅ **R7.3.7** ✏️ Seed 4 TM (v3.5 enum `NHAP/CONG_KHAI/AN`) + 7 BM entry NHAP <a id="r7-3-7"></a>
-  - **Kết quả:** TM 4/4 PASS — filter LV cover 4/4 (Lao động/KDTM/Thuế/SHTT). BM 0/7 defer (env limit thiếu file .docx). [r7-3-7-tm-list.png](../output/qa-reports/round7-2026-05-06/seed/dao-tao/r7-3-7-tm-list.png)
+- ✅ **R7.3.7** ✏️ Seed 4 TM (v3.5 enum `NHAP/CONG_KHAI/AN`) + 4 BM (3 NHAP + 1 AN) <a id="r7-3-7"></a>
+  - **Kết quả:** R8 re-seed ✅ 2026-05-09 — 4 TM (3 NHAP + 1 AN) + 4 BM (3 NHAP + 1 AN) cover 4 LV (SHTT/Thuế/Thương mại/Lao động). [r7-3-7-r8-bm-list-4-bm.png](../output/qa-reports/round7-2026-05-06/seed/bieu-mau/r7-3-7-r8-bm-list-4-bm.png)
 
-- ⚠️ **R7.4.C1** ✏️ Workflow BM v3.5 — SM-BIEUMAU 3 transition + Switch công khai 4 trường + BR-PUBLIC-01/02/03 `[~62% — 5/8 PASS, BR-PUBLIC-02 FAIL]` <a id="r7-4-c1"></a>
-  - **Kết quả:** ⚠️ 5/8 PASS — SM 3/3 transition + BR-PUBLIC-01 BE + BR-PUBLIC-03 BE PASS. BR-PUBLIC-02 FAIL. [workflow-r7-4-c1](../output/qa-reports/round7-2026-05-06/workflow/bieu-mau/workflow-test-report-r7-4-c1-bm.md)
-  - **Bug:** [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) — 0/6 đóng (2 Critical + 2 Major + 2 Medium)
+- ⚠️ **R7.4.C1** ✏️ Workflow BM v3.5 — SM-BIEUMAU 3 transition + Switch công khai 4 trường + BR-PUBLIC-01/02/03 `[~88% — 7/8 PASS]` <a id="r7-4-c1"></a>
+  - **Kết quả:** R8 lần 3 ✅ 7/8 PASS — SM 3/3 + BR-PUBLIC-01/02/03 PASS. BUG-BM-001 fully fixed (Switch added). 5/6 bug closed. [workflow-r7-4-c1-r8](../output/qa-reports/round7-2026-05-06/workflow/bieu-mau/workflow-test-report-r7-4-c1-bm-r8.md)
+  - **Bug:** [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) — 5/6 đóng (BUG-BM-001 R8 lần 3 + 002/003/004/006). Còn BUG-BM-005 UI silent 409.
 
 - ⚠️ **R7.7.10** ✏️ Biểu mẫu v3.5 — 47 TC (7 cũ + 10 CR-01 + 30 CRUD/workflow) `[~47% — 22/47 PASS, 11 BLOCKED + 14 DEFER]` <a id="r7-7-10"></a>
-  - **Kết quả:** PASS 22/47 (47%) — 19 PASS + 1 PARTIAL + 3 FAIL + 11 BLOCKED + 14 DEFER. P0 9/14. [functional-r7-7-10](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10-bm.md)
-  - **Bug:** [bug-report-function-bm-r7-7-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-function-bm-r7-7-10.md) — 0/2 đóng (BUG-BM-007 Critical MinIO localhost broken preview+download · BUG-BM-008 Medium silent reject upload). Workflow bugs riêng tại [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) (6 bugs R7.4.C1).
+  - **Kết quả:** R8 lần 3 — BUG-BM-001 Switch closed → 10 CR-01 (BM-041..050) UNBLOCKED chờ test riêng. BUG-BM-007/008 vẫn Open. Smoke 5/5 PASS regression-free từ R8 lần 2. [functional-r7-7-10-r8](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10-bm-r8.md)
+  - **Bug:** [bug-report-function-bm-r7-7-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-function-bm-r7-7-10.md) — 0/2 đóng (BUG-BM-007 Critical MinIO localhost vẫn reproduced R8 lần 3 · BUG-BM-008 Medium silent reject .txt vẫn reproduced R8 lần 3). Workflow bugs riêng tại [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) (5/6 đóng R8 lần 3).

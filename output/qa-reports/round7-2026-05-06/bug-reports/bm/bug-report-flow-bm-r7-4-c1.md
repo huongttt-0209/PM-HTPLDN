@@ -22,22 +22,40 @@ Phát hiện **6** lỗi vi phạm SRS v3.5 FR-VII (Thay đổi 1 + 3 BR mới) 
 |------|----------|-------|--------|-------|---------|
 | 6    | 2        | 2     | 2      | 0     | 0       |
 
+### Status sau R8 lần 2 (2026-05-09)
+
+| Đóng | Còn open | % đóng |
+|---|---|---|
+| **5/6** (BUG-BM-001 R8 lần 3 Switch added + BUG-BM-002 R8 + BUG-BM-003 R8 + BUG-BM-004 R8 + BUG-BM-006 R8 lần 2) | 1/6 (BUG-BM-005 UI silent 409) | **83%** |
+
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-BM-001 | Critical | P0 | UI/UX | R7.4.C1 / R7.7.10 | `_DELTA-MAP-FR09.md §1 Áp CR-01` + `CHANGELOG-v3-to-v3.5.md line 1029-1032` (SCR-VII-02 + FR-VII-04 Inputs) | Form Thêm/Sửa Biểu mẫu thiếu 4 trường công khai (Switch + Ảnh + Mô tả CK + File CK) | Open (partial fix R8) |
+| ~~BUG-BM-001~~ | Critical | P0 | UI/UX | R7.4.C1 / R7.7.10 | `_DELTA-MAP-FR09.md §1 Áp CR-01` + `CHANGELOG-v3-to-v3.5.md line 1029-1032` (SCR-VII-02 + FR-VII-04 Inputs) | Form Thêm/Sửa Biểu mẫu thiếu 4 trường công khai (Switch + Ảnh + Mô tả CK + File CK) | **Closed (R8 lần 3 — Switch added, full 4/4 fields)** |
 | ~~BUG-BM-002~~ | Critical | P0 | Workflow | R7.4.C1 | `BR-PUBLIC-02` (`srs-fr-12-tv-chuyen-sau.md` line 1603-1607) | Khi BM chuyển sang `AN`, `ngayCongKhai` KHÔNG clear về NULL | Closed (R8) |
 | ~~BUG-BM-003~~ | Major | P1 | Data | R7.4.C1 | `_DELTA-MAP-FR09.md §1 Thay đổi 1.1` + `CHANGELOG-v3-to-v3.5.md line 1034` (BIEU_MAU bảng attributes rename) | BE BIEU_MAU entity chưa rename `laCongKhai → congKhai` + `ngayCongKhai → thoiGianDangTai` | Closed (R8) |
 | ~~BUG-BM-004~~ | Major | P1 | Data | R7.4.C1 | `_DELTA-MAP-FR09.md §1 Thay đổi 1.4-1.6` + `CHANGELOG-v3-to-v3.5.md line 1034` (BIEU_MAU + 4 row mới) | BE BIEU_MAU entity thiếu 3 fields công khai (`anhDaiDien`, `moTaCongKhai`, `fileDinhKemCongKhai`) | Closed (R8) |
-| BUG-BM-005 | Medium | P2 | UI/UX | R7.4.C1 | `FR-VII-03 §Error Handling E1` (ERR-CK-01 "Thư mục chưa có biểu mẫu, không thể công khai") | UI silent fail — BE trả 409 ERR-CK-01 nhưng KHÔNG hiện toast/notification cho user | Open |
-| BUG-BM-006 | Medium | P2 | Data | R7.4.C1 | `FR-VII-01 §Outputs row 4` (`so_bieu_mau auto đếm`) + `SCR-VII-01 row 11` | Cột "Số biểu mẫu" trên list Thư mục không cập nhật sau khi thêm BM (vẫn 0 dù API đã có 1 BM) | Open |
+| BUG-BM-005 | Medium | P2 | UI/UX | R7.4.C1 | `FR-VII-03 §Error Handling E1` (ERR-CK-01 "Thư mục chưa có biểu mẫu, không thể công khai") | UI silent fail — BE trả 409 ERR-CK-01 nhưng KHÔNG hiện toast/notification cho user | Open (R8 lần 2 reproduced) |
+| ~~BUG-BM-006~~ | Medium | P2 | Data | R7.4.C1 | `FR-VII-01 §Outputs row 4` (`so_bieu_mau auto đếm`) + `SCR-VII-01 row 11` | Cột "Số biểu mẫu" trên list Thư mục không cập nhật sau khi thêm BM (vẫn 0 dù API đã có 1 BM) | Closed (R8 lần 2) |
 
 ---
 
-## BUG-BM-001 — Form Thêm/Sửa Biểu mẫu thiếu 4 trường công khai theo SRS v3.5
+## ~~BUG-BM-001~~ — Form Thêm/Sửa Biểu mẫu thiếu 4 trường công khai theo SRS v3.5 [CLOSED]
 
 > **Re-test 2026-05-08 R8:** ⚠️ **PARTIAL FIX**. Account `cb_nv_tw_02`. Form `/bieu-mau/them-moi` đã thêm heading "Nội dung công khai trên Cổng PLQG" với 3/4 trường: Ảnh đại diện ✅, Mô tả công khai ✅, File đính kèm công khai ✅. **Vẫn thiếu Switch "Công khai trên Cổng PLQG"** (`evaluate_script` đếm `button[role="switch"]` + `.ant-switch` = 0). Bug giữ Open chờ FE add Switch. Evidence: `screenshots/r8-verify-2026-05-08-bm-001-form-them-bm.png`.
+>
+> **Re-test 2026-05-09 R8 lần 2:** ⚠️ **VẪN PARTIAL**. Account `cb_nv_tw_02`. Form `/bieu-mau/them-moi` (sau khi seed 3 BM mới R7.3.7 R8 re-seed) — cấu trúc form không thay đổi: 3/4 fields v3.5 vẫn render OK (uid `12_35` Ảnh CK + uid `12_37` Mô tả CK + uid `12_42` File CK), KHÔNG có element `button[role="switch"]` hoặc `.ant-switch` nào. Snapshot a11y tree chỉ liệt kê `inbox` upload buttons + textbox + Tạo/Hủy buttons — không có switch/toggle component. Bug Open partial chờ FE add Switch.
+>
+> **Re-test 2026-05-09 R8 lần 3 (sau dev claim fix BUG-BM-007/008):** ✅ **CLOSED — full fix 4/4 fields**. Account `cb_nv_tw_02` (cache clear toàn diện + SW unregister + hard reload + fresh login). Form `/bieu-mau/them-moi` snapshot a11y tree liệt kê đầy đủ:
+> ```
+> uid=6_60 StaticText "Công khai trên Cổng PLQG"
+> uid=6_63 switch  "Công khai trên Cổng PLQG question-circle"
+> uid=6_67 button  "Ảnh đại diện ... .jpg, .png, .gif"
+> uid=6_69 textbox "Mô tả công khai" multiline
+> uid=6_74 button  "File đính kèm công khai ... .doc, .docx, .xls, .xlsx, .pdf, .jpg, .png, .gif"
+> ```
+> Switch "Công khai trên Cổng PLQG" đã được FE add (component `switch` role-based, ngược lại 2 round trước count=0). 4/4 CR-01 fields đầy đủ theo SRS v3.5 Thay đổi 1.4-1.6. Bug đóng. Verify thêm 10 TC CR-01 (BM-041..050) trong R7.7.10 R8 lần 3 sau khi cleanup. Evidence: `image/r8l3-bm-001-switch-full-fix.png`.
 
 ### Mô tả
 
@@ -211,6 +229,8 @@ Verify (DevTools console):
 
 ## BUG-BM-005 — UI silent fail khi BE trả 409 ERR-CK-01 (Công khai thư mục rỗng)
 
+> **Re-test 2026-05-09 R8 lần 2:** ❌ **VẪN OPEN**. Account `cb_nv_tw_02`. Tạo TM rỗng "TM Test BR-PUBLIC-01 R8" (id `2d3dfbe9-7bf5-4e0f-8911-aad6228c0150`, Hình sự, 0 BM) → click "Công khai" → confirm popconfirm. POST `/api/v1/thu-muc-bieu-maus/2d3dfbe9.../cong-khai` 409 với `ERR-CK-01`. DOM check: `toastCount=0, errCount=0, bodyHasErrCK01=false`. Pattern silent fail lặp R8 lần 2. Evidence: `screenshots-r8/r8-bug-bm-005-ui-silent-409.png`.
+
 ### Mô tả
 
 Theo FR-VII-03 §Error Handling E1, khi user công khai thư mục rỗng, hệ thống phải báo "Thư mục chưa có biểu mẫu, không thể công khai" (mã `ERR-CK-01`). BE trả đúng response 409 với message tiếng Việt, nhưng FE KHÔNG hiển thị toast / notification → user bấm xong không biết tại sao thư mục vẫn ở NHAP.
@@ -255,7 +275,9 @@ DOM check sau request:
 
 ---
 
-## BUG-BM-006 — Cột "Số biểu mẫu" trên list Thư mục không cập nhật sau khi thêm BM
+## ~~BUG-BM-006~~ — Cột "Số biểu mẫu" trên list Thư mục không cập nhật sau khi thêm BM [CLOSED]
+
+> **Re-test 2026-05-09 R8 lần 2:** ✅ **CLOSED**. Account `cb_nv_tw_02`. Sau R7.3.7 R8 re-seed 1 BM mỗi TM (4 TM × 1 BM = 4 BM total), navigate `/bieu-mau/thu-muc` quan sát cột "Số biểu mẫu" — cả 4 TM đều hiển thị `1` đúng số BM thực tế: HĐ Dân sự-TM/Biểu mẫu SHTT/Biểu mẫu Thuế/HĐ Lao động đều `1`. API GET `/api/v1/thu-muc-bieu-maus` trả field `soBieuMau=1` cho mỗi record. Dev đã fix counter logic.
 
 ### Mô tả
 
