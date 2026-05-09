@@ -29,7 +29,7 @@ Phát hiện **1** lỗi khi seed Tết Nguyên đán Bính Ngọ qua UI Tab Ng�
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-NGAY-LE-001 | Major | P1 | UI/UX | R7.1.5 | `FR-VIII-29 §Processing bước 4` (line 1412) | Form Thêm mới ngày lễ — button [Đồng ý] click silent fail, không trigger POST + không hiện validation error | **Open (lần 6 FAIL — 2026-05-08)** |
+| ~~BUG-NGAY-LE-001~~ | Major | P1 | UI/UX | R7.1.5 | `FR-VIII-29 §Processing bước 4` (line 1412) | Form Thêm mới ngày lễ — button [Đồng ý] click silent fail, không trigger POST + không hiện validation error | **Closed-verified R8 lần 8 (2026-05-09 11:18 sau cache clear toàn diện)** |
 
 > **Re-test 2026-05-07:** ❌ STILL OPEN. Fill date `25/12/2026` qua DatePicker calendar click + tên + ghi chú → click [Đồng ý] vẫn silent: KHÔNG trigger POST `/api/v1/ngay-le`, KHÔNG toast, KHÔNG inline error. Modal stuck open. Bug chưa được dev fix.
 >
@@ -42,6 +42,42 @@ Phát hiện **1** lỗi khi seed Tết Nguyên đán Bính Ngọ qua UI Tab Ng�
 > **Re-test 2026-05-08 R8 lần 5 (sau dev claim fix lần 4):** ❌ **VẪN OPEN**. Account qtht_02 (isolated context fresh). Vào `/quan-tri/cau-hinh?tab=ngay-le` → table 4 record năm 2026 → click [+ Thêm mới] → modal mở. Fill input "Ngày" type text `16/05/2026` (input value verify = `16/05/2026`) + tên `QA R8 retest BUG-NGAY-LE-001 2026-05-08` + Loại default "Ngày lễ" → click [Đồng ý]. Network full session (12 requests) KHÔNG có `POST /api/v1/ngay-le` — chỉ có `auth/login + verify-otp + auth/me + dashboard + cau-hinh/sla + GET ngay-le?nam=2026 + thong-baos/unread-count`. Modal stuck open với form values preserved, KHÔNG toast/error/inline validation. Bug FE handler chưa fix sau 5 lần verify.
 >
 > **Re-test 2026-05-08 23:38 R8 lần 6 (post DB reset — pool về 4 record):** ❌ **VẪN OPEN**. Account qtht_02. Tab Ngày lễ render 4 record (Tết DL/30-4/1-5/Quốc khánh — Tết NĐ R7 lần 5 đã bị reset cùng pool). Click [+ Thêm mới] → drawer mở (NOTE: form là `.ant-drawer-section`, không phải Modal — phát hiện mới R8 lần 6). Fill input Ngày `17/02/2026` + tên `QA R8 retest BUG-NGAY-LE-001 lần 6 (2026-05-08)` + Loại default "Ngày lễ" + Ghi chú text. Click [Đồng ý]. Network 24 request session (auth + dashboard + cau-hinh/sla + ngay-le?nam=2026 + thong-baos/unread-count polling) — KHÔNG có `POST /api/v1/ngay-le`. Drawer stuck open, form values preserved, toast inline `Vui lòng chọn ngày` (FE validation state stale dù input.value=`17/02/2026`). API direct probe POST → 201 OK record id `0647a404-4e84-4578-9718-8f2fa080f853`, table reload UI 5/5 record. Bug FE submit handler chưa fix sau 6 lần verify. Evidence: [bug-ngay-le-001-retest-lan-6-2026-05-08.png](bug-ngay-le-001-retest-lan-6-2026-05-08.png) + [r7-1-5-tab-ngay-le-5-records-reverify-2026-05-08.png](../../seed/qtht-cau-hinh-ht/r7-1-5-tab-ngay-le-5-records-reverify-2026-05-08.png) (sau API workaround).
+>
+> **Re-test 2026-05-09 02:05 R8 lần 7 (sau dev claim fix lần 5):** ❌ **VẪN OPEN — TESTED 3 INPUT METHODS, ALL FAIL.** Account qtht_02. Hard reload `ignoreCache:true` + drawer mở fresh. **Tested 3 method để rule out method limitation:**
+>
+> - **Method 1 — Programmatic native setter** (HTMLInputElement.prototype.value setter + dispatch input/change): Fill ngày `18/02/2026` + tên + ghi chú → click [Đồng ý]. Network: 4 baseline GET requests, KHÔNG có POST `/api/v1/ngay-le`. Drawer stuck.
+> - **Method 2 — MCP keyboard type_text** (real keystroke vào focused DatePicker input): Fill `19/02/2026` qua type_text + Enter, fill_form Tên + Ghi chú → click [Đồng ý]. Network: KHÔNG có POST. Drawer stuck.
+> - **Method 3 — Calendar click chọn ngày** (real user flow đúng nhất — click ô input → mở dropdown calendar → click cell ngày 20): Fill `20/05/2026` qua calendar dropdown click + fill_form Tên + Ghi chú → click [Đồng ý]. Network: KHÔNG có POST. Drawer stuck. KHÔNG có form errors, toasts, console errors.
+> - **Console log:** Chỉ 1 warning Antd `[antd: Drawer] width is deprecated` — KHÔNG có error JS submit handler.
+> - **Form state DOM:** input.value persist OK cả 3 method. Submit button không disabled.
+> - **Mouse event sequence test:** dispatch full mousedown+mouseup+click + form.dispatchEvent('submit') → vẫn KHÔNG fire POST.
+>
+> **Conclusion:** Bug FE submit handler 100% confirmed — onClick/onSubmit React handler không gọi mutation API regardless of input method. Dev claim fix lần 5 KHÔNG thực sự fix bug. Cần dev:
+> 1. Re-deploy với confirm code change đã push lên branch deploy
+> 2. Check React Form `onFinish` handler có throw silent error không (try/catch swallow)
+> 3. Check `useMutation` hook có conditional `enabled: false` chặn fire không
+> 4. Test POST manual qua curl (đã verify R8 lần 6 BE 201 OK với token JWT) → BE không phải nguyên nhân, FE thuần.
+>
+> Evidence: [bug-ngay-le-001-retest-lan-7-2026-05-09.png](bug-ngay-le-001-retest-lan-7-2026-05-09.png).
+>
+> **Re-test 2026-05-09 11:18 R8 lần 8 (sau dev claim fix lần 5 + CACHE CLEAR TOÀN DIỆN):** ✅ **CLOSED-VERIFIED!** Account qtht_02. **Phương pháp:**
+> 1. Clear `caches.delete()` toàn bộ + unregister service workers + `localStorage.clear()` + `sessionStorage.clear()` + BE logout (clear refresh-token cookie HttpOnly).
+> 2. Hard reload `ignoreCache:true` /login + login fresh qtht_02 + OTP 666666.
+> 3. Nav `/quan-tri/cau-hinh?tab=ngay-le` → table 5/5 (4 pre-existing + Tết NĐ R8 lần 6).
+> 4. Click [+ Thêm mới] → drawer mở. Click DatePicker input → calendar dropdown mở → click cell ngày 21 (May 2026). Verify input value = `21/05/2026`. Fill Tên `QA R8 retest BUG-NGAY-LE-001 lần 8 (cache clear + calendar)` + Ghi chú text. Loại default "Ngày lễ".
+> 5. Click [Đồng ý].
+>
+> **Result:** ✅
+> - Network: `POST /api/v1/ngay-le` → **201 Created** ✅ (lần đầu trigger sau 7 lần fail)
+> - Network: `GET /api/v1/ngay-le?nam=2026` → 200 (auto reload table)
+> - Drawer: **đóng tự động** ✅
+> - Table: render **6/6 mục** với record mới `21/05/2026 — QA R8 retest BUG-NGAY-LE-001 lần 8` ✅
+>
+> **Root cause analysis:** Dev fix lần 5 đã work, nhưng lần 6+7 verify FAIL là do **FE bundle cached** trong browser (chrome-devtools-mcp profile cache). Cache invalidate qua `caches.delete()` + service worker unregister + hard reload `ignoreCache:true` mới load FE bundle mới chứa fix.
+>
+> **Lesson learned (memory candidate):** Sau dev claim FE fix → BẮT BUỘC clear cache toàn diện (caches.delete + SW unregister + hard reload + fresh login) trước khi conclude FAIL. Pattern "FE silent fail" với input.value persist + no JS error + no network request thường là FE bundle cũ bị cache thay vì bug FE thực sự.
+>
+> **Status:** **Closed-verified R8 lần 8 (2026-05-09 11:18)**. Evidence: [bug-ngay-le-001-CLOSED-lan-8-2026-05-09.png](bug-ngay-le-001-CLOSED-lan-8-2026-05-09.png).
 
 ---
 

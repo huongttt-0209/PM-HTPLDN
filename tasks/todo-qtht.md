@@ -17,11 +17,11 @@
 
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
-| **P1** | 6 | 0 | 0 | 5 | 1 | 0 | 0 | 0 | ✅[R7.1.1](#r7-1-1) · ✅[R7.1.2](#r7-1-2) · ✅[R7.1.3](#r7-1-3) · ✅[R7.1.4](#r7-1-4) · ⚠️[R7.1.5](#r7-1-5) · ✅[R7.1.6](#r7-1-6) |
+| **P1** | 6 | 0 | 0 | 6 | 0 | 0 | 0 | 0 | ✅[R7.1.1](#r7-1-1) · ✅[R7.1.2](#r7-1-2) · ✅[R7.1.3](#r7-1-3) · ✅[R7.1.4](#r7-1-4) · ✅[R7.1.5](#r7-1-5) · ✅[R7.1.6](#r7-1-6) |
 | **P2** | 3 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | ✅[R7.2.1](#r7-2-1) · ⚠️[R7.2.9](#r7-2-9) · ⚠️[R7.2.9b](#r7-2-9b) |
 | **P5** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.5.5](#r7-5-5) |
-| **P7** | 6 | 0 | 0 | 4 | 2 | 0 | 0 | 0 | ⚠️[R7.7.8](#r7-7-8) · ✅[R7.7.8a](#r7-7-8a) · ⚠️[R7.7.8b](#r7-7-8b) · ✅[R7.7.8c](#r7-7-8c) · ✅[R7.7.8d](#r7-7-8d) · ✅[R7.7.8e](#r7-7-8e) |
-| **Tổng** | **16** | **0** | **0** | **11** | **5** | **0** | **0** | **0** |  |
+| **P7** | 6 | 0 | 0 | 5 | 1 | 0 | 0 | 0 | ✅[R7.7.8](#r7-7-8) · ✅[R7.7.8a](#r7-7-8a) · ⚠️[R7.7.8b](#r7-7-8b) · ✅[R7.7.8c](#r7-7-8c) · ✅[R7.7.8d](#r7-7-8d) · ✅[R7.7.8e](#r7-7-8e) |
+| **Tổng** | **16** | **0** | **0** | **13** | **3** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -39,10 +39,10 @@
 - ✅ **R7.1.4** 🔄 SLA 4 loại (HOI_DAP 10d, VV 10d, HSHT 15d, HSTT 10d, hệ số 2.0) <a id="r7-1-4"></a>
   - **Kết quả:** PASS 4/4 pre-existing match spec, hệ số 2.0, cảnh báo 50/90%. [seed-checklist-r7-1-4-sla.md](../output/qa-reports/round7-2026-05-06/seed/qtht-cau-hinh-ht/seed-checklist-r7-1-4-sla.md)
 
-- ⚠️ **R7.1.5** 🆕 Seed 5 ngày lễ 2026 qua UI Tab Ngày lễ SCR-VIII-06 (FR-VIII-29) `[~80% — 5/5 data, FE submit silent block UI]` <a id="r7-1-5"></a>
+- ✅ **R7.1.5** 🆕 Seed 5 ngày lễ 2026 qua UI Tab Ngày lễ SCR-VIII-06 (FR-VIII-29) <a id="r7-1-5"></a>
   - **Cần:** account `qtht_02`
-  - **Kết quả:** 5/5 data (4 pre-existing + Tết NĐ qua API workaround) — re-verify 2026-05-08 23:38 R8 lần 6 vẫn FE silent. [r7-1-5-tab-ngay-le-5-records-reverify-2026-05-08.png](../output/qa-reports/round7-2026-05-06/seed/qtht-cau-hinh-ht/r7-1-5-tab-ngay-le-5-records-reverify-2026-05-08.png)
-  - **Bug:** [bug-report-seed-r7-1-5-ngay-le.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-cau-hinh-ht/bug-report-seed-r7-1-5-ngay-le.md) — 0/1 đóng (BUG-NGAY-LE-001 Major FE [Đồng ý] silent fail Open lần 6/6 sau dev fix lần 4; BUG-NGAY-LE-002 dropped)
+  - **Kết quả:** PASS 6/6 — 4 pre-existing + Tết NĐ R8 lần 6 (API) + record mới `21/05/2026` qua UI sau cache clear lần 8. R8 lần 8 (2026-05-09 11:18) BUG-NGAY-LE-001 closed-verified. [bug-ngay-le-001-CLOSED-lan-8-2026-05-09.png](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-cau-hinh-ht/bug-ngay-le-001-CLOSED-lan-8-2026-05-09.png)
+  - **Bug:** [bug-report-seed-r7-1-5-ngay-le.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-cau-hinh-ht/bug-report-seed-r7-1-5-ngay-le.md) — 1/1 đóng (BUG-NGAY-LE-001 Closed-verified R8 lần 8 — root cause: FE bundle cached, cần caches.delete + SW unregister + hard reload `ignoreCache` mới load fix; BUG-NGAY-LE-002 dropped)
 
 - ✅ **R7.1.6** 🆕 Seed 9 DM còn lại qua UI SCR-VIII-01 (account qtht_02) <a id="r7-1-6"></a>
   - **Kết quả:** PASS 9/9 — DM2 CHUONG_TRINH_HT 2→3 sau R8 seed CT_HTPLDN (re-verify 2026-05-08). [seed-checklist-r7-1-6-9-dm-con-lai.md](../output/qa-reports/round7-2026-05-06/seed/qtht-danh-muc/seed-checklist-r7-1-6-9-dm-con-lai.md)
@@ -51,21 +51,25 @@
 - ✅ **R7.2.1** 🔄 Seed 12 mẫu phản hồi (cover 6 LV × 2 mẫu/LV) <a id="r7-2-1"></a>
   - **Kết quả:** PASS 12/12 cover 6 LV × 2 (DN/TM/LĐ/Thuế/SHTT/Đất đai). 6 TW + 3 BN + 3 DP, all KICH_HOAT. R8 seed 9 mẫu mới qua 5 account switch sau R7.1.1 unblock. [seed-checklist-r7-2-1-mau-phan-hoi.md](../output/qa-reports/round7-2026-05-06/seed/qtht-cau-hinh-ht/seed-checklist-r7-2-1-mau-phan-hoi.md)
 
-- ⚠️ **R7.2.9** ✏️ Verify 9 TK CG/NHT click mail kích hoạt → HOAT_DONG (FR-VIII-26) `[~50% — API PASS 9/9 + probe ly_13 + dinh_14 login UI ✅; mail click + set MK form UI → R7.2.9b]` <a id="r7-2-9"></a>
-  - **Kết quả:** PASS 9/9 API + probe ly_13 + dinh_14 login UI 2026-05-09 ✅ TK persist active sau >2 ngày. [workflow-test-report-r7-2-9-mail-kich-hoat.md](../output/qa-reports/round7-2026-05-06/workflow/qtht-tai-khoan/workflow-test-report-r7-2-9-mail-kich-hoat.md)
-  - **Scope:** Happy path API + login probe. UI mail click + form set MK full → R7.2.9b. Edge cases ở R7.7.8c.
+- ⚠️ **R7.2.9** ✏️ Verify 9 TK CG/NHT click mail kích hoạt → HOAT_DONG (FR-VIII-26) `[~50% — data acceptance ✅, method gap UI chưa cover original 9 TK]` <a id="r7-2-9"></a>
+  - **Data acceptance ✅:** 9/9 TK persist HOAT_DONG sau >2 ngày — 6 CG batch 1 (TVV-BTP-TW-0001..0006: ly_13/dinh_14/ngo_15/truong_16/mai_17/ho_18) + 3 NHT (_01/_02/_03 STP-AG/DN/HP). Login UI ly_13 + dinh_14 verified functional.
+  - **Method gap ⚠️ chưa resolve cho original 9 TK:** R7 chạy curl API `POST /auth/first-login-password` thuần (CG) + `verify-email`+`reset-password` (NHT) — vi phạm rule UI-only ban hành 2026-05-07. **R7.2.9b R8 KHÔNG cover 9 TK này** — chỉ cover 1 TK MỚI (NHT_04_UI / NHT-BTP-TW-0001) qua UI E2E + 2 login probe CG (ly_13 + dinh_14, verify post-MK-set, KHÔNG phải UI mail click + form set MK).
+  - **Để flip ✅ đúng acceptance UI-only:** Cần re-trigger mail kích hoạt cho 1 trong 6 CG batch 1 hoặc 1 trong 3 NHT _01/_02/_03 (reset state về CHO_KICH_HOAT) → click UI mail link → form set MK qua UI → verify state HOAT_DONG. HOẶC user accept "method gap permanent" với rationale rõ ràng. [workflow-test-report-r7-2-9-mail-kich-hoat.md](../output/qa-reports/round7-2026-05-06/workflow/qtht-tai-khoan/workflow-test-report-r7-2-9-mail-kich-hoat.md)
 
-- ⚠️ **R7.2.9b** 🆕 UI E2E mail kích hoạt + login + view chức năng per role (FR-VIII-26 + SCR-IV/SCR-IV-NHT) `[~67% — NHT full E2E ✅ + CG login/permission ✅; TVV blocked BUG-002]` <a id="r7-2-9b"></a>
-  - **Cần có sẵn:** R7.2.9 ⚠️ (TK đã set MK Secret@123 cho 6 CG batch 1 + 3 NHT) · R7.4.A1 BUG-002 mail format fix (chặn TVV mới)
-  - **Kết quả:** PASS 2/3 role — NHT_04_UI full E2E (verify-email → forgot-password → reset-password form UI → login + OTP → sidebar 3 menu + URL force redirect ✅) + CG dinh_14 login + sidebar 2 menu + URL force ×2 ✅. TVV blocked BUG-002. [workflow-test-report-r7-2-9b-ui-e2e-mail-kich-hoat.md](../output/qa-reports/round7-2026-05-06/workflow/qtht-tai-khoan/workflow-test-report-r7-2-9b-ui-e2e-mail-kich-hoat.md)
-  - **Probe verified:** Sidebar match SCR per role (NHT 3 / CG 2 / QTHT 13). URL force `/quan-tri/*` redirect dashboard cho NHT+CG. URL force `/vu-viec` redirect cho CG (CG không có module VV, khác NHT).
+- ⚠️ **R7.2.9b** 🆕 UI E2E mail kích hoạt + login + view chức năng per role (FR-VIII-26 + SCR-IV/SCR-IV-NHT) `[~75% — NHT full E2E ✅ + CG login/permission ✅ + TVV mail format ✅; TVV login MK after first-login chưa verify]` <a id="r7-2-9b"></a>
+  - **Kết quả PARTIAL 2.5/3 role:**
+    - NHT_04_UI full E2E ✅ (verify-email → forgot-password → reset-password form UI → login + OTP → sidebar 3 menu + URL force redirect)
+    - CG dinh_14 ✅ (login + sidebar 2 menu + URL force ×2)
+    - TVV: mail format BUG-002 ✅ closed-verified (URL chuẩn + first-login-password pattern + single-use vĩnh viễn). Form first-login-password UI render OK. **Login với Secret@123 sau form set MK FAIL 401** trên 2 token (`tvv.r11.mailfix` + `tvv.r12.a18`) — token consumed bởi parallel tester HOẶC FE silent fail bug mới (chưa distinguish được). [workflow-test-report-r7-2-9b-ui-e2e-mail-kich-hoat.md](../output/qa-reports/round7-2026-05-06/workflow/qtht-tai-khoan/workflow-test-report-r7-2-9b-ui-e2e-mail-kich-hoat.md)
+  - **Acceptance gốc unmet:** "TVV/CG/NHT mỗi role 1 record login UI thành công, sidebar đếm đúng menu count theo SCR" — TVV chưa login UI thành công.
+  - **Để flip ✅:** Cần (a) dev seed pool TVV mới với fresh token tester độc quyền, HOẶC (b) isolated test env để rule out parallel race, HOẶC (c) verify FE first-login-password silent fail pattern với cache clear toàn diện + log bug riêng nếu reproduce.
 
 - ✅ **R7.5.5** 🔄 Audit log ≥100 entry qua Nhật ký HT (FR-VIII-28) <a id="r7-5-5"></a>
   - **Kết quả:** PASS 1468 entry (14.68× ngưỡng) — 20 action / 15 entity / 10+ user. UI render `/quan-tri/audit-log` với 5 filter (date/user/module/action/entity). [seed-checklist-r7-5-5-audit-log.md](../output/qa-reports/round7-2026-05-06/seed/qtht-tai-khoan/seed-checklist-r7-5-5-audit-log.md)
 
-- ⚠️ **R7.7.8** ✏️ QTHT 14 DM CRUD functional (DM-only scope; FR-VIII-01..09/11/12/13/18/19/29) `[~96% — 24/25 PASS, 1 BLOCK CREATE NGAY_LE]` <a id="r7-7-8"></a>
-  - **Kết quả:** ⚠️ 24/25 TC PASS + 1 BLOCK CREATE NGAY_LE. R8 re-verify 2026-05-09: DM3 + DM6 verdict ⚠️ → ✅ (3 bug closed-verified); DM1/DM9/DM14 spot OK. BUG-NGAY-LE-001 vẫn Open lần 6/6. [functional-test-report-QTHT-14DM.md](../output/qa-reports/round7-2026-05-06/functional/qtht-danh-muc/functional-test-report-QTHT-14DM.md)
-  - **Bug:** 4 bug đã log từ trước (BUG-NGAY-LE-001 Open lần 6/6) + 3 bug Closed-verified R7 2026-05-07 (BUG-DM-CTHT-001/002, BUG-LOAI-DN-002).
+- ✅ **R7.7.8** ✏️ QTHT 14 DM CRUD functional (DM-only scope; FR-VIII-01..09/11/12/13/18/19/29) <a id="r7-7-8"></a>
+  - **Kết quả:** PASS 25/25 TC. R8 re-verify 2026-05-09: DM3 + DM6 verdict ⚠️ → ✅ (3 bug closed); DM14 NGAY_LE TC17 CREATE flip ✅ sau BUG-NGAY-LE-001 closed lần 8. [functional-test-report-QTHT-14DM.md](../output/qa-reports/round7-2026-05-06/functional/qtht-danh-muc/functional-test-report-QTHT-14DM.md)
+  - **Bug:** 4 bug đã log từ trước, all Closed-verified (BUG-NGAY-LE-001 lần 8 + BUG-DM-CTHT-001/002 + BUG-LOAI-DN-002).
 
 - ✅ **R7.7.8a** 🆕 TAI_KHOAN SM 5 states (TP-TK-01..11) <a id="r7-7-8a"></a>
   - **Kết quả:** PASS 6/6 — R8 re-verify 2026-05-09: 6 tabs SCR-VIII-08 render OK + BE counter reset post-unlock OK + TK pool 89 records (HOAT_DONG:37/CHO_KICH_HOAT:52). [functional-test-report-FR-VIII-15-tk-sm.md](../output/qa-reports/round7-2026-05-06/functional/qtht-tai-khoan/functional-test-report-FR-VIII-15-tk-sm.md)

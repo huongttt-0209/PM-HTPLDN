@@ -1,13 +1,32 @@
 # Workflow test report — R7.2.9 Activate 9 TK qua mail → TK HOAT_DONG (happy path)
 
-> ⚠️ **Method gap (note 2026-05-08):** Task chạy qua curl API thuần `POST /api/v1/auth/first-login-password` — vi phạm rule UI-only ban hành 2026-05-07. Cần re-test UI MCP R8 (click link mail → form đặt MK → submit). Xem [`tasks/lessons-learned.md` 2026-05-08](../../../../../tasks/lessons-learned.md).
+> ⚠️ **Verdict R8 2026-05-09 12:45 (revert sau Codex stop-hook 4th review):** **PARTIAL — Data acceptance ✅, Method gap UI chưa cover original 9 TK.**
+>
+> ### Data acceptance ✅ (state persist verified)
+> - 9/9 TK persist HOAT_DONG sau >2 ngày: 6 CG batch 1 (TVV-BTP-TW-0001..0006) + 3 NHT (_01/_02/_03 STP-AG/DN/HP).
+> - Login UI ly_13 (CG-0001) + dinh_14 (CG-0002) verified functional với MK Secret@123 + OTP — TK active hoạt động sau DB cycle.
+>
+> ### Method gap ⚠️ chưa resolve cho original 9 TK
+> Task gốc R7 chạy curl API `POST /auth/first-login-password` thuần (CG) + `verify-email`+`reset-password` (NHT) — vi phạm rule UI-only ban hành 2026-05-07.
+>
+> **R7.2.9b R8 KHÔNG cover 9 TK của R7.2.9 scope:**
+> - R7.2.9b NHT_04_UI full E2E là **NHT mới (NHT-BTP-TW-0001)**, KHÔNG phải nht_01/02/03 trong R7.2.9 scope.
+> - R7.2.9b CG dinh_14 chỉ verify **login UI sau MK đã set qua API thuần** (probe), KHÔNG phải UI mail click + form set MK qua UI.
+> - → R7.2.9b **chỉ chứng minh "FE pages Quên MK / Reset MK / first-login-password tồn tại + work cho TK mới"**. KHÔNG re-do UI mail flow cho 6 CG batch 1 + 3 NHT _01/_02/_03 của R7.2.9.
+>
+> ### Để flip ✅ đúng acceptance UI-only
+> 1. Dev/QTHT reset state 1 trong 9 TK gốc (vd nht_03) về CHO_KICH_HOAT + re-trigger mail mới
+> 2. QA click UI mail link + form set MK qua UI + verify state HOAT_DONG
+> 3. Lặp tối thiểu 1 CG + 1 NHT để đại diện 2 flow khác nhau (first-login-password vs verify-email+reset-password)
+>
+> **HOẶC** user accept "method gap permanent" với rationale "data acceptance đã đạt + R7.2.9b NHT_04_UI đã chứng minh FE flow work cho new accounts → low regression risk cho 9 TK gốc đã verified state HOAT_DONG persist". Quyết định scope-cut này thuộc về user/PM, KHÔNG tự QA flip ✅ unilateral.
 >
 > ✅ **Probe verify 2026-05-08:** `ly_13` (CG-0001 batch 1, TK đã set MK qua API thuần) login UI MCP `Secret@123` + OTP `666666` → `/dashboard` render đúng role CG (sidebar 2 menu: Đào tạo + Tư vấn, KHÔNG thấy QTHT/Mạng lưới/Hỏi đáp/Vụ việc/Chi trả). TVCS module render data scope đúng (1 record CG mình tham gia). URL force `/quan-tri/danh-muc` → FE redirect `/dashboard`. **Kết luận:** TK 9/9 đã set MK qua API **thực sự functional cho login UI + permission FE** — API path không phải fake pass. Phần còn thiếu (click mail link UI + form set MK qua UI form) sẽ chạy ở task **R7.2.9b** mới (`tasks/todo-qtht.md` §R7.2.9b). Evidence: [`probe-c-cg-ly13-dashboard.png`](probe-c-cg-ly13-dashboard.png) + [`probe-c-cg-ly13-url-force-redirect.png`](probe-c-cg-ly13-url-force-redirect.png).
 >
 > ✅ **Re-verify 2026-05-08 23:55 R8 (qtht_02 + Chrome DevTools MCP):**
 > - **State pool:** `GET /api/v1/tu-van-viens?loaiTvv=CG&pageSize=100` → 14 total, 6 batch 1 (TVV-BTP-TW-0001..0006: ly_13/dinh_14/ngo_15/truong_16/mai_17/ho_18) all `trangThai=HOAT_DONG`. `GET /api/v1/nguoi-ho-tro?pageSize=100` → 12 total, 3 batch 1 (NHT-STP-AG/DN/HP-0001: nht_01/02/03) all `trangThai=HOAT_DONG`. State name đã rename per FR-04 v3.5 (DANG_HOAT_DONG → HOAT_DONG match SRS).
 > - **Login probe fresh `dinh_14` (CG-0002):** username + `Secret@123` → 200 OTP page → OTP `666666` → `/dashboard` render đúng. Display "Đinh Văn Mười Bốn" + role tag CG. TK active functional sau >2 ngày kể từ R7 set MK. Evidence: [probe-cg-dinh14-dashboard-2026-05-08.png](probe-cg-dinh14-dashboard-2026-05-08.png).
-> - **Conclusion:** 9/9 TK persist active sau DB cycle, login UI hoạt động bình thường, permission FE scope đúng. R7.2.9 happy path API + login UI vẫn ✅. UI form set MK lần đầu qua mail link → vẫn deferred sang R7.2.9b.
+> - **Conclusion (R8 2026-05-09 23:55):** 9/9 TK persist active sau DB cycle, login UI hoạt động bình thường, permission FE scope đúng. **Data acceptance ✅ (state HOAT_DONG persist).** Method gap UI cho original 9 TK CHƯA resolve (R7 chạy curl API thuần, R7.2.9b chỉ cover NHT mới + login probe CG, KHÔNG cover UI mail click + form set MK cho 6 CG batch 1 + 3 NHT _01/_02/_03). R7.2.9 verdict ⚠️ partial — xem block "Verdict R8 2026-05-09 12:45" ở đầu report để biết chi tiết.
 
 **Ngày chạy:** 2026-05-06 (R7)
 **SRS ref:** FR-VIII-26 (đặt mật khẩu lần đầu) + FR-VIII-15 (auto-tạo TK)
