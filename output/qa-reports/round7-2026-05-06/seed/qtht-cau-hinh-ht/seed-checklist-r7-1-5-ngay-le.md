@@ -18,11 +18,17 @@
 
 ---
 
-## Kết quả: ✅ XONG 15/5 khoảng (4 pre-existing + 11 seeded mới)
+## Kết quả: ⚠️ MỘT PHẦN ~80% — 5/5 data, FE submit silent block UI (re-verify 2026-05-08 23:38)
 
-5/5 khoảng ngày lễ cover đầy đủ qua 15 record single-date. Schema BE = `{ngay, nam, tenNgayLe, loai, ghiChu}` (single date, không có range). Workaround: expand từng ngày trong period.
+> **Re-verify 2026-05-08 23:38 R8 lần 6 (qtht_02 + Chrome DevTools MCP):**
+> - **State pool hiện tại:** 5 record (4 pre-existing Tết DL/30-4/1-5/Quốc khánh + Tết NĐ Bính Ngọ qua API workaround R8 lần 6 id `0647a404-4e84-4578-9718-8f2fa080f853`). 11 record extra của R7 đã bị reset cùng pool. Cover 4/5 khoảng pháp định 2026 (thiếu Giỗ Tổ + Nghỉ bù — không phải acceptance bắt buộc).
+> - **UI submit re-test lần 6:** Click [+ Thêm mới] → **drawer mở** (không phải Modal — phát hiện R8 lần 6: form là `.ant-drawer-section`). Fill ngày `17/02/2026` + tên + ghi chú → click [Đồng ý] → drawer stuck open, KHÔNG có `POST /api/v1/ngay-le`, toast inline `Vui lòng chọn ngày` (FE validation state stale dù `input.value` đã set). BUG-NGAY-LE-001 vẫn Open sau 6 lần verify.
+> - **API workaround:** `POST /api/v1/ngay-le` với JWT session → 201 OK record save DB → table reload UI 5/5 ✅. BE work fine, FE submit handler bug.
+> - **Evidence:** [r7-1-5-tab-ngay-le-5-records-reverify-2026-05-08.png](r7-1-5-tab-ngay-le-5-records-reverify-2026-05-08.png) (UI 5/5 sau API seed) + [bug-ngay-le-001-retest-lan-6-2026-05-08.png](../../bug-reports/qtht-cau-hinh-ht/bug-ngay-le-001-retest-lan-6-2026-05-08.png) (drawer stuck).
 
-**Bug:** Không có (workaround chính thức cho UI gap DEPLOY-004 — UI tab "Ngày lễ" chưa deploy).
+**Snapshot lịch sử (2026-05-06 14:12):** 15/5 khoảng cover đầy đủ qua API direct workaround (UI tab chưa deploy DEPLOY-004 lúc đó). 5 khoảng: Tết DL/Tết NĐ 7 ngày/Giỗ Tổ/30-4+1-5+nghỉ bù/Quốc khánh+nghỉ bù.
+
+**Bug:** [BUG-NGAY-LE-001](../../bug-reports/qtht-cau-hinh-ht/bug-report-seed-r7-1-5-ngay-le.md) Major Open lần 6/6 — FE [Đồng ý] silent fail, không trigger POST. Workaround API direct OK.
 
 ---
 
@@ -66,7 +72,9 @@
 
 ## Ảnh chụp
 
-- *(không có UI screenshot — UI tab chưa deploy DEPLOY-004; verify qua API response trên)*
+- *(R7 historical: không có UI screenshot — UI tab chưa deploy DEPLOY-004; verify qua API response trên)*
+- [Tab Ngày lễ 5/5 records sau R8 lần 6 API workaround (2026-05-08)](r7-1-5-tab-ngay-le-5-records-reverify-2026-05-08.png)
+- [Drawer Thêm mới ngày lễ stuck sau click [Đồng ý] — BUG-NGAY-LE-001 lần 6 (2026-05-08)](../../bug-reports/qtht-cau-hinh-ht/bug-ngay-le-001-retest-lan-6-2026-05-08.png)
 
 ---
 

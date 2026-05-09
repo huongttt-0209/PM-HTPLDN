@@ -17,7 +17,12 @@
 
 ## Tổng hợp
 
-**Verdict:** ⚠️ **PASS 6/7 + 1 defer + 2 Critical FE missing pages** — BE endpoints đầy đủ và work đúng, nhưng FE pages Quên MK / Reset MK chưa implement → user KHÔNG thể tự reset MK qua UI.
+**Verdict (R7 2026-05-07):** ⚠️ **PASS 6/7 + 1 defer + 2 Critical FE missing pages** — BE endpoints đầy đủ và work đúng, nhưng FE pages Quên MK / Reset MK chưa implement → user KHÔNG thể tự reset MK qua UI.
+
+> **Re-verify R8 2026-05-09 01:10 (Chrome DevTools MCP, no-auth probe):**
+> - **3 BE endpoints persist:** `POST /auth/forgot-password` 200 neutral (TC05 anti-enumerate ✅), `POST /auth/reset-password` 422 with token UUID validation (TC04-style invalid token reject ✅), `POST /auth/verify-email` 400 "Link kích hoạt không hợp lệ" with `ERR-AUTH-VIII-22-05` (TC04 invalid token ✅).
+> - **Cross-verified ở R7.2.9b NHT_04_UI:** Full E2E mail flow (verify-email → forgot-password → reset-password form UI → login + OTP → sidebar SCR-IV-NHT) — confirm 3 endpoints work end-to-end qua UI, KHÔNG còn "FE missing pages" như R7. FE Quên MK / Reset MK page có thật.
+> - **R8 verdict:** ✅ flip từ ⚠️→ — 2 Critical FE pages đã implement (verify R7.2.9b), 6 TC PASS persist, 1 TC03 defer SQL backdate giữ nguyên (P2 không impact session R8).
 
 ### Test result
 

@@ -17,7 +17,15 @@
 
 ## Tổng hợp
 
-**Verdict:** ✅ **PASS 5/6 TP + 1 partial** — Verify đầy đủ guard transitions QTHT thao tác. 1 bug Major BE counter không reset.
+**Verdict (R7 2026-05-07):** ✅ **PASS 5/6 TP + 1 partial** — Verify đầy đủ guard transitions QTHT thao tác. 1 bug Major BE counter không reset → **Closed R7 2026-05-07**.
+
+> **Re-verify R8 2026-05-09 00:55 (qtht_02 + Chrome DevTools MCP):**
+> - **Tabs SCR-VIII-08:** 6 tabs đầy đủ render đúng (Tất cả 89 / Hoạt động 37 / Chờ kích hoạt 52 / Tạm khóa 0 / Chờ phân quyền 0 / Vô hiệu hóa 0). BUG-TK-SM-003 vẫn Closed-verified ✅.
+> - **BE counter reset post-unlock:** Probe `POST /api/v1/auth/login {username:cb_nv_dp_03, password:WRONG}` → 401 `ERR-AUTH-LOGIN-01` "Tên đăng nhập hoặc mật khẩu không đúng" (KHÔNG phải `ERR-AUTH-LOCKED-01`). Counter `so_lan_sai` đã reset = 0 sau lần unlock R7. BUG-TK-SM-002 vẫn Closed-verified ✅.
+> - **TK state pool R8:** total 89, HOAT_DONG:37 (incl. nht_04_ui mới activate R7.2.9b R8), CHO_KICH_HOAT:52, TAM_KHOA:0, VO_HIEU_HOA:0, CHO_PHAN_QUYEN:0. Pool tăng từ 36 (R7) → 89 (R8) do seed nhiều TK batch 6/7/8 từ R7.2.5/6/7.
+> - **Per-state action UI:** Row CHO_KICH_HOAT có [Kích hoạt] + [Gửi lại email]. Row HOAT_DONG có [Khóa TK] + [Vô hiệu hóa]. Match SRS SM-TAIKHOAN.
+> - **Evidence:** [r7-7-8a-tk-sm-6-tabs-reverify-2026-05-09.png](r7-7-8a-tk-sm-6-tabs-reverify-2026-05-09.png).
+> - **R8 verdict:** ✅ giữ PASS — 2 bug Closed-verified persist sau >2 ngày, no regression.
 
 ### Test result
 

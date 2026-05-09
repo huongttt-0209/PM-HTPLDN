@@ -3,6 +3,11 @@
 > ⚠️ **Method gap (note 2026-05-08):** Task chạy qua curl API thuần `POST /api/v1/auth/first-login-password` — vi phạm rule UI-only ban hành 2026-05-07. Cần re-test UI MCP R8 (click link mail → form đặt MK → submit). Xem [`tasks/lessons-learned.md` 2026-05-08](../../../../../tasks/lessons-learned.md).
 >
 > ✅ **Probe verify 2026-05-08:** `ly_13` (CG-0001 batch 1, TK đã set MK qua API thuần) login UI MCP `Secret@123` + OTP `666666` → `/dashboard` render đúng role CG (sidebar 2 menu: Đào tạo + Tư vấn, KHÔNG thấy QTHT/Mạng lưới/Hỏi đáp/Vụ việc/Chi trả). TVCS module render data scope đúng (1 record CG mình tham gia). URL force `/quan-tri/danh-muc` → FE redirect `/dashboard`. **Kết luận:** TK 9/9 đã set MK qua API **thực sự functional cho login UI + permission FE** — API path không phải fake pass. Phần còn thiếu (click mail link UI + form set MK qua UI form) sẽ chạy ở task **R7.2.9b** mới (`tasks/todo-qtht.md` §R7.2.9b). Evidence: [`probe-c-cg-ly13-dashboard.png`](probe-c-cg-ly13-dashboard.png) + [`probe-c-cg-ly13-url-force-redirect.png`](probe-c-cg-ly13-url-force-redirect.png).
+>
+> ✅ **Re-verify 2026-05-08 23:55 R8 (qtht_02 + Chrome DevTools MCP):**
+> - **State pool:** `GET /api/v1/tu-van-viens?loaiTvv=CG&pageSize=100` → 14 total, 6 batch 1 (TVV-BTP-TW-0001..0006: ly_13/dinh_14/ngo_15/truong_16/mai_17/ho_18) all `trangThai=HOAT_DONG`. `GET /api/v1/nguoi-ho-tro?pageSize=100` → 12 total, 3 batch 1 (NHT-STP-AG/DN/HP-0001: nht_01/02/03) all `trangThai=HOAT_DONG`. State name đã rename per FR-04 v3.5 (DANG_HOAT_DONG → HOAT_DONG match SRS).
+> - **Login probe fresh `dinh_14` (CG-0002):** username + `Secret@123` → 200 OTP page → OTP `666666` → `/dashboard` render đúng. Display "Đinh Văn Mười Bốn" + role tag CG. TK active functional sau >2 ngày kể từ R7 set MK. Evidence: [probe-cg-dinh14-dashboard-2026-05-08.png](probe-cg-dinh14-dashboard-2026-05-08.png).
+> - **Conclusion:** 9/9 TK persist active sau DB cycle, login UI hoạt động bình thường, permission FE scope đúng. R7.2.9 happy path API + login UI vẫn ✅. UI form set MK lần đầu qua mail link → vẫn deferred sang R7.2.9b.
 
 **Ngày chạy:** 2026-05-06 (R7)
 **SRS ref:** FR-VIII-26 (đặt mật khẩu lần đầu) + FR-VIII-15 (auto-tạo TK)
