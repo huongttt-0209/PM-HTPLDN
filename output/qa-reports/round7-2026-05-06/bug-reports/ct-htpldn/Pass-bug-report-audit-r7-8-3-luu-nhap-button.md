@@ -26,8 +26,8 @@ Phát hiện **1 bug Major** + **1 bug Medium** liên quan FE chưa implement sc
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |---|---|---|---|---|---|---|---|
-| ~~BUG-LUUNHAP-01~~ | **Major** | P1 | Workflow | R7.8.3-TC02 | `_DELTA-MAP-CROSS-CUTTING.md C3 line 107` (scope HẸP — bỏ button [Lưu nháp]) | ~~Form chỉnh sửa CT HTPLDN trạng thái Dự thảo CHƯA bỏ button [Lưu nháp] + thiếu [Đệ trình duyệt] → workflow CT R7.6.4 nghẽn ở DU_THAO~~ | Closed (R8) |
-| ~~BUG-LUUNHAP-02~~ | Medium | P2 | UI/UX | R7.8.3-TC02 | `_DELTA-MAP-CROSS-CUTTING.md C3 line 107-108` | ~~Form CT HTPLDN edit chỉ có button "Lưu nháp" duy nhất, không có [Hủy] / [Quay lại] → user không thoát form được mà không save~~ | Closed (R8) |
+| ~~BUG-LUUNHAP-01~~ | **Major** | P1 | Workflow | R7.8.3-TC02 | `_DELTA-MAP-CROSS-CUTTING.md C3 line 107` (scope HẸP — bỏ button [Lưu nháp]) | Form chỉnh sửa CT HTPLDN trạng thái Dự thảo CHƯA bỏ button [Lưu nháp] + thiếu [Đệ trình duyệt] → workflow CT R7.6.4 nghẽn ở DU_THAO | Closed (R8 + R9 persist) |
+| ~~BUG-LUUNHAP-02~~ | Medium | P2 | UI/UX | R7.8.3-TC02 | `_DELTA-MAP-CROSS-CUTTING.md C3 line 107-108` | Form CT HTPLDN edit chỉ có button "Lưu nháp" duy nhất, không có [Hủy] / [Quay lại] → user không thoát form được mà không save | Closed (R8 + R9 persist) |
 
 ---
 

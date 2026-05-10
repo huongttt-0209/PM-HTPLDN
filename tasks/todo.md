@@ -4,7 +4,7 @@
 **Plan:** [plan.md](plan.md) v2.6.5 · **Plan trigger:** [plan-r7-trigger.md](plan-r7-trigger.md) · **Spec data:** [seed-fixture.yaml v2.7.2](../input/data/seed-fixture.yaml)  
 **R6 frozen:** [_archive/round6-frozen-2026-05-06.md](_archive/round6-frozen-2026-05-06.md) (74 task, ref lịch sử)  
 **Spec sync chi tiết R7:** [handoff/session-handoff-r7-spec-sync.md](handoff/session-handoff-r7-spec-sync.md)  
-**Today:** 2026-05-08
+**Today:** 2026-05-09
 
 **Trạng thái icon:** 🟢 sẵn sàng · 🔵 đang làm · ✅ xong · ⚠️ partial · 🚫 block · ⏳ chờ upstream  
 **Tag kế thừa R6:** 🔄 KEPT (spec không đổi, re-seed/re-test) · ✏️ MODIFIED (spec đổi) · 🆕 NEW (feature SRS update)
@@ -18,14 +18,14 @@
 | 0 | Pre-test (verify deploy + bug gap + fixture + spec review) | 7 | - | - | 5 | 2 | - | - |
 | 1 | Re-seed Tier 0 (DM/đơn vị/SLA/MPH/ngày lễ) | 6 | - | - | 5 | 1 | - | - |
 | 2 | Re-seed Tier 1 (TC TV/DN/TVV/CG/NHT/account) | 8 | - | - | 7 | - | 1 | - |
-| 3 | Re-seed Tier 2 (transactional entry state) +**3 sub-task FR-02/X.2 v3.5** | 18 | 1 | - | 11 | 0 | 6 | 0 |
-| 4 | Workflow E2E (Trụ A/B/C/D) +**3 task v3.5** | 22 | 1 | - | 2 | 7 | 1 | 11 |
+| 3 | Re-seed Tier 2 (transactional entry state) +**3 sub-task FR-02/X.2 v3.5** | 18 | 2 | - | 11 | 1 | 4 | 0 |
+| 4 | Workflow E2E (Trụ A/B/C/D) +**3 task v3.5** | 22 | 2 | - | 2 | 8 | 0 | 10 |
 | 5 | Verification (KPI/cross/SLA/audit) | 5 | 3 | - | - | - | - | 2 |
 | 6 | Workflow đầu ra hậu kỳ (Chi trả/TVN/CT) | 5 | - | - | 1 | - | 1 | 3 |
 | 7 | Functional 17 module + 2 NEW + **4 sub-task FR-06 v3.5** | 30 | 9 | - | 4 | 6 | 2 | 9 |
 | 8 | Cross-cutting + Profile + Permission +**R7.8.6 UC renumber FR-11 v3.5** +**R7.8.7 E2E DN full luồng** | 7 | 2 | - | 1 | 3 | - | 1 |
 | Trụ E | Monitor unblock | 4 | - | - | 2 | 1 | - | 1 |
-| **Tổng** | | **112** | **19** | **0** | **43** | **17** | **11** | **20** |
+| **Tổng** | | **112** | **21** | **0** | **43** | **19** | **8** | **19** |
 
 ---
 
@@ -39,7 +39,7 @@
 | # | Module | File | Tasks | Status | Phase / Task IDs |
 |:-:|---|---|:-:|---|---|
 | 1 | Pre-test | [todo-pre-test.md](todo-pre-test.md) | 7 | ✅7 | **P0** ✅R7.0.1..7 |
-| 2 | QTHT — Quản trị hệ thống | [todo-qtht.md](todo-qtht.md) | 16 | ✅11 ⚠️5 | **P1** ✅R7.1.1, ✅R7.1.2, ✅R7.1.3, ✅R7.1.4, ⚠️R7.1.5, ✅R7.1.6<br>**P2** ✅R7.2.1, ⚠️R7.2.9, ⚠️R7.2.9b<br>**P5** ✅R7.5.5<br>**P7** ⚠️R7.7.8, ✅R7.7.8a, ⚠️R7.7.8b, ✅R7.7.8c, ✅R7.7.8d, ✅R7.7.8e |
+| 2 | QTHT — Quản trị hệ thống | [todo-qtht.md](todo-qtht.md) | 16 | ✅12 ⚠️4 | **P1** ✅R7.1.1, ✅R7.1.2, ✅R7.1.3, ✅R7.1.4, ⚠️R7.1.5, ✅R7.1.6<br>**P2** ✅R7.2.1, ⚠️R7.2.9, ⚠️R7.2.9b<br>**P5** ✅R7.5.5<br>**P7** ✅R7.7.8, ✅R7.7.8a, ⚠️R7.7.8b, ✅R7.7.8c, ✅R7.7.8d, ✅R7.7.8e |
 | 3 | TC TV — Tổ chức tư vấn | [todo-tc-tv.md](todo-tc-tv.md) | 4 | ✅4 | **P2** ✅R7.2.2, ✅R7.2.3<br>**P4** ✅R7.4.A6<br>**P7** ✅R7.7.4.6 |
 | 4 | Doanh nghiệp | [todo-doanh-nghiep.md](todo-doanh-nghiep.md) | 4 | ✅3 ⚠️1 | **P2** ✅R7.2.4<br>**P3** ✅R7.3.4<br>**P5** ✅R7.5.2<br>**P7** ⚠️R7.7.4 |
 | 5 | TVV + CG | [todo-tvv-cg.md](todo-tvv-cg.md) | 7 | ✅6 ⚠️1 | **P2** ✅R7.2.5, ✅R7.2.6<br>**P4** ✅R7.4.A1, ✅R7.4.A1.6, ✅R7.4.A1-CG, ✅R7.4.A2<br>**P7** ⚠️R7.7.2 |
@@ -48,7 +48,7 @@
 | 8 | Vụ việc | [todo-vu-viec.md](todo-vu-viec.md) | 6 | ✅2 ⚠️1 🚫2 ⏳1 | **P3** ✅R7.3.2<br>**P4** ✅R7.4.A3, 🚫R7.4.A3-DN-BS, 🚫R7.4.A3-PUBLIC<br>**P7** ⚠️R7.7.3, ⏳R7.7.3-PRIVACY |
 | 9 | TVCS — Tư vấn chuyên sâu | [todo-tvcs.md](todo-tvcs.md) | 3 | ✅1 ⚠️2 | **P3** ✅R7.3.3<br>**P4** ⚠️R7.4.A5<br>**P7** ⚠️R7.7.5 |
 | 10 | HĐ TV — Hợp đồng tư vấn | [todo-hop-dong-tv.md](todo-hop-dong-tv.md) | 3 | ✅2 ⚠️1 | **P3** ✅R7.3.14<br>**P7** ⚠️R7.7.14<br>**Trụ E** ✅R7.E1 |
-| 11 | Đào tạo (KH năm / CTĐT / Khóa / NHCH / ĐKT / GV / HV / LH) | [todo-dao-tao.md](todo-dao-tao.md) | 17 | ✅6 ⚠️1 🚫5 ⏳5 | **P3** ✅R7.3.5, 🚫R7.3.6, ✅R7.3.8, ✅R7.3.9, ✅R7.3.10, ✅R7.3.11, 🚫R7.3.12, 🚫R7.3.13, 🚫R7.3.15<br>**P4** 🚫R7.4.B0, ⏳R7.4.B1, ✅R7.4.B5b, ⏳R7.4.B7, ⚠️R7.4.B10, ⏳R7.4.B11, ⏳R7.4.B12<br>**P7** ⏳R7.7.6 |
+| 11 | Đào tạo (KH năm / CTĐT / Khóa / NHCH / ĐKT / GV / HV / LH) | [todo-dao-tao.md](todo-dao-tao.md) | 17 | ✅8 ⚠️4 🚫3 ⏳2 | **P3** ✅R7.3.5, ⚠️R7.3.6, ✅R7.3.8, ✅R7.3.9, ✅R7.3.10, ✅R7.3.11, 🚫R7.3.12, 🚫R7.3.13, ✅R7.3.15<br>**P4** ⚠️R7.4.B0, ✅R7.4.B1, ✅R7.4.B5b, ⚠️R7.4.B7, ⚠️R7.4.B10, 🚫R7.4.B11, ⏳R7.4.B12<br>**P7** ⏳R7.7.6 |
 | 12 | Biểu mẫu | [todo-bieu-mau.md](todo-bieu-mau.md) | 3 | ✅1 ⚠️2 | **P3** ✅R7.3.7<br>**P4** ⚠️R7.4.C1<br>**P7** ⚠️R7.7.10 |
 | 13 | Kho QA | [todo-kho-qa.md](todo-kho-qa.md) | 3 | ✅2 ❌1 | **P3** ✅R7.3.16<br>**P4** ✅R7.4.D3, ❌R7.4.D3.AUTO |
 | 14 | Đánh giá Hiệu quả HTPL | [todo-danh-gia-hq.md](todo-danh-gia-hq.md) | 5 | ✅1 ⚠️1 ⏳3 | **P4** ✅R7.4.D1, ⚠️R7.4.D2, ⏳R7.4.D2a, ⏳R7.4.D2b<br>**P7** ⏳R7.7.9 |

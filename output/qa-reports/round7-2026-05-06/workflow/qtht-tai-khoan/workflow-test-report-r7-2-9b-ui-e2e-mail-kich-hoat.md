@@ -6,15 +6,15 @@
 
 ---
 
-## Verdict
+## Verdict (R8 update 2026-05-09 12:35 sau Codex stop-hook review)
 
 | Role | Step 1 mail click | Step 2 form set MK | Step 3 login + OTP | Step 4 sidebar + URL force | Status |
 |---|:-:|:-:|:-:|:-:|:-:|
 | **NHT** (NHT_04_UI / NHT-BTP-TW-0001) | ✅ verify-email link → 200 | ✅ forgot-password → reset-password form UI → submit | ✅ Secret@123 + OTP 666666 → /dashboard | ✅ 3 menu (Đào tạo/Vụ việc/Tư vấn) + URL force /quan-tri redirect /dashboard | **✅ PASS** |
 | **CG** (dinh_14 / TVV-BTP-TW-0002) | ⏭️ pre-set MK R7 (skip mail) | ⏭️ pre-set MK R7 (skip form) | ✅ Secret@123 + OTP → /dashboard role CG | ✅ 2 menu (Đào tạo/Tư vấn) + URL force /quan-tri + /vu-viec redirect /dashboard | **✅ PASS (login+permission)** |
-| **TVV** | 🚫 BUG-002 mail format | 🚫 cascade | 🚫 cascade | 🚫 cascade | **🚫 BLOCKED bởi R7.4.A1 BUG-002** |
+| **TVV** (tvv.r11.mailfix + tvv.r12.a18) | ✅ mail BUG-002 fixed (URL chuẩn `103.172.236.130` + first-login-password pattern + single-use vĩnh viễn) | ✅ form UI render OK + submit consume token (state CHO_KICH_HOAT → HOAT_DONG) | ❌ **login Secret@123 → 401 ERR-AUTH-LOGIN-01** trên cả 2 token | ❌ blocked by step 3 | **⚠️ PARTIAL (mail+form OK, login MK fail)** |
 
-**Tổng:** 2/3 role full PASS (NHT full E2E + CG login/permission), 1/3 role BLOCKED chờ dev fix R7.4.A1 BUG-002.
+**Tổng:** **2/3 role PASS + 1/3 PARTIAL** — TVV mail format BUG-002 closed-verified ✅ nhưng login MK Secret@123 sau form set fail 401 (token consumed parallel race HOẶC FE silent fail bug mới — chưa distinguish được). Acceptance gốc "TVV login UI thành công + sidebar SCR-IV-TVV" CHƯA đạt → R7.2.9b giữ ⚠️ partial.
 
 ---
 
@@ -98,21 +98,51 @@ KHÔNG có Vụ việc (CG khác NHT — CG không nhận VV phân công, chỉ 
 
 ---
 
-## Phase 3 — TVV BLOCKED (R7.4.A1 BUG-002 mail format)
+## Phase 3 — TVV (UPDATED 2026-05-09 12:25 sau BUG-002 fix)
 
-### Block reason
+### BUG-002 mail format ✅ CLOSED-VERIFIED
 
-Per todo R7.4.A1 + R7.2.9b dependency: BUG-002 (mail format error cho TVV mới đăng ký) chặn flow mail kích hoạt TVV. Đến khi dev fix BUG-002, không thể test E2E TVV mail flow qua UI.
+R8 re-verify 2026-05-09 12:25 sau dev claim fix BUG-002:
+- **Mail format mới đã đúng SRS:**
+  - Subject: "Hồ sơ TVV đã được phê duyệt — kích hoạt tài khoản" ✅
+  - URL chuẩn `http://103.172.236.130/auth/first-login-password?token=...` (KHÔNG còn `localhost:3000`) ✅
+  - Pattern single-use vĩnh viễn: "Link kích hoạt có hiệu lực vĩnh viễn và chỉ dùng được một lần" ✅
+  - KHÔNG còn temp password trong mail (security improved) ✅
+- **3 TVV mail mới (`tvv.r11.mailfix`, `tvv.r11.a16`, `tvv.r12.a18`)** đều dùng pattern này — confirm dev fix lan rộng.
+- Evidence: mail từ MailHog query `tvv.r11.mailfix@test.htpldn.vn` 2026-05-08 21:19 với token `a612b7e5-ca39-4c90-8975-7a2c7c42e860`.
 
-### Pool state
+### TVV E2E full flow — PARTIAL VERIFIED
 
-- TVV pool: `MOI_DANG_KY:6` (R7.2.5 batch 2 TVV-0017..0022) + `CHO_KICH_HOAT:2` + `CHO_PHE_DUYET:1` + `TU_CHOI:3` + `HOAT_DONG:1` + `YEU_CAU_BO_SUNG:1` (re-verify state-snapshot 2026-05-09)
-- Có 2 TVV `CHO_KICH_HOAT` available nhưng mail format BUG-002 chặn.
+R8 verification kết quả:
+- **Step 1 — Click first-login-password link:** ✅ Page load form "Đặt mật khẩu lần đầu" với 2 fields (Mật khẩu mới + Nhập lại mật khẩu) + button [Đặt mật khẩu và đăng nhập]. Form structure OK.
+- **Step 2 — Form set MK + submit:** Token consumed (state TVV chuyển CHO_KICH_HOAT → HOAT_DONG). Page redirect /login.
+- **Step 3 — Login với Secret@123:** ❌ ERR-AUTH-LOGIN-01 "Tên đăng nhập hoặc mật khẩu không đúng" — MK chưa stick.
 
-### Workaround / next action
+**Possible causes (cần điều tra):**
+1. Multi-tester race: parallel QA tester đã consume token + set MK khác Secret@123 trước tôi.
+2. New FE silent fail bug: form submit có response 200 nhưng MK chưa lưu DB (similar pattern BUG-NGAY-LE-001).
 
-- Khi BUG-002 fix → re-run Phase 3 TVV với cùng pattern Phase 1 NHT (verify-email → forgot-password → reset-password → login + sidebar SCR-IV-TVV).
-- Hiện tại flag TVV scope "deferred to R7.4.A1 fix".
+**Pool TVV CHO_KICH_HOAT còn lại R8 (2026-05-09):**
+- TVV-BTP-TW-0030 (huongcg) — không có mail trong MailHog
+- TVV-BTP-TW-0031 (TVV R10 Test BUG-002 Mail) — không có mail trong MailHog
+→ Không thể trigger fresh token mail.
+
+### Decision
+
+- **BUG-002 mail format CLOSED** ✅ — đã verify mail body đúng SRS.
+- **TVV E2E login MK verify** defer R10 (cần seed TVV mới + isolated test environment để tránh multi-tester race, hoặc dev push reset all token để test lại).
+
+### Pool state (R8 update 2026-05-09 12:25)
+
+- TVV pool live: 15 total — HOAT_DONG:8 (incl. tvv.r11.mailfix + tvv.r11.a16 + tvv.r12.a18 đã activated) + MOI_DANG_KY:6 + CHO_KICH_HOAT:1
+- Pool TVV CHO_KICH_HOAT chỉ còn `huongcg` + `TVV-BTP-TW-0031` nhưng KHÔNG có mail trong MailHog (mail có thể đã purge hoặc dev pre-seed pool không trigger mail send).
+- Token-mới đã consumed bởi parallel testers → tester độc quyền không thể test E2E full flow.
+
+### Workaround / next action (R8 update 2026-05-09 12:35)
+
+- ✅ BUG-002 mail format đã closed-verified.
+- ⚠️ TVV login MK sau form first-login-password vẫn fail — cần dev seed pool TVV mới fresh + isolated test env, sau đó QA re-run với cache clear toàn diện.
+- Nếu sau cache clear + fresh token vẫn fail → log bug riêng FE first-login-password silent fail.
 
 ---
 
@@ -124,33 +154,55 @@ Per todo R7.4.A1 + R7.2.9b dependency: BUG-002 (mail format error cho TVV mới 
 | CB_NV_TW (cb_nv_tw_01) | 13 | Tổng quan + 11 modules + Quản trị HT | ✅ access | ✅ access |
 | **NHT** (nht_04_ui) | **3** | Đào tạo + Vụ việc + Tư vấn | 🚫 redirect /dashboard | ✅ access (NHT nhận VV phân công) |
 | **CG** (dinh_14) | **2** | Đào tạo + Tư vấn | 🚫 redirect /dashboard | 🚫 redirect /dashboard |
-| TVV (chưa test) | TBD | TBD | TBD | TBD |
+| **TVV** | TBD (login MK fail — chưa vào được dashboard) | — | — | — |
 
 ---
 
-## BE quirks observed (R8 lần này)
+## BE quirks observed
 
-- Mail config dùng `localhost:3000` thay `103.172.236.130:3000` — minor bug giống R7 (đã document, không re-log).
+### NHT phase (2026-05-09 sáng)
+- Mail NHT verify-email config dùng `localhost:3000` thay `103.172.236.130:3000` — minor bug, tester thay IP thủ công.
 - HTML mail có entity escape `&#x3D;` cho `=` trong query string — phải decode trước navigate.
 - Reset-password token có hiệu lực 30 phút (chuẩn).
-- Verify-email token có hiệu lực 24 giờ (chuẩn).
+- Verify-email token NHT có hiệu lực 24 giờ (chuẩn).
+
+### TVV phase (2026-05-09 12:25 sau BUG-002 fix)
+- ✅ Mail TVV mới đã dùng URL chuẩn `103.172.236.130` (bug localhost cho TVV đã closed).
+- Token first-login-password TVV có hiệu lực vĩnh viễn + single-use (per mail body "Link kích hoạt có hiệu lực vĩnh viễn và chỉ dùng được một lần").
+- Submit form first-login-password CHƯA được verify thực sự stick MK do token consumed bởi parallel testers OR FE silent fail bug khả nghi.
 
 ---
 
-## Cascade impact
+## Cascade impact (R8 update 2026-05-09 12:35)
 
 - ✅ NHT_04_UI now `HOAT_DONG`, MK = `Secret@123`, dùng login UI bình thường — pool NHT HOAT_DONG: 3 → 4.
 - ✅ CG batch 1 (6 record) đã verified login + permission thực tế functional sau >2 ngày từ R7 set MK qua API.
-- 🚫 TVV E2E mail flow vẫn block — chờ R7.4.A1 BUG-002 dev fix.
+- ✅ TVV mail format BUG-002 closed-verified — mail mới đúng SRS pattern (URL chuẩn + first-login-password single-use vĩnh viễn).
+- ⚠️ TVV E2E full flow (login MK + sidebar SCR-IV-TVV) CHƯA resolved — pool tokens consumed. Cần dev seed pool fresh + QA re-run với cache clear toàn diện.
 
 ## Acceptance per task
 
 | Acceptance | Result |
 |---|:-:|
-| TVV/CG/NHT mỗi role 1 record login UI thành công | NHT ✅ + CG ✅ + TVV 🚫 |
-| Sidebar đếm đúng menu count theo SCR | NHT 3 ✅ + CG 2 ✅ |
-| URL force module ngoài quyền → block | NHT ✅ + CG ✅ (×2 module) |
-| **Tổng** | **2/3 role PASS, 1 BLOCKED** |
+| TVV/CG/NHT mỗi role 1 record login UI thành công | NHT ✅ + CG ✅ + **TVV ⚠️** (mail+form OK, login MK fail 401) |
+| Sidebar đếm đúng menu count theo SCR | NHT 3 ✅ + CG 2 ✅ + TVV ❌ (chưa vào được dashboard) |
+| URL force module ngoài quyền → block | NHT ✅ + CG ✅ (×2 module) + TVV ❌ (blocked by step 3) |
+| **Tổng** | **2/3 role PASS + 1/3 PARTIAL** — TVV mail format ✅ closed-verified nhưng login UI + sidebar chưa đạt acceptance gốc |
+
+> **R8 update 2026-05-09 12:25:** R7.4.A1 BUG-002 mail format **CLOSED-VERIFIED**. Pool TVV-BTP-TW-0032/0033/0034 đều có mail mới đúng SRS pattern. **TVV E2E acceptance ("login UI thành công + sidebar SCR-IV-TVV") CHƯA RESOLVED** — verify thử trên 2 token (a612b7e5 + a10cacf9) đều fail login với Secret@123 sau form set MK. State chuyển CHO_KICH_HOAT → HOAT_DONG nhưng MK không stick.
+>
+> **Possible causes (2):**
+> 1. **Parallel-tester race:** QA tester khác đã consume token + set MK của họ trước tôi. Pool shared environment.
+> 2. **FE first-login-password silent fail bug:** form submit có response nhưng MK không persist DB (similar pattern BUG-NGAY-LE-001 cycle).
+>
+> **Cannot distinguish without:** fresh isolated TVV token (chưa có ai chạm) + cache clear toàn diện trước test. Pool hiện tại TVV-BTP-TW-0030/0031 còn CHO_KICH_HOAT nhưng KHÔNG có mail trong MailHog (mail có thể đã purge).
+>
+> **Action items để flip ✅:**
+> 1. **Dev:** seed pool TVV mới với fresh tokens, hoặc reset state TVV-0032/0033/0034 → CHO_KICH_HOAT + re-trigger mail
+> 2. **QA:** sau dev seed, cache clear toàn diện (caches.delete + SW unregister + hard reload + fresh login) → re-run TVV E2E pattern phase 1 NHT
+> 3. **Bug log (nếu reproduce):** Nếu sau cache clear + fresh token vẫn fail → log new bug FE first-login-password silent fail (BUG-FLP-001 candidate, severity Major P1, cùng module BUG-NGAY-LE-001 pattern).
+>
+> **Verdict R8 (2026-05-09 12:30 sau Codex stop-hook review):** ⚠️ **PARTIAL** — không thể flip ✅ vì TVV E2E acceptance "login UI thành công + sidebar SCR-IV-TVV" chưa được verify thực sự dù mail format BUG-002 đã closed.
 
 ---
 

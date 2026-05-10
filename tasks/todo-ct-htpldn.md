@@ -25,9 +25,9 @@
 
 ## Tasks
 
-- ⚠️ **R7.6.4** 🔄 Workflow CT HTPLDN GĐ1 11 bước `[~91% — 10/11 PASS, B10 NEW Open]` <a id="r7-6-4"></a>
-  - **Kết quả:** ⚠️ PASS 10/11 (R2 2026-05-08). B7 BUG-B7-001 R1 fixed. NEW BUG-B10-001 ERR-VAL-XI-06-10 chặn HOAN_THANH "0/0 dot BC". [workflow-test-report-r7-6-4-cthtpldn-gd1.md](../output/qa-reports/round7-2026-05-06/workflow/ct-htpldn/workflow-test-report-r7-6-4-cthtpldn-gd1.md)
-  - **Bug:** [bug-report-flow-cthtpldn.md](../output/qa-reports/round7-2026-05-06/bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md) — 1/2 đóng (B7-001 Closed-verified; B10-001 NEW Open Major)
+- ⚠️ **R7.6.4** 🔄 Workflow CT HTPLDN GĐ1 11 bước `[~91% — 10/11 PASS, B10 Open partial-fix]` <a id="r7-6-4"></a>
+  - **Kết quả:** ⚠️ PASS 10/11 (R3 2026-05-09 re-test). B10 vẫn 409 ERR-VAL-XI-06-10; message R3 "2/2 đợt chưa DA_TONG_HOP" (i18n + count fix). [workflow-test-report-r7-6-4-cthtpldn-gd1.md](../output/qa-reports/round7-2026-05-06/workflow/ct-htpldn/workflow-test-report-r7-6-4-cthtpldn-gd1.md)
+  - **Bug:** [bug-report-flow-cthtpldn.md](../output/qa-reports/round7-2026-05-06/bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md) — 1/2 đóng (B7-001 Closed-verified; B10-001 Open Major partial-fix R3)
 
 - 🚫 **R7.6.5** 🔄 Workflow CT HTPLDN GĐ2 Đợt BC 7 bước `[block: UI Story 13.6 chưa build + TW CT deadlock]` <a id="r7-6-5"></a>
   - **Kết quả:** 🚫 5/7 API PASS · UI tab Đợt BC chưa build (Story 13.6) · TW CT deadlock DA_DUYET_KQ. [workflow-test-report-r7-6-5-cthtpldn-gd2.md](../output/qa-reports/round7-2026-05-06/workflow/workflow-test-report-r7-6-5-cthtpldn-gd2.md)

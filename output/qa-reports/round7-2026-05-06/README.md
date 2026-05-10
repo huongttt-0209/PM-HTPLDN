@@ -19,9 +19,11 @@
 | 3 | qtht_01 login | ✅ | OTP 666666 bypass |
 | 4 | cb_nv_tw_01 login | ✅ | OTP 666666 bypass |
 | 5 | Sub-menu TC TV + NHT visible với CB_NV_TW | ✅ | Verified MCP 2026-05-06 |
-| 6 | 8/18 deploy gap | ⚠️ 6 bug Major/Medium/Minor + 2 false positive drop | xem bug-report |
+| 6 | 8/18 deploy gap | ✅ **6/6 DEPLOY-* Closed** (5/6 R8 batch 2026-05-07: DEPLOY-001/002/004/005/006; DEPLOY-003 sidebar Đào tạo Closed R8 lần 3 2026-05-08 09:10 sau match SRS 6 sub-menu) + 2 false positive drop | [bug-report](bug-reports/deploy-gap/bug-report-audit-deploy-gap.md) |
 
-> **🚫 Block test:** Phase 4/5/6/7 phụ thuộc DEPLOY-001 (NHT 404) + DEPLOY-002 (HOC_VIEN 404) — chờ dev fix.
+> **R10 status (2026-05-10):** Tất cả 6 DEPLOY-* gap đã Closed. Block hiện tại = bug-level (không phải deploy-gap):
+> - **BUG-HV-BE-01 Major Open** (R7.3.12 R10) — HOC_VIEN entity deployed nhưng POST `/hoc-viens` crash 500 với valid DTO. Block 9 TC R7.7.6 HV-related (DT-011/019/031b-d/052/054/055). Chuyên trang DN/NHT FR-III-04 (entry-point user thực) chưa test. [Detail](bug-reports/dao-tao/bug-report-r7-3-12-hoc-vien-deploy-partial.md)
+> - Other module-specific bugs xem todo.md per task icon.
 
 ---
 
@@ -48,8 +50,8 @@ round7-2026-05-06/
 |:-:|---|---|
 | 0 | Pre-test (deploy verify + bug gap + fixture + UI audit) | 🟢 in progress |
 | 1 | Re-seed Tier 0 (DM/đơn vị/SLA/MPH/ngày lễ) | 🟢 ready |
-| 2 | Re-seed Tier 1 (TC TV/DN/TVV/CG/NHT/account/PC) | ⏳ partial — chờ NHT entity |
-| 3 | Re-seed Tier 2 (transactional state) | ⏳ partial — chờ HOC_VIEN entity |
+| 2 | Re-seed Tier 1 (TC TV/DN/TVV/CG/NHT/account/PC) | ✅ done — NHT entity deployed R8, seeded R9-R10 (xem todo per task) |
+| 3 | Re-seed Tier 2 (transactional state) | ⚠️ partial — Đào tạo 13/17 ✅ + 3 ⚠️ + 1 🚫 (R7.3.12 chờ BUG-HV-BE-01; R7.4.B10/B12/R7.7.6 ⚠️); module khác xem todo |
 | 4 | Workflow E2E (Trụ A/B/C/D) | ⏳ chờ Phase 1-3 |
 | 5 | Verification (KPI/cross/SLA/audit) | ⏳ chờ Phase 4 |
 | 6 | Workflow đầu ra hậu kỳ (Chi trả/TVN/CT) | ⏳ chờ Phase 4 |

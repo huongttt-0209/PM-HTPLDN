@@ -16,22 +16,50 @@
 
 R7.6.5 R1 (2026-05-08) phát hiện **2 bug NEW**, đều Major. UI tab Đợt báo cáo chưa build, BE endpoint tổng hợp BC missing → cascade deadlock TW CT + block BUG-CTHTPLDN-B10-001 R7.6.4.
 
+**R2 verify 2026-05-09 (sớm):** BUG-DOTBC-UI-001 đánh giá PARTIAL FIX read-side với account `cb_nv_tw_02`; ghi nhận button [+ Tạo đợt mới] miss → **giữ Major**. BUG-DOTBC-API-001 VẪN OPEN cho TW CT path. Cả 2 block production.
+
+**R3 reconcile verify 2026-05-09 (sau gd1 verify ~30 phút):**
+- **BUG-DOTBC-UI-001 → close-candidate (downgrade Major→Minor):** Re-test với cùng `cb_nv_tw_02` trên cùng CT-20260508-0001 — button **[+ Tạo đợt mới] NOW PRESENT** (uid 16_13). Earlier R2 finding "missing" likely do **FE deploy timing** (dev push fix giữa R2 và R3 verify, ~30 phút khoảng cách). Còn duy nhất miss button [Tổng hợp] cho TW CT — cascade BE.
+- **BUG-DOTBC-API-001 → vẫn Open Major:** Re-probe 8 sub-resource POST endpoints + gui-tw + state check trên DOT-4-1 (TW CT, DA_DUYET_KQ) → 8/8 sub-resource đều 404, gui-tw 403 (đúng spec BN/ĐP only), DOT không mutate. TW CT path vẫn missing endpoint /tong-hop riêng.
+
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 2    | 0        | 2     | 0      | 0     | 0       |
+| Round | Tổng | Critical | Major | Medium | Minor | Trivial |
+|-------|------|----------|-------|--------|-------|---------|
+| R1 2026-05-08 | 2 | 0 | 2 | 0 | 0 | 0 |
+| R2 2026-05-09 (sớm) | 2 | 0 | 2 (UI-001 + API-001) | 0 | 0 | 0 |
+| **R3 2026-05-09 (reconcile)** | **2** | **0** | **1** (API-001) | **0** | **1** (UI-001 close-candidate) | **0** |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-DOTBC-UI-001 | Major | P1 | UI miss feature | R7.6.5 toàn bộ | `02-thu-tu-module.md` line 325 (tab Đợt báo cáo) + `srs-fr-15-ct-htpldn.md` FR-XI-05a line 442 (SCR-XI-01 tab Đợt BC) | Tab "Đợt báo cáo" hiển thị placeholder "Tính năng sẽ được triển khai ở Story 13.6" — UI hoàn toàn chưa build, block toàn bộ CRUD đợt BC + 7 transitions SM-DOT-BC | **Open** |
-| BUG-DOTBC-API-001 | Major | P1 | BE missing endpoint | R7.6.5 B7 + R7.6.4 B10 cascade | `02-thu-tu-module.md` line 875 (`DA_GUI_TW → DA_TONG_HOP \| cb_nv_tw_01 \| [Tổng hợp] (FR-XI-09)`) + `srs-fr-15-ct-htpldn.md` FR-XI-09 line 782 | BE thiếu endpoint chuyển ĐBC sang DA_TONG_HOP. TW CT deadlock vĩnh viễn ở DA_DUYET_KQ → block HOAN_THANH cascade BUG-CTHTPLDN-B10-001 R7.6.4 | **Open** |
+| BUG-DOTBC-UI-001 | Major→**Minor** | P1→P3 | UI miss feature | R7.6.5 toàn bộ | `02-thu-tu-module.md` line 325 (tab Đợt báo cáo) + `srs-fr-15-ct-htpldn.md` FR-XI-05a line 442 (SCR-XI-01 tab Đợt BC) | Tab "Đợt báo cáo" — list table + drill-down detail đã build. Button **[+ Tạo đợt mới]** ở tab list **NOW PRESENT** với cả `cb_nv_tw_01` và `cb_nv_tw_02` (R3 2026-05-09 reconcile). Còn miss button **[Tổng hợp]** ở DOT detail TW CT (FR-XI-09 UC172) — cascade với BUG-DOTBC-API-001 (BE chưa expose endpoint cho TW CT path) | **Close-candidate** (R3 2026-05-09 — UI feature đã build phần lớn; còn block bởi missing [Tổng hợp] button cascade BE) |
+| BUG-DOTBC-API-001 | Major | P1 | BE missing endpoint (TW CT path) | R7.6.5 B7 + R7.6.4 B10 cascade | `02-thu-tu-module.md` line 875 (`DA_GUI_TW → DA_TONG_HOP \| cb_nv_tw_01 \| [Tổng hợp] (FR-XI-09)`) + `srs-fr-15-ct-htpldn.md` FR-XI-09 line 782 | TW CT path: 8 sub-resource POST `/dot-bao-caos/{id}/tong-hop\|tonghop\|consolidate\|...` đều 404 (R3 2026-05-09 sanity-check confirm). Resource-level POST `/dot-bao-caos/tong-hop` đã có (gd1 BUG-DOTBC-API-002 design-fixed) nhưng chỉ accept BN/ĐP DA_GUI_TW — TW CT vẫn deadlock | **Open** (R3 2026-05-09 — sub-resource endpoint cho TW CT path vẫn missing, cùng kết quả R1+R2) |
 
 ---
 
-## BUG-DOTBC-UI-001 — Tab "Đợt báo cáo" UI chưa build
+## BUG-DOTBC-UI-001 — Tab "Đợt báo cáo" UI — close-candidate sau R3 reconcile
+
+> **Re-test R3 reconcile:** 2026-05-09 — ⚠️ CLOSE-CANDIDATE (downgrade Major→Minor). Re-verify với cùng account `cb_nv_tw_02` (single role CB_NV_TW) trên cùng CT-20260508-0001 — button **"plus Tạo đợt mới" NOW PRESENT** (uid 16_13) ở tab Đợt báo cáo. Earlier R2 finding "button missing" có thể do **FE deploy timing** trong khoảng nghỉ ~30 phút giữa R2 và R3 verify (dev push fix). Còn duy nhất block: button **[Tổng hợp]** cho DOT detail TW CT — phụ thuộc cascade BUG-DOTBC-API-001.
+>
+> Bằng chứng R3: [r7-6-5-r3-tab-dotbc-button-present-cb-nv-tw-02-2026-05-09.png](../image/r7-6-5-r3-tab-dotbc-button-present-cb-nv-tw-02-2026-05-09.png)
+>
+> Status: **Close-candidate** — UI feature [+ Tạo đợt mới] đã build cho cả 2 account TW. Recommend close sau khi BUG-DOTBC-API-001 fix + button [Tổng hợp] FE add.
+
+> **Re-test:** 2026-05-09 R2 — ⚠️ PARTIAL FIX (giữ Major). Story 13.6 placeholder GONE. Tab "Đợt báo cáo" trên CT-20260508-0001 (DANG_THUC_HIEN, cấp TW) hiện render read-side đầy đủ:
+> - ✅ Banner deadline TT17/2025 (sẵn từ R1).
+> - ✅ Table list ĐBC đầy đủ (cột: Mã / Tên / Kỳ BC / Từ ngày / Hạn nộp / Trạng thái) — 2 record DOT-4-1 (DA_DUYET_KQ) + DOT-4-2 (DANG_LAP_BC).
+> - ✅ Pagination + click link drill-down → URL `/ct-htpldn/dot-bao-cao/{id}` route đã build.
+> - ✅ DOT detail page: stepper 6 bước (Tạo đợt → Đang lập BC → Chờ duyệt KQ → Đã duyệt KQ → Đã gửi TW → Đã tổng hợp) + bảng 13 chỉ tiêu mẫu 21a + button [Gửi lên TW] (mapping HATEOAS `gui-tw`).
+>
+> **Còn miss (giữ severity Major — write-side block, end-user không tạo được Đợt BC qua UI):**
+> - ❌ KHÔNG có button **[+ Tạo đợt mới]** trên tab list dù CT ở DANG_THUC_HIEN — feature theo spec line 325 ("nút [+ Tạo đợt mới] chỉ bật khi CT ở DANG_THUC_HIEN hoặc HOAN_THANH" → button phải tồn tại để bật) + FR-XI-05a UC195. End-user không thể tạo Đợt BC mới qua UI.
+> - ❌ KHÔNG có button **[Tổng hợp]** trên DOT detail page khi state = DA_DUYET_KQ + actor = TW user — block FR-XI-09 (UC172). Cascade với BUG-DOTBC-API-001 (BE chưa expose endpoint).
+>
+> **Severity remains Major:** R2 partial fix unblock đọc/duyệt list+detail (giúp QA verify state machine), nhưng **không unblock chuỗi production** — end-user TW vẫn không tạo Đợt BC, cascade BUG-CTHTPLDN-B10-001 R7.6.4 (HOAN_THANH) vẫn deadlock vĩnh viễn.
+>
+> Bằng chứng R2: [r7-6-5-r2-tab-dot-bc-list-rendered-2026-05-09.png](../image/r7-6-5-r2-tab-dot-bc-list-rendered-2026-05-09.png) + [r7-6-5-r2-dot-4-1-detail-rendered-2026-05-09.png](../image/r7-6-5-r2-dot-4-1-detail-rendered-2026-05-09.png)
 
 ### Mô tả
 
@@ -84,7 +112,24 @@ UI chỉ render placeholder "Tính năng sẽ được triển khai ở Story 13
 
 ---
 
-## BUG-DOTBC-API-001 — BE thiếu endpoint /tong-hop, TW CT deadlock vĩnh viễn ở DA_DUYET_KQ
+## BUG-DOTBC-API-001 — BE thiếu endpoint /tong-hop cho TW CT path, deadlock vĩnh viễn ở DA_DUYET_KQ
+
+> **Re-test R3 sanity-check:** 2026-05-09 — ❌ VẪN OPEN MAJOR. Login `cb_nv_tw_02`, probe lại 8 sub-resource POST `/dot-bao-caos/{id}/{tong-hop|tonghop|consolidate|aggregate|finalize|mark-tong-hop|tw-tong-hop|consolidate-bc}` trên DOT-4-1 (TW CT, DA_DUYET_KQ, version=4):
+> - 8/8 sub-resource POST → **404 ERR-SYS-00-04-01**
+> - POST `/gui-tw` → **403 ERR-PERM-SYS-00-01** (đúng spec line 874 — BN/ĐP only)
+> - DOT-4-1 state vẫn `DA_DUYET_KQ`, version=4 (không mutate sau probe)
+>
+> → TW CT path vẫn không có endpoint nào để chuyển `DA_DUYET_KQ → DA_TONG_HOP`. Cùng kết quả như R1+R2. Cascade B10 vẫn deadlock.
+
+> **Re-test:** 2026-05-09 R2 — ❌ VẪN OPEN. Tổng hợp probe trên DOT-4-1 (TW CT, DA_DUYET_KQ, version=4):
+> - HATEOAS `_links` chỉ có `self` + `gui-tw` — KHÔNG có `tong-hop` hay `consolidate`.
+> - 8 sub-resource POST `/dot-bao-caos/{id}/{tong-hop|tonghop|consolidate|aggregate|finalize|mark-tong-hop|tw-tong-hop|consolidate-bc}` đều **404 ERR-SYS-00-04-01**.
+> - **Resource-level POST `/dot-bao-caos/tong-hop` ĐÃ TỒN TẠI** (R1 chưa probe pattern này): trả 404 ERR-VAL-XI-09-05 "Không tìm thấy báo cáo với ID" khi truyền DOT-4-1 ID — confirm là cùng endpoint với BUG-CTHTPLDN-DOTBC-API-002 (gd1 bug report) — endpoint chỉ accept BC IDs (BAO_CAO_CT_HTPL entity), không phải DOT IDs.
+> - GET `/dot-bao-caos/tong-hop` → 200 với 2 record BN/ĐP DOT ở DA_GUI_TW (DOT-9-1, DOT-8-1) — endpoint list candidates cho TW tổng hợp BN/ĐP cascade.
+>
+> **Phát hiện mới R2:** Endpoint `/tong-hop` chỉ phục vụ BN/ĐP cascade (`DA_GUI_TW → DA_TONG_HOP` ở phía TW receive). **TW CT path** (TW tự tạo CT + DOT, tự đẩy DA_DUYET_KQ → DA_TONG_HOP) **không có entry endpoint** — BE chưa expose, vẫn deadlock như R1.
+>
+> Bug giữ severity Major. Cascade với BUG-CTHTPLDN-B10-001 R7.6.4 vẫn còn (R3 2026-05-09 confirm POST /complete trả "2/2 đợt báo cáo chưa DA_TONG_HOP").
 
 ### Mô tả
 
