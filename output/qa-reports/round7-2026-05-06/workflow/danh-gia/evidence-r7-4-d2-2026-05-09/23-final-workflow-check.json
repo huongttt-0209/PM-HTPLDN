@@ -1,0 +1,464 @@
+{
+  "planId": "c521f1f1-82b2-424a-a14c-6d01e91ce540",
+  "checkedAt": "2026-05-09T12:16:18.230Z",
+  "pdLoginUrl": "http://103.172.236.130:3000/dashboard",
+  "pdModuleText": "Bỏ qua đến nội dung chính\nHỗ trợ pháp lý doanh nghiệp\nBộ Tư pháp\nTổng quan\nQuản lý hỏi đáp pháp lý\nQuản lý đào tạo, tập huấn\n▶\nMạng lưới Tư vấn viên\n▶\nQuản lý vụ việc hỗ trợ pháp lý\nQuản lý chi trả chi phí\nQuản lý doanh nghiệp được hỗ trợ\nĐánh giá hiệu quả hỗ trợ pháp lý\nQuản lý thư viện biểu mẫu\nQuản lý tư vấn\n▶\nQuản lý chương trình hỗ trợ pháp lý doanh nghiệp\nBáo cáo thống kê\nQuản trị hệ thống\n▶\nBộ Tư pháp — Cục Bổ trợ tư pháp\n16\nC0\nCB Phê duyệt TW 03\nCB_PD_TW\n404\nTrang bạn tìm kiếm không tồn tại hoặc đã được di chuyển.\nĐường dẫn: /danh-gia-hq\nVề trang chủ\nQuay lại",
+  "pdLinks": [
+    {
+      "text": "Bỏ qua đến nội dung chính",
+      "href": "http://103.172.236.130:3000/danh-gia-hq#main-content"
+    }
+  ],
+  "beforeApprove": {
+    "status": 200,
+    "ok": true,
+    "body": {
+      "success": true,
+      "data": {
+        "id": "c521f1f1-82b2-424a-a14c-6d01e91ce540",
+        "nguoiTaoId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+        "nguoiCapNhatId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+        "ngayTao": "2026-05-09T11:41:05.148Z",
+        "ngayCapNhat": "2026-05-09T12:12:28.495Z",
+        "donViId": "00000000-0000-4000-8000-000000000001",
+        "seqId": "1",
+        "version": 2,
+        "trangThai": "PHAN_CONG",
+        "nguoiGuiDuyetId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+        "ngayGuiDuyet": "2026-05-09T12:12:28.501Z",
+        "nguoiDuyetId": null,
+        "ngayDuyet": null,
+        "ghiChuPheDuyet": null,
+        "maKeHoach": "DG-20260509-0001",
+        "tenDot": "QA R7.4.D1 bo 03 202605091141",
+        "mucTieu": "QA report-only R7.4.D1 bằng bộ tài khoản 03. Kiểm tra tạo kỳ Đánh giá Hiệu quả HTPL trạng thái LAP_KE_HOACH và chuyển sang tab Tiêu chí.",
+        "tanSuat": "SO_BO_6_THANG",
+        "doiTuong": "VU_VIEC",
+        "thoiGianBatDau": "2026-03-31",
+        "thoiGianKetThuc": "2026-06-29",
+        "ghiChu": "QA-only R7.4.D1, account cb_nv_tw_03.",
+        "soVuViecDanhGia": 0,
+        "diemTrungBinh": null,
+        "_links": {
+          "self": {
+            "href": "/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540",
+            "method": "GET"
+          }
+        }
+      },
+      "meta": null
+    }
+  },
+  "approve": {
+    "status": 200,
+    "ok": true,
+    "body": {
+      "success": true,
+      "data": {
+        "id": "c521f1f1-82b2-424a-a14c-6d01e91ce540",
+        "nguoiTaoId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+        "nguoiCapNhatId": "c49d46f2-6332-42c7-a511-8f30ed529f6f",
+        "ngayTao": "2026-05-09T11:41:05.148Z",
+        "ngayCapNhat": "2026-05-09T12:16:24.093Z",
+        "donViId": "00000000-0000-4000-8000-000000000001",
+        "seqId": "1",
+        "version": 3,
+        "trangThai": "CHO_DUYET_PC",
+        "nguoiGuiDuyetId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+        "ngayGuiDuyet": "2026-05-09T12:12:28.501Z",
+        "nguoiDuyetId": "c49d46f2-6332-42c7-a511-8f30ed529f6f",
+        "ngayDuyet": "2026-05-09T12:16:24.096Z",
+        "ghiChuPheDuyet": null,
+        "maKeHoach": "DG-20260509-0001",
+        "tenDot": "QA R7.4.D1 bo 03 202605091141",
+        "mucTieu": "QA report-only R7.4.D1 bằng bộ tài khoản 03. Kiểm tra tạo kỳ Đánh giá Hiệu quả HTPL trạng thái LAP_KE_HOACH và chuyển sang tab Tiêu chí.",
+        "tanSuat": "SO_BO_6_THANG",
+        "doiTuong": "VU_VIEC",
+        "thoiGianBatDau": "2026-03-31",
+        "thoiGianKetThuc": "2026-06-29",
+        "ghiChu": "QA-only R7.4.D1, account cb_nv_tw_03.",
+        "soVuViecDanhGia": 0,
+        "diemTrungBinh": null
+      },
+      "meta": null
+    }
+  },
+  "afterApprove": {
+    "status": 200,
+    "ok": true,
+    "body": {
+      "success": true,
+      "data": {
+        "id": "c521f1f1-82b2-424a-a14c-6d01e91ce540",
+        "nguoiTaoId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+        "nguoiCapNhatId": "c49d46f2-6332-42c7-a511-8f30ed529f6f",
+        "ngayTao": "2026-05-09T11:41:05.148Z",
+        "ngayCapNhat": "2026-05-09T12:16:24.093Z",
+        "donViId": "00000000-0000-4000-8000-000000000001",
+        "seqId": "1",
+        "version": 3,
+        "trangThai": "CHO_DUYET_PC",
+        "nguoiGuiDuyetId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+        "ngayGuiDuyet": "2026-05-09T12:12:28.501Z",
+        "nguoiDuyetId": "c49d46f2-6332-42c7-a511-8f30ed529f6f",
+        "ngayDuyet": "2026-05-09T12:16:24.096Z",
+        "ghiChuPheDuyet": null,
+        "maKeHoach": "DG-20260509-0001",
+        "tenDot": "QA R7.4.D1 bo 03 202605091141",
+        "mucTieu": "QA report-only R7.4.D1 bằng bộ tài khoản 03. Kiểm tra tạo kỳ Đánh giá Hiệu quả HTPL trạng thái LAP_KE_HOACH và chuyển sang tab Tiêu chí.",
+        "tanSuat": "SO_BO_6_THANG",
+        "doiTuong": "VU_VIEC",
+        "thoiGianBatDau": "2026-03-31",
+        "thoiGianKetThuc": "2026-06-29",
+        "ghiChu": "QA-only R7.4.D1, account cb_nv_tw_03.",
+        "soVuViecDanhGia": 0,
+        "diemTrungBinh": null,
+        "_links": {
+          "self": {
+            "href": "/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540",
+            "method": "GET"
+          }
+        }
+      },
+      "meta": null
+    }
+  },
+  "nvLoginUrl": "http://103.172.236.130:3000/dashboard",
+  "vvDone": {
+    "status": 200,
+    "ok": true,
+    "body": {
+      "success": true,
+      "data": [],
+      "meta": {
+        "page": 1,
+        "pageSize": 20,
+        "total": 0,
+        "totalPages": 0
+      }
+    }
+  },
+  "vvAll": {
+    "status": 200,
+    "ok": true,
+    "body": {
+      "success": true,
+      "data": [
+        {
+          "id": "a6cb915a-481d-4f44-9069-f5fb8e3374b0",
+          "maVuViec": "VV-STP-AG-20260509-001",
+          "tieuDe": "VV-DP-AG tạo bởi cb_nv_dp_01 cho test BR-AUTH-08 TW exception",
+          "trangThai": "DA_TIEP_NHAN",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-23T06:27:47.026Z",
+          "ngayTiepNhan": "2026-05-09T06:27:47.026Z",
+          "ngayTao": "2026-05-09T06:27:47.018Z",
+          "donViId": "00000000-0000-4000-8002-000000000006",
+          "tenLinhVuc": "Lao động",
+          "tenDoanhNghiep": "Công ty Cổ phần Phúc An AG",
+          "tenNguoiHoTro": null
+        },
+        {
+          "id": "8d074115-4da5-427c-af55-3909f1e4e675",
+          "maVuViec": "VV-BTP-TW-20260509-008",
+          "tieuDe": "VV-004 test validation no DN",
+          "trangThai": "DA_TIEP_NHAN",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-23T06:19:32.605Z",
+          "ngayTiepNhan": "2026-05-09T06:19:32.605Z",
+          "ngayTao": "2026-05-09T06:19:32.598Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Doanh nghiệp",
+          "tenDoanhNghiep": null,
+          "tenNguoiHoTro": null
+        },
+        {
+          "id": "7805bbee-4fb3-4cb0-8f3f-e652838522a1",
+          "maVuViec": "VV-BTP-TW-20260509-007",
+          "tieuDe": "VV-003 R7.7.3 — tạo tay kênh Điện thoại 2026-05-09",
+          "trangThai": "DA_TIEP_NHAN",
+          "kenhTiepNhan": "DIEN_THOAI",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-23T06:17:53.023Z",
+          "ngayTiepNhan": "2026-05-09T06:17:53.023Z",
+          "ngayTao": "2026-05-09T06:17:53.013Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Doanh nghiệp",
+          "tenDoanhNghiep": "DNTN Hoàng Gia AG",
+          "tenNguoiHoTro": null
+        },
+        {
+          "id": "23b809ad-4557-4710-b794-718cd321975c",
+          "maVuViec": "VV-BTP-TW-20260509-006",
+          "tieuDe": "Tư vấn thủ tục thay đổi GĐ và đăng ký HKD - Tân Phú BG",
+          "trangThai": "DA_PHAN_CONG",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-23T02:20:12.471Z",
+          "ngayTiepNhan": "2026-05-09T02:20:12.471Z",
+          "ngayTao": "2026-05-09T02:20:12.465Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Doanh nghiệp",
+          "tenDoanhNghiep": "DNTN Tân Phú BG",
+          "tenNguoiHoTro": "Lý Thị Mười Ba"
+        },
+        {
+          "id": "6594bc71-8c92-4ec5-8fed-02ba95707673",
+          "maVuViec": "VV-BTP-TW-20260509-005",
+          "tieuDe": "Tư vấn thuê đất KCN ưu đãi - Thành Đạt BG",
+          "trangThai": "DA_PHAN_CONG",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-23T02:18:40.036Z",
+          "ngayTiepNhan": "2026-05-09T02:18:40.036Z",
+          "ngayTao": "2026-05-09T02:18:40.028Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Đất đai",
+          "tenDoanhNghiep": "Công ty Cổ phần Thành Đạt BG",
+          "tenNguoiHoTro": "Đào Thị NHT Hải Phòng"
+        },
+        {
+          "id": "a8a676d5-e361-41d4-9a9b-d072fc259e85",
+          "maVuViec": "VV-BTP-TW-20260509-004",
+          "tieuDe": "Tư vấn bảo hộ nhãn hiệu quốc tế - Phương Đông BG",
+          "trangThai": "DA_PHAN_CONG",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-23T02:15:22.393Z",
+          "ngayTiepNhan": "2026-05-09T02:15:22.393Z",
+          "ngayTao": "2026-05-09T02:15:22.386Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Sở hữu trí tuệ",
+          "tenDoanhNghiep": "Công ty TNHH Phương Đông BG",
+          "tenNguoiHoTro": "Mai Thị Mười Bảy"
+        },
+        {
+          "id": "e4126259-8418-43cd-b75c-ac2dfb1a8a81",
+          "maVuViec": "VV-BTP-TW-20260509-003",
+          "tieuDe": "Review và tư vấn sửa đổi HĐ hợp tác chiến lược - Đại Việt AG",
+          "trangThai": "DA_TIEP_NHAN",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-23T05:47:04.140Z",
+          "ngayTiepNhan": "2026-05-09T05:47:04.140Z",
+          "ngayTao": "2026-05-09T02:13:25.745Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Thương mại",
+          "tenDoanhNghiep": "Hộ kinh doanh Đại Việt AG",
+          "tenNguoiHoTro": null
+        },
+        {
+          "id": "33b5a612-56c9-4e8b-82dc-109ca806944f",
+          "maVuViec": "VV-BTP-TW-20260509-002",
+          "tieuDe": "Tư vấn hoàn thuế GTGT - Hoàng Gia AG",
+          "trangThai": "YEU_CAU_BO_SUNG",
+          "kenhTiepNhan": "DIEN_THOAI",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-23T02:12:17.674Z",
+          "ngayTiepNhan": "2026-05-09T02:12:17.674Z",
+          "ngayTao": "2026-05-09T02:12:17.667Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Thuế",
+          "tenDoanhNghiep": "DNTN Hoàng Gia AG",
+          "tenNguoiHoTro": null
+        },
+        {
+          "id": "70b25aaf-0639-42aa-b695-eedb1b6610f0",
+          "maVuViec": "VV-BTP-TW-20260509-001",
+          "tieuDe": "Tư vấn HĐ lao động mẫu - Phúc An AG",
+          "trangThai": "DA_PHAN_CONG",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-23T02:10:50.752Z",
+          "ngayTiepNhan": "2026-05-09T02:10:50.752Z",
+          "ngayTao": "2026-05-09T02:10:50.743Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Lao động",
+          "tenDoanhNghiep": "Công ty Cổ phần Phúc An AG",
+          "tenNguoiHoTro": "Ngô Thị Mười Lăm"
+        },
+        {
+          "id": "ddb6ea07-df88-434a-9d8d-7cebb1f892f2",
+          "maVuViec": "VV-BTP-TW-20260507-006",
+          "tieuDe": "VV-006 HC - DNTN Đông Dương BCT",
+          "trangThai": "DA_PHAN_CONG",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-21T04:05:06.441Z",
+          "ngayTiepNhan": "2026-05-07T04:05:06.441Z",
+          "ngayTao": "2026-05-07T04:05:06.431Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Hành chính",
+          "tenDoanhNghiep": "DNTN Đông Dương BCT",
+          "tenNguoiHoTro": "Lý Thị Mười Ba"
+        },
+        {
+          "id": "6ac795ea-4c08-4189-8d37-797662060e49",
+          "maVuViec": "VV-BTP-TW-20260507-005",
+          "tieuDe": "VV-005 DAT_DAI - DNTN Đông Dương BCT",
+          "trangThai": "DA_PHAN_CONG",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-21T04:03:45.638Z",
+          "ngayTiepNhan": "2026-05-07T04:03:45.638Z",
+          "ngayTao": "2026-05-07T04:03:45.627Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Đất đai",
+          "tenDoanhNghiep": "DNTN Đông Dương BCT",
+          "tenNguoiHoTro": "Vũ Văn Sáu"
+        },
+        {
+          "id": "3bab8066-22a2-48a5-ab66-4736bf035ebc",
+          "maVuViec": "VV-BTP-TW-20260507-004",
+          "tieuDe": "VV-004 SHTT - Công ty TNHH Minh Khôi BNI",
+          "trangThai": "TU_CHOI",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-21T04:02:14.057Z",
+          "ngayTiepNhan": "2026-05-07T04:02:14.057Z",
+          "ngayTao": "2026-05-07T04:02:14.049Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Sở hữu trí tuệ",
+          "tenDoanhNghiep": "Công ty TNHH Minh Khôi BNI",
+          "tenNguoiHoTro": null
+        },
+        {
+          "id": "3be66862-e3fd-4755-89fb-340b8754cc81",
+          "maVuViec": "VV-BTP-TW-20260507-002",
+          "tieuDe": "VV-002 THUE - Công ty TNHH Bình Minh AG",
+          "trangThai": "DA_PHAN_CONG",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-21T03:59:17.444Z",
+          "ngayTiepNhan": "2026-05-07T03:59:17.444Z",
+          "ngayTao": "2026-05-07T03:59:17.437Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Thuế",
+          "tenDoanhNghiep": "Công ty TNHH Bình Minh AG",
+          "tenNguoiHoTro": "Trương Văn Mười Sáu"
+        },
+        {
+          "id": "729e7fc3-64a5-4fa4-8906-b75d8f19828c",
+          "maVuViec": "VV-BTP-TW-20260507-001",
+          "tieuDe": "VV-001 LAO_DONG - DNTN Đông Dương BCT",
+          "trangThai": "DA_PHAN_CONG",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "uuTien": 3,
+          "mucDoCanhBao": "BINH_THUONG",
+          "deadline": "2026-05-21T03:57:47.061Z",
+          "ngayTiepNhan": "2026-05-07T03:57:47.061Z",
+          "ngayTao": "2026-05-07T03:57:47.054Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "tenLinhVuc": "Lao động",
+          "tenDoanhNghiep": "DNTN Đông Dương BCT",
+          "tenNguoiHoTro": "Ngô Thị Mười Lăm"
+        }
+      ],
+      "meta": {
+        "page": 1,
+        "pageSize": 20,
+        "total": 14,
+        "totalPages": 1
+      }
+    }
+  },
+  "dashboard": {
+    "status": 404,
+    "ok": false,
+    "body": {
+      "success": false,
+      "error": {
+        "code": "ERR-SYS-00-04-01",
+        "message": "Cannot GET /api/v1/dashboard/thong-ke",
+        "timestamp": "2026-05-09T12:16:26.947Z",
+        "requestId": "fed994d8-fbc3-4cad-9788-76ccc857d728"
+      }
+    }
+  },
+  "candidateApis": [
+    {
+      "endpoint": "/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/vu-viec-eligible",
+      "result": {
+        "status": 200,
+        "ok": true,
+        "body": {
+          "success": true,
+          "data": [],
+          "meta": {
+            "page": 1,
+            "pageSize": 20,
+            "total": 0,
+            "totalPages": 0
+          }
+        }
+      }
+    },
+    {
+      "endpoint": "/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/vu-viec-candidates",
+      "result": {
+        "status": 404,
+        "ok": false,
+        "body": {
+          "success": false,
+          "error": {
+            "code": "ERR-SYS-00-04-01",
+            "message": "Cannot GET /api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/vu-viec-candidates",
+            "timestamp": "2026-05-09T12:16:27.008Z",
+            "requestId": "56219d75-fa2f-48a8-a19f-b1e126ad4337"
+          }
+        }
+      }
+    },
+    {
+      "endpoint": "/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/vu-viecs/eligible",
+      "result": {
+        "status": 404,
+        "ok": false,
+        "body": {
+          "success": false,
+          "error": {
+            "code": "ERR-SYS-00-04-01",
+            "message": "Cannot GET /api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/vu-viecs/eligible",
+            "timestamp": "2026-05-09T12:16:27.050Z",
+            "requestId": "3b3de86a-e261-45ed-9a27-f0887cf20b86"
+          }
+        }
+      }
+    },
+    {
+      "endpoint": "/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/vu-viecs/candidates",
+      "result": {
+        "status": 404,
+        "ok": false,
+        "body": {
+          "success": false,
+          "error": {
+            "code": "ERR-SYS-00-04-01",
+            "message": "Cannot GET /api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/vu-viecs/candidates",
+            "timestamp": "2026-05-09T12:16:27.132Z",
+            "requestId": "0e4d005b-5e4e-45e4-87f2-c1c1fdf5879c"
+          }
+        }
+      }
+    }
+  ],
+  "detailAfterApproveUrl": "http://103.172.236.130:3000/danh-gia-hq/ke-hoach/c521f1f1-82b2-424a-a14c-6d01e91ce540",
+  "detailTextBeforeTab": "Bỏ qua đến nội dung chính\nHỗ trợ pháp lý doanh nghiệp\nBộ Tư pháp\nTổng quan\nQuản lý hỏi đáp pháp lý\nQuản lý đào tạo, tập huấn\n▶\nMạng lưới Tư vấn viên\n▶\nQuản lý vụ việc hỗ trợ pháp lý\nQuản lý chi trả chi phí\nQuản lý doanh nghiệp được hỗ trợ\nĐánh giá hiệu quả hỗ trợ pháp lý\nQuản lý thư viện biểu mẫu\nQuản lý tư vấn\n▶\nQuản lý chương trình hỗ trợ pháp lý doanh nghiệp\nBáo cáo thống kê\nQuản trị hệ thống\n▶\nBộ Tư pháp — Cục Bổ trợ tư pháp\n56\nC0\nCB Nghiệp vụ TW 03\nCB_NV_TW\n404\nTrang bạn tìm kiếm không tồn tại hoặc đã được di chuyển.\nĐường dẫn: /danh-gia-hq/ke-hoach/c521f1f1-82b2-424a-a14c-6d01e91ce540\nVề trang chủ\nQuay lại",
+  "clickThucHienError": "page.waitForSelector: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.ant-tabs-tab-btn') to be visible\u001b[22m\n",
+  "thucHienText": "Bỏ qua đến nội dung chính\nHỗ trợ pháp lý doanh nghiệp\nBộ Tư pháp\nTổng quan\nQuản lý hỏi đáp pháp lý\nQuản lý đào tạo, tập huấn\n▶\nMạng lưới Tư vấn viên\n▶\nQuản lý vụ việc hỗ trợ pháp lý\nQuản lý chi trả chi phí\nQuản lý doanh nghiệp được hỗ trợ\nĐánh giá hiệu quả hỗ trợ pháp lý\nQuản lý thư viện biểu mẫu\nQuản lý tư vấn\n▶\nQuản lý chương trình hỗ trợ pháp lý doanh nghiệp\nBáo cáo thống kê\nQuản trị hệ thống\n▶\nBộ Tư pháp — Cục Bổ trợ tư pháp\n56\nC0\nCB Nghiệp vụ TW 03\nCB_NV_TW\n404\nTrang bạn tìm kiếm không tồn tại hoặc đã được di chuyển.\nĐường dẫn: /danh-gia-hq/ke-hoach/c521f1f1-82b2-424a-a14c-6d01e91ce540\nVề trang chủ\nQuay lại"
+}

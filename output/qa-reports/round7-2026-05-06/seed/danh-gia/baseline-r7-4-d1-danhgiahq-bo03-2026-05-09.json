@@ -1,0 +1,30 @@
+{
+  "date": "2026-05-09",
+  "url": "http://103.172.236.130:3000",
+  "scope": "R7.4.D1",
+  "healthScore": 91,
+  "issues": [
+    {
+      "id": "ISSUE-001",
+      "title": "Date input shifts back one day after save",
+      "severity": "Medium",
+      "category": "Functional"
+    },
+    {
+      "id": "OBS-001",
+      "title": "Login page emits expected pre-auth 401 and AntD deprecation warning",
+      "severity": "Low",
+      "category": "Console"
+    }
+  ],
+  "categoryScores": {
+    "console": 70,
+    "links": 100,
+    "visual": 92,
+    "functional": 95,
+    "ux": 88,
+    "performance": 100,
+    "content": 100,
+    "accessibility": 95
+  }
+}

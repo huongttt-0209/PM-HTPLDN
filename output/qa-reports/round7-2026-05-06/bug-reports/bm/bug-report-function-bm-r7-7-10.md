@@ -5,7 +5,7 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Claude Code MCP) |
-| **Ngày** | 2026-05-07 |
+| **Ngày** | 2026-05-07 13:54:12 (approx — git commit time) |
 | **Loại test** | Functional 47 TC (CRUD + filter + file upload + preview + download) |
 | **Round** | R7.7.10 |
 | **Tài liệu tham chiếu** | [`output/funtion/7.9-bieu-mau.md`](../../../../funtion/7.9-bieu-mau.md) (47 TC) · [`srs-update-2026-5-5/_DELTA-MAP-FR09.md`](../../../../../input/srs-update-2026-5-5/_DELTA-MAP-FR09.md) · [`functional-test-report-r7-7-10-bm.md`](../../functional/bieu-mau/functional-test-report-r7-7-10-bm.md) |

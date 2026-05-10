@@ -5,7 +5,7 @@
 | **Dự án** | PM Hỗ trợ Pháp lý Doanh nghiệp |
 | **Môi trường** | http://103.172.236.130:3000 |
 | **Người test** | QA huongttt via Claude Code (Chrome DevTools MCP) |
-| **Ngày** | 2026-05-07 |
+| **Ngày** | 2026-05-07 13:54:12 (approx — git commit time) |
 | **Loại test** | Cross-cutting / Security regression |
 | **Round** | Round 7 — R7.8.2 |
 | **Tài liệu tham chiếu** | [_DELTA-MAP-CROSS-CUTTING.md C2 line 50-86](../../../../../input/srs-update-2026-5-5/_DELTA-MAP-CROSS-CUTTING.md) |

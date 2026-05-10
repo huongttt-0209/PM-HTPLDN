@@ -5,7 +5,7 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Claude Code via Chrome DevTools MCP) |
-| **Ngày** | 2026-05-08 |
+| **Ngày** | 2026-05-08 13:41:27 (approx — git commit time) |
 | **Loại test** | Workflow E2E (SM-DOT-BC) |
 | **Round** | R7.6.5 R1 |
 | **Tài liệu tham chiếu (v3.5)** | [`input/srs-update-2026-5-5/srs-v3.5.md`](../../../../input/srs-update-2026-5-5/srs-v3.5.md) (entity DOT_BAO_CAO §3.4.3.x SM 6 states) · [`input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md` line 149](../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) (FR-15 không nâng cấp v3.5) · [`input/srs-v3/srs-fr-15-ct-htpldn.md`](../../../../input/srs-v3/srs-fr-15-ct-htpldn.md) FR-XI-05a..09 (line 442–784) · [`input/quy-trinh-nghiep-vu/02-thu-tu-module.md` ⑭-bis](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) line 851–875 · [`workflow-test-report-r7-6-5-cthtpldn-gd2.md`](../../workflow/workflow-test-report-r7-6-5-cthtpldn-gd2.md) |
@@ -100,7 +100,7 @@ UI chỉ render placeholder "Tính năng sẽ được triển khai ở Story 13
 
 ### Bằng chứng
 
-![Tab Đợt báo cáo Story 13.6 chưa build](../image/r7-6-5-tab-dot-bc-chua-build.png)
+![Tab Đợt báo cáo Story 13.6 chưa build](image/r7-6-5-tab-dot-bc-chua-build.png)
 
 ### SRS verification (2 source — v3.5 + v3 legacy)
 

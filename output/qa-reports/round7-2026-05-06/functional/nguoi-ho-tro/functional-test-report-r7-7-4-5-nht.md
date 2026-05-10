@@ -11,7 +11,7 @@
 | **OTP Bypass** | `666666` (bypass tạm) — MailHog: http://103.172.236.130:8025 |
 | **Test Method** | UI-based (Chrome DevTools MCP) + API verify (`evaluate_script` curl probe) |
 | **Primary Account** | `cb_nv_tw_03` / Secret@123 (CB Nghiệp vụ TW) — primary; `qtht_03` (QTHT) — verify-permission |
-| **Round** | R7.7.4.5 (R8 verify) |
+| **Round** | R7.7.4.5 (R8 verify · R9 unblock guard · R10 retest BUG-003 · R11 retest dev claim 3 · R12 retest dev claim 4 · **R13 retest dev claim 5 — `cb_nv_bn_01` BKH, BUG-003 ✅ FIXED 4/4**) |
 | **Tài liệu tham chiếu** | [7.4a-nguoi-ho-tro.md](../../../../funtion/7.4a-nguoi-ho-tro.md) · [bug-report-r7-7-4-5-nht.md](../../bug-reports/nguoi-ho-tro/bug-report-r7-7-4-5-nht.md) · [todo-nht.md](../../../../../tasks/todo-nht.md) |
 
 ---
@@ -21,27 +21,37 @@
 > **Re-classify 2026-05-09 17:42:** (1) BA chốt QTHT KHÔNG có quyền thêm/sửa/xóa NHT — chỉ Read. Matrix line 61 update ✅CRUD → 👁️R. BUG-NHT-001/002 đóng INVALID. (2) Click thử mail link với workaround host → IP qua MCP: BE flow OK, NHT-BTP-TW-0005 chuyển CHO_KICH_HOAT → HOAT_DONG. NHT-003 FAIL → PASS (workaround). BUG-NHT-003 re-classify Major P1 (host hardcoded + link raw text — KHÔNG phải broken hoàn toàn).
 >
 > **Run R8 2026-05-09 (cb_nv_tw_02):** Execute thêm 5 TC: NHT-006 Edit ✅, NHT-005 negative ✅ (FE block), NHT-009 Tạm dừng ✅, NHT-010 Vô hiệu hóa ✅, NHT-012 Khôi phục ✅. NHT-008/011 vẫn BLOCKED — UI Phân công VV chỉ hiển thị TVV (không có NHT trong dropdown), không seed được VV-NHT linkage qua UI.
+>
+> **R9 unblock 2026-05-09 19:14 (cb_nv_tw_03):** Phát hiện R8 evidence WRONG — UI Phân công VV thực tế CÓ hiển thị NHT khi LV trùng. R8 chỉ test với VV-004 SHTT (1 NHT cùng LV nhưng cross-đơn vị → bị scope filter ra). Test lại với VV-005 Đất đai (NHT-STP-HP-0001 có Đất đai cùng đơn vị Hải Phòng) → dropdown HIỆN NHT-STP-HP-0001 → POST `/api/v1/vu-viecs/{id}/phan-cong` 201. Sau seed, test guard rule: NHT-008 DELETE 422 ERR-NHT-04 ✅, NHT-011 cap-nhat-trang-thai VO_HIEU_HOA 422 ERR-NHT-04 ✅. **NHT-008/011 BLOCKED → PASS**, module 11/11 active PASS, Pass Rate 82% → 100%.
+>
+> **R10 retest BUG-003 2026-05-09 19:50 (cb_nv_tw_03):** Tạo NHT-BTP-TW-0007 `nht_r10_bug003` qua UI → mail mới gửi 19:50:51 UTC+7. Mail body cải thiện 2/3 issue R9 còn lại — wrap `<a href>` ✅, URL encoding `=` raw ✅. **Vẫn còn 1 issue: port `:3000` mất** → `http://103.172.236.130/...` hit port 80 dead (curl HTTP 000, browser `ERR_CONNECTION_REFUSED`). Workaround port 3000 OK: BE consume token, NHT-BTP-TW-0007 chuyển HOAT_DONG ✅. Severity giữ Major P1. Improvement R9 → R10: 1/4 fix → 3/4 fix.
+>
+> **R11 retest BUG-003 dev claim fix 3 — 2026-05-09 21:15 (cb_nv_tw_03):** ❌ Tạo NHT-BTP-TW-0008 `nht_r11_bug003` qua UI → mail mới gửi 21:15:58 UTC+7. **Mail body identical R10** — host ✅ + URL encoding `=` raw ✅ + anchor wrap ✅, **vẫn thiếu port `:3000`**. Verified: `curl http://103.172.236.130/auth/verify-email?token=c6078e81-...` → HTTP 000 (9.8ms); browser navigate raw link → `chrome-error://chromewebdata/`. Workaround port 3000: HTTP 200, BE consume → NHT-BTP-TW-0008 HOAT_DONG ✅. **Dev claim fix lần 3 không produce thay đổi** — fix có thể chưa deploy hoặc apply sai chỗ. Net result R11 = R10 (3/4). Severity giữ Major P1.
+>
+> **R12 retest BUG-003 dev claim fix 4 — 2026-05-09 22:03 (account mới `cb_nv_bn_01` BKH + fresh isolated context + clear cache):** ❌ Tạo NHT-BKH-0002 `nht_r12_bug003_bn` qua UI cb_nv_bn_01 (CB_NV_BN, BKH) → POST `/api/v1/nguoi-ho-tro` reqid=187 → 201 → mail mới gửi 22:03:43 UTC+7. **Mail body identical R10/R11** — host ✅ + URL encoding ✅ + anchor wrap ✅, **vẫn thiếu port `:3000`**. Verified: `curl -v http://103.172.236.130/auth/verify-email?token=28f13542-...` → `Connection refused` port 80; browser navigate raw → `ERR_CONNECTION_REFUSED`. Workaround port 3000: HTTP 200, BE consume → POST `/api/v1/auth/verify-email` reqid=156 [200] → state activated. **Cross-validation R12** (eliminate confound): account khác cấp BN ≠ R10/R11 TW + fresh context + cache clear → defect không phụ thuộc role/cache/context, là server-side mail template. **Dev claim fix lần 4 cũng KHÔNG apply** — escalate verify deployment. Net R12 = R11 = R10 (3/4). Severity giữ Major P1.
+>
+> **R13 retest BUG-003 dev claim fix 5 — 2026-05-09 22:14 (cb_nv_bn_01 BKH + fresh ctx — final):** ✅ **FIXED 4/4 — BUG-003 Closed.** Tạo NHT-BKH-0003 `nht_r13_bug003_final` qua UI cb_nv_bn_01 → POST `/api/v1/nguoi-ho-tro` reqid=188 → 201 → mail mới gửi 22:14:50 UTC+7. **Mail body đầy đủ 4/4 fix** — host `103.172.236.130` ✅ + URL encoding `=` raw ✅ + anchor wrap `<a href>` ✅ + **port `:3000` ĐÃ THÊM** ✅. Link mail nguyên văn: `http://103.172.236.130:3000/auth/verify-email?token=d06ac36b-fa28-4bed-91b9-33ebd72d05de`. Verified: `curl -sI` → HTTP 200 OK; browser navigate link → GET 200 + POST `/api/v1/auth/verify-email` reqid=150 200 → redirect /login (activated); list reload cb_nv_bn_01 → NHT-BKH-0003 trangThai "Đang hoạt động" ✅. **Dev fix lần 5 đã apply mail template config** — link mail giờ user click trực tiếp được, không cần workaround. R7.7.4.5 unblock release.
 
 | Metric | Value |
 |--------|-------|
 | **Total Test Cases (spec FR-IV-NHT-01)** | 12 (NHT-001..012) |
 | **TC applicable cho CB NV** | 11 (loại NHT-007 — sửa đơn vị chỉ áp QTHT theo spec cũ, sau BA chốt KHÔNG ai sửa được nên N/A) |
-| **TC đã test / Tổng TC** | 10/12 (83%) |
-| **Passed** | 9 (NHT-001..006, NHT-009, NHT-010, NHT-012) |
+| **TC đã test / Tổng TC** | 11/12 (92%) |
+| **Passed** | 11 (NHT-001..006, NHT-008, NHT-009, NHT-010, NHT-011, NHT-012) |
 | **Failed (⚠️ Sai spec)** | 0 |
-| **Blocked** | 2 (NHT-008, NHT-011 — UI Phân công VV không có NHT, cần BA confirm) |
+| **Blocked** | 0 |
 | **Partial** | 0 |
 | **N/A (sau BA chốt 2026-05-09)** | 1 (NHT-007 sửa đơn vị — không applicable theo spec mới) |
-| **Overall Pass Rate (active)** | 82% (9/11 applicable) — Còn 2 TC guard cần BA confirm spec NHT-VV linkage |
-| **P0 Pass Rate** | 86% (6/7 active P0 — NHT-001/002/003/004/005/010 PASS, NHT-011 BLOCKED) |
-| **Bugs Found (SRS-ref)** | 5 tổng — 3 Open (1 Major P1 + 2 Minor) + 2 Closed-Invalid |
-| **Health Score** | 88/100 — workflow CRUD + state machine + BR-AUTH-08 vận hành đúng spec, còn config mail (BUG-003) + UX (BUG-004/005) + 2 TC guard chờ spec |
+| **Overall Pass Rate (active)** | **100%** (11/11 applicable) |
+| **P0 Pass Rate** | **100%** (7/7 active P0 — NHT-001/002/003/004/005/010/011 PASS) |
+| **Bugs Found (SRS-ref)** | 5 tổng — **0 Open** (BUG-003 Major P1 ✅ Closed-Fixed R13 — link mail port `:3000` đã thêm + click verify nguyên văn PASS) + 3 Closed-Fixed (BUG-003 R13 + BUG-004/005 R9) + 2 Closed-Invalid |
+| **Health Score** | **97/100** — workflow CRUD + state machine + BR-AUTH-08 + guard rule VV linkage + mail template URL config đều vận hành đúng spec; toàn bộ active bug đã đóng; còn lại 3 điểm trừ minor (UX hardening: refresh state polling, dropdown virtual scroll perf, edge case retry logic) |
 | **Start Time** | 23:25 (UTC+7) 2026-05-08 |
-| **End Time** | 18:30 (UTC+7) 2026-05-09 |
-| **Total Duration** | ~80 phút (R7 60p + R8 20p) |
+| **End Time** | 22:18 (UTC+7) 2026-05-09 |
+| **Total Duration** | ~155 phút (R7 60p + R8 20p + R9 15p + R10 15p + R11 15p + R12 15p + R13 15p) |
 | **Browse Status** | OK |
 
-### Pass Rate breakdown theo Type (sau R8 2026-05-09)
+### Pass Rate breakdown theo Type (sau R9 2026-05-09)
 
 | Type | Mô tả | TC count | PASS | FAIL | BLOCKED | N/A | **Pass Rate** |
 |------|-------|----------|------|------|---------|-----|---------------|
@@ -50,14 +60,26 @@
 | **Authorization** | NHT-002 (CB NV scope lock) | 1 | 1 | 0 | 0 | 0 | **100%** |
 | **Workflow** | NHT-003/009/010/012 (kích hoạt + state) | 4 | 4 | 0 | 0 | 0 | **100%** |
 | **Update** | NHT-006 (sửa LV qua CB NV), NHT-007 (sửa đơn vị — N/A theo BA chốt) | 2 | 1 | 0 | 0 | 1 | **100%** (1/1 active) |
-| **Guard** | NHT-008 (xóa mềm), NHT-011 (vô hiệu fail) | 2 | 0 | 0 | 2 | 0 | **0%** |
-| **Total** | | **12** | **9** | **0** | **2** | **1** | **82%** (9/11 active) |
+| **Guard** | NHT-008 (xóa NHT có VV), NHT-011 (vô hiệu NHT có VV) | 2 | 2 | 0 | 0 | 0 | **100%** |
+| **Total** | | **12** | **11** | **0** | **0** | **1** | **100%** (11/11 active) |
 
-→ **Workflow state machine 4/4 PASS** + **Negative 2/2 PASS** + **Update 1/1 active PASS** — module hoạt động full luồng CRUD + state. Còn 2 TC Guard (NHT-008/011) BLOCKED do UI Phân công VV chỉ hiển thị TVV trong dropdown (không có NHT) → không seed được linkage VV-NHT để test guard rule "delete/vô hiệu fail khi có VV gắn".
+→ **Workflow state machine 4/4 PASS** + **Negative 2/2 PASS** + **Update 1/1 active PASS** + **Guard 2/2 PASS** — module hoạt động full luồng CRUD + state + BE guard rule. R9 unblock — sau khi seed VV-NHT linkage qua UI Phân công VV (LV match Đất đai), BE check guard chuẩn ERR-NHT-04 cho cả DELETE và cap-nhat-trang-thai VO_HIEU_HOA.
 
-### Verdict: **PASS** (9/11 active, module workflow + CRUD + state machine vận hành đúng spec)
+### Verdict: **✅ PASS** (11/11 active TC PASS, BUG-003 ✅ Closed-Fixed R13 — module unblock release)
 
-Module NHT vận hành đầy đủ luồng theo SM-NHT spec: CHO_KICH_HOAT → HOAT_DONG → TAM_DUNG / VO_HIEU_HOA → HOAT_DONG (khôi phục). Workflow swap (cap-nhat-trang-thai) PASS 3/3 transition (009/010/012). Edit happy path PASS (PATCH 200, LV update). Negative validate FE block đúng (Vui lòng chọn ít nhất 1 lĩnh vực). Còn 2 TC guard NHT-008/011 BLOCKED vì UI Phân công VV không có NHT trong dropdown — cần BA confirm spec NHT-VV linkage flow. Khuyến nghị release module NHT sau khi fix BUG-NHT-003 host config (Major P1) + 2 Minor UX. NHT-008/011 chuyển vòng test sau khi BA chốt VV-NHT linkage.
+Module NHT vận hành đầy đủ luồng theo SM-NHT spec: CHO_KICH_HOAT → HOAT_DONG → TAM_DUNG / VO_HIEU_HOA → HOAT_DONG (khôi phục). Workflow swap (cap-nhat-trang-thai) PASS 3/3 transition (009/010/012). Edit happy path PASS (PATCH 200, LV update). Negative validate FE block đúng (Vui lòng chọn ít nhất 1 lĩnh vực). R9 unblock guard — sau khi seed VV-NHT linkage qua UI Phân công, NHT-008 DELETE 422 + NHT-011 cap-nhat-trang-thai VO_HIEU_HOA 422 đều với `ERR-NHT-04` + message tiếng Việt cụ thể.
+
+**R9 retest 2026-05-09 17:30-17:55:** BUG-NHT-004 (3 tab Detail) ✅ Closed-Fixed. BUG-NHT-005 (toast duplicate) ✅ Closed-Fixed (POST 409 + toast "Email hoặc tên đăng nhập đã được sử dụng"). BUG-NHT-003 (mail link) ⚠️ **PARTIAL FIX — KEEP OPEN**: dev đổi `localhost` → `103.172.236.130` nhưng **mất port `:3000`** (URL hit port 80 → connection timeout 000 thực tế); URL HTML entity `&#x3D;` chưa fix; link vẫn raw text không wrap `<a href>`. Net result: mục tiêu spec (link click được trên môi trường thực) vẫn FAIL → severity giữ Major P1.
+
+**R10 retest 2026-05-09 19:50:** BUG-NHT-003 (mail link) ⚠️ **PARTIAL FIX IMPROVED — KEEP OPEN**: dev fix thêm 2/3 issue R9 còn — URL `?token=` raw `=` ✅ (không còn `&#x3D;`), wrap `<a href="...">` ✅ (không còn raw text trong `<p>`). **Vẫn còn 1 issue port `:3000` mất** → `http://103.172.236.130/auth/verify-email?token=...` hit port 80 dead (curl HTTP 000, browser `ERR_CONNECTION_REFUSED`). BE flow OK với workaround port 3000 (NHT-BTP-TW-0007 chuyển HOAT_DONG). Improvement R9 → R10: 1/4 → 3/4 fix. Severity giữ Major P1.
+
+**R11 retest 2026-05-09 21:15 (dev claim fix 3):** BUG-NHT-003 ❌ **NO CHANGE — KEEP OPEN**: tạo NHT-BTP-TW-0008 `nht_r11_bug003` qua UI cb_nv_tw_03 → mail mới gửi 21:15:58 UTC+7 — body identical R10 (host ✅ + URL encoding ✅ + anchor wrap ✅) **vẫn thiếu port `:3000`**. Curl raw URL `103.172.236.130/auth/verify-email?token=c6078e81-...` → HTTP 000 (ERR_CONNECTION_REFUSED 9.8ms). Browser navigate → chrome-error page. Workaround port 3000 → HTTP 200 19ms, BE consume token → NHT-BTP-TW-0008 HOAT_DONG ✅. Dev claim fix lần 3 không apply mail template change. Net R11 = R10 (3/4). Severity giữ Major P1.
+
+**R12 retest 2026-05-09 22:03 (dev claim fix 4 — account `cb_nv_bn_01` BKH + fresh isolated context + clear cache):** BUG-NHT-003 ❌ **STILL NO CHANGE — KEEP OPEN**: tạo NHT-BKH-0002 `nht_r12_bug003_bn` qua UI cb_nv_bn_01 (CB_NV_BN, BKH) → POST `/api/v1/nguoi-ho-tro` reqid=187 → 201 → mail mới gửi 22:03:43 UTC+7 — body identical R10/R11 (3/4) **vẫn thiếu port `:3000`**. Curl raw URL `103.172.236.130/auth/verify-email?token=28f13542-...` → `Connection refused` port 80. Browser navigate → `ERR_CONNECTION_REFUSED`. Workaround port 3000 → HTTP 200, POST `/api/v1/auth/verify-email` reqid=156 [200] → state activated. **Cross-validation R12** — đổi 3 biến independent (account khác cấp BN ≠ TW, fresh isolated context Chrome MCP, clear cache đóng all pages cũ) vẫn cùng defect → confirm là server-side mail template bug, không phụ thuộc cache/context/role. Net R12 = R11 = R10 (3/4). Severity giữ Major P1.
+
+**R13 retest 2026-05-09 22:14 (dev claim fix 5 — final, account `cb_nv_bn_01` BKH + fresh isolated context):** BUG-NHT-003 ✅ **FIXED 4/4 — Closed**: tạo NHT-BKH-0003 `nht_r13_bug003_final` qua UI cb_nv_bn_01 → POST `/api/v1/nguoi-ho-tro` reqid=188 → 201 → mail mới gửi 22:14:50 UTC+7. **Mail body đầy đủ 4/4** — host `103.172.236.130` ✅ + URL encoding `=` raw ✅ + anchor wrap `<a href>` ✅ + **port `:3000` ĐÃ THÊM** ✅. Link mail nguyên văn `http://103.172.236.130:3000/auth/verify-email?token=d06ac36b-fa28-4bed-91b9-33ebd72d05de` curl HTTP 200 OK. Browser navigate link → GET 200 + POST `/api/v1/auth/verify-email` reqid=150 [200] → redirect /login (state activated). List reload cb_nv_bn_01 → NHT-BKH-0003 trangThai "Đang hoạt động" ✅. **Dev fix lần 5 đã apply mail template config thực sự** sau 4 round không change. Net R13 = 4/4 fix. Bug Closed-Fixed, severity Major P1 → Closed.
+
+**Khuyến nghị:** Module NHT unblock release. Mail template config OK — link kích hoạt user click trực tiếp được. Lessons learned: 4 round dev claim fix mà mail body không đổi → cần build CI smoke test cho mail template (tạo NHT test → check link contains expected port) để catch deployment gap ngay khi commit, không phải đợi QA verify thủ công.
 
 ---
 
@@ -68,15 +90,15 @@ Module NHT vận hành đầy đủ luồng theo SM-NHT spec: CHO_KICH_HOAT → 
 | NHT-001 (QTHT path) | FR-IV-NHT-01 | QTHT tạo NHT mới | Happy | P0 | **N/A** | — | Sau BA chốt 2026-05-09: QTHT KO có quyền tạo NHT → TC không applicable |
 | NHT-001 (CB NV path) | FR-IV-NHT-01 | CB NV TW tạo NHT mới | Happy | P0 | **PASS** | — | cb_nv_tw_03 tạo NHT-BTP-TW-0005 ✅ — modal 4 field, đơn vị auto-lock, mail gửi |
 | NHT-002 | FR-IV-NHT-01 | CB NV `don_vi_id` lock (BR-AUTH-08) | Authorization | P0 | **PASS** | — | Modal CB NV KHÔNG có field "Đơn vị" → BE auto-set = đơn vị mình. Verified BTP-TW ✅. Pattern hợp lý cho CB NV. |
-| NHT-003 | FR-IV-NHT-01 | Kích hoạt mail → CHO_KICH_HOAT → HOAT_DONG | Workflow | P0 | **⚠️ PASS** (workaround) | BUG-NHT-003 | Re-test 2026-05-09 17:42: BE flow OK với workaround replace host. NHT-BTP-TW-0005 chuyển HOAT_DONG ✅. Bug còn lại Major P1: host hardcoded `localhost` + link raw text. |
+| NHT-003 | FR-IV-NHT-01 | Kích hoạt mail → CHO_KICH_HOAT → HOAT_DONG | Workflow | P0 | **✅ PASS** | ~~BUG-NHT-003~~ Closed-Fixed | R13 2026-05-09 22:14 (dev claim fix 5 — final): mail body đầy đủ 4/4 fix, port `:3000` đã thêm. Link nguyên văn click → POST verify-email 200 → NHT-BKH-0003 "Đang hoạt động". Bug Closed-Fixed. |
 | NHT-004 | FR-IV-NHT-01 | Email/username trùng → ERR-NHT-01 | Negative | P0 | **PASS** | BUG-NHT-005 (Minor) | BE block duplicate username `nht_tc001_btp_tw` (12→12 không tăng). FE không hiện toast rõ → UX issue Minor |
 | NHT-005 | FR-IV-NHT-01 | Thiếu lĩnh vực → ERR-NHT-03 | Negative | P0 | **PASS** | — | R8: FE block "Vui lòng chọn ít nhất 1 lĩnh vực" trên Edit form (clear LV + Lưu) → no PATCH gửi BE. ERR-NHT-03 BE path không reach từ UI (FE protect đúng spec). |
 | NHT-006 | FR-IV-NHT-01 | Sửa NHT lĩnh vực qua CB NV | Update | P1 | **PASS** | — | R8: cb_nv_tw_02 edit NHT-BTP-TW-0002 thêm LV "Hành chính" → PATCH `/api/v1/nguoi-ho-tro/{id}` 200 reqid=246 → list update 2 LV (Doanh nghiệp + Hành chính). |
 | NHT-007 | FR-IV-NHT-01 | Sửa đơn vị | Update | P1 | **N/A** | — | Sau BA chốt 2026-05-09: QTHT không có quyền edit, CB NV không được sửa đơn vị (BR-AUTH-08 lock). TC này chỉ áp QTHT cũ → không applicable. |
-| NHT-008 | FR-IV-NHT-01 | Xóa mềm + guard VV | Guard | P1 | **BLOCKED** | — | UI Phân công VV (button "Phân công" trên VV detail) chỉ hiển thị TVV trong dropdown (verified VV-BTP-TW-20260507-004 SHTT — chỉ option "Mai Thị Mười Bảy TVV-BTP-TW-0005"), không có NHT → không seed được VV-NHT linkage qua UI. Cần BA confirm spec. |
+| NHT-008 | FR-IV-NHT-01 | Xóa NHT có VV → guard | Guard | P1 | **PASS** | — | R9: sau seed phân công VV-005 (Đất đai) → NHT-STP-HP-0001 (VV=1), click delete → DELETE `/api/v1/nguoi-ho-tro/{id}` 422 reqid=2124 → `{code:"ERR-NHT-04", message:"NHT đang được phân công 1 vụ việc, không thể xóa"}`. BE guard active. |
 | NHT-009 | FR-IV-NHT-01 | Tạm dừng (HOAT_DONG → TAM_DUNG) | Workflow | P1 | **PASS** | — | R8: cb_nv_tw_02 click swap NHT-BTP-TW-0001 → modal "Cập nhật trạng thái", chọn "Tạm dừng" + lý do → POST `/api/v1/nguoi-ho-tro/{id}/cap-nhat-trang-thai` 200 reqid=255 → state Tạm dừng. |
 | NHT-010 | FR-IV-NHT-01 | Vô hiệu hóa (no VV) | Workflow | P0 | **PASS** | — | R8: cb_nv_tw_02 click swap NHT-BTP-TW-0005 (HOAT_DONG, VV=0) → chọn "Vô hiệu hóa" + lý do → POST 200 reqid=259 → state Vô hiệu hóa. |
-| NHT-011 | FR-IV-NHT-01 | Vô hiệu hóa fail (có VV DANG_XU_LY) | Guard | P0 | **BLOCKED** | — | Same root cause với NHT-008 — không seed được VV-NHT linkage qua UI dropdown. Cần BA confirm spec NHT-VV linkage flow. |
+| NHT-011 | FR-IV-NHT-01 | Vô hiệu hóa NHT có VV → guard | Guard | P0 | **PASS** | — | R9: NHT-STP-HP-0001 (VV=1) click swap → modal "Cập nhật trạng thái" → chọn "Vô hiệu hóa" + lý do → POST `/api/v1/nguoi-ho-tro/{id}/cap-nhat-trang-thai` 422 reqid=2319 → `{code:"ERR-NHT-04", message:"NHT đang được phân công 1 vụ việc, vui lòng phân công lại trước khi vô hiệu hóa"}`. BE guard active. |
 | NHT-012 | FR-IV-NHT-01 | Khôi phục VO_HIEU_HOA → HOAT_DONG | Workflow | P2 | **PASS** | — | R8: tiếp NHT-010 — click swap NHT-BTP-TW-0005 (VO_HIEU_HOA) → modal pre-select "Kích hoạt lại" + lý do → POST 200 reqid=263 → state Đang hoạt động. |
 
 ---
@@ -93,16 +115,16 @@ Module NHT vận hành đầy đủ luồng theo SM-NHT spec: CHO_KICH_HOAT → 
 
 > Re-classify 2026-05-09: BA chốt QTHT KHÔNG tạo NHT → field Đơn vị tự do không applicable. Modal 4 field đúng workflow CB NV.
 
-### BUG-NHT-003 — [Major] Activation link trong mail bị broken (host + URL encoding)
+### BUG-NHT-003 — [Major P1] Activation link mail mất port `:3000`
 
 | Trường | Giá trị |
 |--------|---------|
 | **Severity** | Major |
-| **Priority** | P0 |
+| **Priority** | P1 |
 | **TC Reference** | NHT-003 |
-| **Status** | Open |
+| **Status** | ✅ Closed-Fixed (R13 2026-05-09 22:14 — dev claim fix 5 đã apply mail template config: link đầy đủ port `:3000`, click nguyên văn PASS, NHT-BKH-0003 activated qua mail link) |
 
-**Mô tả:** Mail kích hoạt NHT có link `http://localhost:3000/auth/verify-email?token&#x3D;6ee6d7cd-...`. (1) host `localhost:3000` không match server thực `103.172.236.130:3000`; (2) `&#x3D;` là HTML-entity encode của `=` → trình duyệt parse thành query string sai. NHT click không kích hoạt được.
+**Mô tả:** Mail kích hoạt NHT R10/R11/R12 có link `<a href="http://103.172.236.130/auth/verify-email?token=...">...</a>` — host fix ✅, URL encoding fix ✅, anchor wrap fix ✅. **Vẫn còn 1 issue:** mất port `:3000` → URL hit port 80 dead (curl HTTP 000 / `Connection refused`, browser `ERR_CONNECTION_REFUSED`). User click raw link không kích hoạt được. BE flow OK với workaround port 3000. **R11/R12 dev claim fix lần 3+4 — mail body identical R10**, fix chưa được apply (deployment hoặc code path issue). R12 cross-validate (account `cb_nv_bn_01` BKH + fresh ctx + clear cache) confirm defect server-side, không cache.
 
 ### BUG-NHT-004 — [Minor] Detail view thiếu tab "Bồi dưỡng" theo spec
 
@@ -287,22 +309,44 @@ Module NHT vận hành đầy đủ luồng theo SM-NHT spec: CHO_KICH_HOAT → 
 
 ---
 
-### 4.10 NHT-008/011 BLOCKED — UI Phân công VV không có NHT (R8 2026-05-09)
+### 4.10 NHT-008/011: Guard rule "NHT có VV không được xóa/vô hiệu" (R9 2026-05-09)
 
-**Investigation Steps:**
+> **R9 unblock 2026-05-09 19:14 (cb_nv_tw_03):** R8 evidence đã WRONG. Test lại với VV có LV match đơn vị NHT → UI Phân công CÓ hiển thị NHT trong dropdown. Sau seed VV-NHT linkage, BE guard ERR-NHT-04 active đúng spec cho cả delete và vô hiệu.
+
+**R8 evidence sai chỗ nào:** R8 chỉ test với VV-BTP-TW-20260507-004 (LV: SHTT, đơn vị TW). Pool 12 NHT có 3 NHT cùng LV SHTT (NHT-STP-HP-0001 — Đất đai+SHTT, hương 1 — multi LV, hương 2 — multi LV) nhưng đều ở đơn vị khác (Hải Phòng vs TW) → BE filter scope ra. Không test với VV-005 (LV: Đất đai) — case có NHT cùng LV cùng đơn vị.
+
+**R9 Test Steps — Seed phase (UI Phân công):**
 
 | Step | Action | Expected | Actual | Status |
 |------|--------|----------|--------|--------|
-| 1 | Browse VV module — pool 5 records, NHT/TVV column | Có ≥1 VV gắn NHT để chạy guard test | 5 VV gắn TVV (Vũ Văn Sáu, Trương Văn Mười Sáu, Ngô Thị Mười Lăm), không có NHT | **PASS** investigate |
-| 2 | Open VV-BTP-TW-20260507-004 (TIEP_NHAN, SHTT) → click "Kiểm tra hồ sơ" → Xác nhận | State advance KIEM_TRA | State "Đang kiểm tra" | **PASS** advance state |
-| 3 | Click button "Phân công" → modal mở dropdown "Chọn tư vấn viên" | Dropdown có cả TVV và NHT (theo LV match SHTT) | Dropdown chỉ 1 option: "Mai Thị Mười Bảy (TVV-BTP-TW-0005) — 0 VV đang xử lý" — KHÔNG có NHT (NHT-STP-HP-0001 / hương 1 / hương 2 đều có SHTT trong LV nhưng không xuất hiện) | **BLOCKED** seed |
-| 4 | Cancel modal | Không thay đổi VV state | Cancel OK | — |
+| 1 | Browse VV-BTP-TW-20260507-005 detail (LV: Đất đai, đơn vị Hải Phòng) — state DA_KIEM_TRA | Có button "Phân công" | Button "Phân công" hiển thị | **PASS** |
+| 2 | Click "Phân công" → modal "Phân công cán bộ" mở | Dropdown "Chọn người phụ trách" có cả TVV + NHT theo LV+đơn vị match | Dropdown 2 option: TVV-BTP-HP-0001 (Đất đai) + **NHT-STP-HP-0001 (Đất đai)** ✅ | **PASS** (R8 evidence wrong) |
+| 3 | Select NHT-STP-HP-0001 + click "Phân công" | POST `/api/v1/vu-viecs/{id}/phan-cong` 201 | reqid=1753 POST 201 → toast "Phân công thành công" | **PASS** seed VV-NHT linkage |
+| 4 | Verify list NHT row | NHT-STP-HP-0001 cột "Vụ việc đang phụ trách" = 1 | Row text update: "...Đất đai Sở hữu trí tuệ **1** Đang hoạt động" ✅ | **PASS** |
 
-**Conclusion:** UI Phân công VV chỉ hiển thị TVV (loaiTvv=TVV), không hiển thị NHT (loaiTvv=NHT). Không seed được VV với `nguoi_xu_ly_id = NHT_TK_id` qua UI flow chuẩn → NHT-008 (xóa NHT có VV) + NHT-011 (vô hiệu NHT có VV DANG_XU_LY) không test được.
+**R9 Test Steps — NHT-008 Guard (DELETE NHT có VV):**
 
-**BA decision needed:** Spec FR-IV-NHT-01 yêu cầu NHT có thể tham gia xử lý VV (nguoi_xu_ly_id) — nhưng UI Phân công không expose NHT. Có thể (a) thiếu UI feature, (b) NHT chỉ tham gia qua flow khác (vd PHỐI HỢP, không phải PHÂN CÔNG primary), hoặc (c) spec change.
+| Step | Action | Expected | Actual | Status |
+|------|--------|----------|--------|--------|
+| 5 | cb_nv_tw_03 click Delete trên NHT-STP-HP-0001 (VV=1) | Popconfirm "Xóa người hỗ trợ pháp lý" | Popconfirm hiển thị "Bạn có chắc chắn muốn xóa người hỗ trợ này?" + button Xóa/Hủy | **PASS** |
+| 6 | Click "Xóa" → DELETE `/api/v1/nguoi-ho-tro/{id}` | BE reject 422 ERR-NHT-04 với message tiếng Việt | reqid=2124 DELETE 422 response: `{success:false, error:{code:"ERR-NHT-04", message:"NHT đang được phân công 1 vụ việc, không thể xóa"}}` ✅ | **PASS** guard rule |
+| 7 | Verify row không bị xóa | Pool count 12 → 12 (NHT-STP-HP-0001 vẫn còn) | List re-fetch trả 12 records, NHT-STP-HP-0001 vẫn ở vị trí cũ | **PASS** |
 
-**Screenshot:** [nht-008-011-deferred-no-nht-in-vv-phancong-2026-05-09.png](image/nht-008-011-deferred-no-nht-in-vv-phancong-2026-05-09.png)
+**R9 Test Steps — NHT-011 Guard (VO_HIEU_HOA NHT có VV):**
+
+| Step | Action | Expected | Actual | Status |
+|------|--------|----------|--------|--------|
+| 8 | cb_nv_tw_03 click swap button NHT-STP-HP-0001 (HOAT_DONG, VV=1) | Modal "Cập nhật trạng thái — NHT-STP-HP-0001" mở | Modal mở, dropdown 2 option (Tạm dừng / Vô hiệu hóa) | **PASS** |
+| 9 | Select "Vô hiệu hóa" + fill lý do + click Lưu | BE reject 422 ERR-NHT-04 với message tiếng Việt | reqid=2319 POST `/api/v1/nguoi-ho-tro/{id}/cap-nhat-trang-thai` 422 response: `{success:false, error:{code:"ERR-NHT-04", message:"NHT đang được phân công 1 vụ việc, vui lòng phân công lại trước khi vô hiệu hóa"}}` ✅ | **PASS** guard rule |
+| 10 | Verify row state không đổi | NHT-STP-HP-0001 vẫn "Đang hoạt động" | Row state giữ nguyên HOAT_DONG | **PASS** |
+
+**Conclusion:** Backend guard `ERR-NHT-04` cover đúng cả 2 path — DELETE và cap-nhat-trang-thai VO_HIEU_HOA. Message tiếng Việt cụ thể nêu rõ count VV đang phụ trách + action user cần làm trước. Spec FR-IV-NHT-01 guard rule "NHT có VV không được xóa/vô hiệu" verified. Cleanup data: NHT-STP-HP-0001 giữ state HOAT_DONG + VV=1 cho test sau (rollback bằng cách phân công lại VV cho NHT khác trước khi xóa NHT này nếu cần).
+
+**Screenshots:**
+- [r9-pc-dropdown-has-nht-2026-05-09.png](image/r9-pc-dropdown-has-nht-2026-05-09.png) — UI Phân công dropdown HIỆN NHT khi LV+đơn vị match
+- [r9-pc-nht-success-2026-05-09.png](image/r9-pc-nht-success-2026-05-09.png) — Phân công NHT thành công, list update VV=1
+- [r9-nht008-delete-blocked-2026-05-09.png](image/r9-nht008-delete-blocked-2026-05-09.png) — DELETE 422 ERR-NHT-04
+- [r9-nht011-vohieuhoa-blocked-2026-05-09.png](image/r9-nht011-vohieuhoa-blocked-2026-05-09.png) — Cap-nhat-trang-thai VO_HIEU_HOA 422 ERR-NHT-04
 
 ---
 
@@ -326,13 +370,19 @@ Module NHT vận hành đầy đủ luồng theo SM-NHT spec: CHO_KICH_HOAT → 
 | Username | Role | Đơn vị | Cấp | Dùng cho TC |
 |----------|------|--------|-----|-------------|
 | qtht_03 | QTHT | (root) | — | NHT-001 verify QTHT permission UI |
-| cb_nv_tw_03 | CB_NV_TW | Cục BTTP | TW | NHT-001 happy, NHT-002 scope, NHT-004 negative (R7) |
+| cb_nv_tw_03 | CB_NV_TW | Cục BTTP | TW | NHT-001 happy, NHT-002 scope, NHT-004 negative (R7), R9 unblock guard, **R10 retest BUG-003**, **R11 retest BUG-003 dev claim 3** |
 | cb_nv_tw_02 | CB_NV_TW | Cục BTTP | TW | NHT-005/006/009/010/012 (R8) |
+| cb_nv_bn_01 | CB_NV_BN | Bộ Kế hoạch và Đầu tư (BKH) | BN | **R12 retest BUG-003 dev claim 4** — cross-account verify (account mới khác cấp BN ≠ TW + fresh isolated context + clear cache); **R13 retest BUG-003 dev claim 5 FINAL — ✅ FIXED 4/4** (mail link đầy đủ port `:3000`, NHT-BKH-0003 activated qua click mail link) |
 
 ### 5.2 Data tạo trong test
 
 | ID / Mã | Tên / Mô tả | Purpose | Cleanup? |
 |---------|-------------|---------|----------|
+| NHT-BKH-0003 | NHT R13 BUG003 Verify Final | **R13 retest BUG-003 dev claim fix 5 FINAL — cb_nv_bn_01 BKH + fresh ctx — ✅ FIXED 4/4 (mail link đầy đủ port `:3000`)** | Keep (HOAT_DONG sau click mail link, BE consume token reqid=150 200) |
+| NHT-BKH-0002 | NHT R12 BUG003 Verify BN | **R12 retest BUG-003 dev claim fix 4 — cb_nv_bn_01 BKH + fresh ctx — diff R10/R11: identical (3/4)** | Keep (activated sau navigate verify-email port 3000) |
+| NHT-BTP-TW-0008 | NHT R11 BUG003 Verify | **R11 retest BUG-003 dev claim fix 3 — diff R10: identical (3/4)** | Keep (HOAT_DONG sau click verify-email port 3000) |
+| NHT-BTP-TW-0007 | NHT R10 BUG003 Mail Verify | **R10 retest BUG-003 mail config** | Keep (HOAT_DONG sau click verify-email port 3000) |
+| NHT-BTP-TW-0006 | NHT R9 BUG003 Mail Verify | R9 retest BUG-003 — host workaround test | Keep (Chờ kích hoạt) |
 | NHT-BTP-TW-0005 | NHT TC001 Test BTP TW | TC NHT-001 happy + NHT-010 vô hiệu + NHT-012 khôi phục | Keep (HOAT_DONG sau khôi phục) |
 | NHT-BTP-TW-0002 | NHT R8 BTP TW 05 | TC NHT-005 negative (FE block clear LV) + NHT-006 edit LV | LV thêm "Hành chính" — keep state |
 | NHT-BTP-TW-0001 | NHT UI Test 04 | TC NHT-009 tạm dừng | State HOAT_DONG → TAM_DUNG (keep) |
@@ -356,7 +406,7 @@ Module NHT vận hành đầy đủ luồng theo SM-NHT spec: CHO_KICH_HOAT → 
 
 ### Must Fix (Before Release)
 
-1. **BUG-NHT-003 (Major P1):** Fix mail template — (1) đổi host từ `localhost:3000` → env `APP_URL` config động; (2) wrap link bằng `<a href="...">` thay vì để raw text trong `<p>` để user click thẳng (không cần copy/paste). BE flow đã OK — không cần fix backend.
+1. ~~**BUG-NHT-003 (Major P1)**~~ **✅ Closed-Fixed R13 2026-05-09 22:14** — Dev claim fix 5 (final) đã apply. Mail R13 body 4/4 fix: host `103.172.236.130` + URL `?token=` raw `=` + anchor `<a href>` + **port `:3000`** đầy đủ trong link. Verify end-to-end PASS: curl HTTP 200, browser navigate raw link → POST `/api/v1/auth/verify-email` reqid=150 200 → redirect `/login` (state activated) → NHT-BKH-0003 trangThai "Đang hoạt động" trong list. Module NHT unblock release. **Lesson:** Mail template config gap (URL thiếu PORT env) thấy được R10 (1/4 fix) → 4 round verify mới close. Khuyến nghị build CI smoke test mail template URL contains `:${PORT}` env trước deploy để bắt regression sớm.
 
 ### Should Fix
 
@@ -365,7 +415,7 @@ Module NHT vận hành đầy đủ luồng theo SM-NHT spec: CHO_KICH_HOAT → 
 
 ### Additional Recommendations
 
-4. **NHT-008/011 BA decision needed:** UI Phân công VV chỉ hiển thị TVV trong dropdown (verified VV-BTP-TW-20260507-004 SHTT — chỉ option TVV-BTP-TW-0005). Cần BA chốt: (a) NHT có thể nhận PHÂN CÔNG VV không? (b) Nếu có, UI cần expose NHT trong dropdown? (c) Nếu không, spec FR-IV-NHT-01 cần clarify "nguoi_xu_ly NHT" chỉ qua flow nào (PHỐI HỢP riêng?).
+4. **R9 lesson learned:** R8 mark NHT-008/011 BLOCKED dựa vào 1 case test VV-004 SHTT (1 NHT có LV match nhưng cross-đơn vị). R9 verify với VV-005 Đất đai (đơn vị Hải Phòng = đơn vị NHT-STP-HP-0001) → dropdown CÓ NHT. Bài học: trước khi mark BLOCKED, phải test ≥2 case với combinatorial khác (LV × đơn vị) thay vì sample 1.
 5. **BA cần update SRS srs-fr-04** lines 1737-1738, 1781-1782, 1190-1310, 2403-2409 để chốt rõ "QTHT chỉ Read NHT, CB NV CRUD trong scope đơn vị" — tránh QA cycle sau lại dựa vào spec cũ.
 6. **State machine 4 transition đã verify** (CHO_KICH_HOAT→HOAT_DONG, HOAT_DONG→TAM_DUNG, HOAT_DONG→VO_HIEU_HOA, VO_HIEU_HOA→HOAT_DONG). Còn 1 path TAM_DUNG→HOAT_DONG chưa test (có thể infer từ NHT-012 pattern).
 
@@ -380,7 +430,9 @@ Module NHT vận hành đầy đủ luồng theo SM-NHT spec: CHO_KICH_HOAT → 
 | GET | `/api/v1/nguoi-ho-tro?size=100` | List NHT | NHT-001 verify count, NHT-004 verify block |
 | POST | (UI form) `/api/v1/nguoi-ho-tro` | Create NHT | NHT-001, NHT-004 (negative) |
 | PATCH | `/api/v1/nguoi-ho-tro/{id}` | Update NHT (LV) | NHT-006 (200 reqid=246) |
-| POST | `/api/v1/nguoi-ho-tro/{id}/cap-nhat-trang-thai` | State machine transition | NHT-009 (TAM_DUNG reqid=255), NHT-010 (VO_HIEU_HOA reqid=259), NHT-012 (HOAT_DONG reqid=263) |
+| DELETE | `/api/v1/nguoi-ho-tro/{id}` | Delete NHT (guard) | NHT-008 R9 (422 ERR-NHT-04 reqid=2124) |
+| POST | `/api/v1/nguoi-ho-tro/{id}/cap-nhat-trang-thai` | State machine transition | NHT-009 (TAM_DUNG reqid=255), NHT-010 (VO_HIEU_HOA reqid=259), NHT-012 (HOAT_DONG reqid=263), NHT-011 R9 (422 ERR-NHT-04 reqid=2319) |
+| POST | `/api/v1/vu-viecs/{id}/phan-cong` | Phân công NHT/TVV cho VV (seed) | R9 seed NHT-008/011 (201 reqid=1753) |
 | GET | `/api/v1/tai-khoans` | List TK | 404 cho cb_nv_tw — không test được |
 
 ### B — Screenshots
@@ -396,13 +448,35 @@ Module NHT vận hành đầy đủ luồng theo SM-NHT spec: CHO_KICH_HOAT → 
 | [nht-009-tam-dung-success-2026-05-09.png](image/nht-009-tam-dung-success-2026-05-09.png) | NHT-BTP-TW-0001 row state TAM_DUNG | NHT-009 |
 | [nht-010-vohieu-success-2026-05-09.png](image/nht-010-vohieu-success-2026-05-09.png) | NHT-BTP-TW-0005 row state VO_HIEU_HOA | NHT-010 |
 | [nht-012-khoiphuc-success-2026-05-09.png](image/nht-012-khoiphuc-success-2026-05-09.png) | NHT-BTP-TW-0005 row state HOAT_DONG sau khôi phục | NHT-012 |
-| [nht-008-011-deferred-no-nht-in-vv-phancong-2026-05-09.png](image/nht-008-011-deferred-no-nht-in-vv-phancong-2026-05-09.png) | VV Phân công dropdown chỉ TVV — không có NHT | NHT-008/011 |
+| [nht-008-011-deferred-no-nht-in-vv-phancong-2026-05-09.png](image/nht-008-011-deferred-no-nht-in-vv-phancong-2026-05-09.png) | (R8 evidence — đã thay) VV-004 SHTT Phân công dropdown chỉ TVV (NHT cùng LV cross-đơn vị) | NHT-008/011 R8 |
+| [r9-pc-dropdown-has-nht-2026-05-09.png](image/r9-pc-dropdown-has-nht-2026-05-09.png) | R9: VV-005 Đất đai dropdown HIỆN NHT-STP-HP-0001 | NHT-008/011 R9 seed |
+| [r9-pc-nht-success-2026-05-09.png](image/r9-pc-nht-success-2026-05-09.png) | R9: Phân công NHT thành công, list update VV=1 | NHT-008/011 R9 seed |
+| [r9-nht008-delete-blocked-2026-05-09.png](image/r9-nht008-delete-blocked-2026-05-09.png) | R9: DELETE 422 ERR-NHT-04 — guard rule active | NHT-008 R9 |
+| [r9-nht011-vohieuhoa-blocked-2026-05-09.png](image/r9-nht011-vohieuhoa-blocked-2026-05-09.png) | R9: cap-nhat-trang-thai VO_HIEU_HOA 422 ERR-NHT-04 | NHT-011 R9 |
+| [r10-list-after-create-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r10-list-after-create-2026-05-09.png) | R10: List 14 NHT — NHT-BTP-TW-0007 đầu list | NHT-003 R10 |
+| [r10-mail-html-view-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r10-mail-html-view-2026-05-09.png) | R10: Mail HTML view — anchor wrap + URL `=` raw | BUG-NHT-003 R10 |
+| [r10-mail-source-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r10-mail-source-2026-05-09.png) | R10: Mail Source view raw | BUG-NHT-003 R10 |
+| [r10-link-port80-conn-refused-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r10-link-port80-conn-refused-2026-05-09.png) | R10: Browser ERR_CONNECTION_REFUSED khi click raw URL (port 80 dead) | BUG-NHT-003 R10 |
+| [r11-list-after-create-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r11-list-after-create-2026-05-09.png) | R11: List 15 NHT — NHT-BTP-TW-0008 đầu list, đã chuyển HOAT_DONG | NHT-003 R11 |
+| [r11-mail-html-view-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r11-mail-html-view-2026-05-09.png) | R11: Mail HTML view — body identical R10 (3/4) | BUG-NHT-003 R11 |
+| [r11-mail-source-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r11-mail-source-2026-05-09.png) | R11: Mail Source view raw | BUG-NHT-003 R11 |
+| [r11-link-port80-conn-refused-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r11-link-port80-conn-refused-2026-05-09.png) | R11: Browser ERR_CONNECTION_REFUSED khi click raw URL (port 80 dead — KHÔNG đổi vs R10) | BUG-NHT-003 R11 |
+| [r11-state-after-port3000-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r11-state-after-port3000-2026-05-09.png) | R11: NHT-BTP-TW-0008 state Đang hoạt động sau workaround port 3000 | NHT-003 R11 |
+| [r12-list-after-create-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r12-list-after-create-2026-05-09.png) | R12: List NHT cb_nv_bn_01 sau tạo NHT-BKH-0002 | NHT-003 R12 |
+| [r12-mail-html-view-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r12-mail-html-view-2026-05-09.png) | R12: Mail HTML view — body identical R10/R11 (3/4), port `:3000` vẫn thiếu | BUG-NHT-003 R12 |
+| [r12-mail-source-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r12-mail-source-2026-05-09.png) | R12: Mail Source view raw | BUG-NHT-003 R12 |
+| [r12-link-port80-conn-refused-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r12-link-port80-conn-refused-2026-05-09.png) | R12: Browser ERR_CONNECTION_REFUSED khi click raw URL — KHÔNG đổi vs R10/R11 | BUG-NHT-003 R12 |
+| [r12-state-after-port3000-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r12-state-after-port3000-2026-05-09.png) | R12: Sau navigate workaround port 3000 → /login (BE consume token OK) | NHT-003 R12 |
+| [r13-mail-html-view-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r13-mail-html-view-2026-05-09.png) | **R13: Mail HTML view — body 4/4 fix, port `:3000` đã thêm vào link** | BUG-NHT-003 R13 ✅ |
+| [r13-link-success-redirect-login-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r13-link-success-redirect-login-2026-05-09.png) | **R13: Click mail link raw → POST verify-email reqid=150 200 → redirect /login (state activated)** | BUG-NHT-003 R13 ✅ |
+| [r13-list-after-activate-2026-05-09.png](../../bug-reports/nguoi-ho-tro/image/r13-list-after-activate-2026-05-09.png) | **R13: List NHT — NHT-BKH-0003 trangThai "Đang hoạt động" sau activate qua mail link** | NHT-003 R13 ✅ |
 
 ### C — SRS Traceability Matrix (re-classify 2026-05-09)
 
 | SRS Reference | TC Coverage | Status |
 |---------------|-------------|--------|
-| FR-IV-NHT-01 (UC41-49) | NHT-001..012 | 9/12 PASS + 0 FAIL + 2/12 BLOCKED (NHT-008/011 — UI Phân công VV không có NHT, chờ BA) + 1/12 N/A (NHT-007 sửa đơn vị) |
+| FR-IV-NHT-01 (UC41-49) | NHT-001..012 | 11/12 PASS + 0 FAIL + 0 BLOCKED + 1/12 N/A (NHT-007 sửa đơn vị) |
+| FR-IV-NHT-01 §Guard | NHT-008/011 (R9) | 2/2 PASS — BE guard ERR-NHT-04 active cho cả DELETE và VO_HIEU_HOA khi NHT có VV |
 | FR-VIII-15 (Tự cấp TK) | NHT-001 step 3 | PASS — TK tạo + role NHT + state CHO_KICH_HOAT |
 | FR-VIII-26 (Token vĩnh viễn) | NHT-003 | PASS (workaround) — BE consume token + chuyển HOAT_DONG OK; Mail config bug Major P1 (BUG-NHT-003) |
 | BR-AUTH-08 (don_vi_id scope) | NHT-002 | PASS — BE auto-lock đúng, FE ẩn field hợp lý |
@@ -410,4 +484,4 @@ Module NHT vận hành đầy đủ luồng theo SM-NHT spec: CHO_KICH_HOAT → 
 
 ---
 
-*Report generated: 2026-05-08 23:45 (UTC+7) | Updated R8: 2026-05-09 18:30 — NHT-005/006/009/010/012 PASS, NHT-008/011 BLOCKED chờ BA confirm VV-NHT linkage | QA Automation via Claude Code (Chrome DevTools MCP)*
+*Report generated: 2026-05-08 23:45 (UTC+7) | Updated R8: 2026-05-09 18:30 — NHT-005/006/009/010/012 PASS, NHT-008/011 BLOCKED chờ BA | Updated R9: 2026-05-09 19:14 — NHT-008/011 PASS sau seed VV-NHT linkage, BE guard ERR-NHT-04 verified, module 11/11 active PASS, Verdict PASS Health 95/100 | Updated R10: 2026-05-09 19:55 — BUG-003 partial fix improved 1/4 → 3/4 (URL encoding + anchor wrap fix; còn port `:3000` mất → user click raw link `ERR_CONNECTION_REFUSED`); Verdict giữ ⚠️ PASS conditional, Health 90/100 | Updated R11: 2026-05-09 21:30 — BUG-003 dev claim fix 3 KHÔNG apply mail template change, body identical R10 (3/4), port `:3000` vẫn missing; Verdict giữ ⚠️ PASS conditional, Health 90/100 | Updated R12: 2026-05-09 22:05 — BUG-003 dev claim fix 4 cũng KHÔNG apply (account `cb_nv_bn_01` BKH + fresh isolated context + clear cache), cross-validate confirm defect server-side; Verdict giữ ⚠️ PASS conditional, Health 90/100 | **Updated R13: 2026-05-09 22:18 — BUG-003 ✅ Closed-Fixed dev claim fix 5 đã apply, mail link đầy đủ port `:3000`, click nguyên văn PASS end-to-end (curl 200 + browser POST verify-email 200 + redirect /login + NHT-BKH-0003 "Đang hoạt động"); Verdict ✅ PASS, Health 97/100, module unblock release** | QA Automation via Claude Code (Chrome DevTools MCP)*

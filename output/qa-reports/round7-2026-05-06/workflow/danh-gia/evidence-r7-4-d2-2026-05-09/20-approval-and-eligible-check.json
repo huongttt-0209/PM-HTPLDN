@@ -1,0 +1,51 @@
+{
+  "planId": "c521f1f1-82b2-424a-a14c-6d01e91ce540",
+  "planCode": "DG-20260509-0001",
+  "steps": [
+    {
+      "login": "cb_pd_tw_03",
+      "url": "http://103.172.236.130:3000/dashboard"
+    }
+  ],
+  "beforeApprove": {
+    "status": 200,
+    "ok": true,
+    "body": {
+      "success": true,
+      "data": {
+        "id": "c521f1f1-82b2-424a-a14c-6d01e91ce540",
+        "nguoiTaoId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+        "nguoiCapNhatId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+        "ngayTao": "2026-05-09T11:41:05.148Z",
+        "ngayCapNhat": "2026-05-09T12:12:28.495Z",
+        "donViId": "00000000-0000-4000-8000-000000000001",
+        "seqId": "1",
+        "version": 2,
+        "trangThai": "PHAN_CONG",
+        "nguoiGuiDuyetId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+        "ngayGuiDuyet": "2026-05-09T12:12:28.501Z",
+        "nguoiDuyetId": null,
+        "ngayDuyet": null,
+        "ghiChuPheDuyet": null,
+        "maKeHoach": "DG-20260509-0001",
+        "tenDot": "QA R7.4.D1 bo 03 202605091141",
+        "mucTieu": "QA report-only R7.4.D1 bằng bộ tài khoản 03. Kiểm tra tạo kỳ Đánh giá Hiệu quả HTPL trạng thái LAP_KE_HOACH và chuyển sang tab Tiêu chí.",
+        "tanSuat": "SO_BO_6_THANG",
+        "doiTuong": "VU_VIEC",
+        "thoiGianBatDau": "2026-03-31",
+        "thoiGianKetThuc": "2026-06-29",
+        "ghiChu": "QA-only R7.4.D1, account cb_nv_tw_03.",
+        "soVuViecDanhGia": 0,
+        "diemTrungBinh": null,
+        "_links": {
+          "self": {
+            "href": "/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540",
+            "method": "GET"
+          }
+        }
+      },
+      "meta": null
+    }
+  },
+  "error": "page.waitForSelector: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('.ant-tabs-tab-btn') to be visible\u001b[22m\n\n    at clickTab ([stdin]:30:11)\n    at [stdin]:48:11"
+}

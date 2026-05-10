@@ -18,18 +18,20 @@
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P5** | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | ⏳[R7.5.3](#r7-5-3) |
-| **P7** | 2 | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 🟢[R7.7.16](#r7-7-16) · ⏳[R7.7.17](#r7-7-17) |
-| **P8** | 7 | 2 | 0 | 1 | 3 | 0 | 1 | 0 | ✅[R7.8.1](#r7-8-1) · ⚠️[R7.8.2](#r7-8-2) · ⚠️[R7.8.3](#r7-8-3) · ⚠️[R7.8.4](#r7-8-4) · 🟢[R7.8.5](#r7-8-5) · 🟢[R7.8.6](#r7-8-6) · ⏳[R7.8.7](#r7-8-7) |
-| **Tổng** | **10** | **3** | **0** | **1** | **3** | **0** | **3** | **0** |  |
+| **P7** | 2 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 🚫[R7.7.16](#r7-7-16) · ⏳[R7.7.17](#r7-7-17) |
+| **P8** | 7 | 1 | 0 | 1 | 4 | 0 | 1 | 0 | ✅[R7.8.1](#r7-8-1) · ⚠️[R7.8.2](#r7-8-2) · ⚠️[R7.8.3](#r7-8-3) · ⚠️[R7.8.4](#r7-8-4) · 🟢[R7.8.5](#r7-8-5) · ⚠️[R7.8.6](#r7-8-6) · ⏳[R7.8.7](#r7-8-7) |
+| **Tổng** | **10** | **1** | **0** | **1** | **4** | **1** | **3** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
 - ⏳ **R7.5.3** ✏️ SLA cảnh báo banner — verify trừ ngày lễ (BR-CALC-03) `[need: HD/VV deadline >70% SLA]` <a id="r7-5-3"></a>
-  - **Cần:** ≥5 ngày lễ 2026 KICH_HOAT (✓5 R7.1.5) · ≥1 HD/VV deadline >70% SLA (✗ HD ✓7 nhưng deadline >70% chưa verify; VV deadline chưa tính)
+  - **Cần:** ≥5 ngày lễ 2026 KICH_HOAT (✓5 [R7.1.5](todo-qtht.md#r7-1-5) (qtht)) · ≥1 HD/VV deadline >70% SLA (✗ HD ✓7 nhưng deadline >70% chưa verify; VV deadline chưa tính)
 
-- 🟢 **R7.7.16** ✏️ API 42 TC + 8 API inbound mock (v3.5 rename filter `cong_khai=1`) `[full 100%]` <a id="r7-7-16"></a>
-  - **Cần:** ≥1 VV (✓5) · ≥1 TVCS (✓12) · ≥1 Chi trả (✓78) · ≥1 CT (✓3) · ≥1 HD (✓7) · ≥1 TVN (✓50) · test full 6/6
+- 🚫 **R7.7.16** ✏️ API 42 TC + 8 API inbound mock (v3.5 rename filter `cong_khai=1`) `[~14% — 4 PASS, 38 BLOCKED deploy gap]` <a id="r7-7-16"></a>
+  - **Kết quả:** BLOCKED 38/44 — 8/9 cặp outbound endpoint 404, 1/9 mTLS gate test env không cert. 4 PASS infrastructure. [functional-test-report-r7-7-16-api.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-7-16-api.md)
+  - **Bug:** [bug-report-r7-7-16-api-deploy-gap.md](../output/qa-reports/round7-2026-05-06/bug-reports/cross-cutting/bug-report-r7-7-16-api-deploy-gap.md) — 0/2 đóng (1 Critical + 1 Major Open)
+  - **Cần:** ≥1 VV (✓5) · ≥1 TVCS (✓12) · ≥1 Chi trả (✓78) · ≥1 CT (✓3) · ≥1 HD (✓7) · ≥1 TVN (✓50) · test full 6/6 — entity prereq OK, deploy gap block test live
 
 - ⏳ **R7.7.17** 🔄 Edge BR-EC-01..23 (4 BR scope) `[need: infra/wait/integration cho 19 BR còn lại]` <a id="r7-7-17"></a>
   - **Cần:** infra/wait/integration cho 19 BR còn lại
@@ -48,10 +50,11 @@
 
 - 🟢 **R7.8.5** 🆕 Permission 55+ entity × 11 role sample 40 TC/module `[~0% — ready, was R5 scope; entity count update v3.5]` <a id="r7-8-5"></a>
 
-- 🟢 **R7.8.6** 🆕 Verify UC renumber +4 offset FR-11 (UC120-142 → UC124-146 do FR-VIII-22..25 chiếm UC120-123) `[~0% — ready, 23 UC × 11 role × 1 BC = 253 entries]` <a id="r7-8-6"></a>
+- ⚠️ **R7.8.6** 🆕 Verify UC renumber +4 offset FR-11 (UC120-142 → UC124-146 do FR-VIII-22..25 chiếm UC120-123) `[~67% — 2 PASS, 1 PARTIAL gap 7.11]` <a id="r7-8-6"></a>
+  - **Kết quả:** PASS perm-matrix 253 entries + CHANGELOG §FR-11 Thay đổi 1. ⚠️ 7.11 thiếu BC-024 cho UC146. [functional-test-report-r7-8-6-uc-renumber.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-8-6-uc-renumber.md)
   - **Spec:** [permission-matrix-by-role.md](../output/permission-matrix-by-role.md) FR-IX block + 7.11-bao-cao-thong-ke.md UC ref khớp v3.5; CHANGELOG §srs-fr-11 Thay đổi 1
 
-- ⏳ **R7.8.7** 🆕 E2E DN full luồng đăng ký → đánh giá → chi trả (12 bước cross-module, 5 seam handoff) `[need: R7.7.8b, R7.7.8c, R7.4.A3, R7.4.A3-PUBLIC, R7.4.A3-DN-BS, R7.7.3, R7.7.4, R7.5.2]` <a id="r7-8-7"></a>
+- ⏳ **R7.8.7** 🆕 E2E DN full luồng đăng ký → đánh giá → chi trả (12 bước cross-module, 5 seam handoff) `[need: R7.7.8b (qtht), R7.7.8c (qtht), R7.4.A3 (vu-viec), R7.4.A3-PUBLIC (vu-viec), R7.4.A3-DN-BS (vu-viec), R7.7.3 (vu-viec), R7.7.4 (doanh-nghiep), R7.5.2 (doanh-nghiep)]` <a id="r7-8-7"></a>
   - **Cần:** 8 task upstream ✅ · 1 DN test fresh chưa đăng ký · VNeID Tier 2 sandbox · 5 role (DN / CB NV / CB PD / NHT / TVV-CG) · 1 chu kỳ chi trả CT HTPLDN
   - **Spec:** 12 bước: (1) FR-VIII-22 đăng ký 21 trường → (2) FR-VIII-26 kích hoạt + reset MK → (3) DN login chuyên trang VNeID Tier 2 → (4) FR-V.I-02 SCR-V.I-04 tạo VV → (5) FR-V.I-06 CB NV kiểm tra HS → (6) FR-V.I-09 phân công BR-CALC-04 → (7) FR-V.I-15/16 NHT/TVV xử lý → (8) FR-V.I-13 CB PD duyệt → (9) FR-V.I-NEW-05 công khai PLQG (optional) → (10) FR-V.I-14 DN nhận TB → (11) FR-V.I-17 UC67 DN đánh giá → (12) FR-V.II chi trả
   - **Mục đích:** catch integration bug ẩn ở 5 seam handoff (FR22→FR26 mail, FR26→FR-V.I-02 sync MST, FR-V.I-02→FR-V.I-09 BR-CALC-04, VV `HOAN_THANH`→FR-V.II Chi trả, VV `HOAN_THANH`→FR-V.I-17 Đánh giá) — risk không cover bằng test rời FR. R7 verified 3 BUG-DEPLOY Major + 6 audit deploy gap đều seam-bugs.

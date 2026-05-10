@@ -29,7 +29,7 @@
 
 Seed thành công 6 DN qua **FR-VIII-22 self-reg public flow** (button "Đăng ký tài khoản doanh nghiệp" trên login page). 9 variants còn lại không seed được vì BE throttle aggressive (3 req/window + cooldown ≥3-15 phút sau mỗi 429). Cover 4/5 nhóm critical edge case cho downstream R7. Skip variants TW/HP/HN duplicate scope (DN4-7, 9, 11, 12) vì 30 dev pre-seed đã cover scope tương đương.
 
-**Bug:** [`bug-report-seed-r7-2-4-throttle.md`](../../bug-reports/doanh-nghiep/bug-report-seed-r7-2-4-throttle.md) — BUG-THROTTLE-001 Major (block DN14/15)
+**Bug:** [`Pass-bug-report-seed-r7-2-4-throttle.md`](../../bug-reports/doanh-nghiep/Pass-bug-report-seed-r7-2-4-throttle.md) — BUG-THROTTLE-001 Major (block DN14/15)
 
 ---
 
@@ -111,7 +111,7 @@ Trong session R7.2.1 trigger, đã bump fixture `2.7.1 → 2.7.2`:
 2. Bulk replace `linh_vuc_id*: "HOP_DONG"` → `"THUONG_MAI"` ở mọi entity downstream (~30 occurrences)
 3. Giữ nguyên `loai_ho_so: "HOP_DONG"` (HSPL enum SRS FR-X.1-04 — KHÁC LV)
 
-App DM hiện vẫn không khớp SRS — chi tiết: [bug-report-seed-r7-1-1-dm-linh-vuc-pl.md](../../bug-reports/qtht-danh-muc/bug-report-seed-r7-1-1-dm-linh-vuc-pl.md)
+App DM hiện vẫn không khớp SRS — chi tiết: [Pass-bug-report-seed-r7-1-1-dm-linh-vuc-pl.md](../../bug-reports/qtht-danh-muc/Pass-bug-report-seed-r7-1-1-dm-linh-vuc-pl.md)
 
 ---
 

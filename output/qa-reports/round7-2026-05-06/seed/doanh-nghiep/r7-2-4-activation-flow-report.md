@@ -1,9 +1,9 @@
 # R7.2.4 — Luồng kích hoạt email DN (FR-VIII-22)
 
-**Round:** R7 (2026-05-09 02:30:00)
+**Round:** R7 (2026-05-09 02:30:00) → Re-test 2026-05-09 23:35:00 (qtht_03)
 **Tester:** huongttt + Claude (MCP chrome-devtools)
-**Verdict:** ❌ **FAIL** — luồng kích hoạt qua email **không hoạt động cho user thực** vì host link = `localhost:3000` (deploy gap) + email body không có thẻ `<a>` clickable
-**DN test:** Phú Cường BN (MST 5700000029) — token activation chưa consume
+**Verdict:** ✅ **PASS (Re-test 2026-05-09 23:35:00)** — luồng kích hoạt email E2E đã thông sau dev fix BUG-DEPLOY-MAIL-HOST-001 + BUG-DEPLOY-MAIL-LINK-002. Link host = `103.172.236.130:3000` (deploy thực), email body bao link trong `<a href>`, paste link → API verify-email 200 → user account `Hoạt động`. ~~❌ FAIL (R7 02:30:00) — host link = `localhost:3000` + email body không có thẻ `<a>` clickable~~
+**DN test:** Phú Cường BN (MST 5700000029) — token chưa consume (R7 02:30:00) · Verify Mail Host R7 (MST 5700099991) — token consume thành công, account `Hoạt động` (Re-test 2026-05-09 23:35:00)
 
 ---
 
@@ -28,10 +28,10 @@ Round này đo theo đúng phương pháp UI thật (per memory `feedback_test_m
 
 ## 3. Bug đã log
 
-| Bug ID | Severity | Title | File |
-|---|---|---|---|
-| BUG-DEPLOY-MAIL-HOST-001 | Major | Email kích hoạt dùng host `localhost:3000` → user click `ERR_CONNECTION_REFUSED` | [bug-report-deploy-mail-host.md](../../bug-reports/doanh-nghiep/bug-report-deploy-mail-host.md) |
-| BUG-DEPLOY-MAIL-LINK-002 | Major | Email body render link plain text — KHÔNG có thẻ `<a>` clickable | [bug-report-deploy-mail-host.md](../../bug-reports/doanh-nghiep/bug-report-deploy-mail-host.md) |
+| Bug ID | Severity | Title | File | Status |
+|---|---|---|---|---|
+| ~~BUG-DEPLOY-MAIL-HOST-001~~ | Major | ~~Email kích hoạt dùng host `localhost:3000` → user click `ERR_CONNECTION_REFUSED`~~ | [Pass-bug-report-deploy-mail-host.md](../../bug-reports/doanh-nghiep/Pass-bug-report-deploy-mail-host.md) | ✅ Closed (Re-test 2026-05-09 23:35:00) |
+| ~~BUG-DEPLOY-MAIL-LINK-002~~ | Major | ~~Email body render link plain text — KHÔNG có thẻ `<a>` clickable~~ | [Pass-bug-report-deploy-mail-host.md](../../bug-reports/doanh-nghiep/Pass-bug-report-deploy-mail-host.md) | ✅ Closed (Re-test 2026-05-09 23:35:00) |
 
 ## 4. Bằng chứng phương pháp UI thật
 
@@ -89,11 +89,13 @@ Pool vẫn 25 DN (DN Nhỏ × Nông lâm × Lạng Sơn KHÔNG seed thành công
 
 ## 7. Conclusion
 
-Luồng kích hoạt email DN E2E **FAIL** — phát hiện 2 bug Major (BUG-DEPLOY-MAIL-HOST-001 + BUG-DEPLOY-MAIL-LINK-002). FR-VIII-22 self-reg + email gửi đều OK; điểm gãy ở **email link không click được trong môi trường user thực** vì host hardcode `localhost:3000` và body không có thẻ `<a>`.
+**Re-test 2026-05-09 23:35:00 (qtht_03):** Luồng kích hoạt email DN E2E **PASS** — cả 2 bug Major (BUG-DEPLOY-MAIL-HOST-001 + BUG-DEPLOY-MAIL-LINK-002) đã FIX. Self-reg DN MST `5700099991` → email MailHog có link host `103.172.236.130:3000` bao trong `<a href>` clickable → paste link → POST verify-email 200 → user account chuyển sang `Hoạt động`.
+
+~~**Verdict R7 (02:30:00):** Luồng kích hoạt email DN E2E **FAIL** — phát hiện 2 bug Major (BUG-DEPLOY-MAIL-HOST-001 + BUG-DEPLOY-MAIL-LINK-002). FR-VIII-22 self-reg + email gửi đều OK; điểm gãy ở **email link không click được trong môi trường user thực** vì host hardcode `localhost:3000` và body không có thẻ `<a>`.~~
 
 **Next action:**
-1. ✅ Log bug `bug-report-deploy-mail-host.md` (đã làm).
-2. ⏰ Escalate dev set BE config `MAIL_BASE_URL=http://103.172.236.130:3000` per env deploy + đổi template email sang HTML có thẻ `<a>`.
-3. ⏰ Re-test toàn bộ luồng kích hoạt sau khi dev fix BUG-DEPLOY-MAIL-HOST-001.
+1. ✅ Log bug `Pass-bug-report-deploy-mail-host.md` (R7 02:30:00).
+2. ✅ Dev fix BE config `MAIL_BASE_URL=http://103.172.236.130:3000` + email template HTML có thẻ `<a>` (verified Re-test 2026-05-09 23:35:00).
+3. ✅ Re-test toàn bộ luồng kích hoạt — PASS E2E (Re-test 2026-05-09 23:35:00).
 4. ⏰ Retry seed DN Nhỏ × Nông lâm sau throttle clear.
-5. ⏰ Escalate BA Q về FR-VIII-26 reset MK spec (khi luồng kích hoạt thông thì test tiếp).
+5. ⏰ Escalate BA Q về FR-VIII-26 reset MK spec (luồng kích hoạt đã thông, có thể test tiếp).

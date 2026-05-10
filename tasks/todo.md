@@ -39,25 +39,25 @@
 | # | Module | File | Tasks | Status | Phase / Task IDs |
 |:-:|---|---|:-:|---|---|
 | 1 | Pre-test | [todo-pre-test.md](todo-pre-test.md) | 7 | ✅7 | **P0** ✅R7.0.1..7 |
-| 2 | QTHT — Quản trị hệ thống | [todo-qtht.md](todo-qtht.md) | 16 | ✅13 ⚠️3 | **P1** ✅R7.1.1..6<br>**P2** ✅R7.2.1, ⚠️R7.2.9, ⚠️R7.2.9b<br>**P5** ✅R7.5.5<br>**P7** ✅R7.7.8, ✅R7.7.8a, ⚠️R7.7.8b, ✅R7.7.8c, ✅R7.7.8d, ✅R7.7.8e |
-| 3 | TC TV — Tổ chức tư vấn | [todo-tc-tv.md](todo-tc-tv.md) | 4 | ✅3 ⚠️1 | **P2** ✅R7.2.2, ✅R7.2.3<br>**P4** ✅R7.4.A6<br>**P7** ⚠️R7.7.4.6 |
-| 4 | Doanh nghiệp | [todo-doanh-nghiep.md](todo-doanh-nghiep.md) | 4 | ✅2 🟢1 ⚠️1 | **P2** ✅R7.2.4<br>**P3** ✅R7.3.4<br>**P5** 🟢R7.5.2<br>**P7** ⚠️R7.7.4 |
-| 5 | TVV + CG | [todo-tvv-cg.md](todo-tvv-cg.md) | 7 | ✅5 ⚠️1 ❌1 | **P2** ✅R7.2.5, ✅R7.2.6<br>**P4** ✅R7.4.A1, ✅R7.4.A1.6, ✅R7.4.A1-CG, ⚠️R7.4.A2<br>**P7** ❌R7.7.2 |
-| 6 | NHT — Người hỗ trợ | [todo-nht.md](todo-nht.md) | 2 | ✅1 ⚠️1 | **P2** ✅R7.2.7<br>**P7** ⚠️R7.7.4.5 |
-| 7 | Hỏi đáp | [todo-hoi-dap.md](todo-hoi-dap.md) | 5 | ✅1 🟢1 ⚠️1 🚫2 | **P3** ⚠️R7.3.1, ✅R7.3.1.MoB, 🟢R7.3.1.TVN<br>**P4** 🚫R7.4.A4<br>**P7** 🚫R7.7.1 |
-| 8 | Vụ việc | [todo-vu-viec.md](todo-vu-viec.md) | 6 | 🟢1 ⚠️1 ⏳4 | **P3** ⚠️R7.3.2<br>**P4** 🟢R7.4.A3, ⏳R7.4.A3-DN-BS, ⏳R7.4.A3-PUBLIC<br>**P7** ⏳R7.7.3, ⏳R7.7.3-PRIVACY |
-| 9 | TVCS — Tư vấn chuyên sâu | [todo-tvcs.md](todo-tvcs.md) | 3 | ⚠️3 | **P3** ⚠️R7.3.3<br>**P4** ⚠️R7.4.A5<br>**P7** ⚠️R7.7.5 |
-| 10 | HĐ TV — Hợp đồng tư vấn | [todo-hop-dong-tv.md](todo-hop-dong-tv.md) | 3 | ✅1 ⏳2 | **P3** ⏳R7.3.14<br>**P7** ⏳R7.7.14<br>**Trụ E** ✅R7.E1 |
+| 2 | QTHT — Quản trị hệ thống | [todo-qtht.md](todo-qtht.md) | 16 | ✅12 ⚠️4 | **P1** ✅R7.1.1, ✅R7.1.2, ✅R7.1.3, ✅R7.1.4, ⚠️R7.1.5, ✅R7.1.6<br>**P2** ✅R7.2.1, ⚠️R7.2.9, ⚠️R7.2.9b<br>**P5** ✅R7.5.5<br>**P7** ✅R7.7.8, ✅R7.7.8a, ⚠️R7.7.8b, ✅R7.7.8c, ✅R7.7.8d, ✅R7.7.8e |
+| 3 | TC TV — Tổ chức tư vấn | [todo-tc-tv.md](todo-tc-tv.md) | 4 | ✅4 | **P2** ✅R7.2.2, ✅R7.2.3<br>**P4** ✅R7.4.A6<br>**P7** ✅R7.7.4.6 |
+| 4 | Doanh nghiệp | [todo-doanh-nghiep.md](todo-doanh-nghiep.md) | 4 | ✅3 ⚠️1 | **P2** ✅R7.2.4<br>**P3** ✅R7.3.4<br>**P5** ✅R7.5.2<br>**P7** ⚠️R7.7.4 |
+| 5 | TVV + CG | [todo-tvv-cg.md](todo-tvv-cg.md) | 7 | ✅6 ⚠️1 | **P2** ✅R7.2.5, ✅R7.2.6<br>**P4** ✅R7.4.A1, ✅R7.4.A1.6, ✅R7.4.A1-CG, ✅R7.4.A2<br>**P7** ⚠️R7.7.2 |
+| 6 | NHT — Người hỗ trợ | [todo-nht.md](todo-nht.md) | 2 | ✅2 | **P2** ✅R7.2.7<br>**P7** ✅R7.7.4.5 |
+| 7 | Hỏi đáp | [todo-hoi-dap.md](todo-hoi-dap.md) | 5 | ✅2 ⚠️2 🚫1 | **P3** ✅R7.3.1, ✅R7.3.1.MoB, 🚫R7.3.1.TVN<br>**P4** ⚠️R7.4.A4<br>**P7** ⚠️R7.7.1 |
+| 8 | Vụ việc | [todo-vu-viec.md](todo-vu-viec.md) | 6 | ✅2 ⚠️1 🚫2 ⏳1 | **P3** ✅R7.3.2<br>**P4** ✅R7.4.A3, 🚫R7.4.A3-DN-BS, 🚫R7.4.A3-PUBLIC<br>**P7** ⚠️R7.7.3, ⏳R7.7.3-PRIVACY |
+| 9 | TVCS — Tư vấn chuyên sâu | [todo-tvcs.md](todo-tvcs.md) | 3 | ✅1 ⚠️2 | **P3** ✅R7.3.3<br>**P4** ⚠️R7.4.A5<br>**P7** ⚠️R7.7.5 |
+| 10 | HĐ TV — Hợp đồng tư vấn | [todo-hop-dong-tv.md](todo-hop-dong-tv.md) | 3 | ✅2 ⚠️1 | **P3** ✅R7.3.14<br>**P7** ⚠️R7.7.14<br>**Trụ E** ✅R7.E1 |
 | 11 | Đào tạo (KH năm / CTĐT / Khóa / NHCH / ĐKT / GV / HV / LH) | [todo-dao-tao.md](todo-dao-tao.md) | 17 | ✅8 ⚠️4 🚫3 ⏳2 | **P3** ✅R7.3.5, ⚠️R7.3.6, ✅R7.3.8, ✅R7.3.9, ✅R7.3.10, ✅R7.3.11, 🚫R7.3.12, 🚫R7.3.13, ✅R7.3.15<br>**P4** ⚠️R7.4.B0, ✅R7.4.B1, ✅R7.4.B5b, ⚠️R7.4.B7, ⚠️R7.4.B10, 🚫R7.4.B11, ⏳R7.4.B12<br>**P7** ⏳R7.7.6 |
 | 12 | Biểu mẫu | [todo-bieu-mau.md](todo-bieu-mau.md) | 3 | ✅1 ⚠️2 | **P3** ✅R7.3.7<br>**P4** ⚠️R7.4.C1<br>**P7** ⚠️R7.7.10 |
-| 13 | Kho QA | [todo-kho-qa.md](todo-kho-qa.md) | 3 | ✅1 ⚠️1 ⏳1 | **P3** ✅R7.3.16<br>**P4** ⚠️R7.4.D3, ⏳R7.4.D3.AUTO |
+| 13 | Kho QA | [todo-kho-qa.md](todo-kho-qa.md) | 3 | ✅2 ❌1 | **P3** ✅R7.3.16<br>**P4** ✅R7.4.D3, ❌R7.4.D3.AUTO |
 | 14 | Đánh giá Hiệu quả HTPL | [todo-danh-gia-hq.md](todo-danh-gia-hq.md) | 5 | ✅1 ⚠️1 ⏳3 | **P4** ✅R7.4.D1, ⚠️R7.4.D2, ⏳R7.4.D2a, ⏳R7.4.D2b<br>**P7** ⏳R7.7.9 |
-| 15 | Chi trả | [todo-chi-tra.md](todo-chi-tra.md) | 7 | ✅2 🟢1 ⚠️1 🚫3 | **P6** 🚫R7.6.1<br>**P7** 🟢R7.7.12, ✅R7.7.12.1, 🚫R7.7.12.2, 🚫R7.7.12.3, ✅R7.7.12.4<br>**Trụ E** ⚠️R7.E3 |
-| 16 | TV nhanh | [todo-tv-nhanh.md](todo-tv-nhanh.md) | 4 | ✅1 ⚠️2 ⏳1 | **P6** ⚠️R7.6.2, ⏳R7.6.3<br>**P7** ⚠️R7.7.11<br>**Trụ E** ✅R7.E4 |
+| 15 | Chi trả | [todo-chi-tra.md](todo-chi-tra.md) | 7 | ✅3 ⚠️3 🚫1 | **P6** ⚠️R7.6.1<br>**P7** ⚠️R7.7.12, ✅R7.7.12.1, 🚫R7.7.12.2, ✅R7.7.12.3, ✅R7.7.12.4<br>**Trụ E** ⚠️R7.E3 |
+| 16 | TV nhanh | [todo-tv-nhanh.md](todo-tv-nhanh.md) | 4 | ✅2 ⚠️1 ⏳1 | **P6** ✅R7.6.2, ⏳R7.6.3<br>**P7** ⚠️R7.7.11<br>**Trụ E** ✅R7.E4 |
 | 17 | CT HTPLDN | [todo-ct-htpldn.md](todo-ct-htpldn.md) | 5 | ✅2 ⚠️2 🚫1 | **P6** ⚠️R7.6.4, 🚫R7.6.5<br>**P7** ✅R7.7.15, ⚠️R7.7.15.b<br>**Trụ E** ✅R7.E2 |
-| 18 | Dashboard | [todo-dashboard.md](todo-dashboard.md) | 2 | 🟢2 | **P5** 🟢R7.5.1<br>**P7** 🟢R7.7.7 |
-| 19 | Báo cáo | [todo-bao-cao.md](todo-bao-cao.md) | 2 | 🟢1 ❌1 | **P5** ❌R7.5.4<br>**P7** 🟢R7.7.13 |
-| 20 | Cross-cutting (SLA / API / Permission / Profile) | [todo-cross-cutting.md](todo-cross-cutting.md) | 10 | ✅1 🟢3 ⚠️3 ⏳3 | **P5** ⏳R7.5.3<br>**P7** 🟢R7.7.16, ⏳R7.7.17<br>**P8** ✅R7.8.1, ⚠️R7.8.2, ⚠️R7.8.3, ⚠️R7.8.4, 🟢R7.8.5, 🟢R7.8.6, ⏳R7.8.7 |
+| 18 | Dashboard | [todo-dashboard.md](todo-dashboard.md) | 2 | ✅1 ⚠️1 | **P5** ✅R7.5.1<br>**P7** ⚠️R7.7.7 |
+| 19 | Báo cáo | [todo-bao-cao.md](todo-bao-cao.md) | 2 | ✅1 ⚠️1 | **P5** ✅R7.5.4<br>**P7** ⚠️R7.7.13 |
+| 20 | Cross-cutting (SLA / API / Permission / Profile) | [todo-cross-cutting.md](todo-cross-cutting.md) | 10 | ✅1 🟢1 ⚠️4 🚫1 ⏳3 | **P5** ⏳R7.5.3<br>**P7** 🚫R7.7.16, ⏳R7.7.17<br>**P8** ✅R7.8.1, ⚠️R7.8.2, ⚠️R7.8.3, ⚠️R7.8.4, 🟢R7.8.5, ⚠️R7.8.6, ⏳R7.8.7 |
 
 **Tổng:** 115 task / 20 module.
 <!-- END: module-index -->
@@ -90,4 +90,4 @@
 
 ## Bug deploy gap
 
-[bug-report-audit-deploy-gap.md](../output/qa-reports/round7-2026-05-06/bug-reports/deploy-gap/bug-report-audit-deploy-gap.md) — 6 bug verified MCP (3 Major DEPLOY-001/002/003 + 2 Medium DEPLOY-004/006 + 1 Minor DEPLOY-005). + 2 bug FR-07 đã Closed: [bug-report-audit-r7-0-6-fr-07-buttons.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/bug-report-audit-r7-0-6-fr-07-buttons.md). + 2 false positive (sub-menu NHT/TC TV) DROPPED — bài học `feedback_verify_ui_gap_role_permission`.
+[Pass-bug-report-audit-deploy-gap.md](../output/qa-reports/round7-2026-05-06/bug-reports/deploy-gap/Pass-bug-report-audit-deploy-gap.md) — 6 bug verified MCP (3 Major DEPLOY-001/002/003 + 2 Medium DEPLOY-004/006 + 1 Minor DEPLOY-005). + 2 bug FR-07 đã Closed: [Pass-bug-report-audit-r7-0-6-fr-07-buttons.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/Pass-bug-report-audit-r7-0-6-fr-07-buttons.md). + 2 false positive (sub-menu NHT/TC TV) DROPPED — bài học `feedback_verify_ui_gap_role_permission`.

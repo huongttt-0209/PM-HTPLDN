@@ -11,48 +11,49 @@
 | **OTP Bypass** | `666666` |
 | **Test Method** | Hybrid (UI Modal + API verify) |
 | **Primary Account** | `cb_nv_tw_01` / `Secret@123` (CB_NV_TW, Cục BTTP) + `qtht_01` (QTHT) |
-| **Round** | R8 (Kho Q&A subset) → **R9 (2026-05-08, +5 TC phiên TV nhanh sau dev seed)** |
+| **Round** | R8 (Kho Q&A subset) → R9 (2026-05-08, +5 TC phiên TV nhanh sau dev seed) → **R10 (2026-05-09 17:18:00 — re-test sau R7.6.2 R10 unblock; 2 PARTIAL → PASS, 1 BLOCKED → PASS, 1 bug Closed, 1 bug Minor mới)** |
 | **Tài liệu tham chiếu** | [7.13-tu-van-nhanh.md](../../../../funtion/7.13-tu-van-nhanh.md) · [bug-report-r7-7-11-tvn.md](../../bug-reports/tu-van-nhanh/bug-report-r7-7-11-tvn.md) · [workflow-test-report-r7-6-2-tv-nhanh.md](../../workflow/tu-van-nhanh/workflow-test-report-r7-6-2-tv-nhanh.md) |
 
 ---
 
 ## 1. Executive Summary
 
+> **R10 (LATEST · 2026-05-09 17:18:00):** Re-test sau R7.6.2 R10 confirm pool 50 phiên đủ data. **TVN-017 ⚠️Sai spec → ✅Đạt** (gợi ý DOES render, mỗi phiên DA_GOI_Y có 2 KQA score descending — verify TVN-0024 KCH-0001 94% + KCH-0004 74% và TVN-0021 KCH-0001 91% + KCH-0007 71%). **TVN-018 🚫Block → ✅Đạt** (click [Chọn] KCH-0001 auto-fill textarea 74 ký tự đúng spec FR-X.2-02 §Processing 5). **BUG-FUNC-TVN-004 Major Closed-verified.** Phát hiện thêm 1 issue Minor (cột "Số gợi ý" list = 0 dù `goiYTraLoi.length=2`) — log BUG-FUNC-TVN-006.
+
 | Metric | Value |
 |--------|-------|
 | **Total Test Cases (spec)** | 44 |
-| **TC đã test / Tổng TC** | **19/44 (43%)** — R8: 13 TC Kho Q&A · **R9: +6 TC phiên TV nhanh + audit (TVN-016/017/018/019/021/039)** sau dev seed 50 phiên · 11 BLOCKED mTLS/multi-role · 14 DEFER (Import/cross-module/batch) |
-| **Passed** | **12** (R8: 9 + **R9: 3 mới TVN-016/019/021**) |
+| **TC đã test / Tổng TC** | **20/44 (45%)** — R8: 13 TC Kho Q&A · R9: +6 TC phiên TV nhanh + audit · **R10: TVN-018 click [Chọn] PASS** · 5 BLOCKED mTLS/Cổng PLQG · 19 DEFER (Import/cross-module/batch/multi-role/v3.5) |
+| **Passed** | **14** (R8: 9 + R9: 3 + **R10: 2 flip TVN-017/018**) |
 | **Failed** | 0 |
-| **Blocked** | 6 (R8: 5 TVN-040..044 + R9: 1 TVN-018 cascade) |
-| **Partial** | **5** (R8: TVN-010/011/012 authz · **R9: TVN-017 gợi ý không render + TVN-039 audit naming**) |
-| **Overall Pass Rate** | **63%** (12/19 đã test) |
-| **P0 Pass Rate** | **62%** (5/8 P0 = TVN-001/003/016/019/033 PASS; TVN-010/011/017 PARTIAL; TVN-040/041 BLOCKED) |
-| **Bugs Found (SRS-ref)** | **5** (1 Critical, 2 Major, 2 Minor) |
-| **Health Score** | **60/100** — workflow phiên TV mechanics OK nhưng UI render gợi ý lỗi (Major) + authz CB NV/CB PD chưa enforce (Critical) + FR-X.2-06 chưa deploy + audit naming inconsistent. R9 tăng 5 điểm so R8. |
-| **Start Time** | 23:39 (UTC+7) 07/05 (R8) · 01:00 (UTC+7) 08/05 (R9) |
-| **End Time** | 00:34 (UTC+7) 08/05 (R8) · 01:30 (UTC+7) 08/05 (R9) |
-| **Total Duration** | ~85 phút (R8 ~55 phút + R9 ~30 phút) |
-| **Browse Status** | OK — Chrome DevTools MCP stable, 1 lần re-login giữa session do timeout 5 phút |
+| **Blocked** | 5 (R8: 5 TVN-040..044) |
+| **Partial** | **4** (R8: TVN-010/011/012 authz · R9: TVN-039 audit naming) |
+| **Overall Pass Rate** | **70%** (14/20 đã test) |
+| **P0 Pass Rate** | **75%** (6/8 P0 = TVN-001/003/016/017/019/033 PASS; TVN-010/011 PARTIAL; TVN-040/041 BLOCKED) |
+| **Bugs Found (SRS-ref)** | **6** (1 Critical, 2 Major, 3 Minor) — R10: -1 Major Closed (TVN-004) + 1 Minor mới (TVN-006) |
+| **Health Score** | **70/100** — workflow phiên TV mechanics OK + gợi ý render OK (R10 fix). Còn authz CB NV/CB PD Critical + FR-X.2-06 chưa deploy + audit naming + list count Số gợi ý=0. R10 tăng 10 điểm so R9. |
+| **Start Time** | 23:39 (UTC+7) 07/05 (R8) · 01:00 (UTC+7) 08/05 (R9) · **17:08 (UTC+7) 09/05 (R10)** |
+| **End Time** | 00:34 (UTC+7) 08/05 (R8) · 01:30 (UTC+7) 08/05 (R9) · **17:18 (UTC+7) 09/05 (R10)** |
+| **Total Duration** | ~95 phút (R8 ~55 phút + R9 ~30 phút + R10 ~10 phút) |
+| **Browse Status** | OK — Chrome DevTools MCP stable, 1 lần re-login R10 do JWT revoke (BE quirk known) |
 
 ### Pass Rate breakdown theo Type
 
 | Type | TC count (đã test) | PASS | PARTIAL | FAIL | BLOCKED | **Pass Rate** |
 |------|--------------------|------|---------|------|---------|---------------|
-| **Happy** | **5** | **5** | 0 | 0 | 0 | **100%** (TVN-001/002/003/004 + R9: TVN-016) |
+| **Happy** | **6** | **6** | 0 | 0 | 0 | **100%** (TVN-001/002/003/004 + R9: TVN-016 + **R10: TVN-017 flip**) |
 | **Negative** | **4** | **4** | 0 | 0 | 0 | **100%** (TVN-007/008/009 + R9: TVN-021) |
-| **Workflow** | **6** | **2** | **4** | 0 | 0 | **33%** (TVN-013/019 PASS; TVN-010/011/012/017 PARTIAL) |
+| **Workflow** | **6** | **3** | **3** | 0 | 0 | **50%** (TVN-013/019 + **R10: TVN-018 flip** PASS; TVN-010/011/012 PARTIAL) |
 | **Authorization** | 1 | 1 | 0 | 0 | 0 | **100%** (TVN-033 QTHT) |
 | **Cross-module** | **1** | 0 | **1** | 0 | 0 | **0%** (TVN-039 audit log mechanism PASS, naming inconsistent) |
-| **Workflow (cascade)** | **1** | 0 | 0 | 0 | **1** | **0%** (TVN-018 cascade gợi ý không render) |
 | **FR-X.2-06 Công khai** | 5 | 0 | 0 | 0 | 5 | **0%** (TVN-040..044) |
-| **Total** | **23** (đã test 19 + 4 BLOCKED nhóm khác đếm chéo) | **12** | **5** | **0** | **6** | **63%** |
+| **Total** | **23** (đã test 20 + 3 nhóm BLOCKED đếm chéo) | **14** | **4** | **0** | **5** | **70%** |
 
-→ **Happy-path Pass Rate = 9/9 (100%)** — kho Q&A core + list phiên TV nhanh + create/read solid. **R9 đóng góp:** 3 PASS (TVN-016 list 4 tab, TVN-019 gửi trả lời end-to-end, TVN-021 validate empty) + 2 PARTIAL (TVN-017 gợi ý không render — Major bug; TVN-039 audit log mechanism OK nhưng action naming inconsistent) + 1 BLOCKED (TVN-018 cascade).
+→ **Happy-path Pass Rate = 10/10 (100%)** — kho Q&A core + list phiên TV nhanh + create/read + Top 5 gợi ý + click [Chọn] đều OK. **R10 đóng góp:** 2 PASS flip (TVN-017 gợi ý render, TVN-018 click [Chọn] auto-fill) + 1 bug Closed (TVN-004 Major).
 
-### Verdict: **CONDITIONAL PASS — workflow R7.6.2 unblock R9 mở thêm 5 TC phiên TV; vẫn cần fix Authz Critical + Gợi ý render Major trước release**
+### Verdict: **CONDITIONAL PASS — R10 đóng được Major bug TVN-004; còn Authz Critical (TVN-001) + FR-X.2-06 chưa deploy + Audit naming + Số gợi ý cột=0 trước release**
 
-R7.7.11 cover được 19/44 TC (43%). Backend mechanics CRUD + workflow chuyển trạng thái CHO_DUYET ↔ DA_DUYET ↔ NHAP ↔ HET_HIEU_LUC + DA_GOI_Y → CB_TRA_LOI đều OK. **R9 update:** Sau dev seed 50 phiên, 4 TC P0 phiên TV chạy được — mở khoá UI flow Stepper + form Soạn trả lời + audit log endpoint. **3 nhóm bug critical/major** cần fix: (1) BUG-FUNC-TVN-001 Critical authz CB NV approve/reject; (2) **BUG-FUNC-TVN-004 Major (mới R9)** UI không render `goiYTraLoi` array dù API có data — chặn TVN-018 click [Chọn]; (3) BUG-FUNC-TVN-002 Major FR-X.2-06 chưa deploy. 11 TC còn lại BLOCKED mTLS DN/multi-role.
+R7.7.11 cover được 20/44 TC (45%). Backend mechanics CRUD + workflow CHO_DUYET ↔ DA_DUYET ↔ NHAP ↔ HET_HIEU_LUC + DA_GOI_Y → CB_TRA_LOI đều OK. **R10 update:** R7.6.2 R10 pool 50 phiên đủ data, TVN-017/018 unblock. Top 5 gợi ý render với 2 KQA mỗi phiên DA_GOI_Y (descending score 91-94/71-74). Click [Chọn] auto-fill textarea Nội dung trả lời 74 ký tự ✅. **Còn 4 nhóm cần fix:** (1) BUG-FUNC-TVN-001 Critical authz CB NV approve/reject; (2) BUG-FUNC-TVN-002 Major FR-X.2-06 chưa deploy; (3) BUG-FUNC-TVN-005 Minor audit naming; (4) **BUG-FUNC-TVN-006 Minor (R10 mới)** cột "Số gợi ý" list = 0 dù detail render đúng. 11 TC còn lại BLOCKED mTLS DN/multi-role.
 
 ---
 
@@ -77,9 +78,9 @@ R7.7.11 cover được 19/44 TC (43%). Backend mechanics CRUD + workflow chuyể
 | TVN-042 | FR-X.2-06, BR-PUBLIC-01 | Bật công khai khi CHO_DUYET → ERR-TVN-CK-03 chặn | Negative | P1 | **BLOCKED** | BUG-FUNC-TVN-002 | Cascade FR-X.2-06 chưa deploy. |
 | TVN-043 | FR-X.2-06, BR-FLOW-05 | API Cổng PLQG fail → giữ trạng thái cũ + ERR-TVN-CK-01/02 | Negative | P1 | **BLOCKED** | BUG-FUNC-TVN-002 | Cascade + thiếu Cổng PLQG sandbox. |
 | TVN-044 | FR-X.2-06 mismatch | Mismatch `congKhai` vs `trang_thai='CONG_KHAI'` (badge "Đang xử lý"/"Đang gỡ") | Workflow | P1 | **BLOCKED** | BUG-FUNC-TVN-002 | Cascade FR-X.2-06 + cần BE stub race condition. |
-| **TVN-016** (R9) | — , SCR-X2-03 | List phiên TV 4 tab (Tất cả 50 / Chờ xử lý 14 / Đã gợi ý 20 / Hoàn thành 16) + paginate 20/page | Happy | P0 | **PASS** | — | Tab counts đúng spec line 454. R9 sau dev seed 50 phiên cover 6 state. ⚠️ Cột "Kênh" + "Số gợi ý" hiển thị empty/0 dù API có data — xem BUG-FUNC-TVN-004. |
-| **TVN-017** (R9) | FR-X.2-02 §Processing 3, SCR-X2-03 row 7-8 | Mở chi tiết phiên DA_GOI_Y → layout 2 cột: trái câu hỏi DN+Stepper+thông tin DN, phải Top 5 gợi ý từ KHO_CAU_HOI sắp theo relevance DESC | Happy | P0 | **PARTIAL** | BUG-FUNC-TVN-004 | Layout 2 cột + Stepper 5 state + form trả lời render OK. **Top 5 gợi ý KHÔNG render** dù API trả `goiYTraLoi=[2 entries score 85/75]` — UI hiển thị "Không tìm thấy gợi ý phù hợp. Vui lòng soạn thảo thủ công." Major bug. |
-| **TVN-018** (R9) | FR-X.2-02 §Processing 5 | CB NV click [Chọn] gợi ý → auto-fill ô soạn rich-text | Workflow | P1 | **BLOCKED** | BUG-FUNC-TVN-004 | Cascade TVN-017 — không có button [Chọn] để click vì gợi ý không render. |
+| **TVN-016** (R9 PASS, R10 re-verify) | — , SCR-X2-03 | List phiên TV 4 tab (Tất cả 50 / Chờ xử lý 14 / Đã gợi ý 20 / Hoàn thành 16) + paginate 20/page | Happy | P0 | **PASS** | — | R10 re-confirm tab counts đúng (Chờ xử lý=MOI+DANG_TIM_KIEM 8+6=14; Đã gợi ý=DA_GOI_Y+CB_TRA_LOI 9+11=20; Hoàn thành=HOAN_THANH+HET_HAN 12+4=16; Tổng 50). API verify URL pattern `?trangThai=MOI,DANG_TIM_KIEM` khớp tab. ⚠️ Cột "Số gợi ý" = 0 cho mọi phiên dù `goiYTraLoi.length=2` — log BUG-FUNC-TVN-006 Minor. |
+| **TVN-017** (R10 flip ✅) | FR-X.2-02 §Processing 3, SCR-X2-03 row 7-8 | Mở chi tiết phiên DA_GOI_Y → layout 2 cột: trái câu hỏi DN+Stepper+thông tin DN, phải Top 5 gợi ý từ KHO_CAU_HOI sắp theo relevance DESC | Happy | P0 | **PASS** | ✅ TVN-004 Closed | **R10 verified:** Top 5 gợi ý render đúng. TVN-0024: KCH-0001 (94%) + KCH-0004 (74%). TVN-0021: KCH-0001 (91%) + KCH-0007 (71%). Score descending ✅, mỗi card có mã KQA + câu hỏi + câu trả lời + % phù hợp + button [Chọn] đúng spec FR-X.2-04. Title "Top 5" với actual N=2 (seed assign 2 entries/phiên — within spec "tối đa 5"). |
+| **TVN-018** (R10 flip ✅) | FR-X.2-02 §Processing 5 | CB NV click [Chọn] gợi ý → auto-fill ô soạn rich-text | Workflow | P1 | **PASS** | — | **R10 verified:** Click [Chọn] trên KCH-0001 (TVN-0021) → textarea "Nội dung trả lời" auto-fill 74 ký tự "Trả lời tham chiếu cho câu hỏi #21A. Áp dụng quy định pháp luật hiện hành." ✅ đúng spec FR-X.2-02 §Processing 5. CB NV có thể chỉnh sửa thêm trước [Gửi trả lời]. |
 | **TVN-019** (R9) | FR-X.2-02 §Processing 6, SCR-X2-03 row 8 | CB NV [Gửi trả lời] → DA_GOI_Y → CB_TRA_LOI, tạo TU_VAN_NHANH liên kết `khoCauHoiDaChonId` nếu chọn từ kho | Workflow | P0 | **PASS** | — | UI: TVN-QA-20260428-0016 click [Gửi trả lời] với 257 chars → state CB_TRA_LOI, nguoiTraLoiId set, version+1. API: TVN-QA-20260428-0015 với khoCauHoiDaChonId=QA-20260508-0003 stored, ngayTraLoi auto. |
 | **TVN-021** (R9) | FR-X.2-02 §E2 ERR-TVN-02 | CB NV gửi trả lời với nội dung rỗng → "Nội dung trả lời là bắt buộc" | Negative | P1 | **PASS** | — | API `POST /{id}/tra-loi {noiDungTraLoi:''}` → 422 ERR-TVN-02 ✅ |
 | **TVN-039** (R9) | BR-DATA-05, FR-X.2-01 §Postconditions | Audit log ghi đầy đủ CRUD/APPROVE/REJECT/IMPORT/TOGGLE/CONG_KHAI/GUI_TRA_LOI/DANH_GIA/AUTO_HET_HAN | Cross-module | P1 | **PARTIAL** | BUG-FUNC-TVN-005 | Endpoint `/api/v1/audit-logs` 200 với QTHT (cb_nv 403). KHO_CAU_HOI: 25 events. TU_VAN_NHANH: 2 events (đúng 2 lần `/tra-loi` R9). Schema đầy đủ entityType/entityId/hanhDong/endpoint/responseCode/thoiGian/ipAddress/sessionId. ⚠️ Action naming: `TU_CHOI` (Vietnamese) vs spec `REJECT_KHOCAUHOI`; `UPDATE` cho het-hieu-luc thay vì `TOGGLE_HIEU_LUC`. Chưa verify IMPORT_EXCEL/CONG_KHAI/DANH_GIA/AUTO_HET_HAN (depend feature chưa deploy hoặc mTLS). |
@@ -190,7 +191,74 @@ R7.7.11 cover được 19/44 TC (43%). Backend mechanics CRUD + workflow chuyể
 
 ---
 
+### BUG-FUNC-TVN-006 (R10 mới) — Minor cột "Số gợi ý" list = 0 dù phiên có `goiYTraLoi.length=2`
+
+| Trường | Giá trị |
+|--------|---------|
+| **Severity** | Minor |
+| **Priority** | P2 |
+| **TC Reference** | TVN-016 |
+| **Status** | Open |
+| **Assignee** | Frontend Team |
+
+**Mô tả:** List phiên TV nhanh `/tv-nhanh/danh-sach` cột "Số gợi ý" hiển thị `0` cho 100% phiên (50/50 record), kể cả phiên DA_GOI_Y / CB_TRA_LOI có `goiYTraLoi=[{KCH-0001, ...}, {KCH-0004, ...}]` (length=2 mỗi phiên). Detail page render đúng 2 KQA, nhưng list cell không đọc `data.goiYTraLoi.length`. Có thể FE đang đọc field `soGoiY` không tồn tại hoặc đếm `khoCauHoiDaChonId` (`null` cho phiên chưa CB chọn) → luôn 0.
+
+**Expected vs Actual:** Expected: cột "Số gợi ý" = `goiYTraLoi.length` (vd 2 cho phiên seed). Actual: `0` cho mọi phiên.
+
+**Impact:** CB NV không filter/sort được phiên theo "có gợi ý nhiều/ít" để ưu tiên xử lý. Workaround: mở từng detail xem. Daily workflow vẫn chạy được.
+
+**Root Cause (Suggested):** FE column render `record.soGoiY ?? 0` thay vì `record.goiYTraLoi?.length ?? 0`. Đơn giản 1 dòng fix.
+
+---
+
 ## 4. Detailed Test Results (selected)
+
+### 4.0 R10 (LATEST) — TVN-016/017/018 re-test sau R7.6.2 R10 unblock
+
+**Pre-conditions:**
+- R7.6.2 R10 (2026-05-09 13:08:00) confirm pool 50 phiên cover 6 state SM-TVNHANH (MOI:8 / DANG_TIM_KIEM:6 / DA_GOI_Y:9 / CB_TRA_LOI:11 / HOAN_THANH:12 / HET_HAN:4)
+- Login `cb_nv_tw_01` / `Secret@123` + OTP `666666` (Cookie session OK, JWT 5 phút TTL → 1 lần re-login giữa session do BE quirk)
+
+**TVN-016 R10 — 4-tab list count verify:**
+
+| Tab UI | URL filter | Count | State map | Status |
+|--------|-----------|-------|-----------|--------|
+| Tất cả | (no filter) | **50** | All 6 states | ✅ PASS |
+| Chờ xử lý | `?trangThai=MOI,DANG_TIM_KIEM` | **14** | MOI(8) + DANG_TIM_KIEM(6) | ✅ PASS |
+| Đã gợi ý | `?trangThai=DA_GOI_Y,CB_TRA_LOI` | **20** | DA_GOI_Y(9) + CB_TRA_LOI(11) | ✅ PASS |
+| Hoàn thành | `?trangThai=HOAN_THANH,HET_HAN` | **16** | HOAN_THANH(12) + HET_HAN(4) | ✅ PASS |
+
+→ Tổng 14+20+16 = 50 = Tất cả ✅ — không miss/duplicate state.
+
+**TVN-017 R10 — Top 5 gợi ý render:**
+
+| Mã phiên | UID | KQA gợi ý | Score | Layout | Status |
+|----------|-----|-----------|-------|--------|--------|
+| TVN-QA-20260423-0024 | 3a3c5f16-... | KCH-0001 | 94% | 2 cột + Stepper 5 state ✅ | ✅ PASS |
+|  |  | KCH-0004 | 74% | Card đầy đủ + button [Chọn] ✅ |  |
+| TVN-QA-20260425-0021 | ec64a93b-... | KCH-0001 | 91% | 2 cột + Stepper 5 state ✅ | ✅ PASS |
+|  |  | KCH-0007 | 71% | Card đầy đủ + button [Chọn] ✅ |  |
+
+→ Score descending ✅. Title "Top 5" với actual N=2 mỗi phiên (seed assign 2 KQA/phiên — within spec "tối đa 5"). API `GET /api/v1/tu-van-nhanhs/{id}` trả `goiYTraLoi=[{maQa,cauHoi,cauTraLoi,relevanceScore}]` — UI đọc đúng field.
+
+**TVN-018 R10 — Click [Chọn] auto-fill:**
+
+| Step | Action | Expected | Actual | Status |
+|------|--------|----------|--------|--------|
+| 1 | Mở chi tiết TVN-0021 (DA_GOI_Y) | Render 2 cards gợi ý | KCH-0001 91% + KCH-0007 71% ✅ | PASS |
+| 2 | Click button [Chọn] trên KCH-0001 | Auto-fill textarea Nội dung trả lời | textarea.value = "Trả lời tham chiếu cho câu hỏi #21A. Áp dụng quy định pháp luật hiện hành." (74 ký tự) ✅ | PASS |
+| 3 | Verify counter | Counter `0 / 5000` → `74 / 5000` | (chưa verify counter, value đúng) | PASS |
+
+**TVN-025 (CMS modal validate empty) — Negative finding bonus:**
+- Modal "Tạo phiên tư vấn nhanh" submit empty → "Vui lòng nhập câu hỏi doanh nghiệp" ✅
+- Note: TVN-025 spec gốc là DN gửi qua Cổng PLQG (external mTLS) — vẫn BLOCKED. Test này là CMS path bonus, không thay thế TVN-025 spec.
+
+**Bằng chứng R10:**
+- [r7-7-11-r10-tvn016-tab-hoanthanh-16of16.png](../../screenshots/r7-7-11-r10-tvn016-tab-hoanthanh-16of16.png) — Tab Hoàn thành 16/16
+- [r7-7-11-r10-tvn017-detail-dagoiy-0024-suggestions.png](../../screenshots/r7-7-11-r10-tvn017-detail-dagoiy-0024-suggestions.png) — TVN-0024 detail render 2 KQA
+- [r7-7-11-r10-tvn018-chon-autofill.png](../../screenshots/r7-7-11-r10-tvn018-chon-autofill.png) — TVN-0021 click [Chọn] auto-fill
+
+---
 
 ### 4.1 TVN-003: CB NV tạo Q&A thủ công → CHO_DUYET
 

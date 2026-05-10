@@ -18,22 +18,24 @@
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P3** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.3.16](#r7-3-16) |
-| **P4** | 2 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | ⚠️[R7.4.D3](#r7-4-d3) · ⏳[R7.4.D3.AUTO](#r7-4-d3-auto) |
-| **Tổng** | **3** | **0** | **0** | **1** | **1** | **0** | **1** | **0** |  |
+| **P4** | 2 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | ✅[R7.4.D3](#r7-4-d3) · ❌[R7.4.D3.AUTO](#r7-4-d3-auto) |
+| **Tổng** | **3** | **0** | **0** | **2** | **0** | **0** | **0** | **1** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
 - ✅ **R7.3.16** 🆕 Seed Kho QA entry CHO_DUYET cover 5 LV × 2 nguồn (THU_CONG + IMPORT) qua UI Modal SCR-X2-01 <a id="r7-3-16"></a>
   - **Kết quả:** PASS 9/9 record CHO_DUYET. THU_CONG 8/8 (6 LV), IMPORT 1 (Hành chính). cb_nv_tw_02. [r7-3-16-cho-duyet-9.png](../output/qa-reports/round7-2026-05-06/seed/kho-qa/r7-3-16-cho-duyet-9.png)
-  - **Bug:** [bug-report-flow-kho-qa.md](../output/qa-reports/round7-2026-05-06/bug-reports/kho-qa/bug-report-flow-kho-qa.md) — 1/1 đóng (BUG-KHOQA-001 UI Critical Closed-verified R7 2026-05-07)
+  - **Bug:** [Pass-bug-report-flow-kho-qa.md](../output/qa-reports/round7-2026-05-06/bug-reports/kho-qa/Pass-bug-report-flow-kho-qa.md) — 1/1 đóng (BUG-KHOQA-001 UI Critical Closed-verified R7 2026-05-07)
 
-- ⚠️ **R7.4.D3** ✏️ Workflow Kho QA SM-KHOCAUHOI 8 transitions (duyệt đơn lẻ + bulk + từ chối + toggle hiệu lực) `[~88% — 7/8 transition, T8 FE bug]` <a id="r7-4-d3"></a>
-  - **Cần:** R7.3.16 ✅ · ≥3 Kho QA `CHO_DUYET` (✓9) · account `cb_pd_tw_02` cùng cấp
+- ✅ **R7.4.D3** ✏️ Workflow Kho QA SM-KHOCAUHOI 8 transitions (duyệt đơn lẻ + bulk + từ chối + toggle hiệu lực) <a id="r7-4-d3"></a>
+  - **Cần:** R7.3.16 ✅ · ≥3 Kho QA `CHO_DUYET` (✓9) · account `cb_pd_tw_02` / `cb_nv_tw_08` cùng cấp
   - **Spec:** SM-KHOCAUHOI — `02-thu-tu-module.md` line 777-789
-  - **Kết quả:** PARTIAL 7/8 transition. T1/T2/T4/T5/T6/T7 PASS. T8 🚫 FE bug. [workflow-test-report-flow-kho-qa.md](../output/qa-reports/round7-2026-05-06/workflow/kho-qa/workflow-test-report-flow-kho-qa.md)
-  - **Bug:** [bug-report-flow-kho-qa.md](../output/qa-reports/round7-2026-05-06/bug-reports/kho-qa/bug-report-flow-kho-qa.md) — 1 Open BUG-KHOQA-002 Major (FE thiếu button Kích hoạt)
+  - **Kết quả:** PASS 8/8 transition R10b 2026-05-10 11:00 — T8 Closed-verified cb_nv_tw_08 click [Kích hoạt hiệu lực] → DA_DUYET. [workflow-test-report-flow-kho-qa.md](../output/qa-reports/round7-2026-05-06/workflow/kho-qa/workflow-test-report-flow-kho-qa.md)
+  - **Bug:** [Pass-bug-report-flow-kho-qa.md](../output/qa-reports/round7-2026-05-06/bug-reports/kho-qa/Pass-bug-report-flow-kho-qa.md) — 2/2 đóng (BUG-KHOQA-001 + BUG-KHOQA-002 Closed-verified)
 
-- ⏳ **R7.4.D3.AUTO** 🆕 Verify auto-feed Kho QA nguồn TU_DONG (BR-FLOW-10) — HD DA_DUYET → tạo record Kho QA TU_DONG `[need: ≥1 HD DA_DUYET]` <a id="r7-4-d3-auto"></a>
-  - **Cần:** ≥1 HD `DA_DUYET` (✗ 0/7 — distribution chỉ MOI/DA_PHAN_CONG/HUY)
-  - **Spec:** FR-X.2-01 step 2 — BR-FLOW-10
+- ❌ **R7.4.D3.AUTO** 🆕 Verify auto-feed Kho QA nguồn TU_DONG (BR-FLOW-10) — HD DA_DUYET → tạo record Kho QA TU_DONG <a id="r7-4-d3-auto"></a>
+  - **Cần:** ≥1 HD `DA_DUYET` (✓ 2 — HD-20260509-010 R10 + HD-20260510-001 R10c)
+  - **Spec:** `02-thu-tu-module.md` line 781 (FR-13 BR-FLOW-10) + line 509 (SM-HOIDAP DA_DUYET hook)
+  - **Kết quả:** ❌ Lỗi R10c 2026-05-10 12:21:48 — re-verify sau dev claim fix, fresh HD-001 lifecycle 5/5 PASS, BR-FLOW-10 vẫn 0 TU_DONG. [workflow-test-report-r7-4-d3-auto.md](../output/qa-reports/round7-2026-05-06/workflow/kho-qa/workflow-test-report-r7-4-d3-auto.md)
+  - **Bug:** [bug-report-r7-4-d3-auto-br-flow-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/kho-qa/bug-report-r7-4-d3-auto-br-flow-10.md) — 0/1 đóng (BUG-KHOQA-AUTO-001 Open Major P1, dev fix lần 1 fail)

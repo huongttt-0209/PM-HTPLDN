@@ -40,7 +40,7 @@
 - ✅ **R7.3.9** 🔄 Seed 5 ĐKT entry NHAP cover 5 LV (R9 gap-fill SHTT) <a id="r7-3-9"></a>
   - **Kết quả:** R9 PASS 5/5 NHAP cover 5 LV. R8 đã có 4 (HC/LĐ/ĐĐ/Thuế) sau R7.4.B10 CRUD xóa SHTT, R9 add lại 1 SHTT THU_CONG link NHCH SHTT-TN nhiều R9. [seed-checklist R9](../output/qa-reports/round7-2026-05-06/seed/dao-tao/seed-checklist-r7-3-9-dkt-r9.md)
   - **Spec:** FR-III-NEW-01 line 1324
-  - **Bug:** [bug-report-seed-r7-3-9-dkt-nhch.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-seed-r7-3-9-dkt-nhch.md) — 2/2 đóng FE (DKT-FE-01 + NHCH-STATE-01 Closed).
+  - **Bug:** [Pass-bug-report-seed-r7-3-9-dkt-nhch.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/Pass-bug-report-seed-r7-3-9-dkt-nhch.md) — 2/2 đóng FE (DKT-FE-01 + NHCH-STATE-01 Closed).
 
 - ✅ **R7.3.10** 🔄 Seed 8 bài giảng (R9 light verify, state stable) <a id="r7-3-10"></a>
   - **Kết quả:** R9 verify 8/8 stable — 5 VIDEO + 1 SLIDE + 2 PDF cover 3 loại + 8 LV (Doanh nghiệp + Dân sự + Hành chính + Đất đai + SHTT + Thương mại + Lao động + Thuế), all `congKhai=false`. R9 skip add record vì state đã comprehensive + chờ BUG-BG-001 dev fix trước. [seed-checklist R9](../output/qa-reports/round7-2026-05-06/seed/dao-tao/seed-checklist-r7-3-10-bai-giang-r9.md) · [list R8 stable](../output/qa-reports/round7-2026-05-06/seed/dao-tao/r7-3-10-bai-giang-list-8-final.png)

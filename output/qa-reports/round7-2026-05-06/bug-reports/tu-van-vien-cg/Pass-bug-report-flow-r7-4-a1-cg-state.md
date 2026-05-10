@@ -1,0 +1,132 @@
+# Bug Report — TVV/CG Workflow R7.4.A1-CG
+
+| Thông tin | Giá trị |
+|-----------|---------|
+| **Dự án** | PM HTPLDN |
+| **Môi trường** | http://103.172.236.130:3000 |
+| **Người test** | QA Automation (Chrome DevTools MCP) |
+| **Ngày** | 2026-05-06 09:00:00 (approx — git commit time) |
+| **Loại test** | Workflow (R7.4.A1-CG) |
+| **Round** | R7 |
+| **Tài liệu tham chiếu** | [smoke/6.4-sm-tvv.md](../../../../smoke/6.4-sm-tvv.md) · [funtion/7.4-chuyen-gia-tvv.md](../../../../funtion/7.4-chuyen-gia-tvv.md) · [workflow/tu-van-vien-cg/workflow-test-report-r7-4-a1-cg.md](../../workflow/tu-van-vien-cg/workflow-test-report-r7-4-a1-cg.md) |
+
+---
+
+## Tổng hợp
+
+Phát hiện **1 bug Major** trong test R7.4.A1-CG advance state happy path. BE còn dùng tên state cũ + skip state mới `CHO_KICH_HOAT` mà SRS update v3.5 đã chèn.
+
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial |
+|------|----------|-------|--------|-------|---------|
+| 1    | 0        | 1     | 0      | 0     | 0       |
+
+## Bug Summary Table
+
+| Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
+|--------|----------|----------|------|--------|-------------------|-------|--------|
+| ~~BUG-CG-A1-001~~ | Major | P0 | Workflow | TC-CG-A1-05 | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:2011` + `smoke/6.4-sm-tvv.md` line 24-25, 76 + `funtion/7.4-chuyen-gia-tvv.md` TVV-011 | ~~State sau phê duyệt = `DANG_HOAT_DONG`, spec yêu cầu `CHO_KICH_HOAT`~~ | **Closed** |
+
+---
+
+## ~~BUG-CG-A1-001~~ [CLOSED] — State sau CB PD phê duyệt sai spec v3.5 (`DANG_HOAT_DONG` vs `CHO_KICH_HOAT`)
+
+> **Re-test:** 2026-05-08 R8b — ✅ **PASS (Closed-verified, gate 6/6)**. Account `qtht_02`. 6 verify gate qua API + UI:
+> - Gate 1 — `GET ?loaiTvv=CG&trangThai=DANG_HOAT_DONG` → count=0 ✅ enum legacy deprecated.
+> - Gate 2 — `GET ?loaiTvv=CG&trangThai=HOAT_DONG` → count=8 ✅ rename applied.
+> - Gate 3 — `GET ?trangThai=CHO_KICH_HOAT` → count=2 (TVV-0013 + TVV-0009) ✅ enum hợp lệ.
+> - Gate 4 — UI SCR-IV-01 tab "Chờ kích hoạt tài khoản" present (uid=47_40), click → 2 records hiển thị, badge `Chờ kích hoạt tài khoản` đúng spec.
+> - Gate 5 — Spot-check `GET /tu-van-viens/{TVV-0001}` → `trangThai: "HOAT_DONG"` ✅ rename applied legacy record.
+> - Gate 6 — Cross-confirm new workflow: TVV-0013 (R7.4.A1 R8b 2026-05-08) + TVV-0014 (R8 verify-2 2026-05-07) — cả 2 POST `/phe-duyet` → state CHO_KICH_HOAT đúng spec.
+> - Reconciling: R8 verify-1 "still open" trên TVV-0007 là evidence stale (record legacy approved trước dev fix, BE không migrate retroactively). R8 verify-2 + R8b dùng record fresh post-fix.
+> - Screenshot: [R8b-CG-tab-cho-kich-hoat-2records.png](../../workflow/tu-van-vien-cg/evidence-r7-4-a1/R8b-CG-tab-cho-kich-hoat-2records.png).
+
+> **Re-test:** 2026-05-07 R8 verify-2 (16:47) — ✅ **PASS (Closed-verified)**. End-to-end workflow trên TVV-BTP-TW-0014 (`e4aad026-d996-45b3-8ab0-fb766adb60a0`):
+> - **Step 1** (cb_nv_tw_02 lưu nháp thẩm định, version=1) → 200 OK, state `DANG_THAM_DINH` (version=2).
+> - **Step 2** (cb_nv_tw_02 trình duyệt, version=2) → 200 OK, state `CHO_PHE_DUYET` (version=3).
+> - **Step 3** (cb_pd_tw_02 phê duyệt, version=3) → 200 OK, state **`CHO_KICH_HOAT`** (version=4) ✅ + `taiKhoanId="675d5107-6b2b-4046-a9e6-58b7a8ca3ecf"` tự cấp + `ngayCongNhan="2026-05-07"` set.
+> - SCR-IV-01 nay có 8 tab gồm "Chờ kích hoạt tài khoản" (uid=18_10) — tab UI cho state mới đã thêm.
+> - Filter API `?trangThai=CHO_KICH_HOAT` → 200 (enum hợp lệ); `?trangThai=DANG_HOAT_DONG` → count=0 (rename done); `?trangThai=HOAT_DONG` → count=8 TVV legacy.
+> - 3/3 part fix: rename `DANG_HOAT_DONG → HOAT_DONG` ✅, chèn state `CHO_KICH_HOAT` giữa CHO_PHE_DUYET → HOAT_DONG ✅, workflow phê duyệt → CHO_KICH_HOAT (KHÔNG skip thẳng vào HOAT_DONG) ✅.
+> - Screenshot SCR-IV-01 8 tabs: [r8-verify-2026-05-07-scr-iv-01-8tabs-and-donvi-label.png](../../screenshots/r8-verify-2026-05-07-scr-iv-01-8tabs-and-donvi-label.png).
+
+> **Re-test:** 2026-05-07 R7.2.5 — 🔴 **VẪN OPEN** (dev claim fix nhưng evidence không đổi).
+> - GET `/api/v1/tu-van-viens/7cb207b8-eea1-44f2-835f-ebd923dbfbc2` response `data.trangThai = "DANG_HOAT_DONG"` (chưa rename → `HOAT_DONG`, chưa thêm `CHO_KICH_HOAT`).
+> - UI badge detail TVV-BTP-TW-0007 vẫn "Đang hoạt động"; tab list KHÔNG có tab "Chờ kích hoạt".
+> - Account verify: `cb_nv_tw_02` qua MCP. Evidence: ![bug-cg-a1-001-retest-2026-05-07-still-open.png](image/bug-cg-a1-001-retest-2026-05-07-still-open.png)
+> **Re-test:** 2026-05-07 R8 — 🔴 **VẪN OPEN**. Verify lần 2: list TVV vẫn KHÔNG có tab "Chờ kích hoạt"; TVV-0007 detail badge "Đang hoạt động" giữ nguyên (response `trangThai="DANG_HOAT_DONG"`). BE chưa rename + chưa chèn state mới theo SRS update 2026-05-05. Screenshot: [r8-verify-2026-05-07-cg-a1-tvv0007-still-danghoatdong.png](../../screenshots/r8-verify-2026-05-07-cg-a1-tvv0007-still-danghoatdong.png).
+
+### Mô tả
+
+Sau khi CB PD POST `/api/v1/tu-van-viens/{id}/phe-duyet`, BE trả `trangThai: "DANG_HOAT_DONG"`. Theo SRS update 2026-05-05 §FR-IV-NEW-04 đã rename `DANG_HOAT_DONG → HOAT_DONG` và chèn state mới `CHO_KICH_HOAT` giữa `CHO_PHE_DUYET` và `HOAT_DONG`. State đúng phải là `CHO_KICH_HOAT` (chờ chủ TK click mail kích hoạt → `HOAT_DONG`). UI hiển thị badge "Đang hoạt động" sai trên TVV-BTP-TW-0007 ngay sau phê duyệt — cho phép phân công VV/HD ngay khi TK chưa kích hoạt.
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_02`, seed 1 CG `MOI_DANG_KY` qua `POST /api/v1/tu-van-viens` (loaiTvv=CG, đầy đủ field cccd/email/diaChi/trinhDo/toChucChinhId/linhVucIds/donViQuanLyId).
+2. POST `/api/v1/tu-van-viens/{id}/tham-dinh` body `{nhom1KetQua:true, nhom2Diem:80, nhom3Diem:null, nhom4ThamGia:true, ketLuan:"DAT", version:1, trinhDuyet:false}` → state `DANG_THAM_DINH`.
+3. POST `/api/v1/tu-van-viens/{id}/tham-dinh` body `{...same..., version:2, trinhDuyet:true}` → state `CHO_PHE_DUYET`.
+4. Login `cb_pd_tw_02`, POST `/api/v1/tu-van-viens/{id}/phe-duyet` body `{version:3}`.
+5. Quan sát: Response `data.trangThai`. Cũng GET `/api/v1/tu-van-viens/{id}` xem state.
+6. Mở UI `/chuyen-gia-tvv/{id}` xem badge state header.
+
+### Kết quả mong đợi
+
+- Response body POST `/phe-duyet`: `trangThai: "CHO_KICH_HOAT"` (theo SRS `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:2011` + SM `smoke/6.4-sm-tvv.md` line 25 "State mới CHO_KICH_HOAT chèn giữa CHO_PHE_DUYET và HOAT_DONG").
+- Sau khi chủ TK click mail kích hoạt (FR-VIII-26) + đặt MK lần đầu → state TVV chuyển từ `CHO_KICH_HOAT` → `HOAT_DONG` (KHÔNG dùng tên `DANG_HOAT_DONG`).
+- UI badge phải hiển thị "Chờ kích hoạt tài khoản" với màu xanh dương, không phải "Đang hoạt động" xanh lá.
+- TVV ở `CHO_KICH_HOAT` KHÔNG nên xuất hiện trong dropdown phân công VV/HD (vì TK chưa kích hoạt).
+
+### Kết quả thực tế
+
+- Response body POST `/phe-duyet`: `trangThai: "DANG_HOAT_DONG"` (BE còn dùng tên cũ + skip CHO_KICH_HOAT trên TVV).
+- GET `/api/v1/tu-van-viens/{id}` confirm `trangThai: "DANG_HOAT_DONG"` (TVV state) + `taiKhoanId` set.
+- UI badge `"Đang hoạt động"` ngay sau phê duyệt, dù chủ TK chưa kích hoạt mail.
+
+```json
+{
+  "id": "7cb207b8-eea1-44f2-835f-ebd923dbfbc2",
+  "version": 4,
+  "trangThai": "DANG_HOAT_DONG",
+  "maTvv": "TVV-BTP-TW-0007",
+  "taiKhoanId": "fdfafbed-a9f9-487f-abb3-3f97770f4491",
+  "ngayCongNhan": "2026-05-06",
+  "loaiTvv": "CG"
+}
+```
+
+### Bằng chứng
+
+**1. Ảnh chụp TVV-0007 sau phê duyệt — UI hiển thị "Đang hoạt động" thay vì "Chờ kích hoạt tài khoản":**
+
+![BUG-CG-A1-001 — Header badge "Đang hoạt động" sau phê duyệt, spec yêu cầu CHO_KICH_HOAT](image/bug-cg-a1-001-state-deviation.png)
+
+**2. Spec quote (`smoke/6.4-sm-tvv.md` line 19-25):**
+
+```
+| `CHO_KICH_HOAT` | Chờ kích hoạt tài khoản | TVV/CG đã được công nhận, có tài khoản nhưng chưa kích hoạt | Xanh dương |
+| `HOAT_DONG` | Đang hoạt động | TVV/CG đã kích hoạt tài khoản, sẵn sàng nhận phân công | Xanh lá |
+
+> **⚠️ Đổi tên** so với v3 cũ: `DANG_HOAT_DONG` → **`HOAT_DONG`** (đồng bộ enum CHECK constraint, cite `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:2011`).
+> **⚠️ State mới** `CHO_KICH_HOAT` chèn giữa `CHO_PHE_DUYET` và `HOAT_DONG` — workflow tự cấp tài khoản qua FR-VIII-15 + kích hoạt qua FR-VIII-26.
+```
+
+**3. Functional spec quote (`funtion/7.4-chuyen-gia-tvv.md` line 78):**
+
+```
+| TVV-011 | UC45 | CB PD phê duyệt → state `CHO_KICH_HOAT` (KHÔNG phải `HOAT_DONG`); hệ thống tự cấp TK + gửi mail kích hoạt | Workflow | P0 |
+```
+
+---
+
+## Phụ lục — Môi trường test
+
+| Thành phần | Giá trị |
+|------------|---------|
+| URL ứng dụng | http://103.172.236.130:3000 |
+| OTP login | `666666` bypass |
+| MailHog inbox | http://103.172.236.130:8025 |
+| Account thẩm định | `cb_nv_tw_02` / Secret@123 |
+| Account phê duyệt | `cb_pd_tw_02` / Secret@123 |
+| TVV evidence | TVV-BTP-TW-0007 (`7cb207b8-eea1-44f2-835f-ebd923dbfbc2`) |
+| Endpoint phê duyệt | `POST /api/v1/tu-van-viens/{id}/phe-duyet` body `{version}` |

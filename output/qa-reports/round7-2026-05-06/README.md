@@ -10,7 +10,7 @@
 
 ## 0. Tiền điều kiện (verify trước khi bắt đầu)
 
-Đã verify 2026-05-06 — ghi log: [`bug-reports/deploy-gap/bug-report-audit-deploy-gap.md`](bug-reports/deploy-gap/bug-report-audit-deploy-gap.md).
+Đã verify 2026-05-06 — ghi log: [`bug-reports/deploy-gap/Pass-bug-report-audit-deploy-gap.md`](bug-reports/deploy-gap/Pass-bug-report-audit-deploy-gap.md).
 
 | # | Check | Status | Note |
 |:-:|---|---|---|
@@ -33,7 +33,7 @@
 round7-2026-05-06/
 ├── README.md                       (file này)
 ├── bug-reports/                    (bug-report-*.md per module)
-│   └── deploy-gap/bug-report-audit-deploy-gap.md   (R7.0.2 — 6 bug verified)
+│   └── deploy-gap/Pass-bug-report-audit-deploy-gap.md   (R7.0.2 — 6 bug verified)
 ├── seed/                           (seed-checklist-*.md per actor)
 ├── workflow/                       (workflow-test-report-*.md per Trụ A/B/C/D)
 ├── functional/                     (functional-test-report-*.md per module)

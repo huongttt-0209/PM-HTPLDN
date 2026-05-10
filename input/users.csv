@@ -1,58 +1,153 @@
 username,mat_khau,email,ho_ten,trang_thai,loai_tai_khoan,don_vi_ma,don_vi,vai_tro,ngay_tao,is_deleted
+
 cb_nv_bn_01,Secret@123,cb_nv_bn_01@htpldn.test,CB NV BN 01 (BKH),HOAT_DONG,CB,BKH,Bộ Kế hoạch và Đầu tư,CB_NV_BN,2026-04-23 18:59:24,f
+
 cb_nv_bn_02,Secret@123,cb_nv_bn_02@htpldn.test,CB NV BN 02 (BTC),HOAT_DONG,CB,BTC,Bộ Tài chính,CB_NV_BN,2026-04-23 18:59:24,f
+
 cb_nv_bn_03,Secret@123,cb_nv_bn_03@htpldn.test,CB NV BN 03 (BCT),HOAT_DONG,CB,BCT,Bộ Công Thương,CB_NV_BN,2026-04-23 18:59:24,f
+
 cb_nv_dp_01,Secret@123,cb_nv_dp_01@htpldn.test,CB NV DP 01 (AG),HOAT_DONG,CB,STP-AG,Sở Tư pháp An Giang,CB_NV_DP,2026-04-23 18:59:24,f
+
 cb_nv_dp_02,Secret@123,cb_nv_dp_02@htpldn.test,CB NV DP 02 (BG),HOAT_DONG,CB,STP-BG,Sở Tư pháp Bắc Giang,CB_NV_DP,2026-04-23 18:59:24,f
+
 cb_nv_dp_03,Secret@123,cb_nv_dp_03@htpldn.test,CB NV DP 03 (BNI),HOAT_DONG,CB,STP-BNI,Sở Tư pháp Bắc Ninh,CB_NV_DP,2026-04-23 18:59:24,f
+
 cb_nv_tw_01,Secret@123,cb_nv_tw_01@htpldn.test,CB Nghiệp vụ TW 01,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-04-23 18:59:24,f
+
 cb_nv_tw_02,Secret@123,cb_nv_tw_02@htpldn.test,CB Nghiệp vụ TW 02,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-04-23 18:59:24,f
+
 cb_nv_tw_03,Secret@123,cb_nv_tw_03@htpldn.test,CB Nghiệp vụ TW 03,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-04-23 18:59:24,f
+
 cb_pd_bn_01,Secret@123,cb_pd_bn_01@htpldn.test,CB PD BN 01 (BKH),HOAT_DONG,CB,BKH,Bộ Kế hoạch và Đầu tư,CB_PD_BN,2026-04-23 18:59:24,f
+
 cb_pd_bn_02,Secret@123,cb_pd_bn_02@htpldn.test,CB PD BN 02 (BTC),HOAT_DONG,CB,BTC,Bộ Tài chính,CB_PD_BN,2026-04-23 18:59:24,f
+
 cb_pd_bn_03,Secret@123,cb_pd_bn_03@htpldn.test,CB PD BN 03 (BCT),HOAT_DONG,CB,BCT,Bộ Công Thương,CB_PD_BN,2026-04-23 18:59:24,f
+
 cb_pd_dp_01,Secret@123,cb_pd_dp_01@htpldn.test,CB PD DP 01 (AG),HOAT_DONG,CB,STP-AG,Sở Tư pháp An Giang,CB_PD_DP,2026-04-23 18:59:24,f
+
 cb_pd_dp_02,Secret@123,cb_pd_dp_02@htpldn.test,CB PD DP 02 (BG),HOAT_DONG,CB,STP-BG,Sở Tư pháp Bắc Giang,CB_PD_DP,2026-04-23 18:59:24,f
+
 cb_pd_dp_03,Secret@123,cb_pd_dp_03@htpldn.test,CB PD DP 03 (BNI),HOAT_DONG,CB,STP-BNI,Sở Tư pháp Bắc Ninh,CB_PD_DP,2026-04-23 18:59:24,f
+
 cb_pd_tw_01,Secret@123,cb_pd_tw_01@htpldn.test,CB Phê duyệt TW 01,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-04-23 18:59:24,f
+
 cb_pd_tw_02,Secret@123,cb_pd_tw_02@htpldn.test,CB Phê duyệt TW 02,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-04-23 18:59:24,f
+
 cb_pd_tw_03,Secret@123,cb_pd_tw_03@htpldn.test,CB Phê duyệt TW 03,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-04-23 18:59:24,f
+
 admin,Secret@123,admin@htpldn.gov.vn,Quản trị hệ thống,HOAT_DONG,QTHT,,,QTHT,2026-04-22 05:11:50,f
+
 qtht_01,Secret@123,qtht_01@htpldn.test,QTHT Test 01,HOAT_DONG,QTHT,,,QTHT,2026-04-23 18:59:24,f
+
 qtht_02,Secret@123,qtht_02@htpldn.test,QTHT Test 02,HOAT_DONG,QTHT,,,QTHT,2026-04-23 18:59:24,f
+
 qtht_03,Secret@123,qtht_03@htpldn.test,QTHT Test 03,HOAT_DONG,QTHT,,,QTHT,2026-04-23 18:59:24,f
-qtht_04,9kUN*Uqcui$&DK,qtht_04@htpldn.test,QTHT Test 04,CHO_KICH_HOAT,QTHT,,,QTHT,2026-05-08 20:30:00,f
-cb_nv_tw_04,$aAA^Tvanyzh6^,cb_nv_tw_04@htpldn.test,CB Nghiệp vụ TW 04,CHO_KICH_HOAT,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-05-08 20:30:00,f
-cb_nv_bn_04,F3A?r4Z#k&cWVf,cb_nv_bn_04@htpldn.test,CB NV BN 04 (BKH),CHO_KICH_HOAT,CB,BKH,Bộ Kế hoạch và Đầu tư,CB_NV_BN,2026-05-08 20:30:00,f
-cb_nv_dp_04,hn47JHJ2@*RqBC,cb_nv_dp_04@htpldn.test,CB NV DP 04 (AG),CHO_KICH_HOAT,CB,STP-AG,Sở Tư pháp An Giang,CB_NV_DP,2026-05-08 20:30:00,f
-cb_pd_tw_04,ncv&J2ncrj79#P,cb_pd_tw_04@htpldn.test,CB Phê duyệt TW 04,CHO_KICH_HOAT,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-05-08 20:30:00,f
-cb_pd_bn_04,GLsAJzxJbkkx2$,cb_pd_bn_04@htpldn.test,CB Phê duyệt BN 04 (BKH),CHO_KICH_HOAT,CB,BKH,Bộ Kế hoạch và Đầu tư,CB_PD_BN,2026-05-08 20:30:00,f
-cb_pd_dp_04,kzJUpb7AXTMa*J,cb_pd_dp_04@htpldn.test,CB Phê duyệt DP 04 (AG),CHO_KICH_HOAT,CB,STP-AG,Sở Tư pháp An Giang,CB_PD_DP,2026-05-08 20:30:00,f
-qtht_05,sz?EVFK2PC^m@j,qtht_05@htpldn.test,QTHT Test 05,CHO_KICH_HOAT,QTHT,,,QTHT,2026-05-08 21:00:00,f
-cb_nv_tw_05,2gKyEa@rj%9EpM,cb_nv_tw_05@htpldn.test,CB Nghiệp vụ TW 05,CHO_KICH_HOAT,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-05-08 21:00:00,f
-cb_nv_bn_05,A3r8w?Dm8a$^AT,cb_nv_bn_05@htpldn.test,CB NV BN 05 (BTC),CHO_KICH_HOAT,CB,BTC,Bộ Tài chính,CB_NV_BN,2026-05-08 21:00:00,f
-cb_nv_dp_05,by%Adp&BhCxF89,cb_nv_dp_05@htpldn.test,CB NV DP 05 (BG),CHO_KICH_HOAT,CB,STP-BG,Sở Tư pháp Bắc Giang,CB_NV_DP,2026-05-08 21:00:00,f
-cb_pd_tw_05,KS%FnZ&!9naNB9,cb_pd_tw_05@htpldn.test,CB Phê duyệt TW 05,CHO_KICH_HOAT,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-05-08 21:00:00,f
-cb_pd_bn_05,4cJz77QF8p$!?L,cb_pd_bn_05@htpldn.test,CB Phê duyệt BN 05 (BTC),CHO_KICH_HOAT,CB,BTC,Bộ Tài chính,CB_PD_BN,2026-05-08 21:00:00,f
-cb_pd_dp_05,T2YcRv^#gy7#x5,cb_pd_dp_05@htpldn.test,CB Phê duyệt DP 05 (BG),CHO_KICH_HOAT,CB,STP-BG,Sở Tư pháp Bắc Giang,CB_PD_DP,2026-05-08 21:00:00,f
-qtht_06,k7dX$8B?sz!3Ed,qtht_06@htpldn.test,QTHT Test 06,CHO_KICH_HOAT,QTHT,,,QTHT,2026-05-08 21:10:00,f
-cb_nv_tw_06,d4aAEepK7zL&e3,cb_nv_tw_06@htpldn.test,CB Nghiệp vụ TW 06,CHO_KICH_HOAT,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-05-08 21:10:00,f
-cb_nv_bn_06,@Augbn#KniB8eV,cb_nv_bn_06@htpldn.test,CB NV BN 06 (BCT),CHO_KICH_HOAT,CB,BCT,Bộ Công Thương,CB_NV_BN,2026-05-08 21:10:00,f
-cb_nv_dp_06,C3Gar$J?Amy@U%,cb_nv_dp_06@htpldn.test,CB NV DP 06 (BNI),CHO_KICH_HOAT,CB,STP-BNI,Sở Tư pháp Bắc Ninh,CB_NV_DP,2026-05-08 21:10:00,f
-cb_pd_tw_06,X?iKA7cxb7qZqX,cb_pd_tw_06@htpldn.test,CB Phê duyệt TW 06,CHO_KICH_HOAT,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-05-08 21:10:00,f
-cb_pd_bn_06,ApCXDA54UrS8V!,cb_pd_bn_06@htpldn.test,CB Phê duyệt BN 06 (BCT),CHO_KICH_HOAT,CB,BCT,Bộ Công Thương,CB_PD_BN,2026-05-08 21:10:00,f
-cb_pd_dp_06,WL87H5ehz%zAe4,cb_pd_dp_06@htpldn.test,CB Phê duyệt DP 06 (BNI),CHO_KICH_HOAT,CB,STP-BNI,Sở Tư pháp Bắc Ninh,CB_PD_DP,2026-05-08 21:10:00,f
-qtht_07,W5G^j!QCKXd?LV,qtht_07@htpldn.test,QTHT Test 07,CHO_KICH_HOAT,QTHT,,,QTHT,2026-05-08 21:20:00,f
-cb_nv_tw_07,q947eKegYdEw#m,cb_nv_tw_07@htpldn.test,CB Nghiệp vụ TW 07,CHO_KICH_HOAT,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-05-08 21:20:00,f
-cb_nv_bn_07,gxHk6wxg%rKZ6D,cb_nv_bn_07@htpldn.test,CB NV BN 07 (BKH),CHO_KICH_HOAT,CB,BKH,Bộ Kế hoạch và Đầu tư,CB_NV_BN,2026-05-08 21:20:00,f
-cb_nv_dp_07,jinxfnF58NWX@6,cb_nv_dp_07@htpldn.test,CB NV DP 07 (AG),CHO_KICH_HOAT,CB,STP-AG,Sở Tư pháp An Giang,CB_NV_DP,2026-05-08 21:20:00,f
-cb_pd_tw_07,n8%xf4?b8Sd3um,cb_pd_tw_07@htpldn.test,CB Phê duyệt TW 07,CHO_KICH_HOAT,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-05-08 21:20:00,f
-cb_pd_bn_07,Dr^Whn39sk!3c4,cb_pd_bn_07@htpldn.test,CB Phê duyệt BN 07 (BKH),CHO_KICH_HOAT,CB,BKH,Bộ Kế hoạch và Đầu tư,CB_PD_BN,2026-05-08 21:20:00,f
-cb_pd_dp_07,qiq3nUjR3JV4@%,cb_pd_dp_07@htpldn.test,CB Phê duyệt DP 07 (AG),CHO_KICH_HOAT,CB,STP-AG,Sở Tư pháp An Giang,CB_PD_DP,2026-05-08 21:20:00,f
-qtht_08,$CA^$$?K5*hwF!,qtht_08@htpldn.test,QTHT Test 08,CHO_KICH_HOAT,QTHT,,,QTHT,2026-05-08 21:30:00,f
-cb_nv_tw_08,?aBp!W9Zi5ZTn@,cb_nv_tw_08@htpldn.test,CB Nghiệp vụ TW 08,CHO_KICH_HOAT,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-05-08 21:30:00,f
-cb_nv_bn_08,ih$SuBP$s%7USW,cb_nv_bn_08@htpldn.test,CB NV BN 08 (BTC),CHO_KICH_HOAT,CB,BTC,Bộ Tài chính,CB_NV_BN,2026-05-08 21:30:00,f
-cb_nv_dp_08,@EVKuy6fnuMYi*,cb_nv_dp_08@htpldn.test,CB NV DP 08 (BG),CHO_KICH_HOAT,CB,STP-BG,Sở Tư pháp Bắc Giang,CB_NV_DP,2026-05-08 21:30:00,f
-cb_pd_tw_08,24&GNYv!EsU*2f,cb_pd_tw_08@htpldn.test,CB Phê duyệt TW 08,CHO_KICH_HOAT,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-05-08 21:30:00,f
-cb_pd_bn_08,2zajiYeDGH#2NQ,cb_pd_bn_08@htpldn.test,CB Phê duyệt BN 08 (BTC),CHO_KICH_HOAT,CB,BTC,Bộ Tài chính,CB_PD_BN,2026-05-08 21:30:00,f
-cb_pd_dp_08,KGx27i3Q?Fm5m*,cb_pd_dp_08@htpldn.test,CB Phê duyệt DP 08 (BG),CHO_KICH_HOAT,CB,STP-BG,Sở Tư pháp Bắc Giang,CB_PD_DP,2026-05-08 21:30:00,f
+
+qtht_04,Secret@123,qtht_04@htpldn.test,QTHT Test 04,HOAT_DONG,QTHT,,,QTHT,2026-05-08 20:30:00,f
+
+cb_nv_tw_04,Secret@123,cb_nv_tw_04@htpldn.test,CB Nghiệp vụ TW 04,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-05-08 20:30:00,f
+
+cb_nv_bn_04,Secret@123,cb_nv_bn_04@htpldn.test,CB NV BN 04 (BKH),HOAT_DONG,CB,BKH,Bộ Kế hoạch và Đầu tư,CB_NV_BN,2026-05-08 20:30:00,f
+
+cb_nv_dp_04,Secret@123,cb_nv_dp_04@htpldn.test,CB NV DP 04 (AG),HOAT_DONG,CB,STP-AG,Sở Tư pháp An Giang,CB_NV_DP,2026-05-08 20:30:00,f
+
+cb_pd_tw_04,Secret@123,cb_pd_tw_04@htpldn.test,CB Phê duyệt TW 04,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-05-08 20:30:00,f
+
+cb_pd_bn_04,Secret@123,cb_pd_bn_04@htpldn.test,CB Phê duyệt BN 04 (BKH),HOAT_DONG,CB,BKH,Bộ Kế hoạch và Đầu tư,CB_PD_BN,2026-05-08 20:30:00,f
+
+cb_pd_dp_04,Secret@123,cb_pd_dp_04@htpldn.test,CB Phê duyệt DP 04 (AG),HOAT_DONG,CB,STP-AG,Sở Tư pháp An Giang,CB_PD_DP,2026-05-08 20:30:00,f
+
+qtht_05,Secret@123,qtht_05@htpldn.test,QTHT Test 05,HOAT_DONG,QTHT,,,QTHT,2026-05-08 21:00:00,f
+
+cb_nv_tw_05,Secret@123,cb_nv_tw_05@htpldn.test,CB Nghiệp vụ TW 05,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-05-08 21:00:00,f
+
+cb_nv_bn_05,Secret@123,cb_nv_bn_05@htpldn.test,CB NV BN 05 (BTC),HOAT_DONG,CB,BTC,Bộ Tài chính,CB_NV_BN,2026-05-08 21:00:00,f
+
+cb_nv_dp_05,Secret@123,cb_nv_dp_05@htpldn.test,CB NV DP 05 (BG),HOAT_DONG,CB,STP-BG,Sở Tư pháp Bắc Giang,CB_NV_DP,2026-05-08 21:00:00,f
+
+cb_pd_tw_05,Secret@123,cb_pd_tw_05@htpldn.test,CB Phê duyệt TW 05,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-05-08 21:00:00,f
+
+cb_pd_bn_05,Secret@123,cb_pd_bn_05@htpldn.test,CB Phê duyệt BN 05 (BTC),HOAT_DONG,CB,BTC,Bộ Tài chính,CB_PD_BN,2026-05-08 21:00:00,f
+
+cb_pd_dp_05,Secret@123,cb_pd_dp_05@htpldn.test,CB Phê duyệt DP 05 (BG),HOAT_DONG,CB,STP-BG,Sở Tư pháp Bắc Giang,CB_PD_DP,2026-05-08 21:00:00,f
+
+qtht_06,Secret@123,qtht_06@htpldn.test,QTHT Test 06,HOAT_DONG,QTHT,,,QTHT,2026-05-08 21:10:00,f
+
+cb_nv_tw_06,Secret@123,cb_nv_tw_06@htpldn.test,CB Nghiệp vụ TW 06,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-05-08 21:10:00,f
+
+cb_nv_bn_06,Secret@123,cb_nv_bn_06@htpldn.test,CB NV BN 06 (BCT),HOAT_DONG,CB,BCT,Bộ Công Thương,CB_NV_BN,2026-05-08 21:10:00,f
+
+cb_nv_dp_06,Secret@123,cb_nv_dp_06@htpldn.test,CB NV DP 06 (BNI),HOAT_DONG,CB,STP-BNI,Sở Tư pháp Bắc Ninh,CB_NV_DP,2026-05-08 21:10:00,f
+
+cb_pd_tw_06,Secret@123,cb_pd_tw_06@htpldn.test,CB Phê duyệt TW 06,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-05-08 21:10:00,f
+
+cb_pd_bn_06,Secret@123,cb_pd_bn_06@htpldn.test,CB Phê duyệt BN 06 (BCT),HOAT_DONG,CB,BCT,Bộ Công Thương,CB_PD_BN,2026-05-08 21:10:00,f
+
+cb_pd_dp_06,Secret@123,cb_pd_dp_06@htpldn.test,CB Phê duyệt DP 06 (BNI),HOAT_DONG,CB,STP-BNI,Sở Tư pháp Bắc Ninh,CB_PD_DP,2026-05-08 21:10:00,f
+
+qtht_07,Secret@123,qtht_07@htpldn.test,QTHT Test 07,HOAT_DONG,QTHT,,,QTHT,2026-05-08 21:20:00,f
+
+cb_nv_tw_07,Secret@123,cb_nv_tw_07@htpldn.test,CB Nghiệp vụ TW 07,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-05-08 21:20:00,f
+
+cb_nv_bn_07,Secret@123,cb_nv_bn_07@htpldn.test,CB NV BN 07 (BKH),HOAT_DONG,CB,BKH,Bộ Kế hoạch và Đầu tư,CB_NV_BN,2026-05-08 21:20:00,f
+
+cb_nv_dp_07,Secret@123,cb_nv_dp_07@htpldn.test,CB NV DP 07 (AG),HOAT_DONG,CB,STP-AG,Sở Tư pháp An Giang,CB_NV_DP,2026-05-08 21:20:00,f
+
+cb_pd_tw_07,Secret@123,cb_pd_tw_07@htpldn.test,CB Phê duyệt TW 07,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-05-08 21:20:00,f
+
+cb_pd_bn_07,Secret@123,cb_pd_bn_07@htpldn.test,CB Phê duyệt BN 07 (BKH),HOAT_DONG,CB,BKH,Bộ Kế hoạch và Đầu tư,CB_PD_BN,2026-05-08 21:20:00,f
+
+cb_pd_dp_07,Secret@123,cb_pd_dp_07@htpldn.test,CB Phê duyệt DP 07 (AG),HOAT_DONG,CB,STP-AG,Sở Tư pháp An Giang,CB_PD_DP,2026-05-08 21:20:00,f
+
+qtht_08,Secret@123,qtht_08@htpldn.test,QTHT Test 08,HOAT_DONG,QTHT,,,QTHT,2026-05-08 21:30:00,f
+
+cb_nv_tw_08,Secret@123,cb_nv_tw_08@htpldn.test,CB Nghiệp vụ TW 08,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-05-08 21:30:00,f
+
+cb_nv_bn_08,Secret@123,cb_nv_bn_08@htpldn.test,CB NV BN 08 (BTC),HOAT_DONG,CB,BTC,Bộ Tài chính,CB_NV_BN,2026-05-08 21:30:00,f
+
+cb_nv_dp_08,Secret@123,cb_nv_dp_08@htpldn.test,CB NV DP 08 (BG),HOAT_DONG,CB,STP-BG,Sở Tư pháp Bắc Giang,CB_NV_DP,2026-05-08 21:30:00,f
+
+cb_pd_tw_08,Secret@123,cb_pd_tw_08@htpldn.test,CB Phê duyệt TW 08,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-05-08 21:30:00,f
+
+cb_pd_bn_08,Secret@123,cb_pd_bn_08@htpldn.test,CB Phê duyệt BN 08 (BTC),HOAT_DONG,CB,BTC,Bộ Tài chính,CB_PD_BN,2026-05-08 21:30:00,f
+
+cb_pd_dp_08,Secret@123,cb_pd_dp_08@htpldn.test,CB Phê duyệt DP 08 (BG),HOAT_DONG,CB,STP-BG,Sở Tư pháp Bắc Giang,CB_PD_DP,2026-05-08 21:30:00,f
+
+9999999990,Secret@123,dntest01@htpldn.test,Công ty TNHH DN Test 01 (HN),HOAT_DONG,DN,,,DN,2026-05-09 22:13:00,f
+
+9999999991,Secret@123,dntest02@htpldn.test,Công ty CP DN Test 02 (BG),HOAT_DONG,DN,,,DN,2026-05-09 22:18:00,f
+
+nht_01,Secret@123,nht01@htpldn.test,Phùng Thị NHT An Giang,HOAT_DONG,NHT,STP-AG,Sở Tư pháp An Giang,NHT,2026-05-09 22:24:00,f
+
+nht_02,Secret@123,nht02@htpldn.test,Lương Văn NHT Đà Nẵng,HOAT_DONG,NHT,STP-DN,Sở Tư pháp Đà Nẵng,NHT,2026-05-09 22:25:00,f
+
+huongcg,Secret@123,huongcg@gmail.com,huongcg (CG TVV-BTP-TW-0030),HOAT_DONG,CG,BTP-TW,Đoàn Luật sư Hà Nội,CG,2026-05-09 23:18:00,f
+
+qtht_09,Secret@123,qtht_09@htpldn.test,QTHT Test 09,HOAT_DONG,QTHT,,,QTHT,2026-05-10 10:30:00,f
+
+cb_nv_tw_09,Secret@123,cb_nv_tw_09@htpldn.test,CB Nghiệp vụ TW 09,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-05-10 10:30:00,f
+
+cb_nv_bn_09,Secret@123,cb_nv_bn_09@htpldn.test,CB NV BN 09 (BCT),HOAT_DONG,CB,BCT,Bộ Công Thương,CB_NV_BN,2026-05-10 10:30:00,f
+
+cb_nv_dp_09,Secret@123,cb_nv_dp_09@htpldn.test,CB NV DP 09 (BNI),HOAT_DONG,CB,STP-BNI,Sở Tư pháp Bắc Ninh,CB_NV_DP,2026-05-10 10:30:00,f
+
+cb_pd_tw_09,Secret@123,cb_pd_tw_09@htpldn.test,CB Phê duyệt TW 09,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-05-10 10:30:00,f
+
+cb_pd_bn_09,Secret@123,cb_pd_bn_09@htpldn.test,CB Phê duyệt BN 09 (BCT),HOAT_DONG,CB,BCT,Bộ Công Thương,CB_PD_BN,2026-05-10 10:30:00,f
+
+cb_pd_dp_09,Secret@123,cb_pd_dp_09@htpldn.test,CB Phê duyệt DP 09 (BNI),HOAT_DONG,CB,STP-BNI,Sở Tư pháp Bắc Ninh,CB_PD_DP,2026-05-10 10:30:00,f
+
+qtht_10,Secret@123,qtht_10@htpldn.test,QTHT Test 10,HOAT_DONG,QTHT,,,QTHT,2026-05-10 10:35:00,f
+
+cb_nv_tw_10,Secret@123,cb_nv_tw_10@htpldn.test,CB Nghiệp vụ TW 10,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_NV_TW,2026-05-10 10:35:00,f
+
+cb_nv_bn_10,Secret@123,cb_nv_bn_10@htpldn.test,CB NV BN 10 (BKH),HOAT_DONG,CB,BKH,Bộ Kế hoạch và Đầu tư,CB_NV_BN,2026-05-10 10:35:00,f
+
+cb_nv_dp_10,Secret@123,cb_nv_dp_10@htpldn.test,CB NV DP 10 (AG),HOAT_DONG,CB,STP-AG,Sở Tư pháp An Giang,CB_NV_DP,2026-05-10 10:35:00,f
+
+cb_pd_tw_10,Secret@123,cb_pd_tw_10@htpldn.test,CB Phê duyệt TW 10,HOAT_DONG,CB,BTP-TW,Cục Bổ trợ tư pháp - Bộ Tư pháp,CB_PD_TW,2026-05-10 10:35:00,f
+
+cb_pd_bn_10,Secret@123,cb_pd_bn_10@htpldn.test,CB Phê duyệt BN 10 (BKH),HOAT_DONG,CB,BKH,Bộ Kế hoạch và Đầu tư,CB_PD_BN,2026-05-10 10:35:00,f
+
+cb_pd_dp_10,Secret@123,cb_pd_dp_10@htpldn.test,CB Phê duyệt DP 10 (AG),HOAT_DONG,CB,STP-AG,Sở Tư pháp An Giang,CB_PD_DP,2026-05-10 10:35:00,f

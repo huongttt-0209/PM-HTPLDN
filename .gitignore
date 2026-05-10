@@ -1,0 +1,18 @@
+# Chrome browser profiles & QA automation temp files
+.tmp-qa/
+
+# macOS system files
+.DS_Store
+**/.DS_Store
+
+# gstack internal logs
+.gstack/browse-console.log
+.gstack/browse-network.log
+.gstack/browse-audit.jsonl
+.gstack/qa-reports/
+
+# Claude hooks
+.claude/hooks/
+
+# Node modules (if any)
+node_modules/

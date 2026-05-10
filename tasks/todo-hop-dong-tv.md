@@ -17,20 +17,25 @@
 
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
-| **P3** | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | ⏳[R7.3.14](#r7-3-14) |
-| **P7** | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | ⏳[R7.7.14](#r7-7-14) |
+| **P3** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.3.14](#r7-3-14) |
+| **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.14](#r7-7-14) |
 | **Trụ E** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.E1](#r7-e1) |
-| **Tổng** | **3** | **0** | **0** | **1** | **0** | **0** | **2** | **0** |  |
+| **Tổng** | **3** | **0** | **0** | **2** | **1** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
-- ⏳ **R7.3.14** 🆕 Seed 6 Hợp đồng TV entry DANG_THUC_HIEN cover 6 LV `[need: ≥1 TVV/CG HOAT_DONG (✓ 9 — 1 TVV + 8 CG R8b 2026-05-08); ≥1 VV HOAN_THANH (✗ 0)]` <a id="r7-3-14"></a>
-  - **Cần:** R7.4.A1 ⚠️ (TVV-0014 active OK) · R7.4.A1-CG ✅ (8 CG HOAT_DONG) · R7.4.A3 (≥1 VV `HOAN_THANH`)
-  - **Note:** unblock R7.7.14 functional. TVV/CG side ready, gated bởi VV HOAN_THANH.
+- ✅ **R7.3.14** 🆕 Seed 6 Hợp đồng TV entry DANG_THUC_HIEN cover 6 LV `[need: TVV/CG (✓ 9); VV (✓ 14)]` <a id="r7-3-14"></a>
+  - **Kết quả:** PASS 6/6 LV linked qua UI VV detail. R7 retest dev fix 3/3 bug. [seed-checklist-r7-3-14-hdtv.md](../output/qa-reports/round7-2026-05-06/seed/hop-dong-tv/seed-checklist-r7-3-14-hdtv.md)
+  - **Bug:** [Pass-bug-report-r7-3-14-hdtv.md](../output/qa-reports/round7-2026-05-06/bug-reports/hop-dong-tv/Pass-bug-report-r7-3-14-hdtv.md) — 3/3 đóng (Major:3)
+  - **Cần:** [R7.3.2](todo-vu-viec.md#r7-3-2) ✅ · [R7.4.A1-CG](todo-tvv-cg.md#r7-4-a1-cg) ✅
+  - **Note:** 2026-05-10 09:04:00 — dev fix 3 bug retest PASS. HDTV-0003..0008 cover 6 LV `soVvLink=1`. HDTV-0001 mồ côi pre-fix giữ làm evidence.
 
-- ⏳ **R7.7.14** 🔄 HĐ tư vấn (UC163 sub-resource v2.1) `[need: R7.3.14, R7.4.A3]` <a id="r7-7-14"></a>
-  - **Cần:** ≥1 HĐ TV `DANG_THUC_HIEN` (✗0) · ≥1 VV `HOAN_THANH` (✗0)
+- ⚠️ **R7.7.14** 🔄 HĐ tư vấn (UC163 sub-resource v2.1) `[need: ≥1 HĐ TV DANG_THUC_HIEN (✓ 7); ≥1 VV HOAN_THANH (✗ 0)]` <a id="r7-7-14"></a>
+  - **Kết quả:** ⚠️ 17/31 TC: 13 ✅, 1 ❌, 1 🤷, 2 ⚠️ Sai spec. CONDITIONAL PASS. [functional-test-report-r7-7-14-hdtv.md](../output/qa-reports/round7-2026-05-06/functional/hop-dong-tv/functional-test-report-r7-7-14-hdtv.md)
+  - **Bug:** [bug-report-r7-7-14-hdtv.md](../output/qa-reports/round7-2026-05-06/bug-reports/hop-dong-tv/bug-report-r7-7-14-hdtv.md) — 0/5 đóng (Critical:1, Major:4)
+  - **Cần:** ≥1 HĐ TV `DANG_THUC_HIEN` (✓ 7) · ≥1 VV `HOAN_THANH` (✗ 0) — 14 TC defer chờ menu/spec
+  - **Note:** 2026-05-10 11:15:00 — Re-test 5 bug + bổ sung HDTV-019/028. 5/5 bug VẪN Open. HDTV-021 escalate Major→**Critical** (QTHT bypass cả PATCH 200 modify + DELETE 204 hard-delete). HDTV-019 & HDTV-028 PASS.
 
 - ✅ **R7.E1** 🔄 HĐ tư vấn (FR-X3-01) — sub-resource VV/TVV <a id="r7-e1"></a>
   - **Kết quả:** PASS 6/6 — 4 FE route + 2 API endpoint trả 404, sidebar không có menu HĐ TV độc lập. Match spec v2.1. [verify-checklist-r7-e1-hdtv-url.md](../output/qa-reports/round7-2026-05-06/seed/hop-dong-tv/verify-checklist-r7-e1-hdtv-url.md)

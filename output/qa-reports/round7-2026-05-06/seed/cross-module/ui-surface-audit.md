@@ -89,9 +89,9 @@
 
 | ID | Action | Owner |
 |---|---|---|
-| 1 | Update [bug-report-audit-deploy-gap.md](../../bug-reports/deploy-gap/bug-report-audit-deploy-gap.md) — add DEPLOY-007 (FR-07 button Thêm mới) + DEPLOY-008 (FR-07 button Import Excel) | QA |
+| 1 | Update [Pass-bug-report-audit-deploy-gap.md](../../bug-reports/deploy-gap/Pass-bug-report-audit-deploy-gap.md) — add DEPLOY-007 (FR-07 button Thêm mới) + DEPLOY-008 (FR-07 button Import Excel) | QA |
 | 2 | Update DEPLOY-001 — verify endpoint singular vs plural, có thể RESOLVED | QA |
-| 3 | Update bug-report-audit-deploy-gap.md — DEPLOY-002/003 partial RESOLVED (sub-menu thấy đủ với cb_nv_tw_01, KH năm 1/4 deploy) | QA |
+| 3 | Update Pass-bug-report-audit-deploy-gap.md — DEPLOY-002/003 partial RESOLVED (sub-menu thấy đủ với cb_nv_tw_01, KH năm 1/4 deploy) | QA |
 | 4 | Note `ho-so-doi-mat-khau.md` line 22 sai password rule — escalate BA update | BA |
 | 5 | Note F5 section "Phiên đăng nhập" missing trong `ho-so-doi-mat-khau.md` — escalate BA add spec | BA |
 

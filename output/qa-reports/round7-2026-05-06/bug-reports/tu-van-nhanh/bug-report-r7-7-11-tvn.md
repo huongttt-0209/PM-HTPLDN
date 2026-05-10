@@ -7,21 +7,26 @@
 | **Người test** | QA Automation (Chrome DevTools MCP) |
 | **Ngày** | 2026-05-08 (R8 log + R9 update) |
 | **Loại test** | Functional |
-| **Round** | R8 (Kho Q&A) → **R9 (+2 bug mới TVN-004/005 sau test phiên TV nhanh)** |
+| **Round** | R8 (Kho Q&A) → R9 (+2 bug mới TVN-004/005) → **R10 (2026-05-09 17:18:00 — TVN-004 Closed-verified, +1 bug Minor TVN-006 cột Số gợi ý)** |
 | **Tài liệu tham chiếu** | [functional-test-report-r7-7-11-tvn.md](../../functional/tu-van-nhanh/functional-test-report-r7-7-11-tvn.md) · [srs-fr-13-tv-nhanh.md](../../../../../input/srs-v3/srs-fr-13-tv-nhanh.md) · [02-thu-tu-module.md §⑫ FR-13](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) |
 
 ---
 
 ## Tổng hợp
 
-Phát hiện **5** lỗi có SRS reference cụ thể trong quá trình test R7.7.11 (R8 + R9).
+Phát hiện **6** lỗi có SRS reference cụ thể trong quá trình test R7.7.11 (R8 + R9 + R10).
 
 ### Severity breakdown
 
-| Round | Tổng | Critical | Major | Medium | Minor | Trivial |
-|-------|------|----------|-------|--------|-------|---------|
-| R8 (initial) | 3 | 1 | 1 | 0 | 1 | 0 |
-| **R9 (cumulative)** | **5** | **1** | **2** | **0** | **2** | **0** |
+| Round | Tổng | Critical | Major | Medium | Minor | Trivial | Closed |
+|-------|------|----------|-------|--------|-------|---------|--------|
+| R8 (initial) | 3 | 1 | 1 | 0 | 1 | 0 | 0 |
+| R9 (cumulative) | 5 | 1 | 2 | 0 | 2 | 0 | 0 |
+| **R10 (cumulative)** | **6** | **1** | **2** | **0** | **3** | **0** | **1 (TVN-004)** |
+
+### R10 changes (2026-05-09 17:18:00)
+- ✅ **BUG-FUNC-TVN-004 Closed-verified** — Top 5 gợi ý now renders với 2 KQA mỗi phiên DA_GOI_Y (KCH-0001 94%, KCH-0004 74% trên TVN-0024). TVN-018 click [Chọn] auto-fill textarea 74 ký tự ✅.
+- 🆕 **BUG-FUNC-TVN-006 (Minor) mới** — Cột "Số gợi ý" list = 0 cho 100% phiên dù `goiYTraLoi.length=2`. List render bug.
 
 ## Bug Summary Table
 
@@ -30,8 +35,9 @@ Phát hiện **5** lỗi có SRS reference cụ thể trong quá trình test R7.
 | BUG-FUNC-TVN-001 | Critical | P0 | Permission | TVN-010, 011, 012 | `02-thu-tu-module.md §⑫ FR-13 line 784-786 (Transition CHO_DUYET → DA_DUYET / NHAP)` + `BR-AUTH-01` | CB NV TW (cb_nv_tw_01) approve/reject/bulk-approve Q&A thành công — vi phạm phân quyền chỉ cb_pd | Open |
 | BUG-FUNC-TVN-002 | Major | P1 | Workflow | TVN-040, 041, 042, 043, 044 | `srs-fr-13 v3.5 FR-X.2-06 §Inputs/Processing line 411-457` + `BR-PUBLIC-01/02/03` + `BR-FLOW-05` | FR-X.2-06 (Công khai/Hủy công khai) chưa deploy — schema thiếu 4 field, endpoint 404 | Open |
 | BUG-FUNC-TVN-003 | Minor | P2 | UI/UX | TVN-001 | `02-thu-tu-module.md §⑫ FR-13 line 766` + `srs-fr-13 SCR-X2-01 row 4` | Filter trạng thái dropdown thiếu trên UI list — chỉ có Lĩnh vực + Nguồn + dates | Open |
-| **BUG-FUNC-TVN-004 (R9)** | **Major** | **P1** | **UI/UX** | **TVN-017, 018** | `srs-fr-13 FR-X.2-02 §Processing 3` + `SCR-X2-03 row 7-8 (Top 5 gợi ý từ KHO_CAU_HOI)` | **Top 5 gợi ý không render trên detail phiên DA_GOI_Y dù API trả `goiYTraLoi=[2 entries]`** | **Open** |
-| **BUG-FUNC-TVN-005 (R9)** | **Minor** | **P2** | **Data** | **TVN-039** | `srs-fr-13 FR-X.2-01 §Postconditions` + `BR-DATA-05` + `7.13-tu-van-nhanh.md TVN-039 expected actions` | **Audit log action naming inconsistent (TU_CHOI vs REJECT_KHOCAUHOI; UPDATE vs TOGGLE_HIEU_LUC)** | **Open** |
+| ~~BUG-FUNC-TVN-004~~ (R9) | Major | P1 | UI/UX | TVN-017, 018 | `srs-fr-13 FR-X.2-02 §Processing 3` + `SCR-X2-03 row 7-8` | ~~Top 5 gợi ý không render trên detail phiên DA_GOI_Y~~ | **Closed** (R10 verify) |
+| **BUG-FUNC-TVN-005 (R9)** | Minor | P2 | Data | TVN-039 | `srs-fr-13 FR-X.2-01 §Postconditions` + `BR-DATA-05` | Audit log action naming inconsistent (TU_CHOI vs REJECT_KHOCAUHOI; UPDATE vs TOGGLE_HIEU_LUC) | **Open** |
+| **BUG-FUNC-TVN-006 (R10)** | **Minor** | **P2** | **UI/UX** | **TVN-016** | `srs-fr-13 SCR-X2-03 row 6 (cột Số gợi ý)` + `FR-X.2-02 §Outputs` | **Cột "Số gợi ý" list = 0 cho 100% phiên dù `goiYTraLoi.length=2` — FE render bug** | **Open** |
 
 ---
 
@@ -244,7 +250,10 @@ Spec `02-thu-tu-module.md §⑫ FR-13 line 766` quy định filter bar SCR-X2-01
 
 ---
 
-## BUG-FUNC-TVN-004 (R9) — Top 5 gợi ý không render trên detail phiên DA_GOI_Y
+## ~~BUG-FUNC-TVN-004~~ (R9) [CLOSED] — Top 5 gợi ý không render trên detail phiên DA_GOI_Y
+
+> **Re-test:** 2026-05-09 17:14:00 R10 — ✅ PASS (Closed-verified). Verified TVN-QA-20260423-0024 detail render 2 KQA: KCH-0001 (94% phù hợp) + KCH-0004 (74%) đúng spec FR-X.2-04. TVN-QA-20260425-0021 cũng render KCH-0001 (91%) + KCH-0007 (71%). API `GET /api/v1/tu-van-nhanhs/{id}` trả `goiYTraLoi=[{maQa,cauHoi,cauTraLoi,relevanceScore}]` — UI đọc đúng field. Click [Chọn] KCH-0001 → textarea Nội dung trả lời auto-fill 74 ký tự (TVN-018 unblocked).
+
 
 ### Mô tả
 
@@ -367,6 +376,54 @@ Schema event:
 
 INSERT-only verify: không có endpoint PATCH/DELETE audit-logs (404).
 ```
+
+---
+
+## BUG-FUNC-TVN-006 (R10) — Cột "Số gợi ý" list = 0 dù phiên có `goiYTraLoi.length=2`
+
+### Mô tả
+
+List phiên TV nhanh `/tv-nhanh/danh-sach` cột "Số gợi ý" hiển thị `0` cho 100% phiên (50/50 record), kể cả phiên DA_GOI_Y / CB_TRA_LOI có `goiYTraLoi=[{KCH-0001,...}, {KCH-0004,...}]` (length=2 mỗi phiên seed). Detail page render đúng 2 KQA. List cell không đọc `data.goiYTraLoi.length` mà có thể đọc field `soGoiY` không tồn tại hoặc đếm `khoCauHoiDaChonId` (`null` cho phiên chưa CB chọn) → luôn 0.
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_01` / `Secret@123` + OTP `666666`.
+2. Mở `/tv-nhanh/danh-sach` → click tab "Đã gợi ý" (20 mục, gồm 9 DA_GOI_Y + 11 CB_TRA_LOI).
+3. Quan sát cột "Số gợi ý" trên 20 row → tất cả `0`.
+4. Click [eye] vào TVN-QA-20260423-0024 → detail render 2 cards gợi ý KCH-0001 + KCH-0004.
+5. Verify API:
+   ```js
+   await fetch('/api/v1/tu-van-nhanhs?trangThai=DA_GOI_Y&page=1&pageSize=2', {credentials:'include'}).then(r=>r.json())
+   // → data.items[0].goiYTraLoi = [{maQa:'KCH-0004',...}, {maQa:'KCH-0003',...}]  (length=2)
+   ```
+
+### Kết quả mong đợi
+
+- Cột "Số gợi ý" = `goiYTraLoi.length` (vd 2 cho phiên có 2 entries).
+- HOẶC nếu cột là "Số gợi ý đã chọn" (chỉ count `khoCauHoiDaChonId not null`) → đổi label thành "Đã chọn" để tránh nhầm lẫn.
+
+### Kết quả thực tế
+
+- Cột hiển thị `0` cho 100% phiên (50/50), kể cả phiên DA_GOI_Y có goiYTraLoi populated.
+- API list response `goiYTraLoi` đầy đủ array, FE không đọc.
+
+### Bằng chứng
+
+```text
+=== R10 trace BUG-FUNC-TVN-006 (cb_nv_tw_01, 2026-05-09 17:14:00) ===
+Tab "Đã gợi ý" 20 mục — cột "Số gợi ý" = 0 cho mọi row.
+
+API verify TVN-QA-20260424-0022:
+GET /api/v1/tu-van-nhanhs?trangThai=DA_GOI_Y&page=1&pageSize=2
+→ data.items[0].goiYTraLoi = [
+    { maQa:"KCH-0004", relevanceScore:92 },
+    { maQa:"KCH-0003", relevanceScore:72 }
+  ]  (length=2)
+
+UI list cell "Số gợi ý" cho row TVN-QA-20260424-0022 = "0" ❌
+```
+
+![BUG-FUNC-TVN-006 — Tab Hoàn thành 16/16, cột "Số gợi ý" = 0 cho mọi row](../../screenshots/r7-7-11-r10-tvn016-tab-hoanthanh-16of16.png)
 
 ---
 

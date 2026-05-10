@@ -17,35 +17,36 @@
 
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
-| **P6** | 1 | 0 | 0 | 0 | 0 | 1 | 0 | 0 | 🚫[R7.6.1](#r7-6-1) |
-| **P7** | 5 | 1 | 0 | 2 | 0 | 2 | 0 | 0 | 🟢[R7.7.12](#r7-7-12) · ✅[R7.7.12.1](#r7-7-12-1) · 🚫[R7.7.12.2](#r7-7-12-2) · 🚫[R7.7.12.3](#r7-7-12-3) · ✅[R7.7.12.4](#r7-7-12-4) |
+| **P6** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.6.1](#r7-6-1) |
+| **P7** | 5 | 0 | 0 | 3 | 1 | 1 | 0 | 0 | ⚠️[R7.7.12](#r7-7-12) · ✅[R7.7.12.1](#r7-7-12-1) · 🚫[R7.7.12.2](#r7-7-12-2) · ✅[R7.7.12.3](#r7-7-12-3) · ✅[R7.7.12.4](#r7-7-12-4) |
 | **Trụ E** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.E3](#r7-e3) |
-| **Tổng** | **7** | **1** | **0** | **2** | **1** | **3** | **0** | **0** |  |
+| **Tổng** | **7** | **0** | **0** | **3** | **3** | **1** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
-- 🚫 **R7.6.1** ✏️ Workflow Chi trả v3.5 — 12 bước, SM 10 state `[block: thiếu LGSP integration]` <a id="r7-6-1"></a>
-  - **Cần:** BE inject API hoặc seed CHO_TIEP_NHAN · ≥1 VV `HOAN_THANH` (R7.4.A3 🟢) · DN 3 quy mô (R7.2.4 ✅)
-  - **Output:** workflow-test-report-ChiTra-v3.5.md
+- ⚠️ **R7.6.1** ✏️ Workflow Chi trả v3.5 — 12 bước, SM 10 state `[~75% — R3 7 fresh AG walk + B9/B10/B12 BLOCKED]` <a id="r7-6-1"></a>
+  - **Kết quả:** ⚠️ R3 2026-05-10 11:30. 7 bước Đạt fresh AG (B2/B3/B4/B5/B6/B-thẩm-định/B8). B9 cascade clamp. B10/B12 BLOCKED mới (BUG-CHITRA-007). [workflow-test-report-r7-6-1-chi-tra-v3-5.md](../output/qa-reports/round7-2026-05-06/workflow/chi-tra/workflow-test-report-r7-6-1-chi-tra-v3-5.md)
+  - **Bug:** [bug-report-flow-chi-tra.md](../output/qa-reports/round7-2026-05-06/bug-reports/chi-tra/bug-report-flow-chi-tra.md) — 0/7 đóng (2 Major + 2 Medium + 3 Minor)
 
-- 🟢 **R7.7.12** ✏️ Chi trả v3.5 — 35 TC (30 base + 5 mới) `[~80% — 28 TC ready, CT-006/021 chờ BA Q1+Q2]` <a id="r7-7-12"></a>
-  - **Cần:** R7.7.12.1 ✅ · R7.E3 ⚠️ · R7.6.1 🚫 cho TC workflow
-  - **Output:** functional-test-report-ChiTra-v3.5.md
+- ⚠️ **R7.7.12** ✏️ Chi trả v3.5 — 35 TC (30 base + 5 mới) `[~57% — R3 subset 7/10 PASS + 3 BLOCKED, kế thừa R2 20/35]` <a id="r7-7-12"></a>
+  - **Kết quả:** ⚠️ R3 2026-05-10 11:30 subset 10 critical TC AG. CT-013 B9 cascade clamp + CT-015/016 B10/B12 form không render → BUG-CHITRA-007 mới Major. [functional-test-report-ChiTra-v3.5.md](../output/qa-reports/round7-2026-05-06/functional/chi-tra/functional-test-report-ChiTra-v3.5.md)
+  - **Bug:** [bug-report-flow-chi-tra.md](../output/qa-reports/round7-2026-05-06/bug-reports/chi-tra/bug-report-flow-chi-tra.md) — kế thừa 6 + thêm BUG-CHITRA-007 (Major) R3
 
 - ✅ **R7.7.12.1** 🆕 Smoke regression IMPACT — FR-07/08/11/13 × 5 phút <a id="r7-7-12-1"></a>
   - **Kết quả:** PASS 4/4 module render OK, 0 console error, ⚠️ DN count 23 vs 36 (R7.2.4) cần investigate. [smoke-test-report-r7-7-12-1-fr06-impact.md](../output/qa-reports/round7-2026-05-06/functional/chi-tra/smoke-test-report-r7-7-12-1-fr06-impact.md)
 
-- 🚫 **R7.7.12.2** 🆕 FR-V.II-14 DN bổ sung HS `[block: thiếu HSCT YEU_CAU_BO_SUNG — chờ R7.6.1]` <a id="r7-7-12-2"></a>
-  - **Cần:** R7.6.1 🚫 tới state YEU_CAU_BO_SUNG · file mock 5 định dạng
-  - **Output:** functional-test-report-fr-v.ii-14-2026-05-06.md
+- 🚫 **R7.7.12.2** 🆕 FR-V.II-14 DN bổ sung HS `[block: không có HSCT thuộc QA DN]` <a id="r7-7-12-2"></a>
+  - **Kết quả:** 🚫 BLOCKED 2026-05-10 02:10. POST /ho-so-chi-tras 404 ERR-SYS-00-04-01. Pool 4 YCBS thuộc DN khác, no credentials. QA DN reg sở hữu 0 HSCT.
+  - **Cần:** dev seed HSCT cho QA DN (MST 1234567899) HOẶC mở DVC integration test path
 
-- 🚫 **R7.7.12.3** 🆕 CB PD trả về DANG_THAM_DINH + PHE_DUYET_CHI_TRA N:1 `[block: thiếu HSCT CHO_PHE_DUYET — chờ R7.6.1]` <a id="r7-7-12-3"></a>
-  - **Cần:** R7.6.1 🚫 tới state CHO_PHE_DUYET · 2 CB PD cùng cấp
-  - **Output:** functional-test-report-fr-v.ii-12-cbpd-tra-ve-2026-05-06.md
+- ✅ **R7.7.12.3** 🆕 CB PD trả về DANG_THAM_DINH + PHE_DUYET_CHI_TRA N:1 <a id="r7-7-12-3"></a>
+  - **Kết quả:** ✅ PASS R2 2026-05-09 23:46. B8 HSCT000027 CPD→DTD by cb_pd_dp_02. N:1 visibility OK với cb_pd_dp_05 (BG). BR-AUTH-05 scope OK. [functional-test-report-fr-v.ii-12-cbpd-tra-ve-2026-05-06.md](../output/qa-reports/round7-2026-05-06/functional/chi-tra/functional-test-report-fr-v.ii-12-cbpd-tra-ve-2026-05-06.md)
+  - **Bug:** [bug-report-flow-chi-tra.md](../output/qa-reports/round7-2026-05-06/bug-reports/chi-tra/bug-report-flow-chi-tra.md) — BUG-CHITRA-006 mới Minor (wording B8 endpoint/UI mâu thuẫn spec)
 
 - ✅ **R7.7.12.4** 🆕 UI tiếng Việt thuần SCR-V.II-01/02 <a id="r7-7-12-4"></a>
   - **Kết quả:** PASS 2/2 — 0 enum code, 0 English leak, 0 null/undefined, 7 status badge dịch tiếng Việt. [functional-test-report-r7-7-12-4-ui-vn-thuan.md](../output/qa-reports/round7-2026-05-06/functional/chi-tra/functional-test-report-r7-7-12-4-ui-vn-thuan.md)
 
-- ⚠️ **R7.E3** 🔄 Chi trả (FR-06) — verify 100 record HSCT còn `[~78% — 78/100, REGRESSION thiếu 22 HSCT]` <a id="r7-e3"></a>
-  - **Kết quả:** ⚠️ PARTIAL 78/100 — REGRESSION thiếu 22 HSCT (079..100). 78 còn cover 11 trạng thái SM-CHI-TRA. [verify-checklist-r7-e3-chi-tra-100-hsct.md](../output/qa-reports/round7-2026-05-06/seed/chi-tra/verify-checklist-r7-e3-chi-tra-100-hsct.md)
+- ⚠️ **R7.E3** 🔄 Chi trả (FR-06) — verify 100 record HSCT còn `[~10% — pool 108 BR-OK đầy đủ 11/108, 0 CPD]` <a id="r7-e3"></a>
+  - **Kết quả:** ⚠️ R3 PARTIAL — 0/12 CPD BR-OK (chiều trần). B9 BLOCKED toàn pool, B5/B12 OK. [verify-checklist-r7-e3-chi-tra-100-hsct.md](../output/qa-reports/round7-2026-05-06/seed/chi-tra/verify-checklist-r7-e3-chi-tra-100-hsct.md)
+  - **Bug:** [bug-report-flow-chi-tra.md](../output/qa-reports/round7-2026-05-06/bug-reports/chi-tra/bug-report-flow-chi-tra.md) — BUG-CHITRA-001 R3 expand 74→97/108 sai BR đầy đủ

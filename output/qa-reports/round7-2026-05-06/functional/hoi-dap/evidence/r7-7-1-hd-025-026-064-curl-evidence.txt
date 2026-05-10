@@ -1,0 +1,34 @@
+=== R7.7.1 Phase 3a — HD-025/026/064 curl evidence ===
+Date: 2026-05-09 23:30:00 → 23:35:00 (after MCP browser crash recovery via curl fallback)
+Token-derived from POST /api/v1/auth/login + /api/v1/auth/verify-otp (otpCode=666666 bypass)
+
+--- HD-025 — Scope filter per CB_PD level ---
+
+cb_pd_tw_04 (TW) GET /api/v1/hoi-daps?pageSize=50 → total=15
+cb_pd_bn_04 (BKH cấp BN) GET /api/v1/hoi-daps?pageSize=50 → total=1
+cb_pd_dp_04 (STP-AG cấp DP) GET /api/v1/hoi-daps?pageSize=50 → total=0
+
+→ Scope filter strict: TW = full, BN = đơn vị BN scope, DP = đơn vị DP scope.
+
+--- HD-026 — CB_PD cannot CREATE/DELETE HD ---
+
+cb_pd_tw_04 POST /api/v1/hoi-daps -d '{"noiDung":"...","linhVucPlId":"...","kenhTiepNhan":"TRUC_TIEP"}'
+  → HTTP 403 {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+     "timestamp":"2026-05-09T17:17:53.411Z","requestId":"a84e7db2-3911-4875-bb53-0143a25834f4"}}
+
+cb_pd_tw_04 DELETE /api/v1/hoi-daps/dfdbc8a7-59b8-46c2-9816-60991ec997f4
+  → HTTP 403 {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+     "timestamp":"2026-05-09T17:17:53.443Z","requestId":"4099b549-7adf-4698-9ac7-68319c0d6cc7"}}
+
+→ CB_PD chỉ có quyền R+U trên PHAN_HOI (phê duyệt/từ chối). KHÔNG C+D trên HOI_DAP. Match SCR-II-04.
+
+--- HD-064 — BR-FLOW-05 cross-cấp ---
+
+cb_pd_bn_04 (BKH cấp BN) GET /api/v1/hoi-daps/451a5a1b-ab67-4e50-9e3e-3e51ad42ce9c (HD-007 cấp TW)
+  → HTTP 403 {"success":false,"error":{"code":"ERR-AUTH-VPD-00-02",
+     "message":"Đơn vị không nằm trong phạm vi truy cập của bạn",
+     "timestamp":"2026-05-09T16:22:27.070Z","requestId":"8bf46017-1c73-4a9c-b7fe-c96162c9f9b7"}}
+
+→ Cross-cấp 403 enforce. Spec mong đợi ERR-PD-01 cho action Công khai cụ thể; ERR-AUTH-VPD-00-02 là precondition gate trước.
+   Cần follow-up: probe POST /cong-khai để confirm ERR-PD-01 specifically.
+

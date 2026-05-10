@@ -81,7 +81,7 @@ Password mặc định: `Secret@123`.
 - **FR-VIII-26**: Quên mật khẩu / Kích hoạt TK lần đầu — workflow chung cho TVV/CG/NHT/DN/CB
 - **FR-VIII-28**: Nhật ký Hệ thống `[GAP-VIII-02]` — filter, paginate 50/trang, cap 90 ngày, **export 10K Q4**
 - **FR-VIII-29**: Quản lý ngày lễ `[GAP-VIII-05]` — entity NGAY_LE schema chốt Q1 (5 trường: `ngay`/`nam`/`ten_ngay_le`/`loai ∈ {NGAY_LE, NGHI_BU, NGHI_KHAC}`/`ghi_chu`) + import Excel + calendar. **Mỗi ngày 1 dòng** (Tết 7 ngày → 7 dòng). **MH riêng** không gộp SCR-VIII-06
-- **FR-VIII-30** `[NEW Q9]`: Quản lý Tỉnh/Thành phố — 63 tỉnh GSO QĐ 124/2004, entity `TINH_THANH` E32, hiển thị Tab 14 SCR-VIII-01
+- **FR-VIII-30** `[NEW Q9]`: Quản lý Tỉnh/Thành phố — 63 tỉnh GSO QĐ 124/2004, dùng chung bảng `DANH_MUC` với `loai='TINH_THANH'` (BA chốt 2026-05-07 Q2 + `srs-fr-10` line 1983 + lines 1445-1476), hiển thị Tab 14 SCR-VIII-01 qua TPL-DM-CRUD
 - **FR-VIII-06 (Tổ chức TV)**: chuyển sang FR-04 thành FR-IV-NEW-01
 - ~~**FR-II-NEW-01** (Phân công mặc định)~~: **BỎ Q11** — thay bằng auto-filter 4 tiêu chí FR-II-06 Step 5 (lĩnh vực + đơn vị BR-AUTH-08 + workload ASC + ho_ten ASC LIMIT 10)
 
@@ -105,7 +105,7 @@ Password mặc định: `Secret@123`.
 | Loại TK | `DANH_MUC WHERE loai='LOAI_TK'` | — | Luôn |
 | Loại hình tiếp nhận | `DANH_MUC WHERE loai='LOAI_HINH_TIEP_NHAN'` | — | Luôn |
 | Kênh tiếp nhận | `DANH_MUC WHERE loai='KENH_TIEP_NHAN'` | — | Luôn |
-| **Tỉnh/Thành phố** `[NEW Q9 2026-05-07]` | `TINH_THANH` (entity riêng E32) | 63 tỉnh GSO theo QĐ 124/2004; cột: `ma` (01-63), `ten`, `vung_mien`, `trang_thai`. Read-only seed lúc deploy, QTHT chỉnh `trang_thai` | Luôn (FR-VIII-30) |
+| **Tỉnh/Thành phố** `[NEW Q9 2026-05-07]` | `DANH_MUC WHERE loai='TINH_THANH'` (theo `srs-fr-10` line 1983 + FR-VIII-30 lines 1445-1476) | 63 tỉnh GSO theo QĐ 124/2004; schema 4 field DANH_MUC chuẩn: `ma` (01-63), `ten`, `mo_ta`, `loai_danh_muc='TINH_THANH'`. Read-only seed lúc deploy, QTHT chỉnh `trang_thai` qua TPL-DM-CRUD | Luôn (FR-VIII-30) |
 
 **📑 Tabs SCR-VIII-06 Cấu hình hệ thống — 2 tab (BA Q11 chốt 2026-05-07: chỉ giữ SLA + Mẫu phản hồi):**
 
@@ -137,7 +137,7 @@ Password mặc định: `Secret@123`.
 | **🖐️ Cấu hình SLA** | `qtht_01` | Form | SCR-VIII-06 Tab 1 (SLA) | Thời hạn xử lý (ngày làm việc) cho từng module: **Hỏi đáp** (`deadline_hoi_dap`), **Vụ việc** (`deadline_vu_viec`, mặc định `10`), **Chi trả** (`deadline_chi_tra`), **Hạn bổ sung hồ sơ** (`bo_sung_timeout` — xem BR-EC-16). **BA Q5 BỎ ngưỡng "Quá hạn nghiêm trọng"** — chỉ giữ 2 ngưỡng cảnh báo | Nhập số ngày LV |
 | ~~**🖐️ Cấu hình Phân công**~~ | ⚠️ **DEPRECATED Q11 2026-05-07** — BA chốt BỎ entity `CAU_HINH_PHAN_CONG` + FR-II-NEW-01. Thay bằng auto-filter 4 tiêu chí FR-II-06 Step 5 | — | — | — | — |
 | **🖐️ Cấu hình Ngày lễ** `[NEW Q1 2026-05-07]` | `qtht_01` | [+ Thêm ngày lễ] hoặc Import Excel | **MH riêng FR-VIII-29** (KHÔNG gộp SCR-VIII-06 Q1) | Schema chốt: `ngay` (date Y, UNIQUE per `nam`), `nam` (number Y, ≥2024), `ten_ngay_le` (text Y), `loai ∈ {NGAY_LE, NGHI_BU, NGHI_KHAC}` (text Y), `ghi_chu` (text N). **Mỗi ngày 1 dòng** (Tết 7 ngày → 7 dòng). Hỗ trợ tính SLA trừ ngày lễ theo BR-CALC-03 | — |
-| **🖐️ Quản lý Tỉnh/Thành phố** `[NEW Q9 2026-05-07]` | `qtht_01` | Toggle trạng thái (read-only seed) | **SCR-VIII-01 Tab 14 (Tỉnh/TP — FR-VIII-30)** | Entity `TINH_THANH` E32 — 63 tỉnh GSO QĐ 124/2004. Cột: `ma` (01-63), `ten`, `vung_mien`, `trang_thai`. QTHT chỉ chỉnh `trang_thai`, không Add/Delete (read-only seed lúc deploy) | — |
+| **🖐️ Quản lý Tỉnh/Thành phố** `[NEW Q9 2026-05-07]` | `qtht_01` | Toggle trạng thái (read-only seed) | **SCR-VIII-01 Tab 14 (Tỉnh/TP — FR-VIII-30)** | `DANH_MUC WHERE loai='TINH_THANH'` (theo `srs-fr-10` line 1983 + FR-VIII-30 lines 1445-1476) — 63 tỉnh GSO QĐ 124/2004. Schema chuẩn DANH_MUC 4 field: `ma` (01-63), `ten`, `mo_ta`, `loai_danh_muc='TINH_THANH'`. QTHT chỉ chỉnh `trang_thai`, không Add/Delete (read-only seed lúc deploy). UI dùng TPL-DM-CRUD | — |
 | **🖐️ Tạo Mẫu phản hồi** | `qtht_01` | Form | SCR-VIII-06 Tab 2 (Mẫu phản hồi — đổi từ Tab 3 sau Q11) | **Tên mẫu** (`ten_mau`), **Lĩnh vực** (`linh_vuc_id`), **Nội dung mẫu** (`noi_dung_mau`, Rich text) | `linh_vuc_id` ← danh mục `LINH_VUC_PL` (FR-10) |
 
 ---

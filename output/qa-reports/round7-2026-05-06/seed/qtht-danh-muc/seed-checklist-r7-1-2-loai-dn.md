@@ -27,7 +27,7 @@
 
 **Snapshot lịch sử (2026-05-06 → 2026-05-07):** Lần đầu R7 sáng → 3/7 (3 quy_mo pre-existing) + BE 422 block 4 fixture. Sau dev fix lần 1 chiều → BE 500 (fix nửa chừng) + spec contradiction FR-10 vs FR-07. Sau dev fix lần 2 (2026-05-07, Phương án A — tách DM quy_mo riêng) → DM `LOAI_DOANH_NGHIEP` chỉ chứa loại hình pháp lý (TNHH/CP/DNTN/HKD), POST CTHD_TEST → 201 OK ⇒ BUG-LOAI-DN-002 Closed-verified.
 
-**Bug:** [`BUG-LOAI-DN-002`](../../bug-reports/qtht-danh-muc/bug-report-seed-r7-1-2-loai-dn.md) — 1/1 đóng (Closed-verified R7 2026-05-07).
+**Bug:** [`BUG-LOAI-DN-002`](../../bug-reports/qtht-danh-muc/Pass-bug-report-seed-r7-1-2-loai-dn.md) — 1/1 đóng (Closed-verified R7 2026-05-07).
 
 ---
 

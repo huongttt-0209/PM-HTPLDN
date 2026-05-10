@@ -126,4 +126,4 @@ Filter `?loaiTvv=CG&size=100` → `total=8, byState={DANG_HOAT_DONG: 8}`.
 
 - API responses captured in network log (live session).
 - Pool state verified pre/post mỗi TC.
-- BUG-CG-A1-001 cần log riêng file [bug-report-flow-r7-4-a1-cg-state.md](../../bug-reports/tu-van-vien-cg/bug-report-flow-r7-4-a1-cg-state.md).
+- BUG-CG-A1-001 cần log riêng file [Pass-bug-report-flow-r7-4-a1-cg-state.md](../../bug-reports/tu-van-vien-cg/Pass-bug-report-flow-r7-4-a1-cg-state.md).

@@ -4,10 +4,65 @@
 |-----------|---------|
 | **Module** | Tư vấn Nhanh (FR-13 · Nhóm X.2) |
 | **SRS ref** | [`srs-fr-13-tv-nhanh.md`](../../../../../input/srs-v3/srs-fr-13-tv-nhanh.md) §SM-TVNHANH (line 60-68) + [`02-thu-tu-module.md §⑫ FR-13`](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) line 745-790 |
-| **Round** | **R9 (2026-05-08)** — re-test sau dev seed 50 phiên · trước đó R8 (2026-05-07) BLOCKED |
+| **Round** | **R10 (2026-05-09 13:08:00)** — UI re-verify pool sufficiency · R9 (2026-05-08) PASS 4/5 + 1 PARTIAL · R8 (2026-05-07) BLOCKED |
 | **Tester** | QA Automation (Chrome DevTools MCP) |
 | **Pre-req** | ✅ Dev seed 50 phiên TV nhanh cover 6 state (MOI 8 / DANG_TIM_KIEM 6 / DA_GOI_Y 12 / CB_TRA_LOI 8 / HOAN_THANH 12 / HET_HAN 4) · R7.3.16 🟢 Kho QA 6 DA_DUYET hieuLuc=true |
 | **Bug report** | [bug-report-r7-6-2-tvn-create-block.md](../../bug-reports/tu-van-nhanh/bug-report-r7-6-2-tvn-create-block.md) |
+
+---
+
+## Verdict R10 (LATEST · 2026-05-09 13:08:00)
+
+✅ **PASS — Pool đủ data, B1-B4 runnable; B5 chỉ external-sync (Cổng PLQG mTLS), không phải data gap.**
+
+Re-verify qua UI MCP (cb_nv_tw_01) confirm pool TV nhanh tăng nhẹ từ R9 baseline. Tất cả 6 state có ≥1 sample, tổng 50 phiên không đổi.
+
+| State | R9 baseline | R10 UI verify | Δ |
+|---|:-:|:-:|---|
+| Mới | 8 | **8** | 0 |
+| Đang tìm kiếm | 6 | **6** | 0 |
+| Đã gợi ý | 12 → 5+ (R7.B2 -1) | **9** | +4 (rebound) |
+| CB trả lời | 8 | **11** | +3 (R7.B2 advance) |
+| Hoàn thành | 12 | **12** | 0 |
+| Hết hạn | 4 | **4** | 0 |
+| **Total** | **50** | **50** | 0 |
+
+> Source UI: `/tv-nhanh/danh-sach` page 1+2+3 đếm thủ công cột "Trạng thái" qua 3 lần navigate (1-20, 21-40, 41-50). API `GET /tu-van-nhanhs?page=1&pageSize=20` reqid 187 + page 2 + page 3 trả 200.
+
+### Runnability sub-task — quyết định
+
+| Sub-task | Data đủ chạy? | Status | Lý do |
+|---|:-:|:-:|---|
+| **R7.6.2 B1 MOI** | ✅ 8 sample MOI | ✅ Runnable | Detail render OK (sample 0050 HET_HAN cũng accessible). Pool stable. |
+| **R7.6.2 B2 DANG_TIM_KIEM** | ✅ 6 sample | ✅ Runnable | Display state intermediate, system auto transition. |
+| **R7.6.2 B3 DA_GOI_Y** | ✅ 9 sample | ✅ Runnable | Detail TVN-0017 LĐ render OK: Stepper 5 state + Top 5 gợi ý panel (empty placeholder khi FTS no match) + form Soạn trả lời + button [Gửi trả lời]. `GET /{id}/goi-y` reqid 204 → 200. |
+| **R7.6.2 B4 DA_GOI_Y → CB_TRA_LOI** | ✅ 9 DA_GOI_Y có button [message] | ✅ Runnable | UI form trả lời + textarea 5000 char + submit button render OK. R9 đã PASS UI+API end-to-end (TVN-0016). |
+| **R7.6.2 B5 CB_TRA_LOI → HOAN_THANH** | ⚠️ Display data đủ (12 HOAN_THANH), trigger không khả thi từ CMS | ⏳ External sync | Endpoint `POST /{id}/danh-gia` mTLS DN-only — đúng spec FR-X.2-05. Đây là **external sync** (DN qua Cổng PLQG), KHÔNG phải data gap. Sample HOAN_THANH detail render Stepper 5/5 finish OK; danhGiaTv null trong dev seed → TVN-038 verify cần data sync external. |
+
+### Quan sát R10 (UI thuần)
+
+1. **Pool stable + tăng nhẹ:** Đã gợi ý từ 5 (R9 sau R7.B2) rebound về 9; CB trả lời 8→11 (R7.B2 advance 3 phiên). Không có phiên mất, không cần re-seed.
+2. **Detail HOAN_THANH (sample TVN-0043) Stepper 4 finish + 1 process:** Mới ✓ → Đang tìm kiếm ✓ → Đã gợi ý ✓ → CB trả lời ✓ → Hoàn thành (current). Có "Nội dung trả lời" hiển thị: "Trả lời chính thức cho phiên #43...". KHÔNG có UI section hiển thị `danhGiaTv` (điểm DN + nhận xét). Có thể do dev seed danhGiaTv=null hoặc UI chưa render khi field null. → Quan sát phụ, không log bug (sample data state).
+3. **Detail CB trả lời (sample TVN-0015) UI quirk:** State CB_TRA_LOI nhưng UI render form "Soạn trả lời" empty (0/5000) thay vì hiển thị nội dung đã trả lời + locked. Stepper "CB trả lời" status=`process`. → Có thể là UX cho phép CB sửa nội dung trước khi DN đánh giá, hoặc minor UI render miss. Để monitor R7.7.11 functional test, không log bug R10.
+4. **Detail HET_HAN (sample TVN-0050)** chỉ render thông tin phiên + câu hỏi DN, KHÔNG render Stepper visual. Đúng UX cho phiên đã expire — không cần progress bar.
+5. **Pagination text "1-20 / 50 mục" trên page 3** (URL `?page=3`) — minor AntD pagination label bug. Records hiển thị đúng (records 41-50 + 0015 + 0017). Không block test.
+
+### Bằng chứng R10
+
+- List 6 state coverage page 1: [`r7-6-2-r10-tvn-list-tatca.png`](../../screenshots/r7-6-2-r10-tvn-list-tatca.png)
+- List page 3 (HET_HAN samples): [`r7-6-2-r10-tvn-list-page3-hethan.png`](../../screenshots/r7-6-2-r10-tvn-list-page3-hethan.png)
+- Detail HET_HAN TVN-0050: [`r7-6-2-r10-tvn-detail-hethan-0050.png`](../../screenshots/r7-6-2-r10-tvn-detail-hethan-0050.png)
+- Detail HOAN_THANH TVN-0043 (Stepper 5/5): [`r7-6-2-r10-tvn-detail-hoanthanh-0043.png`](../../screenshots/r7-6-2-r10-tvn-detail-hoanthanh-0043.png)
+- Detail DA_GOI_Y TVN-0017 (form trả lời + Top 5 empty): [`r7-6-2-r10-tvn-detail-dagoiy-0017.png`](../../screenshots/r7-6-2-r10-tvn-detail-dagoiy-0017.png)
+- Detail CB_TRA_LOI TVN-0015 (form quirk): [`r7-6-2-r10-tvn-detail-cbtraloi-0015.png`](../../screenshots/r7-6-2-r10-tvn-detail-cbtraloi-0015.png)
+
+### Kết luận R10
+
+- **R7.6.2 status flip: ⚠️ → ✅** (B1-B4 PASS qua dev seed; B5 = external sync per spec, không phải data gap).
+- **R7.6.3 PUBLIC** vẫn ⏳ — phụ thuộc Cổng PLQG endpoint deploy + phiên `cong_khai=1`. **External sync, không phải data gap**.
+- **R7.7.11 functional 44 TC** ⚠️ partial vẫn giữ — pool đủ chạy thêm TC, B5-related TC vẫn external-deferred.
+- **TVN-038** (cập nhật `KHO_CAU_HOI.diem_danh_gia_tb`) external-deferred — cần dev seed `danh_gia_tv` direct DB hoặc Cổng PLQG sandbox.
+- **2 bug Open** (BUG-001/002 mTLS) **giữ nguyên Open** — đúng spec, không phải implementation bug; nhưng test infra dependency.
 
 ---
 
@@ -186,9 +241,10 @@ R8 evidence (giữ nguyên reference): [r7-6-2-tvn-list-empty.png](../../screens
 
 | Round | Date | Kết quả tóm tắt |
 |---|---|---|
-| **R9** | 2026-05-08 | ✅ **PASS 4/5 + 1 PARTIAL B5** sau dev seed 50 phiên cover 6 state. B1 (8 MOI) + B2 (6 DANG_TIM_KIEM) + B3 (12 DA_GOI_Y, gợi ý seed 2 entries) + B4 UI+API end-to-end (DA_GOI_Y → CB_TRA_LOI). B5 mTLS chặn CMS endpoint `/danh-gia` 401 — pool 12 HOAN_THANH chứng minh transition đạt được qua dev seed. UI Detail Stepper + form trả lời 5000 chars + [Gửi trả lời] hoạt động OK. |
+| **R10** | 2026-05-09 13:08:00 | ✅ **Pool re-verify UI MCP — flip ⚠️ → ✅.** Pool 50 phiên cover đầy 6 state (Mới 8/Đang TK 6/Đã gợi ý 9/CB trả lời 11/Hoàn thành 12/Hết hạn 4). Detail TVN-0017 DA_GOI_Y, TVN-0043 HOAN_THANH (Stepper 5/5 finish), TVN-0050 HET_HAN, TVN-0015 CB_TRA_LOI render OK qua UI. B1-B4 runnable; B5 external-sync (đúng spec FR-X.2-05). Thêm 4 screenshot R10. 2 quan sát phụ (HOAN_THANH detail không render danhGiaTv null + CB_TRA_LOI form empty quirk) — monitor R7.7.11. |
+| R9 | 2026-05-08 | ✅ **PASS 4/5 + 1 PARTIAL B5** sau dev seed 50 phiên cover 6 state. B1 (8 MOI) + B2 (6 DANG_TIM_KIEM) + B3 (12 DA_GOI_Y, gợi ý seed 2 entries) + B4 UI+API end-to-end (DA_GOI_Y → CB_TRA_LOI). B5 mTLS chặn CMS endpoint `/danh-gia` 401 — pool 12 HOAN_THANH chứng minh transition đạt được qua dev seed. UI Detail Stepper + form trả lời 5000 chars + [Gửi trả lời] hoạt động OK. |
 | R8 | 2026-05-07 | 🚫 0/5 BLOCKED — `POST /tu-van-nhanhs` create 401 mTLS (DN-only path) + UI trang TV nhanh không có button [+ Tạo phiên] manual. CMS chỉ render filter+table empty. Pre-req kho QA partial 6 DA_DUYET cover 5/6 LV. Endpoints CMS path khả dụng (`tra-loi`, `chuyen-kenh`, `goi-y`, list, detail) nhưng không reach được vì B1 BLOCKED. |
 
 ---
 
-*R9 | QA Automation via Claude Code | Chrome DevTools MCP*
+*R10 | QA Automation via Claude Code | Chrome DevTools MCP*

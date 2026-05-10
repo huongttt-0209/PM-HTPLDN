@@ -1,6 +1,8 @@
 # Seed Checklist — Hỏi đáp pháp lý (R7.3.1)
 
-> ⚠️ **Method gap (note 2026-05-08):** Task chạy qua API thuần `POST /api/v1/cau-hois` — vi phạm rule UI-only ban hành 2026-05-07. Cần re-test UI MCP R8. Xem [`tasks/lessons-learned.md` 2026-05-08](../../../../../tasks/lessons-learned.md).
+> ✅ **R8 UI re-test 2026-05-09:** Seed lại 6 HD MOI qua **UI Drawer Thêm mới (SCR-II-01)** với tài khoản `cb_nv_tw_02`, không POST API. 6 record mới `HD-20260509-001..006` cover đủ 6 LV × 4 kênh. Network supporting evidence: 6× `POST /api/v1/hoi-daps [201]` (reqid 221/228/235/241/248/255) đều phát từ form submit click "Lưu", và `GET /api/v1/hoi-daps?tab=MOI&page=1&pageSize=20 [200]` (reqid 259) trả `meta.total=8` (6 UI-R7 + 2 pre-existing). Verify per-filter PASS — đóng task ⚠️ → ✅.
+>
+> ⚠️ **Method gap cũ (note 2026-05-08):** Lần seed gốc R7 chạy qua API thuần `POST /api/v1/hoi-daps` — vi phạm rule UI-only ban hành 2026-05-07. Đã re-test UI MCP R8, giữ lại lịch sử bảng dữ liệu API gốc bên dưới làm tham khảo.
 
 **Ngày:** 2026-05-06 14:47 • **Tài khoản:** `cb_nv_tw_01` • **Trạng thái mong đợi:** `MỚI` (entry)
 **Màn:** SCR-II-01 — Quản lý hỏi đáp • **Đường dẫn:** `/hoi-dap`
@@ -21,9 +23,49 @@
 
 ---
 
-## Kết quả: ✅ XONG 6/6
+## Kết quả
 
-Seed 6 HD entry MOI qua `POST /api/v1/hoi-daps` cover 6 LV (LAO_DONG/THUE/KINH_DOANH_TM/DOANH_NGHIEP/SHTT/DAT_DAI) × 4 kênh (TRUC_TIEP/DVC/CONG_PLQG/HE_THONG_KHAC). Verify per-filter PASS.
+### R8 (2026-05-09 — UI Drawer, account `cb_nv_tw_02`) ✅ XONG 6/6
+
+Seed 6 HD entry MOI qua **UI Drawer Thêm mới SCR-II-01** (click "+ Thêm mới" → fill form → click "Lưu"). Cover 6 LV × 4 kênh (TRUC_TIEP / DVC / CONG_PLQG / HE_THONG_KHAC). Verify per-filter qua tab "Mới" + response `GET /api/v1/hoi-daps?tab=MOI` PASS.
+
+| # | Mã HD | Lĩnh vực | Kênh | Người gửi | reqid POST |
+|---|-------|----------|------|-----------|------------|
+| 1 | HD-20260509-001 | Lao động | TRUC_TIEP | Nguyễn Văn Alpha | 221 [201] |
+| 2 | HD-20260509-002 | Thuế | DVC | Trần Thị Beta | 228 [201] |
+| 3 | HD-20260509-003 | Thương mại | CONG_PLQG | Lê Văn Gamma | 235 [201] |
+| 4 | HD-20260509-004 | Doanh nghiệp | DVC | Phạm Thị Delta | 241 [201] |
+| 5 | HD-20260509-005 | Sở hữu trí tuệ | CONG_PLQG | Hoàng Văn Epsilon | 248 [201] |
+| 6 | HD-20260509-006 | Đất đai | HE_THONG_KHAC | Vũ Văn Zeta | 255 [201] |
+
+**Per-filter verify R8 (response API supporting evidence reqid=259, `meta.total=8`):**
+
+| Filter | UI-R7 R8 (count) | OK |
+|--------|----:|:--:|
+| Tab MOI total | 8 (6 UI-R8 + 2 pre-existing R7) | ✅ |
+| LV Lao động | 1 | ✅ |
+| LV Thuế | 1 | ✅ |
+| LV Thương mại | 1 | ✅ |
+| LV Doanh nghiệp | 1 | ✅ |
+| LV Sở hữu trí tuệ | 1 | ✅ |
+| LV Đất đai | 1 | ✅ |
+| Kênh TRUC_TIEP | 1 | ✅ |
+| Kênh DVC | 2 | ✅ |
+| Kênh CONG_PLQG | 2 | ✅ |
+| Kênh HE_THONG_KHAC | 1 | ✅ |
+
+**Ảnh chụp R8:**
+- Baseline trước seed: [r7-3-1-ui-baseline-list.png](r7-3-1-ui-baseline-list.png)
+- Danh sách sau seed (13 mục TAT_CA): [r7-3-1-ui-list-final-13of13.png](r7-3-1-ui-list-final-13of13.png)
+- Tab MOI 8 mục: [r7-3-1-ui-tab-moi-8of8.png](r7-3-1-ui-tab-moi-8of8.png)
+
+**Bug observation R8:** SRS line 1071 ghi `kênh = TVN_BRIDGE` không hiển thị trong dropdown form, nhưng UI Drawer "Kênh tiếp nhận" có option "Từ Tư vấn nhanh" → log riêng (không block task).
+
+---
+
+### R7 (2026-05-06 — API thuần, vi phạm rule UI-only) ⚠️ Method gap
+
+Seed 6 HD entry MOI qua `POST /api/v1/hoi-daps` cover 6 LV × 4 kênh. Verify per-filter PASS lúc đó nhưng **method vi phạm rule UI-only 2026-05-07** → đã re-test bằng UI ở R8 phía trên.
 
 **Bug:** Không.
 
