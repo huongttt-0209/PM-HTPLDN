@@ -30,7 +30,7 @@
 
 - ⚠️ **R7.4.C1** ✏️ Workflow BM v3.5 — SM-BIEUMAU 3 transition + Switch công khai 4 trường + BR-PUBLIC-01/02/03 `[~88% — 7/8 PASS]` <a id="r7-4-c1"></a>
   - **Kết quả:** R8 lần 3 ✅ 7/8 PASS — SM 3/3 + BR-PUBLIC-01/02/03 PASS. BUG-BM-001 fully fixed (Switch added). 5/6 bug closed. [workflow-r7-4-c1-r8](../output/qa-reports/round7-2026-05-06/workflow/bieu-mau/workflow-test-report-r7-4-c1-bm-r8.md)
-  - **Bug:** [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) — 5/6 đóng (BUG-BM-001 R8 lần 3 + 002/003/004/006). Còn BUG-BM-005 UI silent 409.
+  - **Bug:** [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) — 5/6 đóng (BUG-BM-001 R8 lần 3 + 002/003/004/006). BUG-BM-005 R8 lần 6 (2026-05-10) sweep 6/6 verify lại — 5 closed persist không regress, BUG-BM-005 vẫn silent 409 lặp 5 round liên tiếp.
 
 - ⚠️ **R7.7.10** ✏️ Biểu mẫu v3.5 — 47 TC (7 cũ + 10 CR-01 + 30 CRUD/workflow) `[~47% — 22/47 PASS, 11 BLOCKED + 14 DEFER]` <a id="r7-7-10"></a>
   - **Kết quả:** R8 lần 3 — BUG-BM-001 Switch closed → 10 CR-01 (BM-041..050) UNBLOCKED chờ test riêng. BUG-BM-007/008 vẫn Open. Smoke 5/5 PASS regression-free từ R8 lần 2. [functional-r7-7-10-r8](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10-bm-r8.md)

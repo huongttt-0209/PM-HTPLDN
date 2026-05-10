@@ -14,7 +14,7 @@
 
 ## Kết luận
 
-⚠️ **PASS-WITH-NOTE — 10/11 bước PASS (90.9%)**. R7.6.4 R1 (2026-05-07) FAIL B7 do BUG-CTHTPLDN-B7-001 (BE 409 ERR-VAL-XI-06-11 cascade block B8/B9/B10). **R7.6.4 R2 (2026-05-08): BUG-CTHTPLDN-B7-001 đã FIXED** → B7/B8/B9 PASS. **NEW BUG-CTHTPLDN-B10-001 Major** phát sinh: BE chặn HOAN_THANH với code `ERR-VAL-XI-06-10` "Khong the hoan thanh: con 0/0 dot bao cao chua DA_TONG_HOP" — message contradictory (0/0 = không có đợt BC nào), BE đang yêu cầu CT phải có ≥1 Đợt BC DA_TONG_HOP trước khi HOAN_THANH. Yêu cầu này không có trong SRS FR-XI-01 line 903 nhưng phù hợp với cascade logic R7.6.5 (Đợt BC) → cần BA confirm pre-condition.
+⚠️ **PASS-WITH-NOTE — 10/11 bước PASS (90.9%)**. R7.6.4 R1 (2026-05-07) FAIL B7 do BUG-CTHTPLDN-B7-001 (BE 409 ERR-VAL-XI-06-11 cascade block B8/B9/B10). **R7.6.4 R2 (2026-05-08): BUG-CTHTPLDN-B7-001 đã FIXED** → B7/B8/B9 PASS. **NEW BUG-CTHTPLDN-B10-001 Major** phát sinh: BE chặn HOAN_THANH với code `ERR-VAL-XI-06-10`. **R7.6.4 R3 (2026-05-09):** re-test B10 trên cùng CT-20260508-0001 (đã có 2 Đợt BC ở `DA_DUYET_KQ` + `DANG_LAP_BC`, 0 ở `DA_TONG_HOP`) → POST `/complete` vẫn 409 cùng code, **nhưng message đã được dev fix một phần:** từ `"Khong the hoan thanh: con 0/0 dot bao cao chua DA_TONG_HOP"` (English-leak + count contradictory) → `"Không thể hoàn thành: còn 2/2 đợt báo cáo chưa DA_TONG_HOP"` (Vietnamese diacritics đúng + count logic chính xác). Pre-condition về DA_TONG_HOP vẫn enforce ngoài SRS FR-XI-01 line 903 → BUG-B10-001 vẫn Open Major, cần BA confirm. Cascade deadlock với BUG-CTHTPLDN-DOTBC-API-002 (POST /tong-hop ID mismatch không thể đẩy Đợt BC lên DA_TONG_HOP).
 
 **R7.6.5 (GĐ2 Đợt BC) bây giờ unblock** vì có CT-A `CT-20260508-0001` ở DANG_THUC_HIEN (đủ điều kiện tạo Đợt BC theo spec FR-XI-05a).
 
@@ -35,7 +35,7 @@
 | 7 | `DA_DUYET → DANG_THUC_HIEN` ([Bắt đầu thực hiện]) | `cb_nv_tw_01` | CT-20260508-0001 | ✅ | **BUG-CTHTPLDN-B7-001 R1 đã FIXED!** Modal "Bắt đầu thực hiện? Sau đó có thể tạo đợt báo cáo." → Đồng ý. State Đang thực hiện. Stepper bước 4 ✓. Network: `POST /activate` → **200** (R1 trả 409 với code ERR-VAL-XI-06-11). |
 | 8 | `DANG_THUC_HIEN → TAM_DUNG` ([Tạm dừng] + lý do) | `cb_nv_tw_01` | CT-20260508-0001 | ✅ | Modal "Tạm dừng chương trình" có textarea Lý do tạm dừng required + counter `0/500`. Lý do test 86 ký tự. State Tạm dừng, stepper ẩn step 4 (đúng spec — TAM_DUNG out of stepper). Button đổi sang [Tiếp tục]. Network: `POST /pause` → 200. |
 | 9 | `TAM_DUNG → DANG_THUC_HIEN` ([Tiếp tục]) | `cb_nv_tw_01` | CT-20260508-0001 | ✅ | Modal "Tiếp tục chương trình?" → Đồng ý. State Đang thực hiện. Stepper bước 4 ✓ trở lại. Buttons: [Tạm dừng] + [Hoàn thành]. Network: `POST /resume` → 200. |
-| 10 | `DANG_THUC_HIEN → HOAN_THANH` ([Hoàn thành]) | `cb_nv_tw_01` | CT-20260508-0001 | ❌ | **NEW BUG-CTHTPLDN-B10-001 Major** — BE trả 409 `ERR-VAL-XI-06-10` "Khong the hoan thanh: con 0/0 dot bao cao chua DA_TONG_HOP". Toast hiện đúng (UI silent fix vs R1 B7), nhưng message logic sai — "0/0" = không có đợt BC nào → không nên block. Hoặc BE đang yêu cầu pre-condition ≥1 Đợt BC DA_TONG_HOP, không có trong SRS FR-XI-01 line 903. Cần BA confirm. |
+| 10 | `DANG_THUC_HIEN → HOAN_THANH` ([Hoàn thành]) | `cb_nv_tw_01` | CT-20260508-0001 | ❌ | **BUG-CTHTPLDN-B10-001 Major** — BE trả 409 `ERR-VAL-XI-06-10`. **R3 2026-05-09:** message đã đổi `"Không thể hoàn thành: còn 2/2 đợt báo cáo chưa DA_TONG_HOP"` (i18n + count đã fix; pre-condition vẫn block). State CT giữ DANG_THUC_HIEN (version 8). Bug Open Major. |
 | 11 | `DU_THAO → HUY` ([Hủy CT] + xác nhận) | `cb_nv_tw_01` | CT-20260508-0003 | ✅ | Modal "Hủy chương trình? Hành động này không thể hoàn tác." → Đồng ý. State Đã hủy, stepper ẩn (đúng spec — TAM_DUNG/HUY ẩn khỏi stepper). Không còn action button. |
 
 > Icon: ✅ pass · ❌ fail · 🚫 blocked (cascade upstream) · ⏭ skip · — chưa test
@@ -51,6 +51,7 @@
 | R6.6.4 | 2026-05-05 | PASS 11/11 transitions với CT-20260505-0001..0003. Unblock R6.6.5 + R6.7.15. |
 | R7.6.4 R1 | 2026-05-07 | ⚠️ 7/11 PASS — B7 FAIL do BE thêm validation `ERR-VAL-XI-06-11` (regression vs R6). Cascade block B8-B10. CT-20260507-0001 stuck DA_DUYET. |
 | **R7.6.4 R2** | **2026-05-08** | **⚠️ 10/11 PASS — BUG-CTHTPLDN-B7-001 fixed. NEW BUG-CTHTPLDN-B10-001 (ERR-VAL-XI-06-10) — BE chặn HOAN_THANH với message "0/0" contradictory. CT-A unblock R7.6.5 (Đợt BC).** |
+| **R7.6.4 R3** | **2026-05-09** | **⚠️ 10/11 PASS giữ nguyên — re-test B10 trên CT-20260508-0001 (đã có 2 Đợt BC `DA_DUYET_KQ`+`DANG_LAP_BC`, 0 ở DA_TONG_HOP). POST `/complete` → 409 ERR-VAL-XI-06-10 message đổi `"Không thể hoàn thành: còn 2/2 đợt báo cáo chưa DA_TONG_HOP"` (i18n diacritics ✅ + count logic ✅). BUG-B10-001 vẫn Open Major — pre-condition vẫn block. Cascade deadlock với BUG-DOTBC-API-002.** |
 
 ---
 
@@ -97,10 +98,11 @@ Response: 200 OK
 ### B8 — CT-A `TAM_DUNG`
 ![B8 CT-A TAM_DUNG](../bug-reports/image/r7-6-4-r2-ct1-b8-tam-dung.png)
 
-### B10 — BE 409 (NEW BUG)
-![B10 CT-A FAIL toast](../bug-reports/image/r7-6-4-r2-ct1-b10-FAIL-toast.png)
+### B10 — BE 409 (BUG-CTHTPLDN-B10-001)
+![B10 CT-A FAIL toast R2](../bug-reports/image/r7-6-4-r2-ct1-b10-FAIL-toast.png)
 
 ```text
+R2 2026-05-08:
 POST /api/v1/chuong-trinh-htpls/52fe225a-1c38-4727-b587-4e505439eaec/complete
 Request body: {"version":8}
 Response 409:
@@ -114,6 +116,26 @@ Response 409:
   }
 }
 ```
+
+![B10 CT-A FAIL toast R3 partial-fix](../bug-reports/image/r7-6-4-r3-ct1-b10-FAIL-toast-2026-05-09.png)
+
+```text
+R3 2026-05-09 (cùng UUID, đã có 2 Đợt BC nhưng 0 ở DA_TONG_HOP):
+POST /api/v1/chuong-trinh-htpls/52fe225a-1c38-4727-b587-4e505439eaec/complete
+Request body: {"version":8}
+Response 409:
+{
+  "success": false,
+  "error": {
+    "code": "ERR-VAL-XI-06-10",
+    "message": "Không thể hoàn thành: còn 2/2 đợt báo cáo chưa DA_TONG_HOP",
+    "timestamp": "2026-05-09T18:20:16.758Z",
+    "requestId": "5506ae5a-0ed0-4524-9ab2-4c5118299a9b"
+  }
+}
+```
+
+→ BE đã fix i18n diacritics ("Không thể hoàn thành" thay "Khong the hoan thanh") + count logic ("2/2" thay "0/0" — đếm đúng số đợt BC thực tế chưa DA_TONG_HOP). Pre-condition vẫn enforce → bug Open Major.
 
 ### B11 — CT-C `DA_HUY` (Đã hủy)
 ![B11 CT-C DA_HUY](../bug-reports/image/r7-6-4-r2-ct3-b11-da-huy.png)

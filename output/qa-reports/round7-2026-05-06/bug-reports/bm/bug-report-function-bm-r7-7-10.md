@@ -26,8 +26,8 @@ Phát hiện **2** lỗi mới trong functional test R7.7.10 (preview/download M
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-BM-007 | Critical | P0 | Integration | BM-007 + BM-008 | `FR-VII-04 §Processing — Xem trực tuyến` + `§Processing — Tải về` | Preview + Download BM dùng MinIO presigned URL trỏ `localhost:9000` → user browser không kết nối được (`ERR_CONNECTION_REFUSED`) | **Open (R8 lần 3 vẫn reproduced — dev claim sai)** |
-| BUG-BM-008 | Medium | P2 | UI/UX | BM-016 | `FR-VII-04 §Error Handling E1` (ERR-BM-01 "Chỉ chấp nhận file doc, docx, xls, xlsx") | Form Thêm BM upload file `.txt` → FE silent rejected (ẩn file khỏi upload list) nhưng KHÔNG hiển thị toast/error message → user không biết file không hợp lệ | **Open (R8 lần 3 vẫn reproduced — dev claim sai)** |
+| BUG-BM-007 | Critical | P0 | Integration | BM-007 + BM-008 | `FR-VII-04 §Processing — Xem trực tuyến` + `§Processing — Tải về` | Preview + Download BM dùng MinIO presigned URL trỏ `localhost:9000` → user browser không kết nối được (`ERR_CONNECTION_REFUSED`) | **Open (R8 lần 4 — 4 round confirm, BE config chưa đổi)** |
+| BUG-BM-008 | Medium | P2 | UI/UX | BM-016 | `FR-VII-04 §Error Handling E1` (ERR-BM-01 "Chỉ chấp nhận file doc, docx, xls, xlsx") | Form Thêm BM upload file `.txt` → FE silent rejected (ẩn file khỏi upload list) nhưng KHÔNG hiển thị toast/error message → user không biết file không hợp lệ | **Open (R8 lần 4 — 4 round confirm silent reject)** |
 
 ---
 
@@ -38,6 +38,15 @@ Phát hiện **2** lỗi mới trong functional test R7.7.10 (preview/download M
 > **Re-test 2026-05-09 R8 lần 2:** ❌ **VẪN OPEN**. Account `cb_nv_tw_02`. BM-20260509-001 (`8a7211a6-7368-49d1-bb39-e9b5078b1037`, TM SHTT đã CONG_KHAI sau R7.4.C1 R8 lần 2). GET `/api/v1/bieu-maus/{id}/download` → 302 → `http://localhost:9000/htpldn/00000000-0000-4000-8000-000000000001/2026/05/f39d316d-bf34-4f8b-9d35-3f989ada4c8f/test-bm-r7-4-c1.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&...`. 2 lần redirect gặp `net::ERR_ABORTED` + `net::ERR_CONNECTION_REFUSED`. MinIO `MINIO_PUBLIC_HOST` vẫn `localhost:9000` chưa đổi. Evidence: `image/r8-bm-007-localhost-still-r8l2.png` + reqid 464-467.
 >
 > **Re-test 2026-05-09 R8 lần 3 (sau dev claim fix):** ❌ **VẪN OPEN — dev claim sai**. Account `cb_nv_tw_02` (cache clear toàn diện + SW unregister + hard reload + fresh login per memory `feedback_clear_cache_before_verify_fe_fix`). BM-20260509-001 cùng id. GET `/api/v1/bieu-maus/{id}/download` reqid=804 → 302 → reqid=805 GET **`http://localhost:9000/htpldn/00000000-0000-4000-8000-000000000001/2026/05/f39d316d-bf34-4f8b-9d35-3f989ada4c8f/test-bm-r7-4-c1.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20260509T125509Z&...`** → `net::ERR_ABORTED`. Cấu hình BE `MINIO_PUBLIC_HOST` chưa được đổi từ `localhost:9000` sang IP server `103.172.236.130:9000`. Bug giữ Open chờ dev verify lại config thật + restart service.
+>
+> **Re-test 2026-05-10 R8 lần 4 (curl direct verify, bypass CORS):** ❌ **VẪN OPEN — confirm 4 round liên tiếp**. Login `cb_nv_tw_02` qua API `/auth/login` + `/auth/verify-otp` (OTP `666666`) → cookie session. Curl `GET /api/v1/bieu-maus/8a7211a6-7368-49d1-bb39-e9b5078b1037/download` với `--max-redirs 0` để inspect Location header trực tiếp:
+> ```text
+> HTTP/1.1 302 Found
+> location: http://localhost:9000/htpldn/00000000-0000-4000-8000-000000000001/2026/05/f39d316d-bf34-4f8b-9d35-3f989ada4c8f/test-bm-r7-4-c1.docx?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=htpldn_minio%2F20260509%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20260509T192131Z&X-Amz-Expires=300&X-Amz-SignedHeaders=host&X-Amz-Signature=5d66f3f124cfd4ec468a1e98495edaa8f802df9a174f7a3f035ef595ec14a56a
+> content-type: text/plain; charset=utf-8
+> Found. Redirecting to http://localhost:9000/htpldn/...
+> ```
+> Cross-verify qua browser fetch `redirect: 'follow'` → `TypeError: Failed to fetch` (target unreachable từ user browser). Performance API resource entry `name=.../download type=fetch status=0`. **Identical pattern 4 round** (R8/R8 lần 2/R8 lần 3/R8 lần 4). BE `MINIO_PUBLIC_HOST=localhost:9000` config chưa đổi. Cần dev sửa env var + restart BE service. Bug giữ Open Critical P0.
 
 ### Mô tả
 
@@ -78,6 +87,20 @@ HEAD http://localhost:9000/...
 > **Re-test 2026-05-09 R8 lần 2:** ❌ **VẪN OPEN**. Account `cb_nv_tw_02`. Form `/bieu-mau/them-moi`. Upload file `test-bm-invalid.txt` (36B) qua field "File biểu mẫu" (uid `45_58`). DOM check 1.5s sau upload: `toastCount=0, toastTexts=[], errCount=0, errTexts=[], fileItemCount=0, fileItems=[]`. FE filter client-side, file không xuất hiện trong upload list, KHÔNG có toast/notification/inline error. Evidence: `image/r8-bm-008-silent-reject-r8l2.png`.
 >
 > **Re-test 2026-05-09 R8 lần 3 (sau dev claim fix):** ❌ **VẪN OPEN — dev claim sai**. Account `cb_nv_tw_02` (cache clear toàn diện trước test). Form `/bieu-mau/them-moi` (verify BUG-BM-001 đã add Switch CR-01). Upload `test-bm-invalid.txt` 36B qua uid `6_58`. DOM check 2s sau: `toastCount=0, toastTexts=[], errCount=0, errTexts=[], fileItemCount=0, fileItems=[], allMessages=[]` (kiểm cả `.ant-message-notice` + `.ant-notification-notice`). FE vẫn silent reject — không add toast `ERR-BM-01` "Chỉ chấp nhận file doc, docx, xls, xlsx". Evidence: `image/r8l3-bm-008-still-silent.png`.
+>
+> **Re-test 2026-05-10 R8 lần 4:** ❌ **VẪN OPEN — confirm 4 round liên tiếp**. Account `cb_nv_tw_02` (kill chrome + restart browser + fresh OTP login). Form `/bieu-mau/them-moi` (BUG-BM-001 đã add Switch CR-01 verify R8 lần 3). Upload `test-bm-invalid-r4.txt` 57B (single line text content) vào "File biểu mẫu" qua MCP `upload_file` uid `34_30`. DOM check 2s sau:
+> ```json
+> {
+>   "toastCount": 0, "toastTexts": [],
+>   "errCount": 0, "errTexts": [],
+>   "fileItemCount": 0, "fileItems": [],
+>   "allMessageClassCount": 0,
+>   "bodyHasErrBM01": false,
+>   "bodyHasInvalidMsg": true,    ← từ static label "Chỉ chấp nhận: .doc, .docx, .xls, .xlsx" của upload area, KHÔNG phải toast lỗi
+>   "bodyHasFilename": false      ← file `test-bm-invalid-r4.txt` không hiện trong upload list
+> }
+> ```
+> File bị filter client-side (fileItemCount=0, bodyHasFilename=false), KHÔNG có toast/notification/inline error nào. `.ant-message-notice` count = 0, `.ant-notification-notice` count = 0. Pattern silent fail identical 4 round (R8/R8 lần 2/R8 lần 3/R8 lần 4). FE chưa hook beforeUpload → message.error(`ERR-BM-01`). Evidence: `image/r8l4-reverify-2026-05-10-bug-bm-008-still-silent.png`.
 
 ### Mô tả
 
