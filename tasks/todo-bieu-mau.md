@@ -1,12 +1,12 @@
 # TODO — Biểu mẫu
 
-> File module của [`todo.md`](todo.md) master. Tổng **3 task**.
+> File module của [`todo.md`](todo.md) master. Tổng **4 task**.
 >
 > **Tham chiếu shared:** [`state-snapshot.md`](state-snapshot.md) · [`dep-map.md`](dep-map.md) · [`lessons-learned.md`](lessons-learned.md)
 >
 > **Trạng thái icon:** 🟢 sẵn sàng · 🔵 đang làm · ✅ xong · ⚠️ partial · 🚫 block · ⏳ chờ upstream
 >
-> **Task IDs:** R7.3.7, R7.4.C1, R7.7.10
+> **Task IDs:** R7.3.7, R7.4.C1, R7.7.10, R7.7.10b
 
 ---
 
@@ -19,8 +19,8 @@
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P3** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.3.7](#r7-3-7) |
 | **P4** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.4.C1](#r7-4-c1) |
-| **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.10](#r7-7-10) |
-| **Tổng** | **3** | **0** | **0** | **1** | **2** | **0** | **0** | **0** |  |
+| **P7** | 2 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | ⚠️[R7.7.10](#r7-7-10) · ⚠️[R7.7.10b](#r7-7-10b) |
+| **Tổng** | **4** | **0** | **0** | **1** | **3** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -35,3 +35,8 @@
 - ⚠️ **R7.7.10** ✏️ Biểu mẫu v3.5 — 47 TC (7 cũ + 10 CR-01 + 30 CRUD/workflow) `[~47% — 22/47 PASS, 11 BLOCKED + 14 DEFER]` <a id="r7-7-10"></a>
   - **Kết quả:** R8 lần 3 — BUG-BM-001 Switch closed → 10 CR-01 (BM-041..050) UNBLOCKED chờ test riêng. BUG-BM-007/008 vẫn Open. Smoke 5/5 PASS regression-free từ R8 lần 2. [functional-r7-7-10-r8](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10-bm-r8.md)
   - **Bug:** [bug-report-function-bm-r7-7-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-function-bm-r7-7-10.md) — 0/2 đóng (BUG-BM-007 Critical MinIO localhost vẫn reproduced R8 lần 3 · BUG-BM-008 Medium silent reject .txt vẫn reproduced R8 lần 3). Workflow bugs riêng tại [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) (5/6 đóng R8 lần 3).
+
+- ⚠️ **R7.7.10b** ✏️ Defer-unblock multi-account + size + audit `[~75% — 6/8 unblocked: 4 ✅ PASS + 2 ⚠️ PARTIAL + 2 🔁 DEFER tool block]` <a id="r7-7-10b"></a>
+  - **Kết quả:** ✅ PASS BM-032 QTHT R-only + BM-033 BN isolation 2 chiều + BM-034 ĐP scope 2 chiều + BM-040 Audit log 20+37 entries; ⚠️ PARTIAL BM-035 NHT/CG (spec test outdated, NHT có R menu đúng v3.5 perm matrix; TVV defer pwd) + BM-015 (BE reject 21MB qua TCP reset, no graceful 413). 🔁 BM-028/029 defer MCP tool block. [functional-r7-7-10b](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10b-bm.md)
+  - **Bug:** [bug-report-r7-7-10b-bm.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-r7-7-10b-bm.md) — 0/1 đóng (BUG-BM-009 Medium upload 21MB ERR_CONNECTION_RESET + session invalidate, no graceful 413 + Vietnamese error)
+  - **Output:** 3 TM cross-unit seeded (BKH `6ad5bf52` + BTC `65471c03` + STP-AG `11fe7276`); pool TM 4→7

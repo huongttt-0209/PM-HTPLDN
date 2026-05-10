@@ -170,11 +170,12 @@ Response: {
 
 | Bug ID | Severity | SRS Ref | Title | Status |
 |---|---|---|---|---|
-| BUG-FR22-001 | Minor | FR-VIII-22 line 1089 + 1280 | UI thiếu ô "Tên đăng nhập" readonly hiển thị MST + message "hiệu lực 24 giờ" ≠ SRS "vĩnh viễn" | Open |
-| BUG-FR22-002 | Major | FR-VIII-22 line 1032 + 1074 | FE+BE cho phép MST 13 chữ số (chi nhánh) — SRS quy định chi nhánh không tự đăng ký riêng | Open |
-| BUG-FR22-003 | Minor | FR-VIII-22 line 1074-1079 (E1-E6) | errCode mismatch — BE dùng `ERR-VAL-VIII-22-XX` / `ERR-VAL-SYS-00-XX` thay SRS `ERR-REG-XX` | Open |
-| BUG-FR22-004 | Medium | FR-VIII-22 line 1032 | BE thêm validation MST checksum theo TT 105/2020 — KHÔNG có trong SRS spec; cần BA confirm bổ sung hay drop | Open |
-| BUG-FR22-005 | Minor | FR-VIII-22 §Error Handling | BE warning WRN-DN-01 quy mô-lao động (NĐ 39/2018) — KHÔNG có trong FR-VIII-22 §Error Handling; cần BA confirm | Open |
+| BUG-FR22-001(a) | Minor | FR-VIII-22 line 1089 | UI thiếu ô "Tên đăng nhập" readonly hiển thị MST | ✅ Closed R8 2026-05-09 (FE đã add field "Tên đăng nhập" readonly với placeholder "Sẽ tự cập nhật theo Mã số thuế") |
+| BUG-FR22-001(b) | Minor | FR-VIII-22 line 1280 | Message "hiệu lực 24 giờ" ≠ SRS "vĩnh viễn nếu là kích hoạt lần đầu" | Open (chờ BA chốt spec) |
+| BUG-FR22-002 | Major | FR-VIII-22 line 1032 + 1074 | FE+BE cho phép MST 13 chữ số (chi nhánh) — SRS quy định chi nhánh không tự đăng ký riêng | ✅ Closed R8 2026-05-09 (inline error "Mã số thuế phải đúng 10 chữ số (theo TT 105/2020/TT-BTC). Chi nhánh không tự đăng ký riêng." match SRS line 1074 ERR-REG-01a EXACTLY) |
+| BUG-FR22-003 | Minor | FR-VIII-22 line 1074-1079 (E1-E6) | errCode mismatch — BE dùng `ERR-VAL-VIII-22-XX` / `ERR-VAL-SYS-00-XX` thay SRS `ERR-REG-XX` | Open (chờ BA decision) |
+| BUG-FR22-004 | Medium | FR-VIII-22 line 1032 | BE thêm validation MST checksum theo TT 105/2020 — KHÔNG có trong SRS spec; cần BA confirm bổ sung hay drop | Open (chờ BA decision) |
+| BUG-FR22-005 | Minor | FR-VIII-22 §Error Handling | BE warning WRN-DN-01 quy mô-lao động (NĐ 39/2018) — KHÔNG có trong FR-VIII-22 §Error Handling; cần BA confirm | Open (chờ BA decision) |
 
 **Bug file riêng:** [bug-report-function-r7-7-8b-self-reg-dn.md](../../bug-reports/qtht-tai-khoan/bug-report-function-r7-7-8b-self-reg-dn.md)
 
