@@ -17,15 +17,16 @@
 
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
-| **P5** | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 🟢[R7.5.1](#r7-5-1) |
-| **P7** | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 🟢[R7.7.7](#r7-7-7) |
-| **Tổng** | **2** | **2** | **0** | **0** | **0** | **0** | **0** | **0** |  |
+| **P5** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.5.1](#r7-5-1) |
+| **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.7](#r7-7-7) |
+| **Tổng** | **2** | **0** | **0** | **1** | **1** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
-- 🟢 **R7.5.1** ✏️ Dashboard KPI counter HD/VV/TVCS/CT (KPI-07 count đổi do NHT tách entity) `[need: full 100%]` <a id="r7-5-1"></a>
-  - **Cần:** ≥1 VV (✓5) · ≥1 TVCS (✓12) · ≥1 CT (✓3) · ≥1 TVV/CG (✓22) · ≥1 HD (✓7) · render full KPI
+- ✅ **R7.5.1** Dashboard KPI counter HD/VV/TVCS/CT (KPI-07 count đổi do NHT tách entity) <a id="r7-5-1"></a>
+  - **Kết quả:** ✅Đạt 9/9 KPI render khớp API. KPI-07=11 (CG=5+TVV=6, NHT=0 verified). [functional](../output/qa-reports/round7-2026-05-06/functional/dashboard/functional-test-report-r7-dashboard.md)
 
-- 🟢 **R7.7.7** ✏️ Dashboard 34 TC (KPI-07 count đổi) `[need: full 100%]` <a id="r7-7-7"></a>
-  - **Cần:** ≥1 VV (✓5) · ≥1 TVV/CG (✓22) · ≥1 Chi trả (✓78) · ≥1 CT (✓3) · ≥1 HD (✓7) · KPI render full
+- ⚠️ **R7.7.7** Dashboard 34 TC (KPI-07 count đổi) `[~82% — R2 28/34 đã test (22 ✅ + 6 ❌); 6 TC hoãn]` <a id="r7-7-7"></a>
+  - **Kết quả:** ⚠️ R2 22/28 ✅. 2 bug R1 retest FAIL + 2 bug Major mới (BUG-DASH-003/004). [functional](../output/qa-reports/round7-2026-05-06/functional/dashboard/functional-test-report-r7-dashboard.md)
+  - **Bug:** [bug-report-r7-dashboard.md](../output/qa-reports/round7-2026-05-06/bug-reports/dashboard/bug-report-r7-dashboard.md) — 0/4 đóng (2 Major + 1 Medium + 1 Minor)

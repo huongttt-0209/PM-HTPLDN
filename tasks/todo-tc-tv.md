@@ -19,15 +19,15 @@
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P2** | 2 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | ✅[R7.2.2](#r7-2-2) · ✅[R7.2.3](#r7-2-3) |
 | **P4** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.4.A6](#r7-4-a6) |
-| **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.4.6](#r7-7-4-6) |
-| **Tổng** | **4** | **0** | **0** | **3** | **1** | **0** | **0** | **0** |  |
+| **P7** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.7.4.6](#r7-7-4-6) |
+| **Tổng** | **4** | **0** | **0** | **4** | **0** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
 - ✅ **R7.2.2** 🆕 Seed 6 Tổ chức tư vấn (TC TV) <a id="r7-2-2"></a>
   - **Kết quả:** UI re-test 2026-05-09 PASS 3/3 loại hình (TC-0006/0007/0008 MOI_DANG_KY) + BVA FE-block đúng spec. Pool 5 HOAT_DONG + 3 MOI_DANG_KY. [seed-checklist-r7-2-2-tc-tv.md](../output/qa-reports/round7-2026-05-06/seed/to-chuc-tu-van/seed-checklist-r7-2-2-tc-tv.md)
-  - **Bug:** [bug-report-seed-r7-2-2-tctv-lv-dropdown.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/bug-report-seed-r7-2-2-tctv-lv-dropdown.md) 1/1 đóng + [bug-report-r7-2-2-tctv-ui-seed.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/bug-report-r7-2-2-tctv-ui-seed.md) 2/2 đóng (FE-002 Not-a-bug, FE-003 Not-reproducible).
+  - **Bug:** [Pass-bug-report-seed-r7-2-2-tctv-lv-dropdown.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/Pass-bug-report-seed-r7-2-2-tctv-lv-dropdown.md) 1/1 đóng + [Pass-bug-report-r7-2-2-tctv-ui-seed.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/Pass-bug-report-r7-2-2-tctv-ui-seed.md) 2/2 đóng (FE-002 Not-a-bug, FE-003 Not-reproducible).
   - **Note:** account `cb_nv_tw_02`. UI path verified, downstream R7.4.A6 + R7.7.4.6 unblock.
 
 - ✅ **R7.2.3** 🆕 Phê duyệt TC TV chuyển sang trạng thái `HOAT_DONG` <a id="r7-2-3"></a>
@@ -36,6 +36,6 @@
 - ✅ **R7.4.A6** 🆕 Workflow state machine TC TV — 8 transition <a id="r7-4-a6"></a>
   - **Kết quả:** PASS 8/8 transition UI MCP. TC-0009 mới qua 4 trans (1+3+4+2), TC-0008 round trip TAM_DUNG, TC-0007 round trip VO_HIEU_HOA. [workflow-test-report-r7-4-a6-tctv.md](../output/qa-reports/round7-2026-05-06/workflow/to-chuc-tu-van/workflow-test-report-r7-4-a6-tctv.md)
 
-- ⚠️ **R7.7.4.6** 🆕 TC TV functional — 10 TC `[~80% — 8/10 đạt + 1 sai spec FE + 1 lỗi critical]` <a id="r7-7-4-6"></a>
-  - **Kết quả:** 8/10 đạt (TC-001/002/003/004/006/017/018/025) + TC-010 ⚠️ Sai spec FE + TC-022 ❌ QTHT bypass DELETE xóa TC-0009. [functional-test-report-r7-7-4-6-tctv.md](../output/qa-reports/round7-2026-05-06/functional/to-chuc-tu-van/functional-test-report-r7-7-4-6-tctv.md)
-  - **Bug:** [bug-report-r7-7-4-6-tctv.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/bug-report-r7-7-4-6-tctv.md) — 0/2 đóng (Critical 1 + Minor 1).
+- ✅ **R7.7.4.6** 🆕 TC TV functional — 10 TC <a id="r7-7-4-6"></a>
+  - **Kết quả:** R3 10/10 PASS. R3.1 BUG-002 đóng + R3.2 BUG-001 đóng (qtht_01 BE 403 đúng spec). [functional-test-report-r7-7-4-6-tctv-r2-acc02.md](../output/qa-reports/round7-2026-05-06/functional/to-chuc-tu-van/functional-test-report-r7-7-4-6-tctv-r2-acc02.md)
+  - **Bug:** [Pass-bug-report-r7-7-4-6-tctv.md](../output/qa-reports/round7-2026-05-06/bug-reports/to-chuc-tu-van/Pass-bug-report-r7-7-4-6-tctv.md) — 2/2 đóng. BUG-001 Closed R3.2, BUG-002 Closed R3.1.

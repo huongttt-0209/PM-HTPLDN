@@ -22,7 +22,7 @@
 | # | DM | URL key | Acceptance | Records | Status | Note |
 |---|---|---|---|---|---|---|
 | 1 | LOAI_HINH_HT | `LOAI_HINH_HO_TRO` | ≥3 | **6 pre-existing** | ✅ PASS | TU_VAN/TO_TUNG/DAI_DIEN_NGOAI_TT/HOA_GIAI/DAO_TAO/TRO_GIUP_KHAC. Match SRS Seed Data. |
-| 2 | CHUONG_TRINH_HT | `CHUONG_TRINH_HT` (đúng SRS) | ≥3 | **3** (2 pre-existing + 1 R8 seed CT_HTPLDN) | ✅ PASS | R7: BUG-DM-CTHT-001 routing + BUG-DM-CTHT-002 form 3 fields. R7 dev fix Closed-verified (URL `/CHUONG_TRINH_HT` đúng + form đủ 3 trường). R8 2026-05-08 seed thêm `CT_HTPLDN` qua API workaround (UI Antd DatePicker programmatic setter chưa fire React onChange) → 3/3 đạt acceptance. **Bug closed:** [bug-report-seed-r7-1-6-dm-cthttp.md](../../bug-reports/qtht-danh-muc/bug-report-seed-r7-1-6-dm-cthttp.md). |
+| 2 | CHUONG_TRINH_HT | `CHUONG_TRINH_HT` (đúng SRS) | ≥3 | **3** (2 pre-existing + 1 R8 seed CT_HTPLDN) | ✅ PASS | R7: BUG-DM-CTHT-001 routing + BUG-DM-CTHT-002 form 3 fields. R7 dev fix Closed-verified (URL `/CHUONG_TRINH_HT` đúng + form đủ 3 trường). R8 2026-05-08 seed thêm `CT_HTPLDN` qua API workaround (UI Antd DatePicker programmatic setter chưa fire React onChange) → 3/3 đạt acceptance. **Bug closed:** [Pass-bug-report-seed-r7-1-6-dm-cthttp.md](../../bug-reports/qtht-danh-muc/Pass-bug-report-seed-r7-1-6-dm-cthttp.md). |
 | 3 | TINH_TRANG_VV | `TINH_TRANG_VU_VIEC` | ≥3 | **12 pre-existing** | ✅ PASS | 12 SM state VV (MOI_TAO/CHO_TIEP_NHAN/.../TU_CHOI). |
 | 4 | HO_SO_DE_NGHI_HT | `HO_SO_DE_NGHI_HT` | ≥3 | **4 pre-existing** | ✅ PASS | DON_DE_NGHI_HT/CMND_CCCD/GCNDK_KD/HS_CHUNG_MINH_DK + cột "LOẠI" Bắt buộc/Tùy chọn. |
 | 5 | HO_SO_DE_NGHI_TT | `HO_SO_DE_NGHI_TT` | ≥3 | **4 pre-existing** | ✅ PASS | BANG_KE_CHI_PHI/BIEN_LAI_THU_PHI/HOP_DONG_DV_TV/BIEN_BAN_NGHIEM_THU. |

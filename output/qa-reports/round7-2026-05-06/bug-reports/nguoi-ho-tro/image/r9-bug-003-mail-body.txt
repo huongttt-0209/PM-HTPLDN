@@ -1,0 +1,36 @@
+To: nht_r9_bug003_v2@htpldn.test
+Date: 2026-05-09T10:42:36.999752251Z
+
+<!DOCTYPE html>
+<html lang=3D"vi">
+<body style=3D"font-family: Arial, =
+sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <h2 style=3D"color: #EF4444;">=F0=9F=94=94 Th=C3=B4ng b=C3=A1o h=E1=BB=87=
+ th=E1=BB=91ng: K=C3=ADch ho=E1=BA=A1t t=C3=A0i kho=E1=BA=A3n =
+Ng=C6=B0=E1=BB=9Di h=E1=BB=97 tr=E1=BB=A3 ph=C3=A1p l=C3=BD =E2=80=94 =
+PM-HTPLDN</h2>
+  <p>Xin ch=C3=A0o NHT R9 BUG003 Mail Verify,
+
+Qu=E1=BA=A3n tr=E1=BB=8B vi=C3=AAn =C4=91=C3=A3 t=E1=BA=A1o cho b=E1=BA=A1n=
+ t=C3=A0i kho=E1=BA=A3n Ng=C6=B0=E1=BB=9Di h=E1=BB=97 tr=E1=BB=A3 ph=C3=A1p=
+ l=C3=BD trong h=E1=BB=87 th=E1=BB=91ng PM-HTPLDN.
+T=C3=AAn =C4=91=C4=83ng =
+nh=E1=BA=ADp: nht_r9_bug003_v2
+
+Vui l=C3=B2ng click link d=C6=B0=E1=BB=9Bi =
+=C4=91=C3=A2y =C4=91=E1=BB=83 k=C3=ADch ho=E1=BA=A1t t=C3=A0i kho=E1=BA=A3n=
+ (link c=C3=B3 hi=E1=BB=87u l=E1=BB=B1c v=C4=A9nh vi=E1=BB=85n):
+http://103.172.236.130/auth/verify-email?token&#x3D;7dac4bf9-494e-417e-a8fe=
+-17b67d43cc61
+
+Sau khi k=C3=ADch ho=E1=BA=A1t, b=E1=BA=A1n d=C3=B9ng =
+ch=E1=BB=A9c n=C4=83ng &quot;Qu=C3=AAn m=E1=BA=ADt kh=E1=BA=A9u&quot; =
+=C4=91=E1=BB=83 =C4=91=E1=BA=B7t m=E1=BA=ADt kh=E1=BA=A9u l=E1=BA=A7n =
+=C4=91=E1=BA=A7u.</p>
+  <hr style=3D"border: none; border-top: 1px solid =
+#E5E7EB; margin: 20px 0;">
+  <p style=3D"font-size: 12px; color: =
+#6B7280;">H=E1=BB=87 th=E1=BB=91ng H=E1=BB=97 tr=E1=BB=A3 Ph=C3=A1p l=C3=BD=
+ Doanh nghi=E1=BB=87p (PM-HTPLDN)</p>
+</body>
+</html>

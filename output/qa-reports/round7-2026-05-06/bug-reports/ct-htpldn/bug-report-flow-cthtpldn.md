@@ -32,14 +32,14 @@ R7.6.4 R2 (2026-05-08) phát hiện **1 bug NEW** và **đóng 1 bug R1**:
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-CTHTPLDN-B7-001 | Major | P1 | Workflow | R7.6.4 R1 B7 | `srs-fr-15-ct-htpldn.md` v3 row 903 + rows 887-898 | BE validation `ERR-VAL-XI-06-11` yêu cầu `ke_hoach_chi_tiet`+`don_vi_thuc_hien` không có trong spec → block transition `DA_DUYET → DANG_THUC_HIEN` | **Closed-verified 2026-05-08 R2** |
+| ~~BUG-CTHTPLDN-B7-001~~ | Major | P1 | Workflow | R7.6.4 R1 B7 | `srs-fr-15-ct-htpldn.md` v3 row 903 + rows 887-898 | ~~BE validation `ERR-VAL-XI-06-11` yêu cầu `ke_hoach_chi_tiet`+`don_vi_thuc_hien` không có trong spec → block transition `DA_DUYET → DANG_THUC_HIEN`~~ | **Closed-verified 2026-05-08 R2** |
 | BUG-CTHTPLDN-B10-001 | Major | P1 | Workflow | R7.6.4 R2 B10 | `srs-fr-15-ct-htpldn.md` v3 row 903 (action `[DANG_THUC_HIEN] Hoan thanh -> SET HOAN_THANH \| click \| -`) + `srs-v3.5.md` §3.4.3.10 (CHECK trang_thai 8 states không nêu pre-condition Đợt BC) | BE validation `ERR-VAL-XI-06-10` "Khong the hoan thanh: con 0/0 dot bao cao chua DA_TONG_HOP" → block `DANG_THUC_HIEN → HOAN_THANH` khi CT chưa có Đợt BC | **Open** |
 | BUG-CTHTPLDN-DOTBC-UI-001 | Major | P1 | UI miss feature | R7.7.15.b (toàn Nhóm 3b) | `srs-v3.5.md` §3.4.3.10a entity DOT_BAO_CAO + §4.2.15 nhóm XI (UC169/170/171/172/195/196) đầy đủ spec | UI tab "Đợt báo cáo" hiện placeholder "Tính năng sẽ được triển khai ở Story 13.6" — toàn bộ workflow Đợt BC GĐ2 KHÔNG có UI, chỉ test được qua API | **Open NEW 2026-05-08** |
 | BUG-CTHTPLDN-DOTBC-API-002 | Major | P1 | API design | R7.7.15.b R2 CT-038 | `srs-v3.5.md` §3.4.3.10a entity DOT_BAO_CAO (chưa document quan hệ với BAO_CAO_CT_HTPL); test plan CT-038 UC172 | POST `/api/v1/dot-bao-caos/tong-hop` field `baoCaoIds` expect BC entity IDs, GET endpoint pair lại trả DOT entity IDs — list candidates ≠ POST identity. Story 13.6 dev không thể integrate. | **Open NEW R7.7.15.b R2 2026-05-08** |
 
 ---
 
-## BUG-CTHTPLDN-B7-001 — [CLOSED-VERIFIED 2026-05-08 R2]
+## ~~BUG-CTHTPLDN-B7-001~~ — [CLOSED-VERIFIED 2026-05-08 R2]
 
 ### Mô tả gốc (R1 2026-05-07)
 
@@ -50,7 +50,7 @@ CB NV TW click `[Bắt đầu thực hiện]` trên CT ở trạng thái `DA_DUY
 - **Action:** Re-test B7 với CT-A mới (CT-20260508-0001) ở state DA_DUYET → click [Bắt đầu thực hiện] → modal "Bắt đầu thực hiện?" → Đồng ý.
 - **Result:** State chuyển `DANG_THUC_HIEN` thành công. Stepper bước 4 ✓. Buttons: [Tạm dừng] + [Hoàn thành].
 - **Network:** `POST /api/v1/chuong-trinh-htpls/52fe225a-1c38-4727-b587-4e505439eaec/activate` → **200 OK** (R1 trả 409 ERR-VAL-XI-06-11).
-- **Bằng chứng:** [r7-6-4-r2-ct1-b7-dang-thuc-hien-PASS.png](../image/r7-6-4-r2-ct1-b7-dang-thuc-hien-PASS.png)
+- **Bằng chứng:** [r7-6-4-r2-ct1-b7-dang-thuc-hien-PASS.png](image/r7-6-4-r2-ct1-b7-dang-thuc-hien-PASS.png)
 
 → Bug fix verified. **Status: Closed-verified 2026-05-08.**
 
@@ -100,9 +100,9 @@ UI hiển thị toast lỗi đúng (fix vs UI silent của BUG-B7-001 R1). Toast
 
 **1. Ảnh chụp:**
 
-![BUG-CTHTPLDN-B10-001 — CT-A stuck DANG_THUC_HIEN sau click Hoàn thành, toast 0/0](../image/r7-6-4-r2-ct1-b10-FAIL-toast.png)
+![BUG-CTHTPLDN-B10-001 — CT-A stuck DANG_THUC_HIEN sau click Hoàn thành, toast 0/0](image/r7-6-4-r2-ct1-b10-FAIL-toast.png)
 
-![BUG-CTHTPLDN-B10-001 — Danh sách 6 CT cuối round, CT-20260508-0001 vẫn ở Đang thực hiện](../image/r7-6-4-r2-list-final-6CT.png)
+![BUG-CTHTPLDN-B10-001 — Danh sách 6 CT cuối round, CT-20260508-0001 vẫn ở Đang thực hiện](image/r7-6-4-r2-list-final-6CT.png)
 
 **2. API request / response (verified via evaluate_script trong session live):**
 
@@ -170,7 +170,7 @@ Theo SRS `srs-v3.5.md` §4.2.15 nhóm XI Kế hoạch thực hiện CT HTPLDN c�
 
 ### Bằng chứng
 
-![BUG-DOTBC-UI-001 — Tab Đợt báo cáo placeholder Story 13.6](../image/r7-7-15-b-dot-bc-tab-placeholder.png) (lưu tại [`functional/screenshots-r7-7-15/r7-7-15-b-dot-bc-tab-placeholder.png`](../../functional/screenshots-r7-7-15/r7-7-15-b-dot-bc-tab-placeholder.png))
+![BUG-DOTBC-UI-001 — Tab Đợt báo cáo placeholder Story 13.6](image/r7-7-15-b-dot-bc-tab-placeholder.png) (lưu tại [`functional/screenshots-r7-7-15/r7-7-15-b-dot-bc-tab-placeholder.png`](../../functional/screenshots-r7-7-15/r7-7-15-b-dot-bc-tab-placeholder.png))
 
 ### So sánh
 

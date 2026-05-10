@@ -1,0 +1,112 @@
+{
+  "afterText": "Bỏ qua đến nội dung chính\nHỗ trợ pháp lý doanh nghiệp\nBộ Tư pháp\nTổng quan\nQuản lý hỏi đáp pháp lý\nQuản lý đào tạo, tập huấn\n▶\nMạng lưới Tư vấn viên\n▶\nQuản lý vụ việc hỗ trợ pháp lý\nQuản lý chi trả chi phí\nQuản lý doanh nghiệp được hỗ trợ\nĐánh giá hiệu quả hỗ trợ pháp lý\nQuản lý thư viện biểu mẫu\nQuản lý tư vấn\n▶\nQuản lý chương trình hỗ trợ pháp lý doanh nghiệp\nBáo cáo thống kê\nQuản trị hệ thống\n▶\nBộ Tư pháp — Cục Bổ trợ tư pháp\n53\nC0\nCB Nghiệp vụ TW 03\nCB_NV_TW\nQuay lại danh sách\nQA R7.4.D1 bo 03 202605091141\nDG-20260509-0001\nLập kế hoạch\n1\nLập kế hoạch\n2\nPhân công\n3\nChờ duyệt PC\n4\nThực hiện\n5\nĐang đánh giá\n6\nĐã đánh giá\n7\nLập báo cáo\n8\nChờ phê duyệt\n9\nHoàn thành\nThông tin kế hoạch\nMã kế hoạch\tDG-20260509-0001\tTên đợt\tQA R7.4.D1 bo 03 202605091141\nTần suất\tSơ bộ 6 tháng\tĐối tượng\tVụ việc\nThời gian bắt đầu\t31/03/2026\tThời gian kết thúc\t29/06/2026\nSố vụ việc đánh giá\t0\tĐiểm trung bình\t—\nMục tiêu\tQA report-only R7.4.D1 bằng bộ tài khoản 03. Kiểm tra tạo kỳ Đánh giá Hiệu quả HTPL trạng thái LAP_KE_HOACH và chuyển sang tab Tiêu chí.\nGhi chú\tQA-only R7.4.D1, account cb_nv_tw_03.\nTiêu chí\nPhân công\nThực hiện\nChấm điểm\nBáo cáo\nTổng trọng số: 100%\nThêm tiêu chí\nNhập từ danh mục\nLưu thay đổi\nSTT\tTên tiêu chí\tNhóm tiêu chí\tTrọng số (%)\tĐiểm tối đa\tTrạng thái\tThao tác\n1\tChất lượng tư vấn pháp luật\tHiệu quả HTPL\t\n\t\n\tHoạt động\t\n\n2\tSự hài lòng của người được trợ giúp pháp lý\tHiệu quả HTPL\t\n\t\n\tHoạt động\t\n\n3\tMức độ hoàn thành vụ việc\tHiệu quả HTPL\t\n\t\n\tHoạt động\t\n\n4\tTuân thủ thời hạn xử lý\tHiệu quả HTPL\t\n\t\n\tHoạt động\t",
+  "detail": {
+    "status": 200,
+    "json": {
+      "success": true,
+      "data": {
+        "id": "c521f1f1-82b2-424a-a14c-6d01e91ce540",
+        "nguoiTaoId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+        "nguoiCapNhatId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+        "ngayTao": "2026-05-09T11:41:05.148Z",
+        "ngayCapNhat": "2026-05-09T11:41:05.148Z",
+        "donViId": "00000000-0000-4000-8000-000000000001",
+        "seqId": "1",
+        "version": 1,
+        "trangThai": "LAP_KE_HOACH",
+        "nguoiGuiDuyetId": null,
+        "ngayGuiDuyet": null,
+        "nguoiDuyetId": null,
+        "ngayDuyet": null,
+        "ghiChuPheDuyet": null,
+        "maKeHoach": "DG-20260509-0001",
+        "tenDot": "QA R7.4.D1 bo 03 202605091141",
+        "mucTieu": "QA report-only R7.4.D1 bằng bộ tài khoản 03. Kiểm tra tạo kỳ Đánh giá Hiệu quả HTPL trạng thái LAP_KE_HOACH và chuyển sang tab Tiêu chí.",
+        "tanSuat": "SO_BO_6_THANG",
+        "doiTuong": "VU_VIEC",
+        "thoiGianBatDau": "2026-03-31",
+        "thoiGianKetThuc": "2026-06-29",
+        "ghiChu": "QA-only R7.4.D1, account cb_nv_tw_03.",
+        "soVuViecDanhGia": 0,
+        "diemTrungBinh": null,
+        "_links": {
+          "self": {
+            "href": "/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540",
+            "method": "GET"
+          },
+          "update": {
+            "href": "/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540",
+            "method": "PATCH"
+          },
+          "delete": {
+            "href": "/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540",
+            "method": "DELETE"
+          }
+        }
+      },
+      "meta": null
+    }
+  },
+  "logs": [
+    {
+      "status": 401,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/auth/me"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/auth/login"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/auth/verify-otp"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/auth/me"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/auth/me"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/thong-baos/unread-count"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/tieu-chis"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/phan-congs"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540"
+    }
+  ],
+  "failed": [
+    {
+      "status": 401,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/auth/me"
+    }
+  ],
+  "clicked": false,
+  "clickedOk": false,
+  "modalTexts": []
+}

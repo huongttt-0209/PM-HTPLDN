@@ -17,17 +17,19 @@
 
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
-| **P5** | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | ❌[R7.5.4](#r7-5-4) |
-| **P7** | 1 | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 🟢[R7.7.13](#r7-7-13) |
-| **Tổng** | **2** | **1** | **0** | **0** | **0** | **0** | **0** | **1** |  |
+| **P5** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.5.4](#r7-5-4) |
+| **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.13](#r7-7-13) |
+| **Tổng** | **2** | **0** | **0** | **1** | **1** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
-- ❌ **R7.5.4** 🔄 BC04 export Excel có data <a id="r7-5-4"></a>
-  - **Cần:** BC HD ✅ data có; BC04 VV BLOCKED chờ R7.4.A3 🟢 seed VV HOAN_THANH
-  - **Kết quả:** ❌ FAIL — header xlsx mime đã fix, body vẫn JSON wrap StreamableFile (1910 bytes xlsx kẹt trong JSON). [verification-test-report-r7-5-4-bc-export.md](../output/qa-reports/round7-2026-05-06/workflow/bao-cao/verification-test-report-r7-5-4-bc-export.md)
-  - **Bug:** [bug-report-r7-5-4-bc-export.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/bug-report-r7-5-4-bc-export.md) — 0/2 đóng (BUG-BC-EXPORT-001 Critical + BUG-BC-LEGEND-001 Minor still Open từ R6)
+- ✅ **R7.5.4** 🔄 BC04 export Excel có data <a id="r7-5-4"></a>
+  - **Cần:** BC HD ✅ data có; BC04 VV ✓ seed VV HOAN_THANH
+  - **Kết quả:** ✅ R2 PASS — Excel binary OK xlsx mime, không JSON wrap. [verification-test-report-r7-5-4-bc-export.md](../output/qa-reports/round7-2026-05-06/workflow/bao-cao/verification-test-report-r7-5-4-bc-export.md)
+  - **Bug:** [bug-report-r7-5-4-bc-export.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/bug-report-r7-5-4-bc-export.md) — 1/2 đóng (BUG-BC-EXPORT-001 Critical Closed R2; BUG-BC-LEGEND-001 Minor still Open)
 
-- 🟢 **R7.7.13** 🔄 Báo cáo 38 TC `[~80% — defer BC ĐT do thiếu seed]` <a id="r7-7-13"></a>
+- ⚠️ **R7.7.13** 🔄 Báo cáo 40 TC `[~43% R2 — 17 PASS, 1 FAIL PDF, 22 DEFER ĐT/ĐG+role+cross]` <a id="r7-7-13"></a>
   - **Cần:** ≥1 TVCS (✓12) · ≥1 CT (✓3) · ≥1 HD (✓7) · BC04/05/HD ready · ĐT (✗0) defer
+  - **Kết quả:** ⚠️ R2 17/40 PASS — 16 BC + Excel OK; PDF 500 (Critical mới); 22 defer. [functional-test-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/functional/bao-cao/functional-test-report-r7-7-13-bao-cao.md)
+  - **Bug:** [Pass-bug-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md) — 2/3 đóng (Word+HD PL Closed R2; PDF-500 Critical Open)

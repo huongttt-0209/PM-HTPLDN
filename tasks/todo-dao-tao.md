@@ -32,7 +32,7 @@
 - 🚫 **R7.3.6** ✏️ Seed 6 CTĐT entry DU_THAO `[block: bug R7.4.B0 JWT revoke <1 phút ngăn workflow advance KH năm]` <a id="r7-3-6"></a>
   - **Cần:** R7.3.5 ✅ (3 NHAP R8) · ≥1 KH năm DA_DUYET/DA_CONG_KHAI mỗi cấp (✗ 0/3 — không advance được)
   - **R8 attempt 2026-05-08 19:14–19:21:** Probe (B) confirm FE filter strict `trangThai=DA_DUYET,DA_CONG_KHAI` → dropdown rỗng đúng spec. Path A1 advance fail 6 lần — bug R7.4.B0 reproduce 100%, escalated to Critical-Blocker P0. Đợi dev fix JWT TTL.
-  - **Bug:** [bug-report-seed-r7-3-6-ctdt.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-seed-r7-3-6-ctdt.md) — 1/1 đóng (BUG-CTDT-FE-01 Closed-verified 2026-05-07 — form has keHoachId field)
+  - **Bug:** [Pass-bug-report-seed-r7-3-6-ctdt.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/Pass-bug-report-seed-r7-3-6-ctdt.md) — 1/1 đóng (BUG-CTDT-FE-01 Closed-verified 2026-05-07 — form has keHoachId field)
 
 - ✅ **R7.3.8** 🔄 Seed NHCH KICH_HOAT (R8 re-seed sau drift) <a id="r7-3-8"></a>
   - **Kết quả:** R8 PASS 6/6 KICH_HOAT cover 5 LV (Hành chính + Lao động + Đất đai + SHTT + Thuế) + 3 mức độ + 3 loại. PATCH 5 cũ + POST 1 mới. [seed-checklist R8](../output/qa-reports/round8-2026-05-08/seed/dao-tao/seed-checklist-r7-3-8-nhch-kich-hoat.md) · [list final](../output/qa-reports/round8-2026-05-08/seed/dao-tao/r7-3-8-nhch-list-6-kich-hoat-final.png)
@@ -40,7 +40,7 @@
 - ✅ **R7.3.9** 🔄 Seed 5 ĐKT entry NHAP cover 5 LV <a id="r7-3-9"></a>
   - **Kết quả:** R8 PASS 5/5 NHAP THU_CONG mode cover 5 LV (Hành chính + Lao động + Đất đai + SHTT + Thuế). 1 NHCH/đề. Unblock R7.4.B10 + R7.7.6. [seed-checklist R8](../output/qa-reports/round8-2026-05-08/seed/dao-tao/seed-checklist-r7-3-9-dkt.md) · [list final](../output/qa-reports/round8-2026-05-08/seed/dao-tao/r7-3-9-dkt-list-5-nhap-final.png)
   - **Spec:** FR-III-NEW-01 line 1324
-  - **Bug:** [bug-report-seed-r7-3-9-dkt-nhch.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-seed-r7-3-9-dkt-nhch.md) — 2/2 đóng FE (DKT-FE-01 + NHCH-STATE-01 Closed).
+  - **Bug:** [Pass-bug-report-seed-r7-3-9-dkt-nhch.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/Pass-bug-report-seed-r7-3-9-dkt-nhch.md) — 2/2 đóng FE (DKT-FE-01 + NHCH-STATE-01 Closed).
 
 - ✅ **R7.3.10** 🔄 Seed 8 bài giảng (R8 hoàn tất Slide/PDF) <a id="r7-3-10"></a>
   - **Kết quả:** R8 PASS 8/8 — 5 VIDEO (R7) + 1 SLIDE Hành chính + 2 PDF (Dân sự + Doanh nghiệp). Cover 3 loại + 7 LV. Direct API JSON body (BE schema dùng `fileUrl + dungLuong` flat thay vì SRS field `file_bai_giang` nested). [seed-checklist R8](../output/qa-reports/round8-2026-05-08/seed/dao-tao/seed-checklist-r7-3-10-bai-giang.md) · [list final](../output/qa-reports/round8-2026-05-08/seed/dao-tao/r7-3-10-bai-giang-list-8-final.png)
@@ -70,7 +70,7 @@
 
 - ✅ **R7.4.B5b** 🔄 ~~Publish NHCH NHAP→CONG_KHAI~~ — **CLOSED N/A do spec drift** <a id="r7-4-b5b"></a>
   - **Kết quả:** N/A — workflow này KHÔNG TỒN TẠI trong impl. Task description dựa trên `FR-III-09 Inputs row 7` quy định 3 state `NHAP/CONG_KHAI/AN` nhưng `Entity §3.4.3.21 row 9` (authoritative) chỉ có 2 state `KICH_HOAT/VO_HIEU_HOA`. State machine thực = toggle 2 state (verified R7.3.8 R8 PATCH 5/5 OK).
-  - **Bug:** Đã cover bởi [BUG-SRS-NHCH-STATE-01](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-seed-r7-3-9-dkt-nhch.md) — Closed FE side 2026-05-07 (form default KICH_HOAT đúng). **SRS doc-side chưa fix** — `FR-III-09 line 783` vẫn ghi `NHAP/CONG_KHAI/AN` (typo copy-paste từ SM-BIEUMAU C.9), cần BA cập nhật sync về Entity §3.4.3.21.
+  - **Bug:** Đã cover bởi [BUG-SRS-NHCH-STATE-01](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/Pass-bug-report-seed-r7-3-9-dkt-nhch.md) — Closed FE side 2026-05-07 (form default KICH_HOAT đúng). **SRS doc-side chưa fix** — `FR-III-09 line 783` vẫn ghi `NHAP/CONG_KHAI/AN` (typo copy-paste từ SM-BIEUMAU C.9), cần BA cập nhật sync về Entity §3.4.3.21.
   - **Replacement workflow:** Toggle KICH_HOAT/VO_HIEU_HOA qua `PATCH /api/v1/ngan-hang-cau-hois/{id}` body `{trangThai, version}` — đã verify R7.3.8 R8 ([seed-checklist R8](../output/qa-reports/round8-2026-05-08/seed/dao-tao/seed-checklist-r7-3-8-nhch-kich-hoat.md)).
 
 - ⏳ **R7.4.B7** ✏️ Workflow KH SM-KHOAHOC 11 state (thêm TU_CHOI + TU_CHOI_KQ) — 12 bước `[need: R7.4.B1]` <a id="r7-4-b7"></a>

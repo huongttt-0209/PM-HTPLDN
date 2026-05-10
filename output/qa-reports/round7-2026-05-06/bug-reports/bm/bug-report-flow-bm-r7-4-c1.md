@@ -5,7 +5,7 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Claude Code MCP) |
-| **Ngày** | 2026-05-07 |
+| **Ngày** | 2026-05-07 13:54:12 (approx — git commit time) |
 | **Loại test** | Workflow (SM-BIEUMAU 3 transition + 4 trường công khai + BR-PUBLIC-01/02/03) |
 | **Round** | R7.4.C1 |
 | **Tài liệu tham chiếu** | [`srs-update-2026-5-5/_DELTA-MAP-FR09.md`](../../../../../input/srs-update-2026-5-5/_DELTA-MAP-FR09.md) · [`srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md`](../../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) line 1010-1117 · [`srs-fr-12-tv-chuyen-sau.md`](../../../../../input/srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md) line 1597-1613 (BR-PUBLIC-01/02/03 canonical) |
@@ -27,9 +27,9 @@ Phát hiện **6** lỗi vi phạm SRS v3.5 FR-VII (Thay đổi 1 + 3 BR mới) 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
 | BUG-BM-001 | Critical | P0 | UI/UX | R7.4.C1 / R7.7.10 | `_DELTA-MAP-FR09.md §1 Áp CR-01` + `CHANGELOG-v3-to-v3.5.md line 1029-1032` (SCR-VII-02 + FR-VII-04 Inputs) | Form Thêm/Sửa Biểu mẫu thiếu 4 trường công khai (Switch + Ảnh + Mô tả CK + File CK) | Open (partial fix R8) |
-| ~~BUG-BM-002~~ | Critical | P0 | Workflow | R7.4.C1 | `BR-PUBLIC-02` (`srs-fr-12-tv-chuyen-sau.md` line 1603-1607) | Khi BM chuyển sang `AN`, `ngayCongKhai` KHÔNG clear về NULL | Closed (R8) |
-| ~~BUG-BM-003~~ | Major | P1 | Data | R7.4.C1 | `_DELTA-MAP-FR09.md §1 Thay đổi 1.1` + `CHANGELOG-v3-to-v3.5.md line 1034` (BIEU_MAU bảng attributes rename) | BE BIEU_MAU entity chưa rename `laCongKhai → congKhai` + `ngayCongKhai → thoiGianDangTai` | Closed (R8) |
-| ~~BUG-BM-004~~ | Major | P1 | Data | R7.4.C1 | `_DELTA-MAP-FR09.md §1 Thay đổi 1.4-1.6` + `CHANGELOG-v3-to-v3.5.md line 1034` (BIEU_MAU + 4 row mới) | BE BIEU_MAU entity thiếu 3 fields công khai (`anhDaiDien`, `moTaCongKhai`, `fileDinhKemCongKhai`) | Closed (R8) |
+| ~~BUG-BM-002~~ | Critical | P0 | Workflow | R7.4.C1 | `BR-PUBLIC-02` (`srs-fr-12-tv-chuyen-sau.md` line 1603-1607) | ~~Khi BM chuyển sang `AN`, `ngayCongKhai` KHÔNG clear về NULL~~ | Closed (R8) |
+| ~~BUG-BM-003~~ | Major | P1 | Data | R7.4.C1 | `_DELTA-MAP-FR09.md §1 Thay đổi 1.1` + `CHANGELOG-v3-to-v3.5.md line 1034` (BIEU_MAU bảng attributes rename) | ~~BE BIEU_MAU entity chưa rename `laCongKhai → congKhai` + `ngayCongKhai → thoiGianDangTai`~~ | Closed (R8) |
+| ~~BUG-BM-004~~ | Major | P1 | Data | R7.4.C1 | `_DELTA-MAP-FR09.md §1 Thay đổi 1.4-1.6` + `CHANGELOG-v3-to-v3.5.md line 1034` (BIEU_MAU + 4 row mới) | ~~BE BIEU_MAU entity thiếu 3 fields công khai (`anhDaiDien`, `moTaCongKhai`, `fileDinhKemCongKhai`)~~ | Closed (R8) |
 | BUG-BM-005 | Medium | P2 | UI/UX | R7.4.C1 | `FR-VII-03 §Error Handling E1` (ERR-CK-01 "Thư mục chưa có biểu mẫu, không thể công khai") | UI silent fail — BE trả 409 ERR-CK-01 nhưng KHÔNG hiện toast/notification cho user | Open |
 | BUG-BM-006 | Medium | P2 | Data | R7.4.C1 | `FR-VII-01 §Outputs row 4` (`so_bieu_mau auto đếm`) + `SCR-VII-01 row 11` | Cột "Số biểu mẫu" trên list Thư mục không cập nhật sau khi thêm BM (vẫn 0 dù API đã có 1 BM) | Open |
 

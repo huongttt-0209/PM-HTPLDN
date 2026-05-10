@@ -170,7 +170,15 @@ Chi tiết workflow + anti-pattern: memory `feedback_todo_update_after_run` §E.
 
 **Lý do MCP > gstack:** 0% crash qua smoke (vs 20-50% gstack), 1 lần login/session (vs re-login mỗi bash do `$PPID` reset), native `list_network_requests` + `list_console_messages` inspection.
 
-**Config:** `~/.claude.json` → `mcpServers.chrome-devtools` với `npx -y chrome-devtools-mcp@latest`. Chrome window hiện (headless=false mặc định). Tool prefix: `mcp__chrome-devtools__*`.
+**Config:** `~/.claude.json` → `mcpServers.chrome-devtools` với `npx -y chrome-devtools-mcp@latest --isolated --viewport 1440x900`. Chrome window hiện (headless=false mặc định). Tool prefix: `mcp__chrome-devtools__*`.
+
+**Expected: 2 tab khi launch (do `--isolated` mode):**
+- Tab 1 `about:blank`: launcher tab tự sinh khi Chromium khởi với isolated profile. **Không cần đóng** — không tốn RAM đáng kể, không block tool, không ảnh hưởng correctness.
+- Tab 2: tab MCP `new_page()` mở để test thực tế.
+
+**KHÔNG bỏ flag `--isolated`** — flag này bắt buộc cho QA multi-role isolation (xem memory `qa_htpldn_round5_t01`). Bỏ flag = BE httpOnly cookie + localStorage sticky cross-session = role test contaminated = false positive permission. Tab `about:blank` là trade-off cosmetic chấp nhận được.
+
+**Banner "Chrome đang được phần mềm kiểm tra tự động kiểm soát":** notification chuẩn của Chrome khi có CDP client connect. Luôn xuất hiện mỗi MCP session, không phải bug.
 
 ### MCP-Rule 1: `wait_for(text)` trước mọi `fill`/`click` — signal-based
 

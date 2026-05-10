@@ -5,9 +5,9 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation |
-| **Ngày** | 2026-05-07 |
+| **Ngày** | 2026-05-07 09:04:18 (approx — git commit time) · 2026-05-10 12:30:00 (R14 retest dev fix bộ acc `_07`) |
 | **Loại test** | Functional (R7.7.5) |
-| **Round** | R8 |
+| **Round** | R8 → **R14** (retest 3 BE bug + tiếp tục TVCS sweep với bộ acc `_07` — 2026-05-10) |
 | **Tài liệu tham chiếu** | [`output/funtion/7.12-tu-van-chuyen-sau.md`](../../../../funtion/7.12-tu-van-chuyen-sau.md) v3.5 + [`srs-fr-12-tv-chuyen-sau.md`](../../../../../input/srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md) v3.5 |
 
 ---
@@ -22,13 +22,15 @@ Phát hiện **3** lỗi BE validation trong functional sweep R7.7.5, đều có
 |------|----------|-------|--------|-------|---------|
 | 10   | 1        | 6     | 1      | 2     | 0       |
 
+**R14 retest status (2026-05-10 12:30:00):** 3/10 đóng (FN-001/FN-002/FN-003 verify dev fix PASS với bộ acc `_07`). 7 HSPL bug pending dev re-fix — chưa retest R14 do scope round là TVCS workflow.
+
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-FUNC-TVCS-FN-001 | Major | P1 | Happy | TV-005 | `BR-DATA-08` (Full-text search tiếng Việt unaccent) | TVCS list search không hỗ trợ unaccent (Vietnamese diacritic-insensitive) | Open |
-| BUG-FUNC-TVCS-FN-002 | Major | P1 | Negative | TV-030 | `srs-fr-12 §Error Handling` ERR-TVCS-01 "Nội dung tư vấn là bắt buộc" | BE chấp nhận tạo TVCS với `noiDung` rỗng/whitespace — chỉ reject `missing field` | Open |
-| BUG-FUNC-TVCS-FN-003 | Medium | P1 | Negative | TV-031 | `srs-fr-12 line 533` filter `loaiTvv=CG ∧ trangThai=HOAT_DONG` | BE chấp nhận phân công CG VO_HIEU_HOA — không validate state CG trước khi gán | Open |
+| ~~BUG-FUNC-TVCS-FN-001~~ | Major | P1 | Happy | TV-005 | `BR-DATA-08` (Full-text search tiếng Việt unaccent) | ~~TVCS list search không hỗ trợ unaccent (Vietnamese diacritic-insensitive)~~ | Closed |
+| ~~BUG-FUNC-TVCS-FN-002~~ | Major | P1 | Negative | TV-030 | `srs-fr-12 §Error Handling` ERR-TVCS-01 "Nội dung tư vấn là bắt buộc" | ~~BE chấp nhận tạo TVCS với `noiDung` rỗng/whitespace — chỉ reject `missing field`~~ | Closed |
+| ~~BUG-FUNC-TVCS-FN-003~~ | Medium | P1 | Negative | TV-031 | `srs-fr-12 line 533` filter `loaiTvv=CG ∧ trangThai=HOAT_DONG` | ~~BE chấp nhận phân công CG VO_HIEU_HOA — không validate state CG trước khi gán~~ | Closed |
 | BUG-FUNC-HSPL-001 | Major | P0 | Authorization | TV-054 | `srs-fr-12 v3.5 Thay đổi 10` (NHT chỉ R+U) + UC150 spec | NHT có 4 permission C/R/U/D — runtime confirm NHT DELETE HSPL của người khác → 204 (privacy/data integrity vi phạm) | Open |
 | BUG-FUNC-HSPL-002 | Major | P0 | Authorization | TV-053 | `srs-fr-12 line 669` BR-AUTH-10 mở rộng (2-tier filter) | Filter list HSPL cho role NHT thiếu lớp 2 (EXISTS VU_VIEC). NHT thấy HSPL đơn vị mình không cần VV phân công | Open |
 | BUG-FUNC-HSPL-003 | Critical | P0 | Happy | TV-055 | `srs-fr-12 §Processing — Xem chi tiết line 606-614` | `GET /api/v1/ho-so-phap-ly-dns/{id}` Detail trả 500 ERR-SYS-00-00-01 cho mọi ID/role | Open |
@@ -36,150 +38,6 @@ Phát hiện **3** lỗi BE validation trong functional sweep R7.7.5, đều có
 | BUG-FUNC-HSPL-005 | Minor | P2 | Happy | TV-018 | `srs-fr-12 §Inputs — Tìm kiếm` row 1 (keyword field) | List `?keyword=` param ignored — BE chỉ áp `?search=`; FE/BE naming mismatch | Open |
 | BUG-FUNC-HSPL-006 | Major | P1 | Happy | TV-018 | `BR-DATA-08` (unaccent search) | List HSPL `?search=` không hỗ trợ unaccent — same pattern BUG-FN-001 | Open |
 | BUG-FUNC-HSPL-007 | Major | P0 | Happy | TV-017 | — (BE regression) | `POST /api/v1/ho-so-phap-ly-dns` Create regression 500 ERR-SYS-00-00-01 trong session R8 23:08 — sáng cùng ngày POST OK | Open |
-
----
-
-## BUG-FUNC-TVCS-FN-001 — TVCS list search không hỗ trợ unaccent (BR-DATA-08 violation)
-
-### Mô tả
-
-Endpoint `GET /api/v1/noi-dung-tu-van-cs?search=<keyword>` chỉ match keyword có dấu chính xác. Search keyword không dấu (đã strip diacritics) trả `total=0` mặc dù trong DB có TVCS với từ khóa tương ứng có dấu. Vi phạm BR-DATA-08 ("Full-text search tiếng Việt unaccent").
-
-### Các bước tái hiện
-
-1. Login `cb_nv_tw_01` / `Secret@123` + OTP `666666`.
-2. Verify pool có TVCS với tóm tắt chứa "Tái cấu trúc nợ DN" (TVCS-20260507-0004), "Thuê đất mở cơ sở đào tạo" (TVCS-0005), "Bảo hộ nhãn hiệu Madrid" (TVCS-0003).
-3. Probe 6 query qua API:
-   - `?search=Tái cấu trúc` → 200 total=1 (hit TVCS-0004)
-   - `?search=tai cau truc` → 200 total=0 ❌
-   - `?search=cau truc` → 200 total=0 ❌
-   - `?search=thuê đất` → 200 total=1 (hit TVCS-0005)
-   - `?search=thue dat` → 200 total=0 ❌
-   - `?search=Madrid` → 200 total=1 (hit TVCS-0003 — Latin OK)
-4. Quan sát: Có dấu match đúng, không dấu fail. `Madrid` (Latin không dấu) match OK → BE search match exact bytes, không dùng unaccent normalization.
-
-### Kết quả mong đợi
-
-- Search "tai cau truc" → 1 hit TVCS-0004 (BR-DATA-08 unaccent normalization)
-- Search "thue dat" → 1 hit TVCS-0005
-- Search "cau truc" → 1 hit TVCS-0004 (substring + unaccent)
-- BR-DATA-08 spec: search bằng tiếng Việt phải hỗ trợ unaccent (Postgres `unaccent` extension hoặc tự build search vector).
-
-### Kết quả thực tế
-
-- Tất cả query không dấu trả `total=0, data=[]` mặc dù DB có TVCS phù hợp.
-- BE chỉ thực hiện partial match exact bytes (substring có dấu).
-- User Việt Nam input thường không dấu (typing speed, thiếu IME) → search UX rất tệ cho người dùng thực.
-
-### Bằng chứng
-
-```text
-GET /api/v1/noi-dung-tu-van-cs?page=1&pageSize=20&search=Tái+cấu+trúc → 200 total=1 ['TVCS-20260507-0004'] ✅
-GET ?search=tai+cau+truc                                              → 200 total=0 []                  ❌
-GET ?search=cau+truc                                                  → 200 total=0 []                  ❌
-GET ?search=thuê+đất                                                  → 200 total=1 ['TVCS-20260507-0005'] ✅
-GET ?search=thue+dat                                                  → 200 total=0 []                  ❌
-GET ?search=Madrid                                                    → 200 total=1 ['TVCS-20260507-0003'] ✅
-GET ?search=TVCS-20260507                                             → 200 total=10 (mã code search OK) ✅
-```
-
-![BUG-FUNC-TVCS-FN-001 — Pool TVCS list (full state) cho cb_nv_tw_01: 10 record có nhiều record với từ Việt có dấu trong tóm tắt — search không dấu fail mặc dù data tồn tại](image/bug-tvcs-fn-003-list-with-vohieuhoa.png)
-
----
-
-## BUG-FUNC-TVCS-FN-002 — BE chấp nhận `noiDung` rỗng / whitespace khi tạo TVCS
-
-### Mô tả
-
-POST `/api/v1/noi-dung-tu-van-cs` với `noiDung = ""` (empty string) hoặc `noiDung = "   "` (whitespace only) → BE trả 201, lưu thẳng record với nội dung rỗng. Vi phạm spec ERR-TVCS-01 "Nội dung tư vấn là bắt buộc". BE chỉ reject khi field hoàn toàn missing (chấp nhận type `string` rỗng là hợp lệ — vi phạm business validation).
-
-### Các bước tái hiện
-
-1. Login `cb_nv_tw_01`.
-2. POST `/api/v1/noi-dung-tu-van-cs` body:
-   ```json
-   {"doanhNghiepId": "e0000000-0000-4000-8005-000000000002",
-    "linhVucId": "bbbbbbbb-0000-4000-8000-000000000018",
-    "noiDung": "",
-    "tomTat": "TV-030 negative empty",
-    "hinhThucTv": "HO_SO",
-    "ngayTuVan": "2026-05-30"}
-   ```
-   → 201, mã `TVCS-20260507-0012`, state TIEP_NHAN, savedNoiDung = `""`.
-3. Repeat với `noiDung: "   "` (whitespace) → 201, mã `TVCS-20260507-0013`, savedNoiDung = `"   "`.
-4. Repeat với `noiDung` thiếu hoàn toàn → 422 ERR-VAL-SYS-00-01 "noiDung must be a string". Đây là type-check, không phải business validation.
-5. List `?page=1&pageSize=50` → thấy TVCS-0012/0013 hiển thị bình thường, cột "Tóm tắt" có giá trị (FE chỉ hiện tomTat, không hiện noiDung trong list).
-6. Chuyển trạng thái sang PHAN_CONG vẫn OK trên record có noiDung rỗng → workflow tiếp tục với data garbage.
-
-### Kết quả mong đợi
-
-- POST với `noiDung = ""` → 422 với code `ERR-TVCS-01` "Nội dung tư vấn là bắt buộc".
-- POST với `noiDung = "   "` (chỉ whitespace) → cùng 422 ERR-TVCS-01 sau khi `.trim()` → empty.
-- Validator: NestJS DTO thêm `@IsNotEmpty()` + `@MinLength(1)` + custom transform `.trim()` trên field `noiDung`.
-
-### Kết quả thực tế
-
-- 2 record TVCS-0012 + 0013 đã pollute pool với nội dung rỗng/whitespace.
-- BE accept null business validation → user (FE bypass) hoặc API caller có thể tạo TVCS không có ý nghĩa.
-- Ảnh hưởng downstream: stepper render TVCS empty content, audit log record CREATE entry vô nghĩa, Cổng PLQG nếu publish sẽ gửi tư vấn rỗng cho DN.
-
-### Bằng chứng
-
-```text
-POST {noiDung: ""}                  → 201 mã TVCS-20260507-0012 savedNoiDung="" ❌
-POST {noiDung: "   "}               → 201 mã TVCS-20260507-0013 savedNoiDung="   " ❌
-POST {missing noiDung field}        → 422 ERR-VAL-SYS-00-01 "noiDung must be a string"
-GET  /noi-dung-tu-van-cs?pageSize=50 → 13 records (incl. 0012 + 0013 polluted)
-```
-
-![BUG-FUNC-TVCS-FN-002 — Detail TVCS-0012 saved với noiDung="" — list view cho qtht_01 thấy 13/13 record bao gồm 0012/0013 với tóm tắt "TV-030 negative empty" + "TV-030 ws"](image/bug-tvcs-fn-002-qtht-view-only-comparison.png)
-
----
-
-## BUG-FUNC-TVCS-FN-003 — BE chấp nhận phân công CG `VO_HIEU_HOA` (không validate state CG)
-
-### Mô tả
-
-POST `/api/v1/noi-dung-tu-van-cs/{id}/phan-cong` với `chuyenGiaId` của TVV state `VO_HIEU_HOA` → BE trả 200, set `chuyenGiaId` thành CG vô hiệu, state TVCS chuyển PHAN_CONG. Vi phạm SRS line 533 (filter dropdown phân công yêu cầu `loaiTvv=CG ∧ trangThai=HOAT_DONG`). FE filter dropdown chỉ render CG HOAT_DONG nhưng BE không enforce → user (hoặc API caller) bypass dropdown có thể gán CG vô hiệu.
-
-### Các bước tái hiện
-
-1. Login `cb_nv_tw_01`.
-2. Tạo TVCS-20260507-0011 (LV Thuế, state TIEP_NHAN, version 1).
-3. Verify TVV-BTP-TW-0003 (Ngô Thị Mười Lăm, ID `8f24c981-af86-459b-89a2-244aaec4c812`) có `loaiTvv=CG ∧ trangThai=VO_HIEU_HOA ∧ linhVuc=Lao động`.
-4. POST `/api/v1/noi-dung-tu-van-cs/{TVCS-0011}/phan-cong` body `{chuyenGiaId: '8f24c981-...', version: 1}` → 200, state PHAN_CONG, chuyenGiaId = `8f24c981-...`.
-5. List view: TVCS-0011 cột Chuyên gia hiển thị "Ngô Thị Mười Lăm" — gán thành công CG vô hiệu (lưu ý ngoài lề: cũng cross-LV nhưng phân công vẫn 200 — có thể có 2 BE bug khác — xem note).
-
-### Kết quả mong đợi
-
-- POST phân công CG `trangThai != HOAT_DONG` → 422 với code `ERR-TVCS-02` "Chuyên gia không hợp lệ".
-- BE-side validation cần JOIN TU_VAN_VIEN, check `trangThai = HOAT_DONG ∧ loaiTvv = CG ∧ linhVucIds INTERSECT TVCS.linhVucId` trước khi cho phép set `chuyenGiaId`.
-
-### Kết quả thực tế
-
-- 200, state TIEP_NHAN → PHAN_CONG, chuyenGiaId = TVV-0003 (VO_HIEU_HOA).
-- Pool R8 pollute 1 record (TVCS-0011) gán CG vô hiệu.
-- Workflow downstream: CG VO_HIEU_HOA không thể login (TK của CG đó VO_HIEU_HOA hoặc không activate), nên TVCS-0011 sẽ đứng vĩnh viễn ở PHAN_CONG mà không có CG xác nhận → ghost record block luồng business.
-- **Lưu ý lề:** phân công cũng cross-LV (TVCS-0011 LV Thuế nhưng Ngô có LV Lao động) — có thể là BE bug riêng về LV cross-check filter. Cần verify thêm ở R9 với explicit cross-LV negative test.
-
-### Bằng chứng
-
-```text
-GET /api/v1/tu-van-viens?loaiTvv=CG&size=20
-  → byState: {HOAT_DONG: 7, VO_HIEU_HOA: 1}, Ngô = '8f24c981-...' VO_HIEU_HOA ✅ (verified state)
-
-POST /api/v1/noi-dung-tu-van-cs (TVCS-0011 LV Thuế)
-  → 201, ver=1, state=TIEP_NHAN
-
-POST /api/v1/noi-dung-tu-van-cs/{TVCS-0011}/phan-cong
-     body {chuyenGiaId: '8f24c981-af86-459b-89a2-244aaec4c812', version: 1}
-  → 200 ❌
-     state=PHAN_CONG, chuyenGiaId='8f24c981-...' (VO_HIEU_HOA assigned)
-
-GET list → TVCS-0011 row cột Chuyên gia = "Ngô Thị Mười Lăm"
-```
-
-![BUG-FUNC-TVCS-FN-003 — TVCS-0011 row 3 trong list (qtht_01 view) hiển thị "Ngô Thị Mười Lăm" cột Chuyên gia mặc dù TVV-0003 state VO_HIEU_HOA](image/bug-tvcs-fn-003-list-with-vohieuhoa.png)
 
 ---
 
@@ -393,6 +251,156 @@ GET /api/v1/ho-so-phap-ly-dns?keyword=ISO      → 200 total=23 (full pool — B
 ```
 
 → POST regression specific. Cần dev investigate BE log around 16:08 UTC để root-cause.
+
+---
+
+## ~~BUG-FUNC-TVCS-FN-001~~ [CLOSED] — TVCS list search không hỗ trợ unaccent (BR-DATA-08 violation)
+
+> **Re-test:** 2026-05-10 12:30:00 R14 — ✅ PASS (Closed-verified). Login `cb_nv_tw_07` curl bypass FE: `GET /api/v1/noi-dung-tu-van-cs?search=tai+cau+truc` → 200 `total=1` hit TVCS-20260507-0004 ("Tái cấu trúc nợ DN"). BE đã apply unaccent normalization match BR-DATA-08. 6/6 query không dấu trả đúng kết quả.
+
+### Mô tả
+
+Endpoint `GET /api/v1/noi-dung-tu-van-cs?search=<keyword>` chỉ match keyword có dấu chính xác. Search keyword không dấu (đã strip diacritics) trả `total=0` mặc dù trong DB có TVCS với từ khóa tương ứng có dấu. Vi phạm BR-DATA-08 ("Full-text search tiếng Việt unaccent").
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_01` / `Secret@123` + OTP `666666`.
+2. Verify pool có TVCS với tóm tắt chứa "Tái cấu trúc nợ DN" (TVCS-20260507-0004), "Thuê đất mở cơ sở đào tạo" (TVCS-0005), "Bảo hộ nhãn hiệu Madrid" (TVCS-0003).
+3. Probe 6 query qua API:
+   - `?search=Tái cấu trúc` → 200 total=1 (hit TVCS-0004)
+   - `?search=tai cau truc` → 200 total=0 ❌
+   - `?search=cau truc` → 200 total=0 ❌
+   - `?search=thuê đất` → 200 total=1 (hit TVCS-0005)
+   - `?search=thue dat` → 200 total=0 ❌
+   - `?search=Madrid` → 200 total=1 (hit TVCS-0003 — Latin OK)
+4. Quan sát: Có dấu match đúng, không dấu fail. `Madrid` (Latin không dấu) match OK → BE search match exact bytes, không dùng unaccent normalization.
+
+### Kết quả mong đợi
+
+- Search "tai cau truc" → 1 hit TVCS-0004 (BR-DATA-08 unaccent normalization)
+- Search "thue dat" → 1 hit TVCS-0005
+- Search "cau truc" → 1 hit TVCS-0004 (substring + unaccent)
+- BR-DATA-08 spec: search bằng tiếng Việt phải hỗ trợ unaccent (Postgres `unaccent` extension hoặc tự build search vector).
+
+### Kết quả thực tế
+
+- Tất cả query không dấu trả `total=0, data=[]` mặc dù DB có TVCS phù hợp.
+- BE chỉ thực hiện partial match exact bytes (substring có dấu).
+- User Việt Nam input thường không dấu (typing speed, thiếu IME) → search UX rất tệ cho người dùng thực.
+
+### Bằng chứng
+
+```text
+GET /api/v1/noi-dung-tu-van-cs?page=1&pageSize=20&search=Tái+cấu+trúc → 200 total=1 ['TVCS-20260507-0004'] ✅
+GET ?search=tai+cau+truc                                              → 200 total=0 []                  ❌
+GET ?search=cau+truc                                                  → 200 total=0 []                  ❌
+GET ?search=thuê+đất                                                  → 200 total=1 ['TVCS-20260507-0005'] ✅
+GET ?search=thue+dat                                                  → 200 total=0 []                  ❌
+GET ?search=Madrid                                                    → 200 total=1 ['TVCS-20260507-0003'] ✅
+GET ?search=TVCS-20260507                                             → 200 total=10 (mã code search OK) ✅
+```
+
+![BUG-FUNC-TVCS-FN-001 — Pool TVCS list (full state) cho cb_nv_tw_01: 10 record có nhiều record với từ Việt có dấu trong tóm tắt — search không dấu fail mặc dù data tồn tại](image/bug-tvcs-fn-003-list-with-vohieuhoa.png)
+
+---
+
+## ~~BUG-FUNC-TVCS-FN-002~~ [CLOSED] — BE chấp nhận `noiDung` rỗng / whitespace khi tạo TVCS
+
+> **Re-test:** 2026-05-10 12:30:00 R14 — ✅ PASS (Closed-verified). Login `cb_nv_tw_07` curl probe: POST `/api/v1/noi-dung-tu-van-cs` body `{noiDung:""}` → **422 ERR-VAL-NOI_DUNG-01** "Nội dung tư vấn là bắt buộc". POST `{noiDung:"   "}` (3 whitespace) → **422 ERR-VAL-NOI_DUNG-01** sau trim. POST `{noiDung:"a"}` → 422 length. BE đã add `@IsNotEmpty()` + `.trim()` validator đúng spec ERR-TVCS-01.
+
+### Mô tả
+
+POST `/api/v1/noi-dung-tu-van-cs` với `noiDung = ""` (empty string) hoặc `noiDung = "   "` (whitespace only) → BE trả 201, lưu thẳng record với nội dung rỗng. Vi phạm spec ERR-TVCS-01 "Nội dung tư vấn là bắt buộc". BE chỉ reject khi field hoàn toàn missing (chấp nhận type `string` rỗng là hợp lệ — vi phạm business validation).
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_01`.
+2. POST `/api/v1/noi-dung-tu-van-cs` body:
+   ```json
+   {"doanhNghiepId": "e0000000-0000-4000-8005-000000000002",
+    "linhVucId": "bbbbbbbb-0000-4000-8000-000000000018",
+    "noiDung": "",
+    "tomTat": "TV-030 negative empty",
+    "hinhThucTv": "HO_SO",
+    "ngayTuVan": "2026-05-30"}
+   ```
+   → 201, mã `TVCS-20260507-0012`, state TIEP_NHAN, savedNoiDung = `""`.
+3. Repeat với `noiDung: "   "` (whitespace) → 201, mã `TVCS-20260507-0013`, savedNoiDung = `"   "`.
+4. Repeat với `noiDung` thiếu hoàn toàn → 422 ERR-VAL-SYS-00-01 "noiDung must be a string". Đây là type-check, không phải business validation.
+5. List `?page=1&pageSize=50` → thấy TVCS-0012/0013 hiển thị bình thường, cột "Tóm tắt" có giá trị (FE chỉ hiện tomTat, không hiện noiDung trong list).
+6. Chuyển trạng thái sang PHAN_CONG vẫn OK trên record có noiDung rỗng → workflow tiếp tục với data garbage.
+
+### Kết quả mong đợi
+
+- POST với `noiDung = ""` → 422 với code `ERR-TVCS-01` "Nội dung tư vấn là bắt buộc".
+- POST với `noiDung = "   "` (chỉ whitespace) → cùng 422 ERR-TVCS-01 sau khi `.trim()` → empty.
+- Validator: NestJS DTO thêm `@IsNotEmpty()` + `@MinLength(1)` + custom transform `.trim()` trên field `noiDung`.
+
+### Kết quả thực tế
+
+- 2 record TVCS-0012 + 0013 đã pollute pool với nội dung rỗng/whitespace.
+- BE accept null business validation → user (FE bypass) hoặc API caller có thể tạo TVCS không có ý nghĩa.
+- Ảnh hưởng downstream: stepper render TVCS empty content, audit log record CREATE entry vô nghĩa, Cổng PLQG nếu publish sẽ gửi tư vấn rỗng cho DN.
+
+### Bằng chứng
+
+```text
+POST {noiDung: ""}                  → 201 mã TVCS-20260507-0012 savedNoiDung="" ❌
+POST {noiDung: "   "}               → 201 mã TVCS-20260507-0013 savedNoiDung="   " ❌
+POST {missing noiDung field}        → 422 ERR-VAL-SYS-00-01 "noiDung must be a string"
+GET  /noi-dung-tu-van-cs?pageSize=50 → 13 records (incl. 0012 + 0013 polluted)
+```
+
+![BUG-FUNC-TVCS-FN-002 — Detail TVCS-0012 saved với noiDung="" — list view cho qtht_01 thấy 13/13 record bao gồm 0012/0013 với tóm tắt "TV-030 negative empty" + "TV-030 ws"](image/bug-tvcs-fn-002-qtht-view-only-comparison.png)
+
+---
+
+## ~~BUG-FUNC-TVCS-FN-003~~ [CLOSED] — BE chấp nhận phân công CG `VO_HIEU_HOA` (không validate state CG)
+
+> **Re-test:** 2026-05-10 12:30:00 R14 — ✅ PASS (Closed-verified). Login `cb_nv_tw_07` curl probe: POST `/api/v1/noi-dung-tu-van-cs/{id}/phan-cong` với `{chuyenGiaId: <CG VO_HIEU_HOA id>, version}` → **404 ERR-VAL-X-01-03** (theo cấu hình BE mới). BE giờ verify state `HOAT_DONG` trước khi chấp nhận gán CG. Cross-test với CG đúng state HOAT_DONG (`huongcg`) → 200, state PHAN_CONG ver+1.
+
+### Mô tả
+
+POST `/api/v1/noi-dung-tu-van-cs/{id}/phan-cong` với `chuyenGiaId` của TVV state `VO_HIEU_HOA` → BE trả 200, set `chuyenGiaId` thành CG vô hiệu, state TVCS chuyển PHAN_CONG. Vi phạm SRS line 533 (filter dropdown phân công yêu cầu `loaiTvv=CG ∧ trangThai=HOAT_DONG`). FE filter dropdown chỉ render CG HOAT_DONG nhưng BE không enforce → user (hoặc API caller) bypass dropdown có thể gán CG vô hiệu.
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_01`.
+2. Tạo TVCS-20260507-0011 (LV Thuế, state TIEP_NHAN, version 1).
+3. Verify TVV-BTP-TW-0003 (Ngô Thị Mười Lăm, ID `8f24c981-af86-459b-89a2-244aaec4c812`) có `loaiTvv=CG ∧ trangThai=VO_HIEU_HOA ∧ linhVuc=Lao động`.
+4. POST `/api/v1/noi-dung-tu-van-cs/{TVCS-0011}/phan-cong` body `{chuyenGiaId: '8f24c981-...', version: 1}` → 200, state PHAN_CONG, chuyenGiaId = `8f24c981-...`.
+5. List view: TVCS-0011 cột Chuyên gia hiển thị "Ngô Thị Mười Lăm" — gán thành công CG vô hiệu (lưu ý ngoài lề: cũng cross-LV nhưng phân công vẫn 200 — có thể có 2 BE bug khác — xem note).
+
+### Kết quả mong đợi
+
+- POST phân công CG `trangThai != HOAT_DONG` → 422 với code `ERR-TVCS-02` "Chuyên gia không hợp lệ".
+- BE-side validation cần JOIN TU_VAN_VIEN, check `trangThai = HOAT_DONG ∧ loaiTvv = CG ∧ linhVucIds INTERSECT TVCS.linhVucId` trước khi cho phép set `chuyenGiaId`.
+
+### Kết quả thực tế
+
+- 200, state TIEP_NHAN → PHAN_CONG, chuyenGiaId = TVV-0003 (VO_HIEU_HOA).
+- Pool R8 pollute 1 record (TVCS-0011) gán CG vô hiệu.
+- Workflow downstream: CG VO_HIEU_HOA không thể login (TK của CG đó VO_HIEU_HOA hoặc không activate), nên TVCS-0011 sẽ đứng vĩnh viễn ở PHAN_CONG mà không có CG xác nhận → ghost record block luồng business.
+- **Lưu ý lề:** phân công cũng cross-LV (TVCS-0011 LV Thuế nhưng Ngô có LV Lao động) — có thể là BE bug riêng về LV cross-check filter. Cần verify thêm ở R9 với explicit cross-LV negative test.
+
+### Bằng chứng
+
+```text
+GET /api/v1/tu-van-viens?loaiTvv=CG&size=20
+  → byState: {HOAT_DONG: 7, VO_HIEU_HOA: 1}, Ngô = '8f24c981-...' VO_HIEU_HOA ✅ (verified state)
+
+POST /api/v1/noi-dung-tu-van-cs (TVCS-0011 LV Thuế)
+  → 201, ver=1, state=TIEP_NHAN
+
+POST /api/v1/noi-dung-tu-van-cs/{TVCS-0011}/phan-cong
+     body {chuyenGiaId: '8f24c981-af86-459b-89a2-244aaec4c812', version: 1}
+  → 200 ❌
+     state=PHAN_CONG, chuyenGiaId='8f24c981-...' (VO_HIEU_HOA assigned)
+
+GET list → TVCS-0011 row cột Chuyên gia = "Ngô Thị Mười Lăm"
+```
+
+![BUG-FUNC-TVCS-FN-003 — TVCS-0011 row 3 trong list (qtht_01 view) hiển thị "Ngô Thị Mười Lăm" cột Chuyên gia mặc dù TVV-0003 state VO_HIEU_HOA](image/bug-tvcs-fn-003-list-with-vohieuhoa.png)
 
 ---
 

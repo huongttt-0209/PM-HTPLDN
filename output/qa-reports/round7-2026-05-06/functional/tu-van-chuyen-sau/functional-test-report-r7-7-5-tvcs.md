@@ -5,15 +5,45 @@
 | **Module** | Tư vấn chuyên sâu (FR-12 · Nhóm X.1) |
 | **Spec** | [`output/funtion/7.12-tu-van-chuyen-sau.md`](../../../../funtion/7.12-tu-van-chuyen-sau.md) v3.5 (61 TC = 44 base + 17 mới v3.5) |
 | **SRS** | [`srs-fr-12-tv-chuyen-sau.md`](../../../../../input/srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md) v3.5 |
-| **Round** | R8 (2026-05-07) |
+| **Round** | R8 (2026-05-07) → **R14 (2026-05-10 12:30:00 — retest 3 BE bug + bộ acc `_07`)** |
 | **Tester** | QA Automation (Chrome DevTools MCP) |
-| **Pre-req** | R7.2.6 ✅ 8 CG `HOAT_DONG` + R7.4.A5 R8 ⚠️ 13 TVCS pool (10 main + 3 negative-test) + DN 23 records |
-| **Workflow đi kèm** | [workflow-test-report-r7-4-a5-tvcs.md](../../workflow/tu-van-chuyen-sau/workflow-test-report-r7-4-a5-tvcs.md) (3/11 PASS) |
+| **Pre-req** | R7.2.6 ✅ 8 CG `HOAT_DONG` + R7.4.A5 R14 ⚠️ 14 TVCS pool (10 main + 3 negative-test + TVCS-20260510-0001 self-create cb_nv_tw_07 → HUY) + DN 23 records |
+| **Workflow đi kèm** | [workflow-test-report-r7-4-a5-tvcs.md](../../workflow/tu-van-chuyen-sau/workflow-test-report-r7-4-a5-tvcs.md) (R14: 7/11 PASS) |
 | **Bug report** | [bug-report-r7-7-5-tvcs.md](../../bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs.md) |
 
 ---
 
-## Verdict R8 (sau seed R7.3.4 + sweep HSPL R8)
+## Verdict R14 (LATEST · 2026-05-10 12:30:00) — retest 3 BE bug + bộ acc `_07`
+
+⚠️ **PARTIAL 35/61 PASS · 13 BLOCKED · 12 SKIP · 1 FAIL · 7 BUG (3/10 đóng)**
+
+| Type | PASS | BLOCKED | SKIP | FAIL | Total |
+|---|---:|---:|---:|---:|---:|
+| Happy | 17 | 0 | 1 | 0 | 18 |
+| Negative | 6 | 0 | 4 | 0 | 10 |
+| Workflow | 6 | 12 | 4 | 0 | 22 |
+| Authorization | 4 | 0 | 1 | 1 | 6 |
+| Cross-module | 2 | 1 | 2 | 0 | 5 |
+| **Tổng** | **35** | **13** | **12** | **1** | **61** |
+
+**R14 changes vs R8:**
+
+- ✅ **TV-005** FAIL → **PASS** (BUG-FN-001 unaccent search dev fix verified với cb_nv_tw_07).
+- ✅ **TV-008** ⚠️ Partial → **PASS** (B10 `TIEP_NHAN→HUY` self-creator workflow PASS với cb_nv_tw_07: tạo TVCS-20260510-0001 → tự hủy `lyDo` ≥10 chars).
+- ✅ **TV-009** BLOCKED → **PASS** (BUG-A5-001 closed R11/R14 — huongcg [Chấp nhận] TVCS-0002 PHAN_CONG → DANG_TU_VAN ver+1 với chuyên môn Đất đai match).
+- ✅ **TV-030** FAIL → **PASS** (BUG-FN-002 dev fix verified — POST `noiDung=""` → 422, `"   "` → 422).
+- ✅ **TV-031** FAIL → **PASS** (BUG-FN-003 dev fix verified — phân công CG VO_HIEU_HOA → 404 ERR-VAL-X-01-03).
+
+**Lý do non-PASS R14:**
+- **13 BLOCKED** — 12 cascade BUG-FE-A5-004 (B6+B7+B8+B9+B11 fail BE → block TV-012/013/014/015/016/021/022/040 + 4 TLPL endpoint TC-023/024/025/026/034/036) + 1 cross-module Cascade.
+- **12 SKIP** — không đổi vs R8 (6 API inbound + 3 NHT/DN không CMS + 3 v3.5 cross out-of-MCP).
+- **1 FAIL** — TV-054 (BUG-HSPL-001 NHT permission overgrant runtime confirmed).
+
+**HSPL bugs (BUG-HSPL-001..007)** chưa retest R14 do scope round là TVCS workflow + bộ acc `_07` không có CB ĐP/NHT cùng đơn vị scope.
+
+---
+
+## Verdict R8 (sau seed R7.3.4 + sweep HSPL R8) — archive
 
 ⚠️ **PARTIAL 31/61 PASS · 14 BLOCKED · 12 SKIP · 4 FAIL · 7 BUG**
 
@@ -61,11 +91,11 @@
 | **TV-002** | Detail + tab Thông tin/Tư liệu PL/Đánh giá/Nhật ký + stepper SM-TVCS | Happy | P0 | ✅ | Detail có 30+ field bao gồm v3.5 (`congKhai`, `nguon`, `maNoiDungCong`, `thoiGianDangTai`). Stepper 6 bước (TIEP_NHAN→PHAN_CONG→DANG_TU_VAN→HOAN_THANH→CHO_PHE_DUYET→DA_DUYET) render đầy đủ. 3 accordion (TLPL/Đánh giá/Nhật ký) render empty state hợp lệ. |
 | **TV-003** | Tạo YC TVCS mới + auto-gen mã (BR-DATA-04) | Happy | P0 | ✅ | POST → 201, `maTuVan = TVCS-20260507-0011` matches regex `TVCS-YYYYMMDD-NNNN` ✅. State TIEP_NHAN, ver=1. `nguon=THU_CONG`. |
 | **TV-004** | Cập nhật YC ở state TIEP_NHAN (sửa nội dung, ghi chú) | Happy | P1 | ✅ | PATCH TVCS-0010 (TIEP_NHAN) → 200, `tomTat`+`ghiChu` mới reflect. State preserved. Note: BE cũng accept PATCH ở state PHAN_CONG (chưa kiểm immutability per state). |
-| **TV-005** | Tìm kiếm full-text (BR-DATA-08 unaccent) | Happy | P0 | ❌ | Có dấu OK ("Tái cấu trúc"→1 hit, "thuê đất"→1 hit, "Madrid"→1 hit). **KHÔNG dấu** thất bại ("tai cau truc"→0 hit, "thue dat"→0 hit). Vi phạm BR-DATA-08. **BUG-FUNC-TVCS-FN-001**. |
+| **TV-005** | Tìm kiếm full-text (BR-DATA-08 unaccent) | Happy | P0 | ✅ | **R14 retest:** ✅ PASS (BUG-FN-001 closed). cb_nv_tw_07 curl `?search=tai+cau+truc` → 200 total=1 hit TVCS-0004; `?search=thue+dat` → 200 total=1 hit TVCS-0005. BE đã apply unaccent normalization match BR-DATA-08. R8 archive: ❌ FAIL có dấu OK / không dấu fail. |
 | **TV-006** | Search combined (CG + LV + state + dateRange AND) | Happy | P1 | ✅ | `?chuyenGiaId=Lý&linhVucId=DN&trangThai=PHAN_CONG` → 1 hit TVCS-0004 (correct AND logic). |
 | **TV-007** | CB NV phân công CG TIEP_NHAN→PHAN_CONG | Workflow | P0 | ✅ | Cover trong [A5 R8 B2 6/6 LV](../../workflow/tu-van-chuyen-sau/workflow-test-report-r7-4-a5-tvcs.md). Dropdown filter `loaiTvv=CG ∧ trangThai=HOAT_DONG ∧ linhVucIds` đúng. |
-| **TV-008** | CB NV hủy YC TIEP_NHAN→HUY | Workflow | P1 | ⚠️ | A5 R8 B10 cover scope `PHAN_CONG → HUY` (không phải `TIEP_NHAN → HUY`). Spec test path → cần verify thêm cho TIEP_NHAN. Chưa fail nhưng partial. |
-| **TV-009** | CG xác nhận PHAN_CONG→DANG_TU_VAN | Workflow | P0 | 🚫 | BUG-FUNC-TVCS-A5-001 (Critical) — `/xac-nhan` endpoint reject 403 cho assigned CG. |
+| **TV-008** | CB NV hủy YC TIEP_NHAN→HUY | Workflow | P1 | ✅ | **R14 retest:** ✅ PASS. cb_nv_tw_07 self-create TVCS-20260510-0001 (Đất đai) state TIEP_NHAN → POST `/huy {lyDo:"R14 cancel test - khong co nhu cau"}` (10+ chars) → 200 → state HUY ver+1. Self-creator can cancel TIEP_NHAN per SRS line 537. R8 archive: ⚠️ partial (chỉ test PHAN_CONG→HUY, không phải TIEP_NHAN→HUY). |
+| **TV-009** | CG xác nhận PHAN_CONG→DANG_TU_VAN | Workflow | P0 | ✅ | **R14 retest:** ✅ PASS (BUG-A5-001 closed-verified). huongcg login isolated context, click row TVCS-20260509-0002 → click [Chấp nhận] modal → POST `/xac-nhan {quyetDinh:CHAP_NHAN, version:2}` 200 ver=3 DANG_TU_VAN, ngayBatDau auto-set "2026-05-10". UI stepper progress check 1+2. R8 archive: 🚫 BLOCKED bug 403. |
 | **TV-010** | CG từ chối phân công + lý do | Workflow | P1 | 🚫 | Cascade BUG-A5-001 (cùng endpoint). |
 | **TV-011** | Timeout 2 ngày LV → auto-reject | Workflow | P1 | ⏭ | External cron BE — out of CMS scope. |
 | **TV-012** | CG tích "Hoàn thành" (kèm VB TVPL) | Workflow | P0 | 🚫 | Cascade B3 (chưa reach DANG_TU_VAN). |
@@ -86,21 +116,21 @@
 | **TV-027** | API inbound TVCS Cổng PLQG (UC149) payload hợp lệ | Workflow | P0 | ⏭ | Out-of-MCP — cần Postman + API key. |
 | **TV-028** | API inbound HSPL Cổng PLQG (UC151) | Workflow | P1 | ⏭ | Out-of-MCP. |
 | **TV-029** | API inbound Đánh giá CL idempotent (UC153) | Workflow | P1 | ⏭ | Out-of-MCP. |
-| **TV-030** | Tạo TVCS với `noiDung` trống → ERR-TVCS-01 | Negative | P1 | ❌ | BE chấp nhận `""` và `"   "` (whitespace) — chỉ reject `missing field` (422 type-check). Vi phạm spec. **BUG-FUNC-TVCS-FN-002**. |
-| **TV-031** | Phân công CG NGUNG_HOAT_DONG → ERR-TVCS-02 | Negative | P1 | ❌ | BE chấp nhận phân công CG `VO_HIEU_HOA` (Ngô TVV-0003). Vi phạm SRS line 533 filter `trangThai=HOAT_DONG`. **BUG-FUNC-TVCS-FN-003**. |
+| **TV-030** | Tạo TVCS với `noiDung` trống → ERR-TVCS-01 | Negative | P1 | ✅ | **R14 retest:** ✅ PASS (BUG-FN-002 closed). cb_nv_tw_07 POST `{noiDung:""}` → 422 ERR-VAL-NOI_DUNG-01 "Nội dung tư vấn là bắt buộc"; POST `{noiDung:"   "}` (3 whitespace) → 422 ERR-VAL-NOI_DUNG-01 sau trim. BE add `@IsNotEmpty()` + `.trim()` validator đúng spec. R8 archive: ❌ FAIL (BE accept "" + whitespace). |
+| **TV-031** | Phân công CG NGUNG_HOAT_DONG → ERR-TVCS-02 | Negative | P1 | ✅ | **R14 retest:** ✅ PASS (BUG-FN-003 closed). cb_nv_tw_07 POST `/phan-cong` với CG VO_HIEU_HOA id → **404 ERR-VAL-X-01-03** "CG không hoạt động hoặc không tồn tại". Cross-test với huongcg HOAT_DONG → 200 PASS. BE đã verify state CG trước khi gán. R8 archive: ❌ FAIL (BE accept CG VO_HIEU_HOA). |
 | **TV-032** | Skip-step transition TIEP_NHAN→DA_DUYET → ERR-TVCS-04 | Negative | P1 | ✅ | Endpoint `/approve` (probed) trả 409 ERR-STATE-TVCS-APPROVE-01 "Khong the 'approve' khi trang thai la 'PHAN_CONG'". `/phe-duyet` 404 (different naming). State guard hoạt động. |
 | **TV-033** | CB PD KHÁC cấp duyệt → 403 (BR-AUTH-05) | Negative | P0 | ⚠️ | Pattern verified ở [R7.4.A1-CG TC-10/11](../../workflow/tu-van-vien-cg/workflow-test-report-r7-4-a1-cg.md) (cb_pd_dp_02 → 403 ERR-AUTH-VPD-00-01 cho TVV TW). TVCS-specific cần CHO_PHE_DUYET state — cascade. |
 | **TV-034** | Công khai TLPL chưa có file → ERR-TLPL-05 | Negative | P1 | 🚫 | Cascade TLPL endpoint. |
 | **TV-035** | API inbound payload trùng `ma_noi_dung_cong` → ERR-TVCS-API-03 | Negative | P1 | ⏭ | Out-of-MCP API inbound. |
 | **TV-036** | Upload file >20MB / virus EC-FILE-01 | Negative | P1 | 🚫 | Cascade TLPL endpoint. |
-| **TV-037** | QTHT view-only (R only, không C/U/D/phê duyệt) | Authorization | P1 | ✅ | qtht_01 list 13/13 record ✅. UI: row KHÔNG có button team/edit/delete; toolbar KHÔNG có "Tạo mới"/"Xuất Excel"; không có "Hủy yêu cầu" button trong detail. API: POST create → 403 ERR-PERM, POST phan-cong → 403, DELETE → 403. ✅ End-to-end. |
+| **TV-037** | QTHT view-only (R only, không C/U/D/phê duyệt) | Authorization | P1 | ✅ | **R14 retest:** ✅ PASS với qtht_07. `auth/me.permissions` filter `noi_dung_tu_van` → **0 perm** (KHÔNG có read/create/update/delete TVCS). 4 mutation API: POST create → 403 ERR-PERM-SYS-00-01; PATCH update → 403; DELETE → 403; POST phan-cong → 403. R8 archive: ✅ qtht_01 cùng pattern. |
 | **TV-038** | CB NV BN không thấy TVCS BN khác (BR-AUTH-08) | Authorization | P0 | ⏭ | Defer — toàn bộ pool R8 là cấp TW. Cần seed thêm cấp BN/ĐP cho R7.7.5 BN sweep R9. |
 | **TV-039** | NHT/DN không thấy menu "Tư vấn chuyên sâu" trong CMS | Authorization | P1 | ⏭ | DN role không có CMS access (out-of-spec scope). NHT login mới activated qua R7.2.9 nhưng spec bỏ menu — verify ở R7.7.4.5 NHT functional. |
 | **TV-040** | TVCS DA_DUYET trigger update điểm TB CG (cross UC153) | Cross-module | P1 | 🚫 | Cascade — không có DA_DUYET. |
 | **TV-041** | TVCS link `vu_viec_id` cross VV module | Cross-module | P2 | 🚫 | Spec mention `vuViecId` field nullable — verified field present trong detail (TV-002). Test link cần seed VV (R7.4.A3 ⏳). |
 | **TV-042** | API inbound HSPL upsert DN theo MST | Cross-module | P2 | ⏭ | Out-of-MCP API inbound. |
 | **TV-043** | TLPL công khai → hiển thị qua API Cổng PLQG | Cross-module | P2 | ⏭ | Out-of-MCP external Cổng PLQG. |
-| **TV-044** | Audit log đủ CREATE/UPDATE/PHAN_CONG/HUY/etc. | Cross-module | P1 | ✅ | qtht_01 → `GET /api/v1/audit-logs?entityType=NOI_DUNG_TU_VAN_CS` → 25 entries, cover CREATE/UPDATE/PHAN_CONG actions từ 13 TVCS. (Note: cb_nv_tw_01 không có quyền audit-logs — 403, cần qtht_01 hoặc admin.) |
+| **TV-044** | Audit log đủ CREATE/UPDATE/PHAN_CONG/HUY/etc. | Cross-module | P1 | ✅ | **R14 retest:** ✅ PASS với qtht_07. `GET /api/v1/audit-logs?entity=noi_dung_tu_van_cs&entityId=1ddf8102-...` → 200 total=3 entries: CREATE (R10 cb_nv_tw_06), PHAN_CONG (R14 cb_nv_tw_07), UPDATE (R14 huongcg B3 [Chấp nhận]). ⚠️ **Minor obs:** B3 transition log ghi nhận `hanhDong=UPDATE` (không phải `CHAP_NHAN` hay `XAC_NHAN`) — semantic action không reflect đúng tên transition (low-priority data quality, không log bug riêng). R8 archive: cùng pattern qtht_01. |
 | **TV-045** `[v3.5]` | Bật `cong_khai=1` cho DA_DUYET + 5 trường + auto `thoiGianDangTai` | Workflow | P0 | 🚫 | Cascade — không có DA_DUYET. Field `congKhai`/`thoiGianDangTai`/`moTaCongKhai`/`fileDinhKemCongKhai`/`anhDaiDien` đã expose trong detail ✅. |
 | **TV-046** `[v3.5]` | Bật `cong_khai=1` khi chưa DA_DUYET → ERR-PUBLIC-01 (BR-PUBLIC-01) | Negative | P0 | 🚫 | Cascade. Endpoint `/cong-khai` chưa probe. |
 | **TV-047** `[v3.5]` | Hủy cong_khai 1→0 → clear `thoiGianDangTai` (BR-PUBLIC-02) | Workflow | P0 | 🚫 | Cascade. |

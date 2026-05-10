@@ -5,7 +5,7 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Claude Code via MCP Chrome DevTools) |
-| **Ngày** | 2026-05-08 |
+| **Ngày** | 2026-05-08 09:04:18 (approx — git commit time) |
 | **Loại test** | Verification (R7.5.4 BC04 export Excel HD/VV — re-test R6.5.4) |
 | **Round** | R7 |
 | **Tài liệu tham chiếu** | [verification-test-report-r7-5-4-bc-export.md](../../workflow/bao-cao/verification-test-report-r7-5-4-bc-export.md) · `tasks/todo.md` R7.5.4 · R6 origin: [bug-report-flow-bao-cao.md](../../../round6-2026-05-01-postreset/bug-reports/bug-report-flow-bao-cao.md) |
@@ -26,12 +26,15 @@ Re-test 2 bug log từ R6.5.4 (BUG-BC-EXPORT-001 + BUG-BC-LEGEND-001). **Cả 2 
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-BC-EXPORT-001 | Critical | P0 | Data | R7.5.4 | `FR-12 Báo cáo §Xuất file` | API `/bao-cao/export` body vẫn JSON wrap NestJS `StreamableFile` (header đã sửa sang xlsx mime nhưng body chưa pipe stream) — file `.xlsx` tải về không mở được | Open (still) |
+| ~~BUG-BC-EXPORT-001~~ | Critical | P0 | Data | R7.5.4 | `FR-12 Báo cáo §Xuất file` | ~~API `/bao-cao/export` body vẫn JSON wrap NestJS `StreamableFile` — file `.xlsx` tải về không mở được~~ | **Closed (R2)** |
 | BUG-BC-LEGEND-001 | Minor | P3 | UI/UX | R7.5.4 | `FR-12 Báo cáo §Trình bày kết quả — Biểu đồ` | Pie chart legend hiển thị raw enum/UUID (`bbbbbbbb-...000013` cho LV, `TRUC_TIEP` cho kênh tiếp nhận) thay vì label hiển thị | Open (still) |
 
 ---
 
-## BUG-BC-EXPORT-001 — API `/bao-cao/export` body JSON wrap, file xlsx tải về không mở được (R7 regression: header đã đúng nhưng body chưa fix → tệ hơn R6)
+## ~~BUG-BC-EXPORT-001~~ [CLOSED] — API `/bao-cao/export` body JSON wrap, file xlsx tải về không mở được (R7 regression: header đã đúng nhưng body chưa fix → tệ hơn R6)
+
+> **Re-test:** 2026-05-10 12:25:00 R7.7.13-r2 — ✅ PASS (Closed-verified). Login `cb_nv_tw_03` → BC-001 Hỏi đáp PL → click Xuất Excel → POST `/api/v1/bao-cao/export` reqid=288 trả 200 với `content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet` + `content-disposition: attachment; filename="bao-cao-hoi-dap-2026-05-10.xlsx"` + body `<binary data>` (KHÔNG còn JSON wrap). `Transfer-Encoding: chunked` → StreamableFile pipe đúng. Verified trong [Pass-bug-report-r7-7-13-bao-cao.md §3.5.4](../bao-cao/Pass-bug-report-r7-7-13-bao-cao.md).
+
 
 ### Mô tả
 

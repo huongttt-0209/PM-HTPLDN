@@ -29,7 +29,7 @@
 
 **Snapshot lịch sử (2026-05-06 14:08):** 12 LV pre-existing post-reset 2026-05-05 — vượt ngưỡng 6 LV fixture. Cover đầy đủ 6 LV core + 6 LV mở rộng. Sau dev fix R8 lần 4, DM gọn về đúng 10 LV SRS.
 
-**Bug:** [bug-report-seed-r7-1-1-dm-linh-vuc-pl.md](../../bug-reports/qtht-danh-muc/bug-report-seed-r7-1-1-dm-linh-vuc-pl.md) — 1/1 đóng (BUG-DM-LVPL-001 Closed-verified R8 lần 4 2026-05-08).
+**Bug:** [Pass-bug-report-seed-r7-1-1-dm-linh-vuc-pl.md](../../bug-reports/qtht-danh-muc/Pass-bug-report-seed-r7-1-1-dm-linh-vuc-pl.md) — 1/1 đóng (BUG-DM-LVPL-001 Closed-verified R8 lần 4 2026-05-08).
 
 ---
 

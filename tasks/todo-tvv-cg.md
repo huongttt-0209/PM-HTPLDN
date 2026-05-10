@@ -18,9 +18,9 @@
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P2** | 2 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | ✅[R7.2.5](#r7-2-5) · ✅[R7.2.6](#r7-2-6) |
-| **P4** | 4 | 0 | 0 | 3 | 1 | 0 | 0 | 0 | ✅[R7.4.A1](#r7-4-a1) · ✅[R7.4.A1.6](#r7-4-a1-6) · ✅[R7.4.A1-CG](#r7-4-a1-cg) · ⚠️[R7.4.A2](#r7-4-a2) |
-| **P7** | 1 | 0 | 0 | 0 | 0 | 0 | 0 | 1 | ❌[R7.7.2](#r7-7-2) |
-| **Tổng** | **7** | **0** | **0** | **5** | **1** | **0** | **0** | **1** |  |
+| **P4** | 4 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | ✅[R7.4.A1](#r7-4-a1) · ✅[R7.4.A1.6](#r7-4-a1-6) · ✅[R7.4.A1-CG](#r7-4-a1-cg) · ✅[R7.4.A2](#r7-4-a2) |
+| **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.2](#r7-7-2) |
+| **Tổng** | **7** | **0** | **0** | **6** | **1** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -30,24 +30,26 @@
 
 - ✅ **R7.2.6** ✏️ Seed 6 CG TW (field `loai_tvv=CG`, mặc định trạng thái `MOI_DANG_KY`) <a id="r7-2-6"></a>
   - **Kết quả:** PASS 6/6 batch 1 (CG-0001..0006) + 6/6 batch 2 refill (CG-0023..0028) `MOI_DANG_KY` cover 6 LV. [seed-checklist-r7-2-6-cg-tw.md](../output/qa-reports/round7-2026-05-06/seed/tu-van-vien-cg/seed-checklist-r7-2-6-cg-tw.md)
-  - **Bug:** [bug-report-seed-r7-2-6-tvv-tochuc.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-seed-r7-2-6-tvv-tochuc.md) — 1/1 đóng (BUG-TVV-FE-002 đã sửa và verify lại R8 ngày 2026-05-07: combobox query đúng entity TO_CHUC_TU_VAN, render 5 TC TV thật)
+  - **Bug:** [Pass-bug-report-seed-r7-2-6-tvv-tochuc.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/Pass-bug-report-seed-r7-2-6-tvv-tochuc.md) — 1/1 đóng (BUG-TVV-FE-002 đã sửa và verify lại R8 ngày 2026-05-07: combobox query đúng entity TO_CHUC_TU_VAN, render 5 TC TV thật)
 
 - ✅ **R7.4.A1** ✏️ Workflow TVV — SM từ 9 sang 10 trạng thái, thêm `CHO_KICH_HOAT`, hệ thống tự cấp TK theo FR-VIII-15 bước 6 `[100% — 14/14 PASS R11 sau dev fix BUG-002]` <a id="r7-4-a1"></a>
   - **Cần:** R7.2.5 ✅ · R7.2.6 ✅
   - **Spec:** `7.4-chuyen-gia-tvv.md` + `6.4-sm-tvv.md` (đồng bộ ngày 2026-05-06)
   - **Kết quả:** ✅ R11 walk fresh TVV-0032 full lifecycle MDK→HOAT_DONG, mail fire OK + dual-state sync. [workflow-test-report-r7-4-a1.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-vien-cg/workflow-test-report-r7-4-a1.md)
-  - **Bug:** [bug-report-flow-r7-4-a1-tvv.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-flow-r7-4-a1-tvv.md) — 4/5 đóng (BUG-002 Closed R11, BUG-005 Open Minor mail link missing port)
+  - **Bug:** [Pass-bug-report-flow-r7-4-a1-tvv.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/Pass-bug-report-flow-r7-4-a1-tvv.md) — 5/5 đóng (BUG-005 Closed R22 ngày 2026-05-10 02:42:15 mail port `:3000` đã có)
 
 - ✅ **R7.4.A1-CG** ✏️ Đẩy 8 CG sang trạng thái `HOAT_DONG` (đã đổi tên) + 14 TC (BR-AUTH-05/08 + LEGAL-04 + optimistic lock) `[100% — 14/14 PASS sau R8b]` <a id="r7-4-a1-cg"></a>
   - **Kết quả:** 14/14 PASS sau R8b — verify đủ 6/6 gate: đổi tên trạng thái, enum `CHO_KICH_HOAT`, tab UI, luồng phê duyệt mới. [workflow-test-report-r7-4-a1-cg.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-vien-cg/workflow-test-report-r7-4-a1-cg.md)
-  - **Bug:** [bug-report-flow-r7-4-a1-cg-state.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-flow-r7-4-a1-cg-state.md) — 1/1 đóng (BUG-CG-A1-001 verify Closed lần R8b ngày 2026-05-08, qua đủ 6/6 gate API + UI).
+  - **Bug:** [Pass-bug-report-flow-r7-4-a1-cg-state.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/Pass-bug-report-flow-r7-4-a1-cg-state.md) — 1/1 đóng (BUG-CG-A1-001 verify Closed lần R8b ngày 2026-05-08, qua đủ 6/6 gate API + UI).
 
 - ✅ **R7.4.A1.6** 🆕 Kiểm tra điểm gate SM — thời điểm tạo TK + login âm tính + thời điểm gửi mail + đồng bộ 2 trạng thái (FR-VIII-15 + FR-VIII-26) <a id="r7-4-a1-6"></a>
-  - **Kết quả:** PASS 4/4 R8 batch + R11 fresh TVV-0033 walk full lifecycle MDK→HOAT_DONG, TK auto-tạo 07:54:44 đúng moment CKH, mail fire OK, dual-state sync. [workflow-test-report-r7-4-a1-6.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-vien-cg/workflow-test-report-r7-4-a1-6.md)
+  - **Kết quả:** PASS 4/4 R13 fresh TVV-0035 walk; BUG-001 đã FIX (TVV redirect `/dao-tao/...` đúng role). [workflow-test-report-r7-4-a1-6.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-vien-cg/workflow-test-report-r7-4-a1-6.md)
+  - **Bug:** [Pass-bug-report-flow-r7-4-a1-6-tvv-login-403.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/Pass-bug-report-flow-r7-4-a1-6-tvv-login-403.md) — 1/1 đóng (BUG-001 Closed R13 ngày 2026-05-09 09:39:00)
 
-- ⚠️ **R7.4.A2** 🆕 Tiếp nhận TVV — 3 transition (`MOI_DANG_KY`→`CHO_THAM_DINH`, `YEU_CAU_BO_SUNG`→`DANG_THAM_DINH`, `TU_CHOI`→`CHO_THAM_DINH`) `[~33% — 1/3 PASS, 2 transition còn lại chờ portal ứng viên]` <a id="r7-4-a2"></a>
-  - **Kết quả:** 1/3 ✅ + 2/3 🚫 — A2.1 đúng spec; A2.2 + A2.3 chờ portal ứng viên (BUG-CG-A1-003). [workflow-test-report-r7-4-a2.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-vien-cg/workflow-test-report-r7-4-a2.md)
+- ✅ **R7.4.A2** 🆕 Tiếp nhận TVV — 3 transition (`MOI_DANG_KY`→`CHO_THAM_DINH`, `YEU_CAU_BO_SUNG`→`DANG_THAM_DINH`, `TU_CHOI`→`CHO_THAM_DINH`) `[100% — 3/3 PASS sau R23 dev fix]` <a id="r7-4-a2"></a>
+  - **Kết quả:** R23 ✅ 3/3 — BUG-002/003 đã đóng. [workflow-test-report-r7-4-a2.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-vien-cg/workflow-test-report-r7-4-a2.md)
+  - **Bug:** [Pass-bug-report-flow-r7-4-a2-nht-permission-gap.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/Pass-bug-report-flow-r7-4-a2-nht-permission-gap.md) — 3/3 đóng (BUG-002 + BUG-003 Closed R23 ngày 2026-05-10 03:35:00)
 
-- ❌ **R7.7.2** ✏️ Functional CG/TVV — 31 TC (enum `loai_tvv` đã đổi) <a id="r7-7-2"></a>
-  - **Kết quả:** 19✅ · 7❌ · 1⚠️ · 6🚫 · 0⏰ — pass 3+4 retry, TC-022 ❌ cả 2 nhánh (BE 500 sai contract). [functional-test-report-r7-7-2-tvv-cg.md](../output/qa-reports/round7-2026-05-06/functional/tu-van-vien-cg/functional-test-report-r7-7-2-tvv-cg.md)
-  - **Bug:** [bug-report-functional-r7-7-2-tvv.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-functional-r7-7-2-tvv.md) + [bug-report-functional-r7-7-2-tvv-retry.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-functional-r7-7-2-tvv-retry.md) — 0/6 đóng (5 Major + 1 Minor Open).
+- ⚠️ **R7.7.2** ✏️ Functional CG/TVV — 33 TC (28 ID + 5 sub) `[~91% — 30/33 PASS, 3 Open bug Major; dev wave 3 fail]` <a id="r7-7-2"></a>
+  - **Kết quả:** R26 verify dev wave 3: 30✅ · 2❌ · 1⚠️ — RETRY-004/005/007 vẫn OPEN sau dev claim fix lần 3. Sample regression TVV-001/007 PASS. [functional-test-report-r7-7-2-tvv-cg.md](../output/qa-reports/round7-2026-05-06/functional/tu-van-vien-cg/functional-test-report-r7-7-2-tvv-cg.md)
+  - **Bug:** [Pass-bug-report-functional-r7-7-2-tvv.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/Pass-bug-report-functional-r7-7-2-tvv.md) + [bug-report-functional-r7-7-2-tvv-retry.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-functional-r7-7-2-tvv-retry.md) — 6/9 đóng. R26 verify 3 Major Open: RETRY-004 DELETE TVV+VV → 204 lặp 4 lần liên tiếp R23/R24/R25/R26; RETRY-005 BE thiếu transition TU_CHOI→CHO_THAM_DINH (9 endpoint 404); RETRY-007 BE thiếu endpoint danh-gia-sau-vu-viec (15 path 404).

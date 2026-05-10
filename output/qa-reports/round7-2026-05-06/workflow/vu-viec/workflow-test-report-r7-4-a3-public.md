@@ -58,7 +58,7 @@ GET /api/v1/vu-viecs?page=1&pageSize=20 → 403 ERR-PERM-SYS-00-01 "Forbidden"
 
 → **CG được phân công VV nhưng KHÔNG truy cập VV được** → không thể accept transition `DA_PHAN_CONG → DANG_XU_LY` qua UI. Deadlock state.
 
-> **Bug log:** [bug-report-r7-4-a3-public-phancong-cascade.md](../../bug-reports/vu-viec/bug-report-r7-4-a3-public-phancong-cascade.md) BUG-VV-PC-001 Critical Open.
+> **Bug log:** [Pass-bug-report-r7-4-a3-public-phancong-cascade.md](../../bug-reports/vu-viec/Pass-bug-report-r7-4-a3-public-phancong-cascade.md) BUG-VV-PC-001 Critical Open.
 
 ### Finding 4 🐛 — BE `/goi-y-tvv` filter cho VV cấp TW chỉ trả 1 CG, không trả NHT
 
@@ -131,7 +131,7 @@ Logout cần gọi `POST /api/v1/auth/logout` (xoá refresh-token cookie HttpOnl
 
 ## Next actions đề xuất user
 
-1. **Escalate dev** với 2 bug ở [bug-report-r7-4-a3-public-phancong-cascade.md](../../bug-reports/vu-viec/bug-report-r7-4-a3-public-phancong-cascade.md):
+1. **Escalate dev** với 2 bug ở [Pass-bug-report-r7-4-a3-public-phancong-cascade.md](../../bug-reports/vu-viec/Pass-bug-report-r7-4-a3-public-phancong-cascade.md):
    - Fix Critical: `/goi-y-tvv` filter trả NHT entity (cùng cấp + đúng loại); UI loại trừ CG.
    - Fix Major: vai trò NHT có permission `read_vu_viec` cho VV được phân công (instance scope).
 2. **Sau dev fix:** kích hoạt NHT-BTP-TW-0001 qua mail (R7.2.9 pattern) → re-assign VV-002 cho NHT → run R7.4.A3 advance chain → run R7.4.A3-PUBLIC.
@@ -142,7 +142,7 @@ Logout cần gọi `POST /api/v1/auth/logout` (xoá refresh-token cookie HttpOnl
 - [r7-4-a3-public-tab-hoanthanh-empty.png](r7-4-a3-public-tab-hoanthanh-empty.png) — Tab Hoàn thành empty
 - [r7-4-a3-public-vv002-detail.png](r7-4-a3-public-vv002-detail.png) — VV-002 detail page (state DA_PHAN_CONG, button Phân công duy nhất)
 - [r7-4-a3-public-phancong-modal-only-cg.png](r7-4-a3-public-phancong-modal-only-cg.png) — Modal dropdown chỉ 1 CG
-- Bug detail: [bug-report-r7-4-a3-public-phancong-cascade.md](../../bug-reports/vu-viec/bug-report-r7-4-a3-public-phancong-cascade.md)
+- Bug detail: [Pass-bug-report-r7-4-a3-public-phancong-cascade.md](../../bug-reports/vu-viec/Pass-bug-report-r7-4-a3-public-phancong-cascade.md)
 
 ---
 

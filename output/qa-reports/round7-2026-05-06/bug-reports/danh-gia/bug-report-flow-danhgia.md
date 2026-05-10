@@ -5,7 +5,7 @@
 | **Dự án** | PM HTPLDN — Phần mềm Hỗ trợ Pháp lý Doanh nghiệp |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Claude Code via Chrome DevTools MCP) |
-| **Ngày** | 2026-05-06 |
+| **Ngày** | 2026-05-06 09:00:00 (R7 log) · 2026-05-09 23:35:00 (R9 reproduce) · 2026-05-10 11:05:00 (R10 retest dev fix) · 2026-05-10 11:48:00 (R10 B9 retry log new bug) |
 | **Loại test** | Workflow E2E |
 | **Round** | Round 7 — Apply SRS update 2026-05-05 |
 | **Tài liệu tham chiếu** | [`srs-fr-08-danh-gia.md`](../../../../../input/srs-v3/srs-fr-08-danh-gia.md) (FR-VI-01/02/03/04 + SCR-VI-01 + SM-DANHGIA), [workflow-test-report-DanhGiaHQ.md](../../workflow/danh-gia/workflow-test-report-DanhGiaHQ.md), [R6 reference](../../../round6-2026-05-01-postreset/bug-reports/bug-report-flow-danhgia.md) |
@@ -14,32 +14,35 @@
 
 ## Tổng hợp
 
-R7 retest workflow ĐG HQ phát hiện **2 bug mới** + **5 bug R6 Closed** verified by dev fix. Workflow đạt 5/11 bước PASS — B6-B11 cascade block bởi BUG-FUNC-DG-006 (filter VV eligible empty mặc dù có 20 VV HOAN_THANH thực tế) + KPI mismatch BUG-FUNC-DG-007.
+R7 retest workflow ĐG HQ phát hiện **3 bug mới** (DG-006/007 đã Closed sáng R10, **DG-008 mới phát hiện R10 B9**) + **5 bug R6 Closed** verified by dev fix. Workflow đạt 8/11 bước PASS (B1-B8 hoàn tất qua R7+R9) — B9 chấm điểm **fail** bởi BUG-FUNC-DG-008 (PUT `/ket-quas` 200 nhưng GET không trả lại score → cascade block B10+B11).
 
 ### Severity breakdown (R7 mới)
 
 | Tổng | Critical | Major | Medium | Minor | Trivial |
 |------|----------|-------|--------|-------|---------|
-| 2    | 0        | 1     | 1      | 0     | 0       |
+| 3    | 0        | 2     | 1      | 0     | 0       |
 
-> **Rule log bug:** Bug chỉ log khi có SRS reference cụ thể (`FR-X`, `BR-X`, `SCR-X row Y`). 2 bug mới R7 đều có SRS ref đầy đủ.
+> **R10 update 2026-05-10 11:48:00:** Sau dev fix sáng cùng ngày, DG-006 + DG-007 đã ✅ Closed. Tiếp tục B7-B11 với role chain cb_pd_tw_02 (verify role guard) → cb_nv_tw_03 (assigned evaluator). B7-B8 đã hoàn tất từ R9 log (phân công + phê duyệt). B9 phát hiện BUG-FUNC-DG-008: chấm 4 tiêu chí điểm 9/8/9/9, click "Lưu kết quả" → PUT 200 với computed body (diemTong=8.8, xepLoai=TOT, version=2, trangThai=DA_DANH_GIA), nhưng GET tiếp theo (cùng endpoint, cùng session) trả version=1, diemTong=null, trangThai=CHUA_DANH_GIA. Reload page UI → score reset về 0, đợt vẫn THUC_HIEN. Read-after-write inconsistency BE.
+
+> **Rule log bug:** Bug chỉ log khi có SRS reference cụ thể (`FR-X`, `BR-X`, `SCR-X row Y`). 3 bug R7 đều có SRS ref đầy đủ.
 
 ## Bug Summary Table — R7 mới
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-FUNC-DG-006 | Major | P1 | Workflow | R7.4.D2 B6 | `srs-fr-08-danh-gia.md` FR-VI-05/06 (UC87 Chọn VV vào đợt) — chưa rõ filter spec đầy đủ | Endpoint `/vu-viec-eligible` trả empty list mặc dù có 20 VV state HOAN_THANH (3 VV trong date range đợt) — block B6 chọn VV | Open |
-| BUG-FUNC-DG-007 | Medium | P2 | Data | R7.4.D2 (cross-module) | `srs-fr-08-danh-gia.md` Dashboard KPI-04 + `srs-fr-13-dashboard.md` (file chưa cụ thể) | Dashboard "Vụ việc hoàn thành: 0" khi /vu-viec/danh-sach Tab "Hoàn thành" hiện 20 records HOAN_THANH | Open |
+| BUG-FUNC-DG-008 | Major | P1 | Workflow / BE persistence | R7.4.D2 B9 | `srs-fr-08-danh-gia.md` FR-VI-08 (Người đánh giá chấm điểm) + line 798 (SCR-VI-01 row 38 Tab 4 "Lưu kết quả") | PUT `/ke-hoach-danh-gias/{id}/ket-quas` trả 200 với data computed (diemTong, xepLoai, version=2) nhưng GET sau đó trả version=1 + null fields — read-after-write inconsistency, score không persist | 🔴 **Open (R10 2026-05-10 11:48:00)** |
+| ~~BUG-FUNC-DG-006~~ | Major | P1 | Workflow | R7.4.D2 B6 | `srs-fr-08-danh-gia.md` FR-VI-05/06 (UC87 Chọn VV vào đợt) — chưa rõ filter spec đầy đủ | ~~Endpoint `/vu-viec-eligible` trả empty list mặc dù có 20 VV state HOAN_THANH (3 VV trong date range đợt) — block B6 chọn VV~~ | ✅ **Closed (R10 2026-05-10 11:05:00)** |
+| ~~BUG-FUNC-DG-007~~ | Medium | P2 | Data | R7.4.D2 (cross-module) | `srs-fr-08-danh-gia.md` Dashboard KPI-04 + `srs-fr-13-dashboard.md` (file chưa cụ thể) | ~~Dashboard "Vụ việc hoàn thành: 0" khi /vu-viec/danh-sach Tab "Hoàn thành" hiện 20 records HOAN_THANH~~ | ✅ **Closed (R10 2026-05-10 11:05:00)** |
 
 ## Bug Summary Table — R6 dev fix verified Closed
 
 | Bug ID R6 | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | R7 Status |
 |-----------|----------|----------|------|--------|-------------------|-------|-----------|
-| BUG-FUNC-DG-001 | Medium | P2 | UI/UX | R6.4.D2 B1 | `srs-fr-08-danh-gia.md` line 777 (SCR-VI-01 row 27) | Button [Lưu & Chuyển tiêu chí] không navigate Tab Tiêu chí | ✅ **Closed (R7.4.D1)** |
-| BUG-FUNC-DG-002 | Critical | P0 | UI/UX | R6.4.D2 back-fill | `srs-fr-08-danh-gia.md` line 790 (SCR-VI-01 row 33) + line 186 (FR-VI-02 Processing) + line 192 (BR-CALC-04) | Tab Tiêu chí không có nút [+ Thêm tiêu chí] / [Nhập từ DM] | ✅ **Closed (R7.4.D1)** |
-| BUG-FUNC-DG-003 | Critical | P0 | Workflow | R6.4.D2 B2 | `srs-fr-08-danh-gia.md` line 244 (FR-VI-03 Inputs row 2) + line 798 (SCR-VI-01 row 36 Tab 2) | Dropdown Người đánh giá gọi sai endpoint `/chuyen-gia-tvvs` 404 | ✅ **Closed (R7.4.D2 B2)** |
-| BUG-FUNC-DG-004 | Major | P1 | Workflow | R6.4.D2 B2 | `srs-fr-08-danh-gia.md` line 246 (FR-VI-03 Inputs row 4) + line 798 (SCR-VI-01 row 36) | Dropdown Lĩnh vực gọi `/danh-mucs` 404 (sai path/param) | ✅ **Closed (R7.4.D2 B2)** |
-| BUG-FUNC-DG-005 | Major | P1 | Workflow | R6.4.D2 B2 | `srs-fr-08-danh-gia.md` line 245 (FR-VI-03 Inputs row 3) + line 798 (SCR-VI-01 row 36) | Dropdown Vai trò render "Trống" thay 2 enum static | ✅ **Closed (R7.4.D2 B2)** |
+| ~~BUG-FUNC-DG-001~~ | Medium | P2 | UI/UX | R6.4.D2 B1 | `srs-fr-08-danh-gia.md` line 777 (SCR-VI-01 row 27) | ~~Button [Lưu & Chuyển tiêu chí] không navigate Tab Tiêu chí~~ | ✅ **Closed (R7.4.D1)** |
+| ~~BUG-FUNC-DG-002~~ | Critical | P0 | UI/UX | R6.4.D2 back-fill | `srs-fr-08-danh-gia.md` line 790 (SCR-VI-01 row 33) + line 186 (FR-VI-02 Processing) + line 192 (BR-CALC-04) | ~~Tab Tiêu chí không có nút [+ Thêm tiêu chí] / [Nhập từ DM]~~ | ✅ **Closed (R7.4.D1)** |
+| ~~BUG-FUNC-DG-003~~ | Critical | P0 | Workflow | R6.4.D2 B2 | `srs-fr-08-danh-gia.md` line 244 (FR-VI-03 Inputs row 2) + line 798 (SCR-VI-01 row 36 Tab 2) | ~~Dropdown Người đánh giá gọi sai endpoint `/chuyen-gia-tvvs` 404~~ | ✅ **Closed (R7.4.D2 B2)** |
+| ~~BUG-FUNC-DG-004~~ | Major | P1 | Workflow | R6.4.D2 B2 | `srs-fr-08-danh-gia.md` line 246 (FR-VI-03 Inputs row 4) + line 798 (SCR-VI-01 row 36) | ~~Dropdown Lĩnh vực gọi `/danh-mucs` 404 (sai path/param)~~ | ✅ **Closed (R7.4.D2 B2)** |
+| ~~BUG-FUNC-DG-005~~ | Major | P1 | Workflow | R6.4.D2 B2 | `srs-fr-08-danh-gia.md` line 245 (FR-VI-03 Inputs row 3) + line 798 (SCR-VI-01 row 36) | ~~Dropdown Vai trò render "Trống" thay 2 enum static~~ | ✅ **Closed (R7.4.D2 B2)** |
 
 > **Closed criteria:** Đã retest qua MCP UI 2026-05-06, network 200 OK, dropdown render đúng SRS, workflow advance được. Chi tiết evidence trong workflow-test-report-DanhGiaHQ.md (R7).
 
@@ -47,7 +50,110 @@ R7 retest workflow ĐG HQ phát hiện **2 bug mới** + **5 bug R6 Closed** ver
 
 ---
 
-## BUG-FUNC-DG-006 — Endpoint /vu-viec-eligible trả empty list mặc dù tồn tại VV state HOAN_THANH match đợt
+## BUG-FUNC-DG-008 — PUT `/ket-quas` trả 200 với data đúng nhưng GET sau đó trả null (read-after-write inconsistency)
+
+### Mô tả
+
+Account `cb_nv_tw_03` (Người đánh giá được phân công, role CB_NV_TW), đợt DG-20260509-0001 state `THUC_HIEN`, soVuViecDanhGia=1 (VV-BTP-TW-20260509-008). Tab "Chấm điểm" hiển thị grid 1 VV × 4 tiêu chí. QA fill điểm 9/8/9/9 (Σ trọng số 30+20+40+10=100%), điểm tổng auto-tính 8.8, xếp loại "Tốt", click button [Lưu kết quả]. Network: `PUT /api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/ket-quas` → **200 OK** với response body chứa computed `{diemTong: 8.8, xepLoai: "TOT", trangThai: "DA_DANH_GIA", version: 2, ngayCapNhat: "2026-05-10T04:42:37.204Z", chiTietDiem: [...4 entries...]}`. Tuy nhiên `GET /api/v1/ke-hoach-danh-gias/{id}/ket-quas` ngay sau đó (cùng tab, cùng session, cùng JWT) trả `{version: 1, diemTong: null, xepLoai: null, trangThai: "CHUA_DANH_GIA", chiTietDiem: null, ghiChu: null}` — **không reflect ghi mới vừa thực hiện**. Reload page UI → spinbutton điểm reset 0/0/0/0, "Số VV đã chấm" 0/1, đợt-level state vẫn `THUC_HIEN` (`diemTrungBinh=null`, `version=4` không tăng). Retry PUT lần 2 với cùng dữ liệu → response body vẫn version=2 nhưng GET vẫn version=1 sau 3 lần polling cách 1.5s.
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_03` (Người đánh giá được phân công cho đợt DG-20260509-0001 từ R9, nguoiDanhGiaId trong `/phan-congs` khớp `2a5303aa-...`).
+2. Vào module Đánh giá hiệu quả → click row DG-20260509-0001 → mở detail.
+3. Click Tab "Chấm điểm" → grid hiện VV-BTP-TW-20260509-008 với 4 spinbutton điểm + textbox ghi chú + button [Lưu kết quả].
+4. Fill điểm: TC1=9, TC2=8, TC3=9, TC4=9; ghi chú "R10 2026-05-10 — score test sau dev fix BUG-006/007."
+5. Click [Lưu kết quả] → tab Network: PUT `/ket-quas` 200 (response body trả computed `diemTong: 8.8, xepLoai: "TOT", trangThai: "DA_DANH_GIA", version: 2`).
+6. Ngay sau đó FE auto-fetch GET `/ket-quas` → 200 nhưng trả `version: 1, diemTong: null, trangThai: "CHUA_DANH_GIA"`.
+7. Reload page (F5 + ignoreCache) → spinbutton điểm = 0, "Số VV đã chấm: 0/1", đợt state vẫn "Thực hiện".
+8. Click Tab "Chấm điểm" → fill lại điểm + click [Lưu kết quả] lần 2 → cùng pattern: PUT 200 (response version=2) nhưng GET vẫn version=1.
+
+### Kết quả mong đợi
+
+Theo SRS `srs-fr-08-danh-gia.md` FR-VI-08 (Người đánh giá chấm điểm) + SCR-VI-01 row 38 (Tab 4 Chấm điểm Drawer "Lưu kết quả"):
+- PUT `/ket-quas` save thành công (200) → DB persist `chiTietDiem` + computed `diemTong` + `xepLoai` + `trangThai=DA_DANH_GIA` cho mỗi `vuViecId`.
+- GET `/ket-quas` ngay sau đó phải trả lại đúng record vừa update (version tăng, fields filled).
+- Reload UI phải render lại score đã save.
+- Khi tất cả `vuViec` của đợt đã `trangThai=DA_DANH_GIA` → đợt-level `trangThai` advance `THUC_HIEN → DA_DANH_GIA` (workflow B9 transition theo SM-DANHGIA).
+
+### Kết quả thực tế
+
+```text
+PUT /api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/ket-quas
+   request body:
+     {"ketQuas":[{"vuViecId":"8d074115-4da5-427c-af55-3909f1e4e675",
+                  "chiTietDiem":[{tieuChiId:"014e62ec...", diem:9},
+                                 {tieuChiId:"da77e4ed...", diem:8},
+                                 {tieuChiId:"c552a4c1...", diem:9},
+                                 {tieuChiId:"a8dc64b1...", diem:9}],
+                  "ghiChu":"R10 2026-05-10 — score test..."}]}
+   response 200:
+     {"success":true,
+      "data":[{"id":"fb192342-...","version":2,
+               "diemTong":8.8,"xepLoai":"TOT","trangThai":"DA_DANH_GIA",
+               "chiTietDiem":[...4 entries...],
+               "ngayCapNhat":"2026-05-10T04:42:37.204Z"}]}
+
+GET /api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/ket-quas
+   (gọi 0.5s sau PUT, cùng JWT, cache: 'no-store', timestamp buster)
+   response 200:
+     {"success":true,
+      "data":[{"id":"fb192342-...","version":1,
+               "diemTong":null,"xepLoai":null,"trangThai":"CHUA_DANH_GIA",
+               "chiTietDiem":null,"ghiChu":null}]}
+
+GET /api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540
+   response 200:
+     {"data":{"trangThai":"THUC_HIEN","diemTrungBinh":null,"version":4}}
+```
+
+→ Cascade block B10 (đợt không thể `BAO_CAO` vì state vẫn `THUC_HIEN`) + B11 (negative test HUY tại HOAN_THANH không thể tới được).
+
+### Bằng chứng
+
+**1. Screenshot Tab Chấm điểm grid sau reload — score reset về 0, "Số VV đã chấm: 0/1":**
+
+![BUG-FUNC-DG-008 — Tab Chấm điểm sau Lưu + reload, score reset 0/0/0/0](../../workflow/screenshots/r7-4-d2-r10-b9-after-save-reset-2026-05-10.png)
+
+**2. Screenshot grid trước khi click Lưu (điểm 9/8/9/9 đã fill, total auto = 8.8 "Tốt"):**
+
+![BUG-FUNC-DG-008 — Grid trước Lưu, điểm 9/8/9/9, total 8.8 Tốt](../../workflow/screenshots/r7-4-d2-r10-b9-cham-diem-grid-2026-05-10.png)
+
+**3. Network log đầy đủ (reqid 656 PUT 200, reqid 657 GET 200 ngay sau):**
+
+```text
+reqid=656 PUT /api/v1/ke-hoach-danh-gias/c521f1f1.../ket-quas → 200
+   response: version=2, diemTong=8.8, xepLoai=TOT, trangThai=DA_DANH_GIA
+reqid=657 GET /api/v1/ke-hoach-danh-gias/c521f1f1.../ket-quas → 200
+   response: version=1, diemTong=null, xepLoai=null, trangThai=CHUA_DANH_GIA
+   (timestamp: PUT 04:42:37.204Z → GET 04:42:37.xxx → cùng giây)
+```
+
+**4. Polling 3 lần × 1.5s gap đều trả version=1:**
+
+```json
+[{"attempt":1,"ketState":"CHUA_DANH_GIA","ketDiem":null,"ketVersion":1,"dotState":"THUC_HIEN","dotVersion":4},
+ {"attempt":2,"ketState":"CHUA_DANH_GIA","ketDiem":null,"ketVersion":1,"dotState":"THUC_HIEN","dotVersion":4},
+ {"attempt":3,"ketState":"CHUA_DANH_GIA","ketDiem":null,"ketVersion":1,"dotState":"THUC_HIEN","dotVersion":4}]
+```
+
+**5. SRS reference:** `srs-fr-08-danh-gia.md` FR-VI-08 (Người đánh giá chấm điểm) yêu cầu:
+- Input: `chiTietDiem[]` (Σ trọng số = 100, mỗi điểm ≤ điểmTốiĐa).
+- Processing: BE tính `diemTong = Σ(điểmTC × trọngSốTC) / Σ trọngSố`, `xepLoai` map theo BR-RANK (≥9.0 XS, ≥7.5 T, ≥6.0 Đ, <6.0 CD), set `trangThai=DA_DANH_GIA`.
+- Outputs: persist record + side effect: nếu mọi VV trong đợt `=DA_DANH_GIA` → đợt advance.
+- SCR-VI-01 row 38 Tab 4 Chấm điểm: button [Lưu kết quả] gọi PUT API → load lại data.
+
+PUT response cho thấy BE **đã** tính đúng (diemTong=8.8, xepLoai=TOT) nhưng không persist DB (version không tăng ở read path). 2 hypothesis:
+- (a) BE PUT chỉ update in-memory model rồi return, không commit transaction DB.
+- (b) BE có read replica chưa sync (write to master, read from stale replica) — nhưng polling 3 × 1.5s = 4.5s vẫn fail nên không phải replication lag thông thường.
+- (c) PUT có conditional check (vd "đợt phải state DANG_DANH_GIA") fail silent → return computed body nhưng skip commit. Nhưng response không có error code và `success: true`.
+
+→ Cần dev xem log BE phía PUT handler: có `db.commit()` được gọi sau khi tính `diemTong` không? Có exception bị swallow không?
+
+---
+
+## ~~BUG-FUNC-DG-006~~ [CLOSED] — Endpoint /vu-viec-eligible trả empty list mặc dù tồn tại VV state HOAN_THANH match đợt
+
+> **Re-test:** 2026-05-10 11:05:00 R10 — ✅ PASS (Closed-verified). Endpoint mới: `GET /api/v1/ke-hoach-danh-gias/{id}/vu-viec-eligible` (sub-resource path đúng REST). Trả `{"total":1, "items":[{"ma":"VV-BTP-TW-20260509-008"}]}` với scope cb_nv_tw_02 BTP TW. UI Tab "Thực hiện" render 1 row eligible, checkbox active, button "Xác nhận chọn" enabled. POST `/vu-viec-select` 200 OK → đợt advance CHO_DUYET_PC → THUC_HIEN. Dev fix verified.
 
 > **Re-test:** 2026-05-07 R8 — ⚠️ **INCONCLUSIVE**. Pool VV reset giữa R7→R8: dashboard "Vụ việc hoàn thành: 0 vụ việc" + Tab Hoàn thành rỗng. Không có data state HOAN_THANH để verify mismatch endpoint `/vu-viec-eligible` vs `/vu-viec?trangThai=HOAN_THANH`. Bug giữ Open chờ seed lại VV HOAN_THANH (≥3 VV trong date range đợt) để retest đúng pattern. Screenshot: [r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png](../../screenshots/r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png).
 >
@@ -58,6 +164,8 @@ R7 retest workflow ĐG HQ phát hiện **2 bug mới** + **5 bug R6 Closed** ver
 > **Re-test 2026-05-08 R8 verify-4:** ⏰ **PENDING DATA**. Account cb_nv_tw_02. UI `/danh-gia/ke-hoach/danh-sach` vẫn show 0 kế hoạch. Pool VV HOAN_THANH chưa seed lại. Cần round seed riêng (Phase 2: tạo VV → advance lifecycle qua DA_PHAN_CONG → DA_TIEP_NHAN → DA_TU_VAN → HOAN_THANH với date range 01/04-30/06 → tạo đợt ĐG → test "Chọn VV") để verify mismatch endpoint dev fix.
 >
 > **Re-test 2026-05-08 R8 verify-5 (final):** ⏰ **PENDING DATA — không seed được trong session retest**. API probe `GET /api/v1/vu-viecs?pageSize=50` → 0 record (pool VV reset hoàn toàn). `GET /api/v1/ke-hoach-danh-gias?pageSize=20` → 0 đợt ĐG. Verify mismatch endpoint `/vu-viec-eligible` cần round seed full lifecycle 9 bước (tạo DN + nhu cầu HT → VV CHO_PHAN_CONG → phân công TVV → TVV tiếp nhận → đóng VV HOAN_THANH ≥3 VV date 01/04-30/06 → tạo đợt ĐG LAP_KE_HOACH → cấu hình tiêu chí Σ100% → phân công người ĐG + role switch cb_pd_tw duyệt PC → state CHO_DUYET_PC). Round seed quá scope retest → giữ Open + đánh dấu cần task seed riêng (T-Phase2-VVHOANTHANH + T-Phase2-DotDG) trước khi gate retest.
+>
+> **Re-test 2026-05-09 23:35:33 R9 — ❌ REPRODUCED + NEW ROOT CAUSE.** Account chain qtht_01 → cb_nv_tw_01 → nht_tc001_btp_tw → cb_pd_tw_01 → cb_nv_tw_01. Seed VV-BTP-TW-20260509-009 (id `765920aa-43e4-47c0-a8ce-bf6e9c24e53e`, lĩnh vực Lao động, donVi BTP-TW) walk full lifecycle UI: DA_TIEP_NHAN (16:26:33) → DANG_KIEM_TRA → DA_PHAN_CONG (cb_nv_tw_01 phân công nht_tc001) → DANG_XU_LY (NHT chấp nhận) → CHO_PHE_DUYET (cb_nv_tw_01 trình phê duyệt) → DA_DUYET (cb_pd_tw_01 phê duyệt 16:32) → HOAN_THANH (cb_nv_tw_01 click "Hoàn thành vụ việc" 16:33:52, kết luận filled, kết quả "Thành công"). API probe đợt DG-20260509-0001 (id `c521f1f1-82b2-424a-a14c-6d01e91ce540`, scope 31/03-29/06/2026 + donVi TW, state CHO_DUYET_PC): `GET /api/v1/ke-hoach-danh-gias/{id}/vu-viec-eligible` → 200 OK `{success:true, data:[], meta:{total:0}}`. Tab "Thực hiện" UI hiển thị "Không có vụ việc nào phù hợp". **NEW ROOT CAUSE phát hiện:** VV state auto-flip `HOAN_THANH → DA_DANH_GIA` sau action "Hoàn thành vụ việc" (transient HOAN_THANH ~1s rồi flip). Probe `GET /api/v1/vu-viecs?trangThai=HOAN_THANH` → 0 record system-wide; `GET /api/v1/vu-viecs?trangThai=DA_DANH_GIA` → 1 record (VV-009). Filter logic `/vu-viec-eligible` match `trangThai=HOAN_THANH AND daDuocDanhGia=false` không bao giờ pickup được VV vì VV không dừng lại HOAN_THANH. **Vi phạm spec FR-VI-05 line 365-429:** state HOAN_THANH phải là steady state cho đến khi 1 đợt ĐG phê duyệt → VV → DA_DANH_GIA. Bug giữ **Open** + escalate dev: fix state machine (DA_DUYET → HOAN_THANH stable), không auto-trigger DA_DANH_GIA khi không có đợt evaluating.
 
 ### Mô tả
 
@@ -124,13 +232,17 @@ VV list (verify VV HOAN_THANH tồn tại):
 
 ---
 
-## BUG-FUNC-DG-007 — Dashboard KPI "Vụ việc hoàn thành: 0" sai vs thực tế 20 VV state HOAN_THANH
+## ~~BUG-FUNC-DG-007~~ [CLOSED] — Dashboard KPI "Vụ việc hoàn thành: 0" sai vs thực tế 20 VV state HOAN_THANH
+
+> **Re-test:** 2026-05-10 11:05:00 R10 — ✅ PASS (Closed-verified). Dashboard cb_nv_tw_02 BTP TW hiển thị "Vụ việc hoàn thành: 2 vụ việc" khớp với pool BTP TW: HOAN_THANH=1 (VV-008) + DA_DANH_GIA=1 (VV-009) = 2 (FR-VI dashboard count "hoàn thành" gồm 2 state cuối lifecycle). Trước đây Dashboard 0 mismatch. Dev fix verified.
 
 > **Re-test:** 2026-05-07 R8 — ⚠️ **INCONCLUSIVE**. Cùng evidence với DG-006: pool VV reset, Dashboard KPI "Vụ việc hoàn thành: 0" + Tab Hoàn thành cũng rỗng → KPI=0 hiện đã match thực tế. Không có cách verify mismatch giữa Dashboard KPI và Tab list khi cả hai cùng = 0. Bug giữ Open chờ seed lại VV HOAN_THANH để retest cross-module sync. Screenshot: [r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png](../../screenshots/r8-verify-2026-05-07-vv-tab-hoanthanh-0-data-reset.png).
 >
 > **Re-test 2026-05-07 R8 verify-2 (16:47):** ⚠️ **VẪN INCONCLUSIVE**. Dashboard endpoint `/api/v1/dashboard?nam=2026` trả `VU_VIEC_HOAN_THANH.giaTri=0` — match với API `vu-viecs?trangThai=HOAN_THANH` count=0. Cross-module sync hiện đúng vì cả 2 cùng 0. Cần seed VV HOAN_THANH (≥1 VV) để re-verify mismatch giữa KPI counter và list count. Bug giữ Open.
 >
 > **Re-test 2026-05-07 R8 verify-3 (21:13):** ⚠️ **VẪN INCONCLUSIVE**. Account cb_nv_tw_02. Dashboard payload đầy đủ: `kpis[].kpiCode=VU_VIEC_HOAN_THANH.giaTri=0` + `appliedFilter={tuNgay:2026-01-01, denNgay:2026-05-07, donViId:null}`; UI dashboard render "Vụ việc hoàn thành: 0 vụ việc". `/vu-viec/danh-sach?tab=HOAN_THANH` empty (0 records). KPI và list đều = 0 → cross-module sync đúng tại thời điểm này. Cần ≥1 VV state HOAN_THANH mới có thể verify mismatch. Bug giữ Open. Screenshot: [r8-verify3-2026-05-07-dg-list-empty.png](../../screenshots/r8-verify3-2026-05-07-dg-list-empty.png).
+>
+> **Re-test 2026-05-09 23:36:00 R9 — ✅ KPI consistency PASS (Closed-pending).** Account cb_nv_tw_01. Sau seed VV-009 walk full lifecycle → 1 VV state DA_DANH_GIA (transient HOAN_THANH ~1s rồi flip auto). Dashboard endpoint `/api/v1/dashboard` trả `VU_VIEC_HOAN_THANH.giaTri=1`. UI dashboard render "Vụ việc hoàn thành: 1 vụ việc". KPI counter consistent với pool: HOAN_THANH (0) + DA_DANH_GIA (1) = 1. Cross-module sync KPI vs list: Dashboard KPI counts cả `HOAN_THANH ∪ DA_DANH_GIA` (terminal state), không miss VV. **R7 mismatch original (KPI=0 vs Tab=20 HOAN_THANH) không thể tái hiện ở R9** vì pool HOAN_THANH bây giờ = 0 do bug DG-006 root cause auto-flip. Verdict R9: KPI module hoạt động đúng; mismatch original có thể do snapshot thời điểm khác / cache stale. **Đề nghị Closed sau khi DG-006 fix (state machine VV stable HOAN_THANH)** để re-verify KPI count với pool ≥1 HOAN_THANH steady-state.
 
 ### Mô tả
 

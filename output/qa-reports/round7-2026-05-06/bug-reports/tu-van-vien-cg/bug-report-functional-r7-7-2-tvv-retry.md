@@ -15,32 +15,68 @@
 
 ## Tổng hợp
 
-4 lỗi mới phát hiện khi retry verify 6 case ⏰/🚫 của R7.7.2 bằng UI browse (không API direct).
+7 lỗi: 4 phát hiện R7-R8 + 3 NEW R23 (RETRY-005 BE thiếu endpoint re-submit; RETRY-006 UI render 6 tab vs SRS spec 4-5 tab; RETRY-007 BE thiếu endpoint danh-gia-sau-vu-viec FR-IV-09 + BR-CALC-06).
+
+> **R26 verify dev fix claim 2026-05-10 12:25:00 — 0/3 FIXED, dev wave 3 vẫn không đụng BE:** sau R25 báo 3 bug Open, dev claim fix lại lần nữa. Re-verify với account `cb_nv_tw_02` cùng isolatedContext `qa_r25_verify`.
+> - ❌ **BUG-RETRY-004 STILL OPEN (4 lần liên tiếp R23/R24/R25/R26):** `DELETE /api/v1/tu-van-viens/df00f7e1-0d24-4ad2-93f4-132db87749fc` (TVV-BTP-TW-0001 "Lý Thị Mười Ba", verified có VV-BTP-TW-20260509-006 DA_PHAN_CONG + phan-cong CHO_XAC_NHAN gắn) → **HTTP 204** không đổi. Sau xóa GET TVV → 404, record GONE. Vi phạm BR-LEGAL-04 + ERR-TVV-05 lặp lại lần thứ 4. Evidence: [r26-retry004-tvv0001-still-204-bypass.png](img/r26-retry004-tvv0001-still-204-bypass.png).
+> - ❌ **BUG-RETRY-005 STILL OPEN:** probe **9 endpoint variants + 1 PATCH** cho TVV-BTP-TW-0038 (TU_CHOI): 9 POST đường dẫn (`/dang-ky-lai`, `/gui-lai`, `/resubmit`, `/cho-tham-dinh`, `/nop-lai`, `/submit`, `/state-transitions`, `/transitions`, `/state`) đều **404**. PATCH trangThai 200 nhưng GET sau đó vẫn `TU_CHOI` (no-op). BE chưa expose transition. Evidence: [r26-retry005-tvv0038-9endpoints-404.png](img/r26-retry005-tvv0038-9endpoints-404.png).
+> - ❌ **BUG-RETRY-007 STILL OPEN:** probe **14 GET + 1 POST = 15 path variants** danh-gia-sau-vu-viec đều **404**. Đã thử thêm `/api/v1/feedback`, `/api/v1/ratings`, `/api/v1/danh-gia-sau-vu-viec/list`, `/api/v1/danh-gia/sau-vu-viec` ngoài 9 path R25. POST `/api/v1/danh-gia-sau-vu-viec` body `{vuViecId, tuVanVienId, diem, nhanXet}` cũng 404 ERR-SYS-00-04-01. BE entity DANH_GIA_SAU_VU_VIEC chưa được expose qua endpoint nào. Evidence: [r26-retry007-15variants-still-404.png](img/r26-retry007-15variants-still-404.png).
+>
+> **Sample regression R26 cho TC closed:** TVV-001 (10 tab list), TVV-007 (5 tab chi tiết TVV-0002) đều PASS — không regression sau dev wave 3.
+
+> **R25 verify dev fix wave claim 2026-05-10 12:05:00 — 1/4 FIXED, 3/4 STILL OPEN:** dev báo đã fix toàn bộ bug Open. Verify lại qua UI + API browser, isolatedContext `qa_r25_verify`, account `cb_nv_tw_02` / Secret@123 / OTP 666666:
+> - ✅ **BUG-RETRY-006 FIXED:** mở chi tiết `TVV-BTP-TW-0001` (Lý Thị Mười Ba, HOAT_DONG) → tab list giảm còn **5 tab** (Hồ sơ / Thẩm định disabled / Năng lực / Lịch sử hỗ trợ / Đánh giá). Trước R23 là 6 tab (thừa "HĐ tư vấn"). 5 tab nằm trong khoảng 4-5 strict SRS allow (FR-IV-08 line 437 + SCR-IV-03 cho phép Thẩm định cho CB NV). Closed. Evidence: [r25-retry006-tvv-detail-5tabs-fixed.png](img/r25-retry006-tvv-detail-5tabs-fixed.png).
+> - ❌ **BUG-RETRY-004 STILL OPEN:** `DELETE /api/v1/tu-van-viens/e69d0d9d-37f7-4d49-b9ff-594437c41af4` (TVV-BTP-TW-0033 "TVV R11 A16 Gate Test", có VV-BTP-TW-20260510-001 DA_PHAN_CONG + phan-cong CHO_XAC_NHAN gắn) → **HTTP 204** thay vì 409 ERR-TVV-05. TVV-0033 hard-delete khỏi DB (GET trả 404), phan-cong array empty (orphan). Vi phạm BR-LEGAL-04 không đổi so với R24. Evidence: [r25-retry004-tvv0033-still-204-orphan.png](img/r25-retry004-tvv0033-still-204-orphan.png).
+> - ❌ **BUG-RETRY-005 STILL OPEN:** probe 6 endpoint variants TU_CHOI → CHO_THAM_DINH cho TVV-BTP-TW-0011 (`/dang-ky-lai`, `/gui-lai`, `/resubmit`, `/cho-tham-dinh`, `/state-transitions`, `/transitions`) đều **404**. Test riêng `PATCH /api/v1/tu-van-viens/{id}` body `{"trangThai":"CHO_THAM_DINH"}` → 200 nhưng GET sau đó vẫn `trangThai: TU_CHOI` (no-op, BE không apply). Endpoint transition vẫn thiếu. Evidence: [r25-retry005-tvv0011-edit-validation-block.png](img/r25-retry005-tvv0011-edit-validation-block.png).
+> - ❌ **BUG-RETRY-007 STILL OPEN:** probe **9 endpoint variants** danh-gia-sau-vu-viec (`/api/v1/danh-gia-sau-vu-viec`, `/api/v1/danh-gia-sau-vu-viecs`, `/api/v1/danh-gia`, `/api/v1/vu-viecs/danh-gia`, `/api/v1/danh-gia-tvv`, `/api/v1/tu-van-viens/danh-gia`, `/api/v1/danh-gias`, `/api/v1/danh-gia-vu-viec`, `/api/v1/vu-viecs/danh-gia-sau-vu-viec`) đều **404** ERR-SYS-00-04-01 hoặc ERR-VAL-VII-02-01. BE chưa expose endpoint cho entity DANH_GIA_SAU_VU_VIEC. Evidence: [r25-retry007-endpoint-9var-still-404.png](img/r25-retry007-endpoint-9var-still-404.png).
+>
+> **R24 verify dev fix claim 2026-05-10 11:30:00 — BUG-RETRY-004 STILL OPEN:** dev báo đã fix BUG-RETRY-004. Verify lại qua UI: `cb_nv_tw_02` → tab Đang hoạt động → click Xóa trên TVV-BTP-TW-0005 (Mai Thị Mười Bảy, có VV-BTP-TW-20260509-004 DA_PHAN_CONG gắn) → modal Xóa → `DELETE /api/v1/tu-van-viens/87e65340-...` reqid=922 trả **HTTP 204** vẫn pass. TVV-0005 hard-delete khỏi DB, VV bị orphan (phan-cong empty). **Dev chưa fix thật sự** hoặc fix sai branch — defect không đổi so với R23 (204 thay vì 409 ERR-TVV-05). Vi phạm BR-LEGAL-04.
+>
+> **R23 NEW BUG-CG-77-RETRY-007 2026-05-10 10:30:00:** retest TVV-015 (DN đánh giá TVV sau VV) — `cb_nv_tw_02` mở VV-BTP-TW-20260509-008 (state HOAN_THANH có TVV gắn) → probe 5 endpoint variants `/danh-gia-sau-vu-viec` đều **404**: `/api/v1/vu-viecs/{id}/danh-gia-sau-vu-viec`, `/api/v1/vu-viecs/{id}/danh-gia`, `/api/v1/danh-gia-sau-vu-viec?vu_viec_id={id}`, `/api/v1/danh-gia-sau-vu-viec/{id}`, `/api/v1/danh-gia/sau-vu-viec/{id}`. BE thiếu endpoint cho entity DANH_GIA_SAU_VU_VIEC. Vi phạm SRS line 717-718 FR-IV-09 step 5+6 + line 2138 entity spec + BR-CALC-06.
+>
+> **R23 NEW BUG-CG-77-RETRY-006 2026-05-10 10:00:00:** retest TVV-007 chi tiết hồ sơ — UI render **6 tab** (Hồ sơ, Năng lực, Lịch sử hỗ trợ, Đánh giá, **HĐ tư vấn**, Thẩm định) trong khi SRS spec component không có tab "HĐ tư vấn". `srs-fr-04-chuyen-gia-tvv.md:437` (FR-IV-08): "Xem chi tiết hồ sơ TVV gồm **4 tab**: Hồ sơ, Năng lực, Lịch sử hỗ trợ, Đánh giá". SCR-IV-03 component spec line 12-23 cũng không define row tab HĐ TV. UI thừa 1 tab so với SRS strict reading.
+>
+> **R23 NEW BUG-CG-77-RETRY-005 2026-05-10 09:00:00:** retest TVV-023 (re-submit TU_CHOI → CHO_THAM_DINH) — `nht_04_ui` mở /chuyen-gia-tvv/{id}/chinh-sua TVV-0011 (state TU_CHOI) → click Lưu → FE cố call **5 endpoints transition** đều **404**: `POST /nop-lai`, `/re-submit`, `/dang-ky-lai`, `/cho-tham-dinh`, `/submit`. BE thiếu endpoint cho transition `TU_CHOI → CHO_THAM_DINH` (cooldown 6 tháng đã bỏ BA chốt 2026-05-03 nhưng workflow re-submit chưa build BE).
+>
+> **Re-verify 2026-05-10 03:30:00 R23:** dev push fix wave sau R22. Verify qua UI browser. **2/4 FIXED** (`BUG-CG-77-RETRY-001` Closed: DELETE TVV-0008 → 204 ✅; `BUG-CG-77-RETRY-002` Closed: tab Chờ phê duyệt nay có Phê duyệt hàng loạt + Từ chối hàng loạt + Bỏ chọn tất cả ✅). **1/4 PARTIAL FIX, defect changed** (`BUG-CG-77-RETRY-004`: 500 đã fix → giờ trả 204 nhưng vi phạm BR-LEGAL-04 — BE allow hard-delete TVV có VV active gắn, mong đợi 409 ERR-TVV-05). BUG-003 vẫn Closed từ R10.
+>
+> **Re-verify 2026-05-10 02:35:00 R22:** verify lại qua UI browser cuối ngày 2026-05-10. Kết quả: **3/4 vẫn Open** (`BUG-CG-77-RETRY-001`, `BUG-CG-77-RETRY-002` partial, `BUG-CG-77-RETRY-004`); BUG-003 đã Closed từ R10. Dev không push fix nào trong window R10 → R22.
+>
+> **Re-verify 2026-05-10 R10:** verify lại qua UI browser, không dùng API direct. Kết quả: **1/4 Closed** (`BUG-CG-77-RETRY-003`), **1/4 Partial vẫn Open** (`BUG-CG-77-RETRY-002` có checkbox + `Phê duyệt hàng loạt` nhưng thiếu `Từ chối hàng loạt`), **2/4 Open** (`BUG-CG-77-RETRY-001/004`).
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 4    | 0        | 3     | 0      | 1     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Open (R26) |
+|------|----------|-------|--------|-------|---------|------------|
+| 7    | 0        | 5     | 0      | 2     | 0       | 3 Major (RETRY-004/005/007) — dev claim fix 3 lần (R24/R25/R26) đều không đụng BE |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-CG-77-RETRY-001 | Major | P1 | Functional | TVV-022 | `funtion/7.4-chuyen-gia-tvv.md:170` UC50 + `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` (Xóa mềm) | Click Xóa + confirm "Xóa" không trigger DELETE — record vẫn tồn tại sau reload | Open |
-| BUG-CG-77-RETRY-002 | Major | P1 | UI/UX | TVV-012 | `funtion/7.4-chuyen-gia-tvv.md:75-79` UC44 + SCR-IV-04 "Phê duyệt hàng loạt" | Tab Chờ phê duyệt cho CB_PD_TW thiếu checkbox multi-select + batch action toolbar — không thể Phê duyệt hàng loạt qua UI | Open |
-| BUG-CG-77-RETRY-003 | Minor | P3 | UI/UX (Wording) | TVV-016 | `funtion/7.4-chuyen-gia-tvv.md:108` UC55 tab Lịch sử hỗ trợ | Empty state tab Lịch sử hỗ trợ hiện "Chưa có lịch sử hỗ trợ" thay vì spec "Tư vấn viên chưa tham gia hỗ trợ vụ việc nào" | Open |
-| BUG-CG-77-RETRY-004 | Major | P1 | API + UI/UX | TVV-022 nhánh có VV | `funtion/7.4-chuyen-gia-tvv.md:170` UC50 + BR-LEGAL-04 ERR-TVV-05 | DELETE TVV có VV gắn trả HTTP 500 thay vì 409 ERR-TVV-05 + UI silent (không toast). BE đã reject thực sự (record không bị xóa) nhưng wrong status code | Open |
+| ~~BUG-CG-77-RETRY-001~~ | Major | P1 | Functional | TVV-022 | `funtion/7.4-chuyen-gia-tvv.md:170` UC50 + `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` (Xóa cứng — confirm tại [R7.8.1 hard-delete report](../../functional/cross-cutting/functional-test-report-r7-8-1-hard-delete.md)) | ~~Click Xóa + confirm "Xóa" không trigger DELETE — record vẫn tồn tại sau reload~~ | ✅ Closed 2026-05-10 R23 |
+| ~~BUG-CG-77-RETRY-002~~ | Major | P1 | UI/UX | TVV-012 | `funtion/7.4-chuyen-gia-tvv.md:75-79` UC44 + SCR-IV-04 "Phê duyệt hàng loạt" | ~~Tab Chờ phê duyệt cho CB_PD_TW thiếu checkbox multi-select + batch action toolbar — không thể Phê duyệt hàng loạt qua UI~~ | ✅ Closed 2026-05-10 R23 |
+| ~~BUG-CG-77-RETRY-003~~ | Minor | P3 | UI/UX (Wording) | TVV-016 | `funtion/7.4-chuyen-gia-tvv.md:108` UC55 tab Lịch sử hỗ trợ | ~~Empty state tab Lịch sử hỗ trợ hiện "Chưa có lịch sử hỗ trợ" thay vì spec "Tư vấn viên chưa tham gia hỗ trợ vụ việc nào"~~ | ✅ Closed 2026-05-10 |
+| BUG-CG-77-RETRY-004 | Major | P1 | API + UI/UX | TVV-022 nhánh có VV | `funtion/7.4-chuyen-gia-tvv.md:170` UC50 + BR-LEGAL-04 ERR-TVV-05 | DELETE TVV có VV gắn — R22 500 → R23 204 → R24 204 → R25 204 → **R26 204** (lặp 4 lần, dev claim fix 3 lần đều không đụng BE guard); TVV-0001 (Lý Thị Mười Ba) hard-delete dù còn VV-...20260509-006 DA_PHAN_CONG | R26 STILL OPEN (4 lần verify) |
+| BUG-CG-77-RETRY-005 | Major | P1 | API + Workflow | TVV-023 | `funtion/7.4-chuyen-gia-tvv.md:94` TC TVV-023 + `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` (FR-IV-03 cooldown 6 tháng đã bỏ BA chốt 2026-05-03) + `srs-fr-04:2314` | BE thiếu endpoint transition `TU_CHOI → CHO_THAM_DINH`. R23: 5 path 404; R25: 6 path + PATCH no-op; **R26: 9 path biến thể + PATCH no-op (state vẫn TU_CHOI)** | R26 STILL OPEN |
+| ~~BUG-CG-77-RETRY-006~~ | Minor | P3 | UI/UX | TVV-007 | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:437` FR-IV-08 (4 tab) + SCR-IV-03 component spec (5 tab kể cả Thẩm định cho CB NV) | ~~UI render **6 tab** chi tiết TVV (thêm "HĐ tư vấn") trong khi SRS spec không define row tab này — UI thừa 1 tab so với strict SRS reading~~ | ✅ Closed 2026-05-10 R25 (R26 regression check 5 tab confirmed) |
+| BUG-CG-77-RETRY-007 | Major | P1 | API | TVV-015 | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:687-718` FR-IV-09 step 5-6 + line 2138 entity DANH_GIA_SAU_VU_VIEC + BR-CALC-06 line 2506-2510 | BE thiếu endpoint entity DANH_GIA_SAU_VU_VIEC. R23: 5 path 404; R25: 9 path 404; **R26: 14 GET + 1 POST = 15 variants 404 (đã thử thêm `/feedback`, `/ratings`)** | R26 STILL OPEN |
 
 ---
 
-## BUG-CG-77-RETRY-001 — Xóa mềm TVV không hoạt động
+## ~~BUG-CG-77-RETRY-001~~ [CLOSED] — Xóa cứng TVV không hoạt động
 
-> **Re-test 2026-05-08 R8:** ❌ **VẪN OPEN (symptom changed)**. Account `cb_nv_tw_02`. Tab Đang hoạt động → click Xóa trên TVV-0007 → modal confirm → click [Xóa] → BE trả `500 Internal Server Error` (`code=ERR-SYS-00-00-01`, requestId=8b5559b4-...). Trước R8 silent fail, giờ đổi thành 500. Endpoint: `DELETE /api/v1/tu-van-viens/7cb207b8-eea1-44f2-835f-ebd923dbfbc2`. UC50 Xóa mềm vẫn không work.
+> **Re-test:** 2026-05-10 03:25:00 R23 — ✅ **PASS (Closed-verified)**. `cb_nv_tw_02` ở tab Đang hoạt động → click Xóa trên `TVV-BTP-TW-0008` (no VV link) → confirm modal "Xóa" → `DELETE /api/v1/tu-van-viens/e1c31c14-3a81-47a6-9ffd-5813e7c6e57a` reqid=200 → **HTTP 204** ✅. List count drop 15→14, TVV-0008 GONE từ list. UC50 hard-delete hoạt động. Evidence: [r23-retry001-tvv0008-deleted-204.png](image/r23-retry001-tvv0008-deleted-204.png).
+>
+> **Re-verify 2026-05-10 02:35:30 R22:** ❌ **STILL OPEN** qua UI browser. `cb_nv_tw_02` ở tab `Đang hoạt động` → click Xóa trên `TVV-BTP-TW-0008` (no VV link) + confirm modal "Xóa" → DELETE `/api/v1/tu-van-viens/e1c31c14-3a81-47a6-9ffd-5813e7c6e57a` → HTTP 500 ERR-SYS-00-00-01. Modal đóng, không toast, record TVV-0008 vẫn hiện trong list sau reload. Evidence: [r22-retry001-tvv0008-still-active-after-delete.png](image/r22-retry001-tvv0008-still-active-after-delete.png).
+>
+> **Re-test 2026-05-08 R8:** ❌ **VẪN OPEN (symptom changed)**. Account `cb_nv_tw_02`. Tab Đang hoạt động → click Xóa trên TVV-0007 → modal confirm → click [Xóa] → BE trả `500 Internal Server Error` (`code=ERR-SYS-00-00-01`, requestId=8b5559b4-...). Trước R8 silent fail, giờ đổi thành 500. Endpoint: `DELETE /api/v1/tu-van-viens/7cb207b8-eea1-44f2-835f-ebd923dbfbc2`. UC50 Xóa cứng vẫn không work.
+
+> **Re-verify 2026-05-10 R10:** ❌ **STILL OPEN** qua UI browser, không API direct. Account `cb_nv_tw_02` → tab `Đang hoạt động` → row `TVV-BTP-TW-0008` vẫn tồn tại sau thao tác `Xóa` + confirm và reload danh sách; record vẫn hiển thị `Đang hoạt động` trong list. Evidence: `evidence-r7-7-2/r10-current-cbnv-active-after-retry001.png` + `evidence-r7-7-2/r10-verify-2026-05-10-cg-77-retry-001-confirm-delete-tvv0008.png`.
 
 ### Mô tả
 
-CB Nghiệp vụ TW vào tab Đang hoạt động → bấm nút **Xóa** (cột Hành động) ở row TVV-BTP-TW-0008 (Probe CG R7.4.A1 OptLock Test, nhánh không có VV liên kết). Modal Confirm "Xác nhận xóa Tư vấn viên?" hiện ra → bấm **Xóa**. Modal đóng nhưng KHÔNG có toast feedback success/error. Reload trang → record TVV-0008 vẫn nằm nguyên trong tab Đang hoạt động (state Đang hoạt động không đổi). Functional regression UC50 Xóa mềm.
+CB Nghiệp vụ TW vào tab Đang hoạt động → bấm nút **Xóa** (cột Hành động) ở row TVV-BTP-TW-0008 (Probe CG R7.4.A1 OptLock Test, nhánh không có VV liên kết). Modal Confirm "Xác nhận xóa Tư vấn viên?" hiện ra → bấm **Xóa**. Modal đóng nhưng KHÔNG có toast feedback success/error. Reload trang → record TVV-0008 vẫn nằm nguyên trong tab Đang hoạt động (state Đang hoạt động không đổi). Functional regression UC50 Xóa cứng (BE behavior hard-delete confirmed tại [R7.8.1 hard-delete report](../../functional/cross-cutting/functional-test-report-r7-8-1-hard-delete.md)) — DELETE phải remove record khỏi DB, GET by ID 404.
 
 ### Các bước tái hiện
 
@@ -79,11 +115,17 @@ File gốc: `evidence-r7-7-2/TVV-022-confirm-delete-dialog.png` + `evidence-r7-7
 
 ---
 
-## BUG-CG-77-RETRY-002 — Tab Chờ phê duyệt CB_PD_TW thiếu UI batch select
+## ~~BUG-CG-77-RETRY-002~~ [CLOSED] — Tab Chờ phê duyệt CB_PD_TW thiếu UI batch select
 
+> **Re-test:** 2026-05-10 03:30:00 R23 — ✅ **PASS (Closed-verified)**. Sau khi advance TVV-BTP-TW-0046 (mới) từ MOI_DANG_KY → CHO_PHE_DUYET qua UI (cb_nv_tw_02 → tab Thẩm định → Đạt + ĐẠT + Gửi KQ + Trình duyệt), login `cb_pd_tw_02` → tab Chờ phê duyệt → check 1 row → toolbar nay hiển thị **đầy đủ 3 button: "Phê duyệt hàng loạt" + "Từ chối hàng loạt" + "Bỏ chọn tất cả"** + label "Đã chọn 1 mục". Cả checkbox header + per-row checkbox + batch toolbar đều render đúng. Evidence: [r23-retry002-batch-toolbar-tu-choi-fixed.png](image/r23-retry002-batch-toolbar-tu-choi-fixed.png).
+>
+> **Re-verify 2026-05-10 02:36:30 R22:** ❌ **PARTIAL — STILL OPEN**. Sau khi advance TVV-BTP-TW-0019 từ DTD → CHO_PHE_DUYET qua UI (cb_nv_tw_02 → tab Thẩm định → "ĐẠT" + "Trình duyệt"), login `cb_pd_tw_02` → tab "Chờ phê duyệt" → Select all checkbox → toolbar batch chỉ hiển thị **2 button: "Phê duyệt hàng loạt" + "Bỏ chọn tất cả"**, KHÔNG có "Từ chối hàng loạt". Cùng partial fix R10 — chỉ Phê duyệt hàng loạt được add, Từ chối hàng loạt vẫn thiếu. Evidence: [r22-retry002-batch-toolbar-no-tuchoi.png](image/r22-retry002-batch-toolbar-no-tuchoi.png).
+>
 > **Re-test 2026-05-08 R8:** ⏰ **PENDING ROLE-SWITCH**. Verify cần login `cb_pd_tw_02` riêng — khác role với `cb_nv_tw_02` đang dùng. Quan sát ngày 2026-05-07 chưa thay đổi. Bug giữ Open chờ session role-switch riêng.
 >
 > **Re-test 2026-05-08 R8 lần 2 (đã role-switch):** ❌ **STILL OPEN**. Login `cb_pd_tw_02` (CB Phê duyệt TW) qua isolated context fresh → Mạng lưới TVV → Tư vấn viên / Chuyên gia → tab "Chờ phê duyệt" (URL `/chuyen-gia-tvv/danh-sach?page=1&pageSize=20`). Tab có 2 record `TVV-BTP-TW-0015` + `TVV-BTP-TW-0016` (đúng preseed). Verify a11y snapshot: KHÔNG có `checkbox "Select all"` ở header (tab "Đang hoạt động" cùng role có uid=93_35), KHÔNG có checkbox per row (tab "Đang hoạt động" có uid=93_47/63/79...), cột Hành động chỉ có link "Xem" + button "Xóa" — KHÔNG có "Phê duyệt" / "Từ chối" / batch toolbar. Inconsistency cùng role: tab "Đang hoạt động" render checkbox bình thường, tab "Chờ phê duyệt" thiếu. FE conditional render miss nhánh CHO_PHE_DUYET cho role CB_PD_TW. Bug chưa fix.
+
+> **Re-verify 2026-05-10 R10:** ⚠️ **PARTIAL FIX, KEEP OPEN** qua UI browser, không API direct. Login `cb_pd_tw_02` → tab `Chờ phê duyệt` hiện 1 record `TVV-BTP-TW-0036`; header + row checkbox đã render và chọn được. Sau khi chọn 1 record, toolbar hiện `Phê duyệt hàng loạt` + `Bỏ chọn tất cả`, nhưng **vẫn thiếu `Từ chối hàng loạt`** theo expected result. Evidence: `evidence-r7-7-2/r10-verify-2026-05-10-cg-77-retry-002-after-select-row.png`.
 
 ### Mô tả
 
@@ -133,7 +175,9 @@ File gốc: `evidence-r7-7-2/TVV-012-list-no-batch-checkbox.png` + `evidence-r7-
 
 ---
 
-## BUG-CG-77-RETRY-003 — Wording empty state tab Lịch sử hỗ trợ sai spec
+## ~~BUG-CG-77-RETRY-003~~ — Wording empty state tab Lịch sử hỗ trợ sai spec [CLOSED]
+
+> **Re-verify 2026-05-10 R10:** ✅ **FIXED** qua UI browser, không API direct. Account `cb_nv_tw_02` → detail `TVV-BTP-TW-0008` → tab `Lịch sử hỗ trợ` hiện đúng wording spec: `Tư vấn viên chưa tham gia hỗ trợ vụ việc nào`. Evidence: `evidence-r7-7-2/r10-verify-2026-05-10-cg-77-retry-003-current.png`.
 
 ### Mô tả
 
@@ -165,11 +209,23 @@ File gốc: `evidence-r7-7-2/TVV-016-tab-lich-su-empty.png`
 ---
 
 
-## BUG-CG-77-RETRY-004 — DELETE TVV có VV gắn trả HTTP 500 thay vì 409 ERR-TVV-05 + UI silent
+## BUG-CG-77-RETRY-004 — DELETE TVV có VV gắn — R22 trả 500 / R23 trả 204 bypass BR-LEGAL-04
+
+> **Re-verify 2026-05-10 12:25:00 R26:** ❌ **STILL OPEN — pattern lặp lần thứ 4 (R23/R24/R25/R26)**. `cb_nv_tw_02` API direct `DELETE /api/v1/tu-van-viens/df00f7e1-0d24-4ad2-93f4-132db87749fc` (TVV-BTP-TW-0001 "Lý Thị Mười Ba", verified có VV-BTP-TW-20260509-006 DA_PHAN_CONG + phan-cong CHO_XAC_NHAN gắn qua GET phan-cong trước khi xóa) → **HTTP 204**. Sau xóa GET → 404 (TVV record GONE). Cùng pattern R23-R25: BE allow hard-delete bypass guard. Vi phạm BR-LEGAL-04 + ERR-TVV-05. Evidence: [r26-retry004-tvv0001-still-204-bypass.png](img/r26-retry004-tvv0001-still-204-bypass.png).
+>
+> **Re-verify 2026-05-10 12:05:00 R25:** ❌ **STILL OPEN — dev wave 2 chưa fix**. `cb_nv_tw_02` (isolatedContext qa_r25_verify) → API direct `DELETE /api/v1/tu-van-viens/e69d0d9d-37f7-4d49-b9ff-594437c41af4` (TVV-BTP-TW-0033 "TVV R11 A16 Gate Test", verified có VV-BTP-TW-20260510-001 DA_PHAN_CONG + phan-cong CHO_XAC_NHAN gắn qua GET `/api/v1/vu-viecs/9cc24b55-7c6b-4faa-8051-9a2b0db86cb5/phan-cong` trước khi xóa) → **HTTP 204**. Sau xóa: GET `/api/v1/tu-van-viens/{id}` → 404 (TVV record GONE), GET `/api/v1/vu-viecs/.../phan-cong` → `data: []` (orphan). Pattern lặp 3 lần liên tiếp R23/R24/R25 — **dev không thực sự fix BR-LEGAL-04 guard**. Vi phạm BR-LEGAL-04 + ERR-TVV-05. Evidence: [r25-retry004-tvv0033-still-204-orphan.png](img/r25-retry004-tvv0033-still-204-orphan.png).
+>
+> **Re-verify 2026-05-10 11:30:00 R24:** ❌ **STILL OPEN — dev claim fix nhưng KHÔNG fix**. `cb_nv_tw_02` ở tab Đang hoạt động → click Xóa trên `TVV-BTP-TW-0005 Mai Thị Mười Bảy` (id `87e65340-eeed-4e4d-8b71-9d89522835af`, CG, Sở hữu trí tuệ, Công ty Luật TW Epsilon) — TVV này có 1 VV active gắn: `VV-BTP-TW-20260509-004` (DA_PHAN_CONG, assigneeKind=TVV, status CHO_XAC_NHAN), verified qua GET `/api/v1/vu-viecs/a8a676d5-.../phan-cong` trước khi xóa. Confirm modal Xóa → `DELETE /api/v1/tu-van-viens/87e65340-...` reqid=922 → **HTTP 204** vẫn pass + record TVV-0005 GONE khỏi DB (list count drop 12→11). Sau xóa, GET `/api/v1/vu-viecs/a8a676d5-.../phan-cong` trả mảng rỗng `[]` — **VV bị orphan, mất TVV xử lý**. **Vi phạm BR-LEGAL-04 + ERR-TVV-05**: BE phải trả 409 "Tư vấn viên đang có vụ việc chưa hoàn thành". Defect không đổi so với R23 (204 bypass guard). Evidence: [r24-retry004-tvv0005-still-204-bypass.png](image/r24-retry004-tvv0005-still-204-bypass.png).
+>
+> **Re-verify 2026-05-10 03:25:30 R23:** ❌ **PARTIAL FIX — STILL OPEN, defect changed**. `cb_nv_tw_02` ở tab Đang hoạt động → click Xóa trên `TVV-BTP-TW-0003 Ngô Thị Mười Lăm` (id `8f24c981-af86-459b-89a2-244aaec4c812`) — TVV này có VV active gắn: `VV-BTP-TW-20260507-001` (DA_PHAN_CONG, "VV-001 LAO_DONG - DNTN Đông Dương BCT") + `VV-BTP-TW-20260509-001` (DA_PHAN_CONG, "Tư vấn HĐ lao động mẫu - Phúc An AG"), verified qua GET `/api/v1/vu-viecs?soVuViec=VV-BTP-TW-20260507-001` trả `nguoiHoTro.hoTen: "Ngô Thị Mười Lăm"`. Confirm modal Xóa → `DELETE /api/v1/tu-van-viens/8f24c981-...` reqid=218 → **HTTP 204** ✅ (R22 500 đã fix) nhưng record TVV-0003 đã bị HARD DELETE khỏi DB; list count drop 14→13. **Vi phạm BR-LEGAL-04**: BE phải trả 409 ERR-TVV-05 "Không thể xóa: TVV còn vụ việc đang xử lý". Defect đổi từ "BE crash 500" → "BE allow hard-delete bypass business rule". Evidence: [r23-retry004-tvv0007-confirm-modal.png](image/r23-retry004-tvv0007-confirm-modal.png) + [r23-retry004-tvv0007-deleted-204.png](image/r23-retry004-tvv0007-deleted-204.png) + [r23-retry004-tvv0003-bypass-vv.png](image/r23-retry004-tvv0003-bypass-vv.png).
+>
+> **Re-verify 2026-05-10 02:38:00 R22:** ❌ **STILL OPEN** qua UI browser. `cb_nv_tw_02` ở tab `Đang hoạt động` → click Xóa trên `TVV-BTP-TW-0007 Probe CG R7.4.A1 Permission Test` (id `7cb207b8-...`, có VV gắn) + confirm modal "Xóa" → DELETE `/api/v1/tu-van-viens/7cb207b8-...` → **HTTP 500 ERR-SYS-00-00-01** (NOT 409 ERR-TVV-05 per BR-LEGAL-04). Modal đóng, không toast business error rõ ràng. Evidence: [r22-retry004-tvv0007-delete-500.png](image/r22-retry004-tvv0007-delete-500.png).
+>
+> **Re-verify 2026-05-10 R10:** ❌ **STILL OPEN** qua UI browser, không API direct. Account `cb_nv_tw_02` → tab `Đang hoạt động` → row `TVV-BTP-TW-0003 Ngô Thị Mười Lăm` vẫn tồn tại sau thao tác `Xóa` + confirm và reload danh sách; UI không hiển thị thông báo business error rõ ràng kiểu `Không thể xóa: TVV còn vụ việc đang xử lý` / `ERR-TVV-05`. Evidence: `evidence-r7-7-2/r10-verify-2026-05-10-cg-77-retry-004-confirm-specific.png` + `evidence-r7-7-2/r10-verify-2026-05-10-cg-77-retry-004-after-specific.png`.
 
 ### Mô tả
 
-CB Nghiệp vụ TW vào tab Đang hoạt động → click nút **Xóa** ở row TVV-BTP-TW-0003 (Ngô Thị Mười Lăm — CG, Lao động, **đang gắn vụ việc VV-BTP-TW-20260507-001 trạng thái Đã phân công**). Modal Confirm "Xác nhận xóa" hiện → click nút **Xóa**. Modal đóng nhưng **KHÔNG có toast** Success/Error. Network: `DELETE /api/v1/tu-van-viens/8f24c981-af86-459b-89a2-244aaec4c812` trả **HTTP 500** Internal Server Error. API GET ngay sau action: TVV-0003 vẫn `HOAT_DONG, version=6` (BE đã reject thực sự — record không bị soft-delete) nhưng dùng wrong status code (500 thay vì 409 ERR-TVV-05) và FE không hiển thị thông báo cho user.
+CB Nghiệp vụ TW vào tab Đang hoạt động → click nút **Xóa** ở row TVV-BTP-TW-0003 (Ngô Thị Mười Lăm — CG, Lao động, **đang gắn vụ việc VV-BTP-TW-20260507-001 trạng thái Đã phân công**). Modal Confirm "Xác nhận xóa" hiện → click nút **Xóa**. Modal đóng nhưng **KHÔNG có toast** Success/Error. Network: `DELETE /api/v1/tu-van-viens/8f24c981-af86-459b-89a2-244aaec4c812` trả **HTTP 500** Internal Server Error. API GET ngay sau action: TVV-0003 vẫn `HOAT_DONG, version=6` (BE đã reject thực sự — record không bị xóa cứng) nhưng dùng wrong status code (500 thay vì 409 ERR-TVV-05) và FE không hiển thị thông báo cho user. BE behavior expected = hard-delete (xóa cứng) khi không có VV gắn — confirm tại [R7.8.1 hard-delete report](../../functional/cross-cutting/functional-test-report-r7-8-1-hard-delete.md).
 
 ### Các bước tái hiện
 
@@ -226,4 +282,180 @@ File gốc: `evidence-r7-7-2/TVV-022-have-VV-confirm-modal.png` + `TVV-022-have-
 
 ---
 
-*R7.7.2 verify retry session 2026-05-08 (pass 3 + pass 4) — KO log lại 2 bug đã có ([BUG-CG-77-001](bug-report-functional-r7-7-2-tvv.md) + [BUG-CG-77-002](bug-report-functional-r7-7-2-tvv.md)).*
+## BUG-CG-77-RETRY-005 — TU_CHOI → CHO_THAM_DINH transition endpoint thiếu BE
+
+> **Re-verify 2026-05-10 12:25:00 R26:** ❌ **STILL OPEN**. `cb_nv_tw_02` probe **9 POST endpoint biến thể + 1 PATCH** cho TVV-BTP-TW-0038 "TVV Phase B Negative Test" (id `e34dd9eb-...`, TU_CHOI): 9 POST (`/dang-ky-lai`, `/gui-lai`, `/resubmit`, `/cho-tham-dinh`, `/nop-lai`, `/submit`, `/state-transitions`, `/transitions`, `/state`) đều **404 ERR-SYS-00-04-01**. PATCH trangThai 200 nhưng GET sau đó vẫn `TU_CHOI` (no-op). BE chưa expose endpoint cho transition. Evidence: [r26-retry005-tvv0038-9endpoints-404.png](img/r26-retry005-tvv0038-9endpoints-404.png).
+>
+> **Re-verify 2026-05-10 12:05:00 R25:** ❌ **STILL OPEN**. `cb_nv_tw_02` probe 7 endpoint biến thể cho TVV-BTP-TW-0011 (`720eda6c-ad48-4f04-864e-dceba9a74ac2`, TU_CHOI): `POST /dang-ky-lai`, `POST /gui-lai`, `POST /resubmit`, `POST /cho-tham-dinh`, `POST /state-transitions`, `POST /transitions` đều **404 ERR-SYS-00-04-01**. Test riêng `PATCH /api/v1/tu-van-viens/{id}` body `{"trangThai":"CHO_THAM_DINH"}` → 200 nhưng GET sau đó vẫn `trangThai: TU_CHOI` (BE không apply, no-op). Test UI: `cb_nv_tw_02` → /chuyen-gia-tvv/{id}/chinh-sua → click **Lưu** → FE block submit do validation "File thẻ hành nghề là bắt buộc đối với Tư vấn viên" (FE guard). Endpoint transition vẫn thiếu BE, dev wave 2 chưa expose. Evidence: [r25-retry005-tvv0011-edit-validation-block.png](img/r25-retry005-tvv0011-edit-validation-block.png).
+
+### Mô tả
+
+`nht_04_ui` mở form Sửa hồ sơ TVV-BTP-TW-0011 (Lê Văn Chuyên Gia, state `TU_CHOI`) → click **Lưu** → FE intent ngầm trigger transition re-submit nhưng cố call **5 endpoints khác nhau** đều trả **404 ERR-SYS-00-04-01**: `POST /nop-lai`, `POST /re-submit`, `POST /dang-ky-lai`, `POST /cho-tham-dinh`, `POST /submit`. BE thiếu endpoint cho transition `TU_CHOI → CHO_THAM_DINH`. FR-IV-03 BA chốt 2026-05-03 đã bỏ cooldown 6 tháng — nhưng workflow re-submit chưa build BE. Vi phạm SRS srs-fr-04:2314 + TC TVV-023.
+
+### Các bước tái hiện
+
+1. Login `nht_04_ui` / Secret@123 / OTP 666666 → Mạng lưới TVV → Tư vấn viên / Chuyên gia.
+2. Click tab **Từ chối** → mở chi tiết TVV-0011 (Lê Văn Chuyên Gia, state `TU_CHOI`).
+3. Click button "Sửa hồ sơ" → URL navigate `/chuyen-gia-tvv/{id}/chinh-sua`.
+4. Cập nhật field "Ghi chú" với nội dung re-submit (vd "R23 NHT cập nhật hồ sơ bị từ chối — nộp lại cho cơ quan thẩm định").
+5. Click button **Lưu**.
+6. Mở DevTools Network panel → quan sát các request POST.
+
+### Kết quả mong đợi
+
+Theo `funtion/7.4-chuyen-gia-tvv.md:94` TVV-023 + `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` FR-IV-03 + ghi chú BA chốt 2026-05-03 (bỏ cooldown 6 tháng):
+- BE expose endpoint workflow để TVV trạng thái `TU_CHOI` được nộp lại (vd `POST /api/v1/tu-van-viens/{id}/nop-lai` hoặc transition tương đương).
+- Endpoint trả 200 + state đổi `TU_CHOI → CHO_THAM_DINH`, version increment.
+- Toast "Nộp lại thành công" + redirect /chi-tiet hoặc danh-sach.
+
+### Kết quả thực tế
+
+FE Lưu cố call 5 transition endpoints để dò scheme nào BE đã build, đều **404**:
+
+```
+POST /api/v1/tu-van-viens/720eda6c-.../nop-lai     → 404 ERR-SYS-00-04-01
+POST /api/v1/tu-van-viens/720eda6c-.../re-submit   → 404 ERR-SYS-00-04-01
+POST /api/v1/tu-van-viens/720eda6c-.../dang-ky-lai → 404 ERR-SYS-00-04-01
+POST /api/v1/tu-van-viens/720eda6c-.../cho-tham-dinh → 404 ERR-SYS-00-04-01
+POST /api/v1/tu-van-viens/720eda6c-.../submit      → 404 ERR-SYS-00-04-01
+```
+
+State sau click Lưu: `TU_CHOI` không đổi (verify GET).
+
+PATCH `/api/v1/tu-van-viens/{id}` (update field bình thường) trả **200** OK + version increment — chứng minh ID hợp lệ + endpoint update field hoạt động. Vấn đề chỉ ở transition endpoint cho re-submit.
+
+### Bằng chứng
+
+- [`evidence-r7-7-2/r23-tvv023-tu-choi-resubmit-404.png`](../../functional/tu-van-vien-cg/evidence-r7-7-2/r23-tvv023-tu-choi-resubmit-404.png) — DevTools Network panel hiện 5 POST 404 sau click Lưu.
+
+**Network log trích nguyên văn:**
+
+```
+reqid=619 POST /api/v1/tu-van-viens/720eda6c-ad48-4f04-864e-dceba9a74ac2/nop-lai     [404]
+reqid=620 POST /api/v1/tu-van-viens/720eda6c-ad48-4f04-864e-dceba9a74ac2/re-submit   [404]
+reqid=621 POST /api/v1/tu-van-viens/720eda6c-ad48-4f04-864e-dceba9a74ac2/dang-ky-lai [404]
+reqid=622 GET  /api/v1/tu-van-viens/720eda6c-ad48-4f04-864e-dceba9a74ac2/transitions [404]
+reqid=623 POST /api/v1/tu-van-viens/720eda6c-ad48-4f04-864e-dceba9a74ac2/cho-tham-dinh [404]
+reqid=624 POST /api/v1/tu-van-viens/720eda6c-ad48-4f04-864e-dceba9a74ac2/submit      [404]
+```
+
+---
+
+## ~~BUG-CG-77-RETRY-006~~ [CLOSED] — UI render 6 tab chi tiết TVV vs SRS spec 4-5 tab
+
+> **Re-test:** 2026-05-10 12:05:00 R25 — ✅ **PASS (Closed-verified)**. `cb_nv_tw_02` mở chi tiết `TVV-BTP-TW-0001` (Lý Thị Mười Ba, HOAT_DONG) → tab list giảm từ **6 → 5 tab**: Hồ sơ / Thẩm định disabled / Năng lực / Lịch sử hỗ trợ / Đánh giá. Tab "HĐ tư vấn" đã được remove. 5 tab nằm trong khoảng 4-5 strict SRS allow (SCR-IV-03 cho phép Thẩm định cho CB NV state HOAT_DONG). Closed. Evidence: [r25-retry006-tvv-detail-5tabs-fixed.png](img/r25-retry006-tvv-detail-5tabs-fixed.png).
+
+### Mô tả
+
+Mở chi tiết hồ sơ TVV (vd TVV-BTP-TW-0001 từ tab Đang hoạt động) → UI render **6 tab**: `Hồ sơ`, `Năng lực`, `Lịch sử hỗ trợ`, `Đánh giá`, **`HĐ tư vấn`**, `Thẩm định`. SRS strict reading không define tab "HĐ tư vấn" trong component SCR-IV-03. FR-IV-08 line 437 srs-fr-04 ghi rõ "Xem chi tiết hồ sơ TVV gồm **4 tab**: Hồ sơ, Năng lực, Lịch sử hỗ trợ, Đánh giá". SCR-IV-03 component spec mở rộng 5 tab (thêm Thẩm định cho CB NV) nhưng cũng KHÔNG có tab HĐ tư vấn. UI thừa 1 tab so với spec.
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_02` / Secret@123 / OTP 666666 → Mạng lưới TVV → Tư vấn viên / Chuyên gia.
+2. Click tab `Đang hoạt động` → click row TVV-BTP-TW-0001 (hoặc bất kỳ TVV state HOAT_DONG).
+3. Quan sát thanh tab phía trên trong drawer/màn chi tiết.
+
+### Kết quả mong đợi
+
+Theo `srs-fr-04-chuyen-gia-tvv.md:437` (FR-IV-08): "Xem chi tiết hồ sơ TVV gồm 4 tab: Hồ sơ, Năng lực, Lịch sử hỗ trợ, Đánh giá."
+
+SCR-IV-03 component spec (line 12-23): cho phép thêm tab `Thẩm định` khi role CB NV → max 5 tab. KHÔNG có row tab "HĐ tư vấn".
+
+UI phải render đúng 4 tab (FR-IV-08) hoặc 5 tab (SCR-IV-03) — không nhiều hơn.
+
+### Kết quả thực tế
+
+UI render **6 tab**, thừa tab `HĐ tư vấn`. Tab này click vào load list HĐ tư vấn liên quan TVV, lấy data từ entity HOP_DONG_TU_VAN (FK `tu_van_vien_id`). Function thực tế hữu ích nhưng KHÔNG được spec trong SCR-IV-03.
+
+### Bằng chứng
+
+- `evidence-r7-7-2/TVV-007-detail-6-tabs.png` — drawer chi tiết hiện 6 tab.
+
+### So sánh
+
+Đây là deviation cần BA quyết định:
+- **Option A — Update SRS:** BA bổ sung row tab `HĐ tư vấn` vào SCR-IV-03 component spec với data lấy từ srs-fr-14-hop-dong-tv.md. Đóng bug này → ✅ UI đúng spec sau update.
+- **Option B — Remove UI tab:** Dev xóa tab `HĐ tư vấn` khỏi SCR-IV-03, di chuyển truy cập HĐ TV qua màn riêng (UC163). Đóng bug này → ✅ UI đúng spec hiện tại.
+
+Mục lục SRS v3 mention HĐ TV liên kết qua data model (FK `hop_dong_tv_id`) nhưng KHÔNG spec UI hiển thị ở chi tiết TVV. Phải BA chốt một trong 2 option.
+
+---
+
+## BUG-CG-77-RETRY-007 — BE thiếu endpoint danh-gia-sau-vu-viec (BR-CALC-06)
+
+> **Re-verify 2026-05-10 12:25:00 R26:** ❌ **STILL OPEN**. Probe **14 GET + 1 POST = 15 path variants** đều **404**: `/api/v1/danh-gia-sau-vu-viec[s]`, `/api/v1/danh-gia[s]`, `/api/v1/danh-gia-tvv`, `/api/v1/danh-gia-vu-viec`, `/api/v1/vu-viecs/danh-gia[-sau-vu-viec]`, `/api/v1/tu-van-viens/danh-gia[-sau-vu-viec]`, `/api/v1/danh-gia-sau-vu-viec/list`, `/api/v1/danh-gia/sau-vu-viec`, `/api/v1/feedback`, `/api/v1/ratings`. POST `/api/v1/danh-gia-sau-vu-viec` body `{vuViecId: VV-...20260509-008, tuVanVienId, diem: 5.0, nhanXet}` cũng 404 ERR-SYS-00-04-01. BE entity DANH_GIA_SAU_VU_VIEC chưa expose. BR-CALC-06 không tính được `diem_danh_gia_tb`. Evidence: [r26-retry007-15variants-still-404.png](img/r26-retry007-15variants-still-404.png).
+>
+> **Re-verify 2026-05-10 12:05:00 R25:** ❌ **STILL OPEN**. `cb_nv_tw_02` probe 9 path variants `/api/v1/danh-gia-sau-vu-viec`, `/api/v1/danh-gia-sau-vu-viecs`, `/api/v1/danh-gia`, `/api/v1/vu-viecs/danh-gia`, `/api/v1/danh-gia-tvv`, `/api/v1/tu-van-viens/danh-gia`, `/api/v1/danh-gias`, `/api/v1/danh-gia-vu-viec`, `/api/v1/vu-viecs/danh-gia-sau-vu-viec` đều **404** (ERR-SYS-00-04-01 hoặc ERR-VAL-VII-02-01). BE chưa expose endpoint cho entity DANH_GIA_SAU_VU_VIEC. BR-CALC-06 vẫn không tính được `diem_danh_gia_tb` cho TVV. Evidence: [r25-retry007-endpoint-9var-still-404.png](img/r25-retry007-endpoint-9var-still-404.png).
+
+### Mô tả
+
+Probe 5 endpoint variants để tạo/đọc entity `DANH_GIA_SAU_VU_VIEC` trên VV-BTP-TW-20260509-008 (state HOAN_THANH có TVV gắn) đều trả **404**. Vi phạm SRS spec FR-IV-09 (UC47 Đánh giá TVV) bắt buộc tạo bản ghi DANH_GIA_SAU_VU_VIEC để BR-CALC-06 tính `diem_danh_gia_tb` của TVV. Hậu quả: DN không thể đánh giá TVV sau VV qua bất kỳ path nào, BR-CALC-06 không có nguồn dữ liệu, `diem_danh_gia_tb` luôn NULL hiển thị "—/5".
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_02` / Secret@123 / OTP 666666 → Tổng quan.
+2. Click stat card "Vụ việc hoàn thành: 2 vụ việc" → URL `/vu-viec/danh-sach?trangThai=HOAN_THANH`.
+3. Click VV-BTP-TW-20260509-008 → URL `/vu-viec/{id}` (state HOAN_THANH, có TVV "TVV R11 Verify Mail Fix" gắn qua phân công).
+4. Mở DevTools Console → fetch 5 endpoint variants:
+
+```js
+const vvId = '8d074115-4da5-427c-af55-3909f1e4e675';
+const tries = [
+  `/api/v1/vu-viecs/${vvId}/danh-gia-sau-vu-viec`,
+  `/api/v1/vu-viecs/${vvId}/danh-gia`,
+  `/api/v1/danh-gia-sau-vu-viec?vu_viec_id=${vvId}`,
+  `/api/v1/danh-gia-sau-vu-viec/${vvId}`,
+  `/api/v1/danh-gia/sau-vu-viec/${vvId}`,
+];
+for (const url of tries) {
+  const r = await fetch(url, { credentials: 'include' });
+  console.log(url, r.status);
+}
+```
+
+### Kết quả mong đợi
+
+Theo `srs-fr-04-chuyen-gia-tvv.md:687` FR-IV-09 (UC47) + line 717-718:
+- Step 5: "Tạo bản ghi DANH_GIA_SAU_VU_VIEC `[GAP-IV-02]`"
+- Step 6: "Cập nhật `diem_danh_gia_tb` của TVV (trigger FR-IV-CROSS-01) — BR-CALC-06"
+
+Theo line 2138 entity DANH_GIA_SAU_VU_VIEC (owned) + line 2506-2510 BR-CALC-06:
+- BE phải expose endpoint POST/GET cho entity DANH_GIA_SAU_VU_VIEC.
+- DN role có quyền POST đánh giá sau khi VV state HOAN_THANH.
+- Endpoint trả 200/201 + payload bản ghi tạo, trigger BR-CALC-06 tính lại `diem_danh_gia_tb`.
+
+### Kết quả thực tế
+
+Tất cả 5 endpoint variants đều **404 Not Found**:
+
+```
+GET /api/v1/vu-viecs/{id}/danh-gia-sau-vu-viec     → 404
+GET /api/v1/vu-viecs/{id}/danh-gia                 → 404
+GET /api/v1/danh-gia-sau-vu-viec?vu_viec_id={id}   → 404
+GET /api/v1/danh-gia-sau-vu-viec/{id}              → 404
+GET /api/v1/danh-gia/sau-vu-viec/{id}              → 404
+```
+
+VV detail page section "Đánh giá" expand sẵn nhưng render empty state "Chưa có thông tin" — UI không hề trigger fetch endpoint nào → BE chưa build, FE chưa wire.
+
+GET `/api/v1/vu-viecs/{id}` returns 200 và `/phan-cong` returns TVV gắn → context VV hợp lệ, vấn đề chỉ ở missing entity endpoint.
+
+### Bằng chứng
+
+- [`evidence-r7-7-2/r23-tvv015-danh-gia-endpoint-404.png`](../../functional/tu-van-vien-cg/evidence-r7-7-2/r23-tvv015-danh-gia-endpoint-404.png) — VV detail page với section Đánh giá empty state.
+
+**Network log probe nguyên văn:**
+
+```json
+[
+  {"url":"/api/v1/vu-viecs/8d074115-.../danh-gia-sau-vu-viec","status":404},
+  {"url":"/api/v1/vu-viecs/8d074115-.../danh-gia","status":404},
+  {"url":"/api/v1/danh-gia-sau-vu-viec?vu_viec_id=8d074115-...","status":404},
+  {"url":"/api/v1/danh-gia-sau-vu-viec/8d074115-...","status":404},
+  {"url":"/api/v1/danh-gia/sau-vu-viec/8d074115-...","status":404}
+]
+```
+
+---
+
+*R7.7.2 verify retry session 2026-05-08 (pass 3 + pass 4) — KO log lại 2 bug đã có ([BUG-CG-77-001](Pass-bug-report-functional-r7-7-2-tvv.md) + [BUG-CG-77-002](Pass-bug-report-functional-r7-7-2-tvv.md)). R23 add BUG-RETRY-005 + BUG-RETRY-006 + BUG-RETRY-007.*

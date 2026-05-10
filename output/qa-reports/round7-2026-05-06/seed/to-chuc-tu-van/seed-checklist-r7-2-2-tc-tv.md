@@ -2,7 +2,7 @@
 
 > ✅ **UI re-test 2026-05-09 R8 — PASS.** Đã seed thêm 3 TC TV qua UI (cb_nv_tw_02): **TC-BTP-TW-0006** (CONG_TY_LUAT, Theta) UUID `a32d7714-b834-49ff-b6a4-c3fede1c1eee`, **TC-0007** (VP_LUAT_SU, Iota) UUID `8fe25cb4-cab6-4b0c-a73e-0f1b6ce5b8dc`, **TC-0008** (TT_TVPL, Kappa) UUID `c92de88e-aeab-4859-bf26-5f8ff23e1fc7` — 3/3 PASS state `MOI_DANG_KY`, `POST /api/v1/to-chuc-tu-vans` 201 CREATED. Cover full 3 loại hình theo fixture. **BVA negative (KHAC + thiếu Số Giấy ĐKHĐ):** FE block client-side với message "Số Giấy ĐKHĐ là bắt buộc (NĐ 77/2008 Đ.13)" — đúng spec, không gửi BE.
 >
-> ⚠️ **Method note (2026-05-08):** API path 5 record ban đầu chạy thuần `POST` — vi phạm rule UI-only. UI path nay verified với 3 record bổ sung. **2 bug FE log hôm 2026-05-08 đều Closed sau re-test:** FE-002 Not-a-bug (BE auto-derive donViQuanLyId từ session user); FE-003 Not-reproducible (4/4 submit PASS hôm nay). Pool tổng: **5 HOAT_DONG** (0001..0005, từ API) **+ 3 MOI_DANG_KY** (0006..0008, qua UI) = 8 record. Bug log: [bug-report-r7-2-2-tctv-ui-seed.md](../../bug-reports/to-chuc-tu-van/bug-report-r7-2-2-tctv-ui-seed.md).
+> ⚠️ **Method note (2026-05-08):** API path 5 record ban đầu chạy thuần `POST` — vi phạm rule UI-only. UI path nay verified với 3 record bổ sung. **2 bug FE log hôm 2026-05-08 đều Closed sau re-test:** FE-002 Not-a-bug (BE auto-derive donViQuanLyId từ session user); FE-003 Not-reproducible (4/4 submit PASS hôm nay). Pool tổng: **5 HOAT_DONG** (0001..0005, từ API) **+ 3 MOI_DANG_KY** (0006..0008, qua UI) = 8 record. Bug log: [Pass-bug-report-r7-2-2-tctv-ui-seed.md](../../bug-reports/to-chuc-tu-van/Pass-bug-report-r7-2-2-tctv-ui-seed.md).
 
 **Ngày chạy:** 2026-05-06 (R7)
 **Account:** `cb_nv_tw_02` (CB_NV_TW)
@@ -54,3 +54,29 @@ Fixture code → DB code (qua `GET /api/v1/danh-muc/tree?loaiDanhMuc=LINH_VUC_PL
 
 - ⏳ T2 (R7.2.3): Phê duyệt 5 TC TV → `HOAT_DONG` (account `cb_pd_tw_02`).
 - ⏳ T3 (R7.2.6): Seed 6 CG TW dùng `toChucChinhId` từ pool 5 TC TV này.
+
+## Smoke retest 2026-05-09 23:35:00
+
+**Verdict:** ✅ Đạt — full luồng TC TV (4 task R7) còn ổn định.
+
+**Account:** `cb_nv_tw_02` · **Tool:** Chrome DevTools MCP · **Mode:** smoke retest (không seed mới).
+
+**Pool re-verify** (UI tabs + API `GET /api/v1/to-chuc-tu-vans?page=1&pageSize=100` HTTP 200):
+- Total = **9** ✓ match state-snapshot 2026-05-09 17:25.
+- HOAT_DONG = **7** (TC-BTP-TW-0001..0005, 0007, 0008) ✓.
+- CHO_PHE_DUYET = **2** (TC-STP-AG-0001 An Giang, TC-STP-BG-0001 Bắc Giang) ✓.
+- MOI_DANG_KY/TU_CHOI/TAM_DUNG/VO_HIEU_HOA = 0 ✓ (empty state "Trống" render đúng).
+
+**Coverage cover R7 task:**
+- R7.2.2 seed (loại hình) — 3 loại render: Trung tâm Tư vấn Pháp luật / Văn phòng Luật sư / Công ty Luật ✓.
+- R7.2.3 advance HOAT_DONG — 7 record HOAT_DONG (sau R8 advance TC-0006/0007/0008) ✓.
+- R7.4.A6 workflow state machine — detail TC-BTP-TW-0008: 4 action [Chỉnh sửa] / [Tạm dừng] / [Vô hiệu hóa] / [Xóa] + switch Công khai render đầy đủ ✓ (không trigger transition để tránh thay đổi pool).
+- R7.7.4.6 functional — 6 tabs (HOAT_DONG/CHO_PHE_DUYET/MOI_DANG_KY/TU_CHOI/TAM_DUNG/VO_HIEU_HOA), search "Alpha" → 1 record TC-BTP-TW-0001 đúng, 3 filter combobox (Lĩnh vực / Đơn vị / Loại hình) render, pagination "20 / trang" page 1/1 ✓.
+
+**Console:** clean (chỉ 1 warning AntD lib `Space direction` deprecation — không phải app bug).
+
+**Bằng chứng:** [smoke-retest-2026-05-09-tc-tw-0008-detail.png](smoke-retest-2026-05-09-tc-tw-0008-detail.png)
+
+**Drift đã ghi nhận từ R7 (giữ nguyên, không cần action):**
+- TC-BTP-TW-0006 đã mất khỏi HOAT_DONG (drift unknown trước R2 16:35 R7.2.3).
+- TC-BTP-TW-0009 đã DELETE qua BUG-001 R7.7.4.6 R1 (qtht_01 BE 403 đúng spec — bug đã đóng).

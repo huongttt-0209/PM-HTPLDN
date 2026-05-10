@@ -11,7 +11,7 @@ Dev đã deploy SRS update 2026-05-05 + partial reset DB (verified 2026-05-06 qu
 - 3 sub-menu Mạng lưới TVV (Tư vấn viên / Chuyên gia + Người hỗ trợ pháp lý + Tổ chức tư vấn) ĐÃ DEPLOY đầy đủ (verified với role `cb_nv_tw_01`); 6 tab SM-TCTV match SRS.
 - Endpoint NHT `/api/v1/nguoi-ho-tro` (singular) 200 OK — DEPLOY-001 R7.0.2 (plural `/nguoi-ho-tros` 404) có thể đã đổi tên hoặc fix, cần re-verify khi seed.
 - Còn block: DEPLOY-003 4 sub-menu Đào tạo mới thiếu (Kế hoạch năm/Lịch học/Đề kiểm tra/Học viên), DEPLOY-004 Ngày lễ sub-menu thiếu, DEPLOY-005 filter Địa bàn TVV vẫn còn.
-- R7.0.6 cũng phát hiện 2 gap FR-07 (button [Thêm mới]/[Import Excel]) → dev fix Closed 2026-05-06 ([bug-report-audit-r7-0-6-fr-07-buttons.md](../output/qa-reports/round7-2026-05-06/bug-reports/bug-report-audit-r7-0-6-fr-07-buttons.md)).
+- R7.0.6 cũng phát hiện 2 gap FR-07 (button [Thêm mới]/[Import Excel]) → dev fix Closed 2026-05-06 ([Pass-bug-report-audit-r7-0-6-fr-07-buttons.md](../output/qa-reports/round7-2026-05-06/bug-reports/Pass-bug-report-audit-r7-0-6-fr-07-buttons.md)).
 - 2 false positive R7.0.2 (sub-menu NHT/TC TV) DROPPED — bài học: verify UI gap dùng đúng role có permission per SCR (memory `feedback_verify_ui_gap_role_permission`).
 
 ---

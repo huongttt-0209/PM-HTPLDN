@@ -1,0 +1,137 @@
+{
+  "ass": {
+    "status": 200,
+    "json": {
+      "success": true,
+      "data": [
+        {
+          "id": "4cc460fd-d73f-4709-a8c3-c764e591bea9",
+          "nguoiTaoId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+          "nguoiCapNhatId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+          "ngayTao": "2026-05-09T11:58:43.466Z",
+          "ngayCapNhat": "2026-05-09T11:58:43.466Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "seqId": "1",
+          "version": 1,
+          "keHoachId": "c521f1f1-82b2-424a-a14c-6d01e91ce540",
+          "nguoiDanhGiaId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+          "vaiTro": "TRUONG_NHOM",
+          "trangThai": "CHUA_BAT_DAU",
+          "ghiChu": "R7.4.D2 QA-only phân công bằng bộ tài khoản 03.",
+          "keHoach": {
+            "id": "c521f1f1-82b2-424a-a14c-6d01e91ce540",
+            "nguoiTaoId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+            "nguoiCapNhatId": "2a5303aa-b0a2-48e4-aa1d-27a5d97cfecd",
+            "ngayTao": "2026-05-09T11:41:05.148Z",
+            "ngayCapNhat": "2026-05-09T11:41:05.148Z",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "seqId": "1",
+            "version": 1,
+            "trangThai": "LAP_KE_HOACH",
+            "nguoiGuiDuyetId": null,
+            "ngayGuiDuyet": null,
+            "nguoiDuyetId": null,
+            "ngayDuyet": null,
+            "ghiChuPheDuyet": null,
+            "maKeHoach": "DG-20260509-0001",
+            "tenDot": "QA R7.4.D1 bo 03 202605091141",
+            "mucTieu": "QA report-only R7.4.D1 bằng bộ tài khoản 03. Kiểm tra tạo kỳ Đánh giá Hiệu quả HTPL trạng thái LAP_KE_HOACH và chuyển sang tab Tiêu chí.",
+            "tanSuat": "SO_BO_6_THANG",
+            "doiTuong": "VU_VIEC",
+            "thoiGianBatDau": "2026-03-31",
+            "thoiGianKetThuc": "2026-06-29",
+            "ghiChu": "QA-only R7.4.D1, account cb_nv_tw_03.",
+            "soVuViecDanhGia": 0,
+            "diemTrungBinh": null
+          },
+          "linhVucIds": [
+            "bbbbbbbb-0000-4000-8000-000000000013"
+          ]
+        }
+      ],
+      "meta": {
+        "tongPhanCong": 1,
+        "soTruongNhom": 1
+      }
+    }
+  },
+  "logs": [
+    {
+      "status": 401,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/auth/me"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/auth/login"
+    },
+    {
+      "status": 200,
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/auth/verify-otp"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/auth/me"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/auth/me"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/thong-baos/unread-count"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/tieu-chis"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/phan-congs"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/danh-muc?loaiDanhMuc=LINH_VUC_PL&pageSize=100"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/ke-hoach-danh-gias/lookup/danh-gia-vien?pageSize=100"
+    },
+    {
+      "status": 201,
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/phan-congs"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/phan-congs"
+    },
+    {
+      "status": 200,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/ke-hoach-danh-gias/c521f1f1-82b2-424a-a14c-6d01e91ce540/phan-congs"
+    }
+  ],
+  "failed": [
+    {
+      "status": 401,
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/auth/me"
+    }
+  ]
+}

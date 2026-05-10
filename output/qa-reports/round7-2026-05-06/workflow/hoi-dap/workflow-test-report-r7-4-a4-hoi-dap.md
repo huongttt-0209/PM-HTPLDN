@@ -4,14 +4,76 @@
 |-----------|---------|
 | **Module** | Hỏi đáp Pháp luật (FR-02 · Nhóm II) |
 | **SRS ref** | [`6.2-sm-hoidap.md`](../../../../smoke/6.2-sm-hoidap.md) v3.5 (11 paths) + [`02-thu-tu-module.md §FR-02`](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) line 484-509 |
-| **Round** | R8 (2026-05-08) |
+| **Round** | R9 (2026-05-09) — LATEST · R8 (2026-05-08) archived |
 | **Tester** | QA Automation (Chrome DevTools MCP) |
-| **Pre-req** | R7.2.9 ✅ TK active · R7.3.1 ⚠️ pool reset (re-seed inline 6 HD R7.4.A4) · R7.3.1.MoB ✅ · R7.3.1.TVN 🟢 chưa run (TVN_BRIDGE pool empty) |
-| **Bug report** | [bug-report-r7-4-a4-hd-workflow-block.md](../../bug-reports/hoi-dap/bug-report-r7-4-a4-hd-workflow-block.md) |
+| **Pre-req** | R7.2.9 ✅ TK active · R7.3.1 ✅ 6 HD MOI re-seeded · R7.3.1.MoB ✅ · R7.3.1.TVN 🚫 TVN_BRIDGE empty (R7.6.3 ⏳) |
+| **Bug report** | [Pass-bug-report-r7-4-a4-hd-workflow-block.md](../../bug-reports/hoi-dap/Pass-bug-report-r7-4-a4-hd-workflow-block.md) — 3/3 đóng |
 
 ---
 
-## Verdict R8
+## Verdict R9 (LATEST)
+
+⚠️ **10/11 PASS** (~91%) — Re-walk 10/11 path sau dev fix 5 bug R8 (BUG-HD-001/002 + BUG-HD-A4-001/002/003 + BUG-HD-FORM-001). State machine simplify về 7-state Master SRS §C.1 (TIEP_NHAN → DANG_XU_LY direct, bỏ DA_PHAN_CONG). 10 path đã walk PASS end-to-end. **TP-HD-09 (TVN_BRIDGE inbound) hoãn** chờ R7.6.3 ⏳ Cổng PLQG endpoint deploy + R7.3.1.TVN seed phiên TVN ESCALATE.
+
+| Path | Transition | Status | Evidence |
+|:-:|---|:-:|---|
+| TP-HD-01/04 | MOI → TIEP_NHAN → DANG_XU_LY → CHO_PHE_DUYET (BR-FLOW-01 auto) | ✅ | [r7-4-a4-tp-hd-01-04-cho-pd-pass.png](image/r7-4-a4-tp-hd-01-04-cho-pd-pass.png) |
+| TP-HD-02 | CHO_PHE_DUYET → DANG_XU_LY (Từ chối + Lý do từ chối ≤500) BR-FLOW-04 | ✅ | [r7-4-a4-tp-hd-02-reject-pass.png](image/r7-4-a4-tp-hd-02-reject-pass.png) |
+| TP-HD-03 | MOI → HUY (Hủy hồ sơ) | ✅ | [r7-4-a4-tp-hd-03-cancel-pass.png](image/r7-4-a4-tp-hd-03-cancel-pass.png) |
+| TP-HD-05 | CHO_PHE_DUYET → DA_DUYET (Phê duyệt hàng loạt N=1) BR-FLOW-02 | ✅ | [r7-4-a4-tp-hd-05-batch-toolbar.png](image/r7-4-a4-tp-hd-05-batch-toolbar.png) |
+| TP-HD-06 | Immutability {DA_DUYET, CONG_KHAI, HOAN_THANH} | ✅ | [r7-4-a4-tp-hd-06-da-duyet-immutable.png](image/r7-4-a4-tp-hd-06-da-duyet-immutable.png) + tp-hd-10 |
+| TP-HD-07 | CONG_KHAI → DA_DUYET (Hủy công khai) | ✅ | [r7-4-a4-tp-hd-07-unpublish-pass.png](image/r7-4-a4-tp-hd-07-unpublish-pass.png) |
+| TP-HD-09 | TVN_BRIDGE inbound (FR-13 ESCALATE) | ⏰ Hoãn | Defer R7.3.1.TVN — R7.6.3 ⏳ Cổng PLQG endpoint |
+| TP-HD-10 | DA_DUYET → HOAN_THANH (Đóng hồ sơ thủ công) BR-FLOW-06 | ✅ | [r7-4-a4-tp-hd-10-hoan-thanh-pass.png](image/r7-4-a4-tp-hd-10-hoan-thanh-pass.png) |
+| TP-HD-11 | DA_DUYET → CONG_KHAI (Công khai lên Cổng PLQG) BR-FLOW-05 | ✅ | [r7-4-a4-tp-hd-11-cong-khai-pass.png](image/r7-4-a4-tp-hd-11-cong-khai-pass.png) |
+
+> Icon: ✅ Đạt · ⚠️ Sai spec · 🚫 Không test được · ⏰ Hoãn
+
+### R9 walkthrough chronology
+
+1. **TP-HD-01/04 (cb_nv_tw_04 + cb_nv_tw_02 fallback chain)** — HD-20260509-001 Lao động: [Tiếp nhận] → [Phân công] (modal chọn CB Nghiệp vụ TW 04, persist OK qua BUG-HD-A4-002 fix) → state TIEP_NHAN → DANG_XU_LY direct (Master 7-state, no DA_PHAN_CONG intermediate) → form "Soạn phản hồi" render đầy đủ (combobox mẫu PH + textarea ≤5000 + VBPL + Gợi ý DN + button [Lưu nháp]/[Gửi phản hồi]) → fill phản hồi 374 ký tự → confirm dialog "Sau khi gửi, hồ sơ sẽ chuyển sang trạng thái Chờ phê duyệt" → state CHO_PHE_DUYET (BR-FLOW-01 auto). Tương tự HD-20260509-006 Đất đai để có 2 CHO_PHE_DUYET.
+2. **TP-HD-03 (cb_nv_tw_02)** — HD-20260509-003 Thương mại: [Hủy hồ sơ] → confirm "Hồ sơ HD-20260509-003 sẽ chuyển sang trạng thái Đã hủy và không thể tiếp nhận lại" → state HUY. All action buttons removed (terminal immutable).
+3. **TP-HD-02 (cb_pd_tw_01)** — HD-20260509-001 (CHO_PHE_DUYET): [Từ chối] modal → required textarea Lý do từ chối ≤500 → fill "Phản hồi chưa đủ căn cứ pháp lý — vui lòng bổ sung Khoản 1 Điều 113..." → submit → state CHO_PHE_DUYET → DANG_XU_LY. Lý do từ chối persisted ở detail panel "Thông tin xử lý". BR-FLOW-04 verified.
+4. **TP-HD-05 (cb_pd_tw_02)** — HD-20260509-006 (CHO_PHE_DUYET): tab "Chờ phê duyệt" → checkbox "Select all" → toolbar batch xuất hiện ("Đã chọn 1 mục" + [Phê duyệt hàng loạt] + [Bỏ chọn tất cả]) → click [Phê duyệt hàng loạt] → confirm dialog "Phê duyệt 1 hỏi đáp?" → submit → state DA_DUYET. **N=1 partial coverage** chấp nhận do constraint pool 1 record CHO_PHE_DUYET (HD-001 đã reject về DANG_XU_LY ở TP-HD-02). Mechanic + bulk endpoint verified PASS.
+5. **TP-HD-06 (DA_DUYET immutability)** — HD-20260509-006 detail state DA_DUYET: stepper 4 checkmarks (MOI/TIEP_NHAN/DANG_XU_LY/CHO_PHE_DUYET) + "5" badge cho Đã duyệt hiện tại. Action buttons CHỈ CÓ [Công khai lên Cổng PLQG] + [Đóng hồ sơ] — KHÔNG có [Sửa]/[Xóa]/[Phản hồi]/[Phê duyệt]/[Từ chối]/[Hủy]/[Phân công]. "Người duyệt = CB Phê duyệt TW 02" + "Ngày duyệt = 09/05/2026 18:16" persisted. Phản hồi badge "Đã duyệt".
+6. **TP-HD-11 (cb_pd_tw_02)** — HD-20260509-006 (DA_DUYET) → [Công khai lên Cổng PLQG] → modal với optional fields (Mô tả công khai ≤2000 + ảnh đại diện 1 tệp jpg/png ≤5MB + tệp đính kèm ≤10 tệp pdf/doc/xls ≤20MB) → fill Mô tả "[QA-R7.4.A4] Công khai test trên Cổng PLQG..." 151 chars → submit → state CONG_KHAI. Stepper checkmark thứ 6 sáng + button đổi sang [Hủy công khai].
+7. **TP-HD-07 (cb_pd_tw_02)** — HD-20260509-006 (CONG_KHAI) → [Hủy công khai] → confirm dialog "Phản hồi này sẽ bị gỡ khỏi Cổng PLQG" → submit → state DA_DUYET. Toast success "Đã hủy công khai — hồ sơ trả về DA_DUYET". Stepper rollback (uncheck Công khai), button đổi lại [Công khai lên Cổng PLQG]. BR-FLOW-05 reverse verified.
+8. **TP-HD-10 (cb_pd_tw_02)** — HD-20260509-006 (DA_DUYET) → [Đóng hồ sơ] → confirm "Hồ sơ sẽ không thể chỉnh sửa sau khi đóng" → submit → state HOAN_THANH. Stepper FULL 7 checkmarks. Action buttons hoàn toàn biến mất (terminal HOAN_THANH immutable). BR-FLOW-06 v3.5 PASS. **Đồng thời cover TP-HD-06 immutability cho HOAN_THANH.**
+9. **TP-HD-09 SKIP** — TVN_BRIDGE inbound vẫn block do R7.6.3 ⏳ Cổng PLQG endpoint chưa deploy + R7.3.1.TVN 🚫. Defer sang round sau khi R7.6.3 ready.
+
+### Bonus permission verification (CB_PD_TW role)
+
+- List "Tất cả" tab: chỉ button "Xem hỏi đáp" (KHÔNG có Sửa/Xóa/Phản hồi/Phân công). KHÔNG có button "+ Thêm mới" header.
+- Tab "Chờ phê duyệt": checkbox "Select all" + checkbox per row + toolbar [Phê duyệt hàng loạt] + [Bỏ chọn tất cả].
+- Detail DA_DUYET: [Công khai lên Cổng PLQG] + [Đóng hồ sơ] (forward + close, không có backward).
+- Detail CONG_KHAI: [Hủy công khai] + [Đóng hồ sơ] (backward + close).
+- Detail HOAN_THANH: zero action buttons (terminal).
+- Detail CHO_PHE_DUYET: [Phê duyệt] + [Từ chối] (matrix CB_PD_TW có quyền approve/reject).
+
+### Pool sau test R9 (final state)
+
+| Mã HD | LV | Kênh | State cuối | Note |
+|---|---|---|---|---|
+| HD-20260509-001 | Lao động | Trực tiếp | **Đang xử lý** | TP-HD-01/04 → CHO_PHE_DUYET → TP-HD-02 reject → DANG_XU_LY (Lý do từ chối persisted) |
+| HD-20260509-002 | Thuế | DVC | Mới | reserve |
+| HD-20260509-003 | Thương mại | Cổng PLQG | **Hủy** | TP-HD-03 PASS |
+| HD-20260509-004 | Doanh nghiệp | DVC | Mới | reserve |
+| HD-20260509-005 | SHTT | Cổng PLQG | Đang xử lý | reserve (giữ DANG_XU_LY cho R7.7.1) |
+| HD-20260509-006 | Đất đai | HE_THONG_KHAC | **Hoàn thành** | TP-HD-01/04 → TP-HD-05 batch approve → TP-HD-11 publish → TP-HD-07 unpublish → TP-HD-10 đóng hồ sơ → HOAN_THANH (cover 5 paths) |
+| HD-20260509-007 | (chưa note) | — | (Mới) | reserve |
+
+**byState:** {Mới: 4, Đang xử lý: ~5, CHO_PHE_DUYET: 0 (post batch), DA_DUYET: 0, CONG_KHAI: 0, Hoàn thành: 1, Hủy: ~3}.
+
+### Ghi chú thực thi R9
+
+- **Account fallback Rule 7:** primary `cb_nv_tw_01` lock → `cb_nv_tw_02` → `cb_nv_tw_04` (3 lần JWT revoke ~2 phút BE-aggressive memory `qa_htpldn_jwt_revoke_aggressive` repro). PD: `cb_pd_tw_01` → `cb_pd_tw_02`.
+- **HTTP 429 rate limit:** spam re-login trigger 429 trên `/api/v1/auth/login` → cooldown 45s + đổi account.
+- **React Hook Form textarea controlled:** MCP `fill` không persist value vào React state → dùng native HTMLTextAreaElement.prototype value setter + dispatch `input/change/blur` events thay thế.
+- **Soft warning modal "Bạn không phải người được phân công"** xuất hiện khi assignee khác CB hiện tại nhấn [Gửi phản hồi] — bypass bằng [Có] (warning chỉ confirm, không block per spec).
+
+---
+
+## Verdict R8 (archived)
 
 🚫 **BLOCKED 2/11 PASS — BE thêm state DA_PHAN_CONG (8-state) khác Master spec + thiếu transition DA_PHAN_CONG → DANG_XU_LY → workflow stuck.**
 
@@ -170,8 +232,9 @@ POST /api/v1/hoi-daps/HD-004.../huy {version:1, lyDo:'<reason>'}
 
 | Round | Date | Kết quả tóm tắt |
 |---|---|---|
+| **R9** | 2026-05-09 18:30:00 | ⚠️ 10/11 PASS (~91%) — TP-HD-09 TVN_BRIDGE hoãn chờ R7.6.3. State machine simplified về 7-state Master SRS §C.1. 10 path walked unblocked end-to-end. 5 dev-fix bug verified closed. |
 | **R8** | 2026-05-08 | 🚫 2/11 PASS (TP-HD-03 + TP-HD-08 PARTIAL). 8 BLOCKED do BUG-HD-A4-001 (DA_PHAN_CONG transition missing) + 1 SKIP TP-HD-09 (TVN_BRIDGE pool empty). Re-seed inline 6 HD MOI. CauHinhPhanCong workaround seed 5 entries. UI detail DA_PHAN_CONG chỉ có [Quay lại] — không có action button. |
 
 ---
 
-*R8 | QA Automation via Claude Code | Chrome DevTools MCP*
+*R9 | QA Automation via Claude Code | Chrome DevTools MCP*

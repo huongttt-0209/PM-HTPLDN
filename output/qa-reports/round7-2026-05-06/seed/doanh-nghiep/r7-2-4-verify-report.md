@@ -104,7 +104,7 @@ Cả 2 đăng ký qua **luồng self-reg công khai** (FR-VIII-22, không cần 
 
 | Task | Trước | Sau |
 |---|---|---|
-| R7.7.4 Functional DN | có data đủ | thêm 2 DN mới có thể re-test DN-006 (soft delete bug) |
+| R7.7.4 Functional DN | có data đủ | thêm 2 DN mới có thể re-test DN-006 (hard delete — spec đổi soft → hard 2026-05-07, xem [r7-8-1-hard-delete](../../functional/cross-cutting/functional-test-report-r7-8-1-hard-delete.md) + R11.1 verify DN endpoint trong [r7-7-4-dn report](../../functional/doanh-nghiep/functional-test-report-r7-7-4-dn.md)) |
 | R7.7.10 KPI cross-DN | 23 DN | 25 DN |
 | R7.5.2 Cross-module DN tabs | thoả | thoả |
 | R7.8.7 E2E full luồng (mới thêm) | cần ≥1 DN fresh | DN-BGG-0001 + Phú Cường BN ứng viên (chưa login lần đầu, chưa có VV) |
@@ -114,3 +114,43 @@ Cả 2 đăng ký qua **luồng self-reg công khai** (FR-VIII-22, không cần 
 R7.2.4 ✅ PASS — pool drift 36→23 do cleanup, gap VUA×CN closed bằng 2 DN seed mới qua self-reg UI. Acceptance per filter (9/9 combo ≥1) thoả. State-snapshot updated 23→25.
 
 **Next:** R7.8.7 E2E có thể dùng 1 trong 2 DN mới làm fresh actor (chưa kích hoạt → start từ FR-VIII-26 reset MK).
+
+---
+
+## 10. Addendum 2026-05-09 17:15:00 — Retry seed DN Nhỏ × Nông lâm × Lạng Sơn (post throttle clear)
+
+Sau khi BE 500 fix 2026-05-09 sáng + throttle clear, retry self-reg DN Nhỏ Nông lâm tại Lạng Sơn để cover thêm vùng địa lý.
+
+### DN #3 — DN Nông sản Lạng Sơn
+
+| Trường | Giá trị |
+|---|---|
+| Tên DN | Công ty TNHH Nông sản Lạng Sơn |
+| MST | 5800000030 |
+| Loại DN | Công ty trách nhiệm hữu hạn (TNHH) |
+| Tỉnh | Lạng Sơn |
+| Ngành | Nông, lâm nghiệp và thủy sản (NONG_LAM) |
+| Quy mô | Nhỏ (NHO) — 50 LĐ / 25 tỷ DT / **18 tỷ vốn** ≤ 20 tỷ ngưỡng NĐ39/2018 nông lâm Nhỏ (BR pass) |
+| Số LĐ / Nữ / Khuyết tật | 50 / 20 / 2 |
+| Người ĐD | Phạm Văn Sơn — Giám đốc |
+
+**API verify:** `POST /api/v1/auth/register-doanh-nghiep` reqid 160 → **201**. `GET /api/v1/doanh-nghieps?search=5800000030` trả `seqId=28`, `id=66bac9ff-9f63-4ab3-9213-54e3e1849b8e`, `quyMo=NHO`, `nganhNghe=NONG_LAM`, `ngayTao=2026-05-09T10:14:38.096Z`. ✅
+
+### Pool sau seed (27 DN)
+
+| Quy mô \ Ngành | CONG_NGHIEP | NONG_LAM | THUONG_MAI | Total |
+|---|:-:|:-:|:-:|:-:|
+| **VUA** | 2 | 2 | 4 | 8 |
+| **NHO** | 5 | **2** ⬆️ | 1 | 8 |
+| **SIEU_NHO** | 3 | 5 | 3 | 11 |
+| **Total** | 10 | 9 | 8 | **27** |
+
+NHO×NL pool 1→2 (đa dạng vùng — Lạng Sơn cover Đông Bắc bộ).
+
+**Bằng chứng:**
+- `r7-2-4-dn-ls-form-filled.png` — full form 21 trường trước submit
+- `r7-2-4-dn-ls-after-submit.png` — sau submit (form vẫn render — UX gap đã note Issue #3 phần 6, BE đã 201 OK)
+
+### Note BE recovery
+
+Lần test trước (sáng 2026-05-09) BE 500 sustained → BLOCKED (Rule 9 ENV DOWN). Sau khi dev fix, retry success ngay lần đầu — BE login + register flow ổn định trở lại.

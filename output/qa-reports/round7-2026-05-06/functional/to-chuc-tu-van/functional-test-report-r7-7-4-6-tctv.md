@@ -121,7 +121,7 @@ DELETE /api/v1/to-chuc-tu-vans/25248ce2-...-d2 (TC-0009)   → 204 ❌ (DELETE t
 - BUG-001 Critical: QTHT bypass authz POST/PATCH/DELETE TO_CHUC_TU_VAN — đã DELETE thực tế TC-BTP-TW-0009. Lặp pattern bug R14 W1.
 - BUG-002 Minor: FE thiếu permission gate cross-cấp — TW PD render [Phê duyệt]/[Từ chối] cross-cấp DP record dù BE 403.
 
-Chi tiết: [bug-report-r7-7-4-6-tctv.md](../../bug-reports/to-chuc-tu-van/bug-report-r7-7-4-6-tctv.md).
+Chi tiết: [Pass-bug-report-r7-7-4-6-tctv.md](../../bug-reports/to-chuc-tu-van/Pass-bug-report-r7-7-4-6-tctv.md).
 
 ## Observation (không log bug, defer BA confirm)
 

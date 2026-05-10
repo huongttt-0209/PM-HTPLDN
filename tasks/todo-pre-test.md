@@ -28,7 +28,7 @@
 
 - ✅ **R7.0.2** 🆕 Log + gửi dev bug deploy gap <a id="r7-0-2"></a>
   - **Kết quả:** Log 6 bug + 2 false-pos drop. Re-test 2026-05-07/08 đóng hết.
-  - **Bug:** [bug-report-audit-deploy-gap.md](../output/qa-reports/round7-2026-05-06/bug-reports/deploy-gap/bug-report-audit-deploy-gap.md) — 6/6 đóng (3M + 2Me + 1Mi Closed-verified)
+  - **Bug:** [Pass-bug-report-audit-deploy-gap.md](../output/qa-reports/round7-2026-05-06/bug-reports/deploy-gap/Pass-bug-report-audit-deploy-gap.md) — 6/6 đóng (3M + 2Me + 1Mi Closed-verified)
 
 - ✅ **R7.0.3** 🆕 Bump fixture v2.7.0 → v2.7.1 <a id="r7-0-3"></a>
   - **Kết quả:** v2.7.1 header note strip `dia_ban_ids` + `loai_tvv:NHT` khỏi payload khi seed. [seed-fixture.yaml v2.7.1](../input/data/seed-fixture.yaml)
@@ -42,7 +42,7 @@
 
 - ✅ **R7.0.6** 🆕 Pre-test UI surface audit per SRS update <a id="r7-0-6"></a>
   - **Kết quả:** PASS 18 + 2 false-pos drop. [ui-surface-audit.md](../output/qa-reports/round7-2026-05-06/seed/cross-module/ui-surface-audit.md)
-  - **Bug:** [bug-report-audit-r7-0-6-fr-07-buttons.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/bug-report-audit-r7-0-6-fr-07-buttons.md) — 2/2 đóng (FR07-UI-001/002 Major Closed)
+  - **Bug:** [Pass-bug-report-audit-r7-0-6-fr-07-buttons.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/Pass-bug-report-audit-r7-0-6-fr-07-buttons.md) — 2/2 đóng (FR07-UI-001/002 Major Closed)
 
 - ✅ **R7.0.7** 🆕 Deep review SRS FR-10 v3.5 + log inconsistency <a id="r7-0-7"></a>
   - **Kết quả:** 11 SRS bug (3 Major BLOCK + 8 Minor doc) + 10 câu BA. Sync 9 file QA spec.

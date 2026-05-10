@@ -17,33 +17,40 @@
 
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
-| **P3** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.3.2](#r7-3-2) |
-| **P4** | 3 | 1 | 0 | 0 | 0 | 0 | 2 | 0 | 🟢[R7.4.A3](#r7-4-a3) · ⏳[R7.4.A3-DN-BS](#r7-4-a3-dn-bs) · ⏳[R7.4.A3-PUBLIC](#r7-4-a3-public) |
-| **P7** | 2 | 0 | 0 | 0 | 0 | 0 | 2 | 0 | ⏳[R7.7.3](#r7-7-3) · ⏳[R7.7.3-PRIVACY](#r7-7-3-privacy) |
-| **Tổng** | **6** | **1** | **0** | **0** | **1** | **0** | **4** | **0** |  |
+| **P3** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.3.2](#r7-3-2) |
+| **P4** | 3 | 0 | 0 | 1 | 0 | 2 | 0 | 0 | ✅[R7.4.A3](#r7-4-a3) · 🚫[R7.4.A3-DN-BS](#r7-4-a3-dn-bs) · 🚫[R7.4.A3-PUBLIC](#r7-4-a3-public) |
+| **P7** | 2 | 0 | 0 | 0 | 1 | 0 | 1 | 0 | ⚠️[R7.7.3](#r7-7-3) · ⏳[R7.7.3-PRIVACY](#r7-7-3-privacy) |
+| **Tổng** | **6** | **0** | **0** | **2** | **1** | **2** | **1** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
-- ⚠️ **R7.3.2** 🔄 Seed 6 VV entry DA_TIEP_NHAN cover 6 LV `[~0% UI — seed API thuần POST /api/v1/vu-viecs/manual, re-test UI per rule]` <a id="r7-3-2"></a>
-  - **Kết quả:** PASS 16/16 (10 cũ + 6 mới) nhưng API thuần — vi phạm rule, cần re-test UI. [seed-checklist-r7-3-2-vv.md](../output/qa-reports/round7-2026-05-06/seed/vu-viec/seed-checklist-r7-3-2-vv.md)
+- ✅ **R7.3.2** 🔄 Seed 6 VV entry DA_TIEP_NHAN cover 6 LV <a id="r7-3-2"></a>
+  - **Kết quả:** PASS 6/6 LV cover. Re-test UI MCP 2026-05-09 09:18→09:20 (cb_nv_tw_01). [seed-checklist-r7-3-2-vv.md](../output/qa-reports/round7-2026-05-06/seed/vu-viec/seed-checklist-r7-3-2-vv.md)
 
-- 🟢 **R7.4.A3** ✏️ Workflow VV — refactor v3.5 `[need: full 100%]` <a id="r7-4-a3"></a>
-  - **Cần:** ≥3 NHT `HOAT_DONG` (✓3) · ≥1 TC TV `HOAT_DONG` (✓5)
+- ✅ **R7.4.A3** ✏️ Workflow VV — refactor v3.5 <a id="r7-4-a3"></a>
+  - **Kết quả:** PASS 12/12 trans. R13 02:00 B5a v3.5 PASS native UI cb_pd_tw_05. 2 finding cũ reclass → DEFERRED-SPEC-VV-01 BA. [workflow-test-report-r7-4-a3-vu-viec.md](../output/qa-reports/round7-2026-05-06/workflow/vu-viec/workflow-test-report-r7-4-a3-vu-viec.md)
+  - **Bug:** [flow](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/bug-report-flow-vu-viec.md) 6/7 đóng (R13 close NHT-NOTIF-01 + SLA-01) + [cascade](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/Pass-bug-report-r7-4-a3-public-phancong-cascade.md) 2/2 đóng. PC-WRN-01 Minor Open.
+  - **Cần:** ≥3 NHT `HOAT_DONG` (✓3) · ≥1 TC TV `HOAT_DONG` (✓5) · ≥1 CG HOAT_DONG (✓1 huongcg R12) · ≥1 TVV active password (✓1 tvv_r11_mailfix R13)
   - **Spec:** FR-05 v3.5 — `7.5-vu-viec-htpl.md` v3.0 (bỏ `nguoi_ho_tro_id`, thay 3 cột phân công + SLA 15 ngày, CB PD từ chối → DANG_XU_LY)
 
-- ⏳ **R7.4.A3-PUBLIC** 🆕 Workflow Công khai VV lên Cổng PLQG `[need: R7.4.A3]` <a id="r7-4-a3-public"></a>
-  - **Cần:** R7.4.A3 🟢 (cần xong) · ≥1 VV `DA_DUYET` hoặc `HOAN_THANH` (✗0) · account `cb_pd_<cap>_02` cùng cấp CB NV xử lý VV
-  - **Spec:** FR-V.I-NEW-05 — 2 self-loop SM trên DA_DUYET + HOAN_THANH (BR-AUTH-05)
+- 🚫 **R7.4.A3-PUBLIC** 🆕 Workflow Công khai VV lên Cổng PLQG `[block: FR-V.I-NEW-05 chưa build BE+FE]` <a id="r7-4-a3-public"></a>
+  - **Kết quả:** 🚫 BLOCKED — 8/8 endpoint cong-khai 404, schema thiếu 5 cột CR-01, UI no button. [workflow-test-report-r7-4-a3-public-vv.md](../output/qa-reports/round7-2026-05-06/workflow/vu-viec/workflow-test-report-r7-4-a3-public-vv.md)
+  - **Bug:** [bug-report-r7-4-a3-public-vv.md](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/bug-report-r7-4-a3-public-vv.md) — 0/1 đóng (Critical:1)
+  - **Cần:** dev BE 5 cột CR-01 + 2 endpoint + dev FE button + 2 modal
+  - **Spec:** FR-V.I-NEW-05 — 2 self-loop SM DA_DUYET + HOAN_THANH (v3.5 sync 2026-05-06)
 
-- ⏳ **R7.4.A3-DN-BS** 🆕 Workflow DN bổ sung HS qua chuyên trang VNeID `[need: R7.4.A3]` <a id="r7-4-a3-dn-bs"></a>
-  - **Cần:** R7.4.A3 🟢 (cần xong) · ≥1 VV `YEU_CAU_BO_SUNG` (✗0) · DN VNeID Tier 2 sandbox · account `dn_<X>_02` đã VNeID T2
+- 🚫 **R7.4.A3-DN-BS** 🆕 Workflow DN bổ sung HS qua chuyên trang VNeID `[block: VNeID T2 sandbox + DN VV YCBS chưa setup]` <a id="r7-4-a3-dn-bs"></a>
+  - **Kết quả:** 🚫 BLOCKED test-env gap — KHÔNG log bug. 14 endpoint probe, `/bo-sung` 403 CMS-only, DN test 0 VV. [workflow-test-report-r7-4-a3-dn-bs-vv.md](../output/qa-reports/round7-2026-05-06/workflow/vu-viec/workflow-test-report-r7-4-a3-dn-bs-vv.md)
+  - **Cần unlock:** dev/infra setup VNeID T2 sandbox URL+token · DN test account verified T2 · seed ≥1 VV `YEU_CAU_BO_SUNG` thuộc DN test (9999999990 hoặc 9999999991) · BE confirm endpoint chuyên trang DN-portal
   - **Spec:** FR-V.I-NEW-02 — formal hoá `YEU_CAU_BO_SUNG → DANG_KIEM_TRA` (form embedded VNeID)
 
-- ⏳ **R7.7.3** ✏️ Vụ việc 72 TC v3.5 (33 base + 42 mới Cluster 1-8) `[need: R7.4.A3, R7.4.A3-PUBLIC, R7.4.A3-DN-BS]` <a id="r7-7-3"></a>
-  - **Cần:** R7.3.2 ⚠️ · R7.4.A3 🟢 · R7.4.A3-PUBLIC ⏳ · R7.4.A3-DN-BS ⏳ · ≥1 VV mỗi state lifecycle (✗ thiếu PHAN_HOI/HOAN_THANH/HUY — pool 5 total: DTN:1, DPC:3, DKT:1) · DN VNeID Tier 2 · CB PD cùng cấp
-  - **Spec:** `7.5-vu-viec-htpl.md` v3.0 (sync 2026-05-06)
+- ⚠️ **R7.7.3** ✏️ Vụ việc 72 TC v3.5 (33 base + 42 mới Cluster 1-8) `[need: feature UC67; DN VNeID T2]` <a id="r7-7-3"></a>
+  - **Kết quả:** ⚠️ R13 19/72: 13 ✅ 4 ❌ 2 ⚠️. SEARCH+SLA fix verify Closed. Cluster 5 BLOCKED UC67. [functional-test-report-r7-7-3-vu-viec.md](../output/qa-reports/round7-2026-05-06/functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md)
+  - **Bug:** [bug-report-r7-7-3-functional-vu-viec.md](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md) — 3/6 đóng (VALIDATION+SEARCH+SLA). DANHGIA/NOTIF/LICHSU vẫn Open.
+  - **Cần:** dev build UC67 FR-V.I-17 · DN VNeID Tier 2 · CB PD cùng cấp · 53 TC còn
+  - **Spec:** `7.5-vu-viec-htpl.md` v3.0 (sync 2026-05-06) · `srs-fr-05-vu-viec.md:1164 §FR-V.I-17`
 
-- ⏳ **R7.7.3-PRIVACY** 🆕 2 TC P0 Critical privacy NĐ 13/2023 `[need: R7.4.A3-PUBLIC, R7.2.4, R7.4.A3]` <a id="r7-7-3-privacy"></a>
-  - **Cần:** R7.4.A3-PUBLIC ⏳ ≥1 VV `cong_khai=1` · R7.2.4 ≥1 DN test với VV · R7.4.A3 ≥1 VV scope đa DN
+- ⏳ **R7.7.3-PRIVACY** 🆕 2 TC P0 Critical privacy NĐ 13/2023 `[need: R7.4.A3-PUBLIC, R7.2.4 (doanh-nghiep), R7.4.A3]` <a id="r7-7-3-privacy"></a>
+  - **Cần:** R7.4.A3-PUBLIC 🚫 ≥1 VV `cong_khai=1` · [R7.2.4](todo-doanh-nghiep.md#r7-2-4) (doanh-nghiep) ≥1 DN test với VV · R7.4.A3 ≥1 VV scope đa DN
   - **Note:** verify riêng đầu tiên, escalate ngay nếu FAIL

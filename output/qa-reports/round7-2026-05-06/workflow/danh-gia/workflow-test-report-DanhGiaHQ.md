@@ -1,7 +1,7 @@
 # Workflow Test Report — Đánh giá Hiệu quả HTPLDN (FR-08)
 
 > **Module:** FR-08 Đánh giá Hiệu quả (Nhóm VI) · **SRS:** [`srs-fr-08-danh-gia.md`](../../../../../input/srs-v3/srs-fr-08-danh-gia.md) — FR-VI-01 (UC83 Lập KH, line 71-150) + FR-VI-02 (UC84 Tiêu chí, line 151-220) + FR-VI-03 (UC85 Phân công, line 221-290) + FR-VI-04 (Phê duyệt PC) + SCR-VI-01 (line 735-832) + SM-DANHGIA (line 1066-1102) · **Round:** R7 · **Date:** 2026-05-06 · **Tester:** QA Automation
-> **Bug:** [`bug-report-flow-danhgia.md`](../../bug-reports/danh-gia/bug-report-flow-danhgia.md)
+> **Bug:** [`bug-report-flow-danhgia.md`](../../bug-reports/danh-gia/bug-report-flow-danhgia.md) — 7/8 đóng (R10 2026-05-10 11:48:00 thêm BUG-FUNC-DG-008 Major Open)
 
 ---
 

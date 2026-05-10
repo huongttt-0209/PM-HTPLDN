@@ -64,7 +64,7 @@ Acceptance per CLAUDE.md "Quy tắc seed task" — ≥1 record cho mỗi LV down
 
 ## Bug verify retest (kèm theo)
 
-🔴 **BUG-CG-A1-001 VẪN OPEN** sau dev claim fix — verify TVV-BTP-TW-0007 (CG đã approve) state vẫn `DANG_HOAT_DONG` qua API GET (không phải `CHO_KICH_HOAT` per spec). UI tab list cũng chưa có "Chờ kích hoạt". Detail: [bug-report-flow-r7-4-a1-cg-state.md](../../bug-reports/tu-van-vien-cg/bug-report-flow-r7-4-a1-cg-state.md) blockquote "Re-test 2026-05-07".
+🔴 **BUG-CG-A1-001 VẪN OPEN** sau dev claim fix — verify TVV-BTP-TW-0007 (CG đã approve) state vẫn `DANG_HOAT_DONG` qua API GET (không phải `CHO_KICH_HOAT` per spec). UI tab list cũng chưa có "Chờ kích hoạt". Detail: [Pass-bug-report-flow-r7-4-a1-cg-state.md](../../bug-reports/tu-van-vien-cg/Pass-bug-report-flow-r7-4-a1-cg-state.md) blockquote "Re-test 2026-05-07".
 
 ---
 

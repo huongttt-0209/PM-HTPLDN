@@ -1,7 +1,7 @@
 # Workflow Test Report — R7.4.A1 Workflow TVV (SM 10 state)
 
 > **Module:** Mạng lưới Tư vấn viên / Chuyên gia (FR-IV-04..14 + FR-VIII-15/26) · **SRS:** [`smoke/6.4-sm-tvv.md`](../../../../smoke/6.4-sm-tvv.md) + [`funtion/7.4-chuyen-gia-tvv.md`](../../../../funtion/7.4-chuyen-gia-tvv.md) · **Latest round:** R11 2026-05-09 04:25:00 · **Tester:** QA Automation (Chrome DevTools MCP)
-> **Bug:** [`bug-report-flow-r7-4-a1-tvv.md`](../../bug-reports/tu-van-vien-cg/bug-report-flow-r7-4-a1-tvv.md) — 4/5 đóng (BUG-001/002/003/004 Closed · BUG-005 Open Minor mail link thiếu port)
+> **Bug:** [`Pass-bug-report-flow-r7-4-a1-tvv.md`](../../bug-reports/tu-van-vien-cg/Pass-bug-report-flow-r7-4-a1-tvv.md) — 4/5 đóng (BUG-001/002/003/004 Closed · BUG-005 Open Minor mail link thiếu port)
 
 ---
 
@@ -264,7 +264,7 @@ Re-verify 9/14 transitions sample sau dev rebuild — TP-01 happy path A1.A (5 t
 
 ## Bugs phát hiện (4)
 
-> Chi tiết 6-section + screenshot inline base64 trong [bug-report-flow-r7-4-a1-tvv.md](bug-report-flow-r7-4-a1-tvv.md).
+> Chi tiết 6-section + screenshot inline base64 trong [Pass-bug-report-flow-r7-4-a1-tvv.md](Pass-bug-report-flow-r7-4-a1-tvv.md).
 
 | ID | Severity | Type | Title | SRS ref |
 |---|:-:|:-:|---|---|
@@ -273,7 +273,7 @@ Re-verify 9/14 transitions sample sau dev rebuild — TP-01 happy path A1.A (5 t
 | BUG-CG-A1-003 | Critical | Workflow | TU_VAN_VIEN.trang_thai stuck CHO_KICH_HOAT sau TVV first login + đổi MK | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:618 §Postconditions` + `:626 §AC` |
 | BUG-CG-A1-004 | Critical | Workflow | Guard VO_HIEU_HOA không enforce — TVV vô hiệu hóa thành công dù còn VV đang xử lý | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md:887 §Processing Bước 2` + `:907 §Error Handling E2 ERR-TT-02` + `:917 §AC` |
 
-> **Note ID collision:** BUG-CG-A1-001 trong file này khác BUG-CG-A1-001 trong [`bug-report-flow-r7-4-a1-cg-state.md`](../../bug-reports/tu-van-vien-cg/bug-report-flow-r7-4-a1-cg-state.md) (file -cg cũ là về state name DANG_HOAT_DONG vs CHO_KICH_HOAT). Có thể rename file mới này thành BUG-TVV-* nếu cần phân biệt rõ — flag để PM/dev xử lý.
+> **Note ID collision:** BUG-CG-A1-001 trong file này khác BUG-CG-A1-001 trong [`Pass-bug-report-flow-r7-4-a1-cg-state.md`](../../bug-reports/tu-van-vien-cg/Pass-bug-report-flow-r7-4-a1-cg-state.md) (file -cg cũ là về state name DANG_HOAT_DONG vs CHO_KICH_HOAT). Có thể rename file mới này thành BUG-TVV-* nếu cần phân biệt rõ — flag để PM/dev xử lý.
 
 ---
 
