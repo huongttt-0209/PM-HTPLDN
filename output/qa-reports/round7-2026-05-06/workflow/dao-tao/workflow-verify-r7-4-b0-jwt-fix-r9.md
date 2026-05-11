@@ -1,7 +1,7 @@
 # Verify Report — R7.4.B0 JWT revoke <1 phút (BUG-AUTH-JWT-01) — Re-test R9
 
 > **Module:** Workflow KH năm Đào tạo (FR-III-14/15/16) · **SRS:** [`02-thu-tu-module.md §SM-KH-DAO-TAO`](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) · **Round:** R9 · **Date:** 2026-05-09 · **Tester:** QA Automation (Claude Code MCP)
-> **Bug gốc:** [`bug-report-r7-4-b0-jwt-revoke.md`](../../bug-reports/dao-tao/bug-report-r7-4-b0-jwt-revoke.md) — BUG-AUTH-JWT-01 Critical P0
+> **Bug gốc:** [`Pass-bug-report-r7-4-b0-jwt-revoke.md`](../../bug-reports/dao-tao/Pass-bug-report-r7-4-b0-jwt-revoke.md) — BUG-AUTH-JWT-01 Critical P0 (file 3/3 closed R11)
 
 ---
 

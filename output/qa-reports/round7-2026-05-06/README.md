@@ -22,7 +22,7 @@
 | 6 | 8/18 deploy gap | ✅ **6/6 DEPLOY-* Closed** (5/6 R8 batch 2026-05-07: DEPLOY-001/002/004/005/006; DEPLOY-003 sidebar Đào tạo Closed R8 lần 3 2026-05-08 09:10 sau match SRS 6 sub-menu) + 2 false positive drop | [bug-report](bug-reports/deploy-gap/bug-report-audit-deploy-gap.md) |
 
 > **R10 status (2026-05-10):** Tất cả 6 DEPLOY-* gap đã Closed. Block hiện tại = bug-level (không phải deploy-gap):
-> - **BUG-HV-BE-01 Major Open** (R7.3.12 R10) — HOC_VIEN entity deployed nhưng POST `/hoc-viens` crash 500 với valid DTO. Block 9 TC R7.7.6 HV-related (DT-011/019/031b-d/052/054/055). Chuyên trang DN/NHT FR-III-04 (entry-point user thực) chưa test. [Detail](bug-reports/dao-tao/bug-report-r7-3-12-hoc-vien-deploy-partial.md)
+> - ~~**BUG-HV-BE-01 Major Open**~~ → **Closed R11 2026-05-11** (BE thay crash 500 bằng 403 guard đúng spec FR-III-04). 6 HV records đã có trong DB. Chuyên trang DN/NHT FR-III-04 (entry-point user thực) chưa test. [Detail](bug-reports/dao-tao/Pass-bug-report-r7-3-12-hoc-vien-deploy-partial.md)
 > - Other module-specific bugs xem todo.md per task icon.
 
 ---

@@ -38,13 +38,15 @@ Phát hiện **3 lỗi có SRS reference cụ thể** trong quá trình re-seed 
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-KH-001 | Major | P0 | Permission | R7.3.5-R8 | `BR-AUTH-08 line 1903` + `FR-III-14 Processing-Xem danh sách Bước 2 BR-DATA-02` | Backend trả KH năm cross-đơn vị — CB NV bất kỳ cấp đều thấy KH năm của tất cả 3 cấp | **Open** (R10 RE-CONFIRMED) |
+| BUG-KH-001 | Major | P0 | Permission | R7.3.5-R8 | `BR-AUTH-08 line 1903` + `FR-III-14 Processing-Xem danh sách Bước 2 BR-DATA-02` | Backend trả KH năm cross-đơn vị — CB NV bất kỳ cấp đều thấy KH năm của tất cả 3 cấp | **Open** (R10 + R11 RE-CONFIRMED 2026-05-11) |
 | ~~BUG-KH-002~~ | Major | P1 | UI/UX | R7.3.5-R8 | `FR-III-14 Processing-Xóa Bước 1-5 line 1037-1045` | UI chi tiết KH năm Nháp thiếu nút "Xoá" mặc dù backend cho DELETE 204 | **Closed** (R10 verified) |
 | ~~BUG-KH-003~~ | Medium | P2 | Data | R7.3.5-R8 | `FR-III-14 Inputs row 3-4 line 991-992` | Date timezone off-by-one ở backend — input `01/01/2026` lưu thành `2025-12-31` | **Closed** (R10 verified, record cũ R8 vẫn còn data lệch trong DB) |
 
 ---
 
 ## BUG-KH-001 — Backend trả KH năm cross-đơn vị (vi phạm BR-AUTH-08 / BR-DATA-02 multi-tenant scoping)
+
+> **Re-test:** 2026-05-11 R11 — ❌ FAIL (RE-RE-CONFIRMED Open). Sau cache clear + fresh login `cb_nv_bn_02` (BTC, donViId `...0002`), gọi lại `GET /api/v1/ke-hoach-dao-taos?page=1&pageSize=50` → vẫn trả 7 record gồm 3 donViId (3 TW + 2 BN + 2 DP), giống hệt R10. State + dates không thay đổi → BE chưa deploy fix mới giữa R10→R11. Cross-tenant leak vẫn còn. Light check confirm KH-002 (UI Xoá) + KH-003 (date) KHÔNG regression — record R9 dates vẫn `01/01/2026 → 31/12/2026` đúng. Screenshot: [r11-verify-2026-05-11-kh-001-cross-tenant-still-open.png](../../screenshots/r11-verify-2026-05-11-kh-001-cross-tenant-still-open.png). **Bug giữ Open Major P0 — escalate BE team lần 2.**
 
 > **Re-test:** 2026-05-10 R10 — ❌ FAIL (RE-CONFIRMED Open). Sau cache clear + fresh login `cb_nv_bn_02` (BTC, donViId `...0002`), gọi `GET /api/v1/ke-hoach-dao-taos?page=1&pageSize=50` vẫn trả 7 record gồm 3 donViId khác nhau:
 > - TW (`...000001`): 3 record (KH-20260509-0001 NHAP + KH-20260508-0004 DA_DUYET + KH-20260508-0001 DA_CONG_KHAI) — ❌ leak

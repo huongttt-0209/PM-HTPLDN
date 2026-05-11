@@ -97,7 +97,11 @@
 
 - ⚠️ **R7.7.6** ✏️ Functional 40 test case Khóa học (cuối module Đào tạo) <a id="r7-7-6"></a>
   - **Kết quả R10 phase 1+2 (10/05):** ⚠️ 15/19 KH-pure PASS — 7 inherit B7/B11 + 6 new phase 1 (DT-001/002/003/015/029/053) + 2 inherit B12 phase 2 (DT-056 ✅ + DT-056a ⚠️). [report R10](../output/qa-reports/round7-2026-05-06/functional/dao-tao/functional-test-report-r7-7-6-khoa-hoc-r10.md)
-  - **Bug:** [bug-report-r7-7-6-dt004-form-missing-gv.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-7-6-dt004-form-missing-gv.md) — 1/2 đóng (BUG-DT-FORM-GV-01 Closed R10 21:50 — FE add field "Giảng viên *"; BUG-DT-FORM-GV-02 NEW Major Open — FE call `pageSize=200` vượt BE max 100 → dropdown empty, DT-004 vẫn BLOCKED).
-  - **Defer:** DT-038 ⚠️ partial (FE/BE thiếu assignment CRUD) · DT-032..036 (permission-matrix audit).
+  - **Kết quả R11 (11/05):** ✅ DT-004 happy path PASS — POST 201 `KH-20260511-001` DU_THAO. 16/19 KH-pure PASS. Log 2 bug findings R10 chưa log: DT-038 Major + DT-053 Minor.
+  - **Kết quả R11 (11/05 18:15):** ✅ DT-008 NHCH UI verified — list 7/7 + modal 5 fields + 3 loại + conditional Các lựa chọn + radio SINGLE. R7.3.8 cover POST 7/7. 17/19.
+  - **Bug:** [Pass-bug-report-r7-7-6-dt004-form-missing-gv.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/Pass-bug-report-r7-7-6-dt004-form-missing-gv.md) — 2/2 đóng (GV-01 Closed R10; GV-02 Closed R11 17:33 — FE `pageSize=100`, dropdown 8 GV, POST 201).
+  - **Bug:** [bug-report-r7-7-6-dt038-baigiang-assign-missing.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-7-6-dt038-baigiang-assign-missing.md) — 0/1 đóng (BUG-DT-038-ASSIGN-01 Major Open R11 — FE thiếu nút "Gán bài giảng" + BE thiếu nested route assignment).
+  - **Bug:** [bug-report-r7-7-6-dt053-public-modal-missing-cpf.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-7-6-dt053-public-modal-missing-cpf.md) — 0/1 đóng (BUG-DT-053-PUBLIC-MODAL-01 Minor Open R11 — modal "Công khai" thiếu `mo_ta_cong_khai` + `file_dinh_kem_cong_khai`).
+  - **Defer:** DT-032..036 (permission-matrix audit).
   - **Block:** 9 TC HV-related (DT-011/019/031b-d/052/054/055) chờ HOC_VIEN BUG-HV-BE-01 (R7.3.12).
-  - **Findings:** ⚠️ DT-053 modal "Công khai" thiếu form 5 CPF. ⚠️ DT-038 FE thiếu nút "Gán bài giảng". ⚠️ Spec error code drift `ERR-CTDT-04` vs `ERR-STATE-III-01-01`. ⚠️ DT-004 BUG-DT-FORM-GV-01.
+  - **Findings:** ⚠️ Spec error code drift `ERR-CTDT-04` vs `ERR-STATE-III-01-01`.

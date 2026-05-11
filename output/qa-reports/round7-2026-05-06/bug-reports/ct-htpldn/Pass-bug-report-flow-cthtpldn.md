@@ -5,18 +5,20 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Claude Code via Chrome DevTools MCP) |
-| **Ngày** | 2026-05-11 (R4 re-verify) — kế tiếp R3 2026-05-09, R2 2026-05-08, R1 2026-05-07 |
-| **Loại test** | Workflow E2E (SM-CHUONG_TRINH_HTPL) + Functional R7.7.15 (Option A P0 only) + Functional R7.7.15.b (Đợt BC SM-DOT-BC API-only) + R4 re-verify session (API + UI mixed) |
-| **Round** | R7.6.4 R4 + R7.7.15 + R7.7.15.b (2026-05-11) |
+| **Ngày** | 2026-05-11 (R5 re-verify — B10 closed via full workflow PASS) — kế tiếp R4 sáng, R3 2026-05-09, R2 2026-05-08, R1 2026-05-07 |
+| **Loại test** | Workflow E2E (SM-CHUONG_TRINH_HTPL) + Functional R7.7.15 (Option A P0 only) + Functional R7.7.15.b (Đợt BC SM-DOT-BC API-only) + R4/R5 re-verify session (API + UI mixed) |
+| **Round** | R7.6.4 R5 + R7.7.15 + R7.7.15.b (2026-05-11) |
 | **Tài liệu tham chiếu (v3.5)** | [`input/srs-update-2026-5-5/srs-v3.5.md §3.4.3.10`](../../../../input/srs-update-2026-5-5/srs-v3.5.md) (entity SM 8 states) · [`input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md` line 149](../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) (xác nhận FR-15 KHÔNG nâng cấp v3.5) · [`input/srs-v3/srs-fr-15-ct-htpldn.md`](../../../../input/srs-v3/srs-fr-15-ct-htpldn.md) (legacy v3, vẫn còn hiệu lực — line 903 action-bar) · [`workflow-test-report-r7-6-4-cthtpldn-gd1.md`](../../workflow/workflow-test-report-r7-6-4-cthtpldn-gd1.md) |
 
 ---
 
 ## Tổng hợp
 
-R7.6.4 R2 (2026-05-08) phát hiện **1 bug NEW** và **đóng 1 bug R1**:
-- **BUG-CTHTPLDN-B7-001** R1 (R1 2026-05-07): Major — BE chặn activate, ERR-VAL-XI-06-11 → **CLOSED-VERIFIED 2026-05-08** sau dev fix.
-- **BUG-CTHTPLDN-B10-001** R2 (NEW 2026-05-08): Major — BE chặn complete, ERR-VAL-XI-06-10 với message "0/0" contradictory.
+**R5 2026-05-11 final closure — 4/4 bugs Closed:**
+- **BUG-CTHTPLDN-B7-001** R1 (2026-05-07): Major — Closed R2 sau dev fix.
+- **BUG-CTHTPLDN-B10-001** R2 (NEW 2026-05-08): Major — **Closed R5** sau full workflow PASS (CT advance HOAN_THANH thành công khi all 3 DOT DA_TONG_HOP). Bug premise sai do cascade từ DOTBC-API-001.
+- **BUG-CTHTPLDN-DOTBC-UI-001** R7.7.15.b R2 (NEW 2026-05-08): Major→Minor — Closed R4 sau UI Story 13.6 build đủ.
+- **BUG-CTHTPLDN-DOTBC-API-002** R7.7.15.b R2 (NEW 2026-05-08): Major→Minor — Closed R4 sau design fix expose baoCaoId + end-to-end POST PASS.
 
 > **Rule log bug:** Bug log đúng có SRS reference cụ thể (FR-XI-01 line 903 srs-fr-15 v3 + entity §3.4.3.10 srs-v3.5).
 
@@ -26,7 +28,10 @@ R7.6.4 R2 (2026-05-08) phát hiện **1 bug NEW** và **đóng 1 bug R1**:
 |-------|------|----------|-------|--------|-------|---------|--------|
 | R2 2026-05-08 EOD | 4 | 0 | 4 | 0 | 0 | 0 | 1 (B7) |
 | R3 2026-05-09 | 4 | 0 | 1 (B10) | 0 | 2 (DOTBC-UI/API-002 close-candidate) | 0 | 1 (B7) |
-| **R4 2026-05-11** | **4** | **0** | **1** (B10) | **0** | **0** | **0** | **3** (B7 + DOTBC-UI-001 + DOTBC-API-002) |
+| R4 2026-05-11 sáng | 4 | 0 | 1 (B10) | 0 | 0 | 0 | 3 (B7 + DOTBC-UI-001 + DOTBC-API-002) |
+| **R5 2026-05-11 chiều** | **4** | **0** | **0** | **0** | **0** | **0** | **4** (B7 + B10 + DOTBC-UI-001 + DOTBC-API-002) |
+
+**R5 verdict — full closure:** B10-001 cuối cùng Closed-verified qua full workflow PASS. Khi cả 3 DOT của CT-20260508-0001 ở `DA_TONG_HOP` (DOT-4-1 + DOT-4-2 advance qua sub-resource `/{id}/tong-hop` mới + DOT-4-3 từ R7.6.5 R4 re-run) → POST `/complete` trả **200 OK**, CT advance `DANG_THUC_HIEN → HOAN_THANH` (version 8→9, ngayHoanThanh=2026-05-11T09:40:31.967Z set). Pre-condition BE đúng business logic; bug premise R1-R4 sai do cascade từ DOTBC-API-001 (sub-resource endpoint missing) — giờ giải hết.
 
 → R2: B7-001 Closed-verified, B10-001 Open Major, DOTBC-UI-001 + DOTBC-API-002 NEW Open Major. **R3 2026-05-09 (verify session + reconcile):** B10-001 partial-fix (i18n + count fixed, pre-condition vẫn block — Open Major); DOTBC-UI-001 **close-candidate ready**; DOTBC-API-002 close-candidate. **R4 2026-05-11 (re-verify session):** B10-001 vẫn Open Major (i18n + count tiếp tục đúng — message "1/2 đợt báo cáo chưa DA_TONG_HOP" phản ánh state DOT-4-1 đã advance DA_TONG_HOP từ R3 lên R4, DOT-4-2 vẫn DANG_LAP_BC); **DOTBC-UI-001 Closed-verified** (cb_nv_tw_02 single role re-confirm button [+ Tạo đợt mới] visible); **DOTBC-API-002 Closed-verified** (GET /tong-hop response confirm `baoCaoId` field present per DOT — design fix stable; end-to-end POST deferred per /qa-only no-mutate rule).
 
@@ -35,7 +40,7 @@ R7.6.4 R2 (2026-05-08) phát hiện **1 bug NEW** và **đóng 1 bug R1**:
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
 | BUG-CTHTPLDN-B7-001 | Major | P1 | Workflow | R7.6.4 R1 B7 | `srs-fr-15-ct-htpldn.md` v3 row 903 + rows 887-898 | BE validation `ERR-VAL-XI-06-11` yêu cầu `ke_hoach_chi_tiet`+`don_vi_thuc_hien` không có trong spec → block transition `DA_DUYET → DANG_THUC_HIEN` | **Closed-verified 2026-05-08 R2** |
-| BUG-CTHTPLDN-B10-001 | Major | P1 | Workflow | R7.6.4 R2 B10 | `srs-fr-15-ct-htpldn.md` v3 row 903 (action `[DANG_THUC_HIEN] Hoan thanh -> SET HOAN_THANH \| click \| -`) + `srs-v3.5.md` §3.4.3.10 (CHECK trang_thai 8 states không nêu pre-condition Đợt BC) | BE validation `ERR-VAL-XI-06-10` "Không thể hoàn thành: còn N/N đợt báo cáo chưa DA_TONG_HOP" → block `DANG_THUC_HIEN → HOAN_THANH` khi không có ≥1 Đợt BC ở DA_TONG_HOP | **Open** (R4 2026-05-11 re-verify: i18n + count vẫn fix-stable — message "1/2 đợt báo cáo chưa DA_TONG_HOP"; pre-condition tiếp tục block) |
+| ~~BUG-CTHTPLDN-B10-001~~ | ~~Major~~ | ~~P1~~ | ~~Workflow~~ | ~~R7.6.4 R2 B10~~ | ~~`srs-fr-15-ct-htpldn.md` row 903 + `srs-v3.5.md` §3.4.3.10~~ | ~~BE validation block `DANG_THUC_HIEN → HOAN_THANH` khi DOT BC chưa DA_TONG_HOP.~~ | **Closed-verified 2026-05-11 R5** (full workflow PASS — 3/3 DOT DA_TONG_HOP → POST /complete 200 → CT HOAN_THANH version 9. Code đổi `ERR-VAL-XI-06-10`→`ERR-XI-01-HT-03`, message user-friendly. Bug premise sai do cascade từ DOTBC-API-001 — fixed sau R7.6.5 R4 sub-resource endpoint add) |
 | ~~BUG-CTHTPLDN-DOTBC-UI-001~~ | ~~Major→Minor~~ | ~~P1→P3~~ | ~~UI miss feature~~ | ~~R7.7.15.b (toàn Nhóm 3b)~~ | ~~`srs-v3.5.md` §3.4.3.10a entity DOT_BAO_CAO + §4.2.15 nhóm XI (UC169/170/171/172/195/196)~~ | ~~UI tab "Đợt báo cáo": placeholder Story 13.6 GONE; list table + drill-down detail + button [Gửi lên TW] đã build. Button [+ Tạo đợt mới] visible cho cb_nv_tw_01 + cb_nv_tw_02.~~ | **Closed-verified 2026-05-11 R4** (cb_nv_tw_02 single role tái-confirm button [+ Tạo đợt mới] PRESENT, tab Đợt BC table list 2 DOT đầy đủ, placeholder GONE) |
 | ~~BUG-CTHTPLDN-DOTBC-API-002~~ | ~~Major→Minor~~ | ~~P1→P3~~ | ~~API design~~ | ~~R7.7.15.b R2 CT-038~~ | ~~`srs-v3.5.md` §3.4.3.10a entity DOT_BAO_CAO; test plan CT-038 UC172~~ | ~~GET `/api/v1/dot-bao-caos/tong-hop` response expose `baoCaoId` per DOT (Option (a) fix).~~ | **Closed-verified 2026-05-11 R4** (GET /tong-hop 2 record, cả 2 expose `baoCaoId` field — DOT-1-1 `baoCaoId=7b2d1762...`, DOT-8-1 `baoCaoId=a7cf2c9c...`; end-to-end POST defer per /qa-only no-mutate rule) |
 
@@ -58,7 +63,27 @@ CB NV TW click `[Bắt đầu thực hiện]` trên CT ở trạng thái `DA_DUY
 
 ---
 
-## BUG-CTHTPLDN-B10-001 — BE chặn complete CT khi không có Đợt BC DA_TONG_HOP
+## ~~BUG-CTHTPLDN-B10-001~~ — [CLOSED-VERIFIED 2026-05-11 R5 — full workflow PASS]
+
+> **Re-test:** 2026-05-11 R5 — ✅ **CLOSED-VERIFIED end-to-end**. Full workflow PASS chứng minh BE validation hợp lý + bug premise sai do cascade.
+>
+> **Step A — message + code updated (R5 chiều):**
+> - Code đổi: `ERR-VAL-XI-06-10` → `ERR-XI-01-HT-03` (BE refactor error taxonomy)
+> - Message R5: `"Vui lòng hoàn thành tất cả đợt báo cáo trước khi hoàn thành CT"` (user-friendly Vietnamese, no N/M count, no English-leak)
+>
+> **Step B — Full workflow PASS:** Trên CT-20260508-0001 (TW, version=8) với 3 DOT (DOT-4-1, DOT-4-2 DANG_LAP_BC từ R1 reject, DOT-4-3 R7.6.5 R4 mới):
+> 1. Advance DOT-4-2 qua workflow đầy đủ: submit-bc → CHO_DUYET_KQ (TW) → approve-bc DUYET → DA_DUYET_KQ (PD) → sub-resource /tong-hop → DA_TONG_HOP ✅
+> 2. Tất cả 3 DOT giờ ở DA_TONG_HOP
+> 3. POST `/api/v1/chuong-trinh-htpls/52fe225a-1c38-4727-b587-4e505439eaec/complete` `{version:8}` → **200 OK**
+> 4. State CT: `DANG_THUC_HIEN → HOAN_THANH` ✅, version 8→9, `ngayHoanThanh=2026-05-11T09:40:31.967Z` set ✅
+>
+> **Bug premise R1-R4 sai do cascade:** B10 stuck vì BUG-DOTBC-API-001 (gd2) — TW DOT không advance được DA_DUYET_KQ → DA_TONG_HOP vì sub-resource endpoint missing. Sau R7.6.5 R4 verify BE add sub-resource `/{id}/tong-hop` → workflow end-to-end OK → B10 tự fix qua workflow đúng.
+>
+> **Spec gap (out-of-scope bug, để BA decide):** Pre-condition "ALL DOT BC phải DA_TONG_HOP" trong BE chưa được document rõ trong `srs-fr-15-ct-htpldn.md` line 903 (cột Điều kiện = `-`) + `srs-v3.5.md` §3.4.3.10. Recommend BA update SRS để spec match BE reality. Logic BE đúng business sense (CT không thể HOAN_THANH nếu báo cáo dở dang).
+>
+> Status: **Closed-verified 2026-05-11 R5** — bug premise sai, BE logic + message + workflow đều OK.
+
+### Re-test history
 
 > **Re-test:** 2026-05-11 R4 — ⚠️ STILL OPEN, partial-fix stable. CT-20260508-0001 (UUID `52fe225a-1c38-4727-b587-4e505439eaec`) version=8, state `DANG_THUC_HIEN` (unchanged). API call `POST /api/v1/chuong-trinh-htpls/52fe225a-1c38-4727-b587-4e505439eaec/complete` với body `{"version":8}` (Bearer cb_nv_tw_01) → **409 `ERR-VAL-XI-06-10`** message `"Không thể hoàn thành: còn 1/2 đợt báo cáo chưa DA_TONG_HOP"` (Vietnamese diacritics ✅, count `1/2` đúng — DOT-4-1 đã advance lên DA_TONG_HOP từ 2026-05-10, DOT-4-2 vẫn DANG_LAP_BC). Pre-condition tiếp tục enforce ngoài SRS line 903. Bug vẫn **Open Major** chờ BA confirm + spec update.
 >
@@ -409,4 +434,4 @@ BE error messages thiếu diacritics: "Chi duoc xoa", "Chi duoc cap nhat", "Khon
 
 ---
 
-*Bug report updated: 2026-05-11 R4 re-verify (B10 still Open, DOTBC-UI-001 + DOTBC-API-002 Closed-verified) | QA Automation via Claude Code (Chrome DevTools MCP + curl mixed)*
+*Bug report updated: 2026-05-11 R5 re-verify — **4/4 bugs Closed** (B7 R2 + B10 R5 + DOTBC-UI-001 R4 + DOTBC-API-002 R4). Full workflow CT-HTPLDN GĐ1+GĐ2 end-to-end PASS. | QA Automation via Claude Code (Chrome DevTools MCP + curl mixed)*

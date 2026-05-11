@@ -9,11 +9,17 @@
 | ID | Severity | Title | Status |
 |---|:-:|---|:-:|
 | ~~BUG-DT-FORM-GV-01~~ | **Major** | Form Tạo KH (`/dao-tao/khoa-hoc/tao-moi`) thiếu field required "Giảng viên" → POST always 422 `giangVienIds must contain at least 1 elements` | **Closed** (R10 21:50 verified — FE đã add combobox "Giảng viên *" required với placeholder "Chọn giảng viên phụ trách") |
-| BUG-DT-FORM-GV-02 | **Major** | FE gọi `GET /giang-viens?pageSize=200` (vượt BE limit max 100) → BE 422 → dropdown "Giảng viên" rỗng → user vẫn KHÔNG thể submit form Tạo KH end-to-end | **Open** (R10 21:50 NEW) |
+| ~~BUG-DT-FORM-GV-02~~ | **Major** | FE gọi `GET /giang-viens?pageSize=200` (vượt BE limit max 100) → BE 422 → dropdown "Giảng viên" rỗng → user vẫn KHÔNG thể submit form Tạo KH end-to-end | **Closed** (R11 2026-05-11 17:33 verified — FE đã đổi `pageSize=100` → reqid=529 HTTP 200 trả 8 GV, dropdown populated, happy path DT-004 PASS) |
 
-> **Re-test:** 2026-05-10 R10 21:50 — sau cache clear + fresh login `cb_nv_tw_02`, navigate `/dao-tao/khoa-hoc/tao-moi`:
+> **Re-test R11:** 2026-05-11 17:33 — sau cache clear (caches/SW/localStorage) + fresh login `cb_nv_tw_02`, navigate `/dao-tao/khoa-hoc/tao-moi`:
+> - **GV-01 vẫn Closed:** Form render đủ 11 fields gồm combobox "Giảng viên *" required.
+> - **GV-02 Closed:** Click dropdown Giảng viên → reqid=529 `GET /api/v1/giang-viens?page=1&pageSize=100&trangThai=DANG_HOAT_DONG` → **HTTP 200**, response `meta.total=8, pageSize=100, totalPages=1`, dropdown render 8 GV (GV-BTP-TW-0001..0008).
+> - **End-to-end happy path PASS:** Chọn GV-BTP-TW-0001 + Tên KH + CTDT-BTP-TW-2026-0002 + Hình thức Trực tuyến + Range 15/07–20/07/2026 → reqid=532 `POST /api/v1/khoa-hocs` → **201 Created** → redirect `/dao-tao/khoa-hoc/774ba2df-5872-4aa5-b492-6b53af6b1225`, KH `KH-20260511-001` state `DU_THAO`, toast "Tạo khóa học thành công".
+> Screenshots: [r11-dt004-form-gv-dropdown-populated-8gv.png](image/r11-dt004-form-gv-dropdown-populated-8gv.png) · [r11-dt004-kh-detail-after-submit-success.png](image/r11-dt004-kh-detail-after-submit-success.png).
+>
+> **Re-test R10:** 2026-05-10 21:50 — sau cache clear + fresh login `cb_nv_tw_02`, navigate `/dao-tao/khoa-hoc/tao-moi`:
 > - **GV-01 Closed:** Form render đầy đủ 11 fields gồm "Giảng viên *" combobox required (description "Chỉ hiển thị giảng viên đang hoạt động"). FE schema match BE.
-> - **GV-02 NEW:** Click dropdown Giảng viên → list rỗng. Network log reqid=206/207 ghi `GET /api/v1/giang-viens?page=1&pageSize=200&trangThai=DANG_HOAT_DONG` → BE **422 `ERR-VAL-SYS-00-01` field `pageSize` "pageSize must not be greater than 100"`. Probe trực tiếp confirm cùng error. Backend `/giang-viens?page=1&pageSize=20` trả 8 records DANG_HOAT_DONG sẵn — data có nhưng FE param sai. Form vẫn không submit được.
+> - **GV-02 NEW (sau Closed ở R11):** Click dropdown Giảng viên → list rỗng. Network log reqid=206/207 ghi `GET /api/v1/giang-viens?page=1&pageSize=200&trangThai=DANG_HOAT_DONG` → BE **422 `ERR-VAL-SYS-00-01` field `pageSize` "pageSize must not be greater than 100"`. Probe trực tiếp confirm cùng error. Backend `/giang-viens?page=1&pageSize=20` trả 8 records DANG_HOAT_DONG sẵn — data có nhưng FE param sai. Form vẫn không submit được.
 > Screenshot: [r10-dt004-form-gv-field-render-but-dropdown-empty.png](../../screenshots/r10-dt004-form-gv-field-render-but-dropdown-empty.png).
 
 ---
@@ -81,11 +87,11 @@ SRS FR-III + Mô hình A: KHOA_HOC junction `KHOA_HOC_GIANG_VIEN` (N-N) → KH c
 ## Recommend dev FE
 - ~~Add multi-select dropdown "Giảng viên"~~ ✅ Done R10 21:50 (BUG-DT-FORM-GV-01 closed)
 - ~~Required validation: tối thiểu 1 GV~~ ✅ Done R10 21:50 (combobox marked required)
-- **R10 21:50 NEW (BUG-DT-FORM-GV-02):** Đổi FE call `pageSize=200` → `pageSize=100` (≤ BE max), HOẶC pagination khi >100, HOẶC BE nâng max pageSize lên 500. 8 GV hiện tại < 100 nên `pageSize=100` đủ.
+- ~~**R10 21:50 NEW (BUG-DT-FORM-GV-02):** Đổi FE call `pageSize=200` → `pageSize=100` (≤ BE max), HOẶC pagination khi >100, HOẶC BE nâng max pageSize lên 500. 8 GV hiện tại < 100 nên `pageSize=100` đủ.~~ ✅ Done R11 17:33 (BUG-DT-FORM-GV-02 closed — FE đã đổi pageSize=100, 8 GV render, happy path 201 Created).
 
 ## Impact
 - ~~DT-004 Tạo KH happy path qua UI: BLOCKED (FE form incomplete)~~ → R10 21:50: form complete (GV-01 closed) NHƯNG vẫn BLOCKED do BUG-DT-FORM-GV-02 (dropdown empty).
-- R7.7.6 phase 2 cannot complete DT-004 cho đến khi GV-02 fix (1 line FE change).
+- **R11 17:33: DT-004 UNBLOCKED** — happy path qua UI PASS (POST 201 → `KH-20260511-001` state DU_THAO). R7.7.6 phase 2 có thể tiếp tục các TC DT-005..DT-040.
 
 ---
 

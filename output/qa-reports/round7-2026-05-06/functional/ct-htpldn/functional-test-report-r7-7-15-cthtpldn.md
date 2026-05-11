@@ -14,7 +14,7 @@
 | **Primary Account** | `cb_nv_tw_01 / Secret@123` (CB_NV_TW, cấp TW) — workflow + CRUD |
 | **Secondary Accounts** | `cb_pd_tw_01` (CB_PD_TW phê duyệt cùng cấp) · `cb_pd_bn_01` (CB_PD_BN — test cross-cấp BR-AUTH-05) |
 | **Round** | R7.7.15 — Functional CT HTPLDN scope **Option A: P0 only (15 TC + 1 partial CT-311)** |
-| **Tài liệu tham chiếu** | [workflow-test-report-r7-6-4-cthtpldn-gd1.md](../workflow/workflow-test-report-r7-6-4-cthtpldn-gd1.md) (R7.6.4 R2 11/11 transitions) · [bug-report-flow-cthtpldn.md](../bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md) (BUG-B10-001 Open) |
+| **Tài liệu tham chiếu** | [workflow-test-report-r7-6-4-cthtpldn-gd1.md](../workflow/workflow-test-report-r7-6-4-cthtpldn-gd1.md) (R7.6.4 R2 11/11 transitions) · [Pass-bug-report-flow-cthtpldn.md](../bug-reports/ct-htpldn/Pass-bug-report-flow-cthtpldn.md) (BUG-B10-001 Open) |
 
 ---
 
@@ -31,7 +31,7 @@
 | **Overall Pass Rate** | 16/16 = **100%** P0 |
 | **P0 Pass Rate** | 16/16 = **100%** |
 | **Bugs Found (SRS-ref)** | 0 NEW (R7.6.4 R2 BUG-B10-001 vẫn Open — cite, không log lại) |
-| **Observations (out-of-SRS)** | 2 (xem [bug-report-flow-cthtpldn.md §Observations](../bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md)) |
+| **Observations (out-of-SRS)** | 2 (xem [Pass-bug-report-flow-cthtpldn.md §Observations](../bug-reports/ct-htpldn/Pass-bug-report-flow-cthtpldn.md)) |
 | **Health Score** | 95/100 — 100% P0 PASS, trừ 5 điểm cho 2 observation Minor (data-leak list + counter mismatch) |
 | **Start Time** | 11:09 (UTC+7) |
 | **End Time** | 11:30 (UTC+7) |
@@ -113,7 +113,7 @@ R7.7.15 Option A (P0 only) hoàn tất với 100% pass rate. SM-KH-CTHTPL 8 stat
 | **Status** | Open (từ R7.6.4 R2 2026-05-08) |
 | **Note** | Block CT-018 (P1) — sẽ test lại khi BUG fix hoặc khi pre-condition ≥1 Đợt BC DA_TONG_HOP đầy đủ. |
 
-→ **Chi tiết:** xem [bug-report-flow-cthtpldn.md](../bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md).
+→ **Chi tiết:** xem [Pass-bug-report-flow-cthtpldn.md](../bug-reports/ct-htpldn/Pass-bug-report-flow-cthtpldn.md).
 
 ### 3.2 Observations mới (R7.7.15) — không log thành Bug formal, chỉ ghi nhận
 
@@ -299,13 +299,13 @@ R7.7.15 Option A (P0 only) hoàn tất với 100% pass rate. SM-KH-CTHTPL 8 stat
 
 | File | Mô tả | TC Ref |
 |------|-------|--------|
-| [r7-7-15-ct-001-list-6CT.png](screenshots-r7-7-15/r7-7-15-ct-001-list-6CT.png) | Pre-test list 6 CT pool + 9 columns + 7 tabs filter | CT-001 |
-| [r7-7-15-ct-022-search-2of6.png](screenshots-r7-7-15/r7-7-15-ct-022-search-2of6.png) | Search "cancel path" → 2/6 mục match | CT-022 |
-| [r7-7-15-ct-002-003-list-7CT-edited.png](screenshots-r7-7-15/r7-7-15-ct-002-003-list-7CT-edited.png) | Sau create + edit: list 7 mục, CT-0004 [EDITED CT-003] | CT-002, CT-003 |
-| [r7-7-15-ct-026-immutability-DANG_THUC_HIEN.png](screenshots-r7-7-15/r7-7-15-ct-026-immutability-DANG_THUC_HIEN.png) | Detail CT-0001 DANG_THUC_HIEN: form read-only, chỉ workflow buttons | CT-026 |
-| [r7-7-15-ct-106-reject-no-reason.png](screenshots-r7-7-15/r7-7-15-ct-106-reject-no-reason.png) | Modal Từ chối với textbox invalid="true" + msg "Vui lòng nhập lý do" | CT-106 |
-| [r7-7-15-ct-202-cb_pd_bn_dashboard.png](screenshots-r7-7-15/r7-7-15-ct-202-cb_pd_bn_dashboard.png) | cb_pd_bn_01 dashboard (BN level user) — context test BR-AUTH-05 | CT-202 |
-| [r7-7-15-final-list-6CT-after-walk.png](screenshots-r7-7-15/r7-7-15-final-list-6CT-after-walk.png) | Pool cuối round: 6 CT, CT-0002 đã duyệt + CT-20260507-0002 chờ PD | Final state |
+| [r7-7-15-ct-001-list-6CT.png](image/r7-7-15-ct-001-list-6CT.png) | Pre-test list 6 CT pool + 9 columns + 7 tabs filter | CT-001 |
+| [r7-7-15-ct-022-search-2of6.png](image/r7-7-15-ct-022-search-2of6.png) | Search "cancel path" → 2/6 mục match | CT-022 |
+| [r7-7-15-ct-002-003-list-7CT-edited.png](image/r7-7-15-ct-002-003-list-7CT-edited.png) | Sau create + edit: list 7 mục, CT-0004 [EDITED CT-003] | CT-002, CT-003 |
+| [r7-7-15-ct-026-immutability-DANG_THUC_HIEN.png](image/r7-7-15-ct-026-immutability-DANG_THUC_HIEN.png) | Detail CT-0001 DANG_THUC_HIEN: form read-only, chỉ workflow buttons | CT-026 |
+| [r7-7-15-ct-106-reject-no-reason.png](image/r7-7-15-ct-106-reject-no-reason.png) | Modal Từ chối với textbox invalid="true" + msg "Vui lòng nhập lý do" | CT-106 |
+| [r7-7-15-ct-202-cb_pd_bn_dashboard.png](image/r7-7-15-ct-202-cb_pd_bn_dashboard.png) | cb_pd_bn_01 dashboard (BN level user) — context test BR-AUTH-05 | CT-202 |
+| [r7-7-15-final-list-6CT-after-walk.png](image/r7-7-15-final-list-6CT-after-walk.png) | Pool cuối round: 6 CT, CT-0002 đã duyệt + CT-20260507-0002 chờ PD | Final state |
 
 ### C — SRS Traceability Matrix
 

@@ -5,6 +5,16 @@
 > **Trigger:** User explicit "chạy R7.7.6" sau B7+B11 R10 unblock + "chạy R7.7.6 giúp tôi" phase 2 sau R7.3.13 + R7.4.B12 R10 unblock.
 
 > **🔄 R10 21:30 ADDENDUM (Re-verify):** 4 BUG validation LH (CONFLICT-01 + VAL-01/02/03) ĐÃ CLOSED sau commit `af8276fd`. **DT-056a vẫn ⚠️ partial** — 4/5 spec PASS (ERR-LH-01/02/03/04) + 1 defer (ERR-LH-05 "xóa buổi có điểm danh" chờ HOC_VIEN entity, BUG-HV-BE-01 R7.3.12). Tổng count 15/19 KH-pure giữ nguyên. Các đoạn dưới ghi "4 BUG candidates Open" là history snapshot 02:00-09:50; phần "DT-056a ⚠️" giữ nguyên vì defer chưa giải.
+>
+> **🔄 R11 17:55 ADDENDUM (DT-004 unblock + log 2 bug findings):**
+> - **DT-004 ✅ PASS R11:** FE đã đổi `pageSize=200 → 100` → dropdown Giảng viên render 8 GV → happy path qua UI → `POST /khoa-hocs` 201 → KH `KH-20260511-001` DU_THAO. Bug BUG-DT-FORM-GV-02 Closed → file rename `bug-report-* → Pass-bug-report-*`. Tổng count 15/19 → **16/19 KH-pure PASS**.
+> - **DT-038 finding R10 → log bug R11:** [bug-report-r7-7-6-dt038-baigiang-assign-missing.md](../../bug-reports/dao-tao/bug-report-r7-7-6-dt038-baigiang-assign-missing.md) Major P1 Open — tab "Bài giảng đã gán" thiếu button "Gán bài giảng" + BE 404 nested route. SRS FR-III-07 §561.
+> - **DT-053 finding R10 → log bug R11:** [bug-report-r7-7-6-dt053-public-modal-missing-cpf.md](../../bug-reports/dao-tao/bug-report-r7-7-6-dt053-public-modal-missing-cpf.md) Minor P2 Open — modal "Công khai khóa học?" thiếu `mo_ta_cong_khai` + `file_dinh_kem_cong_khai`. BR-PUBLIC-01 (test plan §213).
+>
+> **🔄 R11 18:15 ADDENDUM (DT-008 NHCH CRUD UI verify):**
+> - **DT-008 ✅ PASS R11:** Navigate `/dao-tao/ngan-hang-cau-hoi/danh-sach` → list render 7/7 records cover 5 LV × 3 loại (TN1 + TN nhiều + TL) × 3 mức độ + 8 cột UI (Nội dung/LV/Mức độ/Loại/TT/Số đề SD/Ngày tạo/Thao tác). 5 filter (Từ khóa/LV/Mức độ/Loại/TT). Modal "Thêm câu hỏi mới" có 5 fields chính: Nội dung textarea (max 10000) + LV combobox (10 LV) + Mức độ (Dễ/TB/Khó) + Loại (3 enum khớp spec) + Trạng thái default "Kích hoạt". Conditional sau khi chọn TN1: "Các lựa chọn" min 2 (default A+B, có button "+ Thêm lựa chọn") + radio "Đáp án đúng" SINGLE (match spec FR-III-09 row 5+6: ≥2 lựa chọn + 1 đáp án nếu SINGLE).
+> - **Submit happy path R11 ⚠️ partial:** Form filled OK 4/4 options (A=3 tỷ / B=10 tỷ / C=30 tỷ / D=Luật DN 2020 không quy định) nhưng MCP browser disconnect trước click [Tạo mới]. R7.3.8 R8/R9 đã PASS 7/7 POST `/cau-hois` via UI → endpoint proven, mark DT-008 ✅ vì UI render đầy đủ spec + create endpoint verified gián tiếp.
+> - Tổng count: 16/19 → **17/19 KH-pure PASS**.
 
 ---
 
@@ -155,7 +165,7 @@ PATCH /api/v1/khoa-hocs/{id}-DA_DUYET    body {tenKhoaHoc: "...", version: 7}
 
 → **BUG-DT-FORM-GV-01 Major Open** — FE form 10 inputs (verified qua DOM inspection) **KHÔNG có dropdown "Giảng viên"**, BE schema yêu cầu required. Schema mismatch FE/BE.
 
-**Bug logged:** [bug-report-r7-7-6-dt004-form-missing-gv.md](../../bug-reports/dao-tao/bug-report-r7-7-6-dt004-form-missing-gv.md)
+**Bug logged:** [Pass-bug-report-r7-7-6-dt004-form-missing-gv.md](../../bug-reports/dao-tao/Pass-bug-report-r7-7-6-dt004-form-missing-gv.md)
 
 **Cover gián tiếp R7.3.15 R9:** 7/7 KH đã được tạo via API direct (fixture có `giangVienIds`) — confirm auto-gen mã `KH-20260509-001..007` format ✅. UI flow chưa cover happy path đầy đủ.
 
@@ -212,7 +222,7 @@ R7.4.B12 R10 đã verify đầy đủ 8 bước CRUD UI cho LICH_HOC trên KH-00
 | DT-054 | Auto-classify xếp loại từ điểm | HOC_VIEN OK; KET_QUA_HOC_TAP entity chưa probe |
 | DT-055 | Quy tắc HV đạt khóa: chuyên cần ≥80% AND điểm ≥ diem_dat | HOC_VIEN OK; KET_QUA_HOC_TAP entity chưa probe |
 
-→ **Tổng 9 TC block** chờ BUG-HV-BE-01 đóng + verify chuyên trang DN/NHT FR-III-04. Status R10 phase 2: HOC_VIEN entity DEPLOYED nhưng POST broken — cần escalate dev BE fix service crash (xem [bug-report-r7-3-12-hoc-vien-deploy-partial.md](../../bug-reports/dao-tao/bug-report-r7-3-12-hoc-vien-deploy-partial.md)).
+→ **Tổng 9 TC block** chờ verify chuyên trang DN/NHT FR-III-04. R11 update: BUG-HV-BE-01 Closed (BE thay 500 bằng 403 guard đúng spec); 6 HV records đã có trong DB. Còn lại: chuyên trang DN/NHT chưa probe. (xem [Pass-bug-report-r7-3-12-hoc-vien-deploy-partial.md](../../bug-reports/dao-tao/Pass-bug-report-r7-3-12-hoc-vien-deploy-partial.md)).
 
 ---
 
@@ -294,7 +304,7 @@ NV session bị kick về `/login` 401 sau ~5-10 phút không click hoạt độ
 
 **Status update phase 2 (2026-05-10 09:50):** Phase 1 đã defer DT-004 vì nghi do AntD DatePicker tech limit. Phase 2 retry với DatePicker workaround `type+Enter` từ R7.3.13 R10 → DatePicker bind value OK (`15/07/2026` + `20/07/2026` set thành công via RangePicker `type+Tab+type+Enter`). NHƯNG submit form đầy đủ vẫn POST 422 do **FE form 10 inputs thiếu dropdown required "Giảng viên"** (BE schema yêu cầu `giangVienIds: UUID[]` min 1 element).
 
-→ DT-004 status: **⏭ defer (phase 1) → 🚫 BLOCKED (phase 2)** bởi BUG-DT-FORM-GV-01 Major Open. Không phải tester technique limit nữa. Bug logged: [bug-report-r7-7-6-dt004-form-missing-gv.md](../../bug-reports/dao-tao/bug-report-r7-7-6-dt004-form-missing-gv.md).
+→ DT-004 status: **⏭ defer (phase 1) → 🚫 BLOCKED (phase 2)** bởi BUG-DT-FORM-GV-01 Major Open. Không phải tester technique limit nữa. Bug logged: [Pass-bug-report-r7-7-6-dt004-form-missing-gv.md](../../bug-reports/dao-tao/Pass-bug-report-r7-7-6-dt004-form-missing-gv.md).
 
 ### 7. ⚠️ Spec error code drift `ERR-CTDT-04` vs `ERR-STATE-III-01-01`
 

@@ -23,8 +23,19 @@ Sau khi BUG-DKT-FE-REGRESSION-01 (R9) closed (action buttons render đầy đủ
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-DKT-EDIT-FORM-01 | Major | P1 | UI/FE | R7.4.B10 Bước 2 | `srs-fr-03-dao-tao.md FR-III-NEW-02 Processing-Sửa Bước 1-3` | Modal Cập nhật ĐKT không pre-fill `cachTao` từ record → combobox disabled + value rỗng + required → form luôn invalid | **Open** |
-| BUG-DKT-CREATE-FORM-01 | Major | P1 | UI/FE | R7.4.B10 Bước 1b | `srs-fr-03-dao-tao.md FR-III-NEW-02 Processing-Tạo Bước 2-3` | Modal Tạo ĐKT thiếu field UI chọn câu hỏi (`cauHoiIds`) → BE 422 ERR-VAL-SYS-00-01 | **Open** |
+| ~~BUG-DKT-EDIT-FORM-01~~ | Major | P1 | UI/FE | R7.4.B10 Bước 2 | `srs-fr-03-dao-tao.md FR-III-NEW-02 Processing-Sửa Bước 1-3` | Modal Cập nhật ĐKT không pre-fill `cachTao` từ record → combobox disabled + value rỗng + required → form luôn invalid | **Closed** (R11 verified 2026-05-11) |
+| ~~BUG-DKT-CREATE-FORM-01~~ | Major | P1 | UI/FE | R7.4.B10 Bước 1b | `srs-fr-03-dao-tao.md FR-III-NEW-02 Processing-Tạo Bước 2-3` | Modal Tạo ĐKT thiếu field UI chọn câu hỏi (`cauHoiIds`) → BE 422 ERR-VAL-SYS-00-01 | **Closed** (R11 verified 2026-05-11) |
+
+> **Re-test R11 2026-05-11:** Sau cache clear + fresh login `cb_nv_tw_02` (account khác phiên `cb_nv_bn_02` đang mở), navigate Ngân hàng câu hỏi & Đề kiểm tra → tab "Đề kiểm tra":
+>
+> **CREATE-FORM-01 Closed:** Modal Tạo có 2 mode hoàn chỉnh:
+> - **Mode "Ngẫu nhiên"** (default): section "Cấu hình lấy câu hỏi ngẫu nhiên" + button "Thêm quy tắc" → tạo rule 3 fields (Lĩnh vực + Mức độ + Số lượng)
+> - **Mode "Thủ công"**: section "Danh sách câu hỏi" + 3 filter (Lĩnh vực/Mức độ/Loại) + combobox "Chọn câu hỏi từ NHCH" + counter "Đã chọn N câu hỏi"
+> - Submit Thủ công với 1 câu hỏi NHCH → reqid=575 `POST /de-kiem-tras` → **201 Created**, record `a6379f3a` Nháp.
+>
+> **EDIT-FORM-01 Closed:** Click row record vừa tạo → detail page → click "Chỉnh sửa" → modal Cập nhật **pre-fill đầy đủ**: Tên + **Cách tạo: "Thủ công"** (combobox disabled OK theo spec, value đúng, không còn rỗng/error) + Thời gian + Điểm + section "Danh sách câu hỏi" với 1 câu đã chọn ("Hành chính - Trung bình - TN nhiều đáp án"). Submit Cập nhật đổi tên → reqid=586 `PATCH /de-kiem-tras/{id}` → **200 OK**.
+>
+> Cleanup record `a6379f3a` qua DELETE 204. Screenshot: [r11-dkt-form-modal-edit-prefill-pass.png](../../screenshots/r11-dkt-form-modal-edit-prefill-pass.png).
 
 ---
 

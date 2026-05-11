@@ -77,8 +77,8 @@ CreateHocVienDto:
 
 ## Bug logged
 
-[bug-report-r7-3-12-hoc-vien-deploy-partial.md](../../bug-reports/dao-tao/bug-report-r7-3-12-hoc-vien-deploy-partial.md):
-- BUG-HV-BE-01 Major Open — POST 500 với valid DTO
+[Pass-bug-report-r7-3-12-hoc-vien-deploy-partial.md](../../bug-reports/dao-tao/Pass-bug-report-r7-3-12-hoc-vien-deploy-partial.md):
+- ~~BUG-HV-BE-01~~ Major **Closed R11 2026-05-11** — BE thay crash 500 bằng 403 guard đúng spec FR-III-04
 - ~~BUG-HV-FE-01~~ WITHDRAWN — FE missing CMS đúng spec FR-III-04 (HV qua chuyên trang DN/NHT)
 - ~~BUG-HV-PERM-01~~ WITHDRAWN — 403 cb_nv_tw đúng spec FR-III-04 line 397-399 (Tác nhân = DN/NHT)
 

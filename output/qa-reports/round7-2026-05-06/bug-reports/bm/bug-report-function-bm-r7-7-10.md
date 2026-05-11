@@ -22,11 +22,11 @@ Phát hiện **3** lỗi trong functional test R7.7.10 (preview/download MinIO c
 |------|----------|-------|--------|-------|---------|
 | 3    | 1        | 0     | 2      | 0     | 0       |
 
-### Status sau R8 lần 8 (2026-05-11)
+### Status sau R8 lần 11 (2026-05-11)
 
 | Đóng | Còn open | % đóng |
 |---|---|---|
-| **2/3** (BUG-BM-007 + BUG-BM-008) | 1/3 (BUG-BM-010 Medium — 3 fields visibility) | **67%** |
+| **2/3** (BUG-BM-007 + BUG-BM-008) | 1/3 (BUG-BM-010 Medium — 3 fields visibility, **VẪN reproduced R8 lần 11**) | **67%** |
 
 ## Bug Summary Table
 
@@ -34,7 +34,7 @@ Phát hiện **3** lỗi trong functional test R7.7.10 (preview/download MinIO c
 |--------|----------|----------|------|--------|-------------------|-------|--------|
 | ~~BUG-BM-007~~ | Critical | P0 | Integration | BM-007 + BM-008 | `FR-VII-04 §Processing — Xem trực tuyến` + `§Processing — Tải về` | Preview + Download BM dùng MinIO presigned URL trỏ `localhost:9000` → user browser không kết nối được (`ERR_CONNECTION_REFUSED`) | **Closed (R8 lần 8 — BE đổi `MINIO_PUBLIC_HOST` sang `103.172.236.130:9000`, fetch status=200, content_length=917, 36ms)** |
 | ~~BUG-BM-008~~ | Medium | P2 | UI/UX | BM-016 | `FR-VII-04 §Error Handling E1` (ERR-BM-01 "Chỉ chấp nhận file doc, docx, xls, xlsx") | Form Thêm BM upload file `.txt` → FE silent rejected (ẩn file khỏi upload list) nhưng KHÔNG hiển thị toast/error message → user không biết file không hợp lệ | **Closed (R8 lần 8 — MCP MutationObserver verified, toast `.ant-message-notice-wrapper` "Định dạng không hỗ trợ: .txt. Chỉ chấp nhận: .doc, .docx, .xls, .xlsx" rendered)** |
-| BUG-BM-010 | Medium | P2 | UI/UX | BM-041 | `7.9-bieu-mau.md` line 122 (BM-041) + line 147 ("Switch OFF... → 3 trường ẩn") | Form Thêm BM — 3 trường công khai (Ảnh đại diện / Mô tả công khai / File đính kèm công khai) VẪN visible khi Switch "Công khai trên Cổng PLQG" OFF, vi phạm spec BM-041 "Switch công khai OFF → 3 trường (ảnh/mô tả/file) ẨN khỏi form" | **Open (R8 lần 8 phát hiện trong CR-01 test)** |
+| BUG-BM-010 | Medium | P2 | UI/UX | BM-041 | `7.9-bieu-mau.md` line 122 (BM-041) + line 147 ("Switch OFF... → 3 trường ẩn") | Form Thêm BM — 3 trường công khai (Ảnh đại diện / Mô tả công khai / File đính kèm công khai) VẪN visible khi Switch "Công khai trên Cổng PLQG" OFF, vi phạm spec BM-041 "Switch công khai OFF → 3 trường (ảnh/mô tả/file) ẨN khỏi form" | **Open (R8 lần 11 reproduced — Switch ON/OFF không đổi visibility, same heights 203/128/203px both states)** |
 
 ---
 
@@ -191,6 +191,37 @@ DOM check sau upload .txt:
 ---
 
 ## BUG-BM-010 — Form Thêm BM: 3 trường công khai visible khi Switch OFF (vi phạm BM-041)
+
+> **Re-test 2026-05-11 R8 lần 11:** ❌ **VẪN OPEN — reproduce 100%, không có fix giữa R8 lần 8 và R8 lần 11.** Account `cb_nv_tw_02` (kill chrome + fresh launch + fresh login + OTP `666666`). Navigate `/bieu-mau/them-moi`. DOM check Switch + 3 fields:
+> ```json
+> Switch OFF (default):
+>   { ariaChecked: "false", hasCheckedClass: false }
+>   "Ảnh đại diện":          { visible: true, display: "block", height: 203px }
+>   "Mô tả công khai":       { visible: true, display: "block", height: 128px }
+>   "File đính kèm công khai": { visible: true, display: "block", height: 203px }
+>
+> Click Switch → toggle ON:
+>   { ariaChecked: "true", hasCheckedClass: true }
+>   "Ảnh đại diện":          { visible: true, height: 203px }  ← KHÔNG đổi
+>   "Mô tả công khai":       { visible: true, height: 128px }  ← KHÔNG đổi
+>   "File đính kèm công khai": { visible: true, height: 203px }  ← KHÔNG đổi
+> ```
+> Switch state thay đổi đúng (`aria-checked`/`ant-switch-checked` class). Nhưng 3 trường height/visibility **identical giữa Switch ON và OFF** — FE chưa hook conditional render based on Switch state. Bug NOT fixed sau ~3 ngày kể từ R8 lần 8 (2026-05-11 sáng). Evidence: `image/r8l11-2026-05-11-bug-bm-010-still-3fields-visible-switch-off.png`.
+>
+> **Bonus fix detected (separate, non-bug related):** UI hint "Ảnh đại diện" upload area changed from `Dung lượng tối đa: 20MB` (R8 lần 8 observation) → `Dung lượng tối đa: 5MB` (R8 lần 11 actual). Match spec BM-048 `anh_dai_dien ≤5MB`. Observation closed.
+>
+> **Recommend dev fix BUG-BM-010:** Wrap 3 Form.Item bằng conditional render based on `Form.useWatch('congKhai')`:
+> ```jsx
+> const congKhai = Form.useWatch('congKhai', form);
+> {congKhai && (
+>   <>
+>     <Form.Item name="anhDaiDien" label="Ảnh đại diện">...</Form.Item>
+>     <Form.Item name="moTaCongKhai" label="Mô tả công khai">...</Form.Item>
+>     <Form.Item name="fileDinhKemCongKhai" label="File đính kèm công khai">...</Form.Item>
+>   </>
+> )}
+> ```
+> Clear value qua `form.resetFields(['anhDaiDien','moTaCongKhai','fileDinhKemCongKhai'])` trong `useEffect(() => { if (!congKhai) form.resetFields(...) }, [congKhai])` để match spec line 147 "tắt → ẩn **+ clear value khi save**".
 
 ### Mô tả
 

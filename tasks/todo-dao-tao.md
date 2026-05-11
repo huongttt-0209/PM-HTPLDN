@@ -17,10 +17,10 @@
 
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
-| **P3** | 9 | 0 | 0 | 8 | 0 | 1 | 0 | 0 | ✅[R7.3.5](#r7-3-5) · ✅[R7.3.6](#r7-3-6) · ✅[R7.3.8](#r7-3-8) · ✅[R7.3.9](#r7-3-9) · ✅[R7.3.10](#r7-3-10) · ✅[R7.3.11](#r7-3-11) · 🚫[R7.3.12](#r7-3-12) · ✅[R7.3.13](#r7-3-13) · ✅[R7.3.15](#r7-3-15) |
-| **P4** | 7 | 0 | 0 | 6 | 1 | 0 | 0 | 0 | ✅[R7.4.B0](#r7-4-b0) · ✅[R7.4.B1](#r7-4-b1) · ✅[R7.4.B5b](#r7-4-b5b) · ✅[R7.4.B7](#r7-4-b7) · ⚠️[R7.4.B10](#r7-4-b10) · ✅[R7.4.B11](#r7-4-b11) · ✅[R7.4.B12](#r7-4-b12) |
+| **P3** | 9 | 0 | 0 | 9 | 0 | 0 | 0 | 0 | ✅[R7.3.5](#r7-3-5) · ✅[R7.3.6](#r7-3-6) · ✅[R7.3.8](#r7-3-8) · ✅[R7.3.9](#r7-3-9) · ✅[R7.3.10](#r7-3-10) · ✅[R7.3.11](#r7-3-11) · ✅[R7.3.12](#r7-3-12) · ✅[R7.3.13](#r7-3-13) · ✅[R7.3.15](#r7-3-15) |
+| **P4** | 7 | 0 | 0 | 7 | 0 | 0 | 0 | 0 | ✅[R7.4.B0](#r7-4-b0) · ✅[R7.4.B1](#r7-4-b1) · ✅[R7.4.B5b](#r7-4-b5b) · ✅[R7.4.B7](#r7-4-b7) · ✅[R7.4.B10](#r7-4-b10) · ✅[R7.4.B11](#r7-4-b11) · ✅[R7.4.B12](#r7-4-b12) |
 | **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.6](#r7-7-6) |
-| **Tổng** | **17** | **0** | **0** | **14** | **2** | **1** | **0** | **0** |  |
+| **Tổng** | **17** | **0** | **0** | **16** | **1** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -50,10 +50,11 @@
 - ✅ **R7.3.11** ✏️ Seed 8 giảng viên entry HOAT_DONG (R9 light verify, R7 stable) <a id="r7-3-11"></a>
   - **Kết quả:** R9 verify 8/8 DANG_HOAT_DONG stable (R7 baseline cover 6 LV: Dân sự/Lao động/Thuế/SHTT/KDTM/Đất đai/Hành chính/KDQT). R9 add BLOCKED do BE ThrottlerException 429 cooldown >5min (cascade từ ~10 login switch). [seed-checklist R9](../output/qa-reports/round7-2026-05-06/seed/dao-tao/seed-checklist-r7-3-11-giang-vien-r9.md) · [list R7](../output/qa-reports/round7-2026-05-06/seed/dao-tao/r7-3-11-giang-vien-list.png)
 
-- 🚫 **R7.3.12** 🆕 Seed 8 Học viên (HOC_VIEN — qua chuyên trang DN/NHT FR-III-04) `[block: BE POST 500 + chuyên trang DN chưa test]` <a id="r7-3-12"></a>
-  - **R10 re-probe (10/05 02:55):** BE deploy 5 routes + swagger DTO match SRS FR-III-04 inputs. POST `/hoc-viens` (qtht_01) với valid body crash 500. 0 record seeded. [seed-checklist R10](../output/qa-reports/round7-2026-05-06/seed/dao-tao/seed-checklist-r7-3-12-hoc-vien-r10.md)
-  - **Spec clarify:** SRS FR-III-04 (UC23): Tác nhân = DN/NHT đăng ký qua chuyên trang. CB NV chỉ duyệt DKDT (FR-III-03 UC22). → 403 cho cb_nv_tw + cb_pd_tw đúng spec. FE missing CMS đúng spec. **Test entry-point thật là chuyên trang DN/NHT** (chưa verify).
-  - **Bug:** [bug-report-r7-3-12-hoc-vien-deploy-partial.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-3-12-hoc-vien-deploy-partial.md) — 0/1 đóng (BUG-HV-BE-01 Major POST 500). 2 bug ban đầu log đã withdraw sau SRS cite.
+- ✅ **R7.3.12** 🆕 Seed 8 Học viên (HOC_VIEN — qua DKDT NHẬP_TAY FR-III-04) <a id="r7-3-12"></a>
+  - **Kết quả R11 (11/05):** ✅ **9/8 HV** (overflow acceptance) + 9 DKDT linkages: KH-005 (5) + KH-003 (3 R11 DT-019) + KH-001 (1). BE POST DKDT nested route NHẬP_TAY auto-create HV. [seed-checklist R10](../output/qa-reports/round7-2026-05-06/seed/dao-tao/seed-checklist-r7-3-12-hoc-vien-r10.md)
+  - **Spec clarify:** SRS FR-III-04 (UC23): Tác nhân = DN/NHT đăng ký qua chuyên trang. CB NV chỉ duyệt DKDT. → 403 cho cb_nv_tw + cb_pd_tw đúng spec. FE chuyên trang DN/NHT chưa test E2E (out of scope; BE-side verified qua DKDT NHẬP_TAY mode).
+  - **Bug:** [Pass-bug-report-r7-3-12-hoc-vien-deploy-partial.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/Pass-bug-report-r7-3-12-hoc-vien-deploy-partial.md) — 1/1 đóng (BUG-HV-BE-01 Closed R11 — BE thay crash 500 bằng 403 guard đúng spec FR-III-04).
+  - **Caveat:** HV thiếu field `taiKhoanId` per spec (BUG-DT-052-HV-TAIKHOAN-01 Minor spec drift — không block seed; xem [bug-report-r7-7-6-hv-deps.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-7-6-hv-deps.md)).
 
 - ✅ **R7.3.13** 🆕 Seed Lịch học (LICH_HOC — FR-III-22) <a id="r7-3-13"></a>
   - **Kết quả R10 (10/05 02:25):** ✅ 3 records seeded KH-002 cover 2 hình thức (TRUC_TIEP×2 + TRUC_TUYEN×1). CRUD discovered: POST/GET nested + PATCH/DELETE flat route. PATCH v1→2 verified. [seed-checklist R10](../output/qa-reports/round7-2026-05-06/seed/dao-tao/seed-checklist-r7-3-13-lich-hoc-r10.md)
@@ -66,7 +67,7 @@
 
 - ✅ **R7.4.B0** 🆕 Workflow Kế hoạch ĐT năm (submit → approve → publish → reject) <a id="r7-4-b0"></a>
   - **Kết quả:** ✅ 11/11 transitions PASS — full state machine 3 cấp (TW+BN+DP) × 4 nhánh submit/approve/reject/publish. [report R9 final](../output/qa-reports/round7-2026-05-06/workflow/dao-tao/workflow-test-report-r7-4-b0-r9-final.md) · [report R9 phase 1+2](../output/qa-reports/round7-2026-05-06/workflow/dao-tao/workflow-verify-r7-4-b0-jwt-fix-r9.md)
-  - **Bug:** [bug-report-r7-4-b0-jwt-revoke.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-4-b0-jwt-revoke.md) — 2/3 đóng (JWT-01 Closed R9 + OTP-02 Closed R8 Won't-Fix; OTP-02b Minor FE silent toast Open RE-CONFIRMED R10).
+  - **Bug:** [Pass-bug-report-r7-4-b0-jwt-revoke.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/Pass-bug-report-r7-4-b0-jwt-revoke.md) — 3/3 đóng (JWT-01 Closed R9 + OTP-02 Closed R8 Won't-Fix + OTP-02b FE notification Closed R11 2026-05-11).
   - **Spec drift Minor (R9 final):** Reject lưu lý do vào `ghiChuPheDuyet` thay vì `lyDoTuChoi/thoiGianTuChoi/nguoiTuChoiId` — chờ BA confirm spec field naming.
 
 - ✅ **R7.4.B1** ✏️ Workflow CTĐT SM-CTDT mới (DU_THAO→CHO_DUYET→DA_DUYET) <a id="r7-4-b1"></a>
@@ -81,9 +82,9 @@
   - **Kết quả R10 (10/05):** ✅ 11/12 PASS qua UI sau cache clear. 4 bước R9 block đã unblock (FE+BE deploy `start/finish/submit-result/approve-result`). [report R10](../output/qa-reports/round7-2026-05-06/workflow/dao-tao/workflow-test-report-r7-4-b7-khoa-hoc-r10.md)
   - **Defer:** Bước cancel + reject-result (negative path) — R7.4.B11 cover.
 
-- ⚠️ **R7.4.B10** 🆕 Workflow Đề kiểm tra (tạo + sửa/xóa + phân phối vào khóa học) <a id="r7-4-b10"></a>
-  - **Kết quả R10 (10/05):** ⚠️ 5/8 PASS UI + 1/8 BLOCKED (Sửa - bug FE NEW) + 2/8 N/A (Trình duyệt/Phê duyệt — state machine ĐKT chỉ NHAP→DA_PHAN_PHOI). [report R10](../output/qa-reports/round7-2026-05-06/workflow/dao-tao/workflow-test-report-r7-4-b10-r10.md)
-  - **Bug:** [Pass-bug-report-r7-4-b10-dkt-fe-regression.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/Pass-bug-report-r7-4-b10-dkt-fe-regression.md) 1/1 đóng + [bug-report-r7-4-b10-dkt-form-modal.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-4-b10-dkt-form-modal.md) — 0/2 đóng (BUG-DKT-EDIT-FORM-01 Major + BUG-DKT-CREATE-FORM-01 Major Open).
+- ✅ **R7.4.B10** 🆕 Workflow Đề kiểm tra (tạo + sửa/xóa + phân phối vào khóa học) <a id="r7-4-b10"></a>
+  - **Kết quả R11 (11/05):** ✅ 6/8 PASS UI + 2/8 N/A (Trình duyệt/Phê duyệt — state machine ĐKT chỉ NHAP→DA_PHAN_PHOI). Bước Sửa unblock R11 sau FE pre-fill cachTao + UI chọn câu hỏi NHCH. [report R10](../output/qa-reports/round7-2026-05-06/workflow/dao-tao/workflow-test-report-r7-4-b10-r10.md)
+  - **Bug:** [Pass-bug-report-r7-4-b10-dkt-fe-regression.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/Pass-bug-report-r7-4-b10-dkt-fe-regression.md) 1/1 đóng + [Pass-bug-report-r7-4-b10-dkt-form-modal.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/Pass-bug-report-r7-4-b10-dkt-form-modal.md) 2/2 đóng (CREATE-FORM-01 + EDIT-FORM-01 Closed-verified R11).
   - **Cần BA xác nhận:** State machine ĐKT 2-state (NHAP/DA_PHAN_PHOI) — không có CHO_DUYET. Cập nhật spec FR-III-NEW-02 nếu correct.
 
 - ✅ **R7.4.B11** 🆕 Phê duyệt kết quả khóa học (FR-III-21) <a id="r7-4-b11"></a>
@@ -97,7 +98,13 @@
 
 - ⚠️ **R7.7.6** ✏️ Functional 40 test case Khóa học (cuối module Đào tạo) <a id="r7-7-6"></a>
   - **Kết quả R10 phase 1+2 (10/05):** ⚠️ 15/19 KH-pure PASS — 7 inherit B7/B11 + 6 new phase 1 (DT-001/002/003/015/029/053) + 2 inherit B12 phase 2 (DT-056 ✅ + DT-056a ⚠️). [report R10](../output/qa-reports/round7-2026-05-06/functional/dao-tao/functional-test-report-r7-7-6-khoa-hoc-r10.md)
-  - **Bug:** [bug-report-r7-7-6-dt004-form-missing-gv.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-7-6-dt004-form-missing-gv.md) — 1/2 đóng (BUG-DT-FORM-GV-01 Closed R10 21:50 — FE add field "Giảng viên *"; BUG-DT-FORM-GV-02 NEW Major Open — FE call `pageSize=200` vượt BE max 100 → dropdown empty, DT-004 vẫn BLOCKED).
-  - **Defer:** DT-038 ⚠️ partial (FE/BE thiếu assignment CRUD) · DT-032..036 (permission-matrix audit).
-  - **Block:** 9 TC HV-related (DT-011/019/031b-d/052/054/055) chờ HOC_VIEN BUG-HV-BE-01 (R7.3.12).
-  - **Findings:** ⚠️ DT-053 modal "Công khai" thiếu form 5 CPF. ⚠️ DT-038 FE thiếu nút "Gán bài giảng". ⚠️ Spec error code drift `ERR-CTDT-04` vs `ERR-STATE-III-01-01`. ⚠️ DT-004 BUG-DT-FORM-GV-01.
+  - **Kết quả R11 (11/05):** ✅ DT-004 happy path PASS — POST 201 `KH-20260511-001` DU_THAO. 16/19 KH-pure PASS. Log 2 bug findings R10 chưa log: DT-038 Major + DT-053 Minor.
+  - **Kết quả R11 (11/05 18:15):** ✅ DT-008 NHCH UI verified — list 7/7 + modal 5 fields + 3 loại + conditional Các lựa chọn + radio SINGLE. R7.3.8 cover POST 7/7. 17/19.
+  - **Bug:** [Pass-bug-report-r7-7-6-dt004-form-missing-gv.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/Pass-bug-report-r7-7-6-dt004-form-missing-gv.md) — 2/2 đóng (GV-01 Closed R10; GV-02 Closed R11 17:33 — FE `pageSize=100`, dropdown 8 GV, POST 201).
+  - **Bug:** [bug-report-r7-7-6-dt038-baigiang-assign-missing.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-7-6-dt038-baigiang-assign-missing.md) — 0/1 đóng (BUG-DT-038-ASSIGN-01 Major Open R11 — FE thiếu nút "Gán bài giảng" + BE thiếu nested route assignment).
+  - **Bug:** [bug-report-r7-7-6-dt053-public-modal-missing-cpf.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-7-6-dt053-public-modal-missing-cpf.md) — 0/1 đóng (BUG-DT-053-PUBLIC-MODAL-01 Minor Open R11 — modal "Công khai" thiếu `mo_ta_cong_khai` + `file_dinh_kem_cong_khai`).
+  - **Defer:** DT-032..036 (permission-matrix audit).
+  - **Kết quả R11 (11/05 verify 9 TC HV-related):** ✅ DT-019 PASS (cap 422 ERR-BIZ-III-04-03) + ⚠️ DT-052 spec drift (HV thiếu `taiKhoanId`) + ⚠️ DT-011 partial (DD GET mock + POST 404) + 🚫 6 TC BLOCKED (DT-011a/031b-d/054/055 chờ KQHT entity 404 + DD POST 404). Tổng 18/19 PASS+partial; 6 TC BLOCKED chờ deploy KQHT/DD.
+  - **Bug:** [bug-report-r7-7-6-hv-deps.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-7-6-hv-deps.md) — 0/3 đóng (DT-052 Minor + DT-011 Major + DT-031 KQHT Major Open R11). Cần dev BE deploy KQHT entity + DD POST endpoint.
+  - **Bug R11 probe E2E chuyên trang:** [bug-report-r7-7-6-chuyen-trang-vpd-inbound.md](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-r7-7-6-chuyen-trang-vpd-inbound.md) — 0/2 đóng (BUG-DT-CT-VPD-01 Major Open — VPD chặn DN/NHT access KH `congKhai=true` cross-đơn-vị, 403 ERR-AUTH-VPD-00-02; BUG-DT-CT-INBOUND-01 Major Open — BE thiếu `POST /public/dang-ky-dao-taos` + `/public/hoc-viens` inbound). Probe 2026-05-11 19:23 sau câu hỏi user "có chạy E2E luôn được không?" → chưa chạy được, chờ dev BE fix VPD bypass cho `congKhai=true` + add inbound endpoints.
+  - **Findings:** ⚠️ Spec error code drift `ERR-CTDT-04` vs `ERR-STATE-III-01-01`.

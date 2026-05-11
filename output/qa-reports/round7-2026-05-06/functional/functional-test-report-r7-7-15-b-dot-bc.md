@@ -14,7 +14,7 @@
 | **Primary Account** | `cb_nv_tw_01 / Secret@123` (CB_NV_TW, cấp TW) — owner CT + lập BC + trình duyệt |
 | **Secondary Account** | `cb_pd_tw_01` (CB_PD_TW cùng cấp) — duyệt KQ + từ chối KQ |
 | **Round** | R7.7.15.b — Functional Đợt BC (split từ R7.7.15) — **R4 update 2026-05-11 (UTC+7): CT-038 advance PARTIAL → PASS end-to-end; DOTBC-UI-001 + DOTBC-API-002 Closed-verified** · R2 2026-05-08 12:18 bổ sung CT-035 BN+ĐP + CT-038 partial |
-| **Tài liệu tham chiếu** | [functional-test-report-r7-7-15-cthtpldn.md](functional-test-report-r7-7-15-cthtpldn.md) (R7.7.15 GĐ1 chính) · [bug-report-flow-cthtpldn.md](../bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md) |
+| **Tài liệu tham chiếu** | [functional-test-report-r7-7-15-cthtpldn.md](functional-test-report-r7-7-15-cthtpldn.md) (R7.7.15 GĐ1 chính) · [Pass-bug-report-flow-cthtpldn.md](../bug-reports/ct-htpldn/Pass-bug-report-flow-cthtpldn.md) |
 
 ---
 
