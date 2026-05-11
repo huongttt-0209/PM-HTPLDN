@@ -15,11 +15,13 @@
 
 | BUG-ID | Severity | Component | Title | Status |
 |---|---|---|---|---|
-| BUG-HD-055-PUBLISH-FAIL-UX-001 | Minor | FE — Modal CR-01 error handler | Modal Công khai không hiện ERR-PD-04 + nút "Thử lại" khi BE trả 500 | Open |
+| ~~BUG-HD-055-PUBLISH-FAIL-UX-001~~ | Minor | FE — Modal CR-01 error handler | ~~Modal Công khai không hiện ERR-PD-04 + nút "Thử lại" khi BE trả 500~~ | Closed |
 
 ---
 
-## BUG-HD-055-PUBLISH-FAIL-UX-001 — Modal Công khai không hiện ERR-PD-04 + nút "Thử lại" khi BE trả 500
+## ~~BUG-HD-055-PUBLISH-FAIL-UX-001~~ [CLOSED] — Modal Công khai không hiện ERR-PD-04 + nút "Thử lại" khi BE trả 500
+
+> **Re-test:** 2026-05-11 14:25:00 R10g — ✅ PASS (Closed-verified). Inject XHR 500 ERR-PD-04 cho POST `/cong-khai` trên HD-20260510-006 (DA_DUYET, version=8). Modal CR-01 GIỜ hiển thị: (1) `ant-alert-error` đỏ với tiêu đề "Công khai thất bại" + message "Lỗi máy chủ tạm thời khi công khai. Vui lòng thử lại sau." + "Mã lỗi: ERR-PD-04" + ghi chú "Dữ liệu đã nhập được giữ lại — bấm 'Thử lại' để gửi lại yêu cầu."; (2) button cuối modal đổi label `[Công khai]` → `[Thử lại]`; (3) toast `ant-message` global hiện "Không thể công khai. Vui lòng thử lại."; (4) Form data RETAINED — textarea `Mô tả công khai` giữ 65 ký tự đã nhập, counter `65 / 2000`. Evidence: [r7-hd-055-retest-r10g-modal-error-alert-retry-pass.png](image/r7-hd-055-retest-r10g-modal-error-alert-retry-pass.png).
 
 ### Mô tả
 

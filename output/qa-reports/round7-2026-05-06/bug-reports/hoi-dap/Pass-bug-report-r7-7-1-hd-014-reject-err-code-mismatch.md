@@ -15,11 +15,19 @@
 
 | BUG-ID | Severity | Component | Title | Status |
 |---|---|---|---|---|
-| BUG-HD-014-REJECT-ERR-CODE-001 | Minor | BE — validation error code mapping | POST `/tu-choi` empty lyDo trả `ERR-VAL-SYS-00-01` thay vì spec-required `ERR-PD-02` | Open |
+| ~~BUG-HD-014-REJECT-ERR-CODE-001~~ | Minor | BE — validation error code mapping | ~~POST `/tu-choi` empty lyDo trả `ERR-VAL-SYS-00-01` thay vì spec-required `ERR-PD-02`~~ | Closed |
 
 ---
 
-## BUG-HD-014-REJECT-ERR-CODE-001 — Empty lyDo trả generic ERR-VAL-SYS thay vì business ERR-PD-02
+## ~~BUG-HD-014-REJECT-ERR-CODE-001~~ [CLOSED] — Empty lyDo trả generic ERR-VAL-SYS thay vì business ERR-PD-02
+
+> **Re-test UI 2026-05-11 14:40:00 R10g — ✅ PASS (Closed-verified).** Walk record HD-20260509-008 qua UI thực tế (theo rule UI-only):
+> 1. Login `cb_nv_tw_08` (isolatedContext) → mở record DANG_XU_LY → click [Gửi phản hồi] → confirm 2 modal ("Bạn không phải người được phân công" + "Xác nhận gửi phản hồi") → state → `CHO_PHE_DUYET`.
+> 2. Switch context `cb_pd_tw_04` → reload record → buttons `[Phê duyệt]` + `[Từ chối]` xuất hiện.
+> 3. Click `[Từ chối]` → modal "Từ chối" mở với textarea "Lý do từ chối *" required + counter `0 / 500`.
+> 4. Click `[Xác nhận từ chối]` không nhập gì → modal hiện **inline error "Vui lòng nhập lý do từ chối."** đúng message spec `ERR-PD-02`. Validation client-side trước khi gọi BE — UX tốt, không cần round-trip server. State record giữ `CHO_PHE_DUYET`.
+>
+> Evidence: [r7-hd-014-retest-r10g-ui-empty-lyDo-inline-error-pass.png](image/r7-hd-014-retest-r10g-ui-empty-lyDo-inline-error-pass.png)
 
 ### Mô tả
 

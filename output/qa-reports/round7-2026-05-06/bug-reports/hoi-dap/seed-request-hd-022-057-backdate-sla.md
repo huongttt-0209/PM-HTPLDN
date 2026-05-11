@@ -3,6 +3,37 @@
 > **Người gửi:** QA Automation · **Ngày:** 2026-05-10 · **Module:** Hỏi đáp · **Round:** R7.7.1 Phase 8
 > **Loại yêu cầu:** Test data seed (KHÔNG phải bug, không cần fix code) · **Effort dev:** ~15 phút (4 câu SQL UPDATE)
 
+## ⚠️ Cập nhật 2026-05-11 10:30:00 — Dev đã chạy 1 phần, còn THIẾU 2 câu SQL
+
+QA re-verify Phase 9 R10f thấy dev đã chạy 4 SQL UPDATE `ngay_tiep_nhan` + `created_at` ban đầu. Kết quả:
+
+| Record | Trạng thái | Ratio thực tế | Kỳ vọng | Status |
+|---|---|---|---|---|
+| HD-22b (dfdbc8a7) | DANG_XU_LY | ~20% | ~30% | ✅ PASS (xanh "Bình thường") |
+| HD-22c (8c54715f) | DANG_XU_LY | ~45.4% | ~70% | ⚠️ **VẪN xanh — phải vàng "Sắp hết hạn"** |
+| HD-22d (101f22b6) | DANG_XU_LY | ~55.6% | ~110% | ⚠️ **VẪN xanh — phải đỏ "Quá hạn"** |
+| HD-057 (3577bfb6) | DA_DUYET 35d | created_at lùi 35d | giữ DA_DUYET | ✅ PASS (không auto-close) |
+
+**Nguyên nhân:** Dev chỉ UPDATE `ngay_tiep_nhan`, KHÔNG UPDATE `deadline` → tổng span giữa `ngay_tiep_nhan` và `deadline` = ~10 ngày thay vì 5 ngày → ratio chia 2.
+
+**Cần dev chạy thêm 2 câu SQL dưới đây để HD-22c/d unblock đúng spec.**
+
+```sql
+-- Bổ sung — UPDATE deadline cho HD-22c (target ratio 70%)
+UPDATE hoi_dap
+SET deadline = ngay_tiep_nhan + INTERVAL '5 days'
+WHERE id = '8c54715f-4ff5-487f-bc1b-bc405d162534';
+
+-- Bổ sung — UPDATE deadline cho HD-22d (target ratio 110%)
+UPDATE hoi_dap
+SET deadline = ngay_tiep_nhan + INTERVAL '5 days'
+WHERE id = '101f22b6-1cbe-4e1a-9d76-ab5d6cfd1322';
+```
+
+> Sau khi dev chạy thêm 2 câu trên → QA reload UI verify badge `ant-tag-yellow` (HD-22c) + `ant-tag-red` (HD-22d) + escalate notification (HD-22d).
+
+---
+
 ## Mục đích
 
 QA cần test 4 TC functional R7.7.1 phụ thuộc thời gian (SLA rendering theo ratio elapsed/deadline + auto-close 30 ngày). App implement đúng spec, nhưng QA không có cách giả lập "thời gian trôi" qua UI. Nhờ dev chạy 4 câu SQL UPDATE trên DB test để backdate `ngay_tiep_nhan` / `created_at` của 4 record hiện có → QA test ngay được, không cần build tool.

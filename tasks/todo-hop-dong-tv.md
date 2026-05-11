@@ -31,11 +31,11 @@
   - **Cần:** [R7.3.2](todo-vu-viec.md#r7-3-2) ✅ · [R7.4.A1-CG](todo-tvv-cg.md#r7-4-a1-cg) ✅
   - **Note:** 2026-05-10 09:04:00 — dev fix 3 bug retest PASS. HDTV-0003..0008 cover 6 LV `soVvLink=1`. HDTV-0001 mồ côi pre-fix giữ làm evidence.
 
-- ⚠️ **R7.7.14** 🔄 HĐ tư vấn (UC163 sub-resource v2.1) `[need: ≥1 HĐ TV DANG_THUC_HIEN (✓ 1); ≥1 VV HOAN_THANH (✗ 0)]` <a id="r7-7-14"></a>
-  - **Kết quả:** ⚠️ R3 16/17 ✅ + 1 Sai spec. CONDITIONAL PASS. [functional-test-report-r7-7-14-hdtv.md](../output/qa-reports/round7-2026-05-06/functional/hop-dong-tv/functional-test-report-r7-7-14-hdtv.md)
-  - **Bug:** [bug-report-r7-7-14-hdtv.md](../output/qa-reports/round7-2026-05-06/bug-reports/hop-dong-tv/bug-report-r7-7-14-hdtv.md) — 4/6 đóng (Closed: BUG-018/021/026/029; Open: BUG-020 Medium UI partial, BUG-030 Major regression FE pageSize)
-  - **Cần:** ≥1 HĐ TV `DANG_THUC_HIEN` (✓ 1) · ≥1 VV `HOAN_THANH` (✗ 0) — 14 TC defer chờ menu/spec
-  - **Note:** 2026-05-10 21:50:00 — Re-test #3 sau dev fix lần 2 (acc `_07`). 4/5 bug Closed (BUG-018 toggle + tienDoTt; BUG-021 QTHT 403; BUG-026 PATCH vuViecIds persist; BUG-029 form TVV/CG dropdown). BUG-020 partial (BE audit-logs ✅ 200 + 5 events / UI tab vẫn thiếu — Medium). New regression BUG-030 (Major): FE Tạo HD call `pageSize=200` → BE max 100 → 422 → dropdown TVV/CG empty trên UI.
+- ⚠️ **R7.7.14** 🔄 HĐ tư vấn (UC163 sub-resource v2.1) `[need: ≥1 HĐ TV DANG_THUC_HIEN (✓ 1); ≥1 VV HOAN_THANH (✓ 1)]` <a id="r7-7-14"></a>
+  - **Kết quả:** ⚠️ R5 4 Closed + 7 Open (1C+5M+1Med+1Min). UI spec-gap + permission anomaly. [functional-test-report-r7-7-14-hdtv.md](../output/qa-reports/round7-2026-05-06/functional/hop-dong-tv/functional-test-report-r7-7-14-hdtv.md)
+  - **Bug:** [bug-report-r7-7-14-hdtv.md](../output/qa-reports/round7-2026-05-06/bug-reports/hop-dong-tv/bug-report-r7-7-14-hdtv.md) — 4/12 đóng (Closed: BUG-018/021/026/029 · Open: 020 partial, 030 regression, 031 contract, 032 missing TVV-HD section, 033 missing modal entry, 034 stale standalone route, 035 silent RangePicker drop, 036 CB has Create btn vs QTHT)
+  - **Cần:** ≥1 HĐ TV `DANG_THUC_HIEN` (✓ 1) · ≥1 VV `HOAN_THANH` (✓ 1) — 14 TC defer out-of-scope per SRS v2.1
+  - **Note:** 2026-05-11 16:15:00 — Re-test #5 + #5b UI-only multi-role (qtht_07 + cb_nv_bn_07 + cb_nv_dp_07 + DN 9999999990 + nht_btp_tw_audit_r30). 6/6 TC PASS (HDTV-014 calendar/017 search/019 highlight/022 NHT sidebar với acc audit/023 DN sidebar/024 CB scope) + HDTV-028 confirm BUG-032 trên 2 TVV (FE không gọi endpoint HD). 2 bug mới: BUG-035 Minor RangePicker text input silent drop Đến ngày; BUG-036 Major permission inversion CB có Create btn / QTHT không + standalone create route render trái spec v3.5.
 
 - ✅ **R7.E1** 🔄 HĐ tư vấn (FR-X3-01) — sub-resource VV/TVV <a id="r7-e1"></a>
   - **Kết quả:** PASS 6/6 — 4 FE route + 2 API endpoint trả 404, sidebar không có menu HĐ TV độc lập. Match spec v2.1. [verify-checklist-r7-e1-hdtv-url.md](../output/qa-reports/round7-2026-05-06/seed/hop-dong-tv/verify-checklist-r7-e1-hdtv-url.md)

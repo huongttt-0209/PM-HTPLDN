@@ -14,7 +14,7 @@
 
 ## Tổng hợp
 
-Phát hiện **1 bug Major (security)** sau khi BE bỏ ClamAV theo SRS update item 10. Endpoint upload `/api/v1/files/upload` chỉ check extension whitelist + Content-Type header (untrusted), KHÔNG check magic bytes file → mime spoofing trivial.
+Phát hiện **1 bug Major (security)** sau khi BE bỏ ClamAV theo SRS update item 10. Endpoint upload `/api/v1/files/upload` chỉ check extension whitelist + Content-Type header (untrusted), KHÔNG check magic bytes file → mime spoofing trivial. **Đã FIX R9** — BE thêm magic-byte sniff, mime spoof reject với `ERR-VAL-FILE-04`.
 
 ### Severity breakdown
 
@@ -26,11 +26,13 @@ Phát hiện **1 bug Major (security)** sau khi BE bỏ ClamAV theo SRS update i
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |---|---|---|---|---|---|---|---|
-| BUG-SEC-FILE-01 | **Major** | P1 | Negative | R7.8.2-TC05 | `_DELTA-MAP-CROSS-CUTTING.md C2 line 69-78` (QA flag risk Critical, escalate BA security review) | BE upload chỉ check extension + MIME (client-trusted) → mime spoof `.exe` → `.pdf` lọt qua content validation | Open (R8 re-verified) |
+| ~~BUG-SEC-FILE-01~~ | **Major** | P1 | Negative | R7.8.2-TC05 | `_DELTA-MAP-CROSS-CUTTING.md C2 line 69-78` (QA flag risk Critical, escalate BA security review) | ~~BE upload chỉ check extension + MIME (client-trusted) → mime spoof `.exe` → `.pdf` lọt qua content validation~~ | **Closed (R9)** |
 
 ---
 
-## BUG-SEC-FILE-01 — Upload bypass: rename `.exe` → `.pdf` lọt qua content validation
+## ~~BUG-SEC-FILE-01~~ [CLOSED] — Upload bypass: rename `.exe` → `.pdf` lọt qua content validation
+
+> **Re-test 2026-05-11 R9 15:40:28:** ✅ **CLOSED (verified)**. Account `qtht_10` (isolatedContext). Replay PE bytes (`4D 5A 90 00...`) claim `application/pdf` qua `POST /api/v1/files/upload` → response **`400 ERR-VAL-FILE-04 "Nội dung file không khớp định dạng. Vui lòng tải lên file gốc đúng loại đã chọn"`** (reqid `07ad89d6-695b-41ef-8124-ac7547b587bd`, timestamp `2026-05-11T08:40:28.713Z`). Magic-byte sniff đã được thêm. Bonus: text bytes claim `.jpg` cũng reject với `ERR-VAL-FILE-04`. Real PDF + ZIP magic vẫn đi qua content layer (đúng — magic match extension), fail tại permission. Whitelist update thêm `.gif`. Commit ref dev-report §11: `c304b8fc`.
 
 > **Re-test 2026-05-08 R8:** ❌ **STILL OPEN**. Account `cb_nv_tw_02`. Replay test PE bytes (`4D 5A 90 00...`) claim `application/pdf` qua `POST /api/v1/files/upload` → response `403 ERR-PERM-FILE-02 "Forbidden"` (reqid `c476692a-...`, timestamp `2026-05-08T00:14:39.421Z`). Vẫn fail tại tầng permission, **không có ERR-VAL-FILE content-mismatch** → BE chưa sniff magic bytes. Layer defense vẫn thiếu sau 1 round.
 

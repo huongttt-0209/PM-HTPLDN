@@ -16,11 +16,13 @@
 
 R7 retest workflow ĐG HQ phát hiện **3 bug mới** (DG-006/007 đã Closed sáng R10, **DG-008 mới phát hiện R10 B9**) + **5 bug R6 Closed** verified by dev fix. Workflow đạt 8/11 bước PASS (B1-B8 hoàn tất qua R7+R9) — B9 chấm điểm **fail** bởi BUG-FUNC-DG-008 (PUT `/ket-quas` 200 nhưng GET không trả lại score → cascade block B10+B11).
 
-### Severity breakdown (R7 mới)
+### Severity breakdown (R7 cumulative qua R11)
 
 | Tổng | Critical | Major | Medium | Minor | Trivial |
 |------|----------|-------|--------|-------|---------|
-| 3    | 0        | 2     | 1      | 0     | 0       |
+| 10   | 1        | 5     | 3      | 1     | 0       |
+
+> R11 thêm DG-014 (Medium) + DG-015 (Minor).
 
 > **R10 update 2026-05-10 11:48:00:** Sau dev fix sáng cùng ngày, DG-006 + DG-007 đã ✅ Closed. Tiếp tục B7-B11 với role chain cb_pd_tw_02 (verify role guard) → cb_nv_tw_03 (assigned evaluator). B7-B8 đã hoàn tất từ R9 log (phân công + phê duyệt). B9 phát hiện BUG-FUNC-DG-008: chấm 4 tiêu chí điểm 9/8/9/9, click "Lưu kết quả" → PUT 200 với computed body (diemTong=8.8, xepLoai=TOT, version=2, trangThai=DA_DANH_GIA), nhưng GET tiếp theo (cùng endpoint, cùng session) trả version=1, diemTong=null, trangThai=CHUA_DANH_GIA. Reload page UI → score reset về 0, đợt vẫn THUC_HIEN. Read-after-write inconsistency BE.
 
@@ -36,6 +38,8 @@ R7 retest workflow ĐG HQ phát hiện **3 bug mới** (DG-006/007 đã Closed s
 | BUG-FUNC-DG-011 | Medium | P2 | UI display | TC11 (FR-VI-03) | `srs-fr-08-danh-gia.md` line 798 (SCR-VI-01 Tab 2 row 36) — bảng hiển thị "Người đánh giá / Lĩnh vực / Ghi chú" | Bảng phân công render `—` cho cột Người đánh giá + Lĩnh vực + Ghi chú dù BE đã persist `linhVucIds` đầy đủ và `nguoiDanhGiaId` valid. FE không lookup tên người + tên lĩnh vực từ id (BE response chỉ trả id, không nested). | 🔴 **Open (R10b 2026-05-10 22:44:00)** |
 | BUG-FUNC-DG-012 | Critical | P0 | Workflow / state machine | TC11-14 (FR-VI-03 step 7) | `srs-fr-08-danh-gia.md` line 1159 (SM-DANHGIA transition `LAP_KE_HOACH → PHAN_CONG` via FR-VI-03) + line 1160 (`PHAN_CONG → CHO_DUYET_PC` qua "Trình") + FR-VI-03 Acceptance Criteria | Đợt không advance state `LAP_KE_HOACH → PHAN_CONG` dù đã POST 4 lần `/phan-congs` 201. Đợt vẫn `LAP_KE_HOACH` (`version=1` không tăng). Button "Trình phê duyệt" disabled (FE check `trangThai === 'PHAN_CONG'`). Block toàn bộ TC14 (reject PC) + TC17 (cross-cấp deny ở CHO_DUYET_PC). | 🔴 **Open (R10b 2026-05-10 22:47:00)** |
 | BUG-FUNC-DG-013 | Major | P1 | Permission bypass | TC18 (FR-VI-03 Phân công × QTHT) | `output/permission-matrix.md` line 71 (QTHT × KE_HOACH_DANH_GIA = 👁️ R only) + `srs-fr-08-danh-gia.md` FR-VI-03 Tác nhân (Cán bộ Nghiệp vụ TW/BN/ĐP — KHÔNG ghi QTHT) | QTHT vào tab Phân công của đợt thấy button "Thêm người đánh giá" + button "delete" trên mỗi row PC. Per matrix QTHT chỉ R trên KE_HOACH_DANH_GIA — không được create/delete PC. Tab Tiêu chí QTHT có CRUD (matches matrix TIEU_CHI_DANH_GIA = ✅ CRUD), nhưng tab Phân công UI sai phạm vi. | 🔴 **Open (R10b 2026-05-10 22:55:00)** |
+| BUG-FUNC-DG-014 | Medium | P2 | UI data display | TC11 / TC12 modal Phân công (FR-VI-03) | `srs-update-2026-5-5/srs-fr-08-danh-gia.md` FR-VI-03 Inputs row 4 (`linh_vuc_ids` Multi-select tự danh mục lĩnh vực) + line 798 (SCR-VI-01 Tab 2 modal "Thêm người đánh giá") | Dropdown "Lĩnh vực" modal "Thêm người đánh giá" render 12 options. 2/12 hiện raw UUID (`bbbbbbbb-0000-4000-8000-000000000018` + `bbbbbbbb-0000-4000-8000-000000000013`) thay vì tên Vietnamese. 10/12 còn lại render đúng tên (Thuế, Lao động, Đất đai...). FE không lookup tên cho 2 record có id rời rạc / data lỗi (BE trả id thuần). | 🔴 **Open (R11 2026-05-11 14:30:00)** |
+| BUG-FUNC-DG-015 | Minor | P3 | UX / error leak | Tabs Thực hiện + Báo cáo (FR-VI-04 / FR-VI-09 state-gated display) | `srs-update-2026-5-5/srs-fr-08-danh-gia.md` SCR-VI-01 Tab 3 (Thực hiện) + Tab 5 (Báo cáo) — tab body hiển thị empty placeholder, KHÔNG nên show BE error toast khi user chỉ click navigate | Click tab "Thực hiện" / "Báo cáo" khi đợt state `LAP_KE_HOACH` → body render đúng empty placeholder ("Chức năng thực hiện đánh giá sẽ khả dụng sau khi hoàn tất phân công." / "Chưa hoàn thành đánh giá") **NHƯNG** đồng thời pop BE error toast đỏ ("Kế hoạch phải ở trạng thái CHO_DUYET_PC, hiện tại là 'LAP_KE_HOACH'" / "Kế hoạch phải ở trạng thái DA_DANH_GIA trở lên..."). FE gọi API load data trước khi check state → BE 4xx → FE leak. Tab Chấm điểm cùng state → empty placeholder không leak (pattern đúng). | 🔴 **Open (R11 2026-05-11 14:35:00)** |
 | ~~BUG-FUNC-DG-006~~ | Major | P1 | Workflow | R7.4.D2 B6 | `srs-fr-08-danh-gia.md` FR-VI-05/06 (UC87 Chọn VV vào đợt) — chưa rõ filter spec đầy đủ | ~~Endpoint `/vu-viec-eligible` trả empty list mặc dù có 20 VV state HOAN_THANH (3 VV trong date range đợt) — block B6 chọn VV~~ | ✅ **Closed (R10 2026-05-10 11:05:00)** |
 | ~~BUG-FUNC-DG-007~~ | Medium | P2 | Data | R7.4.D2 (cross-module) | `srs-fr-08-danh-gia.md` Dashboard KPI-04 + `srs-fr-13-dashboard.md` (file chưa cụ thể) | ~~Dashboard "Vụ việc hoàn thành: 0" khi /vu-viec/danh-sach Tab "Hoàn thành" hiện 20 records HOAN_THANH~~ | ✅ **Closed (R10 2026-05-10 11:05:00)** |
 
@@ -56,6 +60,8 @@ R7 retest workflow ĐG HQ phát hiện **3 bug mới** (DG-006/007 đã Closed s
 ---
 
 ## BUG-FUNC-DG-010 — Modal "Thêm tiêu chí" force `trongSo=100` bất kể giá trị user nhập
+
+> **Re-test:** 2026-05-11 14:05:00 R11 — ❌ REPRODUCED. Account `cb_nv_tw_09` đợt mới `DG-20260511-0001` LAP_KE_HOACH. Modal "Thêm tiêu chí" nhập trọngSo=60 → save → row render trọngSo=100, Σ jump 100% ngay. **Variant phụ phát hiện R11:** inline edit spinbutton trọng số trong table cũng force value=100 khi click vào (chưa edit). 2 variant cùng FE component force value. Status giữ Open.
 
 ### Mô tả
 
@@ -95,6 +101,8 @@ User chỉ có thể sửa trọng số về 30 bằng inline edit ở table sau
 ---
 
 ## BUG-FUNC-DG-011 — Bảng Phân công render "—" cho Người đánh giá + Lĩnh vực + Ghi chú dù BE đã persist
+
+> **Re-test:** 2026-05-11 14:10:00 R11 — ✅ NOT REPRODUCED. Đợt R11 `DG-20260511-0001`, account `cb_nv_tw_09` add 2 PC (cb_nv_tw_09 Trưởng nhóm + cb_nv_tw_08 Đánh giá viên). Table render đầy đủ: "CB Nghiệp vụ TW 09 / cb_nv_tw_09@htpldn.test / Trưởng nhóm / — / —" (— là LV + Ghi chú vì không chọn). FE lookup tên + email render OK. **Đề nghị đóng bug** nếu retest đợt R10b cũ (DG-20260510-0001) cũng render OK — hoặc giữ Open chờ verify trên đợt cũ.
 
 ### Mô tả
 
@@ -144,6 +152,8 @@ Root cause: BE chỉ trả ID, không nested object. FE chưa wire lookup `/look
 
 ## BUG-FUNC-DG-012 — Đợt không advance state `LAP_KE_HOACH → PHAN_CONG` dù đã POST 4 lần `/phan-congs` 201
 
+> **Re-test:** 2026-05-11 14:00:00 R11 — ❌ REPRODUCED variant phụ. Đợt R11 `DG-20260511-0001` đã advance OK `LAP_KE_HOACH → PHAN_CONG` (sau khi save Σ tiêu chí = 100%). Add 2 PC + click [Trình phê duyệt] → confirm → POST `/api/v1/ke-hoach-danh-gias/{id}/phan-congs/submit` 200 + toast "Đã trình phê duyệt phân công". Tuy nhiên reload đợt → state badge vẫn "Phân công" (`PHAN_CONG`), KHÔNG advance `CHO_DUYET_PC`. Verify cross-role: `cb_pd_tw_09` list "Tất cả" thấy đợt `TRẠNG THÁI=Phân công`; tab "Chờ duyệt PC" → "Không có kế hoạch đánh giá nào phù hợp." → approver không nhận đợt. BE submit endpoint không advance state DB nhưng FE lock UI như đã advance → state inconsistency. **Variant transition `PHAN_CONG → CHO_DUYET_PC` cũng bị block** — bug có 2 transition cùng pattern. Status giữ Open, Critical.
+
 ### Mô tả
 
 Account `cb_nv_tw_01`, đợt DG-20260510-0001 state khởi tạo `LAP_KE_HOACH`. QA POST 4 phân công thành công (mỗi POST trả 201, BE persist record với `keHoach.trangThai: "LAP_KE_HOACH"` không đổi sau từng POST). Sau 4 PC, đợt-level vẫn `trangThai: LAP_KE_HOACH`, `version: 1` (không tăng). Button "Trình phê duyệt" UI disabled vì FE check `trangThai === 'PHAN_CONG'` mới enable. Force-click button qua `btn.disabled = false; btn.click()` không fire request — React onClick handler kiểm tra state nội bộ silent no-op. Tester block không thể tiến tới `CHO_DUYET_PC` để test TC14 (reject PC) hoặc TC17 (cross-cấp deny). Đây là vi phạm SM-DANHGIA: line 1159 ghi rõ "LAP_KE_HOACH → PHAN_CONG | CB NV phân công | Có KH | Gán CB/CG | FR-VI-03" — bước "Gán CB/CG" (POST `/phan-congs`) PHẢI trigger transition state.
@@ -191,6 +201,8 @@ GET phan-congs response:
 
 ## BUG-FUNC-DG-013 — QTHT có button "Thêm người đánh giá" + "delete" trên tab Phân công (vi phạm matrix R-only trên KE_HOACH)
 
+> **Re-test:** 2026-05-11 14:12:00 R11 — ⚠️ PARTIAL FIX + variant phụ. Account `qtht_09` vào đợt `DG-20260510-0001` (LAP_KE_HOACH) Tab Phân công → KHÔNG còn "Thêm người đánh giá" + "Trình phê duyệt" + cột "Thao tác" → ✅ Tab Phân công đã read-only OK (variant gốc R10b đã fix). **Tuy nhiên Tab Tiêu chí cùng đợt vẫn render spinbutton trọng số + spinbutton điểm tối đa + button delete row** → QTHT có thể mutate tiêu chí. Per matrix `TIEU_CHI_DANH_GIA = CRUD` cho QTHT nhưng đây là per-đợt tiêu chí (không phải dictionary master). Phải verify với BA — nếu QTHT chỉ được CRUD trên dictionary master, không trên đợt-specific tiêu chí, thì bug. Status giữ Open chờ BA confirm + dev verify scope BE.
+
 ### Mô tả
 
 Account `qtht_01` (role QTHT, single role), vào module Đánh giá hiệu quả → click row đợt DG-20260510-0001 → đợt detail → tab Phân công. UI render giống hệt CB_NV_TW: button [+ Thêm người đánh giá] visible + clickable, mỗi row PC có button [delete] visible + clickable. Per `output/permission-matrix.md` line 71 (QTHT × `KE_HOACH_DANH_GIA` = 👁️ **R** only — không có CRUD), QTHT chỉ được xem chi tiết đợt, KHÔNG được create/delete PC. Tab Tiêu chí QTHT đúng có CRUD (matrix line 73 TIEU_CHI_DANH_GIA = ✅ CRUD), nhưng tab Phân công UI hiển thị action sai phạm vi quyền. SRS FR-VI-03 Tác nhân: "Cán bộ Nghiệp vụ (TW/BN/ĐP)" — KHÔNG bao gồm QTHT.
@@ -229,6 +241,82 @@ QTHT thấy đầy đủ create/delete control. Nếu QTHT click [delete] hoặc
 | Button [+ Thêm người đánh giá] (PC tab) | ✅ Visible | ❌ Hidden | ✅ Visible (**SAI**) |
 | Button [delete] PC row | ✅ Visible | ❌ Hidden | ✅ Visible (**SAI**) |
 | Spinbutton edit trọng số (Tiêu chí) | ✅ Editable | ✅ Editable (matrix CRUD) | ✅ Editable (CORRECT) |
+
+---
+
+## BUG-FUNC-DG-014 — Dropdown Lĩnh vực modal "Thêm người đánh giá" render 2 raw UUID thay vì tên Vietnamese
+
+### Mô tả
+
+Tester `cb_nv_tw_09`, vào đợt `DG-20260510-0001` (LAP_KE_HOACH) Tab Phân công → click [+ Thêm người đánh giá] → modal "Thêm người đánh giá" mở. Click combobox "Lĩnh vực" → dropdown render 12 options. 2/12 options render raw UUID string thay vì tên Vietnamese: `bbbbbbbb-0000-4000-8000-000000000018` và `bbbbbbbb-0000-4000-8000-000000000013`. 10/12 còn lại render đúng tên Vietnamese (Thuế, Lao động, Đất đai, Dân sự, Thương mại, Hình sự, Hành chính, Sở hữu trí tuệ, Doanh nghiệp, Đầu tư). Người dùng không hiểu 2 lựa chọn UUID là lĩnh vực gì → không chọn được an toàn.
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_09` qua MCP UI.
+2. Sidebar → Đánh giá hiệu quả → tab Kế hoạch → click row `DG-20260510-0001`.
+3. Tab Phân công → click [+ Thêm người đánh giá] → modal mở.
+4. Click combobox "Lĩnh vực" (placeholder "Chọn lĩnh vực...").
+5. Quan sát dropdown listbox.
+
+### Kết quả mong đợi
+
+Theo `srs-update-2026-5-5/srs-fr-08-danh-gia.md` FR-VI-03 Inputs row 4 (`linh_vuc_ids` Multi-select từ danh mục lĩnh vực `LINH_VUC_PL`) + line 798 SCR-VI-01 Tab 2 row 36 modal phân công.
+
+Tất cả 12 (hoặc N) options phải render tên lĩnh vực Vietnamese đầy đủ (vd "Thuế", "Lao động"...). KHÔNG được render raw UUID. Nếu lĩnh vực bị soft-delete / thiếu tên → BE phải KHÔNG trả về dropdown, hoặc trả về với label "(Đã xoá)" / fallback name.
+
+### Kết quả thực tế
+
+- Network: `GET /api/v1/danh-muc?loaiDanhMuc=LINH_VUC_PL&pageSize=100` → 200 (reqid 931).
+- Dropdown render 12 items. 10 tên Vietnamese OK, 2 raw UUID:
+  - `bbbbbbbb-0000-4000-8000-000000000018`
+  - `bbbbbbbb-0000-4000-8000-000000000013`
+- Nghi vấn: BE response item cho 2 record này thiếu trường `tenLinhVuc` (null/empty), FE fallback render `id` raw. Hoặc 2 record là seed test data chưa có tên.
+
+### Bằng chứng
+
+![BUG-DG-014 Lĩnh vực dropdown 2 raw UUID](image/r11-linhvuc-dropdown-raw-uuid-2026-05-11.png)
+
+---
+
+## BUG-FUNC-DG-015 — Tab "Thực hiện" + "Báo cáo" leak BE error toast khi click navigate ở state LAP_KE_HOACH
+
+### Mô tả
+
+Tester `cb_nv_tw_09`, đợt `DG-20260510-0001` state `LAP_KE_HOACH`. Click tab "Thực hiện" → body render đúng empty placeholder "Chức năng thực hiện đánh giá sẽ khả dụng sau khi hoàn tất phân công." (state-gated UI correct). NHƯNG đồng thời pop BE error toast đỏ góc phải: "Kế hoạch phải ở trạng thái CHO_DUYET_PC, hiện tại là 'LAP_KE_HOACH'". Click tab "Báo cáo" cùng đợt → empty placeholder "Chưa hoàn thành đánh giá" + toast đỏ "Kế hoạch phải ở trạng thái DA_DANH_GIA trở lên, hiện tại là 'LAP_KE_HOACH'". Tab Chấm điểm cùng state thì empty placeholder gọn không leak (pattern đúng nên áp dụng cho 2 tab kia).
+
+Root cause nghi vấn: FE gọi API load data tab trước khi check state, BE trả 4xx, FE generic error handler push toast. UI dùng cho user nghiệp vụ không cần thấy BE error code/jargon — chỉ cần placeholder hiền lành như Tab Chấm điểm.
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_09` qua MCP UI.
+2. Sidebar Đánh giá hiệu quả → vào đợt `DG-20260510-0001` (state LAP_KE_HOACH).
+3. Click tab "Thực hiện" → quan sát body + toast.
+4. Click tab "Chấm điểm" → quan sát body + toast (clean, để đối chứng).
+5. Click tab "Báo cáo" → quan sát body + toast.
+
+### Kết quả mong đợi
+
+Theo `srs-update-2026-5-5/srs-fr-08-danh-gia.md` SCR-VI-01 Tab 3 (Thực hiện) + Tab 5 (Báo cáo):
+- Khi state đợt chưa đạt → body render empty placeholder Vietnamese (đã đúng).
+- KHÔNG hiển thị BE error toast khi user chỉ thực hiện navigate tab (không gọi action).
+
+Behavior tham chiếu: Tab Chấm điểm cùng state hiển thị `image "Trống" + "Phân công chưa được phê duyệt — chưa thể thực hiện chấm điểm"` mà KHÔNG kèm toast → pattern đúng, 2 tab kia cần sửa theo.
+
+### Kết quả thực tế
+
+| Tab | Body placeholder | BE error toast |
+|---|---|:-:|
+| Tiêu chí | Có (table editable Σ trọng số) | — |
+| Phân công | Có (table PC) | — |
+| **Thực hiện** | ✅ "Chức năng thực hiện đánh giá sẽ khả dụng sau khi hoàn tất phân công." | ❌ "Kế hoạch phải ở trạng thái CHO_DUYET_PC, hiện tại là 'LAP_KE_HOACH'" |
+| Chấm điểm | ✅ "Phân công chưa được phê duyệt — chưa thể thực hiện chấm điểm" | ✅ KHÔNG có (pattern đúng) |
+| **Báo cáo** | ✅ "Chưa hoàn thành đánh giá" | ❌ "Kế hoạch phải ở trạng thái DA_DANH_GIA trở lên, hiện tại là 'LAP_KE_HOACH'" |
+
+### Bằng chứng
+
+![BUG-DG-015 Tab Thực hiện leak BE error](image/r11-tab-thuchien-state-gated-lap-ke-hoach-2026-05-11.png)
+
+![BUG-DG-015 Tab Báo cáo leak BE error](image/r11-tab-baocao-state-gated-error-leak-2026-05-11.png)
 
 ---
 

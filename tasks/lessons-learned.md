@@ -4,6 +4,97 @@ File ghi lại vấn đề thực tế gặp khi chạy QA + bài học áp dụ
 
 ---
 
+## 2026-05-11 — Tách workflow QA sau dev fix: re-verify bug ≠ audit full module
+
+**Vấn đề:**
+- Khi user cần "verify bug dev đã fix" và "kiểm tra module đã full luồng chưa", ban đầu tôi gom cả hai vào một skill/workflow `qa-bugfix-reverify-audit`.
+- Cách gom này gây lệch trọng tâm:
+  - Re-verify bug cần trả lời: bug dev claim fixed đã thật sự `Closed-verified` chưa, bug nào vẫn `Open/Partial`, TC/path nào được unblock để chạy tiếp.
+  - Audit trạng thái module cần trả lời: toàn bộ module/chức năng đã full workflow chưa, coverage hiện tại là bao nhiêu, bug open/closed, blocker còn lại là gì, roadmap nào để hoàn tất full.
+- Nếu không tách, report dễ vừa thiếu "TC có thể chạy tiếp sau bug fix", vừa thiếu "phương án tổng để full module".
+
+**Quyết định xử lý:**
+- Tách thành 2 skill trong project:
+  - `.agents/skills/qa-bugfix-reverify-audit/` — dùng sau khi dev claim fixed bug.
+  - `.agents/skills/qa-module-status-audit/` — dùng để review trạng thái tổng module/full luồng.
+- Flow chuẩn:
+  1. Dev claim fixed bug.
+  2. Chạy `qa-bugfix-reverify-audit` để re-test bug, cập nhật bug `Open/Closed/Partial`, xác định TC/path được unblock.
+  3. Chạy tất cả TC/path có thể chạy ngay hoặc có thể chạy sau QA-side setup.
+  4. Chạy `qa-module-status-audit` để kết luận module đã full luồng chưa và còn blocker gì.
+
+**Bài học áp dụng:**
+1. **Không dùng một report để trả lời hai câu hỏi khác nhau.**
+   - Re-verify bug là report tác nghiệp sau dev fix.
+   - Module status là report quản trị/trạng thái tổng.
+   - Nếu user hỏi "bug đã fix chưa" → dùng bugfix workflow. Nếu user hỏi "module đã full chưa" → dùng module status workflow.
+
+2. **Sau re-verify bug phải có "testability sweep", không chỉ liệt kê TC unlock do bug fix.**
+   - Rà tất cả TC/path `BLOCKED`, `DEFER`, `SKIP`, `Not run`, `Partial` liên quan.
+   - Phân loại:
+     - `chạy ngay`
+     - `chạy sau QA setup`
+     - `vẫn block bởi external owner`
+   - Output bắt buộc: `Testability Sweep Sau Dev Fix` + `Setup Cần Chuẩn Bị Để Chạy TC Tiếp`.
+
+3. **Không quy mọi defer/block thành "thiếu seed data".**
+   - Taxonomy blocker cần đủ rộng:
+     - thiếu seed data
+     - thiếu state/data setup
+     - thiếu account/role/permission
+     - thiếu file/upload artifact
+     - thiếu email/notification setup
+     - chờ dev fix bug
+     - chờ BA confirm spec
+     - lỗi env/tooling
+     - dependency upstream chưa xong
+     - thiếu backdated/time-travel data
+     - rate limit/session/JWT/OTP issue
+     - data drift/cleanup làm mất pool
+     - integration/API endpoint chưa deploy
+     - cần DBA/API direct hỗ trợ setup
+     - cần mock/stub lỗi external service
+     - chưa đủ evidence/report cũ
+     - lý do khác
+
+4. **Case "chờ BA confirm spec" không được đẩy BA ngay.**
+   - Bắt buộc search SRS local trước bằng TC ID / FR ID / rule ID / screen ID / field / enum / error code / label.
+   - Ưu tiên nguồn: `input/srs-update-*` → `input/quy-trinh-nghiep-vu` → derived docs `output/funtion`, smoke specs, permission matrix, BA question docs.
+   - Nếu có NotebookLM context/access thì cross-check sau SRS local.
+   - Nếu SRS đã trả lời được → không gọi là BA-block nữa; đổi sang nguyên nhân thật: dev bug, setup/data gap, upstream, env/tooling.
+   - Nếu SRS im lặng/mâu thuẫn → mới giữ `chờ BA confirm spec`, kèm câu hỏi BA cụ thể + evidence/gap.
+   - Không bịa expected behavior để đóng câu hỏi; câu trả lời spec phải cite file local + line/section.
+
+5. **Bug summary phải luôn có số Open/Closed.**
+   - Report đầu bảng phải có `Bug Open` và `Bug Closed`.
+   - Chi tiết phải có `Bug Summary` với `Open`, `Partial/Open`, `Closed`, `Closed-verified`, `New bug`.
+   - Nếu todo và bug report lệch số → cite cả hai, ưu tiên timestamp mới hơn.
+
+6. **Audit module status phải kết thúc bằng roadmap full luồng.**
+   - Output bắt buộc: `Phương Án Để Hoàn Thành Full Luồng Chức Năng`.
+   - Bảng cần trả lời:
+     - mục tiêu hoàn tất
+     - việc cần làm tiếp
+     - loại blocker
+     - owner
+     - điều kiện xác nhận xong
+     - TC/luồng được unblock
+   - Đây là phần người quản lý cần nhất để biết "muốn full-pass thì làm gì tiếp".
+
+**Anti-pattern phải tránh:**
+- ❌ Re-verify bug xong kết luận luôn module `Ready/Not ready` khi chưa chạy follow-up TC.
+- ❌ Chỉ chạy TC unlock do bug fix, bỏ qua TC defer có thể chạy sau setup nhỏ như account/file/mock/backdate.
+- ❌ Ghi "chờ BA" mà chưa search SRS local/NotebookLM.
+- ❌ Ghi "thiếu data" chung chung mà không nói cần record trạng thái nào, field nào, account nào, file nào, mock nào.
+- ❌ Báo module chưa full nhưng không có roadmap để full.
+
+**Áp dụng cho dự án sau:**
+- Khi dev fix bug: gọi `qa-bugfix-reverify-audit`.
+- Sau khi chạy hết follow-up TC có thể chạy: gọi `qa-module-status-audit`.
+- Nếu report phát hiện blocker QA-side có thể chuẩn bị, ưu tiên setup và chạy ngay trước khi chốt module status cuối.
+
+---
+
 ## 2026-05-09 — BA chốt QTHT KHÔNG có quyền tạo NHT (đóng 2 bug Invalid)
 
 **Vấn đề trước:**

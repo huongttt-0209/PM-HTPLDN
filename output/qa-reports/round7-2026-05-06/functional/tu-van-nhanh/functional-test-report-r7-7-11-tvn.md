@@ -11,14 +11,16 @@
 | **OTP Bypass** | `666666` |
 | **Test Method** | Hybrid (UI Modal + API verify) |
 | **Primary Account** | `cb_nv_tw_01` / `Secret@123` (CB_NV_TW, Cục BTTP) + `qtht_01` (QTHT) |
-| **Round** | R8 → R9 → R10 → R11 (CB_PD pure session) → R12 (2026-05-10 20:07:00 — verify dev fix CMS proxy: TVN-022/029/038 BLOCKED → PASS; BUG-002/003/006 Closed) → **R13 (2026-05-10 22:00:00 — coverage expand: TVN-005/006 Import Excel + TVN-034 BN scope + TVN-035/036 No-menu + TVN-040/041/042 Công khai UI = 8 PASS mới)** |
+| **Round** | R8 → R9 → R10 → R11 (CB_PD pure session) → R12 (2026-05-10 20:07:00 — CMS proxy + 3 bug Closed) → R13 (2026-05-10 22:00:00 — 8 PASS mới Import Excel + BN scope + No-menu + Công khai) → **R14 (2026-05-11 14:06:00 — UI-only re-audit `_03` accounts: 5/5 UI tests PASS via browse UI; 3 bug Open re-verified clean với accounts pure)** |
 | **Tài liệu tham chiếu** | [7.13-tu-van-nhanh.md](../../../../funtion/7.13-tu-van-nhanh.md) · [bug-report-r7-7-11-tvn.md](../../bug-reports/tu-van-nhanh/bug-report-r7-7-11-tvn.md) · [workflow-test-report-r7-6-2-tv-nhanh.md](../../workflow/tu-van-nhanh/workflow-test-report-r7-6-2-tv-nhanh.md) |
 
 ---
 
 ## 1. Executive Summary
 
-> **R13 (LATEST · 2026-05-10 22:00:00):** Coverage expand 8 PASS mới — **TVN-005/006** Import Excel (file 5 valid + 5 invalid → preview 9 dòng, 5 hợp lệ + 4 lỗi với message rõ; commit 5 record QA-20260510-0006..0010 nguồn=Import); **TVN-034** BN scope BR-AUTH-08 (TW=19 records, BN BKH=0 → filter active no leak); **TVN-035** NHT/CG sidebar không có submenu Tư vấn nhanh + Kho câu hỏi; **TVN-036** DN sidebar không có top-level Quản lý tư vấn entirely; **TVN-040** Switch Công khai DA_DUYET → CONG_KHAI + auto thoiGianDangTai; **TVN-041** Hủy công khai → DA_DUYET; **TVN-042** BR-PUBLIC-01 chặn /cong-khai trên CHO_DUYET với 409 ERR-BIZ-KCH-01.
+> **R14 (LATEST · 2026-05-11 14:06:00) — UI-only re-audit với `_03` accounts:** 5/5 UI tests PASS qua browse UI (no API). **Test 1** `cb_nv_tw_03` list KCH 24 record permission OK (Thêm câu hỏi/Nhập Excel/Xuất Excel/Làm mới render); **Test 2** `cb_pd_tw_03` approve `QA-20260508-0004` CHO_DUYET → DA_DUYET via modal Detail + confirm dialog (Hiệu lực: Không → Có, Ngày duyệt 14:05:00); **Test 3** `cb_nv_tw_03` chọn gợi ý KCH-0007 + [Gửi trả lời] trên phiên `TVN-QA-20260425-0021` DA_GOI_Y → CB_TRA_LOI (Số gợi ý=2, cập nhật 12:27:00); **Test 4** filter Nguồn=Tự động render đúng record `QA-20260510-0005`; **Test 5** `cb_nv_tw_03` Switch [Công khai] trên DA_DUYET → CONG_KHAI (Thời gian đăng tải 14:06:00, button đổi "Hủy công khai"). Workflow E2E E2E NHAP → CHO_DUYET → DA_DUYET → CONG_KHAI verified pure UI click chain qua MCP, không qua API. 3 bug Open trước R14 (BUG-001 data drift, BUG-005 audit naming, BUG-007 auto-import) giữ status — không re-test bug trong R14 (UI scope only). Evidence inline screenshots `image/r14-ui-test{N}-*.png`.
+>
+> R13 (2026-05-10 22:00:00): Coverage expand 8 PASS mới — **TVN-005/006** Import Excel (file 5 valid + 5 invalid → preview 9 dòng, 5 hợp lệ + 4 lỗi với message rõ; commit 5 record QA-20260510-0006..0010 nguồn=Import); **TVN-034** BN scope BR-AUTH-08 (TW=19 records, BN BKH=0 → filter active no leak); **TVN-035** NHT/CG sidebar không có submenu Tư vấn nhanh + Kho câu hỏi; **TVN-036** DN sidebar không có top-level Quản lý tư vấn entirely; **TVN-040** Switch Công khai DA_DUYET → CONG_KHAI + auto thoiGianDangTai; **TVN-041** Hủy công khai → DA_DUYET; **TVN-042** BR-PUBLIC-01 chặn /cong-khai trên CHO_DUYET với 409 ERR-BIZ-KCH-01.
 >
 > R12 (2026-05-10 20:07:00): Verify dev fix — CMS proxy unblock 3 BLOCKED → PASS. **TVN-022** POST `/cms-create` 200 tạo phiên TVN-20260510-0001 nội bộ (không cần mTLS); **TVN-029** POST `/danh-gia/cms-proxy` 200 → state HOAN_THANH; **TVN-038** danh-gia phiên → diem_danh_gia_tb cập nhật trên KHO_CAU_HOI gốc. **3 Bug Closed:** BUG-002 (FR-X.2-06 deploy 4 field + endpoint), BUG-003 (Filter Trạng thái dropdown 5 enum), BUG-006 (cột Số gợi ý render đúng). 3 Open: BUG-001 data drift, BUG-005 audit naming (PARTIAL — KHO chuẩn, TVN còn TRA_LOI/CREATE), BUG-007 auto-import.
 >
@@ -134,6 +136,41 @@ Hiện tại còn **15 TC** chưa PASS — chia 4 nhóm: **3 chờ dev fix bug**
 | 14 | TVN-026 | ⏭ Hoãn | **F — Lý do khác** (outbound API + Postman) | QA setup Postman + xin API key Cổng PLQG sandbox | QA API + Infra |
 | 15 | TVN-027 | ⏭ Hoãn | **F — Lý do khác** (outbound API) | Cùng TVN-026 — Postman + API key | QA API + Infra |
 | 16 | TVN-028 | ⏭ Hoãn | **F — Lý do khác** (outbound API) | Cùng TVN-026 — Postman + API key | QA API + Infra |
+
+---
+
+## 1.7 R14 — UI-only Re-audit với `_03` accounts (2026-05-11 14:06:00)
+
+**Scope:** Re-verify workflow chính của TVN module **chỉ qua browse UI** (Chrome DevTools MCP), không gọi API trực tiếp. Dùng bộ account `_03` permission-test (`cb_nv_tw_03` + `cb_pd_tw_03`) per memory `feedback_test_method_ui_only.md`.
+
+**Method:** MCP `new_page` với `isolatedContext` riêng cho mỗi role (`ui-nv03` + `ui-pd03`) → click chain qua sidebar → fill_form + click button → wait_for signal text → verify state đổi bằng `take_snapshot`. Cấm: `fetch()` action, bulk POST `/api/v1/*`, JWT direct.
+
+### Kết quả 5/5 PASS
+
+| # | TC | Role | Action UI | Outcome | Evidence |
+|---|---|---|---|---|---|
+| 1 | TVN-001 list permission | `cb_nv_tw_03` (NV TW) | Click sidebar Quản lý tư vấn → Kho câu hỏi | 24 record render + 4 buttons (Thêm/Nhập Excel/Xuất Excel/Làm mới) → permission đầy đủ | [r14-ui-nv03-kho-cau-hoi-cho-duyet-no-action.png](../../bug-reports/tu-van-nhanh/image/r14-ui-nv03-kho-cau-hoi-cho-duyet-no-action.png) |
+| 2 | TVN-010 approve | `cb_pd_tw_03` (PD TW) | Tab Chờ duyệt → click row `QA-20260508-0004` → modal Chi tiết → [Duyệt] → confirm dialog [Duyệt] | Status: Chờ duyệt → **Đã duyệt** · Hiệu lực: Không → **Có** · Ngày duyệt: 11/05/2026 14:05:00 · Lượt xem 2 → 3 (auto-inc) | [r14-ui-test2-pd03-detail-duyet-button.png](../../bug-reports/tu-van-nhanh/image/r14-ui-test2-pd03-detail-duyet-button.png) · [r14-ui-test2-pd03-da-duyet-state.png](../../bug-reports/tu-van-nhanh/image/r14-ui-test2-pd03-da-duyet-state.png) |
+| 3 | TVN-018/019 reply gợi ý | `cb_nv_tw_03` | Phiên `TVN-QA-20260425-0021` DA_GOI_Y → click [Chọn] KCH-0007 → auto-fill textarea 74 chars → [Gửi trả lời] | State: Đã gợi ý → **CB trả lời** · Số gợi ý=2 · Cập nhật 11/05/2026 12:27:00 | [r14-ui-test3-nv03-cb-tra-loi-state.png](../../bug-reports/tu-van-nhanh/image/r14-ui-test3-nv03-cb-tra-loi-state.png) |
+| 4 | TVN-016 filter | `cb_nv_tw_03` | Combobox Nguồn = "Tự động" | Render đúng record `QA-20260510-0005` Nguồn=Tự động (BR-FLOW-10 historical) | [r14-ui-nv03-filter-nguon-tu-dong.png](../../bug-reports/tu-van-nhanh/image/r14-ui-nv03-filter-nguon-tu-dong.png) |
+| 5 | TVN-040 CONG_KHAI | `cb_nv_tw_03` | Row `QA-20260508-0004` DA_DUYET → modal Chi tiết → [Công khai] → dialog fill "Mô tả công khai" → [Công khai] | Status: Đã duyệt → **Công khai** · Công khai: Chưa → **Đã công khai** · Thời gian đăng tải 11/05/2026 14:06:00 · Button đổi → [Hủy công khai] | [r14-ui-test5-nv03-cong-khai-state.png](../../bug-reports/tu-van-nhanh/image/r14-ui-test5-nv03-cong-khai-state.png) |
+
+### Workflow E2E verified
+
+`NHAP/CHO_DUYET` (TVN-003 cũ) → **CHO_DUYET → DA_DUYET** (Test 2 R14) → **DA_DUYET → CONG_KHAI** (Test 5 R14). State Machine SM-KCH end-to-end via UI click chain. SM-TVNHANH: **DA_GOI_Y → CB_TRA_LOI** (Test 3 R14).
+
+### Permission gating verified
+
+- `cb_nv_tw_03` (CB_NV) thấy 4 button: Thêm câu hỏi · Nhập Excel · Xuất Excel · Làm mới — KHÔNG có Duyệt/Từ chối ở Chi tiết.
+- `cb_pd_tw_03` (CB_PD) thấy: Xuất Excel · Làm mới + 2 button trong Chi tiết: Duyệt · Từ chối — KHÔNG có Công khai (đúng SCR-X.2: CONG_KHAI là quyền NV sau khi DA_DUYET).
+- Both: Detail modal cho phép view; action button khác nhau theo role.
+
+### Bug status sau R14
+
+Không re-test bug trong R14 (scope = UI tests only theo user request). 3 bug Open trước R14 giữ nguyên status — đã được verify trong session R14 phần audit earlier:
+- **BUG-001** Major data drift account → confirmed data drift (BE guard works với accounts pure)
+- **BUG-005** Minor audit naming → PARTIAL (KHO chuẩn R12, TVN còn TRA_LOI/CREATE)
+- **BUG-007** Major auto-import BR-FLOW-10 → PARTIAL forward-only
 
 ---
 

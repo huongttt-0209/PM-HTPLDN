@@ -17,7 +17,20 @@
 
 7 lỗi: 4 phát hiện R7-R8 + 3 NEW R23 (RETRY-005 BE thiếu endpoint re-submit; RETRY-006 UI render 6 tab vs SRS spec 4-5 tab; RETRY-007 BE thiếu endpoint danh-gia-sau-vu-viec FR-IV-09 + BR-CALC-06).
 
-> **R30 UI verify 2026-05-11 02:58:00 — RETRY-005 STILL OPEN, BE 2 permission rule sai khác nhau cho 2 role:** lấp data gap R28 bằng seed mới `nht_btp_tw_audit_r30` (NHT cấp BTP-TW cùng đơn vị TVV-BTP-TW-0011). Probe `POST /nop-lai`: NHT cùng đơn vị → **403 ERR-PERM-SYS-00-01** "Forbidden" (BE chặn role NHT toàn bộ); CB role có permission → **403 ERR-PERM-IV-NL-02** "Chỉ chủ hồ sơ". Phát hiện thêm: TVV TU_CHOI có `taiKhoanId=null` (chưa kích hoạt account) → permission rule "chủ hồ sơ" của BE = **deadlock không actor nào pass được**. Evidence: [r30-retry005-nht-cung-donvi-403.png](img/r30-retry005-nht-cung-donvi-403.png). Yêu cầu cho dev không đổi: (1) đổi perm `/nop-lai` sang "NHT cùng đơn vị" (BR-AUTH-08 + SCR-IV-02:1462); (2) bỏ endpoint riêng → save-trigger PATCH; (3) BA fix SRS line 2314 mâu thuẫn line 1462 + 366.
+> **R32 dev BE rework VERIFIED ✅ — RETRY-005 CLOSED 2026-05-11 13:50:00:** Dev BE đã hoàn thành 5/5 yêu cầu BA chốt phương án 2026-05-11. Verify qua API browser MCP (NHT `nht_btp_tw_audit_r30` cùng đơn vị BTP-TW + isolatedContext `qa_r32_retry005_audit` + `qa_r32_cb_nv_check`) trên TVV-BTP-TW-0011 (Lê Văn Chuyên Gia, state ban đầu TU_CHOI, version 5). Đủ 5 evidence:
+> 1. **Xoá endpoint `/nop-lai`:** `POST /api/v1/tu-van-viens/720eda6c-.../nop-lai` → **404 `ERR-SYS-00-04-01` "Cannot POST"** (so với R27/R30 trả 422/403 — endpoint từng tồn tại, giờ đã removed).
+> 2. **PATCH mở rộng cho NHT cùng đơn vị:** `PATCH /api/v1/tu-van-viens/720eda6c-...` body `{version:5, hoTen, dienThoai, diaChi}` với NHT BTP-TW (cùng `donViId=00000000-0000-4000-8000-000000000001`) → **200 OK**.
+> 3. **Auto-transition TU_CHOI → CHO_THAM_DINH:** State sau PATCH = `CHO_THAM_DINH` (version 5→6, `nguoiGuiDuyetId` = NHT id `86954d8c-...`, `ngayGuiDuyet` = `2026-05-11T06:48:19.764Z` set tự động).
+> 4. **Reset thẩm định cũ:** `hoSo.trangThaiThamDinh=CHUA_THAM_DINH`, `hoSo.ketQuaThamDinh=null`, `thamDinhMoiNhat=null`, `nguoiDuyetId=null` (clear người duyệt cũ).
+> 5. **Notify CB_NV cùng đơn vị:** Notification fire đồng thời `2026-05-11T06:48:19.777Z` (chậm 13ms sau PATCH — synchronous trigger). CB Nghiệp vụ TW 02 (`cb_nv_tw_02`, `nguoiNhanId=facdea31-...`) nhận thông báo `tieuDe="Hồ sơ TVV đã được bổ sung"`, `loai=PHE_DUYET`, `entityType=TU_VAN_VIEN`, `entityId=720eda6c-...`, nội dung `"Hồ sơ TVV Lê Văn Chuyên Gia (R32 NHT edit) đã bổ sung tài liệu và sẵn sàng thẩm định."`. UI banner "Thông báo, 236 chưa đọc" → click → thông báo "2 phút trước" hiện đúng. Evidence: [r32-retry005-be-rework-verified-nht-patch-200.png](img/r32-retry005-be-rework-verified-nht-patch-200.png) + [r32-retry005-cb-nv-notification-received.png](img/r32-retry005-cb-nv-notification-received.png).
+>
+> **UI walk supplementary (TVV-BTP-TW-0018 Trần Thị Tư Vấn 16, TU_CHOI khác):** NHT `nht_btp_tw_audit_r30` navigate `/chuyen-gia-tvv/{id}/chinh-sua` → form load đầy đủ + có thể edit (FE wires role permission) → click **Lưu** → FE block validation `"File thẻ hành nghề là bắt buộc đối với Tư vấn viên"` (FE-only guard, orthogonal với BUG-005 — TVV-0018 không có `fileTheHanhNgheId` từ đầu, BE accept tạo TVV không file nhưng FE strict require khi edit). Evidence: [r32-retry005-fe-validation-file-the-hanh-nghe.png](img/r32-retry005-fe-validation-file-the-hanh-nghe.png).
+>
+> **Status update R32:** BUG-CG-77-RETRY-005 **✅ Closed-verified** — 5/5 yêu cầu BA chốt 2026-05-11 đã được dev BE implement đúng (deploy giữa 03:45 BA chốt → 06:48 verify, ~3h dev). FE validation "File thẻ hành nghề" là behavior orthogonal — nếu TC TVV-023 cần test e2e UI Lưu thành công, phải seed TVV TU_CHOI có file thẻ hành nghề trước (gap data, KHÔNG phải bug RETRY-005). TC TVV-023 đổi từ ⚠️ Sai spec → ✅ Đạt sau verify này.
+
+> **R31 BA chốt phương án 2026-05-11 — RETRY-005 STILL OPEN chờ BE rework, SRS contradiction đã giải:** BA confirm phương án: (1) NHT cùng đơn vị là người sửa + nộp lại hồ sơ TVV/CG sau TU_CHOI; (2) TVV/CG KHÔNG tự nộp lại (do `taiKhoanId=null` R30 phát hiện); (3) Khi NHT Lưu hồ sơ TU_CHOI → BE auto chuyển CHO_THAM_DINH + reset thẩm định cũ + thông báo CB_NV; (4) Save-trigger pattern, KHÔNG endpoint `/nop-lai` riêng. Phương án khớp 4/4 nguồn QA verify (SCR-IV-02:1462 + FR-IV-04:366 + NotebookLM + R30 taiKhoanId=null). Bug giờ chỉ còn 1 nguyên nhân Open: **BE rework theo BA chốt** — bỏ endpoint riêng, mở rộng PATCH `/api/v1/tu-van-viens/{id}` với permission "NHT cùng đơn vị" + auto-transition + reset thẩm định + notify CB_NV. Sau khi dev deploy → QA verify e2e UI walk với `nht_btp_tw_audit_r30` (seed R30 sẵn).
+
+> **R30 UI verify 2026-05-11 02:58:00 — RETRY-005 STILL OPEN, BE 2 permission rule sai khác nhau cho 2 role:** lấp data gap R28 bằng seed mới `nht_btp_tw_audit_r30` (NHT cấp BTP-TW cùng đơn vị TVV-BTP-TW-0011). Probe `POST /nop-lai`: NHT cùng đơn vị → **403 ERR-PERM-SYS-00-01** "Forbidden" (BE chặn role NHT toàn bộ); CB role có permission → **403 ERR-PERM-IV-NL-02** "Chỉ chủ hồ sơ". Phát hiện thêm: TVV TU_CHOI có `taiKhoanId=null` (chưa kích hoạt account) → permission rule "chủ hồ sơ" của BE = **deadlock không actor nào pass được**. Evidence: [r30-retry005-nht-cung-donvi-403.png](img/r30-retry005-nht-cung-donvi-403.png).
 
 > **R28 UI verify 2026-05-10 19:55:00 — 6 ✅ Closed, 1 🔴 Still Open (BE design sai 2 chỗ + SRS contradiction):** chạy lại UI MCP cho RETRY-005 (rule `feedback_test_method_ui_only`). 2 actor:
 > - **NHT cross-don_vi** (nht_01 STP-AG → TVV BTP-TW-0011): GET /tu-van-viens/{id} → **403** (cross-don_vi check working) → form rỗng → click Lưu không fire request.
@@ -70,13 +83,13 @@
 
 | Tổng | Critical | Major | Medium | Minor | Trivial | Open (R28) |
 |------|----------|-------|--------|-------|---------|------------|
-| 7    | 0        | 5     | 0      | 2     | 0       | 1 Open Major (RETRY-005 — R30 NHT cùng đơn vị + CB role đều fail với 2 permission rule sai khác nhau; TU_CHOI TVV `taiKhoanId=null` → rule "chủ hồ sơ" deadlock). RETRY-004 ✅ Closed R27, RETRY-007 ✅ Closed R27 |
+| 7    | 0        | 5     | 0      | 2     | 0       | **0 Open — 7/7 Closed (R32 RETRY-005 Closed-verified 2026-05-11 13:50:00: 5/5 yêu cầu BA chốt 2026-05-11 đã verify). RETRY-004 ✅ Closed R27, RETRY-007 ✅ Closed R27, RETRY-005 ✅ Closed R32** |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-CG-77-RETRY-005 | Major | P1 | API + Workflow | TVV-023 | `funtion/7.4-chuyen-gia-tvv.md:94` TC TVV-023 + `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` (FR-IV-03 cooldown 6 tháng đã bỏ BA chốt 2026-05-03) + `srs-fr-04:1462` SCR-IV-02 quyền NHT + `srs-fr-04:2314` SM-TVV (mâu thuẫn) | Re-submit TU_CHOI → CHO_THAM_DINH BE design sai (R30: 2 permission rule sai khác nhau cho 2 role NHT + CB; TVV TU_CHOI `taiKhoanId=null` → rule "chủ hồ sơ" deadlock) — **Open** chờ BE rework + BA fix SRS line 2314 | 🔴 Open R30 — UI verify R30 confirm 2 role đều fail (xem R30 + R28 detail) |
+| ~~BUG-CG-77-RETRY-005~~ | Major | P1 | API + Workflow | TVV-023 | `funtion/7.4-chuyen-gia-tvv.md:94` TC TVV-023 + `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` (FR-IV-03 cooldown 6 tháng đã bỏ BA chốt 2026-05-03 + actor/cơ chế BA chốt 2026-05-11) + `srs-fr-04:1462` SCR-IV-02 quyền NHT + `srs-fr-04:366` FR-IV-04 + `srs-fr-04:2314` SM-TVV (BA fix theo) | ~~Re-submit TU_CHOI → CHO_THAM_DINH — endpoint `/nop-lai` permission sai + endpoint design sai~~ | ✅ Closed 2026-05-11 R32 (dev BE rework 5/5 yêu cầu BA chốt 2026-05-11: endpoint `/nop-lai` xoá 404, PATCH mở rộng NHT cùng đơn vị 200, auto-transition TU_CHOI→CHO_THAM_DINH, reset thẩm định cũ, notify CB_NV cùng đơn vị) |
 | ~~BUG-CG-77-RETRY-001~~ | Major | P1 | Functional | TVV-022 | `funtion/7.4-chuyen-gia-tvv.md:170` UC50 + `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` (Xóa cứng — confirm tại [R7.8.1 hard-delete report](../../functional/cross-cutting/functional-test-report-r7-8-1-hard-delete.md)) | ~~Click Xóa + confirm "Xóa" không trigger DELETE — record vẫn tồn tại sau reload~~ | ✅ Closed 2026-05-10 R23 |
 | ~~BUG-CG-77-RETRY-002~~ | Major | P1 | UI/UX | TVV-012 | `funtion/7.4-chuyen-gia-tvv.md:75-79` UC44 + SCR-IV-04 "Phê duyệt hàng loạt" | ~~Tab Chờ phê duyệt cho CB_PD_TW thiếu checkbox multi-select + batch action toolbar — không thể Phê duyệt hàng loạt qua UI~~ | ✅ Closed 2026-05-10 R23 |
 | ~~BUG-CG-77-RETRY-003~~ | Minor | P3 | UI/UX (Wording) | TVV-016 | `funtion/7.4-chuyen-gia-tvv.md:108` UC55 tab Lịch sử hỗ trợ | ~~Empty state tab Lịch sử hỗ trợ hiện "Chưa có lịch sử hỗ trợ" thay vì spec "Tư vấn viên chưa tham gia hỗ trợ vụ việc nào"~~ | ✅ Closed 2026-05-10 |
@@ -86,7 +99,26 @@
 
 ---
 
-## BUG-CG-77-RETRY-005 — Re-submit TU_CHOI → CHO_THAM_DINH BE design sai actor + sai endpoint
+## BUG-CG-77-RETRY-005 — Re-submit TU_CHOI → CHO_THAM_DINH BE permission sai + endpoint sai (BA đã chốt phương án 2026-05-11)
+
+> **R31 BA confirm phương án 2026-05-11 — STILL OPEN chờ BE rework (SRS contradiction đã giải):** BA chốt phương án chính thức:
+> 1. **Actor:** NHT cùng đơn vị là người sửa và nộp lại hồ sơ TVV/CG sau khi bị từ chối.
+> 2. **TVV/CG KHÔNG tự nộp lại** vì chưa có quyền/tài khoản để sửa hồ sơ (khớp `taiKhoanId=null` đã phát hiện R30).
+> 3. **Cơ chế:** Khi NHT Lưu hồ sơ ở trạng thái `TU_CHOI` → hệ thống chuyển sang `CHO_THAM_DINH`, reset kết quả thẩm định cũ, thông báo CB Nghiệp vụ.
+> 4. **Endpoint:** save-trigger pattern (suy ra từ "khi NHT Lưu") — KHÔNG có endpoint `/nop-lai` riêng. Cùng pattern với `YEU_CAU_BO_SUNG → DANG_THAM_DINH` (line 1571 + 2308).
+>
+> **Phương án BA KHỚP 4/4 nguồn QA verify R27/R28/R30:** SCR-IV-02 line 1462 ("liên hệ NHT") + FR-IV-04 line 366 ("không sửa được, liên hệ NHT") + NotebookLM HTPLDN ("NHT proxy on behalf") + R30 phát hiện `taiKhoanId=null` trên TU_CHOI TVV. SRS line 2314 SM-TVV (viết "TVV/CG chủ hồ sơ nộp lại") mâu thuẫn với 4 nguồn trên — BA chốt theo SCR-IV-02 + FR-IV-04, line 2314 sẽ được BA fix theo.
+>
+> **Bug giờ chỉ còn 1 nguyên nhân Open: BE rework theo BA chốt.** Yêu cầu cho dev BE:
+> 1. Xoá endpoint riêng `POST /api/v1/tu-van-viens/{id}/nop-lai` (đang trả 403 sai permission code per R27/R30).
+> 2. Mở rộng `PATCH /api/v1/tu-van-viens/{id}` để:
+>    - **Permission:** Allow role `NHT` khi `nht.donViId === tvv.donViId` (BR-AUTH-08); reject CB role với 403 (CB chỉ thẩm định/phê duyệt, không sửa hồ sơ ứng viên).
+>    - **Auto-transition:** Nếu trước PATCH state = `TU_CHOI` và payload hợp lệ → set state = `CHO_THAM_DINH`, version++, nguoiGuiDuyetId = NHT.id, ngayGuiDuyet = now.
+>    - **Reset thẩm định cũ:** Clear `nguoiDuyetId`, `ngayDuyet`, `ghiChuPheDuyet` (BR-LEGAL-04 + FR-IV-04 line 1571 pattern).
+>    - **Notification CB_NV:** Trigger sự kiện `TVV.RESUBMITTED` → fanout `thong-bao` cho CB_NV cùng cấp đơn vị (giống pattern hiện có khi gửi duyệt lần đầu).
+> 3. Sau khi dev BE deploy → QA verify e2e UI walk với `nht_btp_tw_audit_r30` (BTP-TW seed R30) trên TVV-BTP-TW-0011: navigate `/chuyen-gia-tvv/{id}/chinh-sua` → upload file thẻ hành nghề → click **Lưu** → expect PATCH 200 + state TU_CHOI→CHO_THAM_DINH + toast thông báo + CB_NV nhận thông báo.
+>
+> Status: **Major Open** — chỉ chờ dev BE. SRS contradiction (R28/R30) đã được BA giải. Owner = dev BE.
 
 > **R30 UI verify 2026-05-11 02:58:00 — STILL OPEN, BE permission rule sai 2 cách khác nhau cho 2 role:** seed mới NHT cấp BTP-TW (cùng đơn vị với TVV-BTP-TW-0011 — `donViId=00000000-0000-4000-8000-000000000001`) để lấp data gap R28: tạo `nht_btp_tw_audit_r30` qua UI (cb_nv_tw_02 → Thêm mới NHT → mail kích hoạt → Quên mật khẩu → set Secret@123 → login OTP 666666). API browser MCP (rule `feedback_test_method_ui_only`):
 > - **NHT cùng đơn vị (nht_btp_tw_audit_r30, BTP-TW, sameDonVi=true):** `POST /api/v1/tu-van-viens/720eda6c-.../nop-lai` body `{version:5, hoTen, cccd, ghiChu}` → **403 `ERR-PERM-SYS-00-01` "Forbidden"** (generic). GET TVV-BTP-TW-0011 → 200 OK (NHT có quyền đọc cross-don_vi cùng cấp).

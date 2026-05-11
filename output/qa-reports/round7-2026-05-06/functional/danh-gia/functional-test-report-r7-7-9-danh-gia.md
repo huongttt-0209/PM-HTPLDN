@@ -14,7 +14,21 @@
 
 ---
 
-## Verdict
+## Verdict (LATEST R11 2026-05-11 14:35:00)
+
+**⚠️ Sai spec toàn cục — 13/18 TC ✅ Đạt (72%) · 2/18 ⚠️ Sai spec · 2/18 ❌ Lỗi · 1/18 🚫 Không test được · 0/18 ⏭ Hoãn**
+
+**R11 (2026-05-11)** — Re-test 18 TC functional với account set `_09` qua MCP Browse UI (không API direct). Đợt mới `DG-20260511-0001` tạo OK ở `LAP_KE_HOACH`. Phase 1 (TC01-06) ✅ 6/6 clean. Phase 2 (TC07-10) ⚠️ 1 sai spec (modal force `trọngSo=100` — DG-010 REPRODUCED) + 1 sai spec inline edit (DG-010 variant phụ) + 2 PASS (TC09 edit non-trọng, TC10 delete OK + BR-CALC-04 gate "Lưu thay đổi" disabled Σ≠100% ✅). Phase 3 (TC11-14) ✅ TC11 add 2 PC OK + Trình phê duyệt ❌ stuck PHAN_CONG (DG-012 REPRODUCED — cb_pd_tw_09 không thấy đợt trong tab "Chờ duyệt PC"). Phase 5 Permission ✅ TC15 (BN) + TC16 (DP) BR-AUTH-03 cross-cấp deny OK + 🚫 TC17 chờ DG-012 + ❌ TC18 QTHT Tiêu chí spinbutton trọng số + delete visible (DG-013 REPRODUCED Tab Tiêu chí — Tab Phân công đã read-only OK).
+
+**Bug re-test R11:** 5/6 Open bug REPRODUCED — DG-010 (Major), DG-012 (Critical), DG-013 (Tab Tiêu chí variant Major), DG-009 (HUY button still missing trên LAP_KE_HOACH). **DG-011 NOT REPRODUCED** trên đợt R11 — PC table render sạch sẽ với tên đầy đủ. DG-008 không test trong R11 (cần đợt advance — block bởi DG-012). **2 bug mới R11:** DG-014 (Medium — Lĩnh vực 2/12 raw UUID) + DG-015 (Minor — Tab Thực hiện/Báo cáo leak BE error toast khi state-gated).
+
+**Phase 4 R11 extras:** TC12 ✅ Đạt (out-of-scope verified 2-source: SRS local FR-VI-03 không có Update + NotebookLM xác nhận). TC-G ✅ modal validation required. TC-E3 ✅ duplicate person → BE 409 + toast OK. TC-LV ❌ DG-014. TC-TAB ❌ DG-015.
+
+**Test method R11:** MCP Browse UI only (không API). 5 isolated contexts: `test_cb_nv_tw_09` (owner), `test_cb_pd_tw_09` (approver), `test_cb_nv_bn_09` (BN scope), `test_cb_nv_dp_09` (DP scope), `test_qtht_09` (QTHT permission test).
+
+---
+
+## Verdict (R10b 2026-05-10 22:55:00 — archived)
 
 **⚠️ FAIL toàn cục — 12/18 TC PASS clean (67%) · 1/18 ⚠️ Sai spec · 1/18 🚫 BLOCKED · 4/18 ❌ FAIL bug**
 
@@ -26,7 +40,171 @@ Phase 1 FR-VI-01 form validation ✅ PASS 6/6. Phase 2 FR-VI-02 tiêu chí CRUD 
 
 ---
 
-## Bảng trạng thái TC (snapshot R10b — LATEST 2026-05-10 22:55:00)
+## Bảng trạng thái TC (snapshot R11 — LATEST 2026-05-11 14:15:00)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| TC01 | Form trống → 5 required errors | ✅ Đạt | R11 | 5 errors VN đúng spec, R11 re-confirm |
+| TC02 | Tạo đợt valid happy path | ✅ Đạt | R11 | DG-20260511-0001 LAP_KE_HOACH tạo OK |
+| TC03 | Tần suất dropdown 2 enum | ✅ Đạt | R11 | "Sơ bộ 6 tháng" + "Trọn năm" |
+| TC04 | End < Start date validation | ✅ Đạt | R11 | Error "Ngày kết thúc phải sau ngày bắt đầu" |
+| TC05 | Đối tượng dropdown 3 enum | ✅ Đạt | R11 | "Vụ việc" + "Đào tạo" + "Tổng hợp" |
+| TC06 | Tên max 500 ký tự | ✅ Đạt | R10b | maxLength=500 attribute |
+| TC07 | Add tiêu chí modal force trongSo=100 | ⚠️ Sai spec | R11 | DG-010 modal variant REPRODUCED |
+| TC07b | Inline edit trọng số click → force 100 | ⚠️ Sai spec | R11 | DG-010 inline edit variant REPRODUCED |
+| TC08 | BR-CALC-04 Σ≠100% disable [Lưu] | ✅ Đạt | R11 | Button "Lưu thay đổi" disabled khi Σ=60% |
+| TC09 | Edit non-trọng saved Σ=100% | ✅ Đạt | R11 | Tiêu chí "Chất lượng tư vấn pháp luật" 100% |
+| TC10 | Delete tiêu chí inline | ✅ Đạt | R11 | Delete OK, recalculate Σ |
+| TC11 | Add 2 PC (TN + ĐGV) | ✅ Đạt | R11 | cb_nv_tw_09 TN + cb_nv_tw_08 ĐGV |
+| TC11b | DG-011 PC table render | ✅ Đạt | R11 | NOT REPRODUCED — table render sạch |
+| TC12 | Edit role/lĩnh vực phân công | ✅ Đạt | R11 | Out-of-scope SRS (verified NotebookLM + local) — UI ẩn edit đúng spec |
+| TC13 | Remove người ĐG ở LAP_KE_HOACH | ✅ Đạt | R10b | Delete + toast OK (R10b carry) |
+| TC14 | Trình phê duyệt → CHO_DUYET_PC | ❌ Lỗi | R11 | DG-012 REPRODUCED — đợt stuck PHAN_CONG |
+| TC15 | cb_nv_bn_09 không thấy đợt TW | ✅ Đạt | R11 | BCT — list empty + "Tạo kế hoạch" OK |
+| TC16 | cb_nv_dp_09 không thấy đợt TW | ✅ Đạt | R11 | BNI — list empty + "Tạo kế hoạch" OK |
+| TC17 | cb_pd cross-cấp denied | 🚫 Không test được | R11 | Block bởi DG-012 |
+| TC18 | QTHT read-only mọi tab | ❌ Lỗi | R11 | Tab Tiêu chí — DG-013 REPRODUCED |
+| TC-G | Modal Add PC validation required | ✅ Đạt | R11 | Empty submit → 2 errors "Vui lòng chọn người đánh giá / vai trò" |
+| TC-E3 | Add duplicate PC bị reject | ✅ Đạt | R11 | POST 409 + toast "đã được phân công trong kế hoạch này" |
+| TC-LV | Lĩnh vực dropdown 12 options Vietnamese | ❌ Lỗi | R11 | DG-014 NEW — 2/12 raw UUID |
+| TC-TAB | Tab Thực hiện/Báo cáo no error toast on state-gated nav | ❌ Lỗi | R11 | DG-015 NEW — 2 tab leak BE error toast |
+| **Tổng** | **22 TC (18 plan + 4 extra)** | ✅15 · ⚠️2 · ❌4 · 🚫1 · ⏭0 · 🤷0 | | |
+
+---
+
+## Bảng TC chưa chạy được — cần làm gì để chạy (R11)
+
+Hiện tại còn 7 TC chưa PASS clean — chia 4 nhóm: 2 chờ dev fix modal/inline edit trọng số (TC07/07b), 2 chờ dev fix state advance + permission (TC14/TC18), 1 chờ dev fix state advance (TC17), 2 chờ dev fix UI data + UX toast (TC-LV/TC-TAB).
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| TC07 | Modal "Thêm tiêu chí" force `trọngSo=100` bất kể nhập | Dev FE fix modal bind `trongSo` đúng — BUG-FUNC-DG-010 | Dev FE |
+| TC07b | Inline edit click spinbutton trọng số → force 100 ngay | Dev FE fix spinbutton component không reset value — BUG-FUNC-DG-010 variant phụ | Dev FE |
+| TC14 | Trình phê duyệt → POST `/phan-congs/submit` 200 nhưng đợt vẫn `PHAN_CONG` không advance `CHO_DUYET_PC` | Dev BE fix transition trigger sau POST submit — BUG-FUNC-DG-012 | Dev BE |
+| TC17 | Cùng nguyên nhân TC14 — không có đợt nào ở `CHO_DUYET_PC` để cross-cấp test | Sau khi DG-012 fix, retest TC14 → đợt advance CHO_DUYET_PC → retest TC17 | Dev BE + QA |
+| TC18 | QTHT thấy spinbutton trọng số + button delete trên Tab Tiêu chí (Tab Phân công đã read-only OK) | Dev FE hide edit controls khi user role = QTHT trên Tab Tiêu chí + BE 403 khi QTHT POST/PUT/DELETE tiêu chí — BUG-FUNC-DG-013 | Dev FE + Dev BE |
+| TC-LV | Lĩnh vực dropdown 2/12 raw UUID thay tên Vietnamese | Dev BE fix record `LINH_VUC_PL` missing `tenLinhVuc` field hoặc xóa record orphan — BUG-FUNC-DG-014 | Dev BE |
+| TC-TAB | Tab Thực hiện + Báo cáo leak BE error toast khi navigate ở state LAP_KE_HOACH | Dev FE check state đợt trước khi gọi API tab load; suppress error toast cho state-gated 4xx — BUG-FUNC-DG-015 | Dev FE |
+
+**Action item ưu tiên R11:** Fix DG-012 (Critical) trước → unblock TC14 + TC17 + workflow B7-B11. DG-010 + DG-013 (Major) song song. DG-014 (Medium) dễ fix (data fix). DG-015 (Minor) UX hint cho dev FE. DG-011 đã không reproduce — có thể đã fix data-specific.
+
+---
+
+## R11 (2026-05-11) — Re-test bộ acc `_09` qua MCP Browse UI
+
+### Setup R11
+
+- **Đợt mới R11:** `DG-20260511-0001` "R11 QA TC FR-VI-01..10 _09 2026-05-11" tạo bởi `cb_nv_tw_09` 14:00:00.
+  - Tần suất: Sơ bộ 6 tháng · Đối tượng: Vụ việc · BĐ: 14/05/2026 · KT: 10/11/2026 · State: `LAP_KE_HOACH`.
+- **5 isolated context MCP** test cross-role không cookie nhiễm: `test_cb_nv_tw_09` (owner), `test_cb_pd_tw_09` (approver), `test_cb_nv_bn_09` (BCT scope), `test_cb_nv_dp_09` (BNI scope), `test_qtht_09` (QTHT permission).
+- **Method:** UI click chain only — không POST/PUT/DELETE direct API. Network log chỉ làm evidence supporting (read response, không probe).
+
+### Phase 1 (TC01-06) — Form validation ✅ 6/6 R11
+
+- **TC01:** 5 required errors VN đúng spec — re-confirm R11.
+  - Evidence: [`r11-tc01-required-validation-2026-05-11.png`](image/r11-tc01-required-validation-2026-05-11.png)
+- **TC02:** Tạo đợt R11 happy path PASS, redirect đợt detail state `LAP_KE_HOACH`, mã `DG-20260511-0001` auto-generated.
+- **TC03:** Tần suất dropdown render 2 enum đúng spec — "Sơ bộ 6 tháng" + "Trọn năm".
+- **TC04:** End=11/11/2026 < Start=14/05/2026 → DOM error "Ngày kết thúc phải sau ngày bắt đầu" hiển thị, button [Lưu nháp] vẫn cho click nhưng error block submit (re-check post-fix-clear via type_text Tab).
+- **TC05:** Đối tượng dropdown render 3 enum — "Vụ việc" + "Đào tạo" + "Tổng hợp".
+- **TC06:** maxLength=500 attribute đúng (carry R10b — không re-test R11 vì spec không đổi).
+
+### Phase 2 (TC07-10) — FR-VI-02 Tiêu chí CRUD ⚠️ 2 sai spec + 3 PASS
+
+- **TC07 Add tiêu chí — Modal force trọngSo=100:** REPRODUCED. Mở Modal "Thêm tiêu chí", nhập "QA TC07 Tiêu chí 1 - Chất lượng" + nhóm "Hiệu quả HTPL" + trọng số 60 (qua type_text). Click [Lưu] → row tiêu chí ghi `trongSo=100` (Σ jump 100% ngay). FE force value=100 bất kể input.
+  - **Status:** ⚠️ Sai spec — DG-010 variant Modal. Bug Open.
+- **TC07b Inline edit trọng số — Force 100:** REPRODUCED (variant phụ DG-010). Đã save row trongSo=60, click spinbutton trọng số trong table inline → value reset thành 100 ngay. Cùng FE component force value.
+  - **Status:** ⚠️ Sai spec — DG-010 variant Inline edit. Bug Open.
+- **TC08 BR-CALC-04 gate:** Σ=60% (sau khi seed thử 1 tiêu chí 60% qua workaround) → button "Lưu thay đổi" disabled. Σ=100% (đã fix Tiêu chí 1=100%) → button enabled.
+  - **Status:** ✅ Đạt. BR-CALC-04 working as expected.
+- **TC09 Edit non-trọng:** Edit tên "Chất lượng tư vấn pháp luật" + trọng số 100% (không touch spinbutton) → save OK, Σ=100%.
+  - Evidence: [`r11-tc07-10-tieuchi-saved-2026-05-11.png`](image/r11-tc07-10-tieuchi-saved-2026-05-11.png)
+- **TC10 Delete:** Hover row → click delete inline → confirm popup → tiêu chí removed, Σ recalculate.
+  - **Status:** ✅ Đạt.
+
+### Phase 3 (TC11-14) — FR-VI-03 Phân công ✅ TC11 + ❌ TC14 (DG-012)
+
+- **TC11 Add 2 PC:** Modal "Thêm người đánh giá" render:
+  - Người ĐG dropdown: 10 CB NV TW (cb_nv_tw_01..10). Selected `cb_nv_tw_09`.
+  - Vai trò dropdown: 2 enum "Trưởng nhóm" + "Đánh giá viên".
+  - Lĩnh vực dropdown: optional (không chọn).
+  - PC #1: `cb_nv_tw_09` Trưởng nhóm — added, total = 1.
+  - PC #2: `cb_nv_tw_08` Đánh giá viên — added, total = 2 / 1 TN.
+  - **DG-011 PC table render:** ✅ NOT REPRODUCED — render sạch sẽ "CB Nghiệp vụ TW 09 / cb_nv_tw_09@htpldn.test / Trưởng nhóm / — / —". Bug không lặp trên đợt R11.
+  - Evidence: [`r11-tc11-pc-table-2rows-2026-05-11.png`](image/r11-tc11-pc-table-2rows-2026-05-11.png)
+  - **Status:** ✅ Đạt.
+- **TC14 Trình phê duyệt PC:** Click [Trình phê duyệt] → confirm modal → confirm. POST `/api/v1/ke-hoach-danh-gias/{id}/phan-congs/submit` 200. Toast "Đã trình phê duyệt phân công" hiển thị. UI khoá hết action button trên Tab Phân công.
+  - **Tuy nhiên trạng thái không advance:** Reload đợt → state badge vẫn "Phân công" (`PHAN_CONG`), không phải "Chờ duyệt PC" (`CHO_DUYET_PC`).
+  - **Verify cross-role:** Login `cb_pd_tw_09` (CB Phê duyệt TW 09) — list "Tất cả" show DG-20260511-0001 trạng thái "Phân công"; tab "Chờ duyệt PC" → "Không có kế hoạch đánh giá nào phù hợp." → approver không nhận được đợt.
+  - Evidence: [`r11-tc12-after-trinh-phe-duyet-state-2026-05-11.png`](image/r11-tc12-after-trinh-phe-duyet-state-2026-05-11.png) + [`r11-tc12-pheduyet-empty-tab-chod-duyet-pc-2026-05-11.png`](image/r11-tc12-pheduyet-empty-tab-chod-duyet-pc-2026-05-11.png)
+  - **Status:** ❌ Lỗi — DG-012 REPRODUCED Critical. BE submit endpoint không advance state DB nhưng FE lock UI như đã advance → state inconsistency, approver không có queue.
+
+### Phase 5 (TC15-18) — Permission cross-cấp + QTHT
+
+- **TC15 BR-AUTH-03 BN scope:** Login `cb_nv_bn_09` (BTP · BN · BCT — Bộ Công Thương). Đánh giá hiệu quả → list "Không có kế hoạch đánh giá nào phù hợp." Đợt TW của `cb_nv_tw_09` không xuất hiện. Có button "Tạo kế hoạch" (BN có quyền create đợt riêng).
+  - Evidence: [`r11-tc15-cb-nv-bn-09-empty-bn-scope-2026-05-11.png`](image/r11-tc15-cb-nv-bn-09-empty-bn-scope-2026-05-11.png)
+  - **Status:** ✅ Đạt.
+- **TC16 BR-AUTH-03 DP scope:** Login `cb_nv_dp_09` (BTP · DP · BNI — tỉnh Bến Nội). List rỗng. Đợt TW không xuất hiện. Có button "Tạo kế hoạch".
+  - Evidence: [`r11-tc16-cb-nv-dp-09-empty-dp-scope-2026-05-11.png`](image/r11-tc16-cb-nv-dp-09-empty-dp-scope-2026-05-11.png)
+  - **Status:** ✅ Đạt.
+- **TC17 cross-cấp deny phê duyệt:** Cần đợt ở `CHO_DUYET_PC` để verify cross-cấp approver bị reject. Block bởi DG-012 → không có đợt nào ở trạng thái này.
+  - **Status:** 🚫 Không test được — chờ DG-012 fix.
+- **TC18 QTHT permission:** Login `qtht_09` (QTHT Test 09). Đánh giá hiệu quả list 3 đợt TW visible (QTHT thấy được cross-data).
+  - **List view:** NO button "Tạo kế hoạch" → ✅ matches matrix R-only at list level.
+  - **Đợt LAP_KE_HOACH (DG-20260510-0001) Tab Tiêu chí:** spinbutton trọng số (uid=315_65 value=60 + Increase/Decrease) + spinbutton điểm tối đa (uid=315_68 value=10 + I/D) + cột "Thao tác" với button delete (uid=315_72) — VISIBLE. QTHT có thể mutate được.
+  - **Đợt LAP_KE_HOACH Tab Phân công:** NO "Thêm người đánh giá", NO "Trình phê duyệt", NO cột "Thao tác" → READ ONLY → ✅ matches matrix.
+  - Evidence: [`r11-tc18-qtht-edit-tieuchi-bypass-2026-05-11.png`](image/r11-tc18-qtht-edit-tieuchi-bypass-2026-05-11.png) + [`r11-tc18-qtht-pc-readonly-2026-05-11.png`](image/r11-tc18-qtht-pc-readonly-2026-05-11.png)
+  - **Status:** ❌ Lỗi — DG-013 REPRODUCED variant **Tab Tiêu chí** (R10b reported variant Tab Phân công đã fix; R11 phát hiện variant Tiêu chí).
+
+### Phase 4 (R11 extras 14:25-14:35) — TC12 verify + Negative tests + State-gated tabs
+
+**TC12 (Edit role/lĩnh vực phân công) re-verify out-of-scope SRS:**
+- **2-source spec verify:** Đọc local `srs-update-2026-5-5/srs-fr-08-danh-gia.md` FR-VI-03 line 231-301 (Processing 8 bước không có Update, Acceptance Criteria 3 dòng không có Edit, Error Handling E1-E4 không có Update error) + NotebookLM HTPLDN query xác nhận "inline edit" trong SCR-VI-01 Tab 2 row 36 chỉ áp dụng cho new row khi click [+ Thêm], KHÔNG cho saved row → workaround = Delete + Re-add. → SRS không yêu cầu Edit phân công.
+- **UI verify:** Tab Phân công đợt LAP_KE_HOACH (DG-20260510-0001) `cb_nv_tw_09`: PC table cells `isEditable=false` (StaticText only), click "Trưởng nhóm" cell → no modal/drawer/dropdown → focus rebounds tabpanel. Cột Hành động chỉ có button [delete] (no Edit/Pencil). **Contrast:** Tab Tiêu chí cùng đợt cells spinbutton `isEditable=true editType=INPUT` → kết luận UI render phân biệt rõ Phân công=read-only vs Tiêu chí=editable.
+- Evidence: [`r11-tc12-pc-cells-not-editable-2026-05-11.png`](image/r11-tc12-pc-cells-not-editable-2026-05-11.png)
+- **Status:** ✅ Đạt — UI ẩn edit đúng spec (out-of-scope SRS confirmed).
+
+**TC-G (Modal Add PC validation required fields):**
+- Click [+ Thêm người đánh giá] empty → click [Thêm] → 2 errors render đỏ dưới combobox: "Vui lòng chọn người đánh giá" + "Vui lòng chọn vai trò". Lĩnh vực + Ghi chú không required (đúng spec FR-VI-03 Inputs row 4: linh_vuc_ids tùy chọn).
+- **Status:** ✅ Đạt — required field validation OK.
+
+**TC-E3 (Duplicate person assignment):**
+- PC table hiện có `cb_nv_tw_03` (Trưởng nhóm) + `cb_nv_tw_04` (Đánh giá viên). Click [+ Thêm người đánh giá] → modal mở → chọn Người đánh giá = `cb_nv_tw_03` (đã trong PC table) + Vai trò = "Đánh giá viên" + click [Thêm].
+- **Verify:** FE không pre-filter người đã PC trong dropdown (vẫn show cb_nv_tw_03 + 04). BE chặn: POST `/phan-congs` → **409 Conflict** (reqid 938). Modal hiện toast đỏ icon close-circle "Người đánh giá đã được phân công trong kế hoạch này".
+- Evidence: [`r11-tc12-e3-duplicate-person-error-2026-05-11.png`](image/r11-tc12-e3-duplicate-person-error-2026-05-11.png)
+- **Status:** ✅ Đạt — BE enforcement OK (FE pre-filter chưa làm, dùng BE 409 fallback = chấp nhận được).
+
+**TC-LV (Lĩnh vực dropdown render value):**
+- Click combobox Lĩnh vực modal → dropdown render 12 options. Network `GET /api/v1/danh-muc?loaiDanhMuc=LINH_VUC_PL&pageSize=100` → 200 (reqid 931).
+- 10/12 tên Vietnamese OK: Thuế · Lao động · Đất đai · Dân sự · Thương mại · Hình sự · Hành chính · Sở hữu trí tuệ · Doanh nghiệp · Đầu tư.
+- 2/12 RAW UUID: `bbbbbbbb-0000-4000-8000-000000000018` + `bbbbbbbb-0000-4000-8000-000000000013`.
+- Evidence: [`r11-linhvuc-dropdown-raw-uuid-2026-05-11.png`](image/r11-linhvuc-dropdown-raw-uuid-2026-05-11.png)
+- **Status:** ❌ Lỗi — DG-014 NEW Medium logged.
+
+**TC-TAB (State-gated tab display ở LAP_KE_HOACH):**
+- Click tab "Thực hiện" → body "Chức năng thực hiện đánh giá sẽ khả dụng sau khi hoàn tất phân công." ✅ + toast đỏ "Kế hoạch phải ở trạng thái CHO_DUYET_PC, hiện tại là 'LAP_KE_HOACH'" ❌.
+- Click tab "Chấm điểm" → body "Phân công chưa được phê duyệt — chưa thể thực hiện chấm điểm" ✅ + KHÔNG toast ✅ (pattern đúng).
+- Click tab "Báo cáo" → body "Chưa hoàn thành đánh giá" ✅ + toast đỏ "Kế hoạch phải ở trạng thái DA_DANH_GIA trở lên..." ❌.
+- Evidence: [`r11-tab-thuchien-state-gated-lap-ke-hoach-2026-05-11.png`](image/r11-tab-thuchien-state-gated-lap-ke-hoach-2026-05-11.png) + [`r11-tab-baocao-state-gated-error-leak-2026-05-11.png`](image/r11-tab-baocao-state-gated-error-leak-2026-05-11.png)
+- **Status:** ❌ Lỗi — DG-015 NEW Minor logged.
+
+**DG-009 HUY button retest:**
+- Tab Tiêu chí + Phân công đợt LAP_KE_HOACH (DG-20260510-0001) `cb_nv_tw_09` → KHÔNG có button "Hủy đợt" / "Huỷ kế hoạch" / "HUY" trên bất kỳ vị trí nào. R10b bug giữ Open.
+
+### Tóm tắt R11 phase findings
+
+- DG-010 (modal + inline trọng số): REPRODUCED 2 variants → Bug Major still Open.
+- DG-011 (PC table render): NOT REPRODUCED trên đợt R11 fresh → có thể đã fix data-specific, đề nghị đóng nếu retest đợt cũ cũng OK.
+- DG-012 (state stuck `PHAN_CONG`): REPRODUCED Critical → BE block lifecycle. **Ưu tiên #1.**
+- DG-013 (QTHT bypass): REPRODUCED **variant Tab Tiêu chí** Major (Tab Phân công đã read-only OK ở R11) → bug có thể chỉ partial fix.
+- DG-014 (Lĩnh vực 2/12 raw UUID): **NEW Medium**, BE data fix.
+- DG-015 (Tab Thực hiện/Báo cáo leak toast): **NEW Minor**, FE UX.
+- DG-009 (HUY button missing): REPRODUCED trên đợt LAP_KE_HOACH R11 — bug giữ Open.
+- DG-008 không re-test R11 (cần đợt advance qua `THUC_HIEN` — chờ DG-012 fix trước).
+
+---
+
+## Bảng trạng thái TC (snapshot R10b — archived 2026-05-10 22:55:00)
 
 | TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
 |---|---|:-:|:-:|---|

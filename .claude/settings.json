@@ -75,7 +75,19 @@
           },
           {
             "type": "command",
+            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-bug-test-method.py"
+          },
+          {
+            "type": "command",
             "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-report-path-convention.py"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-bug-report-ordering.py"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-bug-report-date-time.py"
           }
         ]
       }

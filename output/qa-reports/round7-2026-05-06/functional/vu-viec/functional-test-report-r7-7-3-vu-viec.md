@@ -14,13 +14,118 @@
 
 ## Verdict
 
-⚠️ **PARTIAL PASS — 29/72 TC chạy (40%) — 22 PASS, 4 FAIL Major/Critical, 2 Partial, 1 Sai spec.** (R7+R8+R14+R15 cộng dồn)
+⚠️ **PARTIAL PASS — 35/72 TC chạy (49%) — 28 PASS, 4 FAIL Critical/Major, 2 Partial, 1 Sai spec.** (R7+R8+R14+R15+R16-P2+R16-P3+R16-P4+R16-P5 cộng dồn) · **+1 NEW BUG Critical PHANCONG-REVERT phát hiện R16-P2**.
 
-Pool VV: 20 records (R15 update — 18 BTP-TW + 2 STP-AG/cross-donVi).
+Pool VV: 20 records (R16 stable — 18 BTP-TW + 2 STP-AG/cross-donVi).
 
 ---
 
-## R15 Round (2026-05-11 09:19:00 → 09:50:00) (LATEST) — Audit post-fix + Cluster 5 UC67 + Cluster 6 BR-CALC-04
+## R16 Phase 3+4 — Cluster 1 Công khai PLQG + Multi-role permission + Immutability (2026-05-11 14:35 → 14:42) (LATEST)
+
+Tester: `cb_pd_tw_05` (CB PD) isolatedContext `r16p3_cbpd_2026_05_11` + `huongcg` (CG) isolatedContext `r16p4_tvv_2026_05_11` + `cb_nv_tw_01` (CB NV+PD) isolatedContext `r16p2_2026_05_11`. Tool: Chrome DevTools MCP UI + API. Scope: chạy TC không phụ thuộc PHANCONG-REVERT fix.
+
+### Bảng trạng thái TC (snapshot R16-P3+P4 — LATEST 2026-05-11 14:42:00)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| **C1-1** | Công khai DA_DANH_GIA happy path | ✅ Đạt | R16-P3 | POST /cong-khai 200 + `congKhai=true` + `thoiGianDangTai` + button flip. |
+| **C1-2** | P0 Privacy whitelist 9 fields | 🚫 Không test được | R16-P3 | Endpoint `/api/v1/public/vu-viecs` 401 ERR-AUTH-MTLS-01 — cần mTLS T2 cert. |
+| **C1-3** | Negative TU_CHOI ẩn nút Công khai | ✅ Đạt | R16-P3 | UI button hidden + force POST → 409 ERR-STATE-VI-CK-01. |
+| **C1-7** | Hủy công khai + flip flag | ✅ Đạt | R16-P3 | POST /huy-cong-khai 200 + `congKhai=false` + `thoiGianDangTai=null`. |
+| **VV-013d** | CG/non-actor 403 trên list+detail VV | ✅ Đạt | R16-P4 | huongcg GET /vu-viecs + detail random → 403 ERR-PERM-SYS-00-01. |
+| **VV-023** | Immutability final state | ✅ Đạt | R16-P4 | PATCH DA_DANH_GIA + TU_CHOI → 409 ERR-STATE-VI-01-05. |
+| **VV-026** | TVV scope filter | ✅ Đạt | R16-P5 | QA tự seed: forgot-password `tvv.r11.mailfix` → reset → login → GET /vu-viecs → 1/1 (chỉ VV-509-008 gán mình, KHÔNG thấy 20 VV như CB). |
+| **C3-4/5/6/7** | Phân công negative ERR-PC-05/06/07 | 🚫 Không test được | R16-P4 | Block bởi BUG-PHANCONG-REVERT-01 (không có VV state DA_PHAN_CONG persist). |
+
+### Bảng TC chưa chạy được — cần làm gì để chạy (R16-P3+P4+P5)
+
+Hiện tại còn 37 TC chưa chạy được — chia 3 nhóm: 1 chờ mTLS PLQG sandbox (C1-2 P0) + 8 chờ dev fix PHANCONG-REVERT + 28 còn lại (VNeID T2 + LICHSU enum + SLA backdated).
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| C1-2 | Endpoint public PLQG yêu cầu mTLS T2 cert | Infra setup mTLS sandbox cert + cấu hình QA env | Infra |
+| C3-4/5/6/7 | Phân công không persist (cascade PHANCONG-REVERT-01) | Dev BE fix transaction atomic | Dev BE |
+
+### R16-P5 — QA seed TVV active + verify VV-026 scope (2026-05-11 15:15 → 15:18)
+
+1. Login `qtht_01` → GET `/api/v1/tu-van-viens?trangThai=HOAT_DONG` → 8 TVV/CG HOAT_DONG, pick `tvv.r11.mailfix@test.htpldn.vn` (id 06748bb5...).
+2. GET TVV detail → `taiKhoanId=b7a05555-ebbb-4369-8b60-0354cdf0e100`. GET `/api/v1/tai-khoan/{id}` → username thực tế là `tvv_r11_mailfix` (KHÔNG phải email), state `HOAT_DONG`, vai trò `TVV` cấp DP.
+3. DELETE MailHog → POST `/api/v1/auth/forgot-password { email: tvv.r11.mailfix@test.htpldn.vn }` → 200 mail trong MailHog với token `add8c43f-297f-4f84-893c-cf912e8dc536`.
+4. POST `/api/v1/auth/reset-password { token, newPassword: Secret@123, newPasswordConfirm: Secret@123 }` → 200 "Mật khẩu đã được đặt lại thành công".
+5. POST `/api/v1/auth/login { username: tvv_r11_mailfix, password: Secret@123 }` → 200 trả `otpToken`. POST `/api/v1/auth/verify-otp { otpToken, otpCode: 666666 }` → 200 trả `accessToken`. (Schema discovery: field name là `otpCode` không phải `otp`/`code`.)
+6. GET `/api/v1/auth/me` → 200 vai trò `TVV` ✓. GET `/api/v1/vu-viecs?page=1&size=100` → trả ĐÚNG **1 VV** (VV-BTP-TW-20260509-008, gán `nguoiXuLyId=tvv_r11_mailfix`). Compare CB scope = 20 VV → scope filter chính xác.
+7. UI verify: navigate `/vu-viec` → tab "Tất cả (1)", "Hoàn thành (1)", các tab khác đều `(0)` ✓ → VV-026 PASS.
+
+### Method R16-P3+P4
+
+1. **Phase 3 Cluster 1** — login `cb_pd_tw_05` fresh context → navigate VV-510-002 (DA_DANH_GIA cleaned) → click [Công khai] → fill mô tả công khai 339 ký tự → submit `POST /cong-khai` 200 (`moTaCongKhai` only). Verify `congKhai=true`, `thoiGianDangTai=2026-05-11T07:37:39.570Z`, timeline +1 "Công khai · 11/05/2026 14:37 · CB Phê duyệt TW 05", button flip [Hủy công khai].
+2. **C1-7 huỷ** — click [Hủy công khai] → confirm dialog → `POST /huy-cong-khai` 200, body `{}`. Verify `congKhai=false`, `thoiGianDangTai=null`, state preserved DA_DANH_GIA, `moTaCongKhai` retained (observation).
+3. **C1-3 negative** — navigate VV-507-004 (TU_CHOI) → verify NO [Công khai] button. Force `POST /cong-khai` → 409 ERR-STATE-VI-CK-01 "Chỉ vụ việc đã duyệt mới được công khai".
+4. **C1-2 mTLS probe** — GET `/api/v1/public/vu-viecs` không cert → 401 ERR-AUTH-MTLS-01. Block.
+5. **Phase 4 CG scope** — login `huongcg` fresh context → CG sidebar KHÔNG có module VV. Force `GET /api/v1/vu-viecs` list + 2 detail UUID → cả 3 đều 403 ERR-PERM-SYS-00-01.
+6. **Phase 4 Immutability** — login `cb_nv_tw_01` (dual CB_NV+CB_PD) → PATCH VV-510-002 (DA_DANH_GIA) + VV-507-004 (TU_CHOI) → cả 2 đều 409 ERR-STATE-VI-01-05.
+
+### Findings R16-P3+P4 (observations chưa log bug)
+
+- **C1-Privacy CMS endpoint trả full record:** `POST /cong-khai` response (CMS) trả full entity gồm `moTa`, `ketQuaTomTat`, `diemDanhGia`, `nguoi*Id` — đây là OK cho FE refresh detail, KHÔNG vi phạm privacy. Privacy gate enforce ở `/api/v1/public/vu-viecs` mTLS endpoint (chưa test được).
+- **C1-7 moTaCongKhai retained sau huỷ:** sau `POST /huy-cong-khai`, field `moTaCongKhai` vẫn giữ trong DB. Nếu user công khai lại sẽ thấy mô tả cũ. Observation, không phải bug (SRS không yêu cầu clear khi huỷ).
+- **Hủy công khai không có textbox `ly_do_huy`:** modal chỉ là confirm 2 nút. BE accept body `{}`. Nếu SRS yêu cầu `ly_do_huy` required → đây là deviation. Cần BA confirm.
+
+---
+
+## R16 Phase 2 — Fresh-trigger retest NOTIF + LICHSU (2026-05-11 14:22 → 14:30 cb_nv_tw_03)
+
+Tester: `cb_nv_tw_03` isolatedContext `r16p2_2026_05_11`. Tool: Chrome DevTools MCP UI + API. Scope: clear cache + DELETE MailHog + walk fresh VV-BTP-TW-20260511-001 từ DA_TIEP_NHAN qua đủ chuỗi để retest NOTIF-01 + LICHSU-01 đúng phương pháp (response to user feedback "đã clear cache trước verify chưa?").
+
+### Bảng trạng thái TC (snapshot R16-P2 — LATEST 2026-05-11 14:30:00)
+
+Tổng 72 TC. Chỉ liệt kê TC có thay đổi status hoặc TC mới chạy R16-P2.
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| **VV-007** | Kiểm tra DA_TIEP_NHAN→DANG_KIEM_TRA | ✅ Đạt | R16-P2 | Click [Kiểm tra hồ sơ] → state advance OK, lich-su +1 enum KIEM_TRA. |
+| **VV-013/014/015/017/033** | Walk lifecycle sau Phân công | 🚫 Không test được | R16-P2 | Block bởi BUG-PHANCONG-REVERT-01 (state revert silent). |
+| VV-031 | UC62 notification | ✅ Đạt | R16-P2 | Fresh trigger phân công → 2 mail (DN + TVV/NHT). BUG-NOTIF-01 Closed. |
+| C8-3 | LICH_SU 18 enum | ⚠️ Partial | R16 | 11/18 ≈ 61% (+1 DANH_GIA từ R15 C5-1). 7 enum còn thiếu. |
+| **NEW** | **POST /phan-cong state revert** | 🆕 ❌ Lỗi | R16-P2 | Mail bay OK nhưng VU_VIEC state không persist. Critical data integrity. → BUG-PHANCONG-REVERT-01. |
+| **Tổng cộng** | **72 TC** | ✅ 23 · ⚠️ 3 · ❌ 4 · 🚫 8+ (mới block) · ⏭ 14 · 🤷 0 | | |
+
+### Bảng TC chưa chạy được — cần làm gì để chạy (R16-P2)
+
+Hiện tại còn 35 TC chưa chạy được — chia 4 nhóm: 8 chờ dev fix PHANCONG-REVERT mới + 16 chờ env VNeID + 3 cần seed backdated SLA + 8 LICHSU enum còn thiếu.
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| VV-013/013b/013c | Phân công không persist (BUG-PHANCONG-REVERT-01) | Dev BE fix transaction để VU_VIEC state + PHAN_CONG_VU_VIEC record persist atomic với mail trigger | Dev BE |
+| VV-014/015/017 | Cascade từ PHANCONG-REVERT — không có VV nào ở DANG_XU_LY/CHO_PHE_DUYET/DA_DUYET mới | Same as VV-013 | Dev BE |
+| VV-033 | Cập nhật kết quả needs DA_PHAN_CONG → DANG_XU_LY persist | Same as VV-013 | Dev BE |
+| C4-1/C4-2 | CB PD từ chối needs CHO_PHE_DUYET fresh | Same as VV-013 | Dev BE |
+| C8-3 (deep) | 7 enum thiếu TIEP_NHAN/CAP_NHAT_KQ/YEU_CAU_BO_SUNG/TU_CHOI/PHAN_CONG_CA_NHAN/TO_CHUC/TU_CHOI_DUYET | Dev BE thêm enum log writer | Dev BE |
+| Cluster 1-4-6-7 (16 TC) | DN VNeID T2 sandbox + DN verified | Infra setup | Infra |
+| C3-1/2/3 (3 TC SLA backdated) | Pool chưa có VV deadline 11/16/21 ngày | Seed backdated | QA seed |
+
+### Phương án test tiếp theo
+
+| Nhóm | Áp dụng | Cần làm | Ưu tiên | Owner |
+|---|---|---|---|---|
+| Dev fix Critical | 7-8 TC | Fix BUG-PHANCONG-REVERT-01 (transaction atomicity giữa BE persist + mail) | **P0** | Dev BE |
+| QA chạy tiếp khi unblock | VV-013/14/15/17/33/C4-1/C4-2 | Sau dev fix → walk fresh VV qua đủ chuỗi DA_PHAN_CONG → DANG_XU_LY → ... → DA_DANH_GIA, query LICH_SU cumulative cho VV đó | P0 | QA |
+| QA test Cluster 1 (Công khai) | C1-1/2/3/7 | Test trên VV existing DA_DANH_GIA (VV-510-002/509-008/009) với `cb_pd_tw_05` — không chờ PHANCONG-REVERT fix | P1 | QA |
+| BA confirm spec | C5-4 mechanism + C6-4 silent fallback | BA reply | P1 | BA |
+
+### Method R16-P2
+
+1. `curl -X DELETE http://103.172.236.130:8025/api/v1/messages` → MailHog 0 mail (clear cache evidence).
+2. Browser logout `/api/v1/auth/logout` + `localStorage.clear()` + `sessionStorage.clear()`.
+3. `mcp__chrome-devtools__new_page` isolatedContext `r16p2_2026_05_11` → login `cb_nv_tw_03` fresh.
+4. Walk VV-BTP-TW-20260511-001 (DA_TIEP_NHAN, lich-su 1 enum TAO_VV) → click [Kiểm tra hồ sơ] → state DANG_KIEM_TRA ✓ + lich-su +1 KIEM_TRA ✓.
+5. Click [Phân công] → modal → pick TVV hương tvv1 → submit. POST 201 với response DA_PHAN_CONG. **MailHog +2 mail (DN-r14 + TVV)** — UC62 + UC61 deliver.
+6. GET VV detail 5s sau → state vẫn DANG_KIEM_TRA + version cũ + nguoiXuLyId NULL + PHAN_CONG_VU_VIEC array rỗng + LICH_SU 2 enum (không có PHAN_CONG).
+7. Lặp với NHT → 201 + 2 mail mới + state vẫn revert. → BUG-PHANCONG-REVERT-01 reproducible 2/2.
+
+---
+
+## R15 Round (2026-05-11 09:19:00 → 09:50:00) — Audit post-fix + Cluster 5 UC67 + Cluster 6 BR-CALC-04
 
 Tester: `cb_nv_tw_03` (CB NV) + `cb_pd_tw_05` (CB PD). Tool: Chrome DevTools MCP UI + API. Scope: skill `qa-bugfix-reverify-audit` audit 2 Open bug (NOTIF-01 + LICHSU-01) + chạy 5 TC chạy được không phụ thuộc env (Cluster 5 P0 + Cluster 6 P1).
 

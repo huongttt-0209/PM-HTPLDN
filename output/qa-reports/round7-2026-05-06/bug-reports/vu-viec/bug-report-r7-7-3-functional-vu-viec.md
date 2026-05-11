@@ -20,7 +20,7 @@ Phát hiện **4 lỗi** Critical/Major khi chạy 11 TC functional R7.7.3. Lỗ
 
 | Tổng | Critical | Major | Medium | Minor | Trivial |
 |------|----------|-------|--------|-------|---------|
-| 6    | 2        | 4     | 0      | 0     | 0       |
+| 7    | 3        | 4     | 0      | 0     | 0       |
 | Open | 1        | 1     | 0      | 0     | 0       |
 | Closed | 2      | 3     | 0      | 0     | 0       |
 
@@ -37,6 +37,22 @@ Phát hiện **4 lỗi** Critical/Major khi chạy 11 TC functional R7.7.3. Lỗ
 > ⚠️ **C6-4 Sai spec:** BE KHÔNG enforce BR-CALC-04 pre-check. VV-BTP-TW-20260511-002 tạo OK cho DN "Demo An Giang" có `gioiTinhChuDn=null + soLaoDongNu=null + soLaoDongKhuyetTat=null`. Form helper text "(mặc định BR-CALC-04)" suggest silent fallback to priority 3. Spec C6-4 yêu cầu ERR-NH-03/warning "DN cần cập nhật hồ sơ" — **cần BA confirm: silent fallback có acceptable không**.
 >
 > **Observation Minor:** POST request field `diemTienDo` ≠ response field `diemThoiGian` — naming inconsistency (defer, không log bug).
+>
+> **R16 Phase 2 fresh-trigger retest 2026-05-11 14:22 → 14:25 (`cb_nv_tw_03` isolatedContext `r16p2_2026_05_11` — MailHog reset 0 + clear browser session):** Walk fresh VV-BTP-TW-20260511-001 (DA_TIEP_NHAN) qua [Kiểm tra hồ sơ] → [Phân công TVV] → check MailHog + state.
+>
+> ✅ **NOTIF-01 CLOSED:** POST `/phan-cong` (TVV hương tvv1) lúc 07:22:59 UTC → MailHog ngay sau 2 mail: (1) `qa-r14-dn004@example.test` Subj "Vụ việc đã được phân công - VV-BTP-TW-20260511-001" ← **DN nhận mail UC62** ✓ (2) `huongtvv@gmail.com` Subj "Vụ việc mới được phân công" ← TVV nhận mail UC61. Lặp lần 2 với NHT lúc 07:25:30 → 2 mail mới (DN + NHT `nht_r12_bug003_213643@htpldn.test`). **Dev đã fix UC62 — R15/R16 audit trước sai phương pháp (observe pool cũ không trigger fresh).** Đóng bug.
+>
+> 🚨 **NEW BUG-VV-FN-PHANCONG-REVERT-01 Critical:** POST `/phan-cong` returns 201 với body `trangThai=DA_PHAN_CONG + version 3 + nguoiXuLyId set + ngayPhanCong set + loaiDoiTuongXuLy=CA_NHAN`. Mail trigger OK. **Nhưng GET `/vu-viecs/{id}` sau 3-5s vẫn `DANG_KIEM_TRA + version 2 + nguoiXuLyId NULL + loaiDoiTuongXuLy NULL + ngayPhanCong NULL`.** GET `/vu-viecs/{id}/phan-cong` trả `data: []` (rỗng). GET `/lich-su` chỉ có 2 enum (KIEM_TRA + TAO_VV) — KHÔNG có entry PHAN_CONG. Reproducible 2/2 lần với TVV + NHT. Side effect (mail) commit nhưng state persist FAIL — data integrity bug. **Blocker:** chặn full lifecycle walk fresh VV → block VV-013/013b/013c/014/015/017/033 + Cluster 1 happy path.
+>
+> ⚠️ **LICHSU-01 partial-progress (R15 audit):** Cumulative pool 11/18 enum ≈ 61% (+1 `DANH_GIA` sau R15 C5-1). Khi state machine advance ĐẦY ĐỦ (VV-510-002), BE log đủ enum chuỗi `CREATE→KIEM_TRA→PHAN_CONG→XAC_NHAN_PHAN_CONG→TRINH_PD→PHE_DUYET→CONG_KHAI→HUY_CONG_KHAI→HOAN_THANH→DANH_GIA` (10 enum). Nhưng PHANCONG-REVERT bug làm fresh VV không advance → không có cơ hội verify đủ 18 enum. Giữ Open partial.
+>
+> **R16 audit 2026-05-11 13:50:00 (`cb_nv_tw_03`) — qa-bugfix-reverify-audit skill (cách R15 ~4h):** Re-verify NOTIF + LICHSU + pool delta.
+>
+> **Pool snapshot:** 20 VV (unchanged total) — DA_TIEP_NHAN 5, YEU_CAU_BO_SUNG 2, DA_DANH_GIA **3** (R15: 2 → +1 từ C5-1 success ✓), DA_PHAN_CONG 9, TU_CHOI 1. 2 VV mới R15 (`VV-BTP-TW-20260511-001/002`) giữ DA_TIEP_NHAN.
+>
+> ⚠️ **NOTIF-01 vẫn Open Critical:** MailHog 182 (R15: 177 → +5 mails trong 4h). **0 VV-related notification.** 1 mail SLA "Sắp hết hạn" 03:30 cho `cb_nv_tw_05` nhưng nội dung "câu hỏi" (Hỏi đáp module), không phải VV. 0 mail nào gửi DN về VV. UC62 cảnh báo DN sau DA_PHAN_CONG/TU_CHOI vẫn miss hoàn toàn.
+>
+> ⚠️ **LICHSU-01 partial-improvement:** Cumulative enum capture sau R15 C5-1 = **11/18 ≈ 61% (+5% so R15)**: `CREATE/TAO_VV/KIEM_TRA/PHAN_CONG/XAC_NHAN_PHAN_CONG/TRINH_PD/PHE_DUYET/HOAN_THANH/CONG_KHAI/HUY_CONG_KHAI/DANH_GIA`. VV-510-002 (R15 evaluated) chứa đủ chuỗi gồm `DANH_GIA` enum mới ✓. Vẫn miss 7 enum: `TIEP_NHAN/PHAN_CONG_CA_NHAN/PHAN_CONG_TO_CHUC/CAP_NHAT_KQ/YEU_CAU_BO_SUNG/TU_CHOI/TU_CHOI_DUYET`. BE mix old/new naming (`CREATE` cho VV cũ + `TAO_VV` cho VV mới).
 >
 > **R15 audit 2026-05-11 09:19 (`cb_nv_tw_03`) — qa-bugfix-reverify-audit skill:** Re-verify 2 Open bug sau dev claim fix.
 >
@@ -67,8 +83,9 @@ Phát hiện **4 lỗi** Critical/Major khi chạy 11 TC functional R7.7.3. Lỗ
 | ~~BUG-VV-FN-DANHGIA-01~~ | Critical | P0 | Missing feature | C5-1/C5-2/C5-3/C5-4/C5-5 | `srs-fr-05-vu-viec.md:1164-1227 §FR-V.I-17` · `:1769 row 11 Accordion 8` · `:2141-2155 §DANH_GIA_VU_VIEC` · `:2332 §SM HOAN_THANH→DA_DANH_GIA` | ~~UC67 Đánh giá VV thang 0-10 chưa build~~ | **Closed** |
 | ~~BUG-VV-FN-SLA-01~~ | ~~Major~~ | ~~P1~~ | ~~Calculation~~ | ~~C6-1~~ | ~~`srs-fr-05-vu-viec.md:43, 334, 1462, 2065` · BR-SLA-01 · NĐ55/2019 Đ.8 K.1~~ | ~~Deadline VV tính = 14 calendar days (~10 ngày LV) thay vì 15 ngày LV theo v3.5 update 2026-05-06~~ | **Closed** |
 | ~~BUG-VV-FN-SEARCH-01~~ | ~~Major~~ | ~~P1~~ | ~~Negative~~ | ~~VV-002~~ | ~~`FR-V.I-NEW-05 §3.4.3 Inputs row "Từ khóa"` · `7.5-vu-viec-htpl.md §VV-002`~~ | ~~Search keyword `tuKhoa` BE ignore — trả full pool bất kể giá trị~~ | **Closed** |
-| BUG-VV-FN-NOTIF-01 | Critical | P0 | Workflow | VV-031 | `UC62 §Outputs` · `BR-NOTIF-VV-TIEPNHAN` | UC62 partial fix — TVV mail OK sau DA_PHAN_CONG; DN KHÔNG mail "Vụ việc tiếp nhận" sau DA_PHAN_CONG/TU_CHOI | Open |
+| ~~BUG-VV-FN-NOTIF-01~~ | ~~Critical~~ | ~~P0~~ | ~~Workflow~~ | ~~VV-031~~ | ~~`UC62 §Outputs` · `BR-NOTIF-VV-TIEPNHAN`~~ | ~~UC62 partial fix — TVV mail OK sau DA_PHAN_CONG; DN KHÔNG mail "Vụ việc tiếp nhận" sau DA_PHAN_CONG/TU_CHOI~~ | **Closed** |
 | BUG-VV-FN-LICHSU-01 | Major | P1 | Data | C8-3 | `LICH_SU_VU_VIEC ENUM 18 hành động` · `BR-AUDIT-VV-01` | LICH_SU_VU_VIEC ghi 5/18 enum (CREATE/UPDATE×3 generic + TRINH_PHE_DUYET/PHE_DUYET/HOAN_THANH) — miss TIEP_NHAN/KIEM_TRA/PHAN_CONG/CAP_NHAT_KQ/DANH_GIA | Open |
+| BUG-VV-FN-PHANCONG-REVERT-01 | **Critical** | P0 | Data integrity | VV-013 / C3-1 | `srs-fr-05-vu-viec.md §UC59 phân công` · `FR-V.I-09 v3.5 Thay đổi 8` · `BR-EC-20 atomicity` | POST `/phan-cong` 201 với response `trangThai=DA_PHAN_CONG + version++ + nguoiXuLyId set`, mail trigger OK, nhưng GET sau 3-5s vẫn DANG_KIEM_TRA + version cũ + nguoiXuLyId NULL + PHAN_CONG_VU_VIEC array rỗng + LICH_SU không có entry PHAN_CONG | **Open** |
 | ~~BUG-VV-FN-VALIDATION-01~~ | ~~Major~~ | ~~P1~~ | ~~Negative~~ | ~~VV-004~~ | ~~`7.5-vu-viec-htpl.md §VV-004` · `BR-VV-DN-REQUIRED`~~ | ~~Form tạo VV thiếu required validation cho DN — VV tạo orphan không có doanhNghiepId~~ | **Closed** |
 
 ---
@@ -345,7 +362,70 @@ GET /api/v1/vu-viecs/8d074115-... → doanhNghiepId: null
 
 ---
 
-## BUG-VV-FN-NOTIF-01 — UC62 violation: tạo VV không trigger email notify
+## BUG-VV-FN-PHANCONG-REVERT-01 — POST `/phan-cong` 201 với optimistic response nhưng state revert silent, PHAN_CONG_VU_VIEC không persist
+
+### Mô tả
+
+QA `cb_nv_tw_03` walk fresh VV-BTP-TW-20260511-001 (DA_TIEP_NHAN) qua [Kiểm tra hồ sơ] → state advance OK sang DANG_KIEM_TRA ✓. Sau đó click [Phân công] → modal "Phân công tư vấn viên" mở → chọn `[TVV] hương tvv1` (TVV-BTP-TW-0029) → click [Xác nhận]. POST `/api/v1/vu-viecs/{id}/phan-cong` trả 201 Created với body chứa đầy đủ field new state (`trangThai=DA_PHAN_CONG, version=3, nguoiXuLyId=46f0e428..., ngayPhanCong=2026-05-11T07:22:59, loaiDoiTuongXuLy=CA_NHAN`). Mail UC62 gửi DN + mail UC61 gửi TVV — cả 2 deliver MailHog ngay. NHƯNG GET `/api/v1/vu-viecs/{id}` sau 3-5s vẫn `trangThai=DANG_KIEM_TRA + version=2 + nguoiXuLyId=NULL + loaiDoiTuongXuLy=NULL + ngayPhanCong=NULL`. GET `/api/v1/vu-viecs/{id}/phan-cong` trả `data: []` (KHÔNG có PHAN_CONG_VU_VIEC record). GET `/lich-su` chỉ có 2 enum (KIEM_TRA + TAO_VV) — KHÔNG có entry PHAN_CONG. **Side effect (mail) commit nhưng state persist FAIL** — vi phạm BR-EC-20 atomicity (data integrity nguyên tử giữa side effect và state). Repro 2/2 lần với TVV + NHT khác account → confirmed reproducible. Blocker: chặn fresh VV advance qua DA_PHAN_CONG → block VV-013/013b/013c/014/015/017/033 + Cluster 1 happy path (cần DA_DUYET fresh).
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_03` qua MCP UI fresh isolatedContext `r16p2_2026_05_11`. MailHog reset 0 trước khi test.
+2. Mở VV-BTP-TW-20260511-001 (state ban đầu DA_TIEP_NHAN, lich-su 1 enum TAO_VV).
+3. Click [Kiểm tra hồ sơ] → modal Checklist 6 hạng mục → default all "Đạt" + Kết luận "Đạt — chuyển sang phân công" → click [Xác nhận].
+4. Verify state → DANG_KIEM_TRA ✓, lich-su 2 enum (KIEM_TRA + TAO_VV) ✓.
+5. Click [Phân công] → modal "Phân công tư vấn viên" mở.
+6. Chọn segmented control "Cá nhân" (default checked) → click dropdown "Chọn người được phân công" → 4 options visible (1 TVV + 3 NHT) — pick `[TVV] hương tvv1 (TVV-BTP-TW-0029)`.
+7. Click [Xác nhận] → modal close.
+8. Capture network: POST `/api/v1/vu-viecs/{id}/phan-cong` request body `{"tvvId":"e4403bbf-7754-4ecf-a25f-59d6e4a39d4f"}` → 201 với response body đầy đủ state mới (DA_PHAN_CONG + version 3 + nguoiXuLyId + ngayPhanCong).
+9. Đợi 3-5s rồi GET `/api/v1/vu-viecs/{id}` → trạng thái revert về DANG_KIEM_TRA + version 2 + nguoiXuLyId NULL.
+10. GET `/api/v1/vu-viecs/{id}/phan-cong` → `data: []` (rỗng).
+11. GET `/api/v1/vu-viecs/{id}/lich-su` → 2 enum cũ (KIEM_TRA + TAO_VV) — không có PHAN_CONG entry.
+12. Lặp với NHT khác (`[NHT] NHT R12 QA Verify Bug003`) → cùng kết quả: 201 + 2 mail mới + state vẫn revert.
+
+### Kết quả mong đợi
+
+Theo `srs-fr-05-vu-viec.md §UC59 phân công cá nhân/tổ chức` + `FR-V.I-09 v3.5 Thay đổi 8` + `BR-EC-20 atomicity`:
+- POST `/phan-cong` 201 → VU_VIEC.trangThai persist = DA_PHAN_CONG, version++, nguoiXuLyId = TVV/NHT account UUID, loaiDoiTuongXuLy = CA_NHAN/TO_CHUC, ngayPhanCong = NOW().
+- PHAN_CONG_VU_VIEC tạo record (1 cho mỗi assignment) với trang_thai=CHO_XAC_NHAN, tvv_id hoặc nht_id, ngay_phan_cong.
+- LICH_SU_VU_VIEC ghi entry `loaiHoatDong=PHAN_CONG` (hoặc PHAN_CONG_CA_NHAN/TO_CHUC tương ứng).
+- BR-EC-20: side effect (mail) chỉ trigger SAU khi DB transaction commit thành công — atomic.
+
+### Kết quả thực tế
+
+POST `/phan-cong` 201 với body claim state mới đầy đủ, mail trigger ngay (DN + assignee). NHƯNG VU_VIEC state KHÔNG persist (vẫn DANG_KIEM_TRA + version cũ), PHAN_CONG_VU_VIEC array RỖNG, LICH_SU không có entry. Mail (side effect) bay ra trước hoặc song song transaction nhưng transaction rollback silent — hoặc BE return optimistic response trước commit và commit fail. Repro 2/2 lần.
+
+```
+POST /api/v1/vu-viecs/fa942aa3.../phan-cong
+Request body: {"tvvId":"e4403bbf-7754-4ecf-a25f-59d6e4a39d4f"}
+Response 201: {success:true, data: {trangThai:"DA_PHAN_CONG", version:3, nguoiXuLyId:"46f0e428...", ngayPhanCong:"2026-05-11T07:22:59.117Z", loaiDoiTuongXuLy:"CA_NHAN", ...}}
+
+GET /api/v1/vu-viecs/fa942aa3... (sau 5s)
+Response 200: {trangThai:"DANG_KIEM_TRA", version:2, nguoiXuLyId:null, ngayPhanCong:null, loaiDoiTuongXuLy:null}
+
+GET /api/v1/vu-viecs/fa942aa3.../phan-cong
+Response 200: {success:true, data:[], meta:null}
+
+GET /api/v1/vu-viecs/fa942aa3.../lich-su
+Response 200: 2 entries [KIEM_TRA, TAO_VV] — NO PHAN_CONG entry
+```
+
+### Bằng chứng
+
+![BUG-VV-FN-PHANCONG-REVERT-01 — VV-001 state DANG_KIEM_TRA sau 2 lần POST phan-cong 201](image/r16-bug-phancong-revert-vv001-2026-05-11.png)
+
+MailHog evidence: 4 mail mới (2 lần phân công × 2 mail/lần = 4) — mail side effect commit, state KHÔNG.
+
+| Phân công lần | Time UTC | TVV/NHT | Mail #1 | Mail #2 | State sau 5s |
+|---|---|---|---|---|---|
+| 1 (TVV) | 07:22:59 | hương tvv1 | qa-r14-dn004@example.test (DN) | huongtvv@gmail.com (TVV) | DANG_KIEM_TRA ❌ |
+| 2 (NHT) | 07:25:30 | NHT R12 QA Verify Bug003 | qa-r14-dn004@example.test (DN) | nht_r12_bug003_213643@htpldn.test (NHT) | DANG_KIEM_TRA ❌ |
+
+## ~~BUG-VV-FN-NOTIF-01~~ [CLOSED] — UC62 đã fix sau khi test bằng fresh trigger trên MailHog reset
+
+> **Re-test:** 2026-05-11 14:22:59 R16 Phase 2 — ✅ PASS (Closed-verified). Method: DELETE MailHog (clear cache), clear browser session, login `cb_nv_tw_03` isolatedContext `r16p2_2026_05_11`, walk fresh VV-BTP-TW-20260511-001 từ DA_TIEP_NHAN → click [Kiểm tra hồ sơ] → click [Phân công] → pick `[TVV] hương tvv1` → submit. Ngay sau POST `/phan-cong` 201, MailHog có **2 mail mới**: (1) `qa-r14-dn004@example.test` Subj "Vụ việc đã được phân công - VV-BTP-TW-20260511-001" ← **DN nhận mail UC62 ✓** (2) `huongtvv@gmail.com` Subj "Vụ việc mới được phân công" ← TVV nhận mail UC61. Lặp lần 2 với NHT 07:25:30 → MailHog tăng thêm 2 mail (DN-r14 + nht_r12_bug003). 4 mails total cho 2 lần phân công, cả 2 lần đều có mail gửi DN ✓. **R15/R16 audit trước sai phương pháp** — chỉ observe pool cũ không trigger fresh transition nên thấy "0 mail DN" và mark Open partial. Method đúng phải clear cache + walk fresh + check mail ngay sau action. Tested: `cb_nv_tw_03`. Evidence: `r16-bug-phancong-revert-vv001-2026-05-11.png` + MailHog snapshot.
+
+> **Re-test:** 2026-05-11 13:50:00 R16 audit (cách R15 ~4h) — ⚠️ PARTIAL (vẫn Open). MailHog total 182 (R15: 177 → +5 mails trong 4h). Filter VV-related từ R15 09:19 → R16 13:50: **0 mail VV nào**. 1 mail "Sắp hết hạn xử lý" 03:30 → `cb_nv_tw_05` nhưng body content `câu hỏi {id}` thuộc module Hỏi đáp, không phải VV. 5 mail còn lại: 2 "Kích hoạt tài khoản" + 2 "Đặt lại mật khẩu" + 1 SLA Hỏi đáp. Pool R16 20 VV trải đủ state nhưng UC62 vẫn miss hoàn toàn phía DN. Tested: `cb_nv_tw_03`.
 
 > **Re-test:** 2026-05-11 09:19:00 R15 audit — ⚠️ PARTIAL FIX (vẫn Open). MailHog total 177 (vs 163 R14 sớm), 14 mail mới từ 2026-05-10 13:00 → 18:10 UTC. Search VV-related mail toàn pool: **chỉ 2 hit** — (1) `tvv.r11.a16@test.htpldn.vn` 02:08:00 R13, (2) `nht_tc001_btp_tw@htpldn.test` 13:21:35 R14 — **0 mail nào gửi đến DN** dù pool có 19 VV (4 DA_TIEP_NHAN + 9 DA_PHAN_CONG + 2 YEU_CAU_BO_SUNG + 1 TU_CHOI + 1 HOAN_THANH + 2 DA_DANH_GIA) trải đủ state transition. UC62 §Outputs dev fix chưa deliver phía DN — chỉ TVV/NHT mail (UC61 partial) work. Tested: `cb_nv_tw_03`.
 
@@ -406,6 +486,8 @@ VV-BTP-TW-20260509-007 created at 13:17:00 GMT+7 (06:17 UTC) — sau timestamp e
 ---
 
 ## BUG-VV-FN-LICHSU-01 — LICH_SU_VU_VIEC ghi chỉ 2 enum, miss ~16 enum spec
+
+> **Re-test:** 2026-05-11 13:50:00 R16 audit (cách R15 ~4h) — ⚠️ PARTIAL (vẫn Open, +1 enum mới `DANH_GIA` từ R15 C5-1 success). Query `/lich-su` cho 5 VV pool: (1) **VV-510-002 (DA_DANH_GIA, R15 evaluated)** 10 entries / **10 distinct enum**: `CREATE, KIEM_TRA, PHAN_CONG, XAC_NHAN_PHAN_CONG, TRINH_PD, PHE_DUYET, HOAN_THANH, CONG_KHAI, HUY_CONG_KHAI, DANH_GIA` ← **`DANH_GIA` enum mới xuất hiện sau R15 POST `/danh-gia` 201 success** ✓ (R15 LICHSU-01 nhận xét "không ghi DANH_GIA" đã được dev fix). (2) **VV-511-001/002 fresh today** 1 entry: `TAO_VV` ← BE giữ rename mới. (3) **VV-510-003 (YEU_CAU_BO_SUNG)** vẫn `TAO_VV, KIEM_TRA, KIEM_TRA` — YCBS chưa có enum riêng. (4) **VV-510-001 (DA_PHAN_CONG)** 3 entries: `CREATE, KIEM_TRA, PHAN_CONG` — VV legacy giữ `CREATE`. Cumulative pool coverage R16: **11/18 enum ≈ 61% (+5% so R15)**: `CREATE + TAO_VV + KIEM_TRA + PHAN_CONG + XAC_NHAN_PHAN_CONG + TRINH_PD + PHE_DUYET + HOAN_THANH + CONG_KHAI + HUY_CONG_KHAI + DANH_GIA`. Vẫn miss 7 enum: `TIEP_NHAN, CAP_NHAT_KQ, YEU_CAU_BO_SUNG, TU_CHOI/TU_CHOI_DUYET, PHAN_CONG_CA_NHAN/TO_CHUC, MO_LAI`. BE mix old/new naming (`CREATE` cho VV cũ + `TAO_VV` cho VV mới). Tested: `cb_nv_tw_03`.
 
 > **Re-test:** 2026-05-11 09:19:00 R15 audit — ⚠️ PARTIAL FIX (vẫn Open, BE retro-rewrite UPDATE → specific enum). Query lại API `/lich-su` cho 3 VV trong pool: (1) **VV-002 (HOAN_THANH)** 9 entries / **9 distinct enum**: `CREATE, KIEM_TRA, PHAN_CONG, XAC_NHAN_PHAN_CONG, TRINH_PD, PHE_DUYET, HOAN_THANH, CONG_KHAI, HUY_CONG_KHAI` — **so R14 20:03 (7 distinct: CREATE/UPDATE×3/TRINH_PHE_DUYET/PHE_DUYET/HOAN_THANH/CONG_KHAI/HUY_CONG_KHAI), BE đã retro-replace `UPDATE×3` thành `KIEM_TRA, PHAN_CONG, XAC_NHAN_PHAN_CONG` cụ thể** ← improvement. (2) **VV-001 fresh today (DA_TIEP_NHAN)** 1 entry: `TAO_VV` ← BE đã rename `CREATE` → `TAO_VV` cho VV mới (legacy VV vẫn `CREATE`). (3) **VV-003 (YEU_CAU_BO_SUNG)** 3 entries / 2 distinct: `TAO_VV, KIEM_TRA, KIEM_TRA` — YCBS vẫn ghi qua `KIEM_TRA` enum, **không có `YEU_CAU_BO_SUNG` enum riêng**. Coverage cumulative pool: **10/18 enum ≈ 56%** (TAO_VV + CREATE legacy + KIEM_TRA + PHAN_CONG + XAC_NHAN_PHAN_CONG + TRINH_PD + PHE_DUYET + HOAN_THANH + CONG_KHAI + HUY_CONG_KHAI). Vẫn miss: `TIEP_NHAN, CAP_NHAT_KQ, DANH_GIA, YEU_CAU_BO_SUNG, TU_CHOI/TU_CHOI_DUYET, PHAN_CONG_CA_NHAN/TO_CHUC, MO_LAI` (chỉ VV-STP-AG-001 R14 có MO_LAI — không trong pool query hôm nay). Tested account: `cb_nv_tw_03`.
 

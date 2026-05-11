@@ -6,7 +6,7 @@
 | **SRS Reference** | [srs-fr-14-hop-dong-tv.md](../../../../input/srs-v3/srs-fr-14-hop-dong-tv.md) — FR-X.3-01 UC163 §2 line 60-150 |
 | **UC Coverage** | UC163 (chỉ sub-resource — không có menu độc lập per spec v2.1) |
 | **Người test** | QA Automation (Claude Code + Chrome DevTools MCP) |
-| **Ngày** | 2026-05-10 09:14:00 → 09:30:00 (lần đầu) · 2026-05-10 10:54:00 → 11:15:00 (Re-test #1 + bổ sung HDTV-019/028) · 2026-05-10 12:13:00 → 12:18:00 (Re-test #2) · 2026-05-10 21:34:00 → 21:50:00 (Re-test #3 — dev fix lần 2, bộ acc `_07`) |
+| **Ngày** | 2026-05-10 09:14:00 → 09:30:00 (lần đầu) · 2026-05-10 10:54:00 → 11:15:00 (Re-test #1 + bổ sung HDTV-019/028) · 2026-05-10 12:13:00 → 12:18:00 (Re-test #2) · 2026-05-10 21:34:00 → 21:50:00 (Re-test #3 — dev fix lần 2, bộ acc `_07`) · 2026-05-11 14:00:00 → 14:35:00 (Re-test #4 UI-only qtht_07 — 4 spec-gap mới) · 2026-05-11 15:25:00 → 15:40:00 (Re-test #5 UI-only multi-role — 6 TC + 2 bug permission mới) |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **OTP Bypass** | `666666` |
 | **Test Method** | Hybrid (UI MCP + API supporting) |
@@ -75,6 +75,69 @@
 | BUG-HDTV-030 | (mới R3) | ❌ **Open Major** | FE call `/api/v1/tu-van-viens?pageSize=200` → 422 (BE max 100) → dropdown empty trên UI |
 
 **Acc:** `cb_nv_tw_07` (CB_NV_TW) cho CRUD; `qtht_07` (QTHT) cho permission gate. Seed POST HDTV-20260510-0001 (id `9054a0a9-...`) với `tuVanVienId=978354d7-...` (TVV-BTP-TW-0035 HOAT_DONG). Các TC ảnh hưởng: HDTV-018 / HDTV-020 / HDTV-021 / HDTV-026 / HDTV-029 / HDTV-031 — kết quả update trong bảng §2.
+
+### R5 (LATEST) — 2026-05-11 15:25:00 → 15:40:00 — Re-test #5 UI-only multi-role (6 TC + 2 bug mới)
+
+**Scope:** Chạy lại 6 TC qua UI thuần (KO API direct) với 4 role: `qtht_07` (QTHT), `cb_nv_bn_07` (CB_NV_BN cấp TW BKH), `cb_nv_dp_07` (CB_NV_DP cấp ĐP AG), `9999999990` (DN). Phát hiện 2 bug mới UX/Permission.
+
+| TC ID | Tên TC ngắn | Status R5 | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| HDTV-014 | Reversed RangePicker | ✅ Đạt (calendar UI) + ⚠️ Sai spec (text input) | R5-P2 | Calendar disable đúng. Text input silent drop → BUG-035 Minor |
+| HDTV-017 | Search + filter + page-size | ✅ Đạt | R5-P2 | Search HDTV-20260511 trả 4 records. Tab filter + page-size OK |
+| HDTV-019 | Highlight ≤30 ngày | ✅ Đạt | R5-P2 | HDTV-20260511-0002 (~21 ngày) render rgb(255,77,79) đỏ + bold 600 |
+| HDTV-022 | NHT sidebar | ✅ Đạt (R5b với nht_btp_tw_audit_r30) | R5-P2 | Sidebar 5 menu không HDTV + direct URL bị FE guard chặn |
+| HDTV-023 | DN sidebar + URL access | ✅ Đạt | R5-P2 | DN 9999999990 sidebar 4 menu không HDTV + direct URL redirect /dashboard |
+| HDTV-024 | CB scope filter | ✅ Đạt + ⚠️ permission anomaly | R5-P2 | CB_BN_BKH 0 records, CB_DP_AG 1 record AG-scope. CB có btn Create / QTHT không → BUG-036 Major |
+| HDTV-028 | TVV detail HD section | ⚠️ Sai spec (confirm BUG-032) | R5-P2 | TVV-BTP-TW-0035 detail 5 tab + Lịch sử không có HD section |
+
+**Bug mới R5:**
+- **BUG-HDTV-035 Minor (P3) UI/UX** — Filter RangePicker text input cho phép reversed range (Từ > Đến), FE silently drop Đến ngày trên submit không hiển thị validation error. Calendar UI có disable đúng (PASS phần này). SRS ref: SCR-X3-01 line 248 + UX best-practice.
+- **BUG-HDTV-036 Major (P1) Permission + Spec conflict** — CB_NV_BN_07 + CB_NV_DP_07 có button "+ Tạo hợp đồng" trên `/hop-dong-tv/danh-sach`. QTHT_07 KHÔNG có. Click → mở `/hop-dong-tv/tao-moi` standalone create page. Trái spec v3.5 line 660 M-01 + spec v3 line 241 "chỉ truy cập qua VV/TVV modal/drawer". Permission inversion + standalone CRUD route tồn tại trái spec.
+
+### Bảng trạng thái TC (snapshot R5 — LATEST 2026-05-11 15:40:00)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| HDTV-013 | Validation field bắt buộc | ✅ Đạt | R1 | API trả 400 đúng schema |
+| HDTV-014 | Reversed RangePicker | ✅ Đạt | R1+R5 | Calendar OK + text input silent drop minor |
+| HDTV-015 | Số tiền < 0 | ✅ Đạt | R1 | API trả ERR-VAL |
+| HDTV-016 | Tổng thanh toán = giá trị | ✅ Đạt | R1 | BR-VAL-HDTV-03 enforced |
+| HDTV-017 | Search + filter + pagination | ✅ Đạt | R5 | Tab + search + page-size OK |
+| HDTV-018 | Tiến độ TT 50% | ✅ Đạt | R3 (Closed) | Form Edit switch + tienDoTt=50 |
+| HDTV-019 | Highlight ≤30 ngày | ✅ Đạt | R1+R5 | Đỏ rgb(255,77,79) |
+| HDTV-020 | Audit log nhật ký | ⚠️ Sai spec | R1 | BE✅ /UI tab thiếu |
+| HDTV-021 | QTHT permission gate | ✅ Đạt | R3 (Closed) | POST/PATCH/DELETE đều 403 |
+| HDTV-022 | NHT sidebar | ✅ Đạt | R5b | nht_btp_tw_audit_r30: sidebar không HDTV + URL guard chặn |
+| HDTV-023 | DN sidebar + URL | ✅ Đạt | R1+R5 | Sidebar clean + redirect |
+| HDTV-024 | CB scope filter | ✅ Đạt | R1+R5 | BKH 0, AG 1; permission anomaly riêng |
+| HDTV-025 | Hard delete orphan | ✅ Đạt | R1 | DELETE 204 |
+| HDTV-026 | N:N VV link counter | ✅ Đạt | R3 (Closed) | soVuViecLienKet persist |
+| HDTV-027 | VV detail accordion | ⚠️ Sai spec | R4 | BUG-031 camelCase mismatch |
+| HDTV-028 | TVV detail HD section | ⚠️ Sai spec | R5 | BUG-032 confirm Open |
+| HDTV-029 | Form Tạo TVV/CG picker | ✅ Đạt | R3 (Closed) | Radio + Combobox + CHECK |
+| HDTV-030 | Edit form pageSize | ❌ Lỗi | R3 | BUG-030 422 dropdown empty |
+| HDTV-031 | VV liên kết accordion contract | ❌ Lỗi | R4 | BUG-031 FE camelCase ≠ BE snake_case |
+| HDTV-032 | TVV-HD section thiếu | ❌ Lỗi | R4+R5 | BUG-032 confirm |
+| HDTV-033 | Entry point modal/drawer | ❌ Lỗi | R4 | BUG-033 không có button |
+| HDTV-034 | Standalone route conflict | ⚠️ Sai spec | R4 | BUG-034 cần BA confirm |
+| HDTV-035 | RangePicker silent drop | ❌ Lỗi | R5 | BUG-035 Minor UX |
+| HDTV-036 | Permission inversion CB/QTHT | ❌ Lỗi | R5 | BUG-036 Major |
+| **Tổng** | **24 TC tracked** | ✅15 · ⚠️5 · ❌5 · 🚫0 | | R5b: HDTV-022 ✅ với nht_btp_tw_audit_r30. 8 TC nhóm HDTV-001..012 vẫn defer per SRS v2.1 out-of-scope |
+
+### Bảng TC chưa chạy được — cần làm gì để chạy (R5)
+
+Hiện tại còn **8 TC** chưa Đạt clean — chia 3 nhóm: 7 chờ dev fix · 1 chờ BA confirm spec.
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| HDTV-020 | Tab "Nhật ký" thiếu trên UI (BE API 200 OK với 5 events) | FE add tab "Nhật ký" trên `/hop-dong-tv/{id}` detail page | Dev FE |
+| HDTV-030 | FE call `pageSize=200` vượt BE max 100 → dropdown TVV/CG empty | FE đổi pageSize=100 hoặc BE nâng max | Dev FE |
+| HDTV-031 | FE param `vuViecId=` camelCase, BE accept `vu_viec_id=` snake_case → 0 records | FE đổi sang snake_case hoặc BE accept cả 2 | Dev FE |
+| HDTV-032 | TVV detail tab Lịch sử thiếu sub-section HD (verified 2 TVV, FE không gọi endpoint HD) | FE implement section HD trong tab Lịch sử hỗ trợ (call `/tu-van-viens/{id}/hop-dong-tu-vans`) | Dev FE |
+| HDTV-033 | VV detail accordion thiếu button [+Tạo/Liên kết HĐ] | FE implement modal/drawer Create HDTV từ VV detail | Dev FE |
+| HDTV-034 | Standalone list route render dù spec nói chỉ qua VV/TVV | BA confirm: giữ ẩn cho admin hay xóa hoàn toàn | BA |
+| HDTV-035 | RangePicker text input silent drop Đến ngày | FE add inline validation hoặc swap auto khi reversed | Dev FE |
+| HDTV-036 | CB có button Create + standalone create page, QTHT không | BE đổi permission map + FE remove button "+ Tạo HD" trên standalone list | Dev BE + Dev FE |
 
 > **Lưu ý:** Round cũ (lần đầu + Re-test #1 + #2) archive xuống cuối file dưới `# Lifecycle archive`.
 

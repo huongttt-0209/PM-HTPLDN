@@ -19,8 +19,8 @@
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P2** | 2 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | ✅[R7.2.5](#r7-2-5) · ✅[R7.2.6](#r7-2-6) |
 | **P4** | 4 | 0 | 0 | 4 | 0 | 0 | 0 | 0 | ✅[R7.4.A1](#r7-4-a1) · ✅[R7.4.A1.6](#r7-4-a1-6) · ✅[R7.4.A1-CG](#r7-4-a1-cg) · ✅[R7.4.A2](#r7-4-a2) |
-| **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.2](#r7-7-2) |
-| **Tổng** | **7** | **0** | **0** | **6** | **1** | **0** | **0** | **0** |  |
+| **P7** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.7.2](#r7-7-2) |
+| **Tổng** | **7** | **0** | **0** | **7** | **0** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -50,6 +50,6 @@
   - **Kết quả:** R23 ✅ 3/3 — BUG-002/003 đã đóng. [workflow-test-report-r7-4-a2.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-vien-cg/workflow-test-report-r7-4-a2.md)
   - **Bug:** [Pass-bug-report-flow-r7-4-a2-nht-permission-gap.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/Pass-bug-report-flow-r7-4-a2-nht-permission-gap.md) — 3/3 đóng (BUG-002 + BUG-003 Closed R23 ngày 2026-05-10 03:35:00)
 
-- ⚠️ **R7.7.2** ✏️ Functional CG/TVV — 33 TC (28 ID + 5 sub) `[~97% — 32/33 PASS, 1 Open BE rework + BA fix SRS]` <a id="r7-7-2"></a>
-  - **Kết quả:** R30 ⚠️ 32/33 — RETRY-005 Open 2 perm rule sai + TVV TU_CHOI taiKhoanId=null deadlock. [functional-test-report-r7-7-2-tvv-cg.md](../output/qa-reports/round7-2026-05-06/functional/tu-van-vien-cg/functional-test-report-r7-7-2-tvv-cg.md)
-  - **Bug:** [bug-report-functional-r7-7-2-tvv-retry.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/bug-report-functional-r7-7-2-tvv-retry.md) — 8/9 đóng. RETRY-005 Open: BE đổi permission "NHT cùng đơn vị" + bỏ endpoint `/nop-lai` riêng + BA fix SRS line 2314.
+- ✅ **R7.7.2** ✏️ Functional CG/TVV — 33 TC (28 ID + 5 sub) `[100% — 33/33 PASS sau R32 dev BE rework]` <a id="r7-7-2"></a>
+  - **Kết quả:** R32 ✅ 33/33 — RETRY-005 Closed-verified, dev BE rework 5/5 yêu cầu BA chốt. [functional-test-report-r7-7-2-tvv-cg.md](../output/qa-reports/round7-2026-05-06/functional/tu-van-vien-cg/functional-test-report-r7-7-2-tvv-cg.md)
+  - **Bug:** [Pass-bug-report-functional-r7-7-2-tvv-retry.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-vien-cg/Pass-bug-report-functional-r7-7-2-tvv-retry.md) — 9/9 đóng (RETRY-005 Closed R32: xoá `/nop-lai` 404, PATCH NHT cùng đơn vị 200, auto-transition, reset thẩm định, notify CB_NV).

@@ -1,13 +1,16 @@
-# Bug Report — Tư vấn chuyên sâu (R16 — Phase 2 nhóm B + FE)
+# Bug Report — Tư vấn chuyên sâu (R16 → R17 → R18 → R19 — Phase 2 nhóm B + FE)
 
 | Thông tin | Giá trị |
 |-----------|---------|
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000 |
 | **Người test** | QA Automation via Claude Code |
-| **Ngày** | 2026-05-10 20:30:00 |
+| **Ngày tạo (R16)** | 2026-05-10 20:30:00 |
+| **Cập nhật R17** | 2026-05-11 02:18:00 — 3/7 bug Closed (BUG-002/003/007) + log BUG-008 regression |
+| **Cập nhật R18** | 2026-05-11 06:51:00 — BUG-005 verdict correction (BE OK / FE NOT FIXED) |
+| **Cập nhật R19 (LATEST)** | 2026-05-11 — Re-verify sau clear cache với acc `_06` + NHT |
 | **Loại test** | Functional (R7.7.5 deep review nhóm B + FE) |
-| **Round** | R16 |
+| **Round** | R16 → R17 → R18 → R19 |
 | **Tài liệu tham chiếu** | [`srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md`](../../../../../input/srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md), [`functional-test-report-r7-7-5-tvcs.md`](../../functional/tu-van-chuyen-sau/functional-test-report-r7-7-5-tvcs.md) |
 
 ---
@@ -45,11 +48,30 @@ Phát hiện **7** lỗi (5 BE + 2 FE) trong R16 deep review của R7.7.5 sau kh
 | BUG-002 | ✅ FIXED | GET `?congKhai=true&pageSize=20` (cb_nv_tw_06) | 2 records, `allCongKhaiTrue=true` |
 | BUG-003 | ✅ FIXED (full) | POST `/trao-doi-nhap` với `huongcg` (CG) trên TVCS-20260507-0013 DANG_TU_VAN | 200 OK + trả về TRAO_DOI_NHAP entity (id, noiDung, version) + GET sau đó cũng 200. Auto-save endpoint hoạt động đúng. Negative: PUT lần 2 → 409 ERR-STATE-LOCK-409 optimistic locking đúng spec. |
 | BUG-004 | ❌ NOT FIXED | Login `nht_01` → expand "Quản lý tư vấn" sidebar | Submenu "Tư vấn chuyên sâu" vẫn render — vi phạm matrix NHT |
-| BUG-005 | ❌ NOT FIXED | UI detail TVCS-20260510-0002 DA_DUYET (cb_nv_tw_06) + PATCH `/cong-khai` API | UI thiếu button [Công khai] / [Hủy công khai] / panel cong-khai. BE PATCH `/cong-khai`, `/huy-cong-khai` đều 404. BE schema có field `congKhai`/`moTaCongKhai`/`fileDinhKemCongKhai`/`ngayCongKhaiCong` (mới thêm) nhưng workflow endpoint + UI chưa wire. |
+| BUG-005 | ⚠️ PARTIAL (BE OK / FE NOT FIXED) | R18 re-probe: POST `/cong-khai` với version → 422 ERR-VAL-SYS-00-01 (validation missing `moTaCongKhai`) — **endpoint TỒN TẠI**. R17 nhầm PATCH method 404. UI side R17 verify còn thiếu button [Công khai] / [Hủy công khai] + panel 5 field — vẫn NOT FIXED. → BE side đã pass workflow (TV-046/047 R16 PASS), chỉ FE UI thiếu wire. |
 | BUG-006 | ❌ NOT FIXED | GET detail TVCS-20260510-0002 keys (cb_nv_tw_06) | Detail keys không chứa `hopDongTvId`/`hopDongTuVanId` (column FK vẫn missing) |
 | BUG-007 | ✅ FIXED (cross-scope leak) / ❌ regression BUG-008 | GET `/doanh-nghieps/{id}` với (a) `nht_01` cross-scope + (b) `nht_tc001_btp_tw` happy path | (a) Cross-scope DN-006 → 403 đúng spec ✅. (b) Happy DN-003 (NHT có VV phân công) → 403 SAI SPEC ❌. NotebookLM 2-source verify: BE BẮT BUỘC row-level filter BR-AUTH-10, KHÔNG blanket-deny. Regression log mới = **BUG-008**. Original cross-scope leak đã closed, fix approach sai → BUG-008 mở. |
 
 > **Re-test:** 2026-05-11 02:18-02:23 R17 — 3/7 bug Closed. Acc dùng: `cb_nv_tw_06` (BTP·TW, CB_NV_TW) cho BE probes + `nht_01` (STP-AG, NHT) cho FE menu + HSPL detail bypass.
+
+### Bug Re-verify R19 — 2026-05-11 14:27:00 (sau clear cache + isolated context r19_clean)
+
+> **Mục đích R19:** User yêu cầu clear cache (logout + localStorage.clear() + sessionStorage.clear() + page close + isolatedContext mới) trước khi verify lại để loại bỏ false-PASS do session sticky / cache stale.
+>
+> **Phương pháp:** Logout → localStorage empty → cookie empty → close page cũ → new isolatedContext `r19_clean` → fresh login `cb_nv_tw_06` (BE) + `nht_tc001_btp_tw` (FE/permission).
+
+| Bug ID | Verdict R19 | Bằng chứng (HH:MM:SS sau clear cache) | Δ so với R17/R18 |
+|---|---|---|---|
+| BUG-001 | ❌ NOT FIXED | 14:27:13 — 5/5 TLPL endpoint candidates → 404 ERR-SYS-00-04-01 ("Cannot GET ...") | Không đổi |
+| ~~BUG-002~~ | ✅ FIXED (giữ) | R17 đã verify, R19 skip duplicate | Không đổi |
+| ~~BUG-003~~ | ✅ FIXED (giữ) | R17 đã verify, R19 skip duplicate | Không đổi |
+| BUG-004 | ❌ NOT FIXED | Login fresh `nht_tc001_btp_tw` → click "Quản lý tư vấn" sidebar → submenu "Tư vấn chuyên sâu" hiển thị (uid 209_0 trong snapshot). Screenshot: `image/r19-bug-004-nht-menu-tvcs.png` | Không đổi (cùng acc khác `nht_01` cũng leak menu) |
+| BUG-005 | ⚠️ PARTIAL (BE OK / FE NOT FIXED) | 14:27:14 — POST `/cong-khai` với version=13 → 422 ERR-VAL-SYS-00-01 (validation `moTaCongKhai` required) → BE endpoint TỒN TẠI. FE UI chưa wire button [Công khai]/[Hủy công khai] (R17 verified) | Không đổi (cùng kết quả R18 verdict correction) |
+| BUG-006 | ❌ NOT FIXED | 14:27:14 — GET detail TVCS-20260510-0002 → keys không chứa `hopDongTvId`/`hopDongTuVanId`/`hdTvId`/`hopDongTuVan` (column FK vẫn missing). 50 keys liệt kê đầy đủ trong evidence log | Không đổi |
+| ~~BUG-007~~ | ✅ FIXED (giữ — original cross-scope leak fix) | R17 đã verify, R19 skip | Không đổi |
+| BUG-008 | ❌ NOT FIXED | 14:28:41 — `nht_tc001_btp_tw` có VV-BTP-TW-20260510-002 phân công với DN-003 (DNTN Hoàng Gia AG). GET `/api/v1/doanh-nghieps/e0000000-0000-4000-8000-000000000003` → **403 ERR-AUTH-DN-00-01** "Role không được phép truy cập endpoint CMS này" (blanket-deny). Trái lại GET `/api/v1/ho-so-phap-ly-dns?doanhNghiepId={DN-003}` → 200 với row-level filter đúng → BE inconsistent giữa 2 endpoint cùng entity. Screenshot: `image/r19-bug-008-nht-happy-403.png` | Không đổi (regression vẫn mở) |
+
+> **Re-test R19:** 2026-05-11 14:25:00-14:30:00 — **5 Open bugs đều CONFIRMED NOT FIXED sau clear cache hoàn toàn.** Acc dùng: `cb_nv_tw_06` (BTP·TW, CB_NV_TW) cho BE probes + `nht_tc001_btp_tw` (BTP·TW, NHT) cho FE menu + happy path BR-AUTH-10. Cache state pre-test: localStorage=0 entries, cookie="", new isolatedContext `r19_clean`. **Dev chưa push fix mới giữa R17 và R19 (~12h gap).**
 
 > **Chú thích Type:** `Workflow` = chuyển trạng thái, `Data` = toàn vẹn dữ liệu / filter.
 > **Chú thích Severity:** `Major` = tính năng quan trọng lỗi, có workaround (tạm thời CG ghi tay vào nội dung tư vấn thay vì đính kèm TLPL; DN không có cổng public xem TVCS công khai).
@@ -579,4 +601,4 @@ Answer: "BE **BẮT BUỘC phải apply row-level filter (lọc 2 lớp)** đố
 
 ---
 
-*Bug report generated: 2026-05-10 20:30:00 | QA Automation via Claude Code*
+*Bug report generated: 2026-05-10 20:30:00 (R16) | Last updated: 2026-05-11 (R19 — clear cache re-verify) | QA Automation via Claude Code*

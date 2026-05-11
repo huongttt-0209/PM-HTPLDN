@@ -5,9 +5,9 @@
 | **Dự án** | PM-HTPLDN — Phần mềm Hỗ trợ Pháp lý Doanh nghiệp |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Chrome DevTools MCP) |
-| **Ngày** | 2026-05-08 (R8 log + R9 update) |
+| **Ngày** | 2026-05-08 (R8 log) → 2026-05-11 14:06:00 (R14 re-verify last update) |
 | **Loại test** | Functional |
-| **Round** | R8 (Kho Q&A) → R9 (+2 bug mới TVN-004/005) → R10 (2026-05-09 17:18:00 — TVN-004 Closed) → R11 (2026-05-10 19:04:57 — BUG-001 reclassify, +1 bug TVN-007) → **R12 (2026-05-10 20:07:00 — verify dev fix: 3 Closed Major (002 Công khai/006 Số gợi ý/003 dropdown), 0 còn Critical, 3 Open (001 data drift, 005 audit naming TVN, 007 auto-import))** |
+| **Round** | R8 (Kho Q&A) → R9 (+2 bug mới TVN-004/005) → R10 (2026-05-09 17:18:00 — TVN-004 Closed) → R11 (2026-05-10 19:04:57 — BUG-001 reclassify, +1 bug TVN-007) → R12 (2026-05-10 20:07:00 — verify dev fix: 3 Closed Major) → **R14 (2026-05-11 14:06:00 — UI-only re-audit `_03` accounts: 3 bug Open re-verified — 001 confirmed data drift, 005 PARTIAL improved 9/10 actions, 007 PARTIAL forward-only)** |
 | **Tài liệu tham chiếu** | [functional-test-report-r7-7-11-tvn.md](../../functional/tu-van-nhanh/functional-test-report-r7-7-11-tvn.md) · [srs-fr-13-tv-nhanh.md](../../../../../input/srs-v3/srs-fr-13-tv-nhanh.md) · [02-thu-tu-module.md §⑫ FR-13](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) |
 
 ---
@@ -24,7 +24,14 @@ Phát hiện **7** lỗi có SRS reference cụ thể trong quá trình test R7.
 | R9 (cumulative) | 5 | 1 | 2 | 0 | 2 | 0 | 0 |
 | R10 (cumulative) | 6 | 1 | 2 | 0 | 3 | 0 | 1 (TVN-004) |
 | R11 (cumulative) | 7 | 0 | 3 | 0 | 3 | 0 | 1 (TVN-004) |
-| **R12 (cumulative)** | **7** | **0** | **2** | **0** | **2** | **0** | **4 (TVN-002/003/004/006)** |
+| R12 (cumulative) | 7 | 0 | 2 | 0 | 2 | 0 | 4 (TVN-002/003/004/006) |
+| **R14 (cumulative)** | **7** | **0** | **2** | **0** | **2** | **0** | **4 (TVN-002/003/004/006)** — 3 Open giữ status sau re-verify |
+
+### R14 changes (2026-05-11 14:06:00 — UI-only re-audit `_03` accounts)
+
+- 🚫 **BUG-FUNC-TVN-001 confirmed data drift account** — Re-test với `cb_nv_tw_03` (single CB_NV_TW pure per users.csv) → modal Chi tiết KCH KHÔNG render button [Duyệt]/[Từ chối]; chỉ NV view + Sửa permission ✅ BE guard works. `cb_pd_tw_03` (single CB_PD_TW pure) → render đúng 2 button [Duyệt]/[Từ chối] + approve `QA-20260508-0004` 200 → DA_DUYET ✅. Bug Open giữ nguyên — root cause là drift trên `cb_nv_tw_01` (DB gán 3 vai trò), chưa fix DB user_roles.
+- ⚠️ **BUG-FUNC-TVN-005 PARTIAL improved** — Re-verify audit log sau R14 action chain: APPROVE_KHOCAUHOI (Test 2) + GUI_TRA_LOI_TVNHANH/TRA_LOI (Test 3) + CONG_KHAI (Test 5) + UPDATE_KHOCAUHOI + DELETE_KHOCAUHOI. Hiện 9/10 action chuẩn — chỉ `CREATE` generic trên /cms-create chưa rename. Bug giữ Minor partial.
+- 🚫 **BUG-FUNC-TVN-007 PARTIAL forward-only** — Verify new HOI_DAP `HD-20260510-006` DA_DUYET → trigger TU_DONG OK ✅; old HOI_DAP `HD-20260509-010` DA_DUYET trước fix → vẫn 0 KHO_CAU_HOI TU_DONG (cần BE back-fill batch). Bug giữ Major Open.
 
 ### R12 changes (2026-05-10 20:07:00 — verify dev fix)
 - ✅ **BUG-FUNC-TVN-002 Closed-verified** — FR-X.2-06 deploy đầy đủ. Schema KHO_CAU_HOI có 4 field congKhai/thoiGianDangTai/moTaCongKhai/fileDinhKemCongKhai. POST `/cong-khai` 200 + state DA_DUYET → CONG_KHAI + thoiGianDangTai auto-fill. POST `/cong-khai` trên CHO_DUYET → 409 ERR-BIZ-KCH-01 ✅ BR-PUBLIC-01 enforce. POST `/huy-cong-khai` 200 ✅ BR-PUBLIC-02. Filter `?trangThai=CONG_KHAI` → 1 record ✅.
@@ -46,17 +53,24 @@ Phát hiện **7** lỗi có SRS reference cụ thể trong quá trình test R7.
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-FUNC-TVN-001 | **Major** (R11 reclassify) | **P1** | **Data setup** | TVN-010, 011, 012 | `input/users.csv` schema vai trò + `02-thu-tu-module.md §⑫ FR-13 line 784-786` | Account `cb_nv_tw_01` DB gán 3 vai trò `[CB_PD_TW, CB_NV_TW, QA_VT_DEL_TEST_R7]` thay vì single CB_NV_TW per users.csv → bypass guard. BE permission system OK với account pure. | Open |
+| BUG-FUNC-TVN-001 | **Major** (R11 reclassify) | **P1** | **Data setup** | TVN-010, 011, 012 | `input/users.csv` schema vai trò + `02-thu-tu-module.md §⑫ FR-13 line 784-786` | Account `cb_nv_tw_01` DB gán 3 vai trò `[CB_PD_TW, CB_NV_TW, QA_VT_DEL_TEST_R7]` thay vì single CB_NV_TW per users.csv → bypass guard. BE permission system OK với account pure. | Open (R14 re-verified) |
+| **BUG-FUNC-TVN-005 (R9)** | Minor | P2 | Data | TVN-039 | `srs-fr-13 FR-X.2-01 §Postconditions` + `BR-DATA-05` | Audit log action naming inconsistent — TVN module còn `TRA_LOI` (vs GUI_TRA_LOI_TVNHANH) + `CREATE` generic trên /cms-create | Open (R14 PARTIAL 9/10 chuẩn) |
+| **BUG-FUNC-TVN-007 (R11)** | **Major** | **P1** | **Cross-module** | **TVN-014, 037** | `srs-fr-13 BR-FLOW-10` + `7.13-tu-van-nhanh.md line 105+128+151` | **Auto-import HOI_DAP DA_DUYET → KHO_CAU_HOI nguồn TU_DONG không trigger. HD-20260509-010 DA_DUYET → 0 record TU_DONG.** | Open (R14 PARTIAL forward-only) |
 | ~~BUG-FUNC-TVN-002~~ | Major | P1 | Workflow | TVN-040, 041, 042, 043, 044 | `srs-fr-13 v3.5 FR-X.2-06 §Inputs/Processing line 411-457` + `BR-PUBLIC-01/02/03` + `BR-FLOW-05` | ~~FR-X.2-06 (Công khai/Hủy công khai) chưa deploy — schema thiếu 4 field, endpoint 404~~ | **Closed** (R12) |
 | ~~BUG-FUNC-TVN-003~~ | Minor | P2 | UI/UX | TVN-001 | `02-thu-tu-module.md §⑫ FR-13 line 766` + `srs-fr-13 SCR-X2-01 row 4` | ~~Filter trạng thái dropdown thiếu trên UI list — chỉ có Lĩnh vực + Nguồn + dates~~ | **Closed** (R12) |
 | ~~BUG-FUNC-TVN-004~~ (R9) | Major | P1 | UI/UX | TVN-017, 018 | `srs-fr-13 FR-X.2-02 §Processing 3` + `SCR-X2-03 row 7-8` | ~~Top 5 gợi ý không render trên detail phiên DA_GOI_Y~~ | **Closed** (R10 verify) |
-| **BUG-FUNC-TVN-005 (R9)** | Minor | P2 | Data | TVN-039 | `srs-fr-13 FR-X.2-01 §Postconditions` + `BR-DATA-05` | Audit log action naming inconsistent (TU_CHOI vs REJECT_KHOCAUHOI; UPDATE vs TOGGLE_HIEU_LUC) | **Open** |
 | ~~**BUG-FUNC-TVN-006 (R10)**~~ | **Minor** | **P2** | **UI/UX** | **TVN-016** | `srs-fr-13 SCR-X2-03 row 6 (cột Số gợi ý)` + `FR-X.2-02 §Outputs` | ~~**Cột "Số gợi ý" list = 0 cho 100% phiên dù `goiYTraLoi.length=2` — FE render bug**~~ | **Closed** (R12) |
-| **BUG-FUNC-TVN-007 (R11)** | **Major** | **P1** | **Cross-module** | **TVN-014, 037** | `srs-fr-13 BR-FLOW-10` + `7.13-tu-van-nhanh.md line 105+128+151` | **Auto-import HOI_DAP DA_DUYET → KHO_CAU_HOI nguồn TU_DONG không trigger. HD-20260509-010 DA_DUYET → 0 record TU_DONG.** | **Open** |
 
 ---
 
 ## BUG-FUNC-TVN-001 — Account `cb_nv_tw_01` DB role data drift (R11 reclassified Critical → Major)
+
+> **Re-test:** 2026-05-11 14:06:00 R14 — 🚫 Open (data drift còn). UI re-verify với 2 account pure `_03`:
+> - `cb_nv_tw_03` (single CB_NV_TW) mở modal Chi tiết `QA-20260508-0004` CHO_DUYET → **không render button [Duyệt]/[Từ chối]** (chỉ NV permission). ✅ BE guard works ở layer UI/BE.
+> - `cb_pd_tw_03` (single CB_PD_TW) mở cùng modal → render đủ button [Duyệt]/[Từ chối] → click [Duyệt] + confirm → 200, state CHO_DUYET → DA_DUYET, Hiệu lực Không → Có, Ngày duyệt 11/05/2026 14:05:00. ✅
+> - `cb_nv_tw_01` chưa fix — DB `user_roles` vẫn gán 3 vai trò. Cần dev DBA xóa CB_PD_TW + QA_VT_DEL_TEST_R7 khỏi user_roles cho user này.
+>
+> Evidence: `image/r14-ui-test2-pd03-detail-duyet-button.png` + `image/r14-ui-test2-pd03-da-duyet-state.png`.
 
 > **R11 update (2026-05-10 19:04:57):** Verify với account pure single-role:
 > - `cb_nv_tw_03` (single CB_NV_TW per users.csv) → POST `/approve` 403 ERR-PERM-SYS-00-01 ✅ BE guard OK
@@ -346,6 +360,8 @@ DA_GOI_Y phiên có goiYTraLoi=[]: 1/10 (TVN-QA-20260427-0017 — đúng hiển 
 
 ## BUG-FUNC-TVN-005 (R9) — Audit log action naming inconsistent
 
+> **Re-test:** 2026-05-11 14:06:00 R14 — ⚠️ PARTIAL improved 9/10 actions chuẩn. Sau R14 action chain (Test 2 approve + Test 3 gửi trả lời + Test 5 công khai), audit log entries verify qua UI Quản trị → audit log view: `APPROVE_KHOCAUHOI` (Test 2) + `CONG_KHAI_KHOCAUHOI` (Test 5) + `UPDATE_KHOCAUHOI` chuẩn ✅. TU_VAN_NHANH `GUI_TRA_LOI_TVNHANH` chuẩn ✅ (Test 3 — dev đã rename từ TRA_LOI). **Vẫn còn open:** `CREATE` generic action trên `/cms-create` endpoint chưa rename thành `CREATE_TVNHANH_DN`. Bug giữ Minor Open cho 1/10 action còn lại.
+
 > **Re-test:** 2026-05-10 20:07:00 R12 — ⚠️ PARTIAL FIX. KHO_CAU_HOI naming đã chuẩn theo spec: `APPROVE_KHOCAUHOI` / `REJECT_KHOCAUHOI` / `CREATE_KHOCAUHOI` / `UPDATE_KHOCAUHOI` / `DELETE_KHOCAUHOI` / `TOGGLE_HIEU_LUC`. **Vẫn còn open:** TU_VAN_NHANH `hanhDong=TRA_LOI` chưa rename thành `GUI_TRA_LOI_TVNHANH`; entity TU_VAN_NHANH cũng còn `CREATE` generic. Bug giữ Open ở 2 action TVNHANH; KHO_CAU_HOI subset coi như đã đóng.
 
 ### Mô tả
@@ -458,6 +474,8 @@ UI list cell "Số gợi ý" cho row TVN-QA-20260424-0022 = "0" ❌
 ---
 
 ## BUG-FUNC-TVN-007 — Auto-import HOI_DAP DA_DUYET → KHO_CAU_HOI TU_DONG không trigger (R11)
+
+> **Re-test:** 2026-05-11 14:06:00 R14 — 🚫 Open (PARTIAL forward-only). UI verify list `/tv-nhanh/kho-cau-hoi` filter Nguồn=Tự động → render đúng record `QA-20260510-0005` (sau R10d dev fix lần 2 BR-FLOW-10). HOI_DAP mới DA_DUYET sau dev fix → trigger TU_DONG OK ✅. Nhưng HOI_DAP cũ `HD-20260509-010` DA_DUYET trước fix → vẫn KHÔNG tạo record TU_DONG tương ứng → cần BE back-fill batch retro-trigger cho HOI_DAP cũ. Bug giữ Major Open. Evidence: `image/r14-ui-nv03-filter-nguon-tu-dong.png`.
 
 ### Mô tả
 

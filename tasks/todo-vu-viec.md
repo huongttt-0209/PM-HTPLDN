@@ -44,10 +44,10 @@
   - **Cần unlock:** dev/infra setup VNeID T2 sandbox URL+token · DN test account verified T2 · seed ≥1 VV `YEU_CAU_BO_SUNG` thuộc DN test (9999999990 hoặc 9999999991) · BE confirm endpoint chuyên trang DN-portal
   - **Spec:** FR-V.I-NEW-02 — formal hoá `YEU_CAU_BO_SUNG → DANG_KIEM_TRA` (form embedded VNeID)
 
-- ⚠️ **R7.7.3** ✏️ Vụ việc 72 TC v3.5 (33 base + 42 mới Cluster 1-8) `[need: DN VNeID T2]` <a id="r7-7-3"></a>
-  - **Kết quả:** ⚠️ R15 29/72 TC ≈ 40% — +5 TC R15 (C5-1/C5-3/C5-4/C5-5 + C6-4). C5-4 + C6-4 Sai spec mechanism. NOTIF/LICHSU vẫn Open. [functional-test-report-r7-7-3-vu-viec.md](../output/qa-reports/round7-2026-05-06/functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md)
-  - **Bug:** [bug-report-r7-7-3-functional-vu-viec.md](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md) — 4/6 đóng (VALIDATION+SEARCH+SLA+DANHGIA). NOTIF/LICHSU partial Open.
-  - **Cần:** DN VNeID Tier 2 · 43 TC còn
+- ⚠️ **R7.7.3** ✏️ Vụ việc 72 TC v3.5 (33 base + 42 mới Cluster 1-8) `[need: DN VNeID T2 + dev fix PHANCONG-REVERT + mTLS PLQG cert]` <a id="r7-7-3"></a>
+  - **Kết quả:** ⚠️ R16-P5 35/72 TC ≈ 49% — +VV-026 PASS (QA seed `tvv_r11_mailfix` → reset PW → login TVV → 1/1 scope). [functional-test-report-r7-7-3-vu-viec.md](../output/qa-reports/round7-2026-05-06/functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md)
+  - **Bug:** [bug-report-r7-7-3-functional-vu-viec.md](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md) — 5/7 đóng (+NOTIF-01 đóng R16-P2). LICHSU + PHANCONG-REVERT Open.
+  - **Cần:** DN VNeID Tier 2 · mTLS PLQG cert · dev fix PHANCONG-REVERT · 37 TC còn
   - **Spec:** `7.5-vu-viec-htpl.md` v3.0 (sync 2026-05-06) · `srs-fr-05-vu-viec.md:1164 §FR-V.I-17`
 
 - ⏳ **R7.7.3-PRIVACY** 🆕 2 TC P0 Critical privacy NĐ 13/2023 `[need: R7.4.A3-PUBLIC, R7.2.4 (doanh-nghiep), R7.4.A3]` <a id="r7-7-3-privacy"></a>

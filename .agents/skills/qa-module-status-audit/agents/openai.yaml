@@ -1,0 +1,7 @@
+interface:
+  display_name: "QA Module Status Audit"
+  short_description: "Audit module full workflow readiness"
+  default_prompt: "Use $qa-module-status-audit to review a QA module's current full-workflow status, coverage, open/closed bugs, blockers, and roadmap to completion."
+
+policy:
+  allow_implicit_invocation: true
