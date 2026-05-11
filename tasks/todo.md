@@ -20,12 +20,12 @@
 | 2 | Re-seed Tier 1 (TC TV/DN/TVV/CG/NHT/account) | 8 | - | - | 7 | - | 1 | - |
 | 3 | Re-seed Tier 2 (transactional entry state) +**3 sub-task FR-02/X.2 v3.5** | 18 | 2 | - | 11 | 1 | 4 | 0 |
 | 4 | Workflow E2E (Trụ A/B/C/D) +**3 task v3.5** | 22 | 2 | - | 2 | 8 | 0 | 10 |
-| 5 | Verification (KPI/cross/SLA/audit) | 5 | 3 | - | - | - | - | 2 |
+| 5 | Verification (KPI/cross/SLA/audit) | 5 | 3 | - | 1 | - | - | 1 |
 | 6 | Workflow đầu ra hậu kỳ (Chi trả/TVN/CT) | 5 | - | - | 1 | - | 1 | 3 |
-| 7 | Functional 17 module + 2 NEW + **4 sub-task FR-06 v3.5** | 30 | 9 | - | 4 | 6 | 2 | 9 |
-| 8 | Cross-cutting + Profile + Permission +**R7.8.6 UC renumber FR-11 v3.5** +**R7.8.7 E2E DN full luồng** | 7 | 2 | - | 1 | 3 | - | 1 |
+| 7 | Functional 17 module + 2 NEW + **4 sub-task FR-06 v3.5** | 30 | 10 | - | 4 | 6 | 2 | 8 |
+| 8 | Cross-cutting + Profile + Permission +**R7.8.6 UC renumber FR-11 v3.5** +**R7.8.7 E2E DN full luồng** | 7 | 2 | - | 5 | - | - | - |
 | Trụ E | Monitor unblock | 4 | - | - | 2 | 1 | - | 1 |
-| **Tổng** | | **112** | **21** | **0** | **43** | **19** | **8** | **19** |
+| **Tổng** | | **112** | **23** | **0** | **46** | **17** | **8** | **16** |
 
 ---
 
@@ -54,10 +54,10 @@
 | 14 | Đánh giá Hiệu quả HTPL | [todo-danh-gia-hq.md](todo-danh-gia-hq.md) | 5 | ✅1 ⚠️3 🚫1 | **P4** ✅R7.4.D1, ⚠️R7.4.D2, ⚠️R7.4.D2a, 🚫R7.4.D2b<br>**P7** ⚠️R7.7.9 |
 | 15 | Chi trả | [todo-chi-tra.md](todo-chi-tra.md) | 7 | ✅6 🚫1 | **P6** ✅R7.6.1<br>**P7** ✅R7.7.12, ✅R7.7.12.1, 🚫R7.7.12.2, ✅R7.7.12.3, ✅R7.7.12.4<br>**Trụ E** ✅R7.E3 |
 | 16 | TV nhanh | [todo-tv-nhanh.md](todo-tv-nhanh.md) | 4 | ✅2 ⚠️1 ⏳1 | **P6** ✅R7.6.2, ⏳R7.6.3<br>**P7** ⚠️R7.7.11<br>**Trụ E** ✅R7.E4 |
-| 17 | CT HTPLDN | [todo-ct-htpldn.md](todo-ct-htpldn.md) | 5 | ✅2 ⚠️2 🚫1 | **P6** ⚠️R7.6.4, 🚫R7.6.5<br>**P7** ✅R7.7.15, ⚠️R7.7.15.b<br>**Trụ E** ✅R7.E2 |
+| 17 | CT HTPLDN | [todo-ct-htpldn.md](todo-ct-htpldn.md) | 5 | ✅4 ⚠️1 | **P6** ⚠️R7.6.4, ✅R7.6.5<br>**P7** ✅R7.7.15, ✅R7.7.15.b<br>**Trụ E** ✅R7.E2 |
 | 18 | Dashboard | [todo-dashboard.md](todo-dashboard.md) | 2 | ✅1 ⚠️1 | **P5** ✅R7.5.1<br>**P7** ⚠️R7.7.7 |
 | 19 | Báo cáo | [todo-bao-cao.md](todo-bao-cao.md) | 2 | ✅1 ⚠️1 | **P5** ✅R7.5.4<br>**P7** ⚠️R7.7.13 |
-| 20 | Cross-cutting (SLA / API / Permission / Profile) | [todo-cross-cutting.md](todo-cross-cutting.md) | 10 | ✅3 🟢1 ⚠️2 🚫1 ⏳3 | **P5** ⏳R7.5.3<br>**P7** 🚫R7.7.16, ⏳R7.7.17<br>**P8** ✅R7.8.1, ✅R7.8.2, ✅R7.8.3, ⚠️R7.8.4, 🟢R7.8.5, ⚠️R7.8.6, ⏳R7.8.7 |
+| 20 | Cross-cutting (SLA / API / Permission / Profile) | [todo-cross-cutting.md](todo-cross-cutting.md) | 10 | ✅6 🟢1 ⚠️2 🚫1 | **P5** ✅R7.5.3<br>**P7** 🚫R7.7.16, ⚠️R7.7.17<br>**P8** ✅R7.8.1, ✅R7.8.2, ✅R7.8.3, ✅R7.8.4, 🟢R7.8.5, ✅R7.8.6, ⚠️R7.8.7 |
 
 **Tổng:** 116 task / 20 module.
 <!-- END: module-index -->

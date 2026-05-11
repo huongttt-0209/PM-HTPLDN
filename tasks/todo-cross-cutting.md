@@ -17,24 +17,26 @@
 
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
-| **P5** | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | ⏳[R7.5.3](#r7-5-3) |
-| **P7** | 2 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 🚫[R7.7.16](#r7-7-16) · ⏳[R7.7.17](#r7-7-17) |
-| **P8** | 7 | 1 | 0 | 3 | 2 | 0 | 1 | 0 | ✅[R7.8.1](#r7-8-1) · ✅[R7.8.2](#r7-8-2) · ✅[R7.8.3](#r7-8-3) · ⚠️[R7.8.4](#r7-8-4) · 🟢[R7.8.5](#r7-8-5) · ⚠️[R7.8.6](#r7-8-6) · ⏳[R7.8.7](#r7-8-7) |
-| **Tổng** | **10** | **1** | **0** | **3** | **2** | **1** | **3** | **0** |  |
+| **P5** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.5.3](#r7-5-3) |
+| **P7** | 2 | 0 | 0 | 0 | 1 | 1 | 0 | 0 | 🚫[R7.7.16](#r7-7-16) · ⚠️[R7.7.17](#r7-7-17) |
+| **P8** | 7 | 1 | 0 | 5 | 1 | 0 | 0 | 0 | ✅[R7.8.1](#r7-8-1) · ✅[R7.8.2](#r7-8-2) · ✅[R7.8.3](#r7-8-3) · ✅[R7.8.4](#r7-8-4) · 🟢[R7.8.5](#r7-8-5) · ✅[R7.8.6](#r7-8-6) · ⚠️[R7.8.7](#r7-8-7) |
+| **Tổng** | **10** | **1** | **0** | **6** | **2** | **1** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
-- ⏳ **R7.5.3** ✏️ SLA cảnh báo banner — verify trừ ngày lễ (BR-CALC-03) `[need: HD/VV deadline >70% SLA]` <a id="r7-5-3"></a>
-  - **Cần:** ≥5 ngày lễ 2026 KICH_HOAT (✓5 [R7.1.5](todo-qtht.md#r7-1-5) (qtht)) · ≥1 HD/VV deadline >70% SLA (✗ HD ✓7 nhưng deadline >70% chưa verify; VV deadline chưa tính)
+- ✅ **R7.5.3** ✏️ SLA cảnh báo banner — verify trừ ngày lễ (BR-CALC-03) <a id="r7-5-3"></a>
+  - **Kết quả:** PASS 10/10 TC — BE skip ngày lễ 21/05 đúng spec (HD-507-006 deadline 22/05 thay vì 21/05). [functional-test-report-r7-5-3-sla-banner.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-5-3-sla-banner.md)
+  - **Note state drift:** HOI_DAP SLA 10d→5d (2026-05-10), NGAY_LE 6→7 (+22/05 QA seed), HD count 18→30. Update [state-snapshot.md](state-snapshot.md) sau.
 
-- 🚫 **R7.7.16** ✏️ API 42 TC + 8 API inbound mock (v3.5 rename filter `cong_khai=1`) `[~14% — 4 PASS, 38 BLOCKED deploy gap]` <a id="r7-7-16"></a>
-  - **Kết quả:** BLOCKED 38/44 — 8/9 cặp outbound endpoint 404, 1/9 mTLS gate test env không cert. 4 PASS infrastructure. [functional-test-report-r7-7-16-api.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-7-16-api.md)
-  - **Bug:** [bug-report-r7-7-16-api-deploy-gap.md](../output/qa-reports/round7-2026-05-06/bug-reports/cross-cutting/bug-report-r7-7-16-api-deploy-gap.md) — 0/2 đóng (1 Critical + 1 Major Open)
-  - **Cần:** ≥1 VV (✓5) · ≥1 TVCS (✓12) · ≥1 Chi trả (✓78) · ≥1 CT (✓3) · ≥1 HD (✓7) · ≥1 TVN (✓50) · test full 6/6 — entity prereq OK, deploy gap block test live
+- 🚫 **R7.7.16** ✏️ API 42 TC + 8 API inbound mock (v3.5 rename filter `cong_khai=1`) `[~30% — 8 PASS + 5 PARTIAL, 30 BLOCKED deploy]` <a id="r7-7-16"></a>
+  - **Kết quả:** 🚫 8/44 PASS + 5 PARTIAL, 30 BLOCKED deploy gap. [functional-test-report-r7-7-16-api.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-7-16-api.md)
+  - **Bug:** [bug-report-r7-7-16-api-deploy-gap.md](../output/qa-reports/round7-2026-05-06/bug-reports/cross-cutting/bug-report-r7-7-16-api-deploy-gap.md) — 0/2 đóng (scope mở rộng)
+  - **Cần:** Dev deploy 9 outbound + 3 internal · Infra cấp mTLS cert · QA seed ≥1 CT DA_CONG_BO
 
-- ⏳ **R7.7.17** 🔄 Edge BR-EC-01..23 (4 BR scope) `[need: infra/wait/integration cho 19 BR còn lại]` <a id="r7-7-17"></a>
-  - **Cần:** infra/wait/integration cho 19 BR còn lại
+- ⚠️ **R7.7.17** 🔄 Edge BR-EC-01..23 `[~22% — 5 PASS + 2 PARTIAL + 2 OBS, 15 BLOCKED 4 nhóm]` <a id="r7-7-17"></a>
+  - **Kết quả:** ⚠️ 5/23 PASS + 2 PARTIAL + 2 OBS, 15 defer infra/wait. [functional-test-report-r7-7-17-edge-cases.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-7-17-edge-cases.md)
+  - **Cần:** BA confirm BR-EC-06 · Dev verify BR-EC-08 + implement BR-EC-15/16 · DBA backdate cron BR-EC-14/16/17/18
 
 - ✅ **R7.8.1** 🆕 Verify hard delete (DELETE → record không còn trong GET list) <a id="r7-8-1"></a>
   - **Kết quả:** PASS — DELETE 204 → GET list count -1 + GET by ID 404. Confirm BE hard-delete; SRS modal MD-XOA "xóa mềm" obsolete. [functional-test-report-r7-8-1-hard-delete.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-8-1-hard-delete.md)
@@ -46,16 +48,18 @@
 - ✅ **R7.8.3** 🆕 Verify bỏ lưu nháp scope hẹp (button [Lưu nháp] bỏ, state DU_THAO/NHAP/MOI_DANG_KY giữ) `[100% R9 — FE đã bỏ button]` <a id="r7-8-3"></a>
   - **Kết quả:** PASS R9 — form CT DU_THAO có Quay lại/Lưu/Đệ trình/Hủy CT, không còn [Lưu nháp]. [functional-test-report-r9-cross-cutting-reverify.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r9-cross-cutting-reverify.md)
 
-- ⚠️ **R7.8.4** 🆕 Profile + đổi MK self-service (ho-so-doi-mat-khau.md) `[~80% — 3 mâu thuẫn unchanged R9, chờ BA]` <a id="r7-8-4"></a>
-  - **Kết quả:** R9 re-confirm 3 mâu thuẫn (strength rule, errCode, "Phiên đăng nhập"). [functional-test-report-r9-cross-cutting-reverify.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r9-cross-cutting-reverify.md)
+- ✅ **R7.8.4** 🆕 Profile + đổi MK self-service (ho-so-doi-mat-khau.md) <a id="r7-8-4"></a>
+  - **Kết quả:** PASS — deep review NotebookLM 2026-05-11: errCode + "Phiên đăng nhập" không phải bug. 1 spec gap rule MK chờ BA. [functional-test-report-r9-cross-cutting-reverify.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r9-cross-cutting-reverify.md)
+  - **BA pending:** rule độ mạnh MK profile (3 yếu tố) vs FR-VIII-26 (4 yếu tố + ký tự đặc biệt) — `_DELTA-MAP-PROFILE-PWD.md` §2.3 đã flag. BE/UI follow rule stricter là correct security stance. ERR-AUTH-VIII-CP-* hợp lệ vì SRS không định nghĩa errCode cho profile change-password (chỉ FR-VIII-26 mới có ERR-PWD-04/05/06).
 
-- 🟢 **R7.8.5** 🆕 Permission 55+ entity × 11 role sample 40 TC/module `[~0% — ready, was R5 scope; entity count update v3.5]` <a id="r7-8-5"></a>
+- 🟢 **R7.8.5** 🆕 Permission 55+ entity × 11 role sample 40 TC/module `[~0% — 7 acc _10 + matrix sẵn, runnable ngay]` <a id="r7-8-5"></a>
+  - **Cần:** 7 acc _10 (qtht/cb_nv_tw/cb_nv_bn/cb_nv_dp/cb_pd_tw/cb_pd_bn/cb_pd_dp ✓) · permission-matrix-by-role.md (✓) · isolatedContext per role. Không có upstream block — start được ngay.
 
-- ⚠️ **R7.8.6** 🆕 Verify UC renumber +4 offset FR-11 (UC120-142 → UC124-146 do FR-VIII-22..25 chiếm UC120-123) `[~67% — 2 PASS, 1 PARTIAL gap 7.11]` <a id="r7-8-6"></a>
-  - **Kết quả:** PASS perm-matrix 253 entries + CHANGELOG §FR-11 Thay đổi 1. ⚠️ 7.11 thiếu BC-024 cho UC146. [functional-test-report-r7-8-6-uc-renumber.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-8-6-uc-renumber.md)
-  - **Spec:** [permission-matrix-by-role.md](../output/permission-matrix-by-role.md) FR-IX block + 7.11-bao-cao-thong-ke.md UC ref khớp v3.5; CHANGELOG §srs-fr-11 Thay đổi 1
+- ✅ **R7.8.6** 🆕 Verify UC renumber +4 offset FR-11 (UC120-142 → UC124-146 do FR-VIII-22..25 chiếm UC120-123) <a id="r7-8-6"></a>
+  - **Kết quả:** PASS — perm-matrix 253 entries + CHANGELOG §FR-11 + BC-023b lấp gap UC146 (R9 2026-05-11). [functional-test-report-r7-8-6-uc-renumber.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-8-6-uc-renumber.md)
+  - **Spec:** [permission-matrix-by-role.md](../output/permission-matrix-by-role.md) FR-IX block + 7.11-bao-cao-thong-ke.md UC ref khớp v3.5 (BC-023b cho UC146 FR-IX-23); CHANGELOG §srs-fr-11 Thay đổi 1
 
-- ⏳ **R7.8.7** 🆕 E2E DN full luồng đăng ký → đánh giá → chi trả (12 bước cross-module, 5 seam handoff) `[need: R7.7.8b (qtht), R7.7.8c (qtht), R7.4.A3 (vu-viec), R7.4.A3-PUBLIC (vu-viec), R7.4.A3-DN-BS (vu-viec), R7.7.3 (vu-viec), R7.7.4 (doanh-nghiep), R7.5.2 (doanh-nghiep)]` <a id="r7-8-7"></a>
-  - **Cần:** 8 task upstream ✅ · 1 DN test fresh chưa đăng ký · VNeID Tier 2 sandbox · 5 role (DN / CB NV / CB PD / NHT / TVV-CG) · 1 chu kỳ chi trả CT HTPLDN
-  - **Spec:** 12 bước: (1) FR-VIII-22 đăng ký 21 trường → (2) FR-VIII-26 kích hoạt + reset MK → (3) DN login chuyên trang VNeID Tier 2 → (4) FR-V.I-02 SCR-V.I-04 tạo VV → (5) FR-V.I-06 CB NV kiểm tra HS → (6) FR-V.I-09 phân công BR-CALC-04 → (7) FR-V.I-15/16 NHT/TVV xử lý → (8) FR-V.I-13 CB PD duyệt → (9) FR-V.I-NEW-05 công khai PLQG (optional) → (10) FR-V.I-14 DN nhận TB → (11) FR-V.I-17 UC67 DN đánh giá → (12) FR-V.II chi trả
-  - **Mục đích:** catch integration bug ẩn ở 5 seam handoff (FR22→FR26 mail, FR26→FR-V.I-02 sync MST, FR-V.I-02→FR-V.I-09 BR-CALC-04, VV `HOAN_THANH`→FR-V.II Chi trả, VV `HOAN_THANH`→FR-V.I-17 Đánh giá) — risk không cover bằng test rời FR. R7 verified 3 BUG-DEPLOY Major + 6 audit deploy gap đều seam-bugs.
+- ⚠️ **R7.8.7** 🆕 E2E DN full luồng đăng ký → đánh giá → chi trả `[~38% — 5 PASS + 3 PARTIAL + 1 FAIL + 4 BLOCKED]` <a id="r7-8-7"></a>
+  - **Kết quả:** ⚠️ Bước 4 UC52 BLOCKED do FE/BE chưa triển khai. Seam 3 BR-CALC-04 PASS. [workflow-test-report-r7-8-7-e2e-dn.md](../output/qa-reports/round7-2026-05-06/workflow/cross-cutting/workflow-test-report-r7-8-7-e2e-dn.md)
+  - **Bug:** [bug-report-r7-8-7-e2e-seam-gaps.md](../output/qa-reports/round7-2026-05-06/bug-reports/cross-cutting/bug-report-r7-8-7-e2e-seam-gaps.md) — 0/2 đóng (1 Critical, 1 Medium)
+  - **Cần:** Dev triển khai SCR-V.I-04 UC52 + POST `/vu-viecs` · BA confirm BR-CALC-04 cấp · DN-side đánh giá CTA verify

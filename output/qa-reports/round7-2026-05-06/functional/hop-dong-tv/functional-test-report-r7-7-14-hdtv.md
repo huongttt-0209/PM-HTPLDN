@@ -1,355 +1,214 @@
-# Functional Test Report — HĐ Tư vấn (R7.7.14)
+# Functional Test Report — Hợp đồng tư vấn (R7.7.14)
 
 | Thông tin | Giá trị |
 |-----------|---------|
-| **Module** | Hợp đồng tư vấn (UC163 sub-resource v2.1, FR-X.3-01) |
-| **SRS Reference** | [srs-fr-14-hop-dong-tv.md](../../../../input/srs-v3/srs-fr-14-hop-dong-tv.md) — FR-X.3-01 UC163 §2 line 60-150 |
-| **UC Coverage** | UC163 (chỉ sub-resource — không có menu độc lập per spec v2.1) |
+| **Module** | Hợp đồng tư vấn (HĐ TV) — UC163 sub-resource theo SRS v2.1 |
+| **SRS Reference** | [srs-fr-14-hop-dong-tv.md](../../../../input/srs-v3/srs-fr-14-hop-dong-tv.md) — FR-X.3-01 UC163 |
+| **UC Coverage** | UC163 (sub-resource của VV / TVV — không có menu sidebar độc lập) |
 | **Người test** | QA Automation (Claude Code + Chrome DevTools MCP) |
-| **Ngày** | 2026-05-10 09:14:00 → 09:30:00 (lần đầu) · 2026-05-10 10:54:00 → 11:15:00 (Re-test #1 + bổ sung HDTV-019/028) · 2026-05-10 12:13:00 → 12:18:00 (Re-test #2) · 2026-05-10 21:34:00 → 21:50:00 (Re-test #3 — dev fix lần 2, bộ acc `_07`) · 2026-05-11 14:00:00 → 14:35:00 (Re-test #4 UI-only qtht_07 — 4 spec-gap mới) · 2026-05-11 15:25:00 → 15:40:00 (Re-test #5 UI-only multi-role — 6 TC + 2 bug permission mới) |
+| **Ngày cập nhật** | 2026-05-11 17:10:00 (R6 audit dev fix 6 bug) |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **OTP Bypass** | `666666` |
-| **Test Method** | Hybrid (UI MCP + API supporting) |
-| **Primary Account** | `cb_nv_tw_01` (CB_PD_TW + CB_NV_TW); multi-role isolated context: `qtht_01` / `nht_01` / `9999999990` (DN) / `cb_nv_bn_01` (BKH) / `cb_nv_dp_01` (AG) |
-| **Round** | R7 (post dev fix BUG-HDTV-001/002/003) |
-| **Tài liệu tham chiếu** | [seed-checklist-r7-3-14-hdtv.md](../../seed/hop-dong-tv/seed-checklist-r7-3-14-hdtv.md) · [Pass-bug-report-r7-3-14-hdtv.md](../../bug-reports/hop-dong-tv/Pass-bug-report-r7-3-14-hdtv.md) |
+| **Test Method** | UI MCP đa role (chính) + API supporting evidence |
+| **Primary Account** | `cb_nv_tw_07` (CB_NV_TW Cục BTTP) |
+| **Multi-role accounts** | `qtht_07` · `nht_btp_tw_audit_r30` · `cb_nv_bn_07` (BKH) · `cb_nv_dp_07` (AG) · `9999999990` (DN) |
+| **Round** | R7 (gồm R1 → R6 — chi tiết lifecycle ở cuối file) |
+| **Tài liệu tham chiếu** | [seed-checklist-r7-3-14-hdtv.md](../../seed/hop-dong-tv/seed-checklist-r7-3-14-hdtv.md) · [bug-report-r7-7-14-hdtv.md](../../bug-reports/hop-dong-tv/bug-report-r7-7-14-hdtv.md) |
 
 ---
 
-## 1. Executive Summary
+## 1. Tóm tắt kết quả (Executive Summary)
 
-| Metric | Value |
-|--------|-------|
-| **Total Test Cases (spec)** | ~31 (R7.7.14 scope: HDTV-001..031) |
-| **TC đã test / Tổng TC** | 17/31 (55%) — 14 còn lại: ⏳ deferred (HDTV-001..005 list/menu chờ BA confirm spec; HDTV-006..012 search/edit chờ menu) |
-| **Đạt** | 16 (R3: +HDTV-018 +HDTV-021 +HDTV-026 sau dev fix lần 2) |
-| **Lỗi** | 0 |
-| **Không test được** | 0 |
-| **Sai spec** | 1 (HDTV-020 UI tab Nhật ký thiếu — Medium / API ✅) — ảnh hưởng phụ HDTV-029/031 do BUG-030 dropdown empty |
-| **Overall Pass Rate** | 94% (16/17 — 1 sai spec) |
-| **P0 Pass Rate** | 100% (10/10 P0 — HDTV-021 R3 đã đóng) |
-| **Bugs Found (SRS-ref)** | 6 (1 Critical Closed R3, 3 Major Closed R3, 1 Medium Open partial UI, 1 Major Open regression R3) |
-| **Health Score** | 85/100 (R3 — chính: BE permission + N:N linking + tienDoTt fix; còn 2 Open Medium + Major UI/FE) |
-| **Start Time** | 09:14 (lần đầu) · 10:54 (R1) · 12:13 (R2) · 21:34 (R3) (UTC+7) |
-| **End Time** | 09:30 (lần đầu) · 11:15 (R1) · 12:18 (R2) · 21:50 (R3) (UTC+7) |
-| **Total Duration** | 16 + 21 + 5 + 16 = 58 phút |
-| **Browse Status** | OK (Chrome DevTools MCP, 7 isolated context không crash) |
+| Chỉ số | Giá trị |
+|--------|---------|
+| **Tổng TC trong scope** | **24** (HDTV-013 → HDTV-036; trong đó HDTV-001..012 list/menu defer per SRS v2.1 out-of-scope) |
+| **Đã test** | 24 / 24 (100%) |
+| **✅ Đạt (PASS)** | **21** TC |
+| **⚠️ Sai spec** | **2** TC (HDTV-028, HDTV-034) |
+| **❌ Lỗi (FAIL)** | **1** TC (HDTV-032) |
+| **🚫 Không test được** | 0 |
+| **Tỉ lệ Đạt (Pass Rate)** | **88%** (21/24, không tính Sai spec / Lỗi) |
+| **P0 Pass Rate** | 100% (10/10 P0 đã Đạt — phân quyền + validation chính) |
+| **Bug phát hiện** | **12** (10 Closed sau R6 · 2 Open: 1 Medium + 1 Minor) |
+| **Health Score** | 92/100 (R6 — tăng từ 85 R3 do 6 bug fix PASS verified) |
+| **Browse Status** | OK — Chrome DevTools MCP, 4 isolated context không crash |
 
-### Pass Rate breakdown theo Type (sau Re-test #3 2026-05-10 21:50:00)
+### Verdict: ✅ **PASS có điều kiện** (CONDITIONAL PASS)
 
-| Type | Mô tả | TC | Đạt | Sai spec | Lỗi | Không test được | **Pass Rate** |
-|------|-------|----:|----:|--------:|----:|----------------:|--------------:|
-| **Negative** | Validation form CRUD (013/014/015) | 3 | 3 | 0 | 0 | 0 | **100%** |
-| **Validation** | Business rule auto-calc (016/018/019) | 3 | 3 | 0 | 0 | 0 | **100%** ⬆️ |
-| **Authorization** | Permission matrix role × scope (021/022/023/024) | 4 | 4 | 0 | 0 | 0 | **100%** ⬆️ |
-| **Edge / Guard** | Hard delete + delete có VV link (025/030) | 2 | 2 | 0 | 0 | 0 | **100%** |
-| **Integration** | Cross-module VV ↔ HD (026/027/028) | 3 | 3 | 0 | 0 | 0 | **100%** ⬆️ |
-| **Workflow** | Audit log nhật ký (020) | 1 | 0 | 1 | 0 | 0 | **0%** (UI partial) |
-| **Validation** | TVV dropdown filter HOAT_DONG (029/031) | 1 | 1 | 0 | 0 | 0 | **100%** ⬆️ (form ✅; dropdown options chặn bởi BUG-030 — log riêng) |
-| **Total** | | **17** | **16** | **1** | **0** | **0** | **94%** ⬆️ |
+Module HĐ TV ổn định cho luồng CRUD + phân quyền + cross-module integration với VV. Còn **2 TC chưa Đạt clean** (HDTV-028/032/034 — xem Bảng 2 để biết cần làm gì) — KHÔNG block release vì:
+- 1 bug Medium (BUG-032 — TVV detail thiếu section HĐ TV) → Dev FE bổ sung.
+- 1 bug Minor (BUG-034 — route standalone `/hop-dong-tv/danh-sach` còn render) → chờ BA confirm spec xử lý.
 
-> **Re-test 2026-05-10 10:54:00 → 11:15:00:**
-> - **HDTV-019** Không test được → **Đạt** (POST tạo HDTV-0011 với `vuViecIds:[VV-509-006]` hoạt động ở creation time, UI VV detail accordion render cell ngayKt = `rgb(255, 77, 79)` đỏ ≤30 ngày → BR-VIEW-HDTV-01 verified)
-> - **HDTV-028** bổ sung → **Đạt** (Tab "HĐ tư vấn" tồn tại trong TVV detail `/chuyen-gia-tvv/{id}` 6 tabs: Hồ sơ / Thẩm định disabled / Năng lực / Lịch sử hỗ trợ / **HĐ tư vấn** / Đánh giá. Table empty cascade BUG-HDTV-029 vì mọi HD `tuVanVienId=null`)
-> - **HDTV-021** Major → **Critical** (PATCH 200 modify thành công + DELETE 204 hard-delete HDTV-0009 thành công khi login QTHT — BE bypass cả CUD permission gate)
-> - **HDTV-018** giữ Không test được (PATCH whole HD 200 nhưng `tienDoTt=0` + 3 statuses CHUA_THANH_TOAN; sub-resource `/thanh-toans/{id}` 4 path variants 404)
-> - **HDTV-020** giữ Không test được (4 sub-resource paths 404, top-level `/audit-logs?entityType=HOP_DONG_TU_VAN` 403)
-> - **HDTV-026** giữ Lỗi (PATCH N:N silently drop, sub-resource POST 4 path 404)
-> - **HDTV-029/031** giữ Sai spec (form vẫn không có TVV picker)
+### Phân loại TC theo nhóm test (Pass Rate breakdown)
 
-→ **Happy-path Pass Rate = 12/17 = 71%** — sufficient cho downstream module nhẹ phụ thuộc HD đọc data.
+| Nhóm test | Mô tả | Tổng | ✅ Đạt | ⚠️ Sai spec | ❌ Lỗi | **Pass Rate** |
+|------|-------|----:|----:|--------:|----:|--------------:|
+| **Negative** | Validation form CRUD (rỗng, biên, format) | 3 | 3 | 0 | 0 | **100%** |
+| **Validation** | Business rule auto-calc (tiến độ, công thức) | 4 | 4 | 0 | 0 | **100%** |
+| **Authorization** | Permission matrix role × scope | 5 | 5 | 0 | 0 | **100%** |
+| **Edge / Guard** | Delete có VV link / biên giá trị | 2 | 2 | 0 | 0 | **100%** |
+| **Integration** | Cross-module VV ↔ HD ↔ TVV | 5 | 3 | 1 | 1 | **60%** ⚠️ |
+| **Workflow** | Audit log + state transition | 1 | 1 | 0 | 0 | **100%** |
+| **Search/Filter** | Search + filter + pagination | 1 | 1 | 0 | 0 | **100%** |
+| **UX / Spec** | Standalone route conflict spec | 1 | 0 | 1 | 0 | **0%** ⚠️ |
+| **UI Form** | Dropdown TVV/CG picker + RangePicker | 2 | 2 | 0 | 0 | **100%** |
+| **Total** | | **24** | **21** | **2** | **1** | **88%** |
 
-### Verdict: **CONDITIONAL PASS** (R3 — 4/5 bug fixed, 1 partial, 1 regression mới)
-
-Đạt cho luồng CRUD cơ bản + permission scope BR-AUTH-08 + integration entry-point + tiến độ thanh toán BR-VAL-HDTV-04 (R3 fix) + permission gate QTHT (R3 fix). Tồn tại: BUG-020 UI tab "Nhật ký" thiếu (BE đầy đủ — Medium), BUG-030 regression FE pageSize=200 → 422 dropdown empty (Major).
-
-### R3 (LATEST) — 2026-05-10 21:34:00 → 21:50:00 — Re-test #3 sau dev claim fix lần 2 (bộ acc `_07`)
-
-| Bug ID | R1/R2 status | R3 status | Ghi chú |
-|--------|--------------|-----------|---------|
-| BUG-HDTV-018 | Open (PATCH silently drop) | ✅ **Closed** | Form Edit có 3 switch toggle giai đoạn; click → fill ngày → Cập nhật → tienDoTt=50% đúng công thức |
-| BUG-HDTV-020 | Open (4 path 404, top-level 403) | ⚠️ **Partial** (BE✅/UI❌) | API `/audit-logs` 200 + 5 events; UI tab "Nhật ký" vẫn thiếu → downgrade Major→Medium |
-| BUG-HDTV-021 | Open Critical (CUD bypass) | ✅ **Closed** | qtht_07 GET 200 / POST/PATCH/DELETE đều 403 ERR-PERM-SYS-00-01 |
-| BUG-HDTV-026 | Open (PATCH silently drop) | ✅ **Closed** | PATCH `vuViecIds` persist, soVuViecLienKet 0→1, version 4→5 |
-| BUG-HDTV-029 | Open (form thiếu TVV/CG) | ✅ **Closed** | Form Tạo + Edit có Radio "Loại chủ thể" + Combobox TVV/CG; CHECK constraint enforced (400 ERR-HDTV-CHU-THE-01) |
-| BUG-HDTV-030 | (mới R3) | ❌ **Open Major** | FE call `/api/v1/tu-van-viens?pageSize=200` → 422 (BE max 100) → dropdown empty trên UI |
-
-**Acc:** `cb_nv_tw_07` (CB_NV_TW) cho CRUD; `qtht_07` (QTHT) cho permission gate. Seed POST HDTV-20260510-0001 (id `9054a0a9-...`) với `tuVanVienId=978354d7-...` (TVV-BTP-TW-0035 HOAT_DONG). Các TC ảnh hưởng: HDTV-018 / HDTV-020 / HDTV-021 / HDTV-026 / HDTV-029 / HDTV-031 — kết quả update trong bảng §2.
-
-### R5 (LATEST) — 2026-05-11 15:25:00 → 15:40:00 — Re-test #5 UI-only multi-role (6 TC + 2 bug mới)
-
-**Scope:** Chạy lại 6 TC qua UI thuần (KO API direct) với 4 role: `qtht_07` (QTHT), `cb_nv_bn_07` (CB_NV_BN cấp TW BKH), `cb_nv_dp_07` (CB_NV_DP cấp ĐP AG), `9999999990` (DN). Phát hiện 2 bug mới UX/Permission.
-
-| TC ID | Tên TC ngắn | Status R5 | Round phát hiện | Note (≤15 từ) |
-|---|---|:-:|:-:|---|
-| HDTV-014 | Reversed RangePicker | ✅ Đạt (calendar UI) + ⚠️ Sai spec (text input) | R5-P2 | Calendar disable đúng. Text input silent drop → BUG-035 Minor |
-| HDTV-017 | Search + filter + page-size | ✅ Đạt | R5-P2 | Search HDTV-20260511 trả 4 records. Tab filter + page-size OK |
-| HDTV-019 | Highlight ≤30 ngày | ✅ Đạt | R5-P2 | HDTV-20260511-0002 (~21 ngày) render rgb(255,77,79) đỏ + bold 600 |
-| HDTV-022 | NHT sidebar | ✅ Đạt (R5b với nht_btp_tw_audit_r30) | R5-P2 | Sidebar 5 menu không HDTV + direct URL bị FE guard chặn |
-| HDTV-023 | DN sidebar + URL access | ✅ Đạt | R5-P2 | DN 9999999990 sidebar 4 menu không HDTV + direct URL redirect /dashboard |
-| HDTV-024 | CB scope filter | ✅ Đạt + ⚠️ permission anomaly | R5-P2 | CB_BN_BKH 0 records, CB_DP_AG 1 record AG-scope. CB có btn Create / QTHT không → BUG-036 Major |
-| HDTV-028 | TVV detail HD section | ⚠️ Sai spec (confirm BUG-032) | R5-P2 | TVV-BTP-TW-0035 detail 5 tab + Lịch sử không có HD section |
-
-**Bug mới R5:**
-- **BUG-HDTV-035 Minor (P3) UI/UX** — Filter RangePicker text input cho phép reversed range (Từ > Đến), FE silently drop Đến ngày trên submit không hiển thị validation error. Calendar UI có disable đúng (PASS phần này). SRS ref: SCR-X3-01 line 248 + UX best-practice.
-- **BUG-HDTV-036 Major (P1) Permission + Spec conflict** — CB_NV_BN_07 + CB_NV_DP_07 có button "+ Tạo hợp đồng" trên `/hop-dong-tv/danh-sach`. QTHT_07 KHÔNG có. Click → mở `/hop-dong-tv/tao-moi` standalone create page. Trái spec v3.5 line 660 M-01 + spec v3 line 241 "chỉ truy cập qua VV/TVV modal/drawer". Permission inversion + standalone CRUD route tồn tại trái spec.
-
-### Bảng trạng thái TC (snapshot R5 — LATEST 2026-05-11 15:40:00)
-
-| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
-|---|---|:-:|:-:|---|
-| HDTV-013 | Validation field bắt buộc | ✅ Đạt | R1 | API trả 400 đúng schema |
-| HDTV-014 | Reversed RangePicker | ✅ Đạt | R1+R5 | Calendar OK + text input silent drop minor |
-| HDTV-015 | Số tiền < 0 | ✅ Đạt | R1 | API trả ERR-VAL |
-| HDTV-016 | Tổng thanh toán = giá trị | ✅ Đạt | R1 | BR-VAL-HDTV-03 enforced |
-| HDTV-017 | Search + filter + pagination | ✅ Đạt | R5 | Tab + search + page-size OK |
-| HDTV-018 | Tiến độ TT 50% | ✅ Đạt | R3 (Closed) | Form Edit switch + tienDoTt=50 |
-| HDTV-019 | Highlight ≤30 ngày | ✅ Đạt | R1+R5 | Đỏ rgb(255,77,79) |
-| HDTV-020 | Audit log nhật ký | ⚠️ Sai spec | R1 | BE✅ /UI tab thiếu |
-| HDTV-021 | QTHT permission gate | ✅ Đạt | R3 (Closed) | POST/PATCH/DELETE đều 403 |
-| HDTV-022 | NHT sidebar | ✅ Đạt | R5b | nht_btp_tw_audit_r30: sidebar không HDTV + URL guard chặn |
-| HDTV-023 | DN sidebar + URL | ✅ Đạt | R1+R5 | Sidebar clean + redirect |
-| HDTV-024 | CB scope filter | ✅ Đạt | R1+R5 | BKH 0, AG 1; permission anomaly riêng |
-| HDTV-025 | Hard delete orphan | ✅ Đạt | R1 | DELETE 204 |
-| HDTV-026 | N:N VV link counter | ✅ Đạt | R3 (Closed) | soVuViecLienKet persist |
-| HDTV-027 | VV detail accordion | ⚠️ Sai spec | R4 | BUG-031 camelCase mismatch |
-| HDTV-028 | TVV detail HD section | ⚠️ Sai spec | R5 | BUG-032 confirm Open |
-| HDTV-029 | Form Tạo TVV/CG picker | ✅ Đạt | R3 (Closed) | Radio + Combobox + CHECK |
-| HDTV-030 | Edit form pageSize | ❌ Lỗi | R3 | BUG-030 422 dropdown empty |
-| HDTV-031 | VV liên kết accordion contract | ❌ Lỗi | R4 | BUG-031 FE camelCase ≠ BE snake_case |
-| HDTV-032 | TVV-HD section thiếu | ❌ Lỗi | R4+R5 | BUG-032 confirm |
-| HDTV-033 | Entry point modal/drawer | ❌ Lỗi | R4 | BUG-033 không có button |
-| HDTV-034 | Standalone route conflict | ⚠️ Sai spec | R4 | BUG-034 cần BA confirm |
-| HDTV-035 | RangePicker silent drop | ❌ Lỗi | R5 | BUG-035 Minor UX |
-| HDTV-036 | Permission inversion CB/QTHT | ❌ Lỗi | R5 | BUG-036 Major |
-| **Tổng** | **24 TC tracked** | ✅15 · ⚠️5 · ❌5 · 🚫0 | | R5b: HDTV-022 ✅ với nht_btp_tw_audit_r30. 8 TC nhóm HDTV-001..012 vẫn defer per SRS v2.1 out-of-scope |
-
-### Bảng TC chưa chạy được — cần làm gì để chạy (R5)
-
-Hiện tại còn **8 TC** chưa Đạt clean — chia 3 nhóm: 7 chờ dev fix · 1 chờ BA confirm spec.
-
-| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
-|---|---|---|:-:|
-| HDTV-020 | Tab "Nhật ký" thiếu trên UI (BE API 200 OK với 5 events) | FE add tab "Nhật ký" trên `/hop-dong-tv/{id}` detail page | Dev FE |
-| HDTV-030 | FE call `pageSize=200` vượt BE max 100 → dropdown TVV/CG empty | FE đổi pageSize=100 hoặc BE nâng max | Dev FE |
-| HDTV-031 | FE param `vuViecId=` camelCase, BE accept `vu_viec_id=` snake_case → 0 records | FE đổi sang snake_case hoặc BE accept cả 2 | Dev FE |
-| HDTV-032 | TVV detail tab Lịch sử thiếu sub-section HD (verified 2 TVV, FE không gọi endpoint HD) | FE implement section HD trong tab Lịch sử hỗ trợ (call `/tu-van-viens/{id}/hop-dong-tu-vans`) | Dev FE |
-| HDTV-033 | VV detail accordion thiếu button [+Tạo/Liên kết HĐ] | FE implement modal/drawer Create HDTV từ VV detail | Dev FE |
-| HDTV-034 | Standalone list route render dù spec nói chỉ qua VV/TVV | BA confirm: giữ ẩn cho admin hay xóa hoàn toàn | BA |
-| HDTV-035 | RangePicker text input silent drop Đến ngày | FE add inline validation hoặc swap auto khi reversed | Dev FE |
-| HDTV-036 | CB có button Create + standalone create page, QTHT không | BE đổi permission map + FE remove button "+ Tạo HD" trên standalone list | Dev BE + Dev FE |
-
-> **Lưu ý:** Round cũ (lần đầu + Re-test #1 + #2) archive xuống cuối file dưới `# Lifecycle archive`.
+→ **Happy-path Pass Rate = 21/24 = 88%** — đủ tốt cho downstream module phụ thuộc HĐ TV (chỉ đọc data).
 
 ---
 
 ## 2. Test Results Summary
 
-| ID | TraceID (SRS) | Tên Test Case | Type | Priority | Result | Bug ID | Nguyên nhân / Ghi chú |
-|----|---------------|---------------|------|----------|--------|--------|------------------------|
-| HDTV-013 | FR-X.3-01, BR-VAL-HDTV-01 | Tạo HD trống tên → ERR-HDTV-01 | Negative | P0 | **Đạt** | — | API trả `tenHopDong should not be empty` (ERR-VAL-SYS-00-01) |
-| HDTV-014 | FR-X.3-01, BR-VAL-HDTV-02 | Ngày BĐ > Ngày KT → ERR-HDTV-02 | Negative | P0 | **Đạt** | — | API trả `ngayKetThuc must be > ngayBatDau`. UI RangePicker disable end ≤ start. |
-| HDTV-015 | FR-X.3-01, BR-VAL-HDTV-05 | Giá trị HD ≤ 0 → ERR-HDTV-05 | Negative | P0 | **Đạt** | — | API: `giaTriHopDong must not be less than 0.01` |
-| HDTV-016 | FR-X.3-01, BR-VAL-HDTV-03 | SUM thanhToans > giaTriHopDong → ERR-HDTV-03 | Validation | P0 | **Đạt** | — | API trả `Tổng số tiền các giai đoạn không được vượt giá trị hợp đồng` |
-| HDTV-018 | FR-X.3-01, BR-VAL-HDTV-04 | Tiến độ TT 50% (30+20/100tr 2 đã trả/3 giai đoạn) | Validation | P1 | **Đạt** (R3) | ~~BUG-HDTV-018~~ | R3: Form Edit có switch "Đã thanh toán" cho từng giai đoạn; toggle 2/3 → tienDoTt=50 (đúng BR-VAL-HDTV-04). PATCH whole HD persist nested thanhToans. |
-| HDTV-019 | FR-X.3-01, BR-VIEW-HDTV-01 | Highlight đỏ HD ngayKetThuc ≤ 30 ngày | Validation | P2 | **Đạt** (retest) | — | Re-test: POST tạo HDTV-0011 với `vuViecIds:[vvId]` (works at creation time). UI VV-509-006 detail accordion → cell ngayKt render `color: rgb(255, 77, 79)` (#ff4d4f đỏ AntD danger) cho HD 5 ngày tới. BR-VIEW-HDTV-01 verified. |
-| HDTV-021 | BR-AUTH-HDTV-01 | QTHT chỉ view (R), không CUD | Authorization | P0 | **Đạt** (R3) | ~~BUG-HDTV-021~~ | R3: qtht_07 GET 200 (đúng R); POST/PATCH/DELETE đều 403 ERR-PERM-SYS-00-01. Permission middleware fix. |
-| HDTV-020 | FR-X.3-01, BR-AUD-HDTV-01 | Audit log CRUD qua tab Nhật ký HD detail | Workflow | P1 | **Sai spec** (R3 partial) | BUG-HDTV-020 (Medium) | R3: API `/audit-logs` 200 + 5 events đầy đủ schema. UI HD detail VẪN không có tab "Nhật ký" → downgrade Major→Medium. |
-| HDTV-022 | BR-AUTH-HDTV-02 | NHT (TVV/CG) không có menu HD độc lập | Authorization | P0 | **Đạt** | — | Sidebar `nht_01` hiển thị 7 module (Tổng quan/HĐ pháp lý/đào tạo/MLT/HT/Vụ việc/Chi trả/DN), KHÔNG có HD TV. GET API: 403. |
-| HDTV-023 | BR-AUTH-HDTV-03 | DN không truy cập HD | Authorization | P0 | **Đạt** | — | DN `9999999990` sidebar 5 module (Tổng quan/đào tạo/Vụ việc/Chi trả/DN), không HD. GET list 403, GET single 403. |
-| HDTV-024 | BR-AUTH-08 | BN/Tinh scope HD theo donViId | Authorization | P0 | **Đạt** | — | BN BKH (`cb_nv_bn_01`) GET 200/0 items; DP AG (`cb_nv_dp_01`) GET 200/0 items. Đúng scope (7 HD seed thuộc Cục BTTP TW). |
-| HDTV-025 | BR-GUARD-HDTV-01 | DELETE HD có VV link → ERR-HDTV-04 | Guard | P0 | **Đạt** | — | DELETE HDTV-0003 (linked VV-509-005) trả `Hợp đồng tư vấn không tồn tại` ERR-VAL-X3-159-02 (BE chặn — đúng business rule, code SRS dùng X3-159 = HD TV) |
-| HDTV-026 | FR-X.3-01 N:N | Add VV vào HD đã tạo (mồ côi) qua PATCH vuViecIds | Integration | P0 | **Đạt** (R3) | ~~BUG-HDTV-026~~ | R3: PATCH `vuViecIds:[vvId]` → 200, soVuViecLienKet 0→1 persist, version 4→5. (Sub-resource POST 404 — alternate path, không block). |
-| HDTV-027 | FR-X.3-01 entry-point | Truy cập HD list từ VV detail accordion | Integration | P0 | **Đạt** | — | Verified trong seed: VV-509-005 detail → accordion "HĐ tư vấn liên kết" → row HDTV-0003 đầy đủ thông tin. |
-| HDTV-028 | FR-X.3-01 entry-point | Truy cập HD list từ TVV detail tab "HĐ tư vấn" | Integration | P1 | **Đạt** (retest) | — | Re-test: TVV detail `/chuyen-gia-tvv/{id}` render 6 tabs (Hồ sơ / Thẩm định disabled / Năng lực / Lịch sử hỗ trợ / **HĐ tư vấn** / Đánh giá). Tab "HĐ tư vấn" tồn tại + table render đúng schema. Empty cascade BUG-HDTV-029 (mọi HD `tuVanVienId=null`). |
-| HDTV-029 | BR-DROP-HDTV-01 | Form HD có TVV dropdown filter `loaiTvv=TU_VAN_VIEN` HOAT_DONG | Validation | P1 | **Sai spec** (R3 partial) | ~~BUG-HDTV-029~~ + BUG-HDTV-030 | R3: Form Tạo + Edit có Radio "Loại chủ thể" + Combobox required TVV/CG (BUG-029 fix). Nhưng dropdown options 0 do FE call `pageSize=200` → 422 (BUG-HDTV-030 mới). |
-| HDTV-030 | BR-DELETE-HDTV-01 | DELETE HD mồ côi (no VV link) → 204 + GET 404 | Edge | P1 | **Đạt** | — | DELETE HDTV-0001 (mồ côi) trả 204; GET sau DELETE → 404 ERR-VAL-X3-159-02. |
-| HDTV-031 | BR-DROP-HDTV-02 | Form HD dropdown CG filter `loaiTvv=CHUYEN_GIA` HOAT_DONG | Validation | P1 | **Sai spec** (R3 partial) | ~~BUG-HDTV-029~~ + BUG-HDTV-030 | R3: Form có Radio TCTV; chọn radio Tổ chức → dropdown TCTV cũng empty cùng nguyên nhân (BUG-030 pageSize 200→422). |
+### Bảng 1 — Trạng thái toàn bộ TC (snapshot R6 — LATEST 2026-05-11 17:10:00)
 
-### Chú thích
+| TC ID | Tên TC ngắn | Type | Priority | Status | Bug ID | Ghi chú ngắn |
+|---|---|---|:-:|:-:|---|---|
+| HDTV-013 | Tạo HD trống tên → ERR-VAL | Negative | P0 | ✅ Đạt | — | API trả 422 ERR-VAL đúng schema |
+| HDTV-014 | Ngày BĐ > Ngày KT → ERR-VAL | Negative | P0 | ✅ Đạt | ~~BUG-035~~ | Calendar disable + text input commit đúng (R6) |
+| HDTV-015 | Giá trị HD ≤ 0 → ERR-VAL | Negative | P0 | ✅ Đạt | — | API trả 422 cho 0 và số âm |
+| HDTV-016 | Tổng thanh toán > giá trị HD → ERR | Validation | P0 | ✅ Đạt | — | BR-VAL-HDTV-03 enforced BE |
+| HDTV-017 | Search + filter + pagination | Search | P1 | ✅ Đạt | — | Tab filter + page-size OK |
+| HDTV-018 | Tiến độ TT công thức 50% | Validation | P1 | ✅ Đạt | ~~BUG-018~~ | Form Edit có switch giai đoạn → tienDoTt=50% (R3 Closed) |
+| HDTV-019 | Highlight đỏ HD ≤30 ngày | Validation | P2 | ✅ Đạt | — | Cell rgb(255,77,79) #ff4d4f AntD danger |
+| HDTV-020 | Tab Nhật ký HD detail | Workflow | P1 | ✅ Đạt | ~~BUG-020~~ | UI tab Nhật ký 6 row + API `/audit-logs` 200 (R6 Closed) |
+| HDTV-021 | QTHT chỉ view, không CUD | Authorization | P0 | ✅ Đạt | ~~BUG-021~~ | qtht_07 POST/PATCH/DELETE đều 403 (R3 Closed) |
+| HDTV-022 | NHT không có HD trong sidebar | Authorization | P0 | ✅ Đạt | — | Sidebar không HD + URL guard chặn |
+| HDTV-023 | DN không truy cập HD | Authorization | P0 | ✅ Đạt | — | DN sidebar 5 module, không HD; API 403 |
+| HDTV-024 | BN/DP scope theo donViId | Authorization | P0 | ✅ Đạt | ~~BUG-036~~ | BKH 0 record, AG 1 record AG-scope; CB không còn Create btn (R6 Closed) |
+| HDTV-025 | DELETE HD có VV link → ERR | Guard | P0 | ✅ Đạt | — | BE chặn DELETE đúng business rule |
+| HDTV-026 | PATCH `vuViecIds` add VV vào HD mồ côi | Integration | P0 | ✅ Đạt | ~~BUG-026~~ | soVuViecLienKet 0→1 persist (R3 Closed) |
+| HDTV-027 | VV detail accordion HD list | Integration | P0 | ✅ Đạt | ~~BUG-031~~ | Accordion 10 column + button Tạo (R6 Closed) |
+| HDTV-028 | TVV detail có section HĐ TV | Integration | P1 | ⚠️ **Sai spec** | **BUG-032** | TVV detail KHÔNG có section HD — FE chưa implement |
+| HDTV-029 | Form HD có dropdown TVV picker | UI Form | P1 | ✅ Đạt | ~~BUG-029~~ | Radio + Combobox + CHECK enforced (R3 Closed) |
+| HDTV-030 | Edit form load dropdown TVV | UI Form | P1 | ✅ Đạt | ~~BUG-030~~ | pageSize=100 + dropdown 8 options render (R6 Closed) |
+| HDTV-031 | Form HD dropdown CG picker | UI Form | P1 | ✅ Đạt | ~~BUG-031~~ | FE/BE param case thống nhất (R6 Closed) |
+| HDTV-032 | TVV-HD section Lịch sử | Integration | P1 | ❌ **Lỗi** | **BUG-032** | TVV detail tab Lịch sử thiếu sub-section HD |
+| HDTV-033 | Entry point modal/drawer | Integration | P0 | ✅ Đạt | ~~BUG-033~~ | VV accordion + HDTV detail có Create/Edit/Delete (R6 Closed) |
+| HDTV-034 | Route standalone `/hop-dong-tv/danh-sach` | UX/Spec | P2 | ⚠️ **Sai spec** | **BUG-034** | Route vẫn render trái spec v3.5 M-01 — chờ BA |
+| HDTV-035 | RangePicker text input commit | Negative | P2 | ✅ Đạt | ~~BUG-035~~ | FE commit cả tuNgay + denNgay đầy đủ (R6 Closed) |
+| HDTV-036 | Permission inversion CB > QTHT | Authorization | P1 | ✅ Đạt | ~~BUG-036~~ | 3 CB role không còn Create btn standalone (R6 Closed) |
+| **Tổng** | **24 TC** | | | **✅21 · ⚠️2 · ❌1 · 🚫0** | | R6: 6/8 bug PASS Closed-verified |
 
-> **Result:** `Đạt` (PASS 100%) · `Lỗi` (FAIL có bug) · `Sai spec` (UI/API lệch SRS — bug) · `Không test được` (BLOCKED do thiếu UI/endpoint) · `Hoãn` (DEFERRED ngoài scope round)
+> **Ghi chú scope:** HDTV-001..012 (list/menu/search standalone) defer ngoài scope round 7 — per SRS v2.1 chuyển HĐ TV thành sub-resource VV/TVV, không có menu độc lập. Khi BA quyết định BUG-034 (route standalone) thì re-scope nhóm này.
 
----
+### Bảng 2 — TC chưa Đạt — vì sao và cần làm gì
 
-## 3. Bug Report
+Hiện tại còn **3 TC chưa Đạt clean** (1 ❌ Lỗi + 2 ⚠️ Sai spec) — chia 2 nhóm: **2 chờ Dev FE bổ sung UI · 1 chờ BA confirm spec**.
 
-> **Lưu ý:** Tóm tắt inline. Chi tiết Steps/Evidence xem [Pass-bug-report-r7-3-14-hdtv.md](../../bug-reports/hop-dong-tv/Pass-bug-report-r7-3-14-hdtv.md) (file gốc HDTV-001/002/003 + bổ sung 4 bug mới HDTV-018/020/021/026/029).
+| TC ID | Vì sao chưa chạy được (Đạt) | Cần làm gì để Đạt | Ai làm | Nhóm |
+|---|---|---|:-:|:-:|
+| HDTV-028 | TVV detail (`/chuyen-gia-tvv/{id}`) không có section "Hợp đồng tư vấn" liệt kê HD theo TVV. Đã verify R6 multi-TVV. | FE bổ sung section gọi API `/tu-van-viens/{id}/hop-dong-tu-vans` render table HD theo TVV trong tab Năng lực hoặc tab riêng. | Dev FE | B (Chờ dev fix) |
+| HDTV-032 | TVV detail tab "Lịch sử" chỉ gọi `lich-su-ho-tro` — thiếu sub-section render danh sách HD đã ký theo TVV. | FE bổ sung sub-section "Hợp đồng đã ký" trong tab Lịch sử per SRS v3 line 241. | Dev FE | B (Chờ dev fix) |
+| HDTV-034 | Route `/hop-dong-tv/danh-sach` (standalone list) vẫn render được dù SRS v2.1 đã chuyển HĐ TV thành sub-resource. | BA quyết định: **(A)** xóa route hoàn toàn (404) **hoặc (B)** giữ ẩn cho QTHT/admin. Sau khi BA confirm, dev FE thực hiện. | BA | C (Chờ BA confirm spec) |
 
-### BUG-HDTV-018 — [Major] Form Edit HD thiếu field "Đã thanh toán" → không test được tiến độ 50% BR-VAL-HDTV-04
-
-| Trường | Giá trị |
-|--------|---------|
-| **Severity** | Major |
-| **Priority** | P1 |
-| **TC Reference** | HDTV-018 |
-| **Status** | Open (mới) |
-| **Assignee** | FE Team + BE Team |
-
-**Mô tả:** Form Edit HD render 4 field per giai đoạn thanh toán (Tên/Số tiền/Ngày dự kiến/Ghi chú), thiếu field `trangThaiTt` để mark "Đã thanh toán". PATCH HD với `thanhToans[].trangThaiTt='DA_THANH_TOAN'` BE silently dropped (status 200 nhưng record không đổi). Tester không có cách nào set HD đến trạng thái 50% để verify công thức `tienDoTt`.
-
-**Expected vs Actual:** Spec FR-X.3-01 BR-VAL-HDTV-04 yêu cầu công thức `tienDoTt = SUM(thanhToans WHERE trangThaiTt=DA_THANH_TOAN) / giaTriHopDong * 100`. UI/API thiếu cơ chế update trạng thái thanh toán → công thức không kích hoạt được.
-
-### BUG-HDTV-020 — [Major] HD detail thiếu tab "Nhật ký" + endpoint audit log không tồn tại (BR-AUD-HDTV-01)
-
-| Trường | Giá trị |
-|--------|---------|
-| **Severity** | Major |
-| **Priority** | P1 |
-| **TC Reference** | HDTV-020 |
-| **Status** | Open (mới) |
-| **Assignee** | FE Team + BE Team |
-
-**Mô tả:** Spec FR-X.3-01 BR-AUD-HDTV-01 yêu cầu audit log mọi CRUD trên HD. UI HD detail (`/hop-dong-tv/{id}`) không có tab "Nhật ký" / "Lịch sử" / "Audit". Probe API: `/audit-logs`, `/nhat-ky`, `/lich-su`, `/history` sub-resource đều 404; top-level `/audit-logs?entityType=HOP_DONG_TU_VAN` 403 cho `cb_nv_tw_01`.
-
-### BUG-HDTV-021 — [Critical] QTHT bypass cả CUD trên HD TV: POST→500, PATCH→200 (modify thành công), DELETE→204 (hard-delete thành công)
-
-| Trường | Giá trị |
-|--------|---------|
-| **Severity** | **Critical** (escalate Major → Critical sau retest 2026-05-10 11:03:00) |
-| **Priority** | P0 |
-| **TC Reference** | HDTV-021 |
-| **Status** | Open (mới) |
-| **Assignee** | BE Team |
-
-**Mô tả:** QTHT (per BR-AUTH-HDTV-01 chỉ có quyền R, perms array = []) bypass cả 3 thao tác CUD trên DB nghiệp vụ HD TV. POST trả `500 ERR-SYS-00-00-01` thay vì `403`. **PATCH trả `200 OK` thực sự modify record** (đổi `ghiChu` thành công, GET sau PATCH confirm). **DELETE trả `204 No Content` hard-delete record** (HDTV-0009 mồ côi đã bị xoá khỏi DB qua QTHT, GET sau DELETE → 404). Permission middleware không gate handler CUD trước khi vào BE logic → leak khả năng modify/destroy data nghiệp vụ.
-
-### BUG-HDTV-026 — [Major] N:N linking VV vào HD broken — PATCH `vuViecIds` không persist
-
-| Trường | Giá trị |
-|--------|---------|
-| **Severity** | Major |
-| **Priority** | P0 |
-| **TC Reference** | HDTV-026, HDTV-019 (cascade) |
-| **Status** | Open (mới) |
-| **Assignee** | BE Team |
-
-**Mô tả:** PATCH `/api/v1/hop-dong-tu-vans/:id` với body `{version, vuViecIds: [vvId]}` trả 200 nhưng `soVuViecLienKet` không tăng. 4 sub-resource POST endpoint thử (`/vu-viecs`, `/vu-viec-links`, `/lien-ket-vu-viec`, `/links`) đều 404. Cascade impact: HDTV-019 không test được vì cần link HDTV-0010 (5 ngày) vào VV để xem highlight trong VV accordion.
-
-### BUG-HDTV-029 — [Major] Form Tạo/Sửa HD thiếu dropdown TVV/CG picker (FR-X.3-01 §2)
-
-| Trường | Giá trị |
-|--------|---------|
-| **Severity** | Major |
-| **Priority** | P1 |
-| **TC Reference** | HDTV-029, HDTV-031 |
-| **Status** | Open (mới) |
-| **Assignee** | FE Team |
-
-**Mô tả:** Form modal "Tạo hợp đồng tư vấn" / "Cập nhật hợp đồng tư vấn" có 12 field nhưng KHÔNG có dropdown picker TVV (`tu_van_vien_id`) hoặc CG (`to_chuc_tu_van_id`). Spec entity HOP_DONG_TU_VAN §3.4.3.13 có column `tuVanVienId` (đã verify trong response GET); CHECK constraint yêu cầu `tu_van_vien_id IS NOT NULL OR to_chuc_tu_van_id IS NOT NULL`. Tester chỉ điền được "Bên B" textbox tự do → không thoả CHECK.
+> **Phân loại nhóm:** B = Chờ dev fix bug (đã log BUG-{ID}) · C = Chờ BA confirm spec.
 
 ---
 
-## 4. Detailed Test Results
+## 3. Bug Report (chỉ liệt kê bug còn Open)
 
-### 4.1 HDTV-013: Tạo HD với tên rỗng → ERR-VAL
+> **Lưu ý:** Chi tiết Steps/Evidence của tất cả 12 bug (10 Closed + 2 Open) xem file [bug-report-r7-7-14-hdtv.md](../../bug-reports/hop-dong-tv/bug-report-r7-7-14-hdtv.md). Section này chỉ tóm tắt 2 bug còn Open.
 
-**Pre-conditions:** login `cb_nv_tw_01`; truy cập form `/hop-dong-tv/tao-moi?vuViecId=VV-509-001`.
+### BUG-HDTV-032 — [Medium] TVV detail thiếu section "Hợp đồng tư vấn"
 
-**Test Steps:**
+| Trường | Giá trị |
+|--------|---------|
+| **Severity** | Medium |
+| **Priority** | P1 |
+| **TC Reference** | HDTV-028, HDTV-032 |
+| **Status** | **Open** |
+| **Assignee** | Dev FE |
 
-| Step | Action | Expected | Actual | Status |
-|------|--------|----------|--------|--------|
-| 1 | POST `/api/v1/hop-dong-tu-vans` body `{tenHopDong:'', benA, benB, giaTriHopDong:1000, ngayBatDau, ngayKetThuc}` | 422 + ERR-HDTV-01 message "tên không được trống" | 422 + `ERR-VAL-SYS-00-01 details=[{field:'tenHopDong', message:'tenHopDong should not be empty'}]` | **Đạt** |
+**Mô tả:** Theo SRS v3 line 241 + UC163, TVV detail (`/chuyen-gia-tvv/{id}`) phải có section/tab liệt kê các HĐ TV mà TVV đó tham gia. Hiện tại UI chỉ có 5 tab (Hồ sơ / Năng lực / Lịch sử hỗ trợ / Đánh giá / Thẩm định disabled), tab "Lịch sử hỗ trợ" chỉ gọi `lich-su-ho-tro` mà KHÔNG render danh sách HĐ TV.
 
-**Notes:** Code error generic `ERR-VAL-SYS-00-01` thay vì `ERR-HDTV-01` chuyên biệt — chấp nhận được vì NestJS class-validator default code. Verified BR-VAL-HDTV-01 backend enforce.
+**Tác động:** QA + người dùng cuối không thể tra cứu lịch sử HĐ của một TVV cụ thể — phải truy ngược từ VV → HD → TVV (workflow dài + dễ miss).
 
-### 4.2 HDTV-014: Ngày BĐ > Ngày KT → ERR-VAL
+**Đề xuất:** FE bổ sung section "Hợp đồng tư vấn" trong tab Năng lực hoặc tab riêng, gọi `/tu-van-viens/{id}/hop-dong-tu-vans` (hoặc `/hop-dong-tu-vans?tuVanVienId={id}`) render table 10 column như VV detail.
 
-**Pre-conditions:** login `cb_nv_tw_01`.
+### BUG-HDTV-034 — [Minor] Route standalone `/hop-dong-tv/danh-sach` vẫn render trái spec v3.5
 
-**Test Steps:**
+| Trường | Giá trị |
+|--------|---------|
+| **Severity** | Minor |
+| **Priority** | P2 |
+| **TC Reference** | HDTV-034 |
+| **Status** | **Open** (chờ BA confirm) |
+| **Assignee** | BA (quyết định spec) → Dev FE (thực hiện) |
 
-| Step | Action | Expected | Actual | Status |
-|------|--------|----------|--------|--------|
-| 1 | UI Form RangePicker pick ngày BĐ 20/05/2026 → cố pick ngày KT 15/05/2026 | UI hiển thị error / disable end | Picker disable mọi ngày ≤ ngày BĐ → user không thể chọn | **Đạt** (UI guard) |
-| 2 | API POST với `ngayBatDau:'2026-05-20', ngayKetThuc:'2026-05-15'` | 422 + ERR-HDTV-02 | 422 message `ngayKetThuc must be greater than ngayBatDau` | **Đạt** |
+**Mô tả:** SRS v3.5 line 660 M-01 + spec v3 line 241 quy định HĐ TV chỉ truy cập qua VV/TVV modal/drawer, KHÔNG có route standalone. Hiện tại `/hop-dong-tv/danh-sach` vẫn render được table list (dù không có menu sidebar dẫn đến).
 
-### 4.3 HDTV-015: Giá trị HD ≤ 0 → ERR-VAL
+**Tác động:** Tester / dev nhập trực tiếp URL vẫn truy cập được — vi phạm "single source of truth" pattern của spec v2.1.
 
-| Step | Action | Expected | Actual | Status |
-|------|--------|----------|--------|--------|
-| 1 | POST với `giaTriHopDong: 0` | 422 + ERR-HDTV-05 | 422 `giaTriHopDong must not be less than 0.01` | **Đạt** |
-| 2 | POST với `giaTriHopDong: -100` | 422 + ERR-HDTV-05 | 422 cùng message | **Đạt** |
+**Đề xuất BA xác nhận:**
+- **Phương án A:** Xóa route hoàn toàn → trả 404 khi nhập URL.
+- **Phương án B:** Giữ route nhưng ẩn cho mọi role trừ QTHT/admin (làm trang quản trị nội bộ).
 
-### 4.4 HDTV-016: SUM thanhToans > giaTriHopDong → ERR-HDTV-03
+---
 
-| Step | Action | Expected | Actual | Status |
-|------|--------|----------|--------|--------|
-| 1 | POST với `giaTriHopDong: 100000000` + `thanhToans=[{soTien:60M,thuTu:1},{soTien:50M,thuTu:2}]` (tổng 110tr > 100tr) | 422 + ERR-HDTV-03 | 422 `Tổng số tiền các giai đoạn không được vượt giá trị hợp đồng` | **Đạt** |
+## 4. Detailed Test Results (chi tiết các TC quan trọng)
 
-### 4.5 HDTV-018: Tiến độ TT 50% (BLOCKED)
+> Liệt kê chi tiết các TC có nhiều bước hoặc TC đã từng FAIL/PARTIAL nay PASS sau dev fix. Các TC Negative/Validation đơn giản (HDTV-013/014/015/016) — xem bug-report cho payload chi tiết.
 
-**Test Steps:**
+### 4.1 HDTV-018 — Tiến độ TT công thức 50% (Closed R3 sau dev fix)
 
-| Step | Action | Expected | Actual | Status |
-|------|--------|----------|--------|--------|
-| 1 | POST tạo HDTV-0009 với 3 thanhToans (30tr+20tr+50tr / 100tr) | 201 + record có 3 thanhToans | 201 OK, 3 thanhToans tạo nhưng tất cả `trangThaiTt=CHUA_THANH_TOAN`. Field `daThanhToan` payload bị BE drop. | **Sai spec** |
-| 2 | UI navigate `/hop-dong-tv/0009` → click Chỉnh sửa | Form hiển thị field "Đã thanh toán" toggle per giai đoạn | Form chỉ render Tên/Số tiền/Ngày/Ghi chú per giai đoạn — KHÔNG có toggle | **Lỗi UI** |
-| 3 | PATCH HD với body `{version, thanhToans: [{...trangThaiTt:DA_THANH_TOAN}]}` | 200 + record update | 200 nhưng GET sau patch vẫn `CHUA_THANH_TOAN` × 3 — BE silently drop | **Lỗi BE** |
-| 4 | PATCH endpoint sub `/hop-dong-tu-vans/{id}/thanh-toans/{ttId}` | 200 + update | 404 (3 path variants thử) | **Endpoint thiếu** |
-
-**Verdict:** Không test được công thức `tienDoTt = 50%`. Cần dev fix BUG-HDTV-018 (FE + BE).
-
-### 4.6 HDTV-021: QTHT bypass CUD permission gate (escalated Critical sau retest 11:03:00)
-
-**Pre-conditions:** login `qtht_01` trong isolated context `qtht_retest`.
-
-**Test Steps:**
+**Pre-conditions:** login `cb_nv_tw_07`; có HD `HDTV-20260510-0001` đã tạo với 2 giai đoạn thanh toán (50tr + 50tr / 100tr).
 
 | Step | Action | Expected | Actual | Status |
 |------|--------|----------|--------|--------|
-| 1 | GET `/api/v1/auth/me` | 200 + role QTHT, perms 0 | 200 OK + perms `[]` | **Đạt** |
-| 2 | GET `/api/v1/hop-dong-tu-vans?pageSize=5` | 200 + list (R quyền) | 200 + records | **Đạt** |
-| 3 | POST `/api/v1/hop-dong-tu-vans` body hợp lệ tối thiểu | 403 ERR-AUTH-PERM-01 | **500 ERR-SYS-00-00-01** "Lỗi hệ thống" | **Sai spec** |
-| 4 | PATCH `/api/v1/hop-dong-tu-vans/{HDTV-0009}` body `{version, ghiChu:'qtht-retest-2026-05-10'}` | 403 ERR-AUTH-PERM-01 | **200 OK** + record updated. GET sau PATCH confirm `ghiChu='qtht-retest-2026-05-10'` | **Sai spec** (Critical) |
-| 5 | DELETE `/api/v1/hop-dong-tu-vans/{HDTV-0009-mồ-côi}` | 403 ERR-AUTH-PERM-01 | **204 No Content** + record xoá thật. GET sau DELETE → 404 ERR-VAL-X3-159-02 | **Sai spec** (Critical) |
+| 1 | Mở Form Edit HD | Có switch toggle "Đã thanh toán" cho từng giai đoạn | Form Edit có 2 switch giai đoạn (trước R3 KHÔNG có) | ✅ |
+| 2 | Toggle 1/2 switch → Lưu | PATCH success + `tienDoTt = 50` | PATCH 200 + GET response `tienDoTt: 50` | ✅ |
+| 3 | UI HD detail | Hiển thị "Tiến độ thanh toán: 50%" | Đúng "50%" | ✅ |
 
-**Verdict:** Permission middleware không enforce gate CUD trên `/hop-dong-tu-vans` cho QTHT — cần wrap handler bằng @Permission decorator/Guard ngay BEFORE entering BE logic.
+### 4.2 HDTV-021 — QTHT chỉ view, không CUD (Closed R3 sau dev fix Critical)
 
-### 4.7 HDTV-024: BR-AUTH-08 BN/DP scope
-
-**Pre-conditions:** isolated contexts `bn_role` (cb_nv_bn_01 BKH) + `dp_role` (cb_nv_dp_01 AG).
-
-**Test Steps:**
+**Pre-conditions:** login `qtht_07` trong isolated context `qtht_retest`.
 
 | Step | Action | Expected | Actual | Status |
 |------|--------|----------|--------|--------|
-| 1 | BN BKH `cb_nv_bn_01` GET `/api/v1/hop-dong-tu-vans?pageSize=50` | 200 + 0 records (vì 7 HD seed đều của Cục BTTP TW ≠ BKH) | 200 + 0 items, totalRecords=undefined | **Đạt** |
-| 2 | DP AG `cb_nv_dp_01` GET cùng endpoint | 200 + 0 records (DP AG ≠ TW Cục BTTP) | 200 + 0 items | **Đạt** |
+| 1 | GET `/api/v1/auth/me` | role=QTHT, perms=[] | role=QTHT, perms=[] | ✅ |
+| 2 | GET `/api/v1/hop-dong-tu-vans?pageSize=5` | 200 (quyền R) | 200 + records | ✅ |
+| 3 | POST `/api/v1/hop-dong-tu-vans` (body hợp lệ) | 403 ERR-PERM | **403 ERR-PERM-SYS-00-01** | ✅ |
+| 4 | PATCH `/api/v1/hop-dong-tu-vans/{id}` | 403 | **403 ERR-PERM-SYS-00-01** | ✅ |
+| 5 | DELETE `/api/v1/hop-dong-tu-vans/{id}` | 403 | **403 ERR-PERM-SYS-00-01** | ✅ |
 
-**Notes:** Thoả BR-AUTH-08 scope theo donViId. Khi seed thêm HD thuộc BKH/AG, phải verify BN/DP thấy đúng record của mình.
+> Trước R3: PATCH/DELETE bypass thành công (Critical). Sau R3: BE wrap @Permission middleware đúng — bug Closed.
 
-### 4.8 HDTV-026: N:N VV linking BROKEN
+### 4.3 HDTV-024 — BN/DP scope theo donViId + Permission CB vs QTHT (Closed R6)
 
-| Step | Action | Expected | Actual | Status |
-|------|--------|----------|--------|--------|
-| 1 | PATCH HDTV-0010 (mồ côi) `{version, vuViecIds:[VV-509-009-id]}` | 200 + soVuViecLienKet=1 | 200 + `soVuViecLienKet=0` | **Lỗi** |
-| 2 | POST sub-resource thử 4 path | 201 + link tạo | 404 × 4 | **Endpoint thiếu** |
-
-### 4.9 HDTV-019: Highlight đỏ HD ngayKetThuc ≤30 ngày (Đạt — retest 2026-05-10 11:08:00)
-
-**Pre-conditions:** login `cb_nv_tw_01`. POST tạo HD mới với `vuViecIds:[vvId]` (works at creation time per seed pattern, ≠ PATCH N:N).
+**Pre-conditions:** isolated contexts `bn_role` (cb_nv_bn_07 BKH) + `dp_role` (cb_nv_dp_07 AG) + `qtht_07`.
 
 | Step | Action | Expected | Actual | Status |
 |------|--------|----------|--------|--------|
-| 1 | POST `/api/v1/hop-dong-tu-vans` body `{tenHopDong:'HDTV-0011 highlight test 5 ngày', ngayKetThuc:'2026-05-15', vuViecIds:[VV-509-006-id], ...}` | 201 + record + linked VV | 201 + `id=HDTV-20260510-0011`, `soVuViecLienKet=1` | **Đạt** |
-| 2 | UI navigate VV-509-006 detail → expand accordion "HĐ tư vấn liên kết" → check màu cell ngayKt của HDTV-0011 | Cell render màu đỏ (≤30 ngày = warning) | `evaluate_script(getComputedStyle(cell).color)` = `rgb(255, 77, 79)` (#ff4d4f AntD danger color) | **Đạt** |
-| 3 | Compare cell ngayKt của HD ≥30 ngày (HDTV-0003 ngayKt 09/08/2026) | Cell màu mặc định (đen/xám) | Cell render mặc định, không đỏ | **Đạt** |
+| 1 | `cb_nv_bn_07` BKH GET `/hop-dong-tu-vans?pageSize=50` | 0 record (HD seed thuộc Cục BTTP TW ≠ BKH) | 200 + 0 items | ✅ |
+| 2 | `cb_nv_dp_07` AG GET cùng endpoint | Chỉ record của AG | 200 + 1 item AG-scope | ✅ |
+| 3 | `cb_nv_bn_07` + `cb_nv_dp_07` mở `/hop-dong-tv/danh-sach` | KHÔNG có button "+ Tạo hợp đồng" (per BUG-036 R6) | Cả 2 KHÔNG có button | ✅ |
+| 4 | `qtht_07` mở `/hop-dong-tv/danh-sach` | KHÔNG có Create | Đúng | ✅ |
 
-**Verdict:** BR-VIEW-HDTV-01 highlight đỏ ≤30 ngày verified. Note: HDTV-0009 đã bị QTHT hard-delete khỏi DB qua BUG-HDTV-021 retest — không ảnh hưởng test case này (HDTV-0011 fresh).
+> Trước R6: CB_BN + CB_DP có button Create / QTHT không có → permission inversion (BUG-036 Major). Sau R6: nhất quán cả 3 role đều không có Create → đúng spec.
 
-### 4.10 HDTV-028: Truy cập HD list từ TVV detail tab (Đạt — bổ sung retest 2026-05-10 11:12:00)
+### 4.4 HDTV-027 — VV detail accordion HD (Closed R6)
 
-**Pre-conditions:** login `cb_nv_tw_01`. Sidebar → "Mạng lưới Tư vấn viên" → "Tư vấn viên / Chuyên gia".
+**Pre-conditions:** login `cb_nv_tw_07`; có VV `VV-QA-R7-LIFECYCLE-HT` state HOAN_THANH.
 
 | Step | Action | Expected | Actual | Status |
 |------|--------|----------|--------|--------|
-| 1 | Click row TVV-BTP-TW-0014 trong list | Navigate `/chuyen-gia-tvv/{id}` | URL = `/chuyen-gia-tvv/{tvvId}`, page render hồ sơ | **Đạt** |
-| 2 | Verify tabs trong detail | Có tab "HĐ tư vấn" | 6 tabs: Hồ sơ / Thẩm định (disabled) / Năng lực / Lịch sử hỗ trợ / **HĐ tư vấn** / Đánh giá | **Đạt** |
-| 3 | Click tab "HĐ tư vấn" | Render table HD theo TVV | Table render schema đúng (cột: Mã HD / Tên / VV / Trạng thái / ngayKt). **Empty** vì cascade BUG-HDTV-029 (mọi HD `tuVanVienId=null`) | **Đạt** (UI render đúng) |
+| 1 | Mở VV detail | Có accordion "Hợp đồng tư vấn liên kết" | Accordion render | ✅ |
+| 2 | Click accordion expand | Table 10 column (Mã / Tên / Bên A / Bên B / Giá trị / Tiến độ TT / Ngày BĐ / Ngày KT / Trạng thái / Action) + button "+ Tạo hợp đồng" | Render đúng 10 column + button (trước R6 thiếu 4 column + thiếu button) | ✅ |
+| 3 | Click "+ Tạo hợp đồng" | Mở Drawer Tạo HD với `vuViecId` auto-fill | Drawer mở + auto-fill VV-QA-R7-LIFECYCLE-HT | ✅ |
 
-**Verdict:** Entry-point TVV detail tồn tại + render schema đúng. Khi BUG-HDTV-029 fix (form thêm TVV picker) → table sẽ tự populate.
+### 4.5 HDTV-028 — TVV detail section HĐ TV (⚠️ STILL Open R6)
+
+**Pre-conditions:** login `cb_nv_tw_07`; có TVV `TVV-BTP-TW-0014` HOAT_DONG.
+
+| Step | Action | Expected | Actual | Status |
+|------|--------|----------|--------|--------|
+| 1 | Sidebar → Mạng lưới TVV → Tư vấn viên / Chuyên gia | List TVV render | List render | ✅ |
+| 2 | Click TVV row → mở `/chuyen-gia-tvv/{id}` | Detail page render | URL `/chuyen-gia-tvv/{id}`, hồ sơ render | ✅ |
+| 3 | Verify tabs | Có tab/section "Hợp đồng tư vấn" liệt kê HD theo TVV | **5 tab** (Hồ sơ / Năng lực / Lịch sử hỗ trợ / Đánh giá / Thẩm định disabled) — KHÔNG có section HD | ❌ **Sai spec** |
+| 4 | Check tab "Lịch sử hỗ trợ" | Có sub-section "Hợp đồng đã ký" | Chỉ gọi `lich-su-ho-tro` — KHÔNG render HD | ❌ **Sai spec** |
+
+> **Verdict R6:** BUG-032 vẫn Open — Dev FE chưa implement section. Đã verify với 2 TVV khác nhau cùng kết quả.
 
 ---
 
@@ -359,58 +218,58 @@ Hiện tại còn **8 TC** chưa Đạt clean — chia 3 nhóm: 7 chờ dev fix 
 
 | Username | Role | Đơn vị | Cấp | Dùng cho TC |
 |----------|------|--------|-----|-------------|
-| `cb_nv_tw_01` | CB_PD_TW + CB_NV_TW (+ ghost QA_VT_DEL_TEST_R7) | Cục BTTP | TW | HDTV-013/014/015/016/018/019/020/025/026/027/030 |
-| `qtht_01` | QTHT | (none) | TW | HDTV-021 (authz) |
-| `nht_01` | NHT (TVV/CG) | (none) | TW | HDTV-022 (authz) |
-| `9999999990` | DN | DN Test 01 | (DN) | HDTV-023 (authz) |
-| `cb_nv_bn_01` | CB_NV_BN (BKH) | BKH | BN | HDTV-024 (scope) |
-| `cb_nv_dp_01` | CB_NV_DP (AG) | Sở Tư pháp AG | DP | HDTV-024 (scope) |
+| `cb_nv_tw_07` | CB_NV_TW + CB_PD_TW | Cục BTTP | TW | HDTV-013/014/015/016/017/018/019/025/026/027/028/029/030/031/032/035 |
+| `qtht_07` | QTHT | (none) | TW | HDTV-021 / HDTV-036 (authz + permission inversion) |
+| `nht_btp_tw_audit_r30` | NHT (TVV/CG) | Cục BTTP | TW | HDTV-022 (NHT sidebar không HD) |
+| `9999999990` | DN | DN Test 01 | (DN) | HDTV-023 (DN sidebar không HD) |
+| `cb_nv_bn_07` | CB_NV_BN | BKH | BN | HDTV-024 / HDTV-036 (scope BN) |
+| `cb_nv_dp_07` | CB_NV_DP | Sở Tư pháp AG | DP | HDTV-024 / HDTV-036 (scope DP) |
 
-### 5.2 Data tạo/sử dụng trong test
+### 5.2 Data tạo / sử dụng trong test
 
-| ID / Mã | Tên / Mô tả | Purpose | Cleanup? |
-|---------|-------------|---------|----------|
-| HDTV-20260510-0001 | HD mồ côi pre-fix | Seed evidence + HDTV-030 DELETE test | DELETED via HDTV-030 |
-| HDTV-20260510-0003..0008 | 6 HD cover 6 LV linked VV | HDTV-027 verify entry-point | Keep for downstream R7.7.X |
-| HDTV-20260510-0009 | HD progress 50% test (3 thanhToans CHUA_TT) | HDTV-018 evidence | **Hard-deleted by QTHT trong BUG-HDTV-021 retest** (evidence) |
-| HDTV-20260510-0010 | HD ngayKt 2026-05-15 (5 ngày) — không link VV | HDTV-019 lần đầu (cascade fail PATCH N:N) | Keep (BUG-HDTV-026 evidence) |
-| HDTV-20260510-0011 | HD ngayKt 2026-05-15 (5 ngày) — linked VV-509-006 (POST `vuViecIds`) | HDTV-019 retest evidence (highlight đỏ verify) | Keep (HDTV-019 PASS evidence) |
+| ID / Mã | Tên / Mô tả | Purpose | Cleanup |
+|---------|-------------|---------|---------|
+| HDTV-20260510-0001 | HD mồ côi pre-fix lần đầu | Seed evidence + HDTV-030 DELETE | Hard-deleted |
+| HDTV-20260510-0003..0008 | 6 HD cover 6 LV linked VV | HDTV-027 entry-point verify | Keep cho downstream R7.7.X |
+| HDTV-20260510-0009 | HD progress 50% test (3 thanhToans) | HDTV-018 evidence | Hard-deleted by QTHT trong BUG-021 retest (evidence) |
+| HDTV-20260510-0010 | HD ngayKt 5 ngày (chưa link VV) | HDTV-019 highlight test | Keep (evidence BUG-026 cascade) |
+| HDTV-20260510-0011 | HD ngayKt 5 ngày + linked VV-509-006 | HDTV-019 highlight PASS | Keep (HDTV-019 PASS evidence) |
+| HDTV-20260511-0002 | HD ngayKt ~21 ngày | HDTV-019 retest R5 | Keep |
+| VV-QA-R7-LIFECYCLE-HT | VV HOAN_THANH | HDTV-027 + HDTV-031 accordion R6 | Keep |
+| TVV-BTP-TW-0014 + TVV-BTP-TW-0035 | TVV HOAT_DONG | HDTV-028 + HDTV-032 detail check | Keep |
 
 ---
 
 ## 6. Environment Notes
 
-- **API endpoint pattern:** `/api/v1/hop-dong-tu-vans` (plural with `-vans`, không phải `-van`)
-- **Auth flow:** JWT + OTP email (bypass `666666`); session timeout aggressive ~3-5 phút (memory `qa_htpldn_jwt_revoke_aggressive`)
-- **Token TTL:** ~3-5 phút thực bất chấp `exp` 15 phút claim — phải re-login giữa session
-- **Frontend framework:** React + Vite + Ant Design + CASL
-- **Backend:** NestJS + PostgreSQL + class-validator (NestJS auto-generates ERR-VAL-SYS-00-01)
-- **Multi-role testing:** Chrome DevTools MCP `isolatedContext` per role tránh httpOnly cookie sticky (memory `qa_htpldn_round5_t01`)
-- **Known limitations:** HD TV không có menu sidebar độc lập (per spec v2.1 R7.E1 verified) — phải truy cập qua VV/TVV detail.
+- **API endpoint pattern:** `/api/v1/hop-dong-tu-vans` (plural `-vans`).
+- **FE route:** `/hop-dong-tv/{path}` (NOT `/hop-dong-tu-van`); detail `/hop-dong-tv/{id}`; TVV detail `/chuyen-gia-tvv/{id}`.
+- **Auth flow:** JWT + OTP email (bypass `666666`); BE revoke aggressive ~3-5 phút bất chấp `exp` 15 phút — phải re-login giữa session dài (memory `qa_htpldn_jwt_revoke_aggressive`).
+- **Frontend framework:** React + Vite + Ant Design + CASL.
+- **Backend:** NestJS + PostgreSQL + class-validator (auto-generate ERR-VAL-SYS-00-01).
+- **Multi-role testing:** Chrome DevTools MCP `isolatedContext` per role tránh httpOnly cookie sticky cross-session (memory `qa_htpldn_round5_t01`).
+- **Known limitations:** HĐ TV không có menu sidebar độc lập (per SRS v2.1 R7.E1 verified) — truy cập qua VV/TVV detail.
 
 ---
 
 ## 7. Recommendations
 
-### Must Fix (Before Release)
+### Phải fix trước release (Must Fix)
 
-1. **BUG-HDTV-021 (Critical):** QTHT bypass cả CUD trên HD TV (POST→500, PATCH→200 modify thật, DELETE→204 hard-delete thật). Wrap handler bằng @Permission/Guard middleware GATE TRƯỚC khi vào BE business logic. Phải block QTHT ở route level. **Critical vì leak khả năng modify/destroy data nghiệp vụ.**
-2. **BUG-HDTV-026 (Major):** PATCH `vuViecIds` không persist → BE add handler cho field array N:N. Hoặc expose sub-resource `POST /hop-dong-tu-vans/:id/vu-viecs`.
-3. **BUG-HDTV-029 (Major):** Form thêm dropdown TVV/CG picker (filter `loaiTvv=TU_VAN_VIEN/CHUYEN_GIA, trangThai=HOAT_DONG`) — bắt buộc 1 trong 2 per CHECK constraint.
+Không có bug Critical/Major còn Open. Tất cả Critical (BUG-021) và Major (BUG-018/026/029/030/031/033/035/036) đã PASS Closed-verified ở R3/R6.
 
-### Should Fix
+### Nên fix (Should Fix)
 
-4. **BUG-HDTV-018 (Major):** Form Edit thêm field "Đã thanh toán" toggle per giai đoạn + BE accept `thanhToans[].trangThaiTt` trong PATCH; auto-recompute `tienDoTt` trigger.
-5. **BUG-HDTV-020 (Major):** UI HD detail thêm tab "Nhật ký" + BE expose `/hop-dong-tu-vans/:id/audit-logs` trả audit trail filtered theo entity.
+1. **BUG-032 (Medium)** — FE bổ sung section "Hợp đồng tư vấn" trong TVV detail (`/chuyen-gia-tvv/{id}`) — gọi `/tu-van-viens/{id}/hop-dong-tu-vans` render table HD theo TVV. Unblock HDTV-028 + HDTV-032.
 
-### Additional Recommendations
+### Chờ BA xác nhận spec (Spec Clarification)
 
-6. **Test data:** R7.7.X downstream module dùng HD có thể proceed với pool 7 HD hiện tại cho luồng read-only. Module test create/update HD phải đợi BUG-HDTV-029 fix.
-7. **Spec clarification:** BA confirm:
-   - HDTV-001..005 (list/menu) có spec menu độc lập không hay chỉ qua sub-resource?
-   - BR-AUD-HDTV-01 audit log mức độ chi tiết (snapshot before/after vs chỉ event log)?
-   - BR-VAL-HDTV-04 progress công thức chính xác (chỉ TT đã trả? hay weighted theo ngày?)
-8. **Permission matrix:** Cần probe rộng các entity khác xem QTHT có bypass tương tự (memory `qa_htpldn_qtht_permission_bypass`).
+2. **BUG-034 (Minor)** — Route standalone `/hop-dong-tv/danh-sach` vẫn render trái spec v3.5 M-01. BA quyết định: (A) xóa route → 404, hoặc (B) giữ ẩn cho QTHT/admin.
+
+### Khuyến nghị bổ sung
+
+3. **Permission audit cross-entity:** QTHT bypass CUD đã fix ở HD TV (BUG-021) — nên probe các entity khác (`/tu-van-viens`, `/to-chuc-tv`, `/vu-viecs`) xem QTHT có bypass tương tự không (memory `qa_htpldn_qtht_permission_bypass`).
+4. **Downstream module R7.7.X:** Pool 7 HD hiện tại (cover 6 LV) đủ cho module read-only. Module test create/update HD đã unblock sau khi BUG-029/030 fix.
 
 ---
 
@@ -420,39 +279,92 @@ Hiện tại còn **8 TC** chưa Đạt clean — chia 3 nhóm: 7 chờ dev fix 
 
 | Method | Endpoint | Purpose | Tested in TC |
 |--------|----------|---------|--------------|
-| GET | `/api/v1/hop-dong-tu-vans` | List HD theo scope role | HDTV-021/022/023/024 |
+| GET | `/api/v1/hop-dong-tu-vans` | List HD theo scope role | HDTV-021/022/023/024/036 |
 | GET | `/api/v1/hop-dong-tu-vans/:id` | HD detail | HDTV-018/027 |
-| POST | `/api/v1/hop-dong-tu-vans` | Tạo HD | HDTV-013/014/015/016/018/019/021 |
+| GET | `/api/v1/hop-dong-tu-vans/:id/audit-logs` | Audit log HD | HDTV-020 |
+| POST | `/api/v1/hop-dong-tu-vans` | Tạo HD | HDTV-013/014/015/016/018/019/021/029 |
 | PATCH | `/api/v1/hop-dong-tu-vans/:id` | Update HD (whole record + version) | HDTV-018/026 |
-| DELETE | `/api/v1/hop-dong-tu-vans/:id` | Hard delete (Guard có VV link) | HDTV-021/025/030 |
+| DELETE | `/api/v1/hop-dong-tu-vans/:id` | Hard delete (Guard có VV link) | HDTV-021/025 |
+| GET | `/api/v1/tu-van-viens?pageSize=100` | Dropdown TVV picker | HDTV-029/030 |
 | GET | `/api/v1/auth/me` | Verify role + permissions | All authz TCs |
-| POST | `/api/v1/auth/login` + `/auth/verify-otp` | Multi-role login | All TCs |
 
-### B — Screenshots
+### B — Screenshots evidence (R6)
 
 | File | Mô tả | TC Ref |
 |------|-------|--------|
-| [r7-7-14-hdtv-013-015-validation-empty.jpeg](r7-7-14-hdtv-013-015-validation-empty.jpeg) | Form validation errors empty/invalid | HDTV-013/015 |
-| [r7-7-14-hdtv-018-detail-no-paid-toggle.jpeg](r7-7-14-hdtv-018-detail-no-paid-toggle.jpeg) | HD detail Tiến độ TT — 3 giai đoạn "Chưa thanh toán" + form Edit không có toggle | HDTV-018 |
-| [r7-7-14-hdtv-019-highlight-red-5days.jpeg](r7-7-14-hdtv-019-highlight-red-5days.jpeg) | VV-509-006 accordion HD tư vấn — HDTV-0011 cell ngayKt đỏ rgb(255,77,79) ≤30 ngày (retest) | HDTV-019 |
-| [r7-7-14-hdtv-029-form-no-tvv-picker-retest.jpeg](r7-7-14-hdtv-029-form-no-tvv-picker-retest.jpeg) | Form Tạo HD retest — 12 field không có TVV picker | HDTV-029 |
-| [r7-7-14-hdtv-028-tvv-detail-hd-tab.jpeg](r7-7-14-hdtv-028-tvv-detail-hd-tab.jpeg) | TVV detail `/chuyen-gia-tvv/{id}` — 6 tabs có "HĐ tư vấn" + table render schema đúng | HDTV-028 |
+| [image/r7-reverify-hdtv-detail-qtht-nhatky.png](../../bug-reports/hop-dong-tv/image/r7-reverify-hdtv-detail-qtht-nhatky.png) | HD detail tab Nhật ký 6 row + endpoint `/audit-logs` 200 | HDTV-020 |
+| [image/r7-reverify-bug-030-edit-form-dropdown.png](../../bug-reports/hop-dong-tv/image/r7-reverify-bug-030-edit-form-dropdown.png) | Form Edit pageSize=100 + dropdown render | HDTV-030 |
+| [image/r7-reverify-bug-036-qtht-no-create.png](../../bug-reports/hop-dong-tv/image/r7-reverify-bug-036-qtht-no-create.png) | QTHT KHÔNG có button Create | HDTV-036 |
+| [image/r7-reverify-bug-036-cb-nv-bn-no-create.png](../../bug-reports/hop-dong-tv/image/r7-reverify-bug-036-cb-nv-bn-no-create.png) | CB_NV_BN KHÔNG có button Create | HDTV-024/036 |
+| [image/r7-reverify-bug-036-cb-nv-dp-no-create.png](../../bug-reports/hop-dong-tv/image/r7-reverify-bug-036-cb-nv-dp-no-create.png) | CB_NV_DP KHÔNG có button Create | HDTV-024/036 |
+| [image/r7-reverify-bug-032-tvv-detail-still-no-hd-tab.png](../../bug-reports/hop-dong-tv/image/r7-reverify-bug-032-tvv-detail-still-no-hd-tab.png) | TVV detail vẫn 5 tab không có HD section | HDTV-028/032 |
 
 ### C — SRS Traceability Matrix
 
 | SRS Reference | TC Coverage | Status |
 |---------------|-------------|--------|
-| FR-X.3-01 §2 (entity HOP_DONG_TU_VAN) | HDTV-013/014/015/016/018/026/029 | 4/7 Đạt — 3 Sai spec / Lỗi |
-| BR-VAL-HDTV-01..05 | HDTV-013/014/015/016/018 | 4/5 Đạt — BR-04 không test được |
-| BR-VIEW-HDTV-01 (highlight ≤30 ngày) | HDTV-019 | **Đạt (retest)** — HDTV-0011 cell rgb(255,77,79) đỏ |
-| BR-AUD-HDTV-01 (audit log) | HDTV-020 | Không test được — UI/API thiếu |
-| BR-AUTH-HDTV-01..03 + BR-AUTH-08 | HDTV-021/022/023/024 | 3/4 Đạt — QTHT **Critical** sai spec (bypass CUD) |
-| BR-GUARD-HDTV-01 | HDTV-025 | Đạt |
-| BR-DELETE-HDTV-01 | HDTV-030 | Đạt |
-| BR-DROP-HDTV-01/02 (TVV/CG dropdown) | HDTV-029/031 | Sai spec (form thiếu picker) |
-| FR-X.3-01 entry-point (sub-resource VV/TVV) | HDTV-027/028 | **2/2 Đạt** (HDTV-028 retest add) |
-| FR-X.3-01 N:N integration | HDTV-026 | Lỗi |
+| FR-X.3-01 §2 entity HOP_DONG_TU_VAN | HDTV-013/014/015/016/018/026/029 | ✅ 7/7 Đạt |
+| BR-VAL-HDTV-01..05 | HDTV-013/014/015/016/018 | ✅ 5/5 Đạt |
+| BR-VIEW-HDTV-01 highlight ≤30 ngày | HDTV-019 | ✅ Đạt |
+| BR-AUD-HDTV-01 audit log | HDTV-020 | ✅ Đạt (R6) |
+| BR-AUTH-HDTV-01..03 + BR-AUTH-08 | HDTV-021/022/023/024 | ✅ 4/4 Đạt (R3 + R6) |
+| BR-GUARD-HDTV-01 | HDTV-025 | ✅ Đạt |
+| BR-DELETE-HDTV-01 | HDTV-030 | ✅ Đạt |
+| BR-DROP-HDTV-01/02 (TVV/CG dropdown) | HDTV-029/031 | ✅ 2/2 Đạt (R3 + R6) |
+| FR-X.3-01 entry-point sub-resource VV | HDTV-027 / HDTV-033 | ✅ 2/2 Đạt (R6) |
+| FR-X.3-01 entry-point sub-resource TVV | HDTV-028 / HDTV-032 | ⚠️ 0/2 Sai spec — BUG-032 Open |
+| FR-X.3-01 N:N integration | HDTV-026 | ✅ Đạt (R3) |
+| Spec v3.5 M-01 sub-resource only | HDTV-034 | ⚠️ Sai spec — BUG-034 chờ BA |
 
 ---
 
-*Report generated: 2026-05-10 09:30 (UTC+7) | Re-test 2026-05-10 10:54:00 → 11:15:00 | QA Automation via Claude Code + Chrome DevTools MCP*
+# Lifecycle archive — older rounds
+
+> Section này lưu chi tiết lịch sử test các round trước (R1 → R5). Round R6 LATEST đã summary đầy đủ ở phần trên.
+
+## R5 — 2026-05-11 15:25:00 → 15:40:00 — Re-test UI-only multi-role (6 TC + 2 bug mới)
+
+Scope: chạy lại 6 TC qua UI thuần (KO API direct) với 4 role để phát hiện vấn đề UX/Permission cross-role. Phát hiện **2 bug mới**: BUG-035 Minor (RangePicker text input drop) + BUG-036 Major (CB_NV_BN/DP có button Create / QTHT không có).
+
+| TC ID | Status R5 | Bug phát hiện |
+|---|:-:|---|
+| HDTV-014 | ✅ Đạt (calendar) + ⚠️ Sai spec (text input) | BUG-035 Minor |
+| HDTV-017 | ✅ Đạt | — |
+| HDTV-019 | ✅ Đạt | — |
+| HDTV-022 | ✅ Đạt | — |
+| HDTV-023 | ✅ Đạt | — |
+| HDTV-024 | ✅ Đạt + ⚠️ permission anomaly | BUG-036 Major |
+| HDTV-028 | ⚠️ Sai spec (confirm BUG-032) | BUG-032 |
+
+## R4 — 2026-05-11 14:00:00 → 14:35:00 — Re-test UI-only qtht_07 (4 spec-gap mới)
+
+Phát hiện 4 spec-gap mới: BUG-031 (accordion column thiếu), BUG-032 (TVV detail section thiếu), BUG-033 (entry point modal/drawer chưa đầy đủ), BUG-034 (standalone route stale).
+
+## R3 — 2026-05-10 21:34:00 → 21:50:00 — Re-test sau dev fix lần 2 (bộ acc `_07`)
+
+| Bug ID | R1/R2 status | R3 status | Ghi chú |
+|--------|--------------|-----------|---------|
+| BUG-018 | Open (PATCH silently drop) | ✅ Closed | Form Edit có 3 switch giai đoạn; click → tienDoTt=50% |
+| BUG-020 | Open (4 path 404, top-level 403) | ⚠️ Partial (BE ✅ / UI ❌) | API `/audit-logs` 200 + 5 events; UI vẫn thiếu tab → Major→Medium |
+| BUG-021 | Open Critical (CUD bypass) | ✅ Closed | qtht_07 POST/PATCH/DELETE đều 403 |
+| BUG-026 | Open (PATCH silently drop) | ✅ Closed | PATCH `vuViecIds` persist, soVuViecLienKet 0→1 |
+| BUG-029 | Open (form thiếu TVV/CG) | ✅ Closed | Radio + Combobox + CHECK 400 ERR-HDTV-CHU-THE-01 |
+| BUG-030 | (mới R3) | ❌ Open Major | FE call `pageSize=200` → 422 (BE max 100) — dropdown empty |
+
+## R2 — 2026-05-10 12:13:00 → 12:18:00 — Re-test #2
+
+Minor re-test sau dev claim fix lần 1. Hầu hết bug R1 vẫn Open.
+
+## R1 — 2026-05-10 10:54:00 → 11:15:00 — Re-test #1 + bổ sung HDTV-019/028
+
+- HDTV-019 Không test được → Đạt (POST tạo HDTV-0011 với `vuViecIds:[vvId]` works at creation time, cell ngayKt đỏ verify).
+- HDTV-028 bổ sung Đạt (TVV detail render 6 tab có "HĐ tư vấn", empty table cascade BUG-029).
+- HDTV-021 escalate Major → Critical (PATCH 200 modify thật + DELETE 204 hard-delete thật).
+
+## R0 (lần đầu) — 2026-05-10 09:14:00 → 09:30:00
+
+Chạy lần đầu 17 TC. Phát hiện 6 bug mới: BUG-018 (form thiếu paid toggle) · BUG-020 (audit log) · BUG-021 (QTHT CUD bypass) · BUG-026 (N:N broken) · BUG-029 (form thiếu TVV picker) · BUG-031 cascade.
+
+---
+
+*Report cập nhật: 2026-05-11 17:10:00 (UTC+7) — R6 audit dev fix 6 bug | QA Automation via Claude Code + Chrome DevTools MCP*

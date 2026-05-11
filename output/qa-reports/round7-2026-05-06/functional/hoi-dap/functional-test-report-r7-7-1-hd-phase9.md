@@ -15,7 +15,20 @@
 
 ## Verdict
 
-✅ **3/3 bug Closed-verified Phase 9** (HD-053 R10e + HD-014 R10g + HD-055 R10g) + ✅ **3 TC mới PASS sau dev seed/fix** (HD-022b + HD-057 + HD-055) + 🚫 **9 TC chưa chạy được** (chia 2 nhóm: 7 chờ dev deploy Cổng PLQG · 2 chờ dev chạy thêm 2 câu SQL update `deadline`). Coverage R7.7.1 **46/60 (77%)** ↑ từ 43/60.
+✅ **3/3 bug Closed-verified Phase 9** (HD-053 R10e + HD-014 R10g + HD-055 R10g) + ✅ **3 TC PASS sau dev seed** (HD-022b + HD-057 + HD-055) + ❌ **2 bug mới phát hiện R10g 17:20:00** (HD-022c + HD-022d badge SLA tier sai BR-SLA-02 — log [bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../../bug-reports/hoi-dap/bug-report-r7-7-1-hd-022-sla-tier-mismatch.md)) + 🚫 **7 TC còn chưa chạy được** (chờ R7.6.3 Cổng PLQG deploy). Coverage R7.7.1 **46/60 (77%)** giữ nguyên — HD-022b + HD-057 PASS, HD-022c/d Lỗi (không +PASS coverage), 7 chờ infra.
+
+### Update 2026-05-11 17:20:00 — Dev SQL VERIFIED full 6/6 + bug mới SLA tier
+
+Dev BE đã chạy ĐỦ 6 SQL UPDATE (4 gốc + 2 bổ sung deadline) — QA re-verify careful qua UI MCP browse từng record (`cb_pd_tw_04` isolatedContext, không API). Tất cả span = 5 ngày exact. Phân loại lại 4 TC:
+
+| TC | State + Time | Ratio elapsed | Tier kỳ vọng (BR-SLA-02) | Tier thực tế | Verdict |
+|---|---|---|---|---|---|
+| HD-022b | DANG_XU_LY, ngay_tiep_nhan 09/05 22:24, deadline 15/05 17:51 | ~32% | Bình thường (xanh) | `ant-tag-success` "Còn 4 ngày LV" | ✅ PASS |
+| HD-022c | DANG_XU_LY (đã rollback từ CHO_PHE_DUYET qua click [Từ chối]), 08/05 03:18 → 13/05 03:18 | ~71.6% (còn 28%) | Sắp hết hạn (vàng) | `ant-tag-success` "Còn 2 ngày LV" | ❌ **BUG** badge xanh sai tier — log BUG-HD-022-SLA-TIER-001 |
+| HD-022d | DANG_XU_LY, 06/05 03:18 → 11/05 03:18 (PAST ~14h) | ~111.6% | Quá hạn (đỏ) | `ant-tag-orange` "Còn 0 ngày LV" | ❌ **BUG** badge cam sai tier — log BUG-HD-022-SLA-TIER-002 |
+| HD-057 | DA_DUYET, created_at 06/04 10:24 (~35d cũ) | — | DA_DUYET preserve | DA_DUYET, no auto-close | ✅ PASS (xác nhận BR-FLOW-06) |
+
+**App dùng logic `daysRemaining` thay vì `ratio` cho color tier** — đối nghịch BR-SLA-02 spec L1638-1642. Cần dev FE/BE sửa tier mapping (xem bug-report chi tiết).
 
 | BUG-ID | Severity | Verdict | Chi tiết |
 |---|---|---|---|
@@ -37,30 +50,22 @@
 
 **Ai làm:** Dev BE.
 
-### Nhóm 2 — Chờ dev BE chạy thêm 2 câu SQL update `deadline` cho HD-22c + HD-22d (2 TC)
+### ❌ Nhóm 2 — 2 bug mới SLA tier mismatch BR-SLA-02 (HD-022c + HD-022d) [Đổi từ "Block dev SQL" sang "Bug FE/BE tier mapping"]
 
-**TC còn block:** HD-022c (SLA badge vàng "Sắp hết hạn" ~70%), HD-022d (SLA badge đỏ "Quá hạn" ~110%)
+**Dev BE đã chạy ĐỦ 6/6 SQL** (4 gốc + 2 bổ sung deadline) — verified qua UI MCP browse careful 17:15:00. Tất cả 4 record có span deadline = 5d exact đúng BR-SLA-01. **KHÔNG còn cần dev chạy SQL nữa.**
 
-**TC đã PASS sau seed:** ✅ HD-022b (SLA xanh "Bình thường" ~20%, ratio thực ~20% — trong dải xanh) + ✅ HD-057 (record DA_DUYET 35 ngày vẫn giữ state, không auto-close).
+**Phát hiện mới:** Khi run TC HD-022c/d UI thực tế, badge SLA color tier không khớp spec BR-SLA-02:
 
-**Vì sao 2 TC còn block:** Dev BE đã chạy 4 câu SQL ban đầu trong file [seed-request-hd-022-057-backdate-sla.md](../../bug-reports/hoi-dap/seed-request-hd-022-057-backdate-sla.md) lúc khoảng 2026-05-11 10:00:00 — UPDATE `ngay_tiep_nhan` lùi 1.5/3.5/5.5 ngày và `created_at` lùi 35 ngày. **Nhưng dev quên UPDATE `deadline`** → tổng span giữa `ngay_tiep_nhan` và `deadline` = ~10 ngày thay vì 5 ngày theo BR-SLA-01 → ratio chia 2:
+| Record | Ratio thực tế | Tier kỳ vọng (spec L1638-1642) | Tier thực tế UI | Verdict |
+|---|---|---|---|---|
+| HD-022c | elapsed 71.6%, còn 28.4% | Vàng "Sắp hết hạn" (<50% còn lại) | `ant-tag-success` xanh "Còn 2 ngày LV" | ❌ BUG-HD-022-SLA-TIER-001 |
+| HD-022d | elapsed 111.6% (deadline đã qua 14h) | Đỏ "Quá hạn" (>100% đã dùng) | `ant-tag-orange` cam "Còn 0 ngày LV" | ❌ BUG-HD-022-SLA-TIER-002 |
 
-| Record | Ngày tạo (cũ) | ngay_tiep_nhan (sau seed) | deadline (chưa update) | Ratio elapsed/total | Trạng thái UI |
-|---|---|---|---|---|---|
-| HD-22b (dfdbc8a7) | 2026-05-09 | NOW − 1.5d | 2026-05-14 (5d sau create) | **20%** (~xanh) | ✅ `ant-tag-success` "Bình thường" |
-| HD-22c (8c54715f) | 2026-05-09 | NOW − 3.5d | 2026-05-14 | **45.4%** (giả trong dải xanh) | ⚠️ VẪN `ant-tag-success` — kỳ vọng vàng "Sắp hết hạn" |
-| HD-22d (101f22b6) | 2026-05-09 | NOW − 5.5d | 2026-05-14 | **55.6%** (giả mới qua 50%) | ⚠️ API tag `SAP_HET_HAN`, UI tag VẪN `ant-tag-success` xanh — kỳ vọng đỏ "Quá hạn" |
+**Nguyên nhân:** App có vẻ map color theo `daysRemaining` (>=2 → success, ==0 → orange) thay vì `ratio elapsed/span` theo spec → tier sai 1 bậc với HD-022c và HD-022d. DB field `muc_do_canh_bao` có 4 giá trị enum đúng spec (`BINH_THUONG`/`SAP_HET`/`QUA_HAN`/`QUA_HAN_NGHIEM_TRONG`) nhưng badge UI không render đúng.
 
-**Cần làm gì để chạy được:** Dev BE chạy thêm 2 câu SQL (đã bổ sung trong file seed-request, ~5 phút work):
+**Cần làm gì:** Dev FE/BE sửa logic compute `muc_do_canh_bao` + map AntD tag color (`success`/`warning`/`error`/`black`) theo ratio đúng BR-SLA-02. Log chi tiết: [bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../../bug-reports/hoi-dap/bug-report-r7-7-1-hd-022-sla-tier-mismatch.md)
 
-```sql
-UPDATE hoi_dap SET deadline = ngay_tiep_nhan + INTERVAL '5 days'
-WHERE id IN ('8c54715f-4ff5-487f-bc1b-bc405d162534', '101f22b6-1cbe-4e1a-9d76-ab5d6cfd1322');
-```
-
-Sau khi dev chạy: ratio HD-22c → ~70%, HD-22d → ~110% → QA reload UI verify badge vàng + đỏ + escalate notification.
-
-**Ai làm:** Dev BE.
+**Ai làm:** Dev FE + Dev BE (depending on where `muc_do_canh_bao` được compute).
 
 ### ✅ Đã đóng — Nhóm 3 cũ (HD-055 dev FE fix UX modal)
 
@@ -76,7 +81,7 @@ Sau khi dev chạy: ratio HD-22c → ~70%, HD-22d → ~110% → QA reload UI ver
 | R7.6.3 probe | `evaluate_script` fetch 8 candidate endpoints (`/api/v1/cong-plqg/inbound/hoi-dap`, `/cong-plqg/health`, `/cong-plqg/status`, `/cong-plqg/hoi-dap`, `/inbound/cong-plqg/hoi-dap`, `/external/hoi-daps`, `/cong-plqg/inbound`, POST inbound) — tất cả 404 ERR-SYS-00-04-01. Filter `?kenhTiepNhan=TVN_BRIDGE&size=5` → empty content. | — |
 | Seed backdate verify 09:55 | GET API 4 ID record trong seed-request — `ngay_tiep_nhan` vẫn ~2026-05-09/10, không backdate. **Dev chưa apply lần 1.** | — |
 | Seed backdate verify 10:30 (PASS HD-022b) | Re-check GET API — HD-22b `ngay_tiep_nhan` lùi 1.5d, ratio ~20%, badge UI `ant-tag-success` "Bình thường" → ✅ TC HD-022b PASS (xanh đúng spec BR-SLA-02 dải 0-50%). | — |
-| Seed backdate verify 10:30 (HD-22c/d partial) | HD-22c `ngay_tiep_nhan` lùi 3.5d, ratio ~45% (deadline KHÔNG update → span 10d thay vì 5d); HD-22d lùi 5.5d ratio ~55% — UI tag vẫn xanh. API HD-22d trả `mucDoCanhBao=SAP_HET_HAN` nhưng UI render xanh. **Dev BE quên UPDATE `deadline` cho 2 record → 2 TC còn block, cần thêm 2 câu SQL.** | — |
+| Seed backdate verify 17:15:00 (HD-22c/d UI walk) — sau dev chạy đủ 6/6 SQL | Walk UI MCP `cb_pd_tw_04`: HD-22c (8c54715f) `ngay_tiep_nhan = 08/05 03:18`, `deadline = 13/05 03:18` (span 5d exact). Click [Từ chối] rollback CHO_PHE_DUYET → DANG_XU_LY. Now 11/05 17:15, elapsed 3.58d → ratio 71.6%, còn 28.4%. Badge UI: `ant-tag-success` "Còn 2 ngày LV" — ❌ Sai BR-SLA-02 (phải vàng `ant-tag-warning`). HD-22d (101f22b6) `ngay_tiep_nhan = 06/05 03:18`, `deadline = 11/05 03:18` (đã qua 14h). Badge: `ant-tag-orange` "Còn 0 ngày LV" — ❌ Sai BR-SLA-02 (phải đỏ `ant-tag-error`). Cả 2 logged BUG-HD-022-SLA-TIER-001/002. | [r7-hd-022c-retest-r10g-sla-green-at-72pct-mismatch.png](../../bug-reports/hoi-dap/image/r7-hd-022c-retest-r10g-sla-green-at-72pct-mismatch.png) + [r7-hd-022d-sla-orange-overdue.png](../../bug-reports/hoi-dap/image/r7-hd-022d-sla-orange-overdue.png) |
 | HD-057 PASS verify 10:30 | GET HD-057 (3577bfb6) — `created_at` lùi 35 ngày, state vẫn `DA_DUYET` (KHÔNG auto-close về HOAN_THANH). Confirm BR-FLOW-06 manual close — không có cron auto-close. ✅ HD-057 PASS. | — |
 | HD-055 inject 500 (R10g PASS) | UI cb_pd_tw_04 → HD-20260510-006 (DA_DUYET v8) → install XHR override chặn POST `/cong-khai` trả 500 `ERR-PD-04`. Modal CR-01 hiện `ant-alert-error` "Công khai thất bại" + "Lỗi máy chủ tạm thời khi công khai. Vui lòng thử lại sau." + "Mã lỗi: ERR-PD-04" + "Dữ liệu đã nhập được giữ lại — bấm 'Thử lại' để gửi lại yêu cầu." Buttons: `["", "Dùng ảnh hệ thống mặc định", "Hủy", "Thử lại"]` — `[Công khai]` → `[Thử lại]`. Toast: "Không thể công khai. Vui lòng thử lại." Form: textarea giữ 65 ký tự, counter `65 / 2000`. ✅ HD-055 PASS. | [r7-hd-055-retest-r10g-modal-error-alert-retry-pass.png](../../bug-reports/hoi-dap/image/r7-hd-055-retest-r10g-modal-error-alert-retry-pass.png) |
 | HD-014 re-verify R10g UI PASS | Walk record HD-20260509-008 qua UI theo rule UI-only: (1) `cb_nv_tw_08` isolatedContext → mở DANG_XU_LY → [Gửi phản hồi] + confirm 2 modal → state `CHO_PHE_DUYET`. (2) Switch `cb_pd_tw_04` → reload → [Phê duyệt]+[Từ chối] hiện. (3) Click [Từ chối] → modal mở textarea "Lý do từ chối *" required, counter `0/500`. (4) Click [Xác nhận từ chối] không nhập gì → modal inline error **"Vui lòng nhập lý do từ chối."** (đúng message spec ERR-PD-02). Validation client-side trước round-trip BE — UX tốt. State guard giữ CHO_PHE_DUYET. ✅ HD-014 PASS. | [r7-hd-014-retest-r10g-ui-empty-lyDo-inline-error-pass.png](../../bug-reports/hoi-dap/image/r7-hd-014-retest-r10g-ui-empty-lyDo-inline-error-pass.png) |
@@ -84,7 +89,7 @@ Sau khi dev chạy: ratio HD-22c → ~70%, HD-22d → ~110% → QA reload UI ver
 | HD-035 re-verify | API search `?keyword=lương&trangThai=<X>` với 3 state processed: DA_DUYET (total=2, snippet match), HOAN_THANH (total=3, snippet match), CONG_KHAI (total=0 vì pool 0 record). Search full-text hoạt động đúng cho processed state. | API response |
 | HD-008 re-verify | GET `/api/v1/hoi-daps?size=20` — 9/10 record có deadline = ngayTiepNhan + 5 working days (calendar diff 5-6). 1 outlier HD-20260510-002 (mucDoPhucTap=THUONG, deadline +36 cal days) — có thể user override hoặc edge case. Main path BR-SLA-01 OK. | API response |
 
-> **Defects status Phase 9 (sau R10g):** 3 Closed-verified — (1) BUG-HD-053 R10e; (2) BUG-HD-055-PUBLISH-FAIL-UX-001 R10g 14:25:00 [Pass-bug-report](../../bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-055-modal-publish-fail-ux.md); (3) BUG-HD-014-REJECT-ERR-CODE-001 R10g 14:20:00 [Pass-bug-report](../../bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-014-reject-err-code-mismatch.md). KHÔNG còn defect Open trong Hỏi đáp.
+> **Defects status Phase 9 (sau R10g 17:20:00):** 3 Closed-verified — (1) BUG-HD-053 R10e; (2) BUG-HD-055-PUBLISH-FAIL-UX-001 R10g 14:25:00 [Pass-bug-report](../../bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-055-modal-publish-fail-ux.md); (3) BUG-HD-014-REJECT-ERR-CODE-001 R10g 14:20:00 [Pass-bug-report](../../bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-014-reject-err-code-mismatch.md). **2 bug mới Open R10g 17:20:00** — BUG-HD-022-SLA-TIER-001/002 (FE/BE map sai BR-SLA-02): [bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../../bug-reports/hoi-dap/bug-report-r7-7-1-hd-022-sla-tier-mismatch.md).
 
 ---
 

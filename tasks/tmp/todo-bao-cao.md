@@ -27,9 +27,9 @@
 - ✅ **R7.5.4** 🔄 BC04 export Excel có data <a id="r7-5-4"></a>
   - **Cần:** BC HD ✅ data có; BC04 VV ✓ seed VV HOAN_THANH
   - **Kết quả:** ✅ R2 PASS — Excel binary OK xlsx mime, không JSON wrap. [verification-test-report-r7-5-4-bc-export.md](../output/qa-reports/round7-2026-05-06/workflow/bao-cao/verification-test-report-r7-5-4-bc-export.md)
-  - **Bug:** [Pass-bug-report-r7-5-4-bc-export.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/Pass-bug-report-r7-5-4-bc-export.md) — 2/3 đóng (BUG-BC-EXPORT-001 + BUG-BC-LEGEND-001 Closed R2; BUG-BC-LEGEND-002 BC-018 Minor Open)
+  - **Bug:** [Pass-bug-report-r7-5-4-bc-export.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/Pass-bug-report-r7-5-4-bc-export.md) — 3/3 đóng (BUG-BC-EXPORT-001 + BUG-BC-LEGEND-001 Closed R2; BUG-BC-LEGEND-002 Closed R4)
 
-- ⚠️ **R7.7.13** 🔄 Báo cáo 40 TC `[~52% R3 — 20 PASS, 1 OBS, 1 FAIL, 3 BLOCK, 15 DEFER]` <a id="r7-7-13"></a>
-  - **Cần:** ≥1 TVCS (✓12) · ≥1 CT (✓3) · ≥1 HD (✓7) · BC04/05/HD ready · ĐT (✗0) defer
-  - **Kết quả:** ⚠️ R3 — 20 PASS + 1 OBS + 1 FAIL PDF + 3 BLOCK BE list 500 + 15 DEFER. [functional-test-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/functional/bao-cao/functional-test-report-r7-7-13-bao-cao.md)
-  - **Bug:** [bug-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md) — 2/4 đóng (Word+HD PL Closed; PDF-500 Critical + LEGEND-002 BC-018 Minor Open)
+- ⚠️ **R7.7.13** 🔄 Báo cáo 40 TC `[85% R6 — 34 PASS, 6 FAIL, defer cleared]` <a id="r7-7-13"></a>
+  - **Cần:** ≥1 TVCS (✓12) · ≥1 CT (✓3) · ≥1 HD (✓7) · BC04/05/HD ready · ĐT ✓4 khóa seed sẵn R6
+  - **Kết quả:** ⚠️ R6 40/40 cover — 34 PASS + 6 FAIL chờ dev fix 4 bug. [functional-test-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/functional/bao-cao/functional-test-report-r7-7-13-bao-cao.md)
+  - **Bug:** [bug-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md) — 4/8 đóng (4 Open: DATA-SCOPE-LEAK Critical 4 role + PDF-NOT-SUPPORTED Major + XLSX-PARTIAL Medium + KYBAOCAO-NOT-VALIDATED Medium NEW R6)

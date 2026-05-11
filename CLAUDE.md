@@ -2,6 +2,15 @@
 
 Project này chứa tài liệu QA cho Phần mềm Hỗ trợ Pháp lý Doanh nghiệp (PM HTPLDN).
 
+## 🔴 Skill routing preference — BẮT BUỘC hỏi trước
+
+**Không tự động dùng skill chỉ vì yêu cầu của user khớp mô tả skill.**
+
+- Chỉ dùng skill khi user gọi rõ bằng tên skill, slash command, hoặc yêu cầu trực tiếp "dùng skill X".
+- Nếu agent nhận thấy một skill có thể cho kết quả tốt hơn, phải hỏi user xác nhận trước khi áp dụng.
+- Nếu user không xác nhận hoặc không nhắc skill, xử lý thủ công theo context repo và các file liên quan.
+- Quy tắc này áp dụng cho mọi session làm việc trong repo này.
+
 ## 🔴 Tool routing — BẮT BUỘC (enforced từ 2026-05-05)
 
 **Mọi QA test / browse / smoke / functional / workflow / regression trên project này PHẢI dùng Chrome DevTools MCP làm tool MẶC ĐỊNH.**
@@ -127,6 +136,18 @@ Project này chứa tài liệu QA cho Phần mềm Hỗ trợ Pháp lý Doanh n
 - OUTPUT: stderr remind rename `Pass-<orig>.md` + grep command tìm reference link cần update
 - BLOCK / detect: Bug Summary Table parse → mọi row Status ∈ {Closed, ~~closed~~}, KHÔNG có Open/Reopen
 - KHÔNG auto-rename — rename file = phá link cross-file (todo.md, workflow-report, master-index), tester quyết + dùng MultiEdit batch update reference
+
+**Hook contract** ([auto-sync-todo-bug-status.py](.claude/hooks/auto-sync-todo-bug-status.py)):
+- INPUT: sau Edit/Write/MultiEdit trên `tasks/todo*.md` hoặc `**/bug-report*.md`.
+- OUTPUT: tự sửa deterministic drift trong `tasks/todo-*.md`:
+  - link cũ `bug-report-*.md` → `Pass-bug-report-*.md` nếu file cũ mất và file Pass cùng thư mục tồn tại.
+  - dòng `**Bug:** X/Y đóng` nếu có đúng 1 link bug-report và `Bug Summary Table` cho count chắc chắn.
+  - mirror file module chính sang `tasks/tmp/todo-*.md` sau khi sửa.
+- KHÔNG tự flip icon task; vẫn do tester quyết sau khi đọc `Kết quả`.
+- KHÔNG tự sửa dòng nhiều bug-report link/subset count vì có thể là chủ ý; hook chỉ cảnh báo ambiguous.
+- Manual check/fix:
+  - `python3 .claude/hooks/auto-sync-todo-bug-status.py --check`
+  - `python3 .claude/hooks/auto-sync-todo-bug-status.py --write`
 
 **Ví dụ:**
 ```

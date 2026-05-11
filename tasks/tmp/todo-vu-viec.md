@@ -36,7 +36,7 @@
 
 - ✅ **R7.4.A3-PUBLIC** 🆕 Workflow Công khai VV lên Cổng PLQG <a id="r7-4-a3-public"></a>
   - **Kết quả:** PASS R14 — POST /cong-khai 200 + flip flag + thoiGianDangTai auto + button [Công khai] hiện cb_pd_tw_05. [Pass-bug-report-r7-4-a3-public-vv.md](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/Pass-bug-report-r7-4-a3-public-vv.md)
-  - **Bug:** [bug-report-r7-4-a3-public-vv.md](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/bug-report-r7-4-a3-public-vv.md) — 1/1 đóng
+  - **Bug:** [Pass-bug-report-r7-4-a3-public-vv.md](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/Pass-bug-report-r7-4-a3-public-vv.md) — 1/1 đóng
   - **Spec:** FR-V.I-NEW-05 — 2 self-loop SM DA_DUYET + HOAN_THANH (v3.5 sync 2026-05-06)
 
 - 🚫 **R7.4.A3-DN-BS** 🆕 Workflow DN bổ sung HS qua chuyên trang VNeID `[block: VNeID T2 sandbox + DN VV YCBS chưa setup]` <a id="r7-4-a3-dn-bs"></a>
@@ -44,10 +44,10 @@
   - **Cần unlock:** dev/infra setup VNeID T2 sandbox URL+token · DN test account verified T2 · seed ≥1 VV `YEU_CAU_BO_SUNG` thuộc DN test (9999999990 hoặc 9999999991) · BE confirm endpoint chuyên trang DN-portal
   - **Spec:** FR-V.I-NEW-02 — formal hoá `YEU_CAU_BO_SUNG → DANG_KIEM_TRA` (form embedded VNeID)
 
-- ⚠️ **R7.7.3** ✏️ Vụ việc 72 TC v3.5 (33 base + 42 mới Cluster 1-8) `[need: DN VNeID T2]` <a id="r7-7-3"></a>
-  - **Kết quả:** ⚠️ R15 29/72 TC ≈ 40% — +5 TC R15 (C5-1/C5-3/C5-4/C5-5 + C6-4). C5-4 + C6-4 Sai spec mechanism. NOTIF/LICHSU vẫn Open. [functional-test-report-r7-7-3-vu-viec.md](../output/qa-reports/round7-2026-05-06/functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md)
-  - **Bug:** [bug-report-r7-7-3-functional-vu-viec.md](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md) — 4/6 đóng (VALIDATION+SEARCH+SLA+DANHGIA). NOTIF/LICHSU partial Open.
-  - **Cần:** DN VNeID Tier 2 · 43 TC còn
+- ⚠️ **R7.7.3** ✏️ Vụ việc 72 TC v3.5 (33 base + 42 mới Cluster 1-8) `[need: DN VNeID T2 + mTLS PLQG cert + dev fix CG-pool/TVV-detail/TVV-perm]` <a id="r7-7-3"></a>
+  - **Kết quả:** ⚠️ R18 40/72 TC ≈ 56% — full lifecycle DA_TIEP_NHAN → CHO_PHE_DUYET fresh VV PASS, LICHSU 12/18 spec enum. [functional-test-report-r7-7-3-vu-viec.md](../output/qa-reports/round7-2026-05-06/functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md)
+  - **Bug:** [bug-report-r7-7-3-functional-vu-viec.md](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md) — 6/10 đóng (+3 finding mới R18 POOL-CG-MISSING Minor + TVV-DETAIL-403 Major + TVV-PERMISSION-GAP Major). LICHSU-01 12/18 spec.
+  - **Cần:** DN VNeID Tier 2 · mTLS PLQG cert · 32 TC còn · dev fix 3 finding R18
   - **Spec:** `7.5-vu-viec-htpl.md` v3.0 (sync 2026-05-06) · `srs-fr-05-vu-viec.md:1164 §FR-V.I-17`
 
 - ⏳ **R7.7.3-PRIVACY** 🆕 2 TC P0 Critical privacy NĐ 13/2023 `[need: R7.4.A3-PUBLIC, R7.2.4 (doanh-nghiep), R7.4.A3]` <a id="r7-7-3-privacy"></a>

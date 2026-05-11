@@ -19,8 +19,8 @@
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P5** | 1 | 0 | 0 | 0 | 0 | 0 | 1 | 0 | ⏳[R7.5.3](#r7-5-3) |
 | **P7** | 2 | 0 | 0 | 0 | 0 | 1 | 1 | 0 | 🚫[R7.7.16](#r7-7-16) · ⏳[R7.7.17](#r7-7-17) |
-| **P8** | 7 | 1 | 0 | 1 | 4 | 0 | 1 | 0 | ✅[R7.8.1](#r7-8-1) · ⚠️[R7.8.2](#r7-8-2) · ⚠️[R7.8.3](#r7-8-3) · ⚠️[R7.8.4](#r7-8-4) · 🟢[R7.8.5](#r7-8-5) · ⚠️[R7.8.6](#r7-8-6) · ⏳[R7.8.7](#r7-8-7) |
-| **Tổng** | **10** | **1** | **0** | **1** | **4** | **1** | **3** | **0** |  |
+| **P8** | 7 | 1 | 0 | 3 | 2 | 0 | 1 | 0 | ✅[R7.8.1](#r7-8-1) · ✅[R7.8.2](#r7-8-2) · ✅[R7.8.3](#r7-8-3) · ⚠️[R7.8.4](#r7-8-4) · 🟢[R7.8.5](#r7-8-5) · ⚠️[R7.8.6](#r7-8-6) · ⏳[R7.8.7](#r7-8-7) |
+| **Tổng** | **10** | **1** | **0** | **3** | **2** | **1** | **3** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -39,14 +39,15 @@
 - ✅ **R7.8.1** 🆕 Verify hard delete (DELETE → record không còn trong GET list) <a id="r7-8-1"></a>
   - **Kết quả:** PASS — DELETE 204 → GET list count -1 + GET by ID 404. Confirm BE hard-delete; SRS modal MD-XOA "xóa mềm" obsolete. [functional-test-report-r7-8-1-hard-delete.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-8-1-hard-delete.md)
 
-- ⚠️ **R7.8.2** 🆕 Verify bỏ ClamAV (upload `.exe` → BE behavior, security regression risk) `[~80% — extension whitelist OK, magic-byte SECURITY GAP]` <a id="r7-8-2"></a>
-  - **Kết quả:** PASS extension whitelist (.exe/.bat/.docm/.zip reject) + 🚨 SECURITY GAP magic-byte (mime spoof .pdf chứa PE bytes lọt). [functional-test-report-r7-8-2-clamav-removal.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-8-2-clamav-removal.md)
+- ✅ **R7.8.2** 🆕 Verify bỏ ClamAV (upload `.exe` → BE behavior, security regression risk) `[100% — extension + magic-byte FIXED R9]` <a id="r7-8-2"></a>
+  - **Kết quả:** PASS extension whitelist (.exe/.bat/.docm/.zip reject) + ✅ magic-byte FIXED R9 (PE bytes claim .pdf → ERR-VAL-FILE-04). [functional-test-report-r9-cross-cutting-reverify.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r9-cross-cutting-reverify.md)
+  - **Bug:** [Pass-bug-report-audit-r7-8-2-upload-security.md](../output/qa-reports/round7-2026-05-06/bug-reports/cross-cutting/Pass-bug-report-audit-r7-8-2-upload-security.md) — 1/1 đóng (BUG-SEC-FILE-01 Closed R9 commit c304b8fc)
 
-- ⚠️ **R7.8.3** 🆕 Verify bỏ lưu nháp scope hẹp (button [Lưu nháp] bỏ, state DU_THAO/NHAP/MOI_DANG_KY giữ) `[~50% — state DRAFT giữ OK, button chưa bỏ FE]` <a id="r7-8-3"></a>
-  - **Kết quả:** PARTIAL — entry state DRAFT ✅ giữ, button [Lưu nháp] ❌ CHƯA bỏ trên form CT HTPLDN. SRS item 11 chưa implement FE. [functional-test-report-r7-8-3-luu-nhap-scope-hep.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-8-3-luu-nhap-scope-hep.md)
+- ✅ **R7.8.3** 🆕 Verify bỏ lưu nháp scope hẹp (button [Lưu nháp] bỏ, state DU_THAO/NHAP/MOI_DANG_KY giữ) `[100% R9 — FE đã bỏ button]` <a id="r7-8-3"></a>
+  - **Kết quả:** PASS R9 — form CT DU_THAO có Quay lại/Lưu/Đệ trình/Hủy CT, không còn [Lưu nháp]. [functional-test-report-r9-cross-cutting-reverify.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r9-cross-cutting-reverify.md)
 
-- ⚠️ **R7.8.4** 🆕 Profile + đổi MK self-service (ho-so-doi-mat-khau.md) `[~80% — 5/5 PASS, 3 mâu thuẫn detected]` <a id="r7-8-4"></a>
-  - **Kết quả:** PASS 5/5 + 3/3 trường + 3 mâu thuẫn detected (MK strength rule diff, errCode mismatch BUG-FR26-001, "Phiên đăng nhập" extra). [functional-test-report-r7-8-4-profile-doi-mk.md](../output/qa-reports/round7-2026-05-06/functional/qtht-tai-khoan/functional-test-report-r7-8-4-profile-doi-mk.md)
+- ⚠️ **R7.8.4** 🆕 Profile + đổi MK self-service (ho-so-doi-mat-khau.md) `[~80% — 3 mâu thuẫn unchanged R9, chờ BA]` <a id="r7-8-4"></a>
+  - **Kết quả:** R9 re-confirm 3 mâu thuẫn (strength rule, errCode, "Phiên đăng nhập"). [functional-test-report-r9-cross-cutting-reverify.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r9-cross-cutting-reverify.md)
 
 - 🟢 **R7.8.5** 🆕 Permission 55+ entity × 11 role sample 40 TC/module `[~0% — ready, was R5 scope; entity count update v3.5]` <a id="r7-8-5"></a>
 

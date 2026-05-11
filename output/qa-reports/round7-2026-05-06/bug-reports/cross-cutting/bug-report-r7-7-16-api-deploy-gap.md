@@ -5,7 +5,7 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000 (HTTP-only, không TLS) |
 | **Người test** | QA Automation (Claude Code) |
-| **Ngày** | 2026-05-10 02:35:00 (UTC+7) |
+| **Ngày** | 2026-05-10 02:35:00 (UTC+7) — scope mở rộng 2026-05-11 19:35:00 (UTC+7) |
 | **Loại test** | Functional — API contract probe |
 | **Round** | R7 |
 | **Tài liệu tham chiếu** | [functional-test-report-r7-7-16-api.md](../../functional/cross-cutting/functional-test-report-r7-7-16-api.md) · [7.16-API-ket-noi-chia-se.md](../../../../funtion/7.16-API-ket-noi-chia-se.md) · [CHANGELOG §FR-16](../../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) |
@@ -111,6 +111,8 @@ $ curl -s -w "%{http_code}\n" http://103.172.236.130:3000/api/v1/swagger
 
 > **Meta:** Severity Critical / Priority P0 / Type Data / Status Open / TC API-013..030, 032, 044 (22 TC) / SRS `srs-fr-16-api FR-XII-03..18` (16 FR) + CHANGELOG §FR-16 Thay đổi 1+3+5+6+7.
 
+> **Update 2026-05-11 19:35:00 — scope mở rộng:** Re-probe live xác nhận (1) 9/9 outbound cặp 404 (kể cả `/api/v1/hoi-dap` outbound endpoint nay đã 404 — có thể BE đổi route từ R7 lần đầu sang `/api/v1/hoi-daps` plural, hoặc route flat `/api/v1/hoi-dap` mới còn deploy lúc R7 lần 1), (2) **module TVCS substantially undeployed cả internal lẫn outbound** — `/api/v1/tu-van-chuyen-saus` + `/api/v1/noi-dung-tu-van-css` đều 404 → workaround spec-verify TVCS qua internal CMS KHÔNG khả thi từ test env hiện tại, (3) internal CMS deploy 5/8 entity với schema v3.5 đúng — verify được API-017 (TVV `loaiTvv`+HOAT_DONG), API-021 (KE_HOACH_DANH_GIA entity rename), API-023 (BIEU_MAU `congKhai` rename PASS).
+
 ### Mô tả
 
 QA chạy curl probe 9 cặp endpoint outbound module 7.16 (FR-XII-01..18). 8/9 cặp trả HTTP 404 ERR-SYS-00-04-01 "Cannot GET /api/v1/{resource}" — endpoint chưa được dev deploy lên test env. Block 22 TC bao gồm 8 thay đổi v3.5 (filter rename `cong_khai=1`, BR-PUBLIC-04 privacy whitelist, rename field `la_cong_khai → cong_khai` + `ngay_cong_khai → thoi_gian_dang_tai`, parameter mới `don_vi_id`, UC renumber HSPL DN UC189/190 → UC187/188, rename TVCS, rename KE_HOACH_DANH_GIA, TU_VAN_VIEN HOAT_DONG state). Đặc biệt nghiêm trọng: API-019 (P0 Critical privacy whitelist 9 fields VỤ VIỆC ngoài cổng — NĐ 13/2023 + NQ 03/2017) không thể verify do `/api/v1/vu-viec` 404.
@@ -198,6 +200,59 @@ done
 
 **State-snapshot 2026-05-10 01:45 UTC entity prereq verified:** 6/6 entity ready (HOI_DAP=13, VU_VIEC=14, TVCS=15, HSCT=108, CT HTPLDN=3, TVN=50). Data sẵn sàng nhưng endpoint không có để consume → confirm bug ở deployment layer, không phải data layer.
 
+**Bonus evidence 2026-05-11 19:28 — internal CMS deploy partial (5/8 entity):**
+
+```bash
+# Live re-probe outbound 2026-05-11 12:16 UTC+7 — 9/9 cặp đều 404
+for ep in hoi-dap hoi-daps dao-tao tu-van-vien vu-viec danh-gia bieu-mau tu-van-chuyen-sau chuong-trinh-htpl ho-so-pl-dn; do
+  curl -sw "/api/v1/outbound/${ep}: %{http_code}\n" -o /dev/null --max-time 5 "http://103.172.236.130:3000/api/v1/outbound/${ep}?cong_khai=1&limit=1"
+done
+# → tất cả 404
+```
+
+```bash
+# Internal CMS probe — 5/8 entity deploy đúng schema v3.5
+/api/v1/hoi-daps        : 401 ERR-AUTH-SYS-00-01  (deploy)
+/api/v1/tu-van-viens    : 401 ERR-AUTH-SYS-00-01  (deploy — verify loaiTvv + HOAT_DONG via login probe)
+/api/v1/vu-viecs        : 401 ERR-AUTH-SYS-00-01  (deploy)
+/api/v1/bieu-maus       : 401 ERR-AUTH-SYS-00-01  (deploy — verify congKhai rename PASS)
+/api/v1/chuong-trinh-htpls: 401 ERR-AUTH-SYS-00-01  (deploy — nhưng 0 record DA_CONG_BO, seed gap)
+/api/v1/ke-hoach-danh-gias: (login probe) 200, 4 record HOAN_THANH (deploy — Thay đổi 7 verified)
+/api/v1/dao-taos        : 404  (NOT DEPLOYED)
+/api/v1/tu-van-chuyen-saus: 404  (NOT DEPLOYED — scope mở rộng)
+/api/v1/danh-gia-htpls  : 404  (NOT DEPLOYED — chỉ ke-hoach-danh-gias)
+/api/v1/ho-so-pl-dns    : 404  (NOT DEPLOYED)
+```
+
+**v3.5 field rename verify via internal CMS (MCP login `qtht_01` 2026-05-11 19:28):**
+
+```javascript
+// fetch('/api/v1/bieu-maus?limit=2') sample[0] keys:
+// [..., trangThai, congKhai, thoiGianDangTai, anhDaiDien, moTaCongKhai, fileDinhKemCongKhai, ...]
+// → congKhai field EXIST, la_cong_khai/laCongKhai ABSENT → Thay đổi 1.6 v3.5 PASS
+
+// fetch('/api/v1/tu-van-viens?trangThai=HOAT_DONG&limit=3')
+// meta: { total: 8, totalPages: 1 }
+// sample[0]: { loaiTvv: 'TVV', trangThai: 'HOAT_DONG', ... }
+// → Thay đổi 8 v3.5 PASS
+
+// fetch('/api/v1/ke-hoach-danh-gias?limit=2')
+// HTTP 200, 4 record, sample[0].trangThai: 'HOAN_THANH'
+// → Entity rename DANH_GIA → KE_HOACH_DANH_GIA (Thay đổi 7 v3.5) PASS
+
+// fetch('/api/v1/chuong-trinh-htpls?trangThai=DA_CONG_BO&limit=3')
+// HTTP 200, meta { total: 0 }
+// → SEED GAP — cần ≥1 CT trạng thái DA_CONG_BO trước outbound deploy
+```
+
+**Pre-flag risk privacy outbound:**
+```javascript
+// fetch('/api/v1/vu-viecs?limit=1') sample[0] keys:
+// [..., maVuViec, tieuDe, trangThai, ..., tenDoanhNghiep: 'Công ty TNHH Bình Minh AG', tenNguoiHoTro]
+// → Internal lộ tenDoanhNghiep. Khi outbound /api/v1/vu-viec deploy, BE PHẢI implement
+//   separate serializer ẩn tenDoanhNghiep/MST/CCCD theo BR-PUBLIC-04 + NĐ 13/2023
+```
+
 ---
 
 ## Phụ lục — Môi trường test
@@ -217,4 +272,4 @@ done
 
 ---
 
-*Bug report generated: 2026-05-10 02:35:00 (UTC+7) | QA Automation via Claude Code*
+*Bug report generated: 2026-05-10 02:35:00 (UTC+7) | Updated 2026-05-11 19:35:00 (UTC+7) — scope mở rộng: 9/9 outbound 404 (re-probe live) + 3/8 internal CMS cũng 404 (TVCS/dao-tao/danh-gia/ho-so) + 5/8 internal deploy verify được 3 v3.5 thay đổi qua field shape | QA Automation via Claude Code*

@@ -29,7 +29,7 @@
 
 - ⚠️ **R7.4.D2** ✏️ Workflow 9 bước v3.5 (8 state + HUY) `[~73% — 8/11 R10b]` <a id="r7-4-d2"></a>
   - **Kết quả:** ⚠️ 8/11. R10b 20:29 re-test dev fix BUG-008 ❌ REPRODUCED. [report](../output/qa-reports/round7-2026-05-06/workflow/danh-gia/workflow-test-report-DanhGiaHQ.md)
-  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md) — 7/9 đóng (DG-008 + DG-009 Major Open)
+  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md) — workflow subset 7/9 đóng; DG-008 + DG-009 Major còn Open. Functional bugs mới theo R7.7.9 bên dưới.
   - **Cần:** dev fix BUG-FUNC-DG-008 (PUT `/ket-quas` persist) — block B10+B11
 
 - ⚠️ **R7.4.D2a** 🆕 State HUY transition 4 state nguồn (LAP_KE_HOACH/PHAN_CONG/THUC_HIEN/BAO_CAO → HUY) `[~25% — UI 0/4 state có HUY button]` <a id="r7-4-d2a"></a>
@@ -42,8 +42,8 @@
   - **Cần:** dev fix BUG-FUNC-DG-008 → seed đợt HOAN_THANH → retest
   - **Spec:** FR-VI-10 line 741
 
-- ⚠️ **R7.7.9** ✏️ Đánh giá Hiệu quả HTPL functional 46 TC v3.5 (10 FR) `[~28% — 13/18 R10b chạy được]` <a id="r7-7-9"></a>
-  - **Kết quả:** ⚠️ 12/18 ✅ + 1 ⚠️ + 1 ❌ + 2 🚫 + 1 ⏭. 4 bug mới DG-010/011/012/013. [report](../output/qa-reports/round7-2026-05-06/functional/danh-gia/functional-test-report-r7-7-9-danh-gia.md)
-  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md) — 7/13 đóng (DG-008/009/010/011/012/013 Open)
-  - **Cần:** dev fix DG-012 (đợt không advance state) — block TC14+17 + B7-B11. DG-010/013 Major. DG-011 Medium.
+- ⚠️ **R7.7.9** ✏️ Đánh giá Hiệu quả HTPL functional 46 TC v3.5 (10 FR) `[~68% — 15/22 R11 ✅]` <a id="r7-7-9"></a>
+  - **Kết quả:** R11 22 TC ✅15 · ⚠️2 · ❌4 · 🚫1. TC12 ✅ out-of-scope. 2 bug mới DG-014/015. [report](../output/qa-reports/round7-2026-05-06/functional/danh-gia/functional-test-report-r7-7-9-danh-gia.md)
+  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md) — 7/15 đóng; 8 còn cần xử lý/disposition (DG-008/009/010/012/013/014/015 Open; DG-011 NOT REPRODUCED nhưng chưa Closed)
+  - **Cần:** dev fix DG-012 (đợt không advance state) — block TC14+17 + B7-B11. DG-010/013 Major. DG-014 Medium. DG-015 Minor UX.
   - **Spec:** FR-VI-01..10 (46 TC v3.5)

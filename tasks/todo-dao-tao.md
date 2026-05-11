@@ -75,7 +75,7 @@
 - ✅ **R7.4.B5b** 🔄 ~~Publish NHCH NHAP→CONG_KHAI~~ — **N/A confirmed R9 re-verify** <a id="r7-4-b5b"></a>
   - **Kết quả R9 (2026-05-09 22:18):** ✅ N/A confirmed — 3 endpoint legacy `/publish + /cong-khai + /an` đều 404. Replacement PATCH toggle KICH_HOAT↔VO_HIEU_HOA 2 chiều PASS (v2→v3→v4) trên NHCH SHTT R9. [workflow-test-report R9](../output/qa-reports/round7-2026-05-06/workflow/dao-tao/workflow-test-report-r7-4-b5b-nhch-r9.md)
   - **Spec drift vẫn còn:** SRS `FR-III-09 line 783` ghi `NHAP/CONG_KHAI/AN` (3 state) nhưng `Entity §3.4.3.21 row 9` + BE impl = `KICH_HOAT/VO_HIEU_HOA` (2 state). BA cần update doc.
-  - **Bug:** Đã cover bởi [BUG-SRS-NHCH-STATE-01](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/bug-report-seed-r7-3-9-dkt-nhch.md) — Closed FE side 2026-05-07.
+  - **Bug:** Đã cover bởi [BUG-SRS-NHCH-STATE-01](../output/qa-reports/round7-2026-05-06/bug-reports/dao-tao/Pass-bug-report-seed-r7-3-9-dkt-nhch.md) — Closed FE side 2026-05-07.
 
 - ✅ **R7.4.B7** ✏️ Workflow Khóa học (12 bước duyệt → khai giảng → kết thúc → duyệt KQ) <a id="r7-4-b7"></a>
   - **Kết quả R10 (10/05):** ✅ 11/12 PASS qua UI sau cache clear. 4 bước R9 block đã unblock (FE+BE deploy `start/finish/submit-result/approve-result`). [report R10](../output/qa-reports/round7-2026-05-06/workflow/dao-tao/workflow-test-report-r7-4-b7-khoa-hoc-r10.md)

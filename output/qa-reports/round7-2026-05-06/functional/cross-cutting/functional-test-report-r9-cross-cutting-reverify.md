@@ -22,6 +22,10 @@
 | R7.8.3 Lưu nháp scope hẹp | ⚠️ Partial | ✅ **PASS R9** | Form CT giờ có 4 button đúng: Quay lại / Lưu / Đệ trình duyệt / Hủy CT |
 | R7.8.4 Profile + đổi MK | ⚠️ Partial | ⚠️ **Partial** | 3 mâu thuẫn vẫn DETECT (unchanged) — chờ BA chốt |
 | R7.8.6 BC-024 gap | ⚠️ Partial | ✅ **PASS R9** | Đã thêm dòng `BC-023b UC146` vào `7.11-bao-cao-thong-ke.md` |
+| BUG-UPL-001 (gif end-to-end) | dev claim fix | ✅ **CLOSED R9** | Whitelist message confirm `.gif`; gif/GIF (lowercase + uppercase) đều PASS validation |
+| BUG-UPL-002 (.XLSX uppercase) | dev claim fix | ✅ **CLOSED R9** | XLSX uppercase + xlsx lowercase đều PASS validation (case-insensitive) |
+| BUG-UPL-003 (BaiGiang empty MIME) | dev claim fix | ⏳ **Defer** | Generic `/api/v1/files/upload` không accept `entityType=BaiGiang` — phải test qua BaiGiang module endpoint riêng |
+| R7.7.16 API outbound deploy | 🚫 BLOCKED | 🚫 **vẫn BLOCKED** | Re-probe 9 endpoint: 1/9 deployed (HOI_DAP mTLS gate), 8/9 vẫn 404. BUG-API-001/002 Open |
 
 ---
 
@@ -141,6 +145,54 @@ Whitelist message update: `.doc, .docx, .xls, .xlsx, .pdf, .jpg, .png, .gif` (th
 - Screenshot: `r9-r7-8-4-profile-bao-mat-tab-qtht10.png`
 
 → 3 mâu thuẫn ổn định qua 2 round (R7, R9) — không phải transient. Cần BA quyết spec authority để dev align.
+
+### F. BONUS — 3 bug Upload (BUG-UPL-001/002/003) + API outbound re-probe
+
+**Trigger:** Dev summary §11 ghi 4 commit Upload (`b85e7ee3`, `7600b3a3`, `f870c923`, `c304b8fc`) — re-verify với qtht_10 + curl probe 9 endpoint outbound.
+
+#### F.1 BUG-UPL-001 (gif end-to-end — commit `b85e7ee3`) — ✅ CLOSED R9
+
+| # | Test | Filename | MIME | Status | errCode | Verdict |
+|---|---|---|---|:-:|---|---|
+| 001a | `.gif` lowercase | `test.gif` | `image/gif` | 403 | `ERR-PERM-FILE-02` | ✅ PASS validation (perm gate) |
+| 001b | `.GIF` uppercase | `test.GIF` | `image/gif` | 403 | `ERR-PERM-FILE-02` | ✅ PASS validation (case-insensitive) |
+
+Whitelist message confirm: `Chỉ chấp nhận: .doc, .docx, .xls, .xlsx, .pdf, .jpg, .png, .gif` — `.gif` đã add.
+
+#### F.2 BUG-UPL-002 (.XLSX uppercase — commit `7600b3a3`) — ✅ CLOSED R9
+
+| # | Test | Filename | Status | Verdict |
+|---|---|---|:-:|---|
+| 002a | XLSX uppercase | `test.XLSX` | 403 | ✅ PASS validation |
+| 002b | xlsx lowercase control | `test.xlsx` | 403 | ✅ PASS validation |
+
+Extension whitelist case-insensitive — uppercase XLSX không bị reject.
+
+#### F.3 BUG-UPL-003 (BaiGiang empty MIME — commit `f870c923`) — ⏳ DEFER (not testable via generic endpoint)
+
+Probe entityType=`BaiGiang` qua `/api/v1/files/upload` → response error message reveal:
+```
+"entityType must be one of the following values: VuViec, HoSoVuViec, KetQuaVuViec, HoSoChiTra, HoSoTuVanVien, DanhGiaVuVi..."
+```
+→ `BaiGiang` không nằm trong generic uploader. Endpoint `/api/v1/bai-giangs` exist (GET 200) nhưng upload route riêng chưa probe được. Cần test qua BaiGiang module UI (Đào tạo > Bài giảng > Upload file) — **defer cho Đào tạo module**.
+
+#### F.4 R7.7.16 API outbound re-probe (curl từ bash)
+
+| Endpoint | R7 (2026-05-10 02:35) | R9 (2026-05-11 16:50) | Δ |
+|---|:-:|:-:|---|
+| `/api/v1/hoi-dap` | 401 mTLS | 401 mTLS | unchanged |
+| `/api/v1/dao-tao` | 404 | 404 | unchanged |
+| `/api/v1/tu-van-vien` | 404 | 404 | unchanged |
+| `/api/v1/vu-viec` | 404 | 404 | unchanged |
+| `/api/v1/danh-gia` | 404 | 404 | unchanged |
+| `/api/v1/bieu-mau` | 404 | 404 | unchanged |
+| `/api/v1/tu-van-chuyen-sau` | 404 | 404 | unchanged |
+| `/api/v1/chuong-trinh-htpl` | 404 | 404 | unchanged |
+| `/api/v1/ho-so-pl-dn` | 404 | 404 | unchanged |
+
+→ **BUG-API-001 + BUG-API-002 vẫn Open**. Devops chưa cấp mTLS cert, dev chưa deploy 16 endpoint outbound. 38/44 TC R7.7.16 vẫn BLOCKED.
+
+---
 
 ### E. R7.8.6 BC-024 gap (doc-only) — ✅ FIXED R9
 

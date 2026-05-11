@@ -14,7 +14,7 @@
 
 ## Tổng hợp
 
-Re-test 2 bug log từ R6.5.4 (BUG-BC-EXPORT-001 + BUG-BC-LEGEND-001). Round 2 đã Closed-verified cả 2 bug gốc. Round 2/R7.7.13 phát hiện thêm BUG-BC-LEGEND-002 cho BC-018 (Minor) còn Open.
+Re-test 2 bug log từ R6.5.4 (BUG-BC-EXPORT-001 + BUG-BC-LEGEND-001). Round 2 đã Closed-verified cả 2 bug gốc. Round 2/R7.7.13 phát hiện thêm BUG-BC-LEGEND-002 cho BC-018 (Minor), sau đó đã Closed-verified R4. Tổng trạng thái hiện tại: 3/3 bug Closed.
 
 ### Severity breakdown
 

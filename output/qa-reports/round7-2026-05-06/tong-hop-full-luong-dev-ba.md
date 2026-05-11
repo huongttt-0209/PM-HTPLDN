@@ -1,173 +1,131 @@
-# Tổng hợp full luồng Round 7 - Dev/BA
+# Tổng hợp full luồng Round 7 gửi Dev/BA
 
 Ngày tổng hợp: 2026-05-11  
-Phạm vi: `tasks/tmp`, `output/qa-reports/round7-2026-05-06/workflow`, `functional`, `bug-reports`.  
-Cách đọc: ưu tiên kết luận mới nhất trong `bug-reports` và `tasks/tmp/todo-*.md`; bug report mới ghi đè functional/workflow cũ. Không sửa code, không chạy lại test.
+Phạm vi đọc: `tasks/tmp`, `functional`, `workflow`, `bug-reports` trong `output/qa-reports/round7-2026-05-06`.  
+Nguyên tắc: chỉ tổng hợp từ report hiện có, không chạy lại test, không sửa code. Nếu bug report mới hơn functional/workflow report thì ưu tiên kết luận theo bug report mới nhất.
 
-Quy ước:
+## 1. Bảng tổng quan
 
-- `✅`: full/core flow OK.
-- `⚠️`: core flow chạy được nhưng còn edge/partial/defer.
-- `🚫`: đang block full luồng hoặc block nhóm TC chính.
-- `⏳`: chờ upstream/phụ thuộc ngoài là nguyên nhân chính.
-- Nhóm `A`: phụ thuộc ngoài. Nhóm `B`: full/core luồng không block core. Nhóm `C`: chưa full luồng/block nội bộ hoặc data/endpoint/UI/spec.
-- Cột `Phân nhóm` trong bảng tổng quan là kết luận ở mức module. Mục Nhóm A bên dưới có thể liệt kê cả nhánh phụ thuộc ngoài của module đã được chốt nhóm B ở core CMS.
+| Module | Kết luận full luồng | Nhóm | Workflow | Functional coverage | Bug Open | Bug Closed | TC/path còn thiếu | Blocker chính | Phương án để full |
+|---|---|---|---|---|---:|---:|---|---|---|
+| Báo cáo | Chưa sẵn sàng | C | Excel export pass | 31/40 pass, 6 fail | 4 | 4 | BC-025, BC-027/028/030/031, BC-034, XLSX analytic | Lỗi nội bộ BE/thiếu export/sai data scope | Wire scope `/bao-cao/*`, build PDF, XLSX đủ loại, validate `kyBaoCao` |
+| Chi trả | Có điều kiện | A/B | Core 12 bước pass | Core v3.5 pass; DN bổ sung block | 0 | 7 | FR-V.II-14 DN bổ sung HS | Thiếu dữ liệu/endpoint DN portal ngoài CMS | Seed HSCT thuộc QA DN hoặc mở DVC/DN portal path |
+| Cross-cutting/API | Chưa sẵn sàng | A/C | N/A | API 4/44 pass, 38 blocked | 2 | 1+ | R7.7.16, BR-EC còn lại, E2E DN | Thiếu endpoint + phụ thuộc mTLS/JWT/VNeID | Deploy 8/9 cặp API, cấp cert/JWT staging, chạy lại API |
+| Đánh giá hiệu quả HTPL | Chưa sẵn sàng | C | 8/11 pass | R11: 15/22 pass, 7 chưa sạch | 7 | 7 | B9-B11, D2a HUY, D2b, TC14/17/18 | Lỗi nội bộ BE/FE, sai permission | Fix DG-012 trước, sau đó DG-008/009/010/013/014/015 |
+| Dashboard | Có điều kiện | B | N/A | R3 core bug 4/4 closed; permission DN open | 1 | 4 | BUG-DASH-005, phần hoãn auto/filter/chart | Sai UI/permission | Chặn DN render `/dashboard`, rerun permission/auto-refresh |
+| Doanh nghiệp | Sẵn sàng | B | Cross-module pass | CMS pass 19/20 active; DN-020 cắt scope | 0 | 6+ | Không block core | Không còn blocker core | Theo dõi VNeID Tier 3 ngoài scope |
+| Hỏi đáp | Có điều kiện | A/C | Nội bộ 10/11 pass | Phase 9: 46/60 cover, 7 chờ PLQG, 2 SLA bug | 2 | nhiều | HD-027/045/047/048/060/061/062; HD-022c/d | Phụ thuộc PLQG/TVN bridge + sai SLA tier | Deploy Cổng PLQG/bridge; fix SLA badge ratio |
+| Hợp đồng tư vấn | Có điều kiện | B | Seed/flow chính pass | R6: 21/24 pass, 2 partial/open, 1 fail/issue | 2 | 10 | HDTV-032, HDTV-034 | Sai UI/spec gap nhỏ | Bổ sung section HĐ ở TVV detail; BA xác nhận route standalone |
+| Kho QA | Sẵn sàng | B | Manual 8/8 + auto-feed pass | N/A | 0 | 3 | Không còn block core | Không có | Không cần action để full core |
+| Người hỗ trợ | Sẵn sàng | B | State machine pass | 11/11 active pass | 0 | 5 | Không còn block core | Không có | Không cần action để full core |
+| Tổ chức tư vấn | Sẵn sàng | B | 8/8 pass | 10/10 pass | 0 | 2+ | Không còn block core | Không có | Không cần action để full core |
+| Tư vấn nhanh | Có điều kiện | A/C | CMS B1-B4 pass; public chờ ngoài | 31/35 pass; 5 blocked + 7 defer | 3 | 4 | R7.6.3 public, bug 001/005/007 | Phụ thuộc PLQG/mTLS + lỗi nội bộ | Deploy public/PLQG; xử lý bug open, rerun 5 blocked |
+| TVCS | Có điều kiện | B/C | 9/11 pass + 2 external covered | 53/61 pass | 5 | 13 | TVCS-001/004/005/006/008 | Lỗi nội bộ permission/validation/regression | Fix 5 bug open, rerun R7.7.5 |
+| TVV/CG | Sẵn sàng | B | A1/A1-CG/A1.6/A2 pass | 33/33 pass | 0 | 9+ | Không còn block core | Không có | Không cần action để full core |
+| Vụ việc | Có điều kiện | A/C | Core 12/12 + public pass; DN-BS block | R18: 40/72 pass | 4 | 6 | DN-BS, privacy mTLS, TVV/CG native, LICHSU | Phụ thuộc VNeID/mTLS + permission/UI | Cấp VNeID/mTLS, fix CG pool/TVV route/TVV perm/LICHSU |
+| Pre-test/deploy gap | Sẵn sàng | B | 7/7 pass | N/A | 0 product | 6 deploy gap | SRS FR10 doc bugs riêng | BA/spec doc | Không block product flow Round 7 |
 
-## 1. Bảng tổng quan module
+## 2. Nhóm A - Cần kết nối/đồng bộ từ ngoài hệ thống
 
-| Module | Full flow OK? | Phân nhóm | Bug Open | Ghi chú 1 dòng |
-|---|:-:|:-:|---:|---|
-| Báo cáo | 🚫 | C | 2 | Excel pass; R7.7.13 còn PDF 422, BE list 500/block và 15 defer. |
-| Biểu mẫu | 🚫 | C | 3 | Workflow pass nhưng functional còn MinIO `localhost`, invalid upload silent reject, 21MB/413 UX. |
-| Chi trả | ⚠️ | B | 0 | Core v3.5 pass R3, 7/7 bug closed; DN bổ sung HS bị block do thiếu HSCT/DN portal. |
-| Cross-cutting/API/Edge | 🚫 | C | 3+ | API 38/44 blocked do endpoint 404/mTLS; upload security còn magic-byte gap; lưu nháp CT còn UI gap. |
-| CT HTPLDN | 🚫 | C | 4 | Functional P0 CT pass nhưng GĐ1 B10 partial, GĐ2 thiếu UI/endpoint/tổng hợp. |
-| Đánh giá hiệu quả HTPL | 🚫 | C | 6 | BUG-DG-008/009/010/011/012/013 đang block workflow/functional. |
-| Đào tạo | 🚫 | C | 7+ | Nhiều workflow pass nhưng Học viên POST 500, ĐKT form, Khóa học `pageSize=200`, DT-004/9 TC HV block. |
-| Dashboard | ⚠️ | B | 1 | KPI core 33/34; còn BUG-DASH-005 permission và auto-refresh cần manual QA. |
-| Doanh nghiệp | ✅ | B | 0 | CMS pass 19/20 active; DN-020 VNeID Tier 3 BA cắt scope. |
-| Hỏi đáp | ⚠️ | A | 2 | Workflow 10/11; TVN_BRIDGE/PLQG và seed backdate còn chờ, 2 minor open. |
-| Hợp đồng tư vấn | ⚠️ | B | 2 | R3 16/17 pass; còn UI audit tab và dropdown TVV/CG `pageSize=200`. |
-| Kho QA | ✅ | B | 0 | Manual workflow 8/8 + auto-feed TU_DONG pass R10d. |
-| Người hỗ trợ | ✅ | B | 0 | 11/11 active pass, 5/5 bug closed. |
-| QTHT | ✅ | B | 0 | Danh mục, tài khoản, vai trò, audit log core pass; các bug chính closed. |
-| Tổ chức tư vấn | ✅ | B | 0 | Seed/phê duyệt/workflow/functional pass, 2/2 bug closed. |
-| Tư vấn nhanh | ⚠️ | A | 3 | Core CMS pass; public/PLQG/mTLS còn chờ, functional 31/35. |
-| TVCS | ⚠️ | B | 5 | Workflow core pass R15; functional R17 còn 5 bug open. |
-| TVV/CG | ⚠️ | B | 1 | Core workflow TVV/CG pass; functional còn RETRY-005 edge. |
-| Vụ việc | ⚠️ | A | 3 | Core workflow/public pass; DN bổ sung cần VNeID T2/DN portal, functional 29/72. |
-| Pre-test/Deploy gap | ✅ | B | 0 | Deploy-gap audit 6/6 closed; SRS FR10 còn câu hỏi BA, không tính product flow. |
-
-## 2. Nhóm A - Module/nhánh phụ thuộc ngoài
-
-| Module | Phần đã OK | Phần đang phụ thuộc ngoài | Owner tiếp theo |
-|---|---|---|---|
-| Hỏi đáp | Seed MOI, MoB, workflow nội bộ 10/11, bug flow chính closed. | TP-HD-09, TVN_BRIDGE, PLQG endpoint, seed backdate SLA. | Infra/Integration + QA seed. |
-| Tư vấn nhanh | B1-B4 CMS pass, pool 50 phiên cover state. | R7.6.3 public cần Cổng PLQG endpoint, phiên công khai, mTLS/DN portal. | Infra/Integration. |
-| Vụ việc | Core workflow 12/12, công khai pass. | DN bổ sung HS cần VNeID T2 sandbox, DN account, DN portal endpoint, seed VV `YEU_CAU_BO_SUNG`. | Infra + Dev seed. |
-| Chi trả | Core v3.5 pass R3, pool 40/40 BR-OK. | DN bổ sung HS cần HSCT thuộc QA DN hoặc DVC/DN portal path. | Dev seed + Infra. |
-| Cross-cutting/API | 4 infra TC pass. | 8/9 outbound endpoint 404, mTLS test env chưa có cert/JWT. | Infra/BE. |
-
-## 3. Nhóm B - Full/core luồng không block core
-
-| Module | Core/full flow OK | Bug/edge còn lại |
-|---|---|---|
-| Doanh nghiệp | CMS functional R14 pass 19/20 active, 6/6 bug closed. | DN-020 VNeID Tier 3 đã BA cắt scope. |
-| Kho QA | 8/8 manual workflow + auto-feed BR-FLOW-10 pass. | Không còn open bug core. |
-| Người hỗ trợ | 11/11 active pass. | Không còn open bug core. |
-| QTHT | Danh mục, vai trò, tài khoản, reset, audit log pass. | Profile đổi MK có 3 mâu thuẫn tài liệu cần BA rà, không block core. |
-| Tổ chức tư vấn | Workflow 8/8 + functional 10/10 pass. | Không còn open bug. |
-| TVV/CG | Core workflow TVV/CG/NHT transition pass. | RETRY-005 edge permission/SRS. |
-| TVCS | Workflow core 11/11 covered. | Functional chưa sạch 100%, 5 bug open. |
-| Dashboard | KPI core gần sạch. | BUG-DASH-005 permission; 6 sub-aspect auto-refresh cần manual QA. |
-| Hợp đồng tư vấn | 16/17 pass. | BUG-020 audit UI, BUG-030 dropdown TVV/CG. |
-| Chi trả | Core CMS pass R3. | DN-only bổ sung HS cần data/portal. |
-
-## 4. Nhóm C - Chưa full luồng / block
-
-| Module | Bước/TC bị block | Nguyên nhân | Phân loại chuẩn | Bug/Open liên quan |
+| Module/nhánh | Phần đã OK | Phần phụ thuộc ngoài | Loại blocker | Owner đề xuất |
 |---|---|---|---|---|
-| Báo cáo | R7.7.13 PDF export, BE list report, 15 defer. | PDF chưa support đúng, BE list 500/deploy gap, dropdown thiếu report. | Thiếu endpoint / Lỗi nội bộ BE/FE | BUG-BC-PDF-NOT-SUPPORTED, LEGEND-002. |
-| Biểu mẫu | R7.7.10/R7.7.10b upload/preview/download. | MinIO public URL trỏ localhost, invalid `.txt` silent reject, 21MB reset thay vì 413. | Lỗi nội bộ BE/FE / Sai UI | BUG-BM-007/008/009. |
-| Cross-cutting/API | R7.7.16 38/44 API blocked. | Outbound endpoint chưa deploy, mTLS test env thiếu cert. | Thiếu endpoint / Phụ thuộc ngoài | API Critical + Major open. |
-| CT HTPLDN | R7.6.4 B10, R7.6.5 GĐ2, CT-038. | Rule tổng hợp partial, UI Đợt BC chưa build, thiếu `/tong-hop`, ID mismatch. | Lỗi nội bộ BE/FE / Thiếu endpoint / Sai rule BA | B10-001, DOTBC-UI-001, DOTBC-API-001/002. |
-| Đánh giá hiệu quả HTPL | B10/B11, D2a HUY, D2b HOAN_THANH, TC14/17. | Kết quả không persist/advance, thiếu nút HUY, chưa tạo được đợt HOAN_THANH. | Lỗi nội bộ BE/FE | DG-008..013. |
-| Đào tạo | Học viên seed, ĐKT sửa/tạo, Khóa học DT-004, HV-related TC. | POST `/hoc-viens` 500, FE form lỗi, dropdown `pageSize=200`, thiếu assignment CRUD. | Lỗi nội bộ BE/FE / Thiếu data | BUG-HV-BE-01, DKT form, DT-FORM-GV-02. |
-| Vụ việc | R7.7.3 functional còn 43 TC, DN bổ sung HS. | VNeID/DN portal thiếu, NOTIF/LICHSU partial. | Phụ thuộc ngoài / Lỗi nội bộ BE/FE | NOTIF/LICHSU, PC-WRN-01. |
-| Tư vấn nhanh | R7.7.11 5 blocked + 7 defer. | Public/DN/mTLS và 3 bug open/partial. | Phụ thuộc ngoài / Lỗi nội bộ BE/FE | TVN-001/005/007. |
-| TVCS | R7.7.5 8 TC chưa pass. | Permission/validation/regression còn open. | Lỗi nội bộ BE/FE | TVCS 001/004/005/006/008. |
-| Hỏi đáp | TP-HD-09, HD-045/047/048/060..062, HD-022b/c/d/057. | PLQG/TVN_BRIDGE, backdate SLA seed, UX/errCode minor. | Phụ thuộc ngoài / Thiếu data / Sai UI | HD-055, HD-014. |
+| Cross-cutting/API R7.7.16 | 4 infrastructure TC pass, entity prereq đủ | 8/9 cặp outbound endpoint 404; mTLS/JWT staging chưa có cert | Thiếu endpoint + phụ thuộc ngoài hệ thống | Infra + BE |
+| Hỏi đáp | Workflow nội bộ, publish UX, backdate một phần đã verify | Cổng PLQG inbound + TVN_BRIDGE chưa deploy | Phụ thuộc ngoài hệ thống/thiếu endpoint | BE Integration |
+| Tư vấn nhanh | CMS B1-B4, pool 50 phiên, E2E nội bộ NHAP→CONG_KHAI pass | Public Cổng PLQG, phiên `cong_khai=1`, mTLS | Phụ thuộc ngoài hệ thống | Infra + BE |
+| Vụ việc | Core workflow 12/12, công khai pass, lifecycle fresh đến CHO_PHE_DUYET pass | DN bổ sung HS cần VNeID Tier 2, DN portal; privacy endpoint cần mTLS cert | Phụ thuộc ngoài hệ thống + thiếu data | Infra + Dev seed |
+| Chi trả | Core CMS v3.5, pool 40/40, 7/7 bug flow closed | DN bổ sung HS cần HSCT thuộc QA DN hoặc DVC/DN portal path | Thiếu dữ liệu + phụ thuộc ngoài hệ thống | Dev seed + Infra |
+| Cross-module E2E DN | DN/VV/Chi trả nhiều phần đã pass riêng | DN login VNeID T2, DN portal, mTLS, handoff VV→Chi trả | Phụ thuộc ngoài hệ thống | Infra + QA seed |
 
-## 5. Module core pass, chưa sạch 100%
+## 3. Nhóm B - Đã full/core luồng, không bị block core
+
+| Module | Core/full flow đã pass | Chưa sạch 100% nếu có | Kết luận |
+|---|---|---|---|
+| Doanh nghiệp | CMS pass 19/20 active; bug chính closed | DN-020 VNeID Tier 3 đã BA cắt scope | Sẵn sàng |
+| Kho QA | Manual workflow 8/8 + auto-feed BR-FLOW-10 pass | Không còn open core | Sẵn sàng |
+| Người hỗ trợ | 11/11 active TC pass; mail activation closed | Không còn open core | Sẵn sàng |
+| Tổ chức tư vấn | Seed/phê duyệt/workflow/functional 10/10 pass | Không còn open bug | Sẵn sàng |
+| TVV/CG | Workflow + functional 33/33 pass; RETRY-005 closed R32 | Không còn block core | Sẵn sàng |
+| Dashboard | KPI/drill-down core đã closed 4/4 bug | DN permission BUG-DASH-005 + auto/filter/chart còn hoãn | Có điều kiện |
+| Hợp đồng tư vấn | 21/24 TC pass, Critical/Major cũ closed | 2 open không chặn CRUD core | Có điều kiện |
+| Chi trả | Core CMS full flow pass, 7/7 bug flow closed | DN bổ sung HS là nhánh portal/data ngoài core | Có điều kiện |
+
+## 4. Nhóm C - Chưa full luồng hoặc đang bị block
+
+| Module | Block ở bước/TC nào | Nguyên nhân cụ thể | Phân loại | Điều kiện unblock |
+|---|---|---|---|---|
+| Báo cáo | BC-027/028/030/031; BC-025; BC-024 mở rộng; BC-034 | `/bao-cao/*` leak full national cho BN/DP; PDF 422; 2 XLSX analytic 422; 2 route không validate `kyBaoCao` | Lỗi nội bộ BE + thiếu export | Dev BE fix scope/export/DTO validation, rerun R7.7.13 |
+| Đánh giá HTPL | B9/B10/B11, D2a, D2b, TC14/17/18 | Kết quả không persist, thiếu HUY button, state không advance `PHAN_CONG/CHO_DUYET_PC`, role quản trị vẫn edit được | Lỗi nội bộ BE/FE + sai permission | Fix DG-012 trước, rồi DG-008/009/010/013/014/015 |
+| Hỏi đáp | 7 TC public/bridge; HD-022c/d | Cổng PLQG/TVN_BRIDGE chưa deploy; SLA badge tính theo ngày còn lại thay vì ratio | Phụ thuộc ngoài + sai UI/rule | Deploy endpoint; fix mapping SLA tier |
+| Tư vấn nhanh | R7.6.3 public, 5 blocked + 7 defer | Public PLQG/mTLS chưa có; còn 3 bug open/partial | Phụ thuộc ngoài + lỗi nội bộ | Infra deploy/cert; Dev close TVN-001/005/007 |
+| TVCS | R7.7.5 còn 8 TC chưa pass | 5 bug open permission/validation/regression | Lỗi nội bộ BE/FE | Fix TVCS-001/004/005/006/008 |
+| Vụ việc | DN-BS, privacy mTLS, TVV native, LICHSU | VNeID/DN portal thiếu; CG không vào pool; TVV 403/thiếu permission; LICHSU 12/18 enum | Phụ thuộc ngoài + lỗi nội bộ | Infra cấp VNeID/mTLS; Dev fix CG pool, TVV route/permission, LICHSU |
+| Cross-cutting/API | API-001/002; R7.8.7 E2E DN | mTLS cert missing; 8/9 cặp endpoint 404; DN E2E chờ VNeID/portal | Thiếu endpoint + phụ thuộc ngoài | Deploy API, cấp cert/JWT, chuẩn bị DN account |
+
+## 5. Chi tiết module bị block
+
+| Module | TC/path | Trạng thái | Nguyên nhân block | Loại blocker | Owner |
+|---|---|---|---|---|---|
+| Báo cáo | BC-027/028/030/031 | Fail | BN/DP nhận full national data như TW dù dashboard cùng role scope đúng | Lỗi nội bộ BE/data scope | BE |
+| Báo cáo | BC-025 | Fail | PDF export universal 422 `ERR-RPT-EXPORT-01` | Thiếu export endpoint/logic | BE |
+| Báo cáo | XLSX analytic | Fail | `BC_VV_THEO_LINH_VUC`, `BC_DANH_GIA_HIEU_QUA_HTPL` chưa support XLSX | Thiếu implementation | BE |
+| Báo cáo | BC-034 | Fail | `/bao-cao/hoi-dap` và `/bao-cao/danh-gia-hieu-qua` không validate enum `kyBaoCao` | Lỗi validation BE | BE |
+| Đánh giá | TC14/B7-B11 | Block/Fail | DG-012: đợt không advance sau phân công/trình phê duyệt | Lỗi state machine BE | BE |
+| Đánh giá | B9/B10/B11 | Fail/Block | DG-008: PUT kết quả 200 nhưng GET không persist score/state | Lỗi persistence BE | BE |
+| Đánh giá | D2a | Fail | DG-009: thiếu nút HUY ở 4 state nguồn | Sai UI | FE |
+| Hỏi đáp | HD-027/045/047/048/060/061/062 | Block | Cổng PLQG inbound và TVN bridge endpoint 404/chưa deploy | Phụ thuộc ngoài/thiếu endpoint | BE Integration |
+| Hỏi đáp | HD-022c/d | Fail | Badge SLA xanh/cam sai tier so với BR-SLA-02 ratio | Sai UI/rule | FE/BE |
+| Vụ việc | R7.4.A3-DN-BS | Block | DN test không có VV `YEU_CAU_BO_SUNG`; DN portal/VNeID T2 chưa setup | Phụ thuộc ngoài + thiếu data | Infra + Dev seed |
+| Vụ việc | TVV native VV-014/015/017 | Partial | TVV detail 403 và thiếu permission update/trình duyệt VV mình xử lý | Sai permission/UI | BA + BE/FE |
+| Vụ việc | CG pool | Open | Pool cá nhân thiếu CG dù spec cho TVV/CG hoặc NHT | Lỗi filter BE | BE |
+| Cross/API | API-013..030/032/044 | Block | 8/9 cặp outbound endpoint 404 | Thiếu endpoint | BE |
+| Cross/API | API mTLS | Block | Test env thiếu mTLS cert/JWT staging | Phụ thuộc ngoài | Infra |
+
+## 6. Module core pass nhưng chưa sạch 100%
 
 | Module | Core pass | Chưa sạch 100% |
 |---|---|---|
-| Chi trả | Full flow v3.5 pass R3, 7/7 bug closed. | DN bổ sung HS cần HSCT thuộc QA DN/DN portal; DN count smoke cần investigate. |
-| TVV/CG | A1/A1-CG/A1.6/A2 pass. | RETRY-005 còn open: permission NHT cùng đơn vị + SRS/nộp lại. |
-| Vụ việc | Workflow 12/12 + công khai pass. | Functional mới 29/72, DN VNeID branch chưa test, NOTIF/LICHSU partial. |
-| TVCS | Workflow R15 covered 11/11. | Functional 53/61, còn 5 bug open. |
-| Tư vấn nhanh | CMS B1-B4 pass, pool 50. | Public/PLQG/mTLS và functional 31/35 chưa full. |
-| Dashboard | KPI/drill-down cũ closed, 33/34. | BUG-DASH-005 permission, auto-refresh manual. |
-| Hợp đồng tư vấn | R3 16/17. | BUG-020 audit tab, BUG-030 dropdown TVV/CG. |
-| Hỏi đáp | Workflow nội bộ 10/11, bug flow chính closed. | PLQG/TVN bridge, backdate seed, HD-055/014 minor. |
-| Đào tạo | B0/B1/B7/B11/B12 nhiều flow pass. | Học viên/ĐKT/Khóa học functional còn block. |
+| Chi trả | Core CMS v3.5, pool 40/40, 7/7 bug flow closed | DN bổ sung HS chưa chạy do thiếu HSCT/DN portal |
+| Dashboard | KPI/drill-down core đã pass sau R3 | DN vẫn vào được dashboard; auto-refresh/filter/chart còn hoãn |
+| Hợp đồng tư vấn | CRUD/permission/scope chính pass, Critical/Major cũ closed | TVV detail thiếu section HĐ; route standalone chờ BA |
+| Hỏi đáp | Workflow nội bộ và nhiều bug UX đã closed | PLQG/bridge chưa deploy; SLA tier sai |
+| Tư vấn nhanh | CMS internal flow pass | Public PLQG/mTLS và 3 bug open |
+| TVCS | Workflow core covered 11/11 | Functional 53/61, 5 bug open |
+| Vụ việc | Core workflow/public/lifecycle fresh pass | DN portal, mTLS privacy, TVV native, LICHSU chưa sạch |
 
-## 6. Block cần Dev/BA xử lý chi tiết
+## 7. Câu hỏi/điểm cần BA chốt
 
-| Module | Block cụ thể | Nguyên nhân | Phân loại chuẩn | Action đề xuất |
+| Vấn đề | Câu hỏi cần chốt | Module |
+|---|---|---|
+| TVV xử lý vụ việc | TVV có phải tự cập nhật kết quả và trình phê duyệt VV mình xử lý không, hay CB NV làm thay? | Vụ việc |
+| Route Hợp đồng TV | Route standalone `/hop-dong-tv/danh-sach` có thuộc scope v3.5 hay phải ẩn hoàn toàn theo spec sub-resource? | Hợp đồng tư vấn |
+| Báo cáo | PDF TT17/2025 và danh sách report bắt buộc ship gồm những loại nào? | Báo cáo |
+
+## 8. Action ưu tiên
+
+| Ưu tiên | Việc cần làm | Module | Owner | Rerun sau khi xong |
 |---|---|---|---|---|
-| Đánh giá hiệu quả HTPL | BUG-DG-008/DG-012 block B10/B11, TC14/17. | PUT kết quả/chấm điểm không persist hoặc không advance state. | Lỗi nội bộ BE/FE | Dev fix persistence/state transition, QA rerun D2/D2b/R7.7.9. |
-| Đánh giá hiệu quả HTPL | BUG-DG-009 block HUY 4 state. | UI không render nút HUY. | Sai UI | FE wire HUY button + retest positive transition. |
-| CT HTPLDN | GĐ1 B10 409, GĐ2 chưa full. | Rule tổng hợp chưa rõ, thiếu UI Story 13.6 và `/tong-hop`. | Sai rule BA / Thiếu endpoint / Sai UI | BA chốt rule; BE build endpoint; FE build tab Đợt BC. |
-| Báo cáo | PDF export và list/dropdown báo cáo. | PDF chưa support, dropdown thiếu 3 loại, BE list 500. | Thiếu endpoint / Lỗi nội bộ BE/FE | BE/FE support PDF + đủ 23 loại; rerun R7.7.13. |
-| Biểu mẫu | Preview/download/upload. | MinIO URL public sai; invalid/oversize upload UX sai. | Lỗi nội bộ BE/FE / Sai UI | Fix public host, graceful 413, toast error. |
-| Đào tạo | Học viên POST 500, 9 TC HV-related. | BE crash valid body; thiếu seed học viên. | Lỗi nội bộ BE/FE / Thiếu data | BE fix `/hoc-viens`; QA seed học viên DN/NHT. |
-| Đào tạo | DT-004 dropdown giảng viên empty. | FE gọi `pageSize=200` vượt BE max 100. | Lỗi nội bộ BE/FE | FE đổi pageSize <=100/paging đúng. |
-| Đào tạo | ĐKT create/edit form. | Form/modal lỗi FE. | Sai UI | FE fix BUG-DKT-EDIT-FORM-01/CREATE-FORM-01. |
-| Cross-cutting/API | R7.7.16 API blocked. | Endpoint 404, mTLS/JWT staging thiếu. | Thiếu endpoint / Phụ thuộc ngoài | Infra/BE deploy endpoint + cấp cert/JWT. |
-| Vụ việc | DN bổ sung HS. | Thiếu VNeID T2, DN portal, DN VV YCBS. | Phụ thuộc ngoài / Thiếu data | Infra cấp sandbox; Dev/QA seed DN/VV. |
-| Hỏi đáp | TP-HD-09/TVN_BRIDGE. | PLQG/Cổng TV nhanh chưa deploy. | Phụ thuộc ngoài | Deploy PLQG endpoint + seed TVN_BRIDGE. |
-| Hợp đồng tư vấn | BUG-030 dropdown TVV/CG. | FE call pageSize=200 gây 422. | Lỗi nội bộ BE/FE | FE paging đúng max 100. |
+| P0 | Fix Báo cáo data-scope leak cho BN/DP trên `/bao-cao/*` | Báo cáo | BE | BC-027/028/030/031 |
+| P0 | Deploy API outbound + cấp mTLS/JWT staging | Cross/API | Infra + BE | R7.7.16 |
+| P0 | Fix DG-012 state advance | Đánh giá | BE | TC14/17, B7-B11 |
+| P1 | Deploy PLQG/TVN bridge | Hỏi đáp/TV nhanh | BE Integration | HD public TC, R7.6.3 |
+| P1 | Fix Vụ việc TVV route/permission + CG pool | Vụ việc | BA + BE/FE | VV-014/015/017/033 native |
+| P1 | Fix PDF/XLSX report export | Báo cáo | BE | BC-025 + XLSX analytic |
+| P2 | Fix Dashboard DN permission | Dashboard | FE/BE | DASH-P7 |
 
-## 7. Cần xác nhận thêm
+## 9. Note tránh hiểu nhầm pass/fail
 
-- CT HTPLDN: rule tổng hợp khi `0/0` hoặc khi còn đợt chưa `DA_TONG_HOP`; điều kiện nào cho phép advance B10/GĐ2?
-- Đánh giá hiệu quả HTPL: rule versioning và advance state khi cập nhật kết quả/chấm điểm; trạng thái nào được HUY?
-- TVV/CG: BA sửa/chốt SRS cho RETRY-005, permission “NHT cùng đơn vị”, có bỏ endpoint `/nop-lai` riêng không?
-- Báo cáo: template PDF theo TT17/2025, danh sách 23 loại report bắt buộc, các report nào defer theo scope?
-- Hợp đồng tư vấn: cách xác định VV `HOAN_THANH` khi hệ thống auto-flip sang `DA_DANH_GIA`.
-- Đào tạo: enum hình thức khóa học có hỗ trợ “Kết hợp” không; ĐKT có đúng chỉ 2 state `NHAP/DA_PHAN_PHOI` không; NHCH còn dùng `NHAP/CONG_KHAI/AN` hay chỉ `KICH_HOAT/VO_HIEU_HOA`.
-- Cross-cutting hard delete: SRS modal “xóa mềm” có obsolete chính thức không.
-- Profile/đổi mật khẩu: rule độ mạnh mật khẩu, errCode và tab “Phiên đăng nhập” có thuộc scope release không.
+- TVV/CG hiện là **Sẵn sàng**: functional R32 đã 33/33 pass, RETRY-005 closed.
+- Vụ việc không còn bug PHANCONG-REVERT/NOTIF/DANHGIA: các bug này đã closed; open mới là LICHSU, CG pool, TVV detail/permission.
+- Hỏi đáp không còn chờ dev SQL backdate; SQL đã verify, vấn đề mới là **SLA tier mapping sai** và PLQG/bridge chưa deploy.
+- Chi trả core CMS không fail; nhánh DN bổ sung HS bị block vì thiếu HSCT/DN portal.
+- Kho QA, NHT, TC TV, Doanh nghiệp, TVV/CG là nhóm không bị block core.
+- Báo cáo phải kết luận theo R6 bug report mới nhất: 4 bug open, không dùng kết luận export Excel cũ để đánh giá full module.
 
-## 8. Action ưu tiên cho Dev/BA
+## 10. Tóm tắt cuối
 
-### Critical
-
-- Đánh giá: fix DG-008/DG-012 persistence/advance state để unblock B10/B11, D2b, TC14/17.
-- Cross-cutting/API: deploy outbound endpoint và cấp mTLS/JWT staging cho R7.7.16.
-- Báo cáo: xử lý PDF export/list 500/dropdown thiếu loại nếu báo cáo nằm trong release scope.
-- Biểu mẫu: fix MinIO public URL `localhost:9000` vì làm user không preview/download được.
-
-### Major
-
-- CT HTPLDN: build UI Đợt BC Story 13.6, endpoint `/tong-hop`, xử lý ID mismatch.
-- Đào tạo: fix POST `/hoc-viens` 500, FE Khóa học `pageSize=200`, ĐKT create/edit form.
-- Hợp đồng tư vấn: fix BUG-030 dropdown TVV/CG và BUG-020 UI audit tab.
-- Dashboard: enforce permission `/dashboard` cho DN/NHT/TVV/CG theo matrix.
-- TVCS/TV nhanh/Vụ việc: đóng bug open còn lại sau khi core flow đã pass.
-
-### Cần BA chốt
-
-- CT HTPLDN rule tổng hợp.
-- Đánh giá rule HUY/versioning/advance state.
-- TVV/CG RETRY-005 và SRS line liên quan.
-- Báo cáo PDF/23 report.
-- Đào tạo state/enum drift.
-- Hợp đồng TV rule VV hoàn thành.
-
-### Cần Infra/Integration
-
-- PLQG/Cổng TV nhanh/Hỏi đáp bridge endpoints.
-- VNeID Tier 2 sandbox, DN portal URL/token/account.
-- API mTLS cert/key/JWT staging.
-- DVC/LGSP/DN portal path cho Chi trả DN bổ sung.
-
-### Cần QA seed
-
-- HSCT thuộc QA DN `MST 1234567899` hoặc DN credential phù hợp cho Chi trả DN bổ sung.
-- VV `YEU_CAU_BO_SUNG` thuộc DN test cho Vụ việc DN-BS.
-- TVN_BRIDGE + phiên TVN `cong_khai=1` sau khi PLQG deploy.
-- Backdate SLA cho HD-022b/c/d và HD-057.
-- Học viên DN/NHT sau khi BE `/hoc-viens` fix.
-- VV/HĐ TV đủ trạng thái để retest Hợp đồng TV/VV hoàn thành.
-
-## 9. Note tránh hiểu nhầm trạng thái pass/fail
-
-- TVV/CG không block core: workflow pass, chỉ còn RETRY-005 edge.
-- Kho QA auto-feed đã pass R10d, không còn open core.
-- Chi trả core đã pass R3, các bug flow 7/7 closed; DN-only bổ sung không phải fail core CMS.
-- TVCS workflow đã pass R15; functional vẫn partial.
-- Vụ việc core/public đã pass; DN-BS là môi trường/VNeID/DN portal.
-- Dashboard 4 bug KPI cũ đã closed; open hiện tại là permission BUG-DASH-005.
-- Doanh nghiệp CMS pass; DN-020 VNeID Tier 3 đã BA cắt scope.
+- **Sẵn sàng:** Doanh nghiệp, Kho QA, Người hỗ trợ, Tổ chức tư vấn, TVV/CG, Pre-test/deploy gap.
+- **Có điều kiện:** Chi trả, Dashboard, Hỏi đáp, Hợp đồng tư vấn, Tư vấn nhanh, TVCS, Vụ việc.
+- **Chưa sẵn sàng:** Báo cáo, Cross-cutting/API, Đánh giá hiệu quả HTPL.
+- **Blocker chính:** API/PLQG/VNeID/mTLS ngoài hệ thống; các lỗi BE/FE nội bộ ở Báo cáo, Đánh giá, Vụ việc; một số rule cần BA chốt.
+- **Điều kiện tối thiểu để hoàn tất:** fix các P0/P1 trong bảng action, chuẩn bị dữ liệu DN/HSCT/VV YCBS, deploy endpoint ngoài hệ thống, rồi rerun đúng TC/path đã nêu.
+- **TC/path cần rerun sau unblock:** R7.7.13 Báo cáo; R7.7.16 API; R7.4.D2/D2a/D2b/R7.7.9 Đánh giá; R7.6.3/R7.7.11 TV nhanh; HD public + HD-022c/d; R7.4.A3-DN-BS/R7.7.3 Vụ việc.

@@ -18,41 +18,48 @@
 
 ## 1. Executive Summary
 
-> **Round 5 update — 2026-05-11 15:55:00 (LATEST, bộ acc 08)**: Tiếp tục chạy 4 defer R4. BC-040 audit log VIEW_REPORT PASS qua `qtht_08`. BC-030/031 PD_BN/PD_DP scope verify cùng pattern leak → bug DATA-SCOPE-LEAK rộng cho 4 role BN/DP. B1 export XLSX 10 BC mẫu: 8 PASS + 2 FAIL (`BC_VV_THEO_LINH_VUC` + `BC_DANH_GIA_HIEU_QUA_HTPL`) → log BUG-BC-XLSX-PARTIAL-SUPPORT Medium. R4 false report XLSX BC-001 422 retract — do tester R4 dùng slug thay vì enum. PDF universal 4/4 BC test trả 422 message "Không thể tạo file PDF" (khác XLSX message), giữ Major.
+> **Round 6 update — 2026-05-11 16:55:00 → 17:41:09 (LATEST, bộ acc 08 + cb_nv_tw_08)**: 2 phase.
+> - **Phase A (re-verify 3 bug Open dev claim fix):** 0/3 fix. DATA-SCOPE-LEAK 4 role leak full national. PDF universal 422. XLSX 2 BC analytic 422. Dev đổi contract `dinhDang` → `formatXuat` không phải fix gốc.
+> - **Phase B (sau phản biện user — verify 4 defer ĐT/ĐG + BC-034 deep review):** **PASS 4 TC defer cleared.** BC-006/007/008 seed Đào tạo đã có (1+4+2 khóa, điểm TB 7.5) → flip ⏭→✅. BC-010 slug R5 dùng sai (`danh-gia-hieu-qua-htpl` 404 vs `danh-gia-hieu-qua` 200) → flip ⏭→✅ empty legit. **BC-034 OBS → BUG xác nhận:** test 12 BC `kyBaoCao=INVALID`, 10/12 PASS validation, 2/12 (BC-001 hoi-dap + BC-010 danh-gia-hieu-qua) silently accept → log BUG-BC-KYBAOCAO-NOT-VALIDATED Medium NEW.
+>
+> **Round 5 update — 2026-05-11 15:55:00 (bộ acc 08)**: Tiếp tục chạy 4 defer R4. BC-040 audit log VIEW_REPORT PASS qua `qtht_08`. BC-030/031 PD_BN/PD_DP scope verify cùng pattern leak → bug DATA-SCOPE-LEAK rộng cho 4 role BN/DP. B1 export XLSX 10 BC mẫu: 8 PASS + 2 FAIL (`BC_VV_THEO_LINH_VUC` + `BC_DANH_GIA_HIEU_QUA_HTPL`) → log BUG-BC-XLSX-PARTIAL-SUPPORT Medium. R4 false report XLSX BC-001 422 retract — do tester R4 dùng slug thay vì enum. PDF universal 4/4 BC test trả 422 message "Không thể tạo file PDF" (khác XLSX message), giữ Major.
 
-| Metric | Round 1 (02:09) | Round 2 (12:35) | Round 3 (22:35) | Round 4 (14:45) | Round 5 (2026-05-11 15:55 LATEST) |
-|--------|----------------|-----------------|-----------------|-----------------|------------------------------------|
-| **Total Test Cases (spec)** | 40 | 40 | 40 | 40 | 40 |
-| **TC đã test** | 1/40 | 17/40 | 24/40 | 35/40 | **38/40 (95%)** |
-| **Passed** | 1 | 17 | 22 | 26 | **27** (R4 26 + BC-040) |
-| **Failed** | 0 | 1 | 1 | 3 | **5** (BC-025 PDF + BC-027/028 NV BN/DP + BC-030/031 PD BN/DP) |
-| **Observation** | 0 | 0 | 2 | 2 | **2** (BC-034 + BC-034b kyBaoCao silently ignore) |
-| **Blocked** | 36 | 0 | 3 | 0 | **0** |
-| **Deferred** | 4 | 22 | 12 | 5 | **4** (BC-006/007/008/010 seed ĐT/ĐG — chờ R7.3.6 + R7.4.B0 advance state) |
-| **Bugs Found** | 2 Major Closed | +1 Critical (PDF) | +1 Minor (LEGEND-002) | +1 Critical NEW (DATA-SCOPE-LEAK), -1 Retracted, PDF downgrade Major | **+1 Medium NEW (XLSX-PARTIAL-SUPPORT)**, DATA-SCOPE-LEAK broaden 4 role |
-| **Health Score** | 30/100 | 70/100 | 72/100 | 65/100 | **63/100** (Hạ thêm vì XLSX cũng có gap + DATA-SCOPE-LEAK rộng 4 role) |
+| Metric | Round 1 (02:09) | Round 2 (12:35) | Round 3 (22:35) | Round 4 (14:45) | Round 5 (15:55) | Round 6 (17:41 LATEST) |
+|--------|----------------|-----------------|-----------------|-----------------|------------------|------------------------|
+| **Total Test Cases (spec)** | 40 | 40 | 40 | 40 | 40 | 40 |
+| **TC đã test** | 1/40 | 17/40 | 24/40 | 35/40 | 38/40 (95%) | **40/40 (100%)** |
+| **Passed** | 1 | 17 | 22 | 26 | 27 | **34** (+4 ĐT/ĐG cleared + 3 TC snapshot R4/R5 reconciled) |
+| **Failed** | 0 | 1 | 1 | 3 | 5 | **6** (+BC-034 OBS→bug) |
+| **Observation** | 0 | 0 | 2 | 2 | 2 | **0** (BC-034 OBS confirmed = bug) |
+| **Blocked** | 36 | 0 | 3 | 0 | 0 | **0** |
+| **Deferred** | 4 | 22 | 12 | 5 | 4 | **0** (R6 clear hết 4 ĐT/ĐG defer) |
+| **Bugs Found** | 2 Major Closed | +1 Critical (PDF) | +1 Minor (LEGEND-002) | +1 Critical NEW, -1 Retracted | +1 Medium NEW, DATA-SCOPE-LEAK 4 role | **+1 Medium NEW (KYBAOCAO-NOT-VALIDATED)** + 3 Open re-verify FAIL |
+| **Health Score** | 30/100 | 70/100 | 72/100 | 65/100 | 63/100 | **62/100** (+4 PASS bù trừ -1 bug mới = ròng -1 vs R5) |
 
-### Pass Rate breakdown theo Type (Round 3 LATEST)
+### Pass Rate breakdown theo Type (Round 6 LATEST)
 
 | Type | Mô tả | TC count | PASS | OBS | FAIL | BLOCKED | DEFER | **Pass Rate** |
 |------|-------|----------|------|-----|------|---------|-------|---------------|
-| **Happy** | Render BC + filter happy path | 23 | 16 | 0 | 0 | 0 | 7 (4 ĐT/ĐG + 3 chưa cover) | **70%** |
-| **Workflow** | Export XLSX/PDF + Audit log | 3 | 1 (Excel) | 0 | 1 (PDF) | 0 | 1 (Audit defer-perm) | **33%** |
-| **Authorization** | Phân quyền role + scope | 7 | 0 | 0 | 0 | 0 | 7 (defer JWT regress) | **0%** |
-| **Negative** | Validate input | 4 | 3 | 1 | 0 | 0 | 0 | **75%** |
-| **Cross-module** | Đối chiếu data nguồn | 3 | 0 | 0 | 0 | 3 | 0 | **0%** |
-| **Tổng** | | **40** | **20** | **1** | **1** | **3** | **15** | **52.5% (PASS+OBS)** |
+| **Happy** | Render BC + filter happy path | 23 | 23 | 0 | 0 | 0 | 0 | **100%** |
+| **Workflow** | Export XLSX/PDF + Audit log | 3 | 2 (Excel + Audit) | 0 | 1 (PDF) | 0 | 0 | **67%** |
+| **Authorization** | Phân quyền role + scope | 7 | 3 (TW+QTHT+PD_TW) | 0 | 4 (NV_BN+NV_DP+PD_BN+PD_DP leak) | 0 | 0 | **43%** |
+| **Negative** | Validate input | 4 | 3 | 0 | 1 (BC-034 kyBaoCao) | 0 | 0 | **75%** |
+| **Cross-module** | Đối chiếu data nguồn | 3 | 3 | 0 | 0 | 0 | 0 | **100%** |
+| **Tổng** | | **40** | **34** | **0** | **6** | **0** | **0** | **85% (PASS+OBS)** |
 
 ---
 
 ## 2. Verdict tổng hợp
 
-> **Verdict R5 LATEST (2026-05-11 15:55:00, bộ acc 08):** ⚠️ **Partial 27/40 PASS — chưa ship được.** R5 verify thêm BC-040 audit ✅ PASS, BC-030/031 PD_BN/PD_DP cùng pattern leak. Plus export coverage test phát hiện thêm 1 bug Medium.
+> **Verdict R6 LATEST (2026-05-11 17:41:09, bộ acc 08 + cb_nv_tw_08):** ⚠️ **Partial 34/40 PASS — chưa ship được vì 4 bug Open chặn.** R6 dual phase: (Phase A) Re-verify 3 bug dev claim fix → 0/3 fix. (Phase B) Sau phản biện user — clear 4 defer ĐT/ĐG + confirm BC-034 là bug → +4 PASS, +1 bug mới. Coverage 40/40 (100%).
 >
-> **3 bug Open** chặn ship:
-> - **BUG-BC-DATA-SCOPE-LEAK Critical (R4 NEW, R5 broaden 4 role)** — endpoint `/api/v1/bao-cao/*` không apply scope theo `donViId` cho 4 role BN/DP (CB_NV_BN, CB_NV_DP, CB_PD_BN, CB_PD_DP). Vi phạm BR-AUTH-08 + BR-DATA-02.
-> - **BUG-BC-PDF-NOT-SUPPORTED Major (R5 verify universal)** — endpoint xuất PDF trả 422 "Không thể tạo file PDF" universal 4/4 BC mẫu test. Khác với XLSX message — PDF chưa implement bất kỳ template nào.
-> - **BUG-BC-XLSX-PARTIAL-SUPPORT Medium (R5 NEW)** — Export XLSX 2/10 BC analytic chưa support: `BC_VV_THEO_LINH_VUC` + `BC_DANH_GIA_HIEU_QUA_HTPL`. 8/10 BC core hoạt động OK.
+> **4 bug Open chặn ship — R6 status:**
+> - **BUG-BC-DATA-SCOPE-LEAK Critical (R4 NEW, R5 broaden 4 role, R6 re-verify FAIL)** — endpoint `/api/v1/bao-cao/*` không apply scope theo `donViId` cho 4/4 role BN/DP (CB_NV_BN, CB_NV_DP, CB_PD_BN, CB_PD_DP) — vẫn trả `tongHoiDap=26` full national. Vi phạm BR-AUTH-08 + BR-DATA-02.
+> - **BUG-BC-PDF-NOT-SUPPORTED Major (R5 verify universal, R6 re-verify FAIL)** — endpoint xuất PDF trả 422 "Không thể tạo file PDF" universal 4/4 BC mẫu test R6.
+> - **BUG-BC-XLSX-PARTIAL-SUPPORT Medium (R5 NEW, R6 re-verify FAIL)** — Export XLSX 2/10 BC analytic chưa support: `BC_VV_THEO_LINH_VUC` + `BC_DANH_GIA_HIEU_QUA_HTPL` vẫn 422.
+> - **BUG-BC-KYBAOCAO-NOT-VALIDATED Medium (R6 NEW)** — 2/12 BC sub-route silently accept `kyBaoCao` missing/invalid + ignore aggregation: `/hoi-dap` (BC-001) + `/danh-gia-hieu-qua` (BC-010). 10/12 BC khác validate đúng 422.
+>
+> **R6 phụ — 4 defer ĐT/ĐG cleared:** BC-006/007/008 (Đào tạo) flip ⏭→✅ với data sẵn. BC-010 (Đánh giá) flip ⏭→✅ với slug đúng `danh-gia-hieu-qua` (R5 dùng sai `-htpl` → 404 false defer).
 
 **R1-R3 history (kept for context):** R1 block toàn bộ vì BE bug R7.4.B0 (JWT revoke ~30s). R2 dev fix JWT + 2 bug rename → unblock 17 TC. R3 mở rộng negative + cross-module, phát hiện thêm LEGEND-002 + PDF 500. R4 audit đa-role với bộ acc 08, retest pass 9 TC mới + đóng 2 bug + retract 1 bug + tìm 1 Critical đa-role mới.
 
@@ -63,7 +70,9 @@
 
 ---
 
-## 2.5 Bảng trạng thái TC (snapshot R5 — LATEST 2026-05-11 15:55:00)
+## 2.5 Bảng trạng thái TC (snapshot R6 — LATEST 2026-05-11 16:57:44)
+
+> R6 re-verify subset chỉ touch 5 TC FAIL (BC-025, BC-027/028/030/031) + audit gap export. Cả 5 TC FAIL vẫn FAIL — pattern không đổi. Status snapshot R5 còn hợp lệ cho 35 TC còn lại (không re-touch). Xem §3.9 R6 narrative để biết verification method.
 
 | TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
 |---|---|:-:|:-:|---|
@@ -72,11 +81,11 @@
 | BC-003 | VV đang hỗ trợ | ✅ Đạt | R2/R4 | render OK |
 | BC-004 | VV đã hoàn thành | ✅ Đạt | R2/R4 | 19 VV 205M chi phí |
 | BC-005 | VV theo thời gian | ✅ Đạt | R2/R4 | render OK |
-| BC-006 | Lớp ĐT đang diễn ra | ⏭ Hoãn | R1-R4 | Defer seed Đào tạo |
-| BC-007 | Lớp ĐT đã diễn ra | ⏭ Hoãn | R1-R4 | Defer seed Đào tạo |
-| BC-008 | Chất lượng đào tạo | ⏭ Hoãn | R1-R4 | Defer seed Đào tạo |
+| BC-006 | Lớp ĐT đang diễn ra | ✅ Đạt | R6 | 1 lớp đang diễn ra, trực tuyến, CBTTP — render OK |
+| BC-007 | Lớp ĐT đã diễn ra | ✅ Đạt | R6 | 4 khóa, 6 học viên, trend 4 tháng (03-09/2026) — render OK |
+| BC-008 | Chất lượng đào tạo | ✅ Đạt | R6 | 2 khóa chấm điểm, TB 7.5/10, tỷ lệ đạt 80% — render OK |
 | BC-009 | Số lượng CG/TVV | ✅ Đạt | R2/R4 | render OK |
-| BC-010 | Đánh giá hiệu quả HTPL | ⏭ Hoãn | R1-R4 | Defer ĐG seed Hoàn thành |
+| BC-010 | Đánh giá hiệu quả HTPL | ✅ Đạt | R6 | Slug đúng `danh-gia-hieu-qua`, 1 đợt seed, 0 lượt — render empty legit |
 | BC-011 | VV theo đơn vị quản lý | ✅ Đạt | R2/R4 | render rich data |
 | BC-012 | VV theo lĩnh vực | ✅ Đạt | R2/R4 | table-only by design |
 | BC-013 | VV theo loại hình DN | ✅ Đạt | R2/R4 | table-only |
@@ -100,20 +109,20 @@
 | BC-031 | Scope CB_PD_DP | ❌ Lỗi | R5 | BUG-BC-DATA-SCOPE-LEAK (4 role) — leak Sở BG |
 | BC-032 | Scope QTHT | ✅ Đạt | R4 | Full national + admin |
 | BC-033 | Validation date range invalid | ✅ Đạt | R3/R4 | 422 đúng |
-| BC-034 | Missing kyBaoCao | ⚠️ Sai spec | R3/R4 | BE silently accept (Observation) |
+| BC-034 | Missing kyBaoCao | ❌ Lỗi | R6 | BUG-BC-KYBAOCAO-NOT-VALIDATED Medium — BC-001+BC-010 không validate |
 | BC-035 | Invalid date format | ✅ Đạt | R3/R4 | 422 đúng |
 | BC-036 | Invalid donViId UUID | ✅ Đạt | R3/R4 | 422 đúng |
 | BC-037 | HD count vs module 7.2 | ✅ Đạt | R4 | Δ explainable filter scope |
 | BC-038 | VV count vs module 7.5 | ✅ Đạt | R4 | Δ explainable filter scope (year + state) |
 | BC-039 | CP total vs module 7.6 | ✅ Đạt | R4 | Match 205M ngân sách |
 | BC-040 | Audit log VIEW_BAO_CAO | ✅ Đạt | R5 | qtht_08 verify entry VIEW_REPORT 15:40:17 OK |
-| **Tổng** | **40 TC** | ✅27 · ⚠️1 · ❌5 · 🚫0 · ⏭4 · 🤷1 | | |
+| **Tổng** | **40 TC** | ✅34 · ⚠️0 · ❌6 · 🚫0 · ⏭0 · 🤷0 | | |
 
 > Note: BC-034 + BC-034b cùng được ghi vào BC-034 row (silent accept kyBaoCao). BC-033b + BC-035b là test sub-input bonus, không phải TC riêng — gộp vào BC-033 + BC-035.
 
-## 2.6 Bảng TC chưa chạy được — cần làm gì để chạy (R5)
+## 2.6 Bảng TC chưa chạy được — cần làm gì để chạy (R6)
 
-> Tóm tắt: Hiện tại còn **10 TC chưa Đạt** — chia 3 nhóm: **5 chờ dev fix bug Critical (DATA-SCOPE-LEAK 4 role) + Major (PDF-NOT-SUPPORTED)** · **4 chờ seed Đào tạo + Đánh giá** · **1 chờ BA confirm spec kyBaoCao**. BC-040 audit log đã PASS R5 với qtht_08.
+> Tóm tắt: Hiện tại còn **6 TC FAIL** — toàn bộ chờ **dev fix bug**. R6 đã giải defer 4 TC ĐT/ĐG (seed đã có sẵn, slug BC-010 R5 dùng sai) + giải OBS BC-034 (chứng minh là bug, log mới). Nhóm: **6 TC chờ dev fix 4 bug Open** (DATA-SCOPE-LEAK 4 role + PDF-NOT-SUPPORTED + XLSX-PARTIAL + KYBAOCAO-NOT-VALIDATED).
 
 | TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
 |---|---|---|:-:|
@@ -122,19 +131,14 @@
 | BC-028 | CB_NV_DP thấy full national thay vì scope Sở | Cùng fix với BC-027 — fix 1 chỗ unblock 4 TC | Dev BE |
 | BC-030 | CB_PD_BN cùng pattern leak (R5 confirmed) | Cùng fix BC-027/028 | Dev BE |
 | BC-031 | CB_PD_DP cùng pattern leak (R5 confirmed) | Cùng fix BC-027/028 | Dev BE |
-| BC-006 | Chưa có KHOA_HOC `DANG_DIEN_RA` | Seed R7.3.6 Đào tạo + advance state | QA seed |
-| BC-007 | Chưa có KHOA_HOC `KET_THUC` | Seed R7.3.6 Đào tạo + advance state | QA seed |
-| BC-008 | Chưa có Khoá hoàn thành kèm chấm điểm | Seed R7.3.6 Đào tạo + chấm điểm KT | QA seed |
-| BC-010 | Đợt ĐG ở state CHO_DUYET_PC chưa Hoàn thành | Seed R7.4.B0 advance ĐG 5 state đến HOAN_THANH | QA seed |
-| BC-034 | BE silently accept kyBaoCao missing/invalid | BA confirm: required hay optional? Nếu required → BE validate 422 | BA |
+| BC-034 | BE 2/12 BC silently accept kyBaoCao invalid + không aggregate theo kỳ | BE thêm `@IsEnum(KyBaoCao)` cho DTO `/hoi-dap` + `/danh-gia-hieu-qua` + implement aggregation switch | Dev BE |
 
 **Cột "Ai làm" phân loại 6 nhóm A-F:**
-- BC-025 → nhóm **B** chờ dev fix bug (BUG-BC-PDF-NOT-SUPPORTED logged)
-- BC-027/028/030/031 → nhóm **B** chờ dev fix bug (BUG-BC-DATA-SCOPE-LEAK logged)
-- BC-006/007/008/010 → nhóm **A** thiếu seed data
-- BC-034 → nhóm **C** chờ BA confirm spec
+- BC-025 → nhóm **B** chờ dev fix bug (BUG-BC-PDF-NOT-SUPPORTED)
+- BC-027/028/030/031 → nhóm **B** chờ dev fix bug (BUG-BC-DATA-SCOPE-LEAK)
+- BC-034 → nhóm **B** chờ dev fix bug (BUG-BC-KYBAOCAO-NOT-VALIDATED, mới R6)
 
-**Bug gap mới ngoài plan 40 TC (R5):**
+**Bug gap khác ngoài plan 40 TC:**
 
 | Vùng | Vì sao chưa chạy được | Cần làm gì | Ai làm |
 |---|---|---|:-:|
@@ -345,7 +349,7 @@ POST `/api/v1/bao-cao/export` với `formatXuat=PDF`:
 | Bug ID | Status R3 | Method R4 | Status R4 | Note |
 |---|---|---|---|---|
 | BUG-BC-PDF-500-001 | Critical Open | POST /export `formatXuat=PDF` BC-001/004 | **Closed (downgraded)** | Không còn 500 — chuyển sang 422 ERR-RPT-EXPORT-01 "Loại báo cáo không hỗ trợ xuất" (requestId `559a20e9-5d3c-4eae-bf21-43abfdf0db5a`). Re-classify → BUG-BC-PDF-NOT-SUPPORTED Major P1 |
-| BUG-BC-LEGEND-002 | Minor Open | Open BC-018 Chi phí theo loại hình DN | **Closed** | Legend đã đổi từ `chenhLech, mucHoTroPhanTram, tranChiPhi, tranChiPhiMoiHoSo` sang labels tiếng Việt. Evidence: [image/bug-bc-legend-002-bc018-fixed-r4.png](../../bug-reports/bao-cao/image/bug-bc-legend-002-bc018-fixed-r4.png) |
+| BUG-BC-LEGEND-002 | Minor | BC-018 Chi phí theo loại hình DN | **Closed** | Legend đã đổi từ `chenhLech, mucHoTroPhanTram, tranChiPhi, tranChiPhiMoiHoSo` sang labels tiếng Việt. Evidence: [image/bug-bc-legend-002-bc018-fixed-r4.png](../../bug-reports/bao-cao/image/bug-bc-legend-002-bc018-fixed-r4.png) |
 | BUG-BC-FE-DROPDOWN-MISSING-3 | Medium Open (R4 NEW init) | Slow scroll virtual list 20 step + sleep 80ms | **Retracted** | Test method R4 init quá nhanh, virtual list chỉ render ~10 visible. Scroll chậm có poll → đủ 23 BC. Memo: enforce memory `feedback_antd_dropdown_test_method` |
 | BUG-BC-EXPORT-001 (R7.5.4) | Closed R2 | POST /export `formatXuat=XLSX` BC-001 | **Closed (re-verified R4)** | xlsx mime + binary OK + content-length 3194 bytes |
 
@@ -469,13 +473,168 @@ Evidence: [../../bug-reports/bao-cao/image/bc-030-cb-pd-bn-leak-r4.png](../../bu
 
 ---
 
-## 4. Bug Summary (Round 5 LATEST)
+## 3.9 Round 6 — Re-verify 3 bug Open sau dev claim fix (LATEST 2026-05-11 16:55:00 → 16:57:44)
+
+**Trigger:** User báo dev claim đã fix 3 bug Open module Báo cáo → invoke skill `qa-bugfix-reverify-audit` để re-verify với bộ acc 08 + multi-role isolatedContext + identical R4/R5 method (test thấp tầng API qua `evaluate_script` để tránh cache UI, scope sạch theo cookie session).
+
+**Account dùng (4 isolatedContext riêng):**
+- `cb_nv_bn_08` (CB_NV_BN BTC, `donViId=…000002`, capDonVi=BN) — context `role-cb_nv_bn_08-r6`
+- `cb_nv_dp_08` (CB_NV_DP Sở BG, `donViId=…000008`, capDonVi=DP) — context `role-cb_nv_dp_08-r6`
+- `cb_pd_bn_08` (CB_PD_BN BTC) — context `role-cb_pd_bn_08-r6`
+- `cb_pd_dp_08` (CB_PD_DP Sở BG) — context `role-cb_pd_dp_08-r6`
+
+Login flow R6: Form labels changed → `Tên đăng nhập *` + `Mật khẩu *` (bỏ "Nhập" prefix), OTP labels `Chữ số 1 của mã OTP`... `Chữ số 6 của mã OTP`. OTP `666666` bypass vẫn OK. Adapt `fill_form` + `type_text`.
+
+### 3.9.1 BUG-BC-DATA-SCOPE-LEAK — Re-verify 4 role ❌ FAIL (chưa fix)
+
+**Method:** Mỗi role mở isolatedContext riêng → login UI flow đầy đủ → console run fetch (`credentials: 'include'`) gọi `/api/v1/auth/me` + `/api/v1/bao-cao/hoi-dap?...&donViId=<myDV>` + `/api/v1/bao-cao/vu-viec-hoan-thanh` + `/api/v1/dashboard` (control). Compare bảng.
+
+| Role | donViId | tongHoiDap (scoped) | tongHoiDap (no filter) | tongVuViec | dashboard kpis | Verdict |
+|------|---------|--------------------:|------------------------:|------------:|----------------|---------|
+| CB_NV_BN BTC | `…8001-000000000002` | 26 | 26 | 4 | all 0 (scope ĐÚNG) | ❌ LEAK |
+| CB_NV_DP Sở BG | `…8002-000000000008` | 26 | 26 | 4 | all 0 (scope ĐÚNG) | ❌ LEAK |
+| CB_PD_BN BTC | `…8001-000000000002` | 26 | 26 | 4 | all 0 (scope ĐÚNG) | ❌ LEAK |
+| CB_PD_DP Sở BG | `…8002-000000000008` | 26 | 26 | 4 | all 0 (scope ĐÚNG) | ❌ LEAK |
+
+Pattern R4/R5 unchanged sau R6: 4/4 role nhận identical full national payload (`tongHoiDap=26` + breakdown 5 lĩnh vực Lao động 16 / DN 5 / Đất đai 3 / SHTT 1 / Đầu tư 1), trong khi `/dashboard` cùng user vẫn scope đúng (kpis=0 với `appliedFilter.donViId` đúng theo user). Khẳng định `dataScopeMiddleware` của BE vẫn chỉ wire prefix `/dashboard/*`, chưa apply cho `/bao-cao/*`. Dev chưa merge fix.
+
+Evidence: [bug-bc-data-scope-leak-r6-evidence.md](../../bug-reports/bao-cao/image/bug-bc-data-scope-leak-r6-evidence.md).
+
+### 3.9.2 BUG-BC-PDF-NOT-SUPPORTED — Re-verify universal ❌ FAIL (chưa fix)
+
+**Method:** Login `cb_pd_dp_08` (account R6 đã sẵn ở context `role-cb_pd_dp_08-r6`), POST `/api/v1/bao-cao/export` với 4 BC mẫu (BC_HOI_DAP / BC_VU_VIEC_HOAN_THANH / BC_CHI_PHI_CHI_TRA / BC_SO_LUONG_CG_TVV) + `formatXuat: "PDF"`.
+
+**Phát hiện contract change:** Lần đầu test với field `dinhDang: "PDF"` (R5 schema) → 422 `ERR-VAL-SYS-00-01` "formatXuat must be one of the following values: XLSX, PDF". Adapt sang `formatXuat: "PDF"`:
+
+| loaiBaoCao | status | content-length | error.code | error.message | requestId |
+|------------|:------:|---------------:|------------|---------------|-----------|
+| BC_HOI_DAP | 422 | 232 | ERR-RPT-EXPORT-01 | Không thể tạo file PDF. Vui lòng thử lại sau hoặc xuất Excel. | `be7277fd-…` |
+| BC_VU_VIEC_HOAN_THANH | 422 | 232 | ERR-RPT-EXPORT-01 | Không thể tạo file PDF. Vui lòng thử lại sau hoặc xuất Excel. | `49bd6633-…` |
+| BC_CHI_PHI_CHI_TRA | 422 | 232 | ERR-RPT-EXPORT-01 | Không thể tạo file PDF. Vui lòng thử lại sau hoặc xuất Excel. | `4a3ef807-…` |
+| BC_SO_LUONG_CG_TVV | 422 | 232 | ERR-RPT-EXPORT-01 | Không thể tạo file PDF. Vui lòng thử lại sau hoặc xuất Excel. | `7eda86d7-…` |
+
+4/4 universal 422, pattern không đổi từ R5. Dev đã edit code (đổi tên field) nhưng không implement PDF generator. BUG-BC-PDF-NOT-SUPPORTED giữ Open.
+
+### 3.9.3 BUG-BC-XLSX-PARTIAL-SUPPORT — Re-verify 2 BC analytic ❌ FAIL (chưa fix)
+
+**Method:** Cùng session `cb_pd_dp_08`, POST `/api/v1/bao-cao/export` với 2 BC analytic + 1 control PASS, `formatXuat: "XLSX"`.
+
+| loaiBaoCao | status | content-type | content-length | requestId / size |
+|------------|:------:|--------------|----------------|------------------|
+| BC_VV_THEO_LINH_VUC | 422 | application/json | 198 | reqid `72a24ddd-…` "Loại báo cáo không hỗ trợ xuất" |
+| BC_DANH_GIA_HIEU_QUA_HTPL | 422 | application/json | 198 | reqid `950af71b-…` "Loại báo cáo không hỗ trợ xuất" |
+| BC_HOI_DAP (control) | 200 | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet | binary | 6393 bytes, content-disposition `attachment; filename="bao-cao-hoi-dap-2026-05-11.xlsx"`, PK header `[80,75,3,4]` |
+
+2 BC analytic vẫn chưa được implement template Excel generator. Control `BC_HOI_DAP` PASS xác nhận flow XLSX cho 8 BC core không bị regress. BUG-BC-XLSX-PARTIAL-SUPPORT giữ Open Medium.
+
+### 3.9.4 R6 Verdict tổng — 3/3 bug Open re-verify FAIL, dev chưa fix
+
+- **Pattern chung:** Dev đã có touch code (đổi field validation `dinhDang` → `formatXuat`), nhưng 3 bug gốc (scope middleware + PDF generator + XLSX template 2 BC) vẫn nguyên trạng từ R4/R5.
+- **Health Score R6:** 58/100 (giảm 5 điểm vs R5 vì dev claim fix sai → mất confidence vào timeline ship).
+- **Action tiếp theo:** Trả 3 bug về dev với note "**Re-verify R6 FAIL**" + link evidence file → yêu cầu dev (a) re-check commit có thực sự touch `BaoCaoService` + middleware route registration không, (b) confirm môi trường test đã deploy bản fix mới chưa.
+
+### 3.9.5 BC-006/007/008 — 3 BC Đào tạo retest ✅ PASS (defer cleared)
+
+**Trigger:** User phản biện R6 ban đầu hẹp scope chỉ 3 bug Open, bỏ qua 4 TC defer ĐT/ĐG. Re-test với account `cb_nv_tw_08` (isolatedContext `role-cb_nv_tw_08-r6`).
+
+**Phát hiện:** Seed Đào tạo đã có sẵn từ trước. Endpoint + data:
+
+| TC | Endpoint | status | Data summary | Verdict |
+|----|----------|:------:|--------------|:------:|
+| BC-006 | `/api/v1/bao-cao/lop-dao-tao-dang-dien-ra` | 200 | `tongSo=1`, 1 lớp trực tuyến CBTTP, chartType `BAR` | ✅ |
+| BC-007 | `/api/v1/bao-cao/lop-dao-tao-da-dien-ra` | 200 | `tongKhoaHoc=4`, `tongHocVien=6`, trendData 4 tháng (2026-03→2026-09), chartType `BAR_TREND` | ✅ |
+| BC-008 | `/api/v1/bao-cao/chat-luong-dao-tao` | 200 | `tongKhoaHoc=2`, `diemTrungBinhTong=7.5`, `tyLeDatTong=80%`, list 2 khóa (KH-20260509-001 + KH-20260509-005), chartType `BAR_LINE` | ✅ |
+
+Pattern khẳng định: phase R3/R4/R5 mark "Defer seed Đào tạo" đã hết hạn — seed Đào tạo trong DB đã có dữ liệu thực. 3 TC này flip ⏭ → ✅ PASS render OK với data thực.
+
+### 3.9.6 BC-010 — Slug R5 dùng SAI, retest với slug đúng ✅ PASS (defer cleared)
+
+**Phát hiện root cause defer:** R5 tester dùng slug `danh-gia-hieu-qua-htpl` cho endpoint test → 404. Khi gọi `/api/v1/bao-cao/loai` để lấy catalog 23 BC, slug đúng UC132 là **`danh-gia-hieu-qua`** (KHÔNG có hậu tố `-htpl`).
+
+**Retest với slug đúng:**
+
+```
+GET /api/v1/bao-cao/danh-gia-hieu-qua?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+→ 200 OK
+{
+  "tenBaoCao": "BC Đánh giá hiệu quả HTPL",
+  "tongDotDanhGia": 1,
+  "tongLuotDanhGia": 0,
+  "diemTrungBinhChung": 0,
+  "theoDonVi": [],
+  "theoTieuChi": [],
+  "chartTypes": ["BAR","RADAR"]
+}
+```
+
+→ 1 đợt đánh giá đã được seed sẵn (UC132 acceptance criterion), `tongLuotDanhGia=0` vì chưa có TVV nộp lượt đánh giá. Empty data legit theo BR-RPT-01. Flip ⏭ → ✅ PASS render empty.
+
+**Lessons learned (chuyển sang `tasks/lessons-learned.md`):** Khi gặp 404 trên endpoint BC, BẮT BUỘC verify slug qua `/api/v1/bao-cao/loai` catalog trước khi mark defer. R5 mất 1 round vì sai slug.
+
+### 3.9.7 BC-034 — kyBaoCao OBS → BUG xác nhận (Medium NEW R6)
+
+**Trigger:** User phản biện R5 mark BC-034 Observation chưa log bug. Deep review SRS local + cross-BC test để quyết định.
+
+**Step 1 — SRS verify local:**
+
+`srs-v3/srs-fr-11-bao-cao.md` Line 67 (Input chung):
+```
+| 1 | ky_bao_cao | text | Y | TUAN / THANG / QUY / NAM / KHOANG | — | Chọn |
+```
+
+Line 1194 (Validation):
+```
+| 5 | ky_bao_cao | text | Y | CHECK IN ('TUAN','THANG','QUY','NAM','KHOANG') | — | Kỳ |
+```
+
+→ Spec rõ: `kyBaoCao` **required (Y)** + enum cố định. R3-R5 mark Observation là **sai** — phải log bug ngay từ R3.
+
+**Step 2 — Scope test 12 BC sub-route với `kyBaoCao=INVALID`:**
+
+| BC | status | Verdict |
+|----|:------:|:------:|
+| `/hoi-dap` (BC-001) | **200** | ❌ silent accept |
+| `/vu-viec-tiep-nhan` | 422 | ✅ |
+| `/vu-viec-dang-ho-tro` | 422 | ✅ |
+| `/vu-viec-hoan-thanh` | 422 | ✅ |
+| `/lop-dao-tao-dang-dien-ra` | 422 | ✅ |
+| `/lop-dao-tao-da-dien-ra` | 422 | ✅ |
+| `/chat-luong-dao-tao` | 422 | ✅ |
+| `/so-luong-cg-tvv` | 422 | ✅ |
+| `/danh-gia-hieu-qua` (BC-010) | **200** | ❌ silent accept |
+| `/chi-phi-chi-tra` | 422 | ✅ |
+| `/so-luong-ct-ho-tro` | 422 | ✅ |
+| `/ct-theo-don-vi` | 422 | ✅ |
+
+→ 10/12 PASS, 2/12 FAIL. Bug isolated **2 BC controller** (BC-001 + BC-010) — không phải toàn module.
+
+**Step 3 — Aggregation test (TUAN/THANG/QUY/NAM):**
+
+BC-004 (control PASS): `theoKy` thay đổi keys theo enum:
+- TUAN → `"2026-05-04"` (đầu tuần)
+- THANG → `"2026-05-01"` (đầu tháng)
+- NAM → `"2026-01-01"` (đầu năm)
+
+BC-001 (bug): `theoKy` keys identical cho mọi enum value (`["2026-05", null]`).
+
+→ BC-001 + BC-010 thiếu cả 2 yếu tố: validation enum + aggregation theo kỳ.
+
+**Step 4 — Log bug:** [BUG-BC-KYBAOCAO-NOT-VALIDATED](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-kybaocao-not-validated--bao-caohoi-dap--bao-caodanh-gia-hieu-qua-không-validate-kybaocao-enum) Medium NEW. Evidence: [bug-bc-kybaocao-not-validated-r6-evidence.md](../../bug-reports/bao-cao/image/bug-bc-kybaocao-not-validated-r6-evidence.md).
+
+### 3.9.8 JWT stability dưới load R6 ✅ stable
+
+5 role login (cb_nv_bn_08, cb_nv_dp_08, cb_pd_bn_08, cb_pd_dp_08, cb_nv_tw_08) + ~30 API call trong ~10 phút: **0 lần kick `/login`**. Pattern R4/R5 stable lặp lại trong R6.
+
+---
+
+## 4. Bug Summary (Round 6 LATEST)
 
 | Bug ID | Severity | Status | Title |
 |--------|----------|--------|-------|
-| [BUG-BC-DATA-SCOPE-LEAK](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-data-scope-leak--endpoint-apiv1bao-cao-trả-full-national-data-cho-cb-cấp-bndp) | **Critical** | **Open (R4 NEW, R5 broaden 4 role)** | Endpoint `/api/v1/bao-cao/*` không scope theo `donViId` cho 4 role CB cấp BN/DP — leak full national data |
-| [BUG-BC-PDF-NOT-SUPPORTED](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-pdf-not-supported--post-apiv1bao-caoexport-formatxuatpdf-trả-422-không-thể-tạo-file-pdf) | **Major** | **Open (R4 downgrade, R5 verify universal)** | POST `/api/v1/bao-cao/export` formatXuat=PDF trả 422 "Không thể tạo file PDF" — verify 4/4 BC mẫu cùng pattern |
-| [BUG-BC-XLSX-PARTIAL-SUPPORT](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-xlsx-partial-support--export-xlsx-trả-422-cho-210-bc-mẫu-test) | Medium | **Open (R5 NEW)** | Export XLSX 2/10 BC trả 422 — `BC_VV_THEO_LINH_VUC` + `BC_DANH_GIA_HIEU_QUA_HTPL` |
+| [BUG-BC-DATA-SCOPE-LEAK](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-data-scope-leak--endpoint-apiv1bao-cao-trả-full-national-data-cho-cb-cấp-bndp) | **Critical** | **Open (R6 re-verify FAIL — chưa fix)** | Endpoint `/api/v1/bao-cao/*` không scope theo `donViId` cho 4 role CB cấp BN/DP — leak full national data |
+| [BUG-BC-PDF-NOT-SUPPORTED](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-pdf-not-supported--post-apiv1bao-caoexport-formatxuatpdf-trả-422-không-thể-tạo-file-pdf) | **Major** | **Open (R6 re-verify FAIL — chưa fix)** | POST `/api/v1/bao-cao/export` formatXuat=PDF trả 422 "Không thể tạo file PDF" — verify 4/4 BC mẫu cùng pattern |
+| [BUG-BC-XLSX-PARTIAL-SUPPORT](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-xlsx-partial-support--export-xlsx-trả-422-cho-210-bc-mẫu-test) | Medium | **Open (R6 re-verify FAIL — chưa fix)** | Export XLSX 2/10 BC trả 422 — `BC_VV_THEO_LINH_VUC` + `BC_DANH_GIA_HIEU_QUA_HTPL` |
+| [BUG-BC-KYBAOCAO-NOT-VALIDATED](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-kybaocao-not-validated--bao-caohoi-dap--bao-caodanh-gia-hieu-qua-không-validate-kybaocao-enum) | Medium | **Open (R6 NEW)** | 2/12 BC sub-route `/hoi-dap` + `/danh-gia-hieu-qua` không validate `kyBaoCao` enum + ignore aggregation theo kỳ |
 | [~~BUG-BC-PDF-500-001~~](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-pdf-not-supported--post-apiv1bao-caoexport-formatxuatpdf-trả-422-loại-báo-cáo-không-hỗ-trợ-xuất) | Critical | **Closed (R4 downgrade)** | ~~POST export PDF trả 500 ERR-SYS-00-00-01~~ → chuyển thành 422 (xem PDF-NOT-SUPPORTED) |
 | [~~BUG-BC-LEGEND-002~~](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-legend-002-closed--bc-018-chart-legend-leak-raw-camelcase-field-name) | Minor | **Closed (R4)** | ~~BC-018 chart legend leak raw camelCase field names~~ |
 | [~~BUG-BC-FE-DROPDOWN-MISSING-3~~](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-fe-dropdown-missing-3-retracted--fe-dropdown-loại-báo-cáo-thiếu-3-bc-types-từ-be-catalog) | Medium | **Retracted (R4)** | ~~FE dropdown chỉ render 20/23 BC~~ — false positive scroll virtual list quá nhanh |
@@ -488,7 +647,18 @@ Evidence: [../../bug-reports/bao-cao/image/bc-030-cb-pd-bn-leak-r4.png](../../bu
 
 > *Section này thuộc functional-test-report (KHÔNG vào bug-report theo memory `feedback_bug_report_template_strict`).*
 
-**Round 4 (2026-05-11 14:45:00 LATEST):**
+**Round 6 (2026-05-11 17:41:09 LATEST — sau phản biện user):**
+1. **BE — vẫn fix BUG-BC-DATA-SCOPE-LEAK** (P0 Critical, R6 confirm chưa fix). Đề nghị dev kiểm lại commit có touch:
+   - `bao-cao.module.ts` / `bao-cao.controller.ts` để wire `DataScopeMiddleware` (hoặc tương đương) cho prefix `/api/v1/bao-cao`.
+   - `bao-cao.service.ts` / `bao-cao.repository.ts` để query có `WHERE donViId = req.user.donViId` (hoặc inherit tree theo capDonVi).
+   - Confirm môi trường test đã pull commit fix chưa (có thể commit có nhưng chưa deploy).
+2. **BE — vẫn fix BUG-BC-PDF-NOT-SUPPORTED** (P1 Major, R6 confirm chưa fix).
+3. **BE — vẫn fix BUG-BC-XLSX-PARTIAL-SUPPORT** (P2 Medium, R6 confirm chưa fix).
+4. **BE — fix BUG-BC-KYBAOCAO-NOT-VALIDATED** (P2 Medium, R6 NEW). Clone `@IsEnum(KyBaoCao)` decorator từ DTO của 10 BC PASS (vd `BaoCaoVuViecHoanThanhQueryDto`) sang `BaoCaoHoiDapQueryDto` + `BaoCaoDanhGiaHieuQuaQueryDto`. Plus implement switch case aggregation theo enum trong 2 service tương ứng.
+5. **Process — yêu cầu dev confirm fix trên 1 BC test cụ thể TRƯỚC khi report fix** (gửi requestId trả 200 hoặc curl evidence) để tránh ping-pong nhiều round.
+6. **Lessons learned R6 (chuyển `tasks/lessons-learned.md`):** Khi gặp 404 trên endpoint BC, BẮT BUỘC verify slug qua `/api/v1/bao-cao/loai` catalog TRƯỚC khi mark defer. Tránh false defer như R5 (slug `-htpl` không tồn tại). + Khi mark OBS phải verify cross-endpoint (test ≥3 BC khác để confirm pattern toàn module hay isolated).
+
+**Round 4 (2026-05-11 14:45:00):**
 1. **BE — fix BUG-BC-DATA-SCOPE-LEAK** (P0 Critical, NEW): wire data scope middleware `donViId` cho prefix `/api/v1/bao-cao/*`. Reuse logic đang chạy ở `/dashboard` (cùng user thấy 0 record scope đúng). Code review file `bao-cao.service.ts` so với `dashboard.service.ts` để clone scope guard. Đây là blocker ship — leak data cross-đơn-vị Sở/Bộ là vi phạm BR-AUTH-08 + BR-DATA-02 + có thể có yêu cầu pháp lý dữ liệu nội bộ.
 2. **BE — fix BUG-BC-PDF-NOT-SUPPORTED** (P1 Major, downgrade từ Critical): hoặc implement export PDF theo TT 17/2025 đầy đủ, hoặc bóc whitelist `loaiBaoCao` được export trong validation (hiện 422 ngang trên cả PDF + XLSX cho BC-001). Spec yêu cầu PDF khổ A4 font Times New Roman 13pt.
 3. **QA — retest BC-027/028/030/031** sau khi BE fix DATA-SCOPE-LEAK + BC-025 sau khi fix PDF.

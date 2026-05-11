@@ -14,13 +14,63 @@
 
 ## Verdict
 
-⚠️ **PARTIAL PASS — 35/72 TC chạy (49%) — 28 PASS, 4 FAIL Critical/Major, 2 Partial, 1 Sai spec.** (R7+R8+R14+R15+R16-P2+R16-P3+R16-P4+R16-P5 cộng dồn) · **+1 NEW BUG Critical PHANCONG-REVERT phát hiện R16-P2**.
+⚠️ **PARTIAL PASS — 40/72 TC chạy (56%) — 33 PASS, 1 FAIL Major, 2 Partial, 1 Sai spec.** (R7+R8+R14+R15+R16-P2..P5+**R17 reverify+R18 cộng dồn**) · **PHANCONG-REVERT-01 đóng R17** · **+3 finding mới R18 (POOL-CG-MISSING + TVV-DETAIL-403 + TVV-PERMISSION-GAP)**.
 
 Pool VV: 20 records (R16 stable — 18 BTP-TW + 2 STP-AG/cross-donVi).
 
 ---
 
-## R16 Phase 3+4 — Cluster 1 Công khai PLQG + Multi-role permission + Immutability (2026-05-11 14:35 → 14:42) (LATEST)
+## R18 — Phân công cascade + lifecycle DANG_XU_LY → CHO_PHE_DUYET (2026-05-11 17:10 → 17:30) (LATEST)
+
+Tester: `cb_nv_tw_03` + `cb_nv_tw_02` (CB NV cấp TW) + `tvv_r11_mailfix` (TVV) isolatedContext `reverify_r17_2026_05_11`. Tool: Chrome DevTools MCP UI click chain + native value setter cho textarea AntD + API verify. Scope: TC unblock sau R17 reverify PHANCONG-REVERT đóng.
+
+### Bảng trạng thái TC (snapshot R18 — LATEST 2026-05-11 17:30:00)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| VV-013 | Phân công cá nhân TVV (fresh) | ✅ Đạt | R17 reverify | hương tvv1 → DA_PHAN_CONG OK |
+| VV-013b | Phân công cá nhân NHT | ✅ Đạt | R18 | NHT R11 BUG003 → state+LICHSU PHAN_CONG_CA_NHAN |
+| VV-013c | Phân công Tổ chức TV | ✅ Đạt | R18 | TC Alpha + TVV R13 → loaiDoiTuong=TO_CHUC + LICHSU PHAN_CONG_TO_CHUC |
+| VV-014 | TVV xác nhận phân công | ✅ Đạt | R18 | endpoint `/nhan-phan-cong` → state DANG_XU_LY + LICHSU XAC_NHAN_PHAN_CONG |
+| VV-015/017 | Cập nhật kết quả VV | ✅ Đạt | R18 | CB NV submit → LICHSU CAP_NHAT_KQ |
+| VV-033 | Trình phê duyệt → CHO_PHE_DUYET | ✅ Đạt | R18 | CB NV submit → state CHO_PHE_DUYET + LICHSU TRINH_PD (alias) |
+| **Tổng R18 unblock** | **6 TC** | ✅ 6 / ⚠️ 0 / ❌ 0 | | LICHSU enum mới 5 (4 spec match + 1 alias) |
+
+### Bảng TC chưa chạy được — cần làm gì để chạy (R18)
+
+Hiện tại còn ~32 TC chưa chạy được — chia 3 nhóm: 1 chờ dev fix · 28 chờ external infra · 3 finding mới cần BA confirm + dev fix.
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| Pool phân công cá nhân (multi-VV) | CG không hiển thị trong dropdown CÁ NHÂN dù khai báo LV match (nhóm B) | Dev BE: bỏ filter loại CG khỏi pool cá nhân theo spec FR-V.I-09 line 766 "TVV/CG hoặc NHT" | Dev BE |
+| VV-014 native UI | TVV `/vu-viec/{id}` UI 403 dù được phân công VV (nhóm B) | Dev FE: cho TVV route view chi tiết VV được giao | Dev FE |
+| VV-015/017 native TVV | TVV thiếu permission `cap-nhat-ket-qua` + `trinh-phe-duyet` (nhóm B) | BA confirm spec ai update KQ (TVV vs CB NV). Nếu TVV → BE add permission cho role TVV | BA + Dev BE |
+| Cluster 1-2 privacy mTLS | Chờ infra mTLS PLQG cert (nhóm D) | Infra cấp cert + endpoint whitelist test client | Infra |
+| ~28 TC còn (Cluster 2-8) | Đa số chờ DN VNeID Tier 2 sandbox (nhóm D) | Infra + Dev VNeID T2 sandbox | Infra |
+
+### Method R18
+
+1. **VV-013b** — `cb_nv_tw_03` walk VV-BTP-TW-20260511-002 (DA_TIEP_NHAN → DANG_KIEM_TRA → DA_PHAN_CONG) — pool dropdown 8 options (7 NHT + 1 TVV, **0 CG** dù `huongcg` LV Lao động active → finding POOL-CG-MISSING-01). Pick NHT R11 BUG003 → submit. GET sau 3s: state=DA_PHAN_CONG ✓ + version=3 + nguoiXuLyId=22fff56e ✓ + loaiDoiTuong=CA_NHAN ✓ + LICHSU=[PHAN_CONG_CA_NHAN, KIEM_TRA, TAO_VV] ✓.
+2. **VV-013c** — `cb_nv_tw_03` walk VV-STP-AG-20260509-001 → switch radio "Tổ chức tư vấn" → dropdown 7 TC + dropdown TVV thuộc TC (4 TVV gồm cả CG `Hồ Văn Mười Tám`) — pick TC Alpha + TVV R13 A19 Gate. POST 201: state=DA_PHAN_CONG + loaiDoiTuong=**TO_CHUC** ✓ + toChucTuVanId=beb25e6f ✓ + LICHSU **`PHAN_CONG_TO_CHUC`** ✓. Mail UC62 deliver DN `phucanag@example.test` ✓.
+3. **VV-014** — switch sang `tvv_r11_mailfix` (QA self-seed password reset lần 2 — Secret@123). Navigate `/vu-viec/{id}` → 403 (finding TVV-DETAIL-403). List page `/vu-viec/danh-sach` thấy VV-QA-R7-SLA-BT. Probe API `/nhan-phan-cong` (per permission `nhan-phan-cong_vu_viec`) → 201 state advance **DANG_XU_LY** + LICHSU **`XAC_NHAN_PHAN_CONG`** ✓ + phancong.trangThai=CHAP_NHAN.
+4. **VV-015/017** — finding TVV thiếu permission `cap-nhat-ket-qua` (403 trên endpoint). Switch CB NV `cb_nv_tw_02` → UI [Cập nhật kết quả] modal → fill textarea native value setter → submit. LICHSU enum **`CAP_NHAT_KQ`** ✓.
+5. **VV-033** — CB NV click [Trình phê duyệt] → modal confirm → submit. State=**CHO_PHE_DUYET** ✓ + version=5 + nguoiGuiDuyetId set + LICHSU enum **`TRINH_PD`** (alias mismatch vs spec `TRINH_PHE_DUYET`).
+
+### LICHSU enum coverage cumulative sau R18
+
+12/18 spec enum match: `TAO_VV` ✓ · `KIEM_TRA` ✓ · `PHAN_CONG_CA_NHAN` ✓ (R18 mới) · `PHAN_CONG_TO_CHUC` ✓ (R18 mới) · `XAC_NHAN_PHAN_CONG` ✓ (R18 mới) · `CAP_NHAT_KQ` ✓ (R18 mới) · `PHE_DUYET` ✓ · `HOAN_THANH` ✓ · `DANH_GIA` ✓ · `CONG_KHAI` ✓ · `HUY_CONG_KHAI` ✓ · `MO_LAI` ✓.
+
+Alias spec mismatch (1): `TRINH_PD` thay vì `TRINH_PHE_DUYET`.
+
+Miss 5 spec enum: `TIEP_NHAN` · `TU_CHOI` · `TU_CHOI_DUYET` · `YEU_CAU_BO_SUNG` · `DANH_GIA` chi tiết (đã có nhưng có thể có sub-enum).
+
+Legacy extras (3): `CREATE` (VV cũ) · `UPDATE` (generic) · `APPROVE` (cũ).
+
+→ LICHSU-01 progress: 10/18 → **12/18 spec match (67%)** + 1 alias + 3 legacy. Vẫn giữ Open Major cho miss 5 spec + alias.
+
+---
+
+## R16 Phase 3+4 — Cluster 1 Công khai PLQG + Multi-role permission + Immutability (2026-05-11 14:35 → 14:42)
 
 Tester: `cb_pd_tw_05` (CB PD) isolatedContext `r16p3_cbpd_2026_05_11` + `huongcg` (CG) isolatedContext `r16p4_tvv_2026_05_11` + `cb_nv_tw_01` (CB NV+PD) isolatedContext `r16p2_2026_05_11`. Tool: Chrome DevTools MCP UI + API. Scope: chạy TC không phụ thuộc PHANCONG-REVERT fix.
 
