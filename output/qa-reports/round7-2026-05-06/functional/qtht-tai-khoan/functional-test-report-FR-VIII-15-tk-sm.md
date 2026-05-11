@@ -122,8 +122,8 @@ User chốt logic UI/BE đúng: hệ thống tự sinh MK tạm + gửi email + 
 
 | Bug ID | Severity | SRS Ref | Title | Status |
 |---|---|---|---|---|
-| BUG-TK-SM-002 | Major | SM-TAIKHOAN line 2117 + BR-AUTH-07 | so_lan_sai không reset khi QTHT mở khóa | Open |
-| BUG-TK-SM-003 | Minor | SCR-VIII-08 + SM 5 states | Tabs thiếu "Vô hiệu hóa", thay bằng "Chờ phân quyền" (legacy) | Open |
+| BUG-TK-SM-002 | Major | SM-TAIKHOAN line 2117 + BR-AUTH-07 | so_lan_sai không reset khi QTHT mở khóa | ✅ Closed R8 2026-05-09 (counter reset = 0 sau unlock — login sai 1 lần trả ERR-AUTH-LOGIN-01 thay ERR-AUTH-LOCKED-01) |
+| BUG-TK-SM-003 | Minor | SCR-VIII-08 + SM 5 states | Tabs thiếu "Vô hiệu hóa", thay bằng "Chờ phân quyền" (legacy) | ✅ Closed R8 2026-05-09 (tabs render đầy đủ 6: Tất cả/Hoạt động/Chờ kích hoạt/Tạm khóa/Chờ phân quyền/Vô hiệu hóa) |
 
 > ~~BUG-TK-SM-001~~ DROPPED — user chốt 2026-05-07 logic auto-gen MK đúng, SRS doc cần fix.
 

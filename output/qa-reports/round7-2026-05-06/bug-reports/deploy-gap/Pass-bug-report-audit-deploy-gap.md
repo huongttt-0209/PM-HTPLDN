@@ -174,7 +174,7 @@ Sidebar "Quản lý đào tạo, tập huấn" expand đúng **6 sub-menu** theo
 
 ## ~~DEPLOY-004~~ [CLOSED] — UI Quản lý ngày lễ chưa có (cả 2 option SRS)
 
-> **Re-test 2026-05-07 R8 (16:40):** ✅ **PASS (Closed-verified)**. Account qtht_02. Cấu hình hệ thống (`/quan-tri/cau-hinh`) nay render **3 tab**: "Thời hạn xử lý (SLA)" / "Mẫu phản hồi" / "**Quản lý ngày lễ**". Tab "Quản lý ngày lễ" (URL `?tab=ngay-le`) render heading "Ngày lễ" + Year selector + 4 button [Lịch / Nhập từ Excel / Sao chép từ năm trước / + Thêm mới] + table 5 column (STT/Ngày/Tên ngày lễ/Loại/Ghi chú/Thao tác) + 4 record pre-existing (Tết Dương lịch / 30-4 / 1-5 / Quốc khánh). Note: BUG-NGAY-LE-002 dropped 2026-05-07 — user chốt bỏ Tab "Quy trình hỗ trợ" → 3 tab hiện đúng spec mới. UI deploy gap RESOLVED, nhưng submit form vẫn còn bug (xem `bug-report-seed-r7-1-5-ngay-le.md` BUG-NGAY-LE-001 vẫn Open).
+> **Re-test 2026-05-07 R8 (16:40):** ✅ **PASS (Closed-verified)**. Account qtht_02. Cấu hình hệ thống (`/quan-tri/cau-hinh`) nay render **3 tab**: "Thời hạn xử lý (SLA)" / "Mẫu phản hồi" / "**Quản lý ngày lễ**". Tab "Quản lý ngày lễ" (URL `?tab=ngay-le`) render heading "Ngày lễ" + Year selector + 4 button [Lịch / Nhập từ Excel / Sao chép từ năm trước / + Thêm mới] + table 5 column (STT/Ngày/Tên ngày lễ/Loại/Ghi chú/Thao tác) + 4 record pre-existing (Tết Dương lịch / 30-4 / 1-5 / Quốc khánh). Note: BUG-NGAY-LE-002 dropped 2026-05-07 — user chốt bỏ Tab "Quy trình hỗ trợ" → 3 tab hiện đúng spec mới. UI deploy gap RESOLVED, nhưng submit form vẫn còn bug (xem `Pass-bug-report-seed-r7-1-5-ngay-le.md` BUG-NGAY-LE-001 vẫn Open).
 
 ### Mô tả
 

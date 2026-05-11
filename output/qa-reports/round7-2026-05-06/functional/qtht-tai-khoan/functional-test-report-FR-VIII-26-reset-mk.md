@@ -170,11 +170,11 @@ Response: {"code":"ERR-VAL-VIII-CP-04","message":"Mật khẩu xác nhận khôn
 
 | Bug ID | Severity | SRS Ref | Title | Status |
 |---|---|---|---|---|
-| BUG-FR26-FE-01 | **Critical** | FR-VIII-26 line 1278 + AC | FE chưa implement page Quên mật khẩu — `/auth/forgot-password` redirect /login. User KHÔNG tự reset MK qua UI được, chỉ qua API direct | Open |
-| BUG-FR26-FE-02 | **Critical** | FR-VIII-26 line 1282-1284 + AC | FE chưa implement page Reset mật khẩu — `/reset-password?token=X` redirect /login. User click link mail không vào được form đặt MK | Open |
-| BUG-FR26-001 | Minor | FR-VIII-26 §Error Handling line 1295-1303 | errCode mismatch — BE `ERR-AUTH-RESET-01` ≠ SRS `ERR-PWD-04`; BE `ERR-VAL-SYS-00-01` ≠ SRS `ERR-PWD-05/06`; BE `ERR-VAL-VIII-CP-04` ≠ SRS `ERR-PWD-06` | Open |
+| BUG-FR26-FE-01 | **Critical** | FR-VIII-26 line 1278 + AC | FE chưa implement page Quên mật khẩu — `/auth/forgot-password` redirect /login. User KHÔNG tự reset MK qua UI được, chỉ qua API direct | ✅ Closed R8 2026-05-09 (cite R7.2.9b NHT_04_UI verify FE page Quên MK đã build, full E2E mail flow OK) |
+| BUG-FR26-FE-02 | **Critical** | FR-VIII-26 line 1282-1284 + AC | FE chưa implement page Reset mật khẩu — `/reset-password?token=X` redirect /login. User click link mail không vào được form đặt MK | ✅ Closed R8 2026-05-09 (cite R7.2.9b NHT_04_UI verify FE page Reset MK đã build, click link mail → form đặt MK render OK) |
+| BUG-FR26-001 | Minor | FR-VIII-26 §Error Handling line 1295-1303 | errCode mismatch — BE `ERR-AUTH-RESET-01` ≠ SRS `ERR-PWD-04`; BE `ERR-VAL-SYS-00-01` ≠ SRS `ERR-PWD-05/06`; BE `ERR-VAL-VIII-CP-04` ≠ SRS `ERR-PWD-06` | ✅ Closed-verified 2026-05-10 (BE đổi → `ERR-PWD-04/05/06`) |
 
-**Bug file riêng:** [bug-report-function-r7-7-8c-reset-mk.md](../../bug-reports/qtht-tai-khoan/bug-report-function-r7-7-8c-reset-mk.md)
+**Bug file riêng:** [Pass-bug-report-function-r7-7-8c-reset-mk.md](../../bug-reports/qtht-tai-khoan/Pass-bug-report-function-r7-7-8c-reset-mk.md)
 
 ---
 

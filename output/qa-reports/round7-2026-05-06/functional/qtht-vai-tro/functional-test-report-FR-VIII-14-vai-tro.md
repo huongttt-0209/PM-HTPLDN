@@ -5,9 +5,10 @@
 > - **Số quyền permission count:** CB_NV (BN/DP/TW): 244 mỗi role / CB_PD (BN/DP/TW): 100 mỗi role / QTHT: 83 / NHT: 25 / DN: 20 / TVV: 14 / CG: 13. Multi-role permission matrix persist.
 > - **Cấp distribution:** Trung ương / Bộ/Ngành / Địa phương / Tất cả cấp.
 > - **Filter UI:** Tìm kiếm + Cấp + Trạng thái combobox + [Thêm mới].
-> - **BUG-VT-001 closed persist:** Custom role `QA_VT_DEL_TEST_R7` (test verify R7 2026-05-07) vẫn còn — hệ thống refuse delete khi role có TK gán đúng SRS BR-AUTH-08.
+> - **BUG-VT-001 Closed-verified R8:** Custom role `QA_VT_DEL_TEST_R7` (test verify R7 2026-05-07) vẫn còn — hệ thống refuse delete khi role có TK gán đúng SRS BR-AUTH-08. → TC08 R7 FAIL flip thành PASS R8 sau dev fix.
+> - **6 bug Open khác (VT-003/004/005/006/008/009):** Không re-verify trực tiếp R8 — defer status R7 (Open).
 > - **Evidence:** [r7-7-8e-vai-tro-12-records-reverify-2026-05-09.png](r7-7-8e-vai-tro-12-records-reverify-2026-05-09.png).
-> - **R8 verdict:** ✅ giữ PASS 11/11, no regression.
+> - **R8 verdict:** ✅ **PASS 8/11 + PARTIAL 3** (TC08 flip FAIL→PASS sau BUG-VT-001 closed). 6 bug Open persist (VT-003/004/005/006/008/009).
 
 ---
 
@@ -29,7 +30,9 @@
 
 ## Tổng hợp
 
-**Verdict:** 🚫 **FAIL** — Critical 1 + Major 2 + Medium 2 + Minor 2 = 7 bugs. BE không enforce ERR-VT-02 (xóa role đang gán TK silently). Form thiếu trường Trạng thái. Table thiếu 3 cột SRS. FE silent trên 409. TC10 thêm BUG-VT-009 (FE không hide button cho non-QTHT). TC11 audit log PASS.
+**Verdict (R7 2026-05-07):** 🚫 **FAIL** — Critical 1 + Major 2 + Medium 2 + Minor 2 = 7 bugs. BE không enforce ERR-VT-02 (xóa role đang gán TK silently). Form thiếu trường Trạng thái. Table thiếu 3 cột SRS. FE silent trên 409. TC10 thêm BUG-VT-009 (FE không hide button cho non-QTHT). TC11 audit log PASS.
+
+**Verdict update R8 2026-05-09:** ⚠️ **PASS 8/11 + PARTIAL 3** sau BUG-VT-001 Closed. 6 bug Open persist (VT-003/004/005/006/008/009).
 
 > **Bonus test (NotebookLM gợi ý):** TC10 Permission negative + TC11 Audit log — chạy thật 2026-05-07.
 
@@ -44,7 +47,7 @@
 | **TC05** | CREATE empty tên | ✅ PASS — FE inline "Vui lòng nhập tên vai trò" |
 | **TC06** | UPDATE tên | ✅ PASS — toast "Cập nhật vai trò thành công" |
 | **TC07** | TOGGLE trạng thái | ✅ PASS — Kích hoạt → Vô hiệu hóa, toast "Đã vô hiệu hóa vai trò" |
-| **TC08** | DELETE assigned role (ERR-VT-02) | 🚫 **FAIL** — BE 204 silently deleted despite role assigned to cb_nv_tw_02 |
+| **TC08** | DELETE assigned role (ERR-VT-02) | 🚫 R7 FAIL → ✅ R8 PASS — BUG-VT-001 Closed R8 (BE refuse delete role có TK gán). |
 | **TC09** | DELETE cleanup | ✅ PASS (side effect TC08) — list back to 11/11 |
 | **TC10** | Permission negative — cb_nv_tw_02 (non-QTHT) truy cập | ⚠️ PARTIAL — BE 403 ERR-PERM-SYS-00-01 đúng cho POST, NHƯNG FE không hide button [+ Thêm mới] + cho mở modal CRUD (UX gap, BUG-VT-009) |
 | **TC11** | Audit log verify CRUD VAI_TRO | ✅ PASS — Filter Module=Vai trò trả 4 entries match TC02/06/07/08 (CREATE 201 + UPDATE 200 + TOGGLE 200 + DELETE 204) |
@@ -230,15 +233,15 @@ Response: {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbi
 
 | Bug ID | Severity | SRS Ref | Title | Status |
 |---|---|---|---|---|
-| BUG-VT-001 | **Critical** | FR-VIII-14 line 645 + AC line 651 | BE xóa vai trò silently khi role đang gán TK (ERR-VT-02 không trigger, 204 thay 409) | Open |
+| BUG-VT-001 | **Critical** | FR-VIII-14 line 645 + AC line 651 | BE xóa vai trò silently khi role đang gán TK (ERR-VT-02 không trigger, 204 thay 409) | ✅ Closed R8 2026-05-09 (BE refuse delete khi role có TK gán — verify custom role `QA_VT_DEL_TEST_R7` persist sau probe DELETE) |
 | BUG-VT-003 | Major | SCR-VIII-02 line 1517-1519 | UI table thiếu 3 cột SRS: Mô tả + Số tài khoản + Số quyền | Open |
 | BUG-VT-004 | Major | FR-VIII-14 line 644 + UX | FE silent trên 409 ERR-VAL-VIII-111-01 — modal đóng không toast/inline error | Open |
 | BUG-VT-005 | Medium | FR-VIII-14 §Inputs row 4 line 619 | Form Add/Edit modal thiếu trường Trạng thái (trang_thai bắt buộc, default 1) | Open |
 | BUG-VT-006 | Minor | SCR-VIII-02 line 1522 | Form Add button [Thêm] ≠ SRS [Lưu] (Form Edit lại đúng [Lưu]) — inconsistent | Open |
-| BUG-VT-008 | Minor | FR-VIII-14 §Error Handling | errCode mismatch toàn bộ — BE dùng `ERR-VAL-VIII-111-XX` thay SRS `ERR-VT-XX` | Open |
+| BUG-VT-008 | Minor | FR-VIII-14 §Error Handling | errCode mismatch toàn bộ — BE dùng `ERR-VAL-VIII-111-XX` thay SRS `ERR-VT-XX` | ✅ Closed-verified 2026-05-10 (BE đổi → `ERR-VT-01`) |
 | BUG-VT-009 | Medium | FR-VIII-14 §Preconditions line 610 + Processing line 625 | FE cho non-QTHT (cb_nv_tw_02) thấy button [+ Thêm mới] + mở modal CRUD (BE 403 đúng nhưng UI lộ entrypoint) | Open |
 
-**Bug file riêng:** [bug-report-function-r7-7-8e-vai-tro.md](../../bug-reports/qtht-vai-tro/bug-report-function-r7-7-8e-vai-tro.md)
+**Bug file riêng:** [Pass-bug-report-function-r7-7-8e-vai-tro.md](../../bug-reports/qtht-vai-tro/Pass-bug-report-function-r7-7-8e-vai-tro.md)
 
 ---
 

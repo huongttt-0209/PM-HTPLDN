@@ -89,7 +89,7 @@ Project này chứa tài liệu QA cho Phần mềm Hỗ trợ Pháp lý Doanh n
 - BLOCK: bracket có `(✗`, có icon ⚠️/🚫/⏳ trong bracket, có keyword phi-task ("BA confirm", "endpoint deploy", "VNeID Tier", "spec contradiction")
 - KHÔNG flip 🟢→✅/⚠️/🚫 — tester tự quyết
 
-**Workflow sau khi đóng bug ở bug-report-*.md (BẮT BUỘC, từ 2026-05-08):**
+**Workflow sau khi đóng bug ở bug-report-*.md (BẮT BUỘC, từ 2026-05-08; bổ sung step 6 từ 2026-05-10):**
 
 1. Update Bug Summary Table trong file bug-report: Status `Open → Closed` + thêm dòng `> **Re-test:** YYYY-MM-DD R{N} — ✅ PASS ...` sau heading bug.
 2. Mở [tasks/todo.md](tasks/todo.md) tìm task gốc tham chiếu bug-report đó.
@@ -99,12 +99,34 @@ Project này chứa tài liệu QA cho Phần mềm Hỗ trợ Pháp lý Doanh n
    - ⚠️ → ✅: Kết quả PASS clean (chỉ còn Minor defer OK).
    - ⚠️ giữ nguyên: còn Open Major / Sai spec component khác / cần re-test.
    - 🚫 → ⏳/🟢: nếu block chính đã giải, dep upstream ready.
+6. **Rename file `bug-report-<slug>.md` → `Pass-bug-report-<slug>.md` khi MỌI bug trong file đã Closed:**
+   - **Điều kiện trigger:** Bug Summary Table KHÔNG còn dòng nào Status `Open`/`Reopen` (tất cả `Closed` hoặc strikethrough `~~`) **VÀ** task gốc todo.md đã flip icon ✅ với Kết quả PASS clean.
+   - **Action — 2 bước, KHÔNG được skip bước 2:**
+     1. `git mv output/qa-reports/.../bug-report-<slug>.md output/qa-reports/.../Pass-bug-report-<slug>.md` (giữ git history). Nếu chưa track: rename qua filesystem rồi `git add` mới + `git rm` cũ.
+     2. **Update tất cả reference link** chứa `bug-report-<slug>.md` → đổi thành `Pass-bug-report-<slug>.md`. Grep:
+        - [tasks/todo.md](tasks/todo.md) + [tasks/todo-<module>.md](tasks/) — dòng `**Bug:**`
+        - [output/qa-reports/round{N}/workflow/](output/qa-reports/) workflow-test-report-*.md
+        - [output/qa-reports/round{N}/functional/](output/qa-reports/) functional-test-report-*.md
+        - [output/qa-reports/round{N}/seed/](output/qa-reports/) seed-checklist-*.md
+        - [output/qa-reports/round{N}/README.md](output/qa-reports/) + master-index*.md
+     - **Cấm:** rename mà không update link → 404 cascade cross-file → master-index regen lỗi.
+   - **Anti-pattern — KHÔNG rename khi:**
+     - File một-bug Closed nhưng task todo còn ⚠️/🚫 (bug khác chưa log) → đợi.
+     - Còn risk re-open (vd FE fix chưa deploy stable, dev claim mà chưa user manual verify).
+     - Status có `Reopen` (đã đóng rồi mở lại) → giữ tên cũ vì nhịp closing chưa final.
+   - **Hook `auto-rename-pass-prefix.py`** (warn-only, từ 2026-05-10): scan file `bug-report-*.md` (chưa prefix Pass-) có Bug Summary all Closed → stderr remind rename + update link. KHÔNG auto-rename vì rename phá link cross-file, tester quyết.
 
 **Hook contract** ([check-todo-stale-bug-closure.py](.claude/hooks/check-todo-stale-bug-closure.py)):
 - INPUT: todo.md sau Edit/Write/MultiEdit
 - OUTPUT: stderr warn list task ⚠️/🚫 có `**Bug:** X/X đóng` (all closed) — gợi ý flip
 - KHÔNG auto-flip — quyết flip subjective (Minor defer = ✅ judgment), tester tự quyết
 - Skip khi: total=0, X<Y, task không có dòng Bug
+
+**Hook contract** ([auto-rename-pass-prefix.py](.claude/hooks/auto-rename-pass-prefix.py)):
+- INPUT: file `**/bug-reports/**/bug-report-*.md` sau Edit/Write/MultiEdit (skip nếu basename đã `Pass-`)
+- OUTPUT: stderr remind rename `Pass-<orig>.md` + grep command tìm reference link cần update
+- BLOCK / detect: Bug Summary Table parse → mọi row Status ∈ {Closed, ~~closed~~}, KHÔNG có Open/Reopen
+- KHÔNG auto-rename — rename file = phá link cross-file (todo.md, workflow-report, master-index), tester quyết + dùng MultiEdit batch update reference
 
 **Ví dụ:**
 ```
@@ -404,6 +426,43 @@ evaluate_script(() => {
 evaluate_script(() => Array.from(document.querySelectorAll('.ant-form-item-explain-error')).map(e => e.textContent.trim()))
 ```
 
+### MCP-Rule 8: Verify ephemeral UI (toast/snackbar) qua `MutationObserver` — KHÔNG poll
+
+**Pattern gãy:** Toast Ant Design hiện ~3s rồi auto-dismiss. Polling DOM 1500ms+ sau action có thể miss toast vì (a) timing race, (b) selector mismatch (vd `.ant-message-notice` AntD v4 vs `.ant-message-notice-wrapper` AntD v5). Dẫn tới **false negative "UI silent fail"** dù toast thực sự đã render (verified 2026-05-10 BUG-BM-005 R8 lần 7 — manual screenshot user PASS, MCP polling sai 4 round liên tiếp).
+
+**Pattern đúng:** Install `MutationObserver` trên `document.body` BEFORE click action, capture `addedNodes` trong window 2-5s, filter theo text/class regex.
+
+```js
+// Step 1: Install observer BEFORE click (chạy 1 evaluate_script riêng)
+evaluate_script(() => {
+  window.__addedNodes = [];
+  window.__observer = new MutationObserver((muts) => {
+    for (const m of muts) for (const n of m.addedNodes) {
+      if (n.nodeType === 1) {
+        const txt = (n.textContent || '').trim().slice(0, 200);
+        if (txt) window.__addedNodes.push({
+          tag: n.tagName, cls: n.className?.toString() || '', text: txt
+        });
+      }
+    }
+  });
+  window.__observer.observe(document.body, { childList: true, subtree: true });
+  return { observer_installed: true };
+});
+
+// Step 2: Trigger action (click, etc.) qua MCP click tool
+
+// Step 3: Đợi 2-3s rồi inspect captured nodes
+evaluate_script(async () => {
+  await new Promise(r => setTimeout(r, 2500));
+  return window.__addedNodes.filter(n =>
+    /Thư mục|công khai|không thể|message|notif/i.test(n.text + ' ' + n.cls)
+  );
+});
+```
+
+**Khi nào dùng pattern này:** Verify toast/notification, modal flash messages, transient validation feedback, snackbar — bất kỳ UI ephemeral hiện <5s. KHÔNG dùng cho element persistent (table rows, form fields, sidebar).
+
 ### Template login MCP — verified 2026-04-21 với `qtht_01`
 
 ```
@@ -546,8 +605,11 @@ Observation: wait '.ant-otp input[maxlength="1"]' timeout 15s
 | Drawer form submit | `button:has-text("Đồng ý")` ← **NOT [Lưu] như spec** |
 | Drawer cancel | `button:has-text("Hủy")` |
 | Form validation error | `.ant-form-item-explain-error, .ant-form-item-explain` |
-| Success toast | `.ant-message-success` |
-| Error toast | `.ant-message-error, .ant-notification-error` |
+| Toast wrapper (AntD v5) | `.ant-message-notice-wrapper` ← **NOT `.ant-message-notice`** (AntD v5 đổi tên class wrapper) |
+| Toast container | `.ant-message.ant-message-top` (top-center default) |
+| Success toast | `.ant-message-notice-wrapper:has(.anticon-check-circle)` hoặc text contains target |
+| Error toast | `.ant-message-notice-wrapper:has(.anticon-close-circle)` (KHÔNG có class `.ant-message-error` riêng — màu đỏ do icon) |
+| Notification (right side) | `.ant-notification-notice` |
 | Delete confirm popup | `.ant-popconfirm` hoặc `.ant-popover` |
 | User display top-right | `.user-name` (text role), `.user-role` (code) |
 | Column headers | `.ant-table-thead th` |

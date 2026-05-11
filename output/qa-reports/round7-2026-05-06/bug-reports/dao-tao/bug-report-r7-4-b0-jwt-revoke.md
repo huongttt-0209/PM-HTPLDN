@@ -34,7 +34,7 @@ Phát hiện **3** lỗi liên quan auth/session — 1 Critical JWT revoke (Clos
 |--------|----------|----------|------|--------|-------------------|-------|--------|
 | BUG-AUTH-JWT-01 | Critical | P0 | Permission | R7.4.B0 | `FR-VIII-09 §Auth session` (impl) — không có FR cụ thể, infer từ SRS chung | JWT/auth-state revoke <1 phút sau 1-2 nav events block multi-step workflow | **Closed (R9 2026-05-09)** |
 | ~~BUG-AUTH-OTP-02~~ | Major | P1 | Negative | R7.4.B0 | `FR-VIII-09 §OTP bypass dev-only` (impl) | OTP bypass `666666` reject sau N login đồng tài khoản trong 5 phút (rate-limit ngầm) — diagnosis cũ sai (400 verify-otp). Re-test R8 lần 2: thực tế là **`ThrottlerException` 429** ở `/auth/login` (BE đúng spec, by-design security feature) | **Closed (R8 lần 2 — Won't Fix, By Design)** → split UX gap sang [BUG-AUTH-OTP-02b](#bug-auth-otp-02b--fe-không-hiển-thị-toast-khi-be-trả-429-throttlerexception--user-không-biết-tại-sao-nút-đăng-nhập-stall) |
-| BUG-AUTH-OTP-02b | Minor | P3 | UI/UX | R8 lần 2 controlled test | `FR-VIII-09 §UX feedback errors` (infer) | FE không hiển thị toast khi BE trả 429 `ERR-SYS-00-29-01` `ThrottlerException` → user không biết tại sao nút Đăng nhập stall | **Open** |
+| BUG-AUTH-OTP-02b | Minor | P3 | UI/UX | R8 lần 2 controlled test | `FR-VIII-09 §UX feedback errors` (infer) | FE không hiển thị toast khi BE trả 429 `ERR-SYS-00-29-01` `ThrottlerException` → user không biết tại sao nút Đăng nhập stall | **Open** (R10 RE-CONFIRMED 2026-05-10) |
 
 > **Re-test:** 2026-05-09 R9 — ✅ PASS Bug fixed. 2 session × 4 phút (`cb_nv_tw_02` 4m9s + `cb_pd_tw_01` 4m4s), 5 transitions PASS (3 NHAP→CHO_DUYET + 2 CHO_DUYET→DA_DUYET), 0 lần `/auth/me` 401 sau login, 0 redirect `/login`. Endpoint `POST /submit` + `POST /approve` đã được FE/BE trả 200 đúng. Verify report: [workflow-verify-r7-4-b0-jwt-fix-r9.md](../../workflow/dao-tao/workflow-verify-r7-4-b0-jwt-fix-r9.md).
 
@@ -215,6 +215,15 @@ Tổng MailHog 32 message, latest từ `2026-05-07 10:36` (hôm trước). Hôm 
 ---
 
 ## BUG-AUTH-OTP-02b — FE không hiển thị toast khi BE trả 429 ThrottlerException → user không biết tại sao nút Đăng nhập stall
+
+> **Re-test:** 2026-05-10 R10 — ❌ FAIL (RE-CONFIRMED Open). Sau cache clear + fresh `/login`, trigger throttle bằng probe `POST /auth/login` 6 lần liên tiếp → BE 429 `ERR-SYS-00-29-01 "Bạn đã thử quá nhiều lần. Vui lòng đợi khoảng 1 phút rồi thử lại."` (BE message rất rõ). Sau đó click button "Đăng nhập" qua UI với credentials hợp lệ → POST 429 lại (reqid=522) nhưng:
+> - URL vẫn `/login`
+> - Form vẫn enabled với `cb_nv_tw_02 / Secret@123` đã fill
+> - **0 toast/notification/alert/inline-error** hiển thị trên UI (probe `.ant-message`, `.ant-notification`, `[role="alert"]`, `.ant-form-item-explain-error`, `.ant-alert` — toastCount=0)
+> - Console error 429 logged nhưng silent UI
+>
+> User experience: nút Đăng nhập "stall" — không có feedback gì → user retry → đốt thêm bucket → throttle window kéo dài. Bug giữ Open. Recommend FE catch 429 → show `message.error(error.message)` từ BE response (BE đã trả message tiếng Việt user-friendly).
+> Screenshot: [r10-bug-auth-otp-02b-fe-silent-on-429.png](../../screenshots/r10-bug-auth-otp-02b-fe-silent-on-429.png)
 
 ### Mô tả
 

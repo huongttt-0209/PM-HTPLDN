@@ -22,7 +22,7 @@ R9 re-seed 3 KH năm trạng thái `Nháp` qua UI SCR-III-00 + Modal "Tạo kế
 
 **State BE sau R9:** total 7 records — 3 NHAP (R9) + 2 CHO_DUYET (R8 BN/DP chờ approver cấp tương ứng) + 2 DA_DUYET (R7+R8 cấp TW từ R9 verify).
 
-**Bug:** [bug-report-seed-r7-3-5-kh-nam.md](../../../round7-2026-05-06/bug-reports/dao-tao/bug-report-seed-r7-3-5-kh-nam.md) — R8 logged 3 Open. **R9 status:**
+**Bug:** [bug-report-seed-r7-3-5-kh-nam-r8.md](../../../round7-2026-05-06/bug-reports/dao-tao/bug-report-seed-r7-3-5-kh-nam-r8.md) — R8 logged 3 (R10: 2/3 đóng). **R9 status:**
 - 🔴 **BR-AUTH-08 cross-tenant data leak Major:** RE-CONFIRMED — cả 3 user `cb_nv_tw_02` (BTP-TW), `cb_nv_bn_02` (BTC), `cb_nv_dp_02` (STP-BG) đều thấy được TẤT CẢ KH năm cross cấp + cross-đơn vị. BE chưa fix scope filter `donViId`.
 - 🟡 **UI thiếu nút Xoá Major:** Không re-test (R9 chỉ tạo NHAP mới, không xoá).
 - 🟢 **Date off-by-one Medium:** R9 input `01/01/2026 → 31/12/2026` → BE lưu **đúng** `01/01/2026 → 31/12/2026` (vs R8 lưu off-by-one `2025-12-31 → 2026-12-30`). Khả năng dev đã fix BE timezone — cần verify đóng bug.

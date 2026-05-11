@@ -71,7 +71,7 @@ UI render đầy đủ 5 trường thông tin + 3 trường form đổi MK đún
 | Weak password | `ERR-PWD-05` | `ERR-VAL-SYS-00-01` |
 | Password confirm mismatch | `ERR-PWD-06` | `ERR-VAL-VIII-CP-04` |
 
-**→ Đã log [BUG-FR26-001](../../bug-reports/qtht-tai-khoan/bug-report-function-r7-7-8c-reset-mk.md) Minor defer Open ở R7.7.8c.** R7.8.4 confirm bug vẫn ảnh hưởng cả endpoint `change-password` (không chỉ `reset-password`).
+**→ Đã log [BUG-FR26-001](../../bug-reports/qtht-tai-khoan/Pass-bug-report-function-r7-7-8c-reset-mk.md) Closed-verified 2026-05-10 ở R7.7.8c.** Reset-password endpoint đã đổi sang `ERR-PWD-04/05/06`. **Cần re-verify endpoint `change-password` xem BE có đồng bộ chưa** — R7 ban đầu cùng pattern errCode mismatch.
 
 ### C.3 ⚠️ Mâu thuẫn #3 — "Phiên đăng nhập" section ngoài spec
 

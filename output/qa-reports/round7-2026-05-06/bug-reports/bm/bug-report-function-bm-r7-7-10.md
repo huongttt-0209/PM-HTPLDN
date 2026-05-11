@@ -14,7 +14,7 @@
 
 ## Tổng hợp
 
-Phát hiện **2** lỗi mới trong functional test R7.7.10 (preview/download MinIO config sai + UI silent reject upload file invalid). Các bug khác từ workflow đã log riêng tại [`bug-report-flow-bm-r7-4-c1.md`](bug-report-flow-bm-r7-4-c1.md) (6 bugs BUG-BM-001..006).
+Phát hiện **2** lỗi mới trong functional test R7.7.10 (preview/download MinIO config sai + UI silent reject upload file invalid). Các bug khác từ workflow đã log riêng tại [`Pass-bug-report-flow-bm-r7-4-c1.md`](Pass-bug-report-flow-bm-r7-4-c1.md) (6 bugs BUG-BM-001..006).
 
 ### Severity breakdown
 
@@ -119,7 +119,7 @@ FE phải hiển thị toast/notification màu đỏ với message `ERR-BM-01` (
 
 ### Kết quả thực tế
 
-UI không có feedback nào — file bị reject im lặng. Cùng pattern UI silent fail như [`BUG-BM-005`](bug-report-flow-bm-r7-4-c1.md#bug-bm-005--ui-silent-fail-khi-be-trả-409-err-ck-01-công-khai-thư-mục-rỗng) (server error 409 cũng silent).
+UI không có feedback nào — file bị reject im lặng. Cùng pattern UI silent fail như [`BUG-BM-005`](Pass-bug-report-flow-bm-r7-4-c1.md#bug-bm-005--ui-silent-fail-khi-be-trả-409-err-ck-01-công-khai-thư-mục-rỗng) (server error 409 cũng silent).
 
 ### Bằng chứng
 
@@ -155,7 +155,7 @@ DOM check sau upload .txt:
 
 **Test data dùng:** BM-20260507-001 "Biểu mẫu SHTT - test R7.4.C1" id `0f425c10-8bfd-4dcd-ac34-e724135a2872` (file `test-bm-r7-4-c1.docx` 917B từ R7.4.C1) + file invalid `test-bm-invalid.txt` 36B (tạo riêng cho BM-016).
 
-> **Liên quan:** Workflow bugs (BUG-BM-001..006) đã log tại [`bug-report-flow-bm-r7-4-c1.md`](bug-report-flow-bm-r7-4-c1.md). 10 TC CR-01 (BM-041..050) BLOCKED do BUG-BM-001 (form thiếu 4 trường công khai).
+> **Liên quan:** Workflow bugs (BUG-BM-001..006) đã log tại [`Pass-bug-report-flow-bm-r7-4-c1.md`](Pass-bug-report-flow-bm-r7-4-c1.md). 10 TC CR-01 (BM-041..050) BLOCKED do BUG-BM-001 (form thiếu 4 trường công khai).
 
 ---
 
