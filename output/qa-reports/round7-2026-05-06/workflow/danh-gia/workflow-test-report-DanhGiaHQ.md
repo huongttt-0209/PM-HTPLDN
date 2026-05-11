@@ -1,7 +1,7 @@
 # Workflow Test Report — Đánh giá Hiệu quả HTPLDN (FR-08)
 
 > **Module:** FR-08 Đánh giá Hiệu quả (Nhóm VI) · **SRS:** [`srs-fr-08-danh-gia.md`](../../../../../input/srs-v3/srs-fr-08-danh-gia.md) — FR-VI-01 (UC83 Lập KH, line 71-150) + FR-VI-02 (UC84 Tiêu chí, line 151-220) + FR-VI-03 (UC85 Phân công, line 221-290) + FR-VI-04 (Phê duyệt PC) + SCR-VI-01 (line 735-832) + SM-DANHGIA (line 1066-1102) · **Round:** R7 · **Date:** 2026-05-06 · **Tester:** QA Automation
-> **Bug:** [`bug-report-flow-danhgia.md`](../../bug-reports/danh-gia/bug-report-flow-danhgia.md) — 7/8 đóng (R10 2026-05-10 11:48:00 thêm BUG-FUNC-DG-008 Major Open)
+> **Bug:** [`bug-report-flow-danhgia.md`](../../bug-reports/danh-gia/bug-report-flow-danhgia.md) — 7/9 đóng (R10 2026-05-10 11:48:00 BUG-FUNC-DG-008 Open + R10b 2026-05-10 20:42:00 BUG-FUNC-DG-009 Major Open UI HUY missing)
 
 ---
 
@@ -51,6 +51,8 @@
 |---|---|---|
 | R14 (R6) | 02/05 | 1/11 PASS B1. 10/11 BLOCKED do 5 bug FE (2 Critical + 2 Major + 1 Medium) chặn từ Bước 2 (phân công) trở đi và back-fill tiêu chí ở Bước 1. |
 | **R7** | **06/05** | **5/11 PASS (B1+B2+B3+B4 + back-fill tiêu chí). B6 ❌ FAIL by BUG-FUNC-DG-006 (filter `/vu-viec-eligible` empty mặc dù 20 VV HOAN_THANH tồn tại) → cascade B7-B10 🚫. 5/5 R6 bug Closed verified. 2 bug mới R7 (DG-006 Major + DG-007 Medium dashboard KPI mismatch).** |
+| **R10** | **2026-05-10 11:05-11:48** | **B6 PASS (BUG-DG-006/007 Closed). B7-B8 PASS (cb_pd_tw_01 duyệt PC + cb_nv_tw_03 chọn VV). B9 ❌ FAIL by BUG-FUNC-DG-008 (PUT `/ket-quas` trả 200 với data computed nhưng GET trả null version=1 — read-after-write inconsistency). Cascade B10+B11 🚫.** |
+| **R10b (LATEST)** | **2026-05-10 20:29-20:42** | **Re-test BUG-008 sau dev claim fix → ❌ REPRODUCED y hệt pattern (PUT 200 version=2 + GET 200 version=1 cùng giây). Dev fix không hiệu lực hoặc chưa deploy. D2a HUY test: phát hiện BUG-FUNC-DG-009 Major Open — UI đợt detail thiếu hoàn toàn button "Hủy đợt" tại 4 state nguồn (LAP_KE_HOACH/PHAN_CONG/THUC_HIEN/BAO_CAO). D2b cross-co-quan FR-VI-10 🚫 block do cần đợt HOAN_THANH unreachable.** |
 
 ---
 

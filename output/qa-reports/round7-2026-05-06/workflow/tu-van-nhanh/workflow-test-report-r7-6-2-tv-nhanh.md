@@ -7,7 +7,7 @@
 | **Round** | **R10 (2026-05-09 13:08:00)** — UI re-verify pool sufficiency · R9 (2026-05-08) PASS 4/5 + 1 PARTIAL · R8 (2026-05-07) BLOCKED |
 | **Tester** | QA Automation (Chrome DevTools MCP) |
 | **Pre-req** | ✅ Dev seed 50 phiên TV nhanh cover 6 state (MOI 8 / DANG_TIM_KIEM 6 / DA_GOI_Y 12 / CB_TRA_LOI 8 / HOAN_THANH 12 / HET_HAN 4) · R7.3.16 🟢 Kho QA 6 DA_DUYET hieuLuc=true |
-| **Bug report** | [bug-report-r7-6-2-tvn-create-block.md](../../bug-reports/tu-van-nhanh/bug-report-r7-6-2-tvn-create-block.md) |
+| **Bug report** | [Pass-bug-report-r7-6-2-tvn-create-block.md](../../bug-reports/tu-van-nhanh/Pass-bug-report-r7-6-2-tvn-create-block.md) |
 
 ---
 

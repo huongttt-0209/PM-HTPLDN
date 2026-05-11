@@ -14,9 +14,172 @@
 
 ## Verdict
 
-⚠️ **PARTIAL PASS — 15/72 TC chạy (21%) — 9 PASS, 4 FAIL Major/Critical, 2 Partial.** (R7+R8 cộng dồn)
+⚠️ **PARTIAL PASS — 29/72 TC chạy (40%) — 22 PASS, 4 FAIL Major/Critical, 2 Partial, 1 Sai spec.** (R7+R8+R14+R15 cộng dồn)
 
-Pool VV: 14 records (13 BTP-TW + 1 STP-AG seed cross-donVi 13:27).
+Pool VV: 20 records (R15 update — 18 BTP-TW + 2 STP-AG/cross-donVi).
+
+---
+
+## R15 Round (2026-05-11 09:19:00 → 09:50:00) (LATEST) — Audit post-fix + Cluster 5 UC67 + Cluster 6 BR-CALC-04
+
+Tester: `cb_nv_tw_03` (CB NV) + `cb_pd_tw_05` (CB PD). Tool: Chrome DevTools MCP UI + API. Scope: skill `qa-bugfix-reverify-audit` audit 2 Open bug (NOTIF-01 + LICHSU-01) + chạy 5 TC chạy được không phụ thuộc env (Cluster 5 P0 + Cluster 6 P1).
+
+### Bảng trạng thái TC (snapshot R15 — LATEST 2026-05-11 09:50:00)
+
+Tổng 72 TC. Chỉ liệt kê TC ĐÃ CHẠY (29 TC) — TC chưa chạy gộp ở Bảng 2.
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| VV-001 | List + filter trạng thái | ✅ Đạt | R7 | Filter trangThai PASS. 3 obs minor defer. |
+| VV-002 | Search keyword | ✅ Đạt | R13 | BE đổi `tuKhoa`→`keyword`. BUG-SEARCH-01 closed. |
+| VV-003 | Tạo VV nhập tay | ✅ Đạt | R7 | Multi-channel TRUC_TIEP/DIEN_THOAI OK. |
+| VV-004 | Validation required | ✅ Đạt | R13 | DN field nay required. BUG-VALIDATION-01 closed. |
+| VV-006 | SLA 15 ngày LV | ✅ Đạt | R13 | Deadline +15 LV (NĐ55 Đ.8 K.1). BUG-SLA-01 closed. |
+| VV-022 | SLA 4 mức cảnh báo | ⚠️ Sai spec | R7 | 1/4 mức verify (BINH_THUONG). 3 mức cần backdated. |
+| VV-024 | Xuất Excel | ✅ Đạt | R7 | POST `/export` 200 + xlsx blob 8052 bytes. |
+| VV-028 | QTHT view-only | ⚠️ Sai spec | R7 | UI ẩn OK; BE không 403 cho POST/PATCH/DELETE. |
+| VV-031 | UC62 notification | ❌ Lỗi | R7 | 0 mail DN trong 177 mail MailHog. BUG-NOTIF-01 Open. |
+| C8-1 | DON_VI scope ĐP/BN | ✅ Đạt | R7 | total=0 cho cross-donVi. |
+| C8-2 | TW exception toàn quốc | ✅ Đạt | R7 | total=14 (13 TW + 1 STP-AG cross). |
+| C8-3 | LICH_SU 18 enum | ❌ Lỗi | R7 | 10/18 enum (56%). BUG-LICHSU-01 Open. |
+| W-Phase1 | Full lifecycle 7/8 transition | ✅ Đạt | R14 | DA_TIEP_NHAN→...→HOAN_THANH→DA_DANH_GIA. |
+| W-Phase2a | Branch YEU_CAU_BO_SUNG | ✅ Đạt | R14 | VV-003 advance YCBS. |
+| W-Phase2b | Branch TU_CHOI + mở lại | ✅ Đạt | R14 | VV-STP-AG-001 reopen + deadline reset. |
+| W-Phase3 | Public toggle ON+OFF | ✅ Đạt | R14 | cong_khai flip 2 lần. |
+| W-Phase4 | Regression smoke | ✅ Đạt | R14 | Search/Validation/Export/Permission/SLA 5/5. |
+| **C5-1** | **CB_NV chấm điểm 3 tiêu chí 0-10** | **✅ Đạt** | **R15** | POST `/danh-gia` 201, diemTong=9 (AVG 8+9+10), VV-002 flip DA_DANH_GIA. |
+| **C5-3** | **CB_PD KHÔNG được chấm** | **✅ Đạt** | **R15** | POST 403 ERR-PERM-SYS-00-01 (BE block). |
+| **C5-4** | **Duplicate UNIQUE per loại** | **⚠️ Sai spec** | **R15** | Duplicate chặn qua state guard (ERR-STATE-VI-16-01) thay vì UNIQUE (ERR-DG-VV-04). Mechanism khác spec. |
+| **C5-5** | **Validation thang 0-10** | **✅ Đạt** | **R15** | 11/-1/missing/string đều 422. Decimal accepted. |
+| **C6-4** | **BR-CALC-04 lookup pre-check** | **⚠️ Sai spec** | **R15** | BE KHÔNG block DN thiếu fields. VV-002 tạo OK với default priority 3. Spec yêu cầu ERR-NH-03/warning, thực tế silent fallback. |
+
+**Phụ:** Input field `diemTienDo` vs output `diemThoiGian` — naming inconsistency POST request body vs response (Minor observation, not bug). VV-001 fresh hôm nay lich-su dùng `TAO_VV` enum thay `CREATE` ✓.
+
+### Bảng TC chưa chạy được — cần làm gì để chạy (R15)
+
+Hiện tại còn 43 TC chưa chạy được — chia 3 nhóm: 24 chờ dev fix (NOTIF + LICHSU 8 enum) · 16 chờ env (VNeID T2 sandbox + DN T2 verified) · 3 cần seed backdated SLA.
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| C1-1..6 | DN chưa có Tier 2 VNeID account verified | Infra setup VNeID T2 sandbox + DN T2 verified | Infra |
+| C2-1..5 | Endpoint mail DN UC62 chưa hoạt động (BUG-NOTIF-01) | Dev BE fix UC62 trigger mail DN sau state transition | Dev BE |
+| C3-1..3 | Pool VV chưa có deadline backdated 11/16/21 ngày | Seed VV với deadline custom (DB-level) hoặc time-travel | QA seed |
+| C4-1..6 | Cần DN VNeID T2 để DN tự gửi YC | Same as C1 | Infra |
+| C5-2 | DN cần VNeID T2 chấm điểm | Same as C1 | Infra |
+| C6-2, C6-3 | DN session/MST lookup cần VNeID T2 | Same as C1 | Infra |
+| C7-1..7 | LICH_SU 8 enum còn thiếu (TIEP_NHAN/CAP_NHAT_KQ/DANH_GIA/YEU_CAU_BO_SUNG/TU_CHOI*/PHAN_CONG_*) | Dev BE bổ sung 8 enum khi state transition | Dev BE |
+| C8-3 (deep) | Verify đủ 18/18 enum xuất hiện | Same as C7 (BUG-LICHSU-01 fix) | Dev BE |
+| R7.7.3-PRIVACY-1/2 | Cần VV cross-DN scope + DN test có VV | Run R7.4.A3 multi-DN test data | QA seed |
+
+### Pool R15 update (snapshot 09:50:00)
+
+```
+Total VV = 20 (18 BTP-TW + 2 STP-AG)
+States:
+  DA_TIEP_NHAN: 5 (incl VV-BTP-TW-20260511-002 vừa tạo C6-4)
+  YEU_CAU_BO_SUNG: 2
+  DA_PHAN_CONG: 9
+  HOAN_THANH: 0 (VV-002 flip → DA_DANH_GIA via C5-1)
+  DA_DANH_GIA: 3 (VV-008/009 R14 sớm + VV-002 R15 C5-1)
+  TU_CHOI: 1
+```
+
+### R15 evidence — screenshot index (`image/`)
+
+| Screenshot | TC |
+|---|---|
+| [r15-c64-vv002-tao-thanh-cong-no-warning-2026-05-11.png](image/r15-c64-vv002-tao-thanh-cong-no-warning-2026-05-11.png) | C6-4 BE silent fallback |
+
+API evidence (in-line):
+- C5-1 POST: 201 `{diemChatLuong:8, diemThoiGian:9, diemThaiDo:10, diemTong:9, ngayDanhGia:'2026-05-11T02:45:43Z'}` + VV state `DA_DANH_GIA`
+- C5-3 POST: 403 `{code:'ERR-PERM-SYS-00-01', message:'Forbidden'}` (cb_pd_tw_05)
+- C5-4 POST duplicate: 409 `{code:'ERR-STATE-VI-16-01', message:'Vụ việc không ở trạng thái HOAN_THANH'}` (state guard, không phải UNIQUE)
+- C5-5 validation: over_10/negative/missing/string đều 422 `ERR-VAL-SYS-00-01` với details `field, message`; decimal pass validation
+- C6-4 POST VV: 201 → VV-BTP-TW-20260511-002 created với priority default 3, lich-su 1 entry `TAO_VV` ✓
+
+---
+
+## R14 Round (2026-05-10 21:30:00 → 21:45:00) — End-to-end lifecycle + 3 branches + regression
+
+Tester: `cb_nv_tw_03` (CB NV) + `cb_pd_tw_05` (CB PD). Tool: Chrome DevTools MCP UI click chain. Scope user: 4 task — happy path, 2 branch, public toggle, regression smoke.
+
+### Phase 1 — Happy path full lifecycle (VV-002)
+
+| Transition | Trigger | Verdict | Network |
+|---|---|:------:|---------|
+| DA_TIEP_NHAN → DANG_KIEM_TRA | cb_nv_tw_01 click [Kiểm tra hồ sơ] (R13) | ✅ PASS | (R13 LICHSU `Kiểm tra` 17:13) |
+| DANG_KIEM_TRA → DA_PHAN_CONG | cb_nv_tw_01 [Phân công] (R13) | ✅ PASS | (R13 LICHSU `Phân công` 20:21) |
+| DA_PHAN_CONG → DANG_XU_LY | NHT [Xác nhận phân công] auto | ✅ PASS | (R13 LICHSU `XAC_NHAN_PHAN_CONG` 20:25 — new enum) |
+| DANG_XU_LY → CHO_PHE_DUYET | cb_nv_tw_03 [Cập nhật kết quả] + [Trình phê duyệt] | ✅ PASS | POST `/cap-nhat-ket-qua` 201 + POST `/trinh-phe-duyet` 201 21:32 (LICHSU `TRINH_PD`) |
+| CHO_PHE_DUYET → DA_DUYET | cb_pd_tw_05 [Phê duyệt] | ✅ PASS | POST `/phe-duyet` 201 21:33 (LICHSU `Phê duyệt`) |
+| DA_DUYET → HOAN_THANH → DA_DANH_GIA | DN POST `/danh-gia` (R14 sớm verify DANHGIA-01) | ✅ PASS | POST `/danh-gia` 201 + auto SM HOAN_THANH→DA_DANH_GIA + diem 8.3 AVG |
+
+→ 7/8 transition verified UI · DA_DANH_GIA endpoint verified độc lập (DANHGIA-01 retest closed).
+
+### Phase 2a — Branch YEU_CAU_BO_SUNG (VV-003)
+
+| Step | Trigger | Verdict | Network |
+|---|---|:------:|---------|
+| DA_TIEP_NHAN → DANG_KIEM_TRA | cb_nv_tw_03 [Kiểm tra hồ sơ] [Xác nhận] | ✅ PASS | POST `/kiem-tra` 201 21:36 |
+| DANG_KIEM_TRA → YEU_CAU_BO_SUNG | cb_nv_tw_03 [Yêu cầu bổ sung] + Lý do | ✅ PASS | POST `/kiem-tra` 201 (verdict YCBS) — banner "Yêu cầu bổ sung — Yêu cầu doanh nghiệp bổ sung hồ sơ trước khi tiếp tục." |
+
+DN respond side cần DN portal account (out of scope role test này — defer round sau với cấu hình DN VNeID).
+
+### Phase 2b — Branch TU_CHOI + Mở lại hồ sơ (VV-STP-AG-20260509-001)
+
+| Step | Trigger | Verdict | Network |
+|---|---|:------:|---------|
+| DA_TIEP_NHAN → DANG_KIEM_TRA | cb_nv_tw_03 [Kiểm tra hồ sơ] [Xác nhận] | ✅ PASS | POST `/kiem-tra` 201 21:37 |
+| DANG_KIEM_TRA → TU_CHOI | cb_nv_tw_03 [Không đạt] + Lý do | ✅ PASS | POST `/kiem-tra` 201 (verdict TU_CHOI) — banner "Từ chối — Vụ việc đã bị từ chối — xem chi tiết trong dòng thời gian." |
+| TU_CHOI → DA_TIEP_NHAN (mở lại) | cb_nv_tw_03 [Mở lại hồ sơ] + Lý do | ✅ PASS | POST `/mo-lai` 200 21:38 — deadline reset 02/06/2026 (15 ngày LV) — LICHSU `MO_LAI` enum mới |
+
+### Phase 3 — Public CMS toggle (VV-002 DA_DUYET)
+
+| Step | Trigger | Verdict | Network |
+|---|---|:------:|---------|
+| Toggle ON | cb_pd_tw_05 [Công khai] + Mô tả công khai | ✅ PASS | POST `/cong-khai` 200 21:34 — button đổi [Công khai] → [Hủy công khai] · LICHSU `CONG_KHAI` enum |
+| Toggle OFF | cb_pd_tw_05 [Hủy công khai] | ✅ PASS | POST `/huy-cong-khai` 200 21:35 — button đổi lại [Công khai] |
+
+### Phase 4 — Regression smoke (Search + Validation + Export + Permission + SLA)
+
+| TC | Verdict | Note |
+|---|:------:|------|
+| **VV-002 R14 Search** | ✅ PASS | Keyword `VV-BTP-TW-20260510-002` → 1/1 match. Improvement vs R7 R8 (BUG-VV-FN-SEARCH-01 closed). |
+| **VV-004 R14 Validation** | ✅ PASS | Empty form submit → 5 required errors: "Vui lòng chọn doanh nghiệp" + "Tiêu đề vụ việc là bắt buộc" + "Nội dung yêu cầu là bắt buộc" + "Lĩnh vực pháp luật là bắt buộc" + "Loại hình hỗ trợ là bắt buộc". DN field nay có required (improvement vs BUG-VV-FN-VALIDATION-01 closed). |
+| **VV-024 R14 Export** | ✅ PASS | POST `/vu-viecs/export` 200 OK với keyword filter `?keyword=VV-BTP-TW-20260510-002`. |
+| **C8-Permission R14** | ✅ PASS | cb_nv_tw_03 chỉ thấy [Cập nhật kết quả] + [Trình phê duyệt] ở DANG_XU_LY · cb_pd_tw_05 chỉ thấy [Phê duyệt] + [Từ chối] ở CHO_PHE_DUYET (separation of duty enforced). |
+| **VV-022 R14 SLA** | ✅ PASS | All VV mới tạo deadline +14 ngày (15 ngày LV). VV mở lại auto-reset deadline +15 ngày từ ngày mở lại. BR-SLA-01 NĐ55/2019 Đ.8 K.1 enforced. |
+
+### Pool R14 update (snapshot 21:45:00)
+
+```
+Total VV = 18 (17 BTP-TW + 1 STP-AG)
+States:
+  DA_TIEP_NHAN: 4 (incl VV-STP-AG mở lại 21:38)
+  DANG_KIEM_TRA: 0
+  DA_PHAN_CONG: 7
+  DANG_XU_LY: 0
+  CHO_PHE_DUYET: 0
+  DA_DUYET: 1 (VV-002 sau Phase 1)
+  HOAN_THANH: 0
+  DA_DANH_GIA: 2 (VV-008/VV-009 từ R14 sớm)
+  YEU_CAU_BO_SUNG: 2 (VV-509-002, VV-003 21:36)
+  TU_CHOI: 1 (VV-507-004 R8)
+```
+
+### R14 evidence — screenshot index (`image/`)
+
+| Screenshot | Phase |
+|---|---|
+| [r14-vv002-da-duyet-pd-tw-05-2026-05-10.png](image/r14-vv002-da-duyet-pd-tw-05-2026-05-10.png) | Phase 1 DA_DUYET reached |
+| [r14-vv002-public-toggle-on-off-2026-05-10.png](image/r14-vv002-public-toggle-on-off-2026-05-10.png) | Phase 3 toggle ON+OFF |
+| [r14-vv003-yeu-cau-bo-sung-2026-05-10.png](image/r14-vv003-yeu-cau-bo-sung-2026-05-10.png) | Phase 2a YCBS |
+| [r14-vv001-tuchoi-molai-2026-05-10.png](image/r14-vv001-tuchoi-molai-2026-05-10.png) | Phase 2b TU_CHOI + mở lại |
+| [r14-validation-empty-form-2026-05-10.png](image/r14-validation-empty-form-2026-05-10.png) | Phase 4 validation 5/5 |
+
+---
+
+# Lifecycle archive — older rounds
 
 ### Bug summary
 

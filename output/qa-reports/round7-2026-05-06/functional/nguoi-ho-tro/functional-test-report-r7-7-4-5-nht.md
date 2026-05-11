@@ -12,7 +12,7 @@
 | **Test Method** | UI-based (Chrome DevTools MCP) + API verify (`evaluate_script` curl probe) |
 | **Primary Account** | `cb_nv_tw_03` / Secret@123 (CB Nghiệp vụ TW) — primary; `qtht_03` (QTHT) — verify-permission |
 | **Round** | R7.7.4.5 (R8 verify · R9 unblock guard · R10 retest BUG-003 · R11 retest dev claim 3 · R12 retest dev claim 4 · **R13 retest dev claim 5 — `cb_nv_bn_01` BKH, BUG-003 ✅ FIXED 4/4**) |
-| **Tài liệu tham chiếu** | [7.4a-nguoi-ho-tro.md](../../../../funtion/7.4a-nguoi-ho-tro.md) · [bug-report-r7-7-4-5-nht.md](../../bug-reports/nguoi-ho-tro/bug-report-r7-7-4-5-nht.md) · [todo-nht.md](../../../../../tasks/todo-nht.md) |
+| **Tài liệu tham chiếu** | [7.4a-nguoi-ho-tro.md](../../../../funtion/7.4a-nguoi-ho-tro.md) · [Pass-bug-report-r7-7-4-5-nht.md](../../bug-reports/nguoi-ho-tro/Pass-bug-report-r7-7-4-5-nht.md) · [todo-nht.md](../../../../../tasks/todo-nht.md) |
 
 ---
 
@@ -105,7 +105,7 @@ Module NHT vận hành đầy đủ luồng theo SM-NHT spec: CHO_KICH_HOAT → 
 
 ## 3. Bug Report
 
-> **Lưu ý:** Tóm tắt inline. Chi tiết Steps/Evidence xem [bug-report-r7-7-4-5-nht.md](../../bug-reports/nguoi-ho-tro/bug-report-r7-7-4-5-nht.md).
+> **Lưu ý:** Tóm tắt inline. Chi tiết Steps/Evidence xem [Pass-bug-report-r7-7-4-5-nht.md](../../bug-reports/nguoi-ho-tro/Pass-bug-report-r7-7-4-5-nht.md).
 
 ### ~~BUG-NHT-001~~ [CLOSED-INVALID] — QTHT thiếu CRUD UI buttons trên module NHT
 

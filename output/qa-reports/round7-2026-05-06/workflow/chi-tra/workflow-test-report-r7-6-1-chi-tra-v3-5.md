@@ -1,7 +1,7 @@
 # Workflow Test Report — Chi trả v3.5
 
 > **Module:** Chi trả chi phí (FR-V.II / FR-06) · **SRS:** [`srs-update-2026-5-5/srs-fr-06-chi-tra.md`](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md) + [`02-thu-tu-module.md §10 SM-CHI-TRA`](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) · **Round:** R7-R3 (2026-05-10 11:00-11:30) · **Tester:** QA Automation via Claude Code
-> **Bug:** [`bug-report-flow-chi-tra.md`](../../bug-reports/chi-tra/bug-report-flow-chi-tra.md)
+> **Bug:** [`Pass-bug-report-flow-chi-tra.md`](../../bug-reports/chi-tra/Pass-bug-report-flow-chi-tra.md)
 
 ---
 
@@ -64,7 +64,7 @@ R3 user yêu cầu re-walk full lifecycle với account suffix `_02` / `_01` AG 
 
 ---
 
-## Defects ghi nhận trong round (xem chi tiết bug-report-flow-chi-tra.md)
+## Defects ghi nhận trong round (xem chi tiết Pass-bug-report-flow-chi-tra.md)
 
 | Bug ID | Severity | Bước | Tóm tắt |
 |---|---|---|---|

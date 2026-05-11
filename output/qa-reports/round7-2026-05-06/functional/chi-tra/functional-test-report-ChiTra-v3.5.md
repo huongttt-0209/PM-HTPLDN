@@ -2,7 +2,7 @@
 
 > **Module:** Chi trả chi phí (FR-V.II / FR-06) v3.5 · **Task:** R7.7.12 · **Round:** R7-R3 (2026-05-10 11:30:00) · **Tester:** QA Automation via Claude Code
 > **Spec:** [`output/funtion/7.6-chi-tra-chi-phi.md`](../../../funtion/7.6-chi-tra-chi-phi.md) (35 TC: CT-001..035) · [`02-thu-tu-module.md §10 SM-CHI-TRA`](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md)
-> **Bug:** [`bug-report-flow-chi-tra.md`](../../bug-reports/chi-tra/bug-report-flow-chi-tra.md)
+> **Bug:** [`Pass-bug-report-flow-chi-tra.md`](../../bug-reports/chi-tra/Pass-bug-report-flow-chi-tra.md)
 
 ---
 

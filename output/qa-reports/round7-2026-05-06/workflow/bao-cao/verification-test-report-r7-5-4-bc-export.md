@@ -1,7 +1,7 @@
 # Workflow Test Report — Báo cáo Thống kê Export Excel HD/VV (R7.5.4)
 
 > **Module:** Báo cáo Thống kê (M11) · FR-12 · **SRS:** [`02-thu-tu-module.md §⑫`](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) · **Round:** R7 · **Date:** 2026-05-08 · **Tester:** QA Automation (Claude Code via MCP Chrome DevTools)
-> **Bug:** [`bug-report-r7-5-4-bc-export.md`](../../bug-reports/bao-cao/bug-report-r7-5-4-bc-export.md) — 1 Critical + 1 Minor (re-confirm Open từ R6)
+> **Bug:** [`Pass-bug-report-r7-5-4-bc-export.md`](../../bug-reports/bao-cao/Pass-bug-report-r7-5-4-bc-export.md) — 1 Critical + 1 Minor (re-confirm Open từ R6)
 > **Re-test:** [R6.5.4 verification-test-report-BaoCao-Export.md](../../../round6-2026-05-01-postreset/workflow/verification-test-report-BaoCao-Export.md)
 
 ---

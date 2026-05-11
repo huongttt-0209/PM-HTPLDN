@@ -5,37 +5,106 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000 |
 | **Người test** | QA Automation (Claude Opus 4.7) |
-| **Ngày** | 2026-05-10 10:37:30 (UTC+7) · **R2 retest:** 2026-05-10 12:30:00 (UTC+7) |
-| **Loại test** | Functional + Cross-check API ↔ UI |
-| **Round** | Round 7 (R1 + R2 retest) |
+| **Ngày** | 2026-05-10 10:37:30 (UTC+7) · **R2 retest:** 2026-05-10 12:30:00 (UTC+7) · **R3 retest:** 2026-05-10 20:40:00 (UTC+7) · **R3.1 expand permission:** 2026-05-10 22:48:00 (UTC+7) |
+| **Loại test** | Functional + Cross-check API ↔ UI + Permission probe |
+| **Round** | Round 7 (R1 + R2 + R3 + R3.1 retest+expand) |
 | **Tài liệu tham chiếu** | [functional-test-report-r7-dashboard.md](../../functional/dashboard/functional-test-report-r7-dashboard.md) · [tasks/todo-dashboard.md](../../../../tasks/todo-dashboard.md) |
 
 ---
 
 ## Tổng hợp
 
-Phát hiện **4** lỗi có SRS reference cụ thể trong functional test Dashboard. R2 retest 2026-05-10 12:30:00: dev claim đã fix BUG-DASH-001 + BUG-DASH-002 nhưng evidence cho thấy **cả 2 đều CHƯA FIX** (vẫn reproduce 100%). Phát hiện thêm **2 bug Major** từ drill KPI-03/04/05/06 expand coverage.
+Phát hiện **5** lỗi có SRS reference cụ thể trong functional test Dashboard. 4 bug đầu (DASH-001..004) đã Closed sau dev fix lần 2 R3 (20:40). R3.1 expand permission probe (22:48) phát hiện **BUG-DASH-005 Major mới** — DN role login dashboard render full SCR-I-01 vi phạm permission matrix P1=✗ (DN/NHT/CG: NHT+CG redirect đúng, DN bypass).
 
 ### Severity breakdown
 
 | Tổng | Critical | Major | Medium | Minor | Trivial |
 |------|----------|-------|--------|-------|---------|
-| 4    | 0        | 2     | 1      | 1     | 0       |
+| 5    | 0        | 3     | 1      | 1     | 0       |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-DASH-001 | Medium | P1 | Validation | DASH-11 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:268 FR-I-02 §Processing Bước 4` + `:270 §Drill-down` | KPI-02 dashboard count=16 loại trừ TU_CHOI sai spec (phải = 17 bao gồm cả TU_CHOI) | Open (R2 retest FAIL) |
-| BUG-DASH-002 | Minor | P3 | UI/UX | DASH-10 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:100 mermaid` + `srs-fr-01-dashboard.md:611` | Drill-down KPI-07 thiếu URL param `trang_thai=DANG_HOAT_DONG` (tab default rescue) | Open (R2 retest FAIL) |
-| BUG-DASH-003 | Major | P1 | Validation | DASH-12, DASH-13 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:270 §Drill-down` + `:268 FR-I-03/04 §Processing` | Drill KPI-03/04 URL `trangThai=DANG_XU_LY/HOAN_THANH` không khớp dashboard count (composite state mismatch) | Open |
-| BUG-DASH-004 | Major | P1 | UI/UX | DASH-14, DASH-15 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:100 mermaid` (KPI-05/06 drill) | Drill KPI-05/06 navigate `/dao-tao/chuong-trinh/danh-sach` (sai page Chương trình ≠ Khóa học, no filter, no date) | Open |
+| BUG-DASH-005 | Major | P1 | Permission | DASH-P7 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:682-686 §Quyền truy cập màn hình` + Ma trận P1 (DN=✗) | Role DN login `/dashboard` render full SCR-I-01 (KHÔNG redirect, vi phạm P1=✗) | Open |
+| ~~BUG-DASH-001~~ | Medium | P1 | Validation | DASH-11 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:268 FR-I-02 §Processing Bước 4` + `:270 §Drill-down` | ~~KPI-02 dashboard count=16 loại trừ TU_CHOI sai spec (phải = 17 bao gồm cả TU_CHOI)~~ | Closed |
+| ~~BUG-DASH-002~~ | Minor | P3 | UI/UX | DASH-10 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:100 mermaid` + `srs-fr-01-dashboard.md:611` | ~~Drill-down KPI-07 thiếu URL param `trang_thai=DANG_HOAT_DONG` (tab default rescue)~~ | Closed |
+| ~~BUG-DASH-003~~ | Major | P1 | Validation | DASH-12, DASH-13 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:270 §Drill-down` + `:268 FR-I-03/04 §Processing` | ~~Drill KPI-03/04 URL `trangThai=DANG_XU_LY/HOAN_THANH` không khớp dashboard count (composite state mismatch)~~ | Closed |
+| ~~BUG-DASH-004~~ | Major | P1 | UI/UX | DASH-14, DASH-15 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:100 mermaid` (KPI-05/06 drill) | ~~Drill KPI-05/06 navigate `/dao-tao/chuong-trinh/danh-sach` (sai page Chương trình ≠ Khóa học, no filter, no date)~~ | Closed |
 
 ---
 
-## BUG-DASH-001 — KPI-02 dashboard count=16 loại trừ TU_CHOI sai spec
+## BUG-DASH-005 — Role DN login `/dashboard` render full SCR-I-01 (KHÔNG redirect, vi phạm permission matrix)
+
+### Mô tả
+
+Account loại DN (Doanh nghiệp) sau khi login + OTP → URL = `/dashboard` + render đầy đủ SCR-I-01 ("Tổng quan hệ thống") với 9 thẻ KPI (HD/VV/KH/TVV) + filter Năm/Đơn vị + 2 chart. Theo SRS spec (SCR-I-01 §Quyền truy cập màn hình + Ma trận phân quyền P1), DN **KHÔNG có quyền VIEW_DASHBOARD** (P1 = ✗) → phải redirect về Cổng DN riêng (Nhóm VII), KHÔNG render SCR-I-01. Cross-check NHT + CG cùng login → đúng spec redirect `/dao-tao/chuong-trinh/danh-sach`. **Chỉ DN bypass permission gate cho route `/dashboard`.**
+
+### Các bước tái hiện
+
+1. Login DN account `9999999990 / Secret@123` → OTP `666666` → submit.
+2. Quan sát URL bar: `http://103.172.236.130:3000/dashboard` (KHÔNG phải Cổng DN Nhóm VII).
+3. Quan sát render: heading "Tổng quan hệ thống" + 9 KPI thẻ (Hỏi đáp mới, Vụ việc tiếp nhận, Vụ việc đang xử lý, Vụ việc hoàn thành, Đào tạo đang diễn ra, Đào tạo hoàn thành, Chuyên gia/TVV) + 2 chart (Đánh giá hiệu quả, Chất lượng đào tạo).
+4. User badge: "Nguyễn Văn A - DN Test 01" / vai trò "DN".
+5. KPI count = 0 cho mọi thẻ (do BR-AUTH-08 backend filter theo data scope DN — không lộ data cross-ministry, nhưng UI gate VẪN sai).
+6. Cross-check NHT (`nht_01 / Secret@123`): URL = `/dao-tao/chuong-trinh/danh-sach` ✓ redirect đúng.
+7. Cross-check CG (`huongcg / Secret@123`): URL = `/dao-tao/chuong-trinh/danh-sach` ✓ redirect đúng.
+
+### Kết quả mong đợi
+
+Per `srs-update-2026-5-5/srs-fr-01-dashboard.md:682-686` SCR-I-01 §Quyền truy cập màn hình (nguyên văn):
+
+> "**Quyền truy cập màn hình:** yêu cầu quyền `DASHBOARD_VIEW`.
+> - **Vai trò có quyền (mặc định):** CB Nghiệp vụ (TW/BN/ĐP), CB Phê duyệt (TW/BN/ĐP), QTHT (mọi cấp).
+> - **Vai trò KHÔNG có quyền:** Doanh nghiệp (sử dụng Cổng DN riêng — Nhóm VII), Tư vấn viên/Chuyên gia (có view riêng cho vụ việc được phân công — Nhóm IV/V), tài khoản chưa đăng nhập.
+> - User không đủ quyền → redirect về trang chủ theo vai trò, không render SCR-I-01."
+
+Ma trận phân quyền cấp màn hình row P1 (VIEW_DASHBOARD): QTHT/CB_NV_TW/CB_NV_BN/CB_NV_DP/CB_PD_TW/CB_PD_BN/CB_PD_DP = **✓**, **DN/NHT/TVV/CG = ✗**. NotebookLM HTPLDN query confirm 2-source verified.
+
+→ DN login phải redirect Cổng DN riêng (Nhóm VII), KHÔNG render `/dashboard`.
+
+### Kết quả thực tế
+
+- DN login → URL `/dashboard` (full path render, KHÔNG redirect).
+- Render đầy đủ SCR-I-01 (9 KPI + filter + 2 chart) — vi phạm "không render SCR-I-01" trong spec.
+- BR-AUTH-08 backend data scope OK (KPI=0 vì DN không có data scope cấp BTP) — KHÔNG lộ data cross-ministry. Tuy nhiên UI gate fail nghĩa là route guard FE thiếu permission check.
+- NHT + CG cùng test → redirect đúng `/dao-tao/chuong-trinh/danh-sach` → confirm logic redirect TỒN TẠI ở app, chỉ thiếu áp dụng cho DN role.
+
+### Bằng chứng
+
+![BUG-DASH-005 — DN login render dashboard full SCR-I-01 vi phạm P1=✗](image/r7-r3-bug05-dn-dashboard-render-bypass.png)
+
+API + state probe:
+
+```
+URL after login: http://103.172.236.130:3000/dashboard
+User role: DN (Nguyễn Văn A - DN Test 01)
+Sidebar items: Tổng quan + Đào tạo + Vụ việc + Chi trả chi phí + Doanh nghiệp được hỗ trợ
+KPI render: 9 widgets (HD:0, VV:0/0/0, KH:0/0, TVV:0)
+Filter: Năm + Từ ngày + Đến ngày + Áp dụng + Xóa bộ lọc
+Chart: 2 chart (Đánh giá hiệu quả + Chất lượng đào tạo) đều "Trống"
+```
+
+### So sánh — Permission matrix probe (R3.1)
+
+| Role | Username | Expected | Actual | Verdict |
+|------|----------|----------|--------|---------|
+| QTHT | qtht_01 | render `/dashboard` ✓ | render `/dashboard` ✓ | ✅ Đạt |
+| CB_PD_TW | cb_pd_tw_01 | render `/dashboard` ✓ + Đơn vị visible (full scope) | render full + Đơn vị dropdown ✓ | ✅ Đạt |
+| CB_PD_BN | cb_pd_bn_01 (BKH) | render + Đơn vị HIDDEN (locked=BN) | render + Đơn vị HIDDEN ✓ | ✅ Đạt |
+| CB_PD_DP | cb_pd_dp_01 (AG) | render + Đơn vị HIDDEN (locked=DP) | render + Đơn vị HIDDEN ✓ | ✅ Đạt |
+| CB_NV_DP | cb_nv_dp_01 (AG) | render + Đơn vị HIDDEN | render + Đơn vị HIDDEN ✓ | ✅ Đạt |
+| **DN** | 9999999990 | redirect Cổng DN Nhóm VII | **render `/dashboard` full** | ❌ **BUG** |
+| NHT | nht_01 | redirect Nhóm IV/V | redirect `/dao-tao/chuong-trinh/danh-sach` | ✅ Đạt |
+| CG | huongcg | redirect Nhóm IV/V | redirect `/dao-tao/chuong-trinh/danh-sach` | ✅ Đạt |
+
+---
+
+## ~~BUG-DASH-001~~ [CLOSED] — KPI-02 dashboard count=16 loại trừ TU_CHOI sai spec
 
 > **Re-test:** 2026-05-10 12:30:00 R2 — ❌ FAIL (Open-confirmed). Dev claim đã fix nhưng dashboard vẫn trả `VU_VIEC_TIEP_NHAN.giaTri = 16` (API endpoint cũ). Pool VV vẫn = 17 (gồm 1 TU_CHOI: `VV-BTP-TW-20260507-004`). Drill list vẫn "1-17 / 17 mục". Mismatch dashboard 16 vs list 17 nguyên vẹn. Evidence: [r7-r2-bug01-drill-kpi02-still-17vs16.png](image/r7-r2-bug01-drill-kpi02-still-17vs16.png).
+>
+> **Re-test:** 2026-05-10 20:38:00 R3 — ✅ PASS (Closed-verified). Dev fix lần 2 thành công: dashboard KPI-02 = **18** (đã include TU_CHOI). Pool VV evolved 17→18 (+1 record mới). Drill `/vu-viec/danh-sach?tuNgay=2026-01-01&denNgay=2026-05-10` (KHÔNG còn exclude `trangThai!=TU_CHOI`) → list "1-18 / 18 mục" = dashboard 18. Match clean. Evidence: [r7-r3-bug01-CLOSED-kpi02-18match18.png](image/r7-r3-bug01-CLOSED-kpi02-18match18.png).
 
 ### Mô tả
 
@@ -101,9 +170,11 @@ vs. cross-check `/api/v1/vu-viecs?page=1&size=20` trả `meta.total = 17` với 
 
 ---
 
-## BUG-DASH-002 — Drill-down KPI-07 thiếu URL param `trang_thai=DANG_HOAT_DONG`
+## ~~BUG-DASH-002~~ [CLOSED] — Drill-down KPI-07 thiếu URL param `trang_thai=DANG_HOAT_DONG`
 
 > **Re-test:** 2026-05-10 12:31:00 R2 — ❌ FAIL (Open-confirmed). Dev claim đã fix nhưng drill URL vẫn `/chuyen-gia-tvv/danh-sach?tuNgay=2026-01-01&denNgay=2026-05-10` (vẫn THIẾU `trang_thai`, `don_vi_cap`, `don_vi_id`). Tab "Đang hoạt động" rescue count = 10 ✓ (data đã thay đổi từ 11→10 do TVV pool reset). URL filter brittle nguyên vẹn. Evidence: [r7-r2-bug02-drill-kpi07-url-still-missing.png](image/r7-r2-bug02-drill-kpi07-url-still-missing.png).
+>
+> **Re-test:** 2026-05-10 20:39:00 R3 — ✅ PASS (Closed-verified). Dev fix lần 2 thành công: drill URL = `/chuyen-gia-tvv/danh-sach?trangThai=HOAT_DONG&tuNgay=2026-01-01&denNgay=2026-05-10` (đã có `trangThai=HOAT_DONG` explicit). Pagination "1-8 / 8 mục" khớp dashboard KPI-07=8. URL share-able, không phụ thuộc tab default. Note: enum thực tế là `HOAT_DONG` (per BE), spec mermaid ghi `DANG_HOAT_DONG` — accepted theo BE source-of-truth. Evidence: page state confirmed via `evaluate_script` location.href + `.ant-pagination-total-text`.
 
 ### Mô tả
 
@@ -141,7 +212,9 @@ B -- KPI-07 --> C7["/chuyen-gia-tvv/danh-sach<br/>?trang_thai=DANG_HOAT_DONG<br/
 
 ---
 
-## BUG-DASH-003 — Drill KPI-03/04 URL filter `trangThai` không khớp dashboard count
+## ~~BUG-DASH-003~~ [CLOSED] — Drill KPI-03/04 URL filter `trangThai` không khớp dashboard count
+
+> **Re-test:** 2026-05-10 20:39:30 R3 — ✅ PASS (Closed-verified). Dev fix lần 2 thành công: drill KPI-03 = `/vu-viec/danh-sach?trangThai=DA_TIEP_NHAN,DANG_KIEM_TRA,YEU_CAU_BO_SUNG,DA_PHAN_CONG,DANG_XU_LY,CHO_PHE_DUYET,DA_DUYET&tuNgay&denNgay` (composite 7 enums, đã sum logical bucket "Đang xử lý") → list "1-15 / 15 mục" = dashboard 15. Drill KPI-04 = `?trangThai=HOAN_THANH,DA_DANH_GIA` (2 enums) → list "1-2 / 2 mục" = dashboard 2. Match clean cả 2 KPI. Evidence: [r7-r3-bug03-CLOSED-kpi03-15match15.png](image/r7-r3-bug03-CLOSED-kpi03-15match15.png), [r7-r3-bug03b-CLOSED-kpi04-2match2.png](image/r7-r3-bug03b-CLOSED-kpi04-2match2.png).
 
 ### Mô tả
 
@@ -191,7 +264,9 @@ Drill KPI-04: trangThai=HOAN_THANH → 1 row (chỉ 1 thay vì 2)
 
 ---
 
-## BUG-DASH-004 — Drill KPI-05/06 navigate sai page Chương trình ≠ Khóa học, không có filter
+## ~~BUG-DASH-004~~ [CLOSED] — Drill KPI-05/06 navigate sai page Chương trình ≠ Khóa học, không có filter
+
+> **Re-test:** 2026-05-10 20:40:00 R3 — ✅ PASS (Closed-verified). Dev fix lần 2 thành công: drill KPI-05 → `/dao-tao/khoa-hoc/danh-sach?tab=DANG_DIEN_RA&tuNgay=2026-01-01&denNgay=2026-05-10` (đúng page Khóa học, có tab DANG_DIEN_RA + date filter). Drill KPI-06 → `/dao-tao/khoa-hoc/danh-sach?tab=HOAN_THANH&tuNgay=2026-01-01&denNgay=2026-05-10` (cùng page Khóa học, tab HOAN_THANH). Active tab confirmed match. FE đã honor `drillDownUrl` từ API. Note: param dùng `tab=` thay vì `trangThai=` — accepted theo BE source-of-truth (FE pass tab name khớp page Khóa học).
 
 ### Mô tả
 
@@ -257,4 +332,4 @@ vs. UI thực tế: cả 2 navigate `/dao-tao/chuong-trinh/danh-sach` → mismat
 
 ---
 
-*Bug report generated: 2026-05-10 10:37:30 (UTC+7) · R2 retest update: 2026-05-10 12:35:00 (UTC+7) | QA Automation via Claude Code*
+*Bug report generated: 2026-05-10 10:37:30 (UTC+7) · R2 retest update: 2026-05-10 12:35:00 (UTC+7) · R3 retest update: 2026-05-10 20:42:00 (UTC+7) — all 4 bugs CLOSED, file renamed `Pass-` prefix | QA Automation via Claude Code*

@@ -7,14 +7,14 @@
 | **Người test** | QA Automation (Chrome DevTools MCP) |
 | **Ngày** | 2026-05-08 (R8 log + R9 update) |
 | **Loại test** | Functional |
-| **Round** | R8 (Kho Q&A) → R9 (+2 bug mới TVN-004/005) → **R10 (2026-05-09 17:18:00 — TVN-004 Closed-verified, +1 bug Minor TVN-006 cột Số gợi ý)** |
+| **Round** | R8 (Kho Q&A) → R9 (+2 bug mới TVN-004/005) → R10 (2026-05-09 17:18:00 — TVN-004 Closed) → R11 (2026-05-10 19:04:57 — BUG-001 reclassify, +1 bug TVN-007) → **R12 (2026-05-10 20:07:00 — verify dev fix: 3 Closed Major (002 Công khai/006 Số gợi ý/003 dropdown), 0 còn Critical, 3 Open (001 data drift, 005 audit naming TVN, 007 auto-import))** |
 | **Tài liệu tham chiếu** | [functional-test-report-r7-7-11-tvn.md](../../functional/tu-van-nhanh/functional-test-report-r7-7-11-tvn.md) · [srs-fr-13-tv-nhanh.md](../../../../../input/srs-v3/srs-fr-13-tv-nhanh.md) · [02-thu-tu-module.md §⑫ FR-13](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) |
 
 ---
 
 ## Tổng hợp
 
-Phát hiện **6** lỗi có SRS reference cụ thể trong quá trình test R7.7.11 (R8 + R9 + R10).
+Phát hiện **7** lỗi có SRS reference cụ thể trong quá trình test R7.7.11 (R8 + R9 + R10 + R11 + R12).
 
 ### Severity breakdown
 
@@ -22,7 +22,21 @@ Phát hiện **6** lỗi có SRS reference cụ thể trong quá trình test R7.
 |-------|------|----------|-------|--------|-------|---------|--------|
 | R8 (initial) | 3 | 1 | 1 | 0 | 1 | 0 | 0 |
 | R9 (cumulative) | 5 | 1 | 2 | 0 | 2 | 0 | 0 |
-| **R10 (cumulative)** | **6** | **1** | **2** | **0** | **3** | **0** | **1 (TVN-004)** |
+| R10 (cumulative) | 6 | 1 | 2 | 0 | 3 | 0 | 1 (TVN-004) |
+| R11 (cumulative) | 7 | 0 | 3 | 0 | 3 | 0 | 1 (TVN-004) |
+| **R12 (cumulative)** | **7** | **0** | **2** | **0** | **2** | **0** | **4 (TVN-002/003/004/006)** |
+
+### R12 changes (2026-05-10 20:07:00 — verify dev fix)
+- ✅ **BUG-FUNC-TVN-002 Closed-verified** — FR-X.2-06 deploy đầy đủ. Schema KHO_CAU_HOI có 4 field congKhai/thoiGianDangTai/moTaCongKhai/fileDinhKemCongKhai. POST `/cong-khai` 200 + state DA_DUYET → CONG_KHAI + thoiGianDangTai auto-fill. POST `/cong-khai` trên CHO_DUYET → 409 ERR-BIZ-KCH-01 ✅ BR-PUBLIC-01 enforce. POST `/huy-cong-khai` 200 ✅ BR-PUBLIC-02. Filter `?trangThai=CONG_KHAI` → 1 record ✅.
+- ✅ **BUG-FUNC-TVN-003 Closed-verified** — Filter bar có dropdown "Trạng thái" với 5 enum đầy đủ: Bị từ chối / Chờ duyệt / Đã duyệt / Công khai / Hết hiệu lực.
+- ✅ **BUG-FUNC-TVN-006 Closed-verified** — Cột "Số gợi ý" hiển thị đúng `goiYTraLoi.length`: 4 phiên DA_GOI_Y (TVN-QA-20260423-0024, 0424-0022, 0424-0023, 0425-0021) đều hiện `2`. Phiên không có gợi ý (MOI/CB_TRA_LOI) hiện 0 đúng.
+- ⚠️ **BUG-FUNC-TVN-005 PARTIAL** — KHO_CAU_HOI naming đã chuẩn forward (APPROVE_KHOCAUHOI/REJECT_KHOCAUHOI/CONG_KHAI/HUY_CONG_KHAI/TOGGLE_HIEU_LUC/CREATE_KHOCAUHOI). NHƯNG TU_VAN_NHANH vẫn `TRA_LOI` (thay vì GUI_TRA_LOI_TVNHANH) + `CREATE` (cho /cms-create). Giữ Open ở Minor — fix-forward chưa cover TVN module.
+- 🚫 **BUG-FUNC-TVN-001 NOT FIXED** — `cb_nv_tw_01` vẫn gán 3 vai trò `[CB_PD_TW, CB_NV_TW, QA_VT_DEL_TEST_R7]`. Dev chưa sync DB user_roles.
+- 🚫 **BUG-FUNC-TVN-007 NOT FIXED** — HOI_DAP `HD-20260509-010` DA_DUYET vẫn → 0 KHO_CAU_HOI TU_DONG. Auto-import BR-FLOW-10 không trigger.
+
+### R11 changes (2026-05-10 19:04:57)
+- 🔄 **BUG-FUNC-TVN-001 reclassified Critical → Major** — Verify `cb_nv_tw_03` pure CB_NV_TW → 403 ✅, `cb_pd_tw_01` pure → 200 ✅. Root cause là account `cb_nv_tw_01` data drift (3 vai trò gán nhầm), KHÔNG phải BE security hole. TVN-010/011/012 PASS với CB_PD pure.
+- 🆕 **BUG-FUNC-TVN-007 (Major) mới** — Auto-import BR-FLOW-10 không trigger. HOI_DAP `HD-20260509-010` DA_DUYET → 0 KHO_CAU_HOI nguồn TU_DONG. Cross-module flow Module 7.2 → 7.13 đứt.
 
 ### R10 changes (2026-05-09 17:18:00)
 - ✅ **BUG-FUNC-TVN-004 Closed-verified** — Top 5 gợi ý now renders với 2 KQA mỗi phiên DA_GOI_Y (KCH-0001 94%, KCH-0004 74% trên TVN-0024). TVN-018 click [Chọn] auto-fill textarea 74 ký tự ✅.
@@ -32,20 +46,28 @@ Phát hiện **6** lỗi có SRS reference cụ thể trong quá trình test R7.
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-FUNC-TVN-001 | Critical | P0 | Permission | TVN-010, 011, 012 | `02-thu-tu-module.md §⑫ FR-13 line 784-786 (Transition CHO_DUYET → DA_DUYET / NHAP)` + `BR-AUTH-01` | CB NV TW (cb_nv_tw_01) approve/reject/bulk-approve Q&A thành công — vi phạm phân quyền chỉ cb_pd | Open |
-| BUG-FUNC-TVN-002 | Major | P1 | Workflow | TVN-040, 041, 042, 043, 044 | `srs-fr-13 v3.5 FR-X.2-06 §Inputs/Processing line 411-457` + `BR-PUBLIC-01/02/03` + `BR-FLOW-05` | FR-X.2-06 (Công khai/Hủy công khai) chưa deploy — schema thiếu 4 field, endpoint 404 | Open |
-| BUG-FUNC-TVN-003 | Minor | P2 | UI/UX | TVN-001 | `02-thu-tu-module.md §⑫ FR-13 line 766` + `srs-fr-13 SCR-X2-01 row 4` | Filter trạng thái dropdown thiếu trên UI list — chỉ có Lĩnh vực + Nguồn + dates | Open |
+| BUG-FUNC-TVN-001 | **Major** (R11 reclassify) | **P1** | **Data setup** | TVN-010, 011, 012 | `input/users.csv` schema vai trò + `02-thu-tu-module.md §⑫ FR-13 line 784-786` | Account `cb_nv_tw_01` DB gán 3 vai trò `[CB_PD_TW, CB_NV_TW, QA_VT_DEL_TEST_R7]` thay vì single CB_NV_TW per users.csv → bypass guard. BE permission system OK với account pure. | Open |
+| ~~BUG-FUNC-TVN-002~~ | Major | P1 | Workflow | TVN-040, 041, 042, 043, 044 | `srs-fr-13 v3.5 FR-X.2-06 §Inputs/Processing line 411-457` + `BR-PUBLIC-01/02/03` + `BR-FLOW-05` | ~~FR-X.2-06 (Công khai/Hủy công khai) chưa deploy — schema thiếu 4 field, endpoint 404~~ | **Closed** (R12) |
+| ~~BUG-FUNC-TVN-003~~ | Minor | P2 | UI/UX | TVN-001 | `02-thu-tu-module.md §⑫ FR-13 line 766` + `srs-fr-13 SCR-X2-01 row 4` | ~~Filter trạng thái dropdown thiếu trên UI list — chỉ có Lĩnh vực + Nguồn + dates~~ | **Closed** (R12) |
 | ~~BUG-FUNC-TVN-004~~ (R9) | Major | P1 | UI/UX | TVN-017, 018 | `srs-fr-13 FR-X.2-02 §Processing 3` + `SCR-X2-03 row 7-8` | ~~Top 5 gợi ý không render trên detail phiên DA_GOI_Y~~ | **Closed** (R10 verify) |
 | **BUG-FUNC-TVN-005 (R9)** | Minor | P2 | Data | TVN-039 | `srs-fr-13 FR-X.2-01 §Postconditions` + `BR-DATA-05` | Audit log action naming inconsistent (TU_CHOI vs REJECT_KHOCAUHOI; UPDATE vs TOGGLE_HIEU_LUC) | **Open** |
-| **BUG-FUNC-TVN-006 (R10)** | **Minor** | **P2** | **UI/UX** | **TVN-016** | `srs-fr-13 SCR-X2-03 row 6 (cột Số gợi ý)` + `FR-X.2-02 §Outputs` | **Cột "Số gợi ý" list = 0 cho 100% phiên dù `goiYTraLoi.length=2` — FE render bug** | **Open** |
+| ~~**BUG-FUNC-TVN-006 (R10)**~~ | **Minor** | **P2** | **UI/UX** | **TVN-016** | `srs-fr-13 SCR-X2-03 row 6 (cột Số gợi ý)` + `FR-X.2-02 §Outputs` | ~~**Cột "Số gợi ý" list = 0 cho 100% phiên dù `goiYTraLoi.length=2` — FE render bug**~~ | **Closed** (R12) |
+| **BUG-FUNC-TVN-007 (R11)** | **Major** | **P1** | **Cross-module** | **TVN-014, 037** | `srs-fr-13 BR-FLOW-10` + `7.13-tu-van-nhanh.md line 105+128+151` | **Auto-import HOI_DAP DA_DUYET → KHO_CAU_HOI nguồn TU_DONG không trigger. HD-20260509-010 DA_DUYET → 0 record TU_DONG.** | **Open** |
 
 ---
 
-## BUG-FUNC-TVN-001 — CB NV TW approve/reject/bulk-approve Q&A vi phạm phân quyền
+## BUG-FUNC-TVN-001 — Account `cb_nv_tw_01` DB role data drift (R11 reclassified Critical → Major)
+
+> **R11 update (2026-05-10 19:04:57):** Verify với account pure single-role:
+> - `cb_nv_tw_03` (single CB_NV_TW per users.csv) → POST `/approve` 403 ERR-PERM-SYS-00-01 ✅ BE guard OK
+> - `cb_pd_tw_01` (single CB_PD_TW per users.csv) → POST `/approve` 200 ✅ đúng spec
+> - `cb_nv_tw_01` (DB hiện gán `[CB_PD_TW, CB_NV_TW, QA_VT_DEL_TEST_R7]`) → 200 vì có CB_PD_TW trong list
+>
+> **Root cause:** `cb_nv_tw_01` data drift trên `user_roles` table. Không phải BE thiếu role guard. **Reclassify Critical → Major.** Severity Major vì cần audit toàn bộ DB role mapping cross-check `users.csv` (production có thể cùng pattern).
 
 ### Mô tả
 
-`cb_nv_tw_01` (vai trò CB_NV_TW, đơn vị BTP-TW) gọi 3 endpoint duyệt Kho Q&A đều thành công 200, hoàn tất chuyển trạng thái CHO_DUYET → DA_DUYET hoặc → NHAP. Spec `02-thu-tu-module.md §⑫ FR-13 line 784-786` chỉ định CB PD (`cb_pd_<cap>_01`) là role duy nhất có quyền [Duyệt] / [Từ chối] / [Duyệt hàng loạt]. CB NV chỉ được tạo (THU_CONG/IMPORT) + toggle hiệu lực (line 787). BE thiếu role guard trên 3 endpoint duyệt.
+Account `cb_nv_tw_01` trong DB hiện gán 3 vai trò `[CB_PD_TW, CB_NV_TW, QA_VT_DEL_TEST_R7]` thay vì single `CB_NV_TW` per `input/users.csv`. Vì có `CB_PD_TW` trong role list, account này bypass role guard và approve/reject/bulk-approve thành công. Test R8-R10 nhận định BE thiếu role guard là **sai**: BE thực ra hoạt động đúng (verified với account pure CB_NV_TW khác → 403).
 
 ### Các bước tái hiện
 
@@ -149,7 +171,9 @@ POST /api/v1/kho-cau-hois/c7b8a1c2-.../reject  {ghiChu:'...', version:1}
 
 ---
 
-## BUG-FUNC-TVN-002 — FR-X.2-06 (Công khai/Hủy công khai) chưa deploy
+## ~~BUG-FUNC-TVN-002~~ — FR-X.2-06 (Công khai/Hủy công khai) chưa deploy [CLOSED]
+
+> **Re-test:** 2026-05-10 20:07:00 R12 — ✅ PASS (Closed-verified). Schema KHO_CAU_HOI có đủ 4 field (`congKhai`, `thoiGianDangTai`, `moTaCongKhai`, `fileDinhKemCongKhai`); `POST /api/v1/kho-cau-hois/{id}/cong-khai` 200 → SET `trangThai=CONG_KHAI` + auto-fill `thoiGianDangTai`; BR-PUBLIC-01 enforce: re-publish trả 409 `ERR-BIZ-KCH-01`; filter `?trangThai=CONG_KHAI` total=1.
 
 ### Mô tả
 
@@ -212,7 +236,9 @@ FR-X.2-06 v3.5 (UC156) thêm action [Công khai] / [Hủy công khai] cho CB NV 
 
 ---
 
-## BUG-FUNC-TVN-003 — Filter trạng thái dropdown thiếu trên UI list
+## ~~BUG-FUNC-TVN-003~~ — Filter trạng thái dropdown thiếu trên UI list [CLOSED]
+
+> **Re-test:** 2026-05-10 20:07:00 R12 — ✅ PASS (Closed-verified). Filter bar `/tv-nhanh/kho-cau-hoi` đã có dropdown "Trạng thái" cover 5 enum NHAP/CHO_DUYET/DA_DUYET/CONG_KHAI/HET_HIEU_LUC. Click filter từng option → API gọi `?trangThai=<enum>` → list refresh đúng.
 
 ### Mô tả
 
@@ -320,6 +346,8 @@ DA_GOI_Y phiên có goiYTraLoi=[]: 1/10 (TVN-QA-20260427-0017 — đúng hiển 
 
 ## BUG-FUNC-TVN-005 (R9) — Audit log action naming inconsistent
 
+> **Re-test:** 2026-05-10 20:07:00 R12 — ⚠️ PARTIAL FIX. KHO_CAU_HOI naming đã chuẩn theo spec: `APPROVE_KHOCAUHOI` / `REJECT_KHOCAUHOI` / `CREATE_KHOCAUHOI` / `UPDATE_KHOCAUHOI` / `DELETE_KHOCAUHOI` / `TOGGLE_HIEU_LUC`. **Vẫn còn open:** TU_VAN_NHANH `hanhDong=TRA_LOI` chưa rename thành `GUI_TRA_LOI_TVNHANH`; entity TU_VAN_NHANH cũng còn `CREATE` generic. Bug giữ Open ở 2 action TVNHANH; KHO_CAU_HOI subset coi như đã đóng.
+
 ### Mô tả
 
 Spec [`7.13-tu-van-nhanh.md TVN-039`](../../../../funtion/7.13-tu-van-nhanh.md) yêu cầu audit log ghi action với naming convention rõ: CREATE/UPDATE/DELETE_KHOCAUHOI, APPROVE/REJECT_KHOCAUHOI, IMPORT_EXCEL, TOGGLE_HIEU_LUC, CONG_KHAI, HUY_CONG_KHAI, GUI_TRA_LOI_TVNHANH, DANH_GIA_TVNHANH, AUTO_HET_HAN. Endpoint `/api/v1/audit-logs` trả naming inconsistent: (a) `TU_CHOI` (Vietnamese) cho reject thay vì `REJECT_KHOCAUHOI`; (b) generic `UPDATE` cho het-hieu-luc thay vì `TOGGLE_HIEU_LUC`; (c) `TRA_LOI` thay vì `GUI_TRA_LOI_TVNHANH`. Mechanism INSERT-only audit + ipAddress + sessionId + endpoint + responseCode đầy đủ ✅.
@@ -379,7 +407,9 @@ INSERT-only verify: không có endpoint PATCH/DELETE audit-logs (404).
 
 ---
 
-## BUG-FUNC-TVN-006 (R10) — Cột "Số gợi ý" list = 0 dù phiên có `goiYTraLoi.length=2`
+## ~~BUG-FUNC-TVN-006~~ (R10) — Cột "Số gợi ý" list = 0 dù phiên có `goiYTraLoi.length=2` [CLOSED]
+
+> **Re-test:** 2026-05-10 20:07:00 R12 — ✅ PASS (Closed-verified). 4 phiên DA_GOI_Y / CB_TRA_LOI list trên `/tv-nhanh/danh-sach` cột "Số gợi ý" hiển thị `2` đúng (matched `goiYTraLoi.length` từ API). Còn phiên MOI / DANG_TIM_KIEM hiển thị `0` chuẩn (không có gợi ý). Evidence: [r12-bug-006-r762-list-fixed.png](image/r12-bug-006-r762-list-fixed.png).
 
 ### Mô tả
 
@@ -424,6 +454,59 @@ UI list cell "Số gợi ý" cho row TVN-QA-20260424-0022 = "0" ❌
 ```
 
 ![BUG-FUNC-TVN-006 — Tab Hoàn thành 16/16, cột "Số gợi ý" = 0 cho mọi row](../../screenshots/r7-7-11-r10-tvn016-tab-hoanthanh-16of16.png)
+
+---
+
+## BUG-FUNC-TVN-007 — Auto-import HOI_DAP DA_DUYET → KHO_CAU_HOI TU_DONG không trigger (R11)
+
+### Mô tả
+
+Spec `7.13-tu-van-nhanh.md` line 105 (BR-FLOW-10) + line 128 (TVN-014) + line 151 (TVN-037) yêu cầu khi `HOI_DAP` (Module 7.2 Hỏi đáp pháp lý) chuyển trạng thái `DA_DUYET` → trigger auto-tạo `KHO_CAU_HOI` mới với `nguon=TU_DONG`, `trangThai=DA_DUYET`, `hoi_dap_goc_id` trỏ về HOI_DAP gốc — không cần CB PD duyệt thêm. R11 (2026-05-10 19:04:57) verify thấy auto-import không trigger: `HD-20260509-010` đã `DA_DUYET` từ trước nhưng KHO không có record `nguon=TU_DONG` nào.
+
+### Các bước tái hiện
+
+1. Login `cb_pd_tw_01` / `Secret@123` + OTP `666666`.
+2. Query HOI_DAP DA_DUYET:
+   ```js
+   await fetch('/api/v1/hoi-daps?trangThai=DA_DUYET&page=1&pageSize=10', {credentials:'include'}).then(r=>r.json())
+   ```
+   → `total: 1`, item: `{id:'3577bfb6-ec53-4a0c-8858-b0507afb3472', maHoiDap:'HD-20260509-010', trangThai:'DA_DUYET'}`
+3. Query KHO_CAU_HOI TU_DONG:
+   ```js
+   await fetch('/api/v1/kho-cau-hois?page=1&pageSize=100', {credentials:'include'}).then(r=>r.json())
+   ```
+   → `total: 18`, sources: `{THU_CONG: 17, IMPORT: 1, TU_DONG: 0}`. Filter `hoiDapGocId='3577bfb6-...'` → 0 record.
+
+### Kết quả mong đợi
+
+- HOI_DAP `HD-20260509-010` DA_DUYET → tự động sinh ra ≥1 record KHO_CAU_HOI có `nguon='TU_DONG'`, `trangThai='DA_DUYET'`, `hoi_dap_goc_id='3577bfb6-ec53-4a0c-8858-b0507afb3472'`.
+- Spec line 128 TVN-014: "HOI_DAP (Nhóm II) chuyển DA_DUYET → trigger auto-tạo KHO_CAU_HOI nguồn=TU_DONG, trang_thai=DA_DUYET, `hoi_dap_goc_id` trỏ về HOI_DAP (BR-FLOW-10) — KHÔNG cần duyệt thêm".
+
+### Kết quả thực tế
+
+- KHO_CAU_HOI total = 18 nhưng không có nguồn TU_DONG nào.
+- Cross-reference `hoi_dap_goc_id` = 0 record link đến HOI_DAP DA_DUYET.
+- Auto-import flow Module 7.2 → 7.13 đứt.
+
+```text
+=== Probe HOI_DAP DA_DUYET ===
+GET /api/v1/hoi-daps?trangThai=DA_DUYET → 200
+{ total: 1, items: [{ id: '3577bfb6-ec53-4a0c-8858-b0507afb3472', maHoiDap: 'HD-20260509-010', trangThai: 'DA_DUYET' }] }
+
+=== Probe KHO_CAU_HOI sources distribution ===
+GET /api/v1/kho-cau-hois?page=1&pageSize=100 → 200
+{
+  total: 18,
+  sources: { THU_CONG: 17, IMPORT: 1 },   // KHÔNG có TU_DONG
+  withHoiDapGoc: 0,                        // KHÔNG record nào link HOI_DAP gốc
+  linkedToHD20260509010: 0                 // 0 record link cụ thể đến HOI_DAP đã DA_DUYET
+}
+```
+
+### Bằng chứng
+
+- Probe API result trên (chạy trên session `cb_pd_tw_01` 2026-05-10 19:04:57)
+- Network reqid GET `/api/v1/kho-cau-hois?page=1&pageSize=100` 200 + GET `/api/v1/hoi-daps?trangThai=DA_DUYET&page=1&pageSize=10` 200
 
 ---
 

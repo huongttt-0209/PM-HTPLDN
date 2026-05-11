@@ -1,0 +1,7 @@
+interface:
+  display_name: "QA Bugfix Reverify Audit"
+  short_description: "Audit fixed bugs, coverage, and blocked TC"
+  default_prompt: "Use $qa-bugfix-reverify-audit to audit any QA module after dev fixes, including bug re-verification, missing or blocked test cases, block causes, and next actions."
+
+policy:
+  allow_implicit_invocation: true

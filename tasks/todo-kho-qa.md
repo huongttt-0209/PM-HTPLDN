@@ -18,8 +18,8 @@
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P3** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.3.16](#r7-3-16) |
-| **P4** | 2 | 0 | 0 | 1 | 0 | 0 | 0 | 1 | ✅[R7.4.D3](#r7-4-d3) · ❌[R7.4.D3.AUTO](#r7-4-d3-auto) |
-| **Tổng** | **3** | **0** | **0** | **2** | **0** | **0** | **0** | **1** |  |
+| **P4** | 2 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | ✅[R7.4.D3](#r7-4-d3) · ✅[R7.4.D3.AUTO](#r7-4-d3-auto) |
+| **Tổng** | **3** | **0** | **0** | **3** | **0** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -34,8 +34,8 @@
   - **Kết quả:** PASS 8/8 transition R10b 2026-05-10 11:00 — T8 Closed-verified cb_nv_tw_08 click [Kích hoạt hiệu lực] → DA_DUYET. [workflow-test-report-flow-kho-qa.md](../output/qa-reports/round7-2026-05-06/workflow/kho-qa/workflow-test-report-flow-kho-qa.md)
   - **Bug:** [Pass-bug-report-flow-kho-qa.md](../output/qa-reports/round7-2026-05-06/bug-reports/kho-qa/Pass-bug-report-flow-kho-qa.md) — 2/2 đóng (BUG-KHOQA-001 + BUG-KHOQA-002 Closed-verified)
 
-- ❌ **R7.4.D3.AUTO** 🆕 Verify auto-feed Kho QA nguồn TU_DONG (BR-FLOW-10) — HD DA_DUYET → tạo record Kho QA TU_DONG <a id="r7-4-d3-auto"></a>
-  - **Cần:** ≥1 HD `DA_DUYET` (✓ 2 — HD-20260509-010 R10 + HD-20260510-001 R10c)
+- ✅ **R7.4.D3.AUTO** 🆕 Verify auto-feed Kho QA nguồn TU_DONG (BR-FLOW-10) — HD DA_DUYET → tạo record Kho QA TU_DONG <a id="r7-4-d3-auto"></a>
+  - **Cần:** ≥1 HD `DA_DUYET` (✓ 3 — HD-010 R10 + HD-001 R10c + HD-006 R10d)
   - **Spec:** `02-thu-tu-module.md` line 781 (FR-13 BR-FLOW-10) + line 509 (SM-HOIDAP DA_DUYET hook)
-  - **Kết quả:** ❌ Lỗi R10c 2026-05-10 12:21:48 — re-verify sau dev claim fix, fresh HD-001 lifecycle 5/5 PASS, BR-FLOW-10 vẫn 0 TU_DONG. [workflow-test-report-r7-4-d3-auto.md](../output/qa-reports/round7-2026-05-06/workflow/kho-qa/workflow-test-report-r7-4-d3-auto.md)
-  - **Bug:** [bug-report-r7-4-d3-auto-br-flow-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/kho-qa/bug-report-r7-4-d3-auto-br-flow-10.md) — 0/1 đóng (BUG-KHOQA-AUTO-001 Open Major P1, dev fix lần 1 fail)
+  - **Kết quả:** PASS 6/6 R10d 2026-05-10 20:38:31 — fresh HD-006 trigger BR-FLOW-10, tạo QA-20260510-0005 TU_DONG sau dev fix lần 2. [workflow-test-report-r7-4-d3-auto.md](../output/qa-reports/round7-2026-05-06/workflow/kho-qa/workflow-test-report-r7-4-d3-auto.md)
+  - **Bug:** [Pass-bug-report-r7-4-d3-auto-br-flow-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/kho-qa/Pass-bug-report-r7-4-d3-auto-br-flow-10.md) — 1/1 đóng (BUG-KHOQA-AUTO-001 Major Closed-verified R10d sau dev fix lần 2)

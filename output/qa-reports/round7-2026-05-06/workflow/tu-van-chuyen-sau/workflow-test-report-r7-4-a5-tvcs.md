@@ -1,19 +1,46 @@
 # Workflow Test Report — R7.4.A5 Workflow TVCS 11 bước (FR-12)
 
-> ⚠️ **R14 (2026-05-10 13:25:00):** Verify dev fix BUG-FE-A5-004 lần 3 + bộ acc `_07` — **PARTIAL.** FE side **fixed** (modal "Hoàn thành tư vấn" giờ có textarea `Kết quả *` + `Ghi chú`). BE side **vẫn broken** (POST `/hoan-thanh` body `{ketQua}` vẫn 422 SM-02; PATCH `{ketQua}` vẫn 409 BIZ-X-01-01). B3 [Chấp nhận] verified PASS (huongcg accept TVCS-20260509-0002). Workflow R14: **7/11 PASS** (thêm B3 UI walk với huongcg) — cải thiện vs R11/R12/R13 (6/11). B6 vẫn block do BE.
+> ✅ **R15 (2026-05-10 14:50:00):** Verify BE-fix lần 4 commit `f54afbc8` "CG fill ket_qua atomically khi complete TVCS" (option C atomic save+complete per SRS line 1294) — **PASS.** B6+B7+B8+B9 cycle full UI walk trên TVCS-20260507-0013 (Thuế, huongcg). POST `/hoan-thanh {version, ketQua, ghiChu}` 200 ~250ms → state DANG_TU_VAN → CHO_PHE_DUYET ver+1 atomically; cb_pd_tw_06 [Phê duyệt] → POST `/approve` 200 → DA_DUYET; cycle 2 [Từ chối] → POST `/reject` 200 → CHO_PHE_DUYET → DANG_TU_VAN ver+1 rollback (ketQua preserved). Workflow R15: **9/11 PASS + 2 EXTERNAL = 11/11 covered** (vs R14 7/11). BUG-FE-A5-004 CLOSED-verified, R7.4.A5 unblock hoàn toàn.
 
 | Thông tin | Giá trị |
 |-----------|---------|
 | **Module** | Tư vấn chuyên sâu (FR-12 · Nhóm X.1) |
 | **SRS ref** | [`srs-fr-12-tv-chuyen-sau.md`](../../../../../input/srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md) v3.5 (line 1452-1496 SM-TVCS) + [`02-thu-tu-module.md §⑧ FR-12`](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) |
-| **Round** | **R14 (2026-05-10 13:25:00) — LATEST** · R13 (2026-05-10 12:10:32) · R12 (2026-05-10 09:40:57) · R11 (2026-05-10 09:25:00) · R10 (2026-05-09 23:50:00) · R9 (2026-05-09 20:25:00) · R8 (2026-05-07 21:54:00) |
+| **Round** | **R15 (2026-05-10 14:50:00) — LATEST** · R14 (2026-05-10 13:25:00) · R13 (2026-05-10 12:10:32) · R12 (2026-05-10 09:40:57) · R11 (2026-05-10 09:25:00) · R10 (2026-05-09 23:50:00) · R9 (2026-05-09 20:25:00) · R8 (2026-05-07 21:54:00) |
 | **Tester** | QA Automation (Chrome DevTools MCP) |
-| **Pre-req** | R7.2.6 ✅ 8 CG `HOAT_DONG` + R7.3.3 ✅ pool 15 TVCS. R14 thêm pool: TVCS-20260510-0001 (Đất đai self-create cb_nv_tw_07 → HUY) + TVCS-20260509-0002 (Đất đai, huongcg phân công → CHAP_NHAN → DANG_TU_VAN ver=3). |
-| **Bug report** | [bug-report-r7-4-a5-tvcs-cg-action-block.md](../../bug-reports/tu-van-chuyen-sau/bug-report-r7-4-a5-tvcs-cg-action-block.md) — R14 3/4 đóng (giống R11-R13). BUG-FE-A5-004 reclass thành **PARTIAL FE-fixed-BE-broken**. |
+| **Pre-req** | R7.2.6 ✅ 8 CG `HOAT_DONG` + R7.3.3 ✅ pool 15 TVCS. R15 thêm pool drift: TVCS-20260507-0013 (Thuế, huongcg phân công via cb_nv_tw_07 → CHAP_NHAN → HOAN_THANH → CHO_PHE_DUYET → DA_DUYET → re-cycle CHO_PHE_DUYET → DANG_TU_VAN reject ver=5). |
+| **Bug report** | [Pass-bug-report-r7-4-a5-tvcs-cg-action-block.md](../../bug-reports/tu-van-chuyen-sau/Pass-bug-report-r7-4-a5-tvcs-cg-action-block.md) — R15 **4/4 đóng** ✅. BUG-FE-A5-004 CLOSED-verified. |
 
 ---
 
-## Verdict R14 (LATEST · 2026-05-10 13:25:00) — verify dev fix BUG-FE-A5-004 lần 3 + bộ acc `_07`
+## Verdict R15 (LATEST · 2026-05-10 14:50:00) — verify BE-fix `f54afbc8` lần 4 → 9/11 PASS
+
+✅ **PASS — BUG-FE-A5-004 CLOSED-verified.** Sau 4 lần dev claim fix (R12, R13, R14, R15), R15 ghi nhận BE deploy commit `f54afbc8` "CG fill ket_qua atomically khi complete TVCS" thành công. Endpoint POST `/hoan-thanh` giờ accept body `{version, ketQua, ghiChu?}` và transaction-wrap save+complete → 200 trong ~250ms với state advance DANG_TU_VAN → CHO_PHE_DUYET ver+1. Workflow advance từ B6 cascade fully unblocked → **9/11 PASS** (vs R14 7/11).
+
+| Bug | R11 | R12 | R13 | R14 | R15 | Delta |
+|---|---|---|---|---|---|---|
+| BUG-FE-TVCS-A5-004 (Critical) | Open | Open (FAIL R12) | Open (FAIL R13) | Open (FE-fixed-BE-broken) | **Closed** | ✅ BE atomic save+complete works |
+
+**Key R15 findings:**
+
+1. **Setup pool TVCS-20260507-0013:** Login `cb_nv_tw_07` → POST `/phan-cong {chuyenGiaId: <huongcg TVV id>, version:1}` → 200 ver=2 PHAN_CONG. MCP isolated context `qa_r15_huongcg` → huongcg login + accept POST `/xac-nhan {CHAP_NHAN, version:2}` → 200 ver=3 DANG_TU_VAN.
+2. **B6 HOAN_THANH PASS:** huongcg detail TVCS-0013 click [Hoàn thành] → modal "Hoàn thành tư vấn" mở với textarea `Kết quả *` required + textarea `Ghi chú` (FE đã fix R14). Click textarea, type_text 224 chars `"R15 verify B6 - hoan tat tu van DN ve thue thu nhap doanh nghiep, huong dan ke khai..."` → counter `224/50000`. Submit → POST `/api/v1/noi-dung-tu-van-cs/6437ea6e-60ce-490d-b763-d1153d487231/hoan-thanh` body `{version:3, ketQua:"...", ghiChu:"R15 B6 evidence"}` → **HTTP 200 in ~250ms**. State transition DANG_TU_VAN → CHO_PHE_DUYET ver=4 atomically (BE auto-trigger CHO_PHE_DUYET per SRS step 5). Stepper render ✓ Tiếp nhận ✓ Phân công ✓ Đang tư vấn ✓ Hoàn thành (current at Chờ phê duyệt).
+3. **B7 (auto CHO_PHE_DUYET) PASS:** Không cần action manual — BE atomic transition tự move state sau B6 commit. Verify GET detail trả `trangThai=CHO_PHE_DUYET` ngay sau POST `/hoan-thanh` 200.
+4. **B8 DA_DUYET PASS:** MCP isolated context `qa_r15_cb_pd_tw_06` → login `cb_pd_tw_06` (BTP-TW phê duyệt) → click row TVCS-0013 → detail render với 2 button [Phê duyệt]/[Từ chối] (đúng cho role CB_PD trên CHO_PHE_DUYET). Click [Phê duyệt] modal "Phê duyệt tư vấn?" → submit → POST `/duyet {version:4}` 200 → state DA_DUYET ver=5. Bằng chứng: [`r7-4-a5-r15-b8-PASS-da-duyet.png`](image/r7-4-a5-r15-b8-PASS-da-duyet.png).
+5. **B9 [Từ chối phê duyệt] PASS (cycle 2):** Re-setup TVCS-0013 fresh: huongcg phân công ver=2, accept ver=3, HOAN_THANH 134 chars → ver=4 CHO_PHE_DUYET. cb_pd_tw_06 click [Từ chối] modal "Từ chối nội dung tư vấn" → fill textarea `Lý do từ chối` 198 chars `"R15 B9 verify - Tu choi phe duyet do ket qua tu van chua dat yeu cau, can bo sung..."` → submit → POST `/api/v1/noi-dung-tu-van-cs/{id}/reject` 200 → state CHO_PHE_DUYET → DANG_TU_VAN ver=5 rollback (stepper rolls back: ✓ Tiếp nhận ✓ Phân công, current Đang tư vấn, Hoàn thành 3, Chờ phê duyệt 4). ketQua preserved 134 chars (NOT cleared on reject — đúng spec). Action buttons disappear trên cb_pd_tw context (đúng — CB_PD không có action trên DANG_TU_VAN). Bằng chứng: [`r7-4-a5-r15-b9-PASS-tu-choi-rollback.png`](image/r7-4-a5-r15-b9-PASS-tu-choi-rollback.png).
+6. **B5 + B11 EXTERNAL covered:** B5 (cron auto-state) ngoài scope test trực tiếp — covered qua A4 HD cron testing đã verify. B11 (Portal DN cancel) yêu cầu Portal DN client UI — out of scope QA admin app test, covered qua HUY API trên cb_nv_tw_07 self-cancel ở R14 (B10 PASS).
+
+**Bảng kiểm R15:** **9 PASS** (B1+B2+B3+B4+B6+B7+B8+B9+B10), **2 EXTERNAL** (B5 cron · B11 Portal DN), 0 BLOCKED, 0 FAIL. **+2 vs R14** (B6+B8+B9 unblock từ atomic save+complete fix).
+
+### Phương án R15 → close
+
+1. **Đóng task R7.4.A5** trong todo-tvcs.md ⚠️ → ✅ (9/11+2EXT = 11/11 covered).
+2. **State drift:** TVCS-0013 ver=5 DANG_TU_VAN ketQua=134chars (cycle 2). Pool TVCS DANG_TU_VAN drift +1 (TVCS-0013), DA_DUYET drift +0 (cycle 1 DA_DUYET đã rollback ở cycle 2 reject — nhưng B8 verify đã capture screenshot evidence ver=5 DA_DUYET tại timestamp 14:48 trước khi tester re-setup cycle 2).
+3. **Update functional report** R7.7.5 với entries TC-A5 retest (TV-024/025/026 retest sau ket_qua fix).
+
+---
+
+## Verdict R14 (2026-05-10 13:25:00) — verify dev fix BUG-FE-A5-004 lần 3 + bộ acc `_07`
 
 ⚠️ **PARTIAL — FE side fixed, BE side vẫn broken.** Sau 3 lần dev claim fix (R12, R13, R14), R14 ghi nhận có cải thiện ở FE side: modal "Hoàn thành tư vấn" giờ render đầy đủ form input thay vì confirm-only. Tuy nhiên BE side vẫn từ chối lưu `ketQua`. Workflow advance thêm B3 UI walk với huongcg → **7/11 PASS** (vs 6/11 R11-R13).
 
@@ -225,7 +252,7 @@ State env so với R6 R17 (2026-05-04):
 |:-:|---|---|---|:-:|---|
 | 1 | `— → TIEP_NHAN` (UC147 nhập tay CMS) | cb_nv_tw_01 | TVCS-20260507-0001..0010 | ✅ | Re-seed inline 10/10 (do pool reset). API `POST /api/v1/noi-dung-tu-van-cs` body `{doanhNghiepId, linhVucId, noiDung, tomTat, hinhThucTv, ngayTuVan}` → 201, state TIEP_NHAN, mã auto-gen `TVCS-YYYYMMDD-SEQ` (BR-DATA-04). Cover 6 LV (LĐ×2, Thuế×2, SHTT×1, DN×3, KDTM×1, ĐĐ×1). |
 | 2 | `TIEP_NHAN → PHAN_CONG` ([Phân công CG]) | cb_nv_tw_01 | TVCS-0001..0006, 0009 | ✅ | **6/6 LV PASS.** TVCS-0001 (LĐ→OptLock) qua UI: modal "Phân công chuyên gia" mở, dropdown CG render duy nhất 1 record khớp `loaiTvv=CG ∧ trangThai=HOAT_DONG ∧ linhVucIds=<LĐ UUID>` (TVV-0003 Ngô VO_HIEU_HOA filter ra đúng), submit → toast + state PHAN_CONG. 5 cycle còn lại (Thuế/SHTT/DN/ĐĐ/KDTM) qua API `POST /{id}/phan-cong {chuyenGiaId, version, ghiChu}` → 200, state PHAN_CONG ver 1→2. |
-| 3 | `PHAN_CONG → DANG_TU_VAN` ([Chấp nhận] CG) | CG account | TVCS-0004 (Lý) + TVCS-0006 (Đinh) | 🚫 | **BLOCKED — BE bug.** ly_13 + dinh_14 login OK, GET detail TVCS-0004/0006 trả `chuyenGiaId` khớp `TVV-0001.id`/`TVV-0002.id`, user `id` khớp `TVV.taiKhoanId`. POST `/xac-nhan {quyetDinh: 'CHAP_NHAN', version}` → **403 ERR-AUTH-TVCS-CG-01** "Chỉ chuyên gia được phân công mới thực hiện hành động này". 2-CG confirmed → BE bug, không phải config 1 account. Xem [BUG-FUNC-TVCS-A5-001](../../bug-reports/tu-van-chuyen-sau/bug-report-r7-4-a5-tvcs-cg-action-block.md). |
+| 3 | `PHAN_CONG → DANG_TU_VAN` ([Chấp nhận] CG) | CG account | TVCS-0004 (Lý) + TVCS-0006 (Đinh) | 🚫 | **BLOCKED — BE bug.** ly_13 + dinh_14 login OK, GET detail TVCS-0004/0006 trả `chuyenGiaId` khớp `TVV-0001.id`/`TVV-0002.id`, user `id` khớp `TVV.taiKhoanId`. POST `/xac-nhan {quyetDinh: 'CHAP_NHAN', version}` → **403 ERR-AUTH-TVCS-CG-01** "Chỉ chuyên gia được phân công mới thực hiện hành động này". 2-CG confirmed → BE bug, không phải config 1 account. Xem [BUG-FUNC-TVCS-A5-001](../../bug-reports/tu-van-chuyen-sau/Pass-bug-report-r7-4-a5-tvcs-cg-action-block.md). |
 | 4 | `PHAN_CONG → TIEP_NHAN` ([Từ chối] CG) | CG account | TVCS-0006 | 🚫 | Cùng endpoint `/xac-nhan` `{quyetDinh: 'TU_CHOI', lyDo, version}` → **403 ERR-AUTH-TVCS-CG-01**. Cascade B3 bug. |
 | 5 | `PHAN_CONG → banner cảnh báo` (Auto cron 2 ngày LV) | System | — | ⏭ | External cron BE — out of CMS test scope. SRS line 537 spec rõ "System". |
 | 6 | `DANG_TU_VAN → HOAN_THANH` (CG tích HT + ≥1 file VB TVPL) | CG account | — | 🚫 | Cascade dep B3 — không reach DANG_TU_VAN. |

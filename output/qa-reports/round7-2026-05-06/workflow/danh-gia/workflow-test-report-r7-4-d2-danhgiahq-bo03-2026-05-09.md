@@ -1,7 +1,7 @@
 # Workflow Test Report — Đánh giá Hiệu quả HTPLDN (FR-08)
 
 > **Module:** FR-08 Đánh giá Hiệu quả (Nhóm VI) · **SRS:** [`srs-fr-08-danh-gia.md`](../../../../../input/srs-v3/srs-fr-08-danh-gia.md) — FR-VI-01..09 + SCR-VI-01 + SM-DANHGIA · **Round:** R7.4.D2 · **Date:** 2026-05-09 · **Tester:** QA Automation
-> **Bug:** [`bug-report-flow-danhgia.md`](../../bug-reports/danh-gia/bug-report-flow-danhgia.md) — 7/8 đóng (R10 2026-05-10 11:48:00 thêm BUG-FUNC-DG-008 Major Open)
+> **Bug:** [`bug-report-flow-danhgia.md`](../../bug-reports/danh-gia/bug-report-flow-danhgia.md) — 7/9 đóng (R10 2026-05-10 11:48:00 BUG-FUNC-DG-008 Open + R10b 2026-05-10 20:42:00 BUG-FUNC-DG-009 Major Open UI HUY missing)
 > **Template used:** [`workflow-test-report-template.md`](../../../../template/workflow-test-report-template.md)
 > **Output folder:** `output/qa-reports/round7-2026-05-06/workflow/danh-gia/`
 > **Evidence folder:** [`evidence-r7-4-d2-2026-05-09/`](evidence-r7-4-d2-2026-05-09/)

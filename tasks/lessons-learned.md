@@ -326,3 +326,39 @@ File ghi lại vấn đề thực tế gặp khi chạy QA + bài học áp dụ
 
 ---
 
+
+## 2026-05-10 — BE flag conditional theo creation method (UI form vs API direct) — false-positive 4 round trên BUG-MAIL-FL-001
+
+**Vấn đề:** BUG-MAIL-FL-001 (Email promise force-change MK lần đầu nhưng implementation không enforce) bị flag Open across 4 round R7.1-R7.3 do tester dùng path API direct tạo TK (`POST /api/v1/tai-khoan` + `PATCH /trang-thai {hanhDong:KICH_HOAT}`) thay vì UI form click chain. R7.4 retest qua UI form → ✅ PASS clean.
+
+**Root cause:** BE chỉ set flag `mustChangePassword: true` cho TK tạo qua UI form. Direct API skip logic đó → login response không có flag → FE không render modal "Đặt mật khẩu mới" → tester kết luận FAIL nhầm. Implementation thực ra đã đúng từ đầu, dev fix correct.
+
+**Bài học:**
+
+1. **Mọi bug auth/first-login/notification/onboarding flow phải UI chain verify, KHÔNG shortcut qua API.** BE có thể có flag conditional theo creation method (vd: `created_via_ui` metadata, request header, trigger logic in FE controller). API direct = bypass logic = false negative.
+
+2. **Trigger force UI verify** (cho R8+ và sau):
+   - Bug liên quan first-login / change-password / activate flow.
+   - Bug liên quan email content vs implementation behavior.
+   - Bug liên quan FE modal blocking / route guard.
+   - Bug có user-facing message ("hệ thống sẽ yêu cầu...").
+
+3. **API chỉ dùng để inspect (network tab) hoặc verify BE chấp nhận khi UI broken** (vd RESET MK R7.7.8c — UI thiếu form `/auth/forgot-password` nên fallback API là correct, đã ghi rõ trong bug). KHÔNG dùng API để TẠO TK rồi test login flow.
+
+4. **Discipline check trước retest:** tự hỏi 3 câu trước khi mark FAIL:
+   - "Tôi tạo TK/dữ liệu qua đúng flow user thực sẽ dùng không?"
+   - "BE có thể đặt flag/metadata phụ thuộc creation context không?"
+   - "Manual test trên UI có cho kết quả khác API test không?"
+
+5. **Anti-pattern điển hình tôi đã làm:**
+   - Lý do: API nhanh hơn UI form click chain (~3s vs ~30s), test scale hơn.
+   - Hậu quả: 4 round false-positive, dev mistakenly tin bug còn open, user đã phải nhắc "manual on system thấy okie rồi".
+
+6. **Bug-report disclosure khi phát hiện tester error:** thêm section `## ⚠️ Tester Error Disclosure` đầu bug-report ghi rõ round nào INVALID + nguyên nhân + lessons-learned link. KHÔNG ẩn / KHÔNG xóa retest cũ — giữ lại để minh bạch process.
+
+**Reference:**
+- Memory rule cũ: `feedback_test_method_ui_only` (2026-05-07) — tôi vi phạm khi retest BUG-MAIL-FL-001 R7.1-R7.3.
+- Bug case: [`Pass-bug-report-mail-first-login-promise-not-enforced.md`](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/Pass-bug-report-mail-first-login-promise-not-enforced.md).
+- Audit kết quả 2026-05-10: scan 22 bug-report R7 → CHỈ BUG-MAIL-FL-001 có pattern này. Các bug API-direct khác (RESET MK, NHT, JWT revoke, TVCS, chi-tra) đều correct context (UI broken / data verification / BE behavior bug).
+
+---

@@ -15,11 +15,21 @@
 
 ## ~~BUG-MAIL-FL-001~~ [CLOSED] — Email promise force-change MK lần đầu, implementation cho login thẳng /dashboard
 
-> **Re-test:** 2026-05-10 15:35:00 R7.4 — ✅ PASS (Closed-verified). Tạo TK fresh `qtht_14` (UUID `ebcbcba4-f210-485d-83b7-6d0a49e8bb26`) qua **UI form click chain** (Tài khoản → Thêm mới → fill 4 trường → chọn Loại/Đơn vị/Vai trò → Tạo tài khoản). Login `qtht_14 / F@CcTBS%Y3Rq6d` qua isolated context fresh `qa_qtht_14_first_login_2026_05_10`. (1) `POST /auth/login` 200 trả `{otpToken: "", mustChangePassword: true, changePasswordToken: "d2e82f16-43f7-4c89-8776-1925024429b5", maskedEmail: "qth***@htpldn.test", message: "Bạn cần đổi mật khẩu trong lần đăng nhập đầu tiên."}` — BE skip OTP, trả flag `mustChangePassword` + token. (2) FE render modal blocking "Đặt mật khẩu mới" với form Mật khẩu mới + Nhập lại + button "Xác nhận và đăng nhập". Modal text: "Đây là lần đăng nhập đầu tiên. Vì lý do bảo mật, bạn cần đổi mật khẩu tạm đã gửi tới qth***@htpldn.test." (3) Reload page → kick về `/login`, KHÔNG cấp accessToken trước khi đổi MK → enforcement đúng. Email content vẫn giữ nguyên câu hứa, implementation đã enforce khớp. Bằng chứng: ![retest-pass](image/bug-mail-first-login-001-r7-4-pass-modal-uiform.png)
+> ## ⚠️ Tester Error Disclosure (2026-05-10 15:50:00)
 >
-> **Re-test:** 2026-05-10 15:08:00 R7.3 — ❌ FAIL với path API-direct. Tạo TK `qtht_13` (UUID `954b1498-3f25-487e-a16a-ec15ff199d23`) qua API `POST /api/v1/tai-khoan` (không qua UI form). Login → OTP `666666` → `/dashboard` thẳng, KHÔNG có modal. **Lý do:** path API-direct bypass logic FE form trigger flag `mustChangePassword` BE. Đây là path chỉ tester dùng (không user-facing). Production luôn dùng UI form (R7.4 verified PASS). KHÔNG ảnh hưởng kết luận đóng bug.
+> **R7.1 Open + R7.2/R7.3 Re-test FAIL = false negative do tester chọn sai test method.** Cả 3 round dùng path `POST /api/v1/tai-khoan` (API direct) tạo TK rồi `PATCH /trang-thai {hanhDong:KICH_HOAT}` activate, bỏ qua UI form click chain. BE chỉ set flag `mustChangePassword` cho TK tạo qua UI form (logic FE-controlled), API direct skip flag → login response không có `mustChangePassword` → FE không render modal → tester kết luận FAIL nhầm.
 >
-> **Re-test:** 2026-05-10 12:25:30 R7.2 — ❌ FAIL (cùng path API-direct với R7.3). Tạo TK `qtht_11` (UUID `77d12061-68a9-42aa-8ea1-4f93f0e1ab26`) qua API + `PATCH /trang-thai`. Email vẫn còn câu hứa, login → /dashboard thẳng, không modal. Cùng nguyên nhân R7.3.
+> **Dev fix thực sự đã apply từ trước R7.1.** Manual smoke trên hệ thống (user xác nhận) + retest R7.4 qua UI form đều PASS. Bug đáng lẽ Closed sớm hơn nếu tester theo đúng `feedback_test_method_ui_only` (memory rule 2026-05-07: "Test method BẮT BUỘC UI browse, KHÔNG dùng API direct để pass").
+>
+> **Lessons recorded:** [`tasks/lessons-learned.md`](../../../../../tasks/lessons-learned.md) entry 2026-05-10 — BE flag conditional theo creation method, mọi bug auth/first-login/notification phải UI chain verify.
+
+> **Re-test:** 2026-05-10 15:35:00 R7.4 — ✅ PASS (Closed-verified, valid test method). Tạo TK fresh `qtht_14` (UUID `ebcbcba4-f210-485d-83b7-6d0a49e8bb26`) qua **UI form click chain** (Tài khoản → Thêm mới → fill 4 trường → chọn Loại/Đơn vị/Vai trò → Tạo tài khoản). Login `qtht_14 / F@CcTBS%Y3Rq6d` qua isolated context fresh `qa_qtht_14_first_login_2026_05_10`. (1) `POST /auth/login` 200 trả `{otpToken: "", mustChangePassword: true, changePasswordToken: "d2e82f16-43f7-4c89-8776-1925024429b5", maskedEmail: "qth***@htpldn.test", message: "Bạn cần đổi mật khẩu trong lần đăng nhập đầu tiên."}` — BE skip OTP, trả flag `mustChangePassword` + token. (2) FE render modal blocking "Đặt mật khẩu mới" với form Mật khẩu mới + Nhập lại + button "Xác nhận và đăng nhập". Modal text: "Đây là lần đăng nhập đầu tiên. Vì lý do bảo mật, bạn cần đổi mật khẩu tạm đã gửi tới qth***@htpldn.test." (3) Reload page → kick về `/login`, KHÔNG cấp accessToken trước khi đổi MK → enforcement đúng. Email content vẫn giữ nguyên câu hứa, implementation đã enforce khớp. Bằng chứng: ![retest-pass](image/bug-mail-first-login-001-r7-4-pass-modal-uiform.png)
+>
+> **Re-test:** 2026-05-10 15:08:00 R7.3 — ❌ FAIL **(INVALID — tester error)**. Tạo TK `qtht_13` qua API direct, không qua UI form. Bypass BE flag logic. Conclusion FAIL không phản ánh state thực của implementation.
+>
+> **Re-test:** 2026-05-10 12:25:30 R7.2 — ❌ FAIL **(INVALID — tester error)**. Tạo TK `qtht_11` qua API + `PATCH /trang-thai`. Cùng nguyên nhân R7.3.
+>
+> **Original log (R7.1):** ❌ FAIL **(INVALID — tester error)**. Cùng pattern API direct.
 
 ### 1. Mô tả
 

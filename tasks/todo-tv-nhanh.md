@@ -27,14 +27,14 @@
 
 - ✅ **R7.6.2** 🔄 Workflow TV nhanh (5 trạng thái) — pool 50 đủ data cover 6 state <a id="r7-6-2"></a>
   - **Kết quả:** ✅ PASS B1-B4 UI+API. B5 = external sync (mTLS Cổng PLQG đúng spec FR-X.2-05). R10 UI re-verify pool stable. [workflow-test-report-r7-6-2-tv-nhanh.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-nhanh/workflow-test-report-r7-6-2-tv-nhanh.md)
-  - **Bug:** [bug-report-r7-6-2-tvn-create-block.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-nhanh/bug-report-r7-6-2-tvn-create-block.md) — 0/2 đóng (test infra dep, đúng spec mTLS).
+  - **Bug:** [Pass-bug-report-r7-6-2-tvn-create-block.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-nhanh/Pass-bug-report-r7-6-2-tvn-create-block.md) — 2/2 đóng R12 (CMS proxy create + danh-gia deployed).
 
 - ⏳ **R7.6.3** 🔄 Workflow TV nhanh PUBLIC (DN qua Cổng PLQG) `[need: phiên TVN cong_khai + Cổng PLQG endpoint]` <a id="r7-6-3"></a>
   - **Cần:** ≥1 phiên TVN `cong_khai=1` (✗ chưa verify) · Cổng PLQG endpoint deploy
 
-- ⚠️ **R7.7.11** 🔄 TV nhanh 44 TC v3.5 (R8 + R9 + R10 flip TVN-017/018) `[~70% — 14/20 PASS, 5 BLOCKED + 24 chờ]` <a id="r7-7-11"></a>
-  - **Kết quả:** PASS 14/20 (70%) R10. R10 17:18 flip TVN-017/018 sau pool 50 unblock. [functional-r7-7-11](../output/qa-reports/round7-2026-05-06/functional/tu-van-nhanh/functional-test-report-r7-7-11-tvn.md)
-  - **Bug:** [bug-report-r7-7-11-tvn.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-nhanh/bug-report-r7-7-11-tvn.md) — 1/6 đóng (001 Critical · 002 Major · 003 Minor · ~~004 Major~~ ✅R10 · 005 Minor · **006 Minor R10**)
+- ⚠️ **R7.7.11** 🔄 TV nhanh 44 TC v3.5 (R8→R13) `[~89% — 31/35 PASS, 5 BLOCKED + 7 defer + 3 bug Open]` <a id="r7-7-11"></a>
+  - **Kết quả:** PASS 31/35 (89%) R13. R13 22:00 +8 PASS TVN-005/006/034/035/036/040/041/042. [functional-r7-7-11](../output/qa-reports/round7-2026-05-06/functional/tu-van-nhanh/functional-test-report-r7-7-11-tvn.md)
+  - **Bug:** [bug-report-r7-7-11-tvn.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-nhanh/bug-report-r7-7-11-tvn.md) — 4/7 đóng (001 Major · ~~002~~✅R12 · ~~003~~✅R12 · ~~004~~✅R10 · 005 Minor partial · ~~006~~✅R12 · 007 Major R11)
 
 - ✅ **R7.E4** 🔄 TV nhanh (FR-13.A) — ≥1 phiên tồn tại <a id="r7-e4"></a>
   - **Kết quả:** PASS 50 phiên cover 6 state SM-TVNHANH + 2 enum kênh (TV_NHANH/TV_THU_CONG). [verify-checklist-r7-e4-tv-nhanh.md](../output/qa-reports/round7-2026-05-06/seed/verify-checklist-r7-e4-tv-nhanh.md)
