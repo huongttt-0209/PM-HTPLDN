@@ -78,6 +78,17 @@ Phát hiện **1** lỗi khi seed Tết Nguyên đán Bính Ngọ qua UI Tab Ng�
 > **Lesson learned (memory candidate):** Sau dev claim FE fix → BẮT BUỘC clear cache toàn diện (caches.delete + SW unregister + hard reload + fresh login) trước khi conclude FAIL. Pattern "FE silent fail" với input.value persist + no JS error + no network request thường là FE bundle cũ bị cache thay vì bug FE thực sự.
 >
 > **Status:** **Closed-verified R8 lần 8 (2026-05-09 11:18)**. Evidence: [bug-ngay-le-001-CLOSED-lan-8-2026-05-09.png](bug-ngay-le-001-CLOSED-lan-8-2026-05-09.png).
+>
+> **Re-verify 2026-05-10 R8 lần 9 (regression check 1 ngày sau closed):** ✅ **VẪN CLOSED — Bug không re-open.** Account qtht_02 fresh isolated context (cache clear toàn diện + service worker unregister + localStorage/sessionStorage clear + BE logout + hard reload `ignoreCache:true`). Nav `/quan-tri/cau-hinh?tab=ngay-le` → table 6/6 (4 pre-existing + Tết NĐ R7 + record R8 lần 8 21/05/2026). Click [+ Thêm mới] → drawer mở. Click input Ngày + type_text `22/05/2026` + Enter (input.value = `22/05/2026`). Fill Tên `QA verify BUG-NGAY-LE-001 R8 lần 9 (2026-05-10)` + Ghi chú. Loại default "Ngày lễ". Click [Đồng ý].
+>
+> **Result:** ✅
+> - Network: `POST /api/v1/ngay-le` → **201 Created** ✅ (reqid=388)
+> - Network: `GET /api/v1/ngay-le?nam=2026` → 200 (auto reload) ✅ (reqid=389)
+> - Drawer: **đóng tự động** ✅
+> - Table: render **7/7 mục** (record mới row 6: `22/05/2026 — QA verify BUG-NGAY-LE-001 R8 lần 9 (2026-05-10)`) ✅
+> - Console: 0 error / 0 warn ✅
+>
+> **Conclusion:** Fix dev lần 5 stable, bug FE submit handler không regression sau 1 ngày. Confirm rename `Pass-` prefix là chính xác. Evidence: [bug-ngay-le-001-reverify-2026-05-10-still-closed.png](bug-ngay-le-001-reverify-2026-05-10-still-closed.png).
 
 ---
 

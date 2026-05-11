@@ -26,7 +26,9 @@ Phát hiện **1** lỗi liên quan logout flow qua UI menu trong quá trình te
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-FR21-LOGOUT-001 | Major | P1 | Workflow | R7.2.9b transition giữa account | `FR-VIII-21 §Processing Bước 2-3 + §Postconditions + §Acceptance Criteria` | Click "Đăng xuất" UI menu KHÔNG gọi `POST /api/v1/auth/logout` — BE không có cơ hội blacklist JWT token + ghi audit log "LOGOUT" | Open |
+| ~~BUG-FR21-LOGOUT-001~~ | Major | P1 | Workflow | R7.2.9b transition giữa account | `FR-VIII-21 §Processing Bước 2-3 + §Postconditions + §Acceptance Criteria` | ~~Click "Đăng xuất" UI menu KHÔNG gọi `POST /api/v1/auth/logout` — BE không có cơ hội blacklist JWT token + ghi audit log "LOGOUT"~~ | **Closed-verified 2026-05-10** |
+
+> **Re-verify 2026-05-10 (sau dev fix):** ✅ **CLOSED.** Account `cb_nv_tw_02` logged in → click avatar dropdown (uid 15_29) → menu mở 3 item ("Hồ sơ cá nhân"/"Đổi mật khẩu"/"Đăng xuất") → click "Đăng xuất" (uid 16_3). Network log `includePreservedRequests=true` capture **`reqid=248 POST /api/v1/auth/logout [200]`** ✅ trước khi FE redirect `/login` + clear `auth-store`. BE đã có cơ hội thực hiện FR-VIII-21 §Processing Bước 2 (blacklist JWT) + Bước 3 (audit log LOGOUT). Sau đó GET `/auth/me` → 401 (session đã invalid BE-side).
 
 ---
 

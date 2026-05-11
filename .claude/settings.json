@@ -39,6 +39,9 @@
       "PowerShell(Get-CimInstance Win32_Process -Filter \"Name='chrome.exe'\" | Select-Object ProcessId, @{N='Cmd';E={$_.CommandLine.Substring\\(0, [Math]::Min\\(300, $_.CommandLine.Length\\)\\)}} | Format-Table -AutoSize -Wrap)",
       "PowerShell($mcpProc = Get-CimInstance Win32_Process -Filter \"Name='chrome.exe'\"; foreach \\($p in $mcpProc\\) { if \\($p.CommandLine -and $p.CommandLine.Contains\\('chrome-devtools-mcp'\\)\\) { Write-Host \"Found PID=$\\($p.ProcessId\\) parent=$\\($p.ParentProcessId\\)\" } })",
       "PowerShell(Stop-Process -Id 11660 -Force -ErrorAction SilentlyContinue; Start-Sleep -Seconds 2; Get-Process -Name chrome -ErrorAction SilentlyContinue | Where-Object { $_.Path -and $_.MainWindowTitle -eq \"\" } | Select-Object Id, MainWindowTitle | Select-Object -First 5)"
+    ],
+    "additionalDirectories": [
+      "d:\\Dopai\\PM+HTPLDN_05_05_2025\\PM-HTPLDN\\.claude\\hooks"
     ]
   },
   "hooks": {

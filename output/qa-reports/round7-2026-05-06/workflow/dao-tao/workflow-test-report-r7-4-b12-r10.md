@@ -4,13 +4,15 @@
 > **Test mode:** UI click thực tế qua MCP với DatePicker workaround `type+Enter` (per memory `reference_antd_picker_workaround`).
 > **Trigger:** User explicit "chạy R7.4.B12" sau R7.3.13 R10 unblock DatePicker workaround.
 
+> **🔄 R10 21:30 ADDENDUM (Re-verify):** ALL 4 BUG candidate (BUG-LH-CONFLICT-01 + VAL-01/02/03) đã ĐÓNG sau commit `af8276fd` — re-probe 6 case POST `/lich-hocs` đều PASS spec. Task R7.4.B12 hiện **8/8 PASS** + flip ✅. Phần "PARTIAL 7/8" + "BUG candidate Open" + "task icon ⚠️" trong văn bản dưới là **history snapshot 02:45**, không phải state hiện tại. Bug report rename `Pass-bug-report-r7-4-b12-lich-hoc-validation.md` 4/4 đóng — xem chi tiết Re-test note ở đó.
+
 ---
 
 ## 🎯 Tóm tắt nhanh (cho PM/BA)
 
-**Kết quả: ⚠️ PARTIAL 7/8 — Bước 1-6 + 8 PASS clean (CRUD UI Create/Read/Update/Delete OK), Bước 7 conflict validation FAIL (BE 201 accept overlap thay vì 409/422).** R9 báo "chưa thấy Edit/Delete icons" SAI — icons có sẵn từ đầu, R9 chỉ chưa scroll/snapshot toàn row.
+**Kết quả R10 21:30: ✅ FULL PASS 8/8** — R10 02:45 ban đầu PARTIAL 7/8 (Bước 7 conflict FAIL), sau commit `af8276fd` BE thêm validation guard → R10 21:30 re-probe PASS toàn bộ. R9 báo "chưa thấy Edit/Delete icons" SAI — icons có sẵn từ đầu, R9 chỉ chưa scroll/snapshot toàn row.
 
-**1 BUG candidate Major mới phát hiện (Bước 7):** BE KHÔNG validate conflict — chấp nhận 2 buổi học cùng ngày overlap thời gian (POST 201). Bug logged + Open. Vì vậy task icon ⚠️ (không ✅) — chờ dev fix BUG-LH-CONFLICT-01 trước khi flip ✅.
+**~~1 BUG candidate Major (Bước 7)~~ → đã CLOSED R10 21:30** (commit `af8276fd` "Validate conflict + LH-VAL-01/02/03"; xem [Pass-bug-report-r7-4-b12-lich-hoc-validation.md](../../bug-reports/dao-tao/Pass-bug-report-r7-4-b12-lich-hoc-validation.md) 4/4 đóng). Task icon flip ⚠️ → ✅.
 
 | # | Bước test | Status | Endpoint |
 |:-:|---|:-:|---|
@@ -20,14 +22,14 @@
 | 4 | Verify list hiển thị buổi mới (4 records) | ✅ | `GET .../lich-hocs` 200 |
 | 5 | Click icon Edit row → modal "Sửa buổi học" data pre-filled → update ghiChu → Lưu | ✅ | `PATCH /lich-hocs/{id}` 200 (flat route) |
 | 6 | Click icon Delete row → modal "Xác nhận xóa" hiển thị ngày giờ → Xóa | ✅ | `DELETE /lich-hocs/{id}` 204 (flat route) |
-| 7 | **Conflict validate:** Tạo buổi 15/06 09:00-10:30 trùng overlap buổi 1 (15/06 08:30-11:30) | ❌ **BUG** | `POST` returned **201 Created** — no conflict check |
+| 7 | **Conflict validate:** Tạo buổi 15/06 09:00-10:30 trùng overlap buổi 1 (15/06 08:30-11:30) | ✅ R10 21:30 | R10 02:45: ❌ POST 201 (no check). R10 21:30: ✅ POST 409 `ERR-BIZ-III-23-01` sau commit `af8276fd` |
 | 8 | Verify list final + cleanup pollution | ✅ | DELETE 204 cleanup OK |
 
-**Ý nghĩa team:**
+**Ý nghĩa team (R10 21:30 update):**
 - ✅ FE+BE LICH_HOC CRUD UI hoàn chỉnh (Create/Read/Update/Delete với modal confirm + data pre-fill).
 - ✅ Conditional render đúng: chọn "Trực tuyến" → field "Địa điểm" → "Link Zoom" (UX rõ).
-- ⚠️ Cần dev BE thêm conflict validation (BR-LH suspected): chặn 2 buổi cùng ngày + overlap time của cùng KH.
-- ⚠️ Cộng dồn từ R7.3.13 R10 → tổng 4 BUG candidate BE LICH_HOC validation: ERR-LH-01/03/04 (R7.3.13) + new conflict (R7.4.B12).
+- ✅ ~~Cần dev BE thêm conflict validation~~ → đã FIX commit `af8276fd` (R10 21:30 verify): chặn 2 buổi cùng ngày + overlap time của cùng KH PASS 409.
+- ✅ ~~Cộng dồn từ R7.3.13 R10 → tổng 4 BUG candidate~~ → ALL 4 closed R10 21:30: ERR-LH-01/03/04 (R7.3.13) + conflict (R7.4.B12) — xem [Pass-bug-report-r7-4-b12-lich-hoc-validation.md](../../bug-reports/dao-tao/Pass-bug-report-r7-4-b12-lich-hoc-validation.md) 4/4 đóng.
 
 ---
 
@@ -92,7 +94,7 @@ UX modal xóa hiển thị ngày + giờ rõ — confirm before destructive acti
 4. List hiển thị 2 buổi cùng ngày 15/06: 08:30-11:30 + 09:00-10:30 overlap visible
 ```
 
-→ **BUG candidate Major:** BE KHÔNG validate conflict overlap. Vi phạm BR-LH conflict prevention.
+→ **R10 02:45:** BUG candidate Major — BE KHÔNG validate conflict overlap. **R10 21:30 update:** ✅ Closed (commit `af8276fd`). Re-probe POST overlap → 409 `ERR-BIZ-III-23-01 "Buổi học bị trùng giờ với buổi đã có"` đúng spec.
 
 **Cleanup R10:** Conflict record `1ed24f51` (giả định ID) đã DELETE 204 OK qua UI Delete icon → list trở về 3 records baseline.
 
@@ -124,18 +126,18 @@ c2ee1c96: 2026-06-16 14:00-17:00 TRUC_TUYEN  v=1
 
 ---
 
-## ⚠️ BUG candidates — LICH_HOC validation gaps
+## ✅ BUG candidates — LICH_HOC validation gaps (ALL Closed R10 21:30)
 
-Cộng dồn R7.3.13 R10 + R7.4.B12 R10:
+Cộng dồn R7.3.13 R10 + R7.4.B12 R10. R10 02:45 ban đầu 4/4 Open; R10 21:30 sau commit `af8276fd` → 4/4 Closed-verified:
 
 | ID | Severity | Description | Status |
 |---|:-:|---|:-:|
-| BUG-LH-CONFLICT-01 | **Major** | BE KHÔNG validate conflict overlap — 2 buổi cùng ngày + overlap time của cùng KH được create thành công | ❌ Open |
-| BUG-LH-VAL-01 | Minor | TRUC_TUYEN thiếu `linkZoom` → BE trả `ERR-SYS-00-00-01` (500 generic) thay vì 422 ERR-LH-03 | ❌ Open (R7.3.13) |
-| BUG-LH-VAL-02 | Minor | TRUC_TIEP thiếu `diaDiem` → BE trả `ERR-SYS-00-00-01` (500 generic) thay vì 422 ERR-LH-04 | ❌ Open (R7.3.13) |
-| BUG-LH-VAL-03 | Major | `ngayHoc` ngoài khoảng KH (KH-002 BĐ 01/06 - KT 03/06, ngayHoc=2025-01-01) → BE 200 accept | ❌ Open (R7.3.13) |
+| ~~BUG-LH-CONFLICT-01~~ | **Major** | BE KHÔNG validate conflict overlap — 2 buổi cùng ngày + overlap time của cùng KH được create thành công | ✅ **Closed R10 21:30** (commit `af8276fd` → 409 `ERR-BIZ-III-23-01`) |
+| ~~BUG-LH-VAL-01~~ | Minor | TRUC_TUYEN thiếu `linkZoom` → BE trả `ERR-SYS-00-00-01` (500 generic) thay vì 422 ERR-LH-03 | ✅ **Closed R10 21:30** (commit `af8276fd` → 400 `ERR-VAL-III-23-05`) |
+| ~~BUG-LH-VAL-02~~ | Minor | TRUC_TIEP thiếu `diaDiem` → BE trả `ERR-SYS-00-00-01` (500 generic) thay vì 422 ERR-LH-04 | ✅ **Closed R10 21:30** (commit `af8276fd` → 400 `ERR-VAL-III-23-06`) |
+| ~~BUG-LH-VAL-03~~ | Major | `ngayHoc` ngoài khoảng KH (KH-002 BĐ 01/06 - KT 03/06, ngayHoc=2025-01-01) → BE 200 accept | ✅ **Closed R10 21:30** (commit `af8276fd` → 400 `ERR-VAL-III-23-04`) |
 
-**Recommend escalate dev BE:** 4 bugs in 1 batch — implement validation rules ERR-LH-01/03/04/conflict cho LICH_HOC entity tại NestJS DTO + service layer.
+**~~Recommend escalate dev BE~~ → COMPLETED R10 21:30** (commit `af8276fd`): BE đã implement validation rules `ERR-VAL-III-23-04/05/06` + `ERR-BIZ-III-23-01` cho LICH_HOC tại NestJS DTO + service layer.
 
 ---
 
@@ -155,9 +157,9 @@ R9 báo "Edit/Delete icons chưa thấy" → SAI. Cả 4 row actions hoạt đ�
 Chọn radio "Trực tiếp" → field "Địa điểm" (text input).
 Chọn radio "Trực tuyến" → field swap thành "Link Zoom" (text input).
 
-→ UX rõ. Tuy nhiên FE KHÔNG enforce required cho linkZoom/diaDiem — submit empty vẫn pass FE (BE trả 500 generic, xem BUG-LH-VAL-01/02).
+→ UX rõ. R10 02:45: FE KHÔNG enforce required cho linkZoom/diaDiem — submit empty pass FE, BE trả 500 generic. **R10 21:30:** BE đã FIX (commit `af8276fd`): submit empty bị reject 400 `ERR-VAL-III-23-05/06` đúng spec. ~~BUG-LH-VAL-01/02~~ Closed.
 
-### 3. ⚠️ BUG MAJOR mới — BE thiếu conflict validation
+### 3. ✅ ~~BUG MAJOR mới~~ — BE conflict validation Closed R10 21:30
 
 `POST /khoa-hocs/{khId}/lich-hocs` accept buổi học cùng ngày + overlap time với buổi đã tồn tại của cùng KH. Vi phạm logic nghiệp vụ — không thể có 2 buổi học diễn ra song song trong cùng khóa học.
 
@@ -198,9 +200,9 @@ R7.3.13 R10 đã noted MCP browser crash khi type_text >100 chars. R10 R7.4.B12 
 
 | Task | Pre-R10 | Post-R10 | Reason |
 |---|---|---|---|
-| **R7.4.B12 Quản lý lịch học** | 🟢 sẵn sàng | ⚠️ PARTIAL 7/8 (Bước 7 conflict FAIL) | CRUD UI verified end-to-end; conflict validation BE thiếu |
+| **R7.4.B12 Quản lý lịch học** | ✅ ĐÓNG R10 21:30 | ✅ FULL PASS 8/8 | CRUD UI verified end-to-end; 4 BUG validation BE đã closed commit `af8276fd` |
 | **R7.7.6 DT-056 LICH_HOC CRUD test** | 🚫 chờ workaround | ✅ inherit từ R7.4.B12 R10 | Same test scope |
-| **R7.7.6 DT-056a negative validation** | 🚫 chờ workaround | ⚠️ inherit + thêm BUG-LH-CONFLICT-01 | 4 BUG candidates cộng dồn |
+| **R7.7.6 DT-056a negative validation** | ⚠️ R10 21:30 | ⚠️ 4/5 spec PASS sau fix | 4 BUG validation closed `af8276fd`; ERR-LH-05 defer chờ HOC_VIEN entity (BUG-HV-BE-01 R7.3.12 Open) |
 | **R7.4.B7 ĐiỂm danh DT-011** | 🚫 chờ HOC_VIEN | 🚫 vẫn chờ R7.3.12 | Independent block |
 
 ---
@@ -232,7 +234,8 @@ GET  /api/v1/khoa-hocs/{kh-002}/lich-hocs              → 200  (3 records basel
 |---|---|---|
 | R8 | 2026-05-08 | Endpoint 404 — BE chưa deploy |
 | R9 | 2026-05-09 | ⏳ BE deploy + UI tab có. Step 2 fill form blocked AntD picker. Step 5/6 báo "chưa thấy icon" (sai diagnose). |
-| **R10** | **2026-05-10** | **⚠️ PARTIAL 7/8 PASS** — Bước 1-6 + 8 PASS clean. Bước 7 conflict FAIL (BE 201 accept overlap). DatePicker workaround unblock. Edit/Delete icons exist. **1 BUG Major mới** — BUG-LH-CONFLICT-01 logged Open. |
+| **R10 02:45** | **2026-05-10** | **⚠️ PARTIAL 7/8 PASS** — Bước 1-6 + 8 PASS clean. Bước 7 conflict FAIL (BE 201 accept overlap). DatePicker workaround unblock. Edit/Delete icons exist. **1 BUG Major mới** — BUG-LH-CONFLICT-01 logged Open. |
+| **R10 21:30** | **2026-05-10** | **✅ FULL PASS 8/8** — re-probe Bước 7 sau commit `af8276fd` PASS (409 `ERR-BIZ-III-23-01`). 4 BUG (CONFLICT-01 + VAL-01/02/03) ALL Closed-verified. Task R7.4.B12 ⚠️ → ✅. |
 
 ---
 

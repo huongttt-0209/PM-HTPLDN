@@ -238,10 +238,10 @@ Response: {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbi
 | BUG-VT-004 | Major | FR-VIII-14 line 644 + UX | FE silent trên 409 ERR-VAL-VIII-111-01 — modal đóng không toast/inline error | Open |
 | BUG-VT-005 | Medium | FR-VIII-14 §Inputs row 4 line 619 | Form Add/Edit modal thiếu trường Trạng thái (trang_thai bắt buộc, default 1) | Open |
 | BUG-VT-006 | Minor | SCR-VIII-02 line 1522 | Form Add button [Thêm] ≠ SRS [Lưu] (Form Edit lại đúng [Lưu]) — inconsistent | Open |
-| BUG-VT-008 | Minor | FR-VIII-14 §Error Handling | errCode mismatch toàn bộ — BE dùng `ERR-VAL-VIII-111-XX` thay SRS `ERR-VT-XX` | Open |
+| BUG-VT-008 | Minor | FR-VIII-14 §Error Handling | errCode mismatch toàn bộ — BE dùng `ERR-VAL-VIII-111-XX` thay SRS `ERR-VT-XX` | ✅ Closed-verified 2026-05-10 (BE đổi → `ERR-VT-01`) |
 | BUG-VT-009 | Medium | FR-VIII-14 §Preconditions line 610 + Processing line 625 | FE cho non-QTHT (cb_nv_tw_02) thấy button [+ Thêm mới] + mở modal CRUD (BE 403 đúng nhưng UI lộ entrypoint) | Open |
 
-**Bug file riêng:** [bug-report-function-r7-7-8e-vai-tro.md](../../bug-reports/qtht-vai-tro/bug-report-function-r7-7-8e-vai-tro.md)
+**Bug file riêng:** [Pass-bug-report-function-r7-7-8e-vai-tro.md](../../bug-reports/qtht-vai-tro/Pass-bug-report-function-r7-7-8e-vai-tro.md)
 
 ---
 

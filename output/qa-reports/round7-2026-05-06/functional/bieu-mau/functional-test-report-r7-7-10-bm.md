@@ -12,7 +12,7 @@
 | **Test Method** | Hybrid (UI MCP + API direct via `evaluate_script` cho batch validation) |
 | **Primary Account** | `cb_nv_tw_01` / `Secret@123` — CB Nghiệp vụ TW, đơn vị BTP-TW |
 | **Round** | R7.7.10 |
-| **Tài liệu tham chiếu** | [`output/funtion/7.9-bieu-mau.md`](../../../../funtion/7.9-bieu-mau.md) (47 TC) · [`workflow-test-report-r7-4-c1-bm.md`](../../workflow/bieu-mau/workflow-test-report-r7-4-c1-bm.md) (R7.4.C1) · [`bug-report-function-bm-r7-7-10.md`](../../bug-reports/bm/bug-report-function-bm-r7-7-10.md) (2 bugs R7.7.10) · [`bug-report-flow-bm-r7-4-c1.md`](../../bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) (6 bugs R7.4.C1) |
+| **Tài liệu tham chiếu** | [`output/funtion/7.9-bieu-mau.md`](../../../../funtion/7.9-bieu-mau.md) (47 TC) · [`workflow-test-report-r7-4-c1-bm.md`](../../workflow/bieu-mau/workflow-test-report-r7-4-c1-bm.md) (R7.4.C1) · [`bug-report-function-bm-r7-7-10.md`](../../bug-reports/bm/bug-report-function-bm-r7-7-10.md) (2 bugs R7.7.10) · [`Pass-bug-report-flow-bm-r7-4-c1.md`](../../bug-reports/bm/Pass-bug-report-flow-bm-r7-4-c1.md) (6 bugs R7.4.C1) |
 
 ---
 
@@ -164,7 +164,7 @@ CRUD core + state machine + BR-PUBLIC-01 (BE-side) hoạt động đúng. R7.7.1
 
 ## 5. Bug Linkage
 
-**File 1 — R7.4.C1 workflow bugs:** [`bug-report-flow-bm-r7-4-c1.md`](../../bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) (6 bugs)
+**File 1 — R7.4.C1 workflow bugs:** [`Pass-bug-report-flow-bm-r7-4-c1.md`](../../bug-reports/bm/Pass-bug-report-flow-bm-r7-4-c1.md) (6 bugs)
 
 | Bug ID | Severity | Status | TC chặn |
 |--------|----------|--------|---------|

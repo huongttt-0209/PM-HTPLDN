@@ -21,7 +21,7 @@
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
 | ~~BUG-CTDT-FE-01~~ | Major | P1 | UI/UX | R7.3.6 | `srs-fr-03-dao-tao.md FR-III-01 Inputs row 3` + `Processing Bước 3` + `AC ERR-CTDT-05` | Form CTĐT thiếu field bắt buộc `keHoachId` → submit BE 422 silent | **Closed** |
-| BUG-CTDT-NAME-02 | Major | P1 | BE / Validation | R7.3.6 variant 6 | `srs-fr-03-dao-tao.md FR-III-01 Inputs row 2` (ten_chuong_trinh varchar 500, không có constraint regex) | BE reject 422 `Tên không hợp lệ` cho tên hợp lệ — pattern reject ngầm chỉ accept "Chương trình đào tạo ..." prefix, FE form normalize khác curl | **Open** |
+| ~~BUG-CTDT-NAME-02~~ | Major | P1 | BE / Validation | R7.3.6 variant 6 | `srs-fr-03-dao-tao.md FR-III-01 Inputs row 2` (ten_chuong_trinh varchar 500, không có constraint regex) | BE reject 422 `Tên không hợp lệ` cho tên hợp lệ — pattern reject ngầm chỉ accept "Chương trình đào tạo ..." prefix, FE form normalize khác curl | **Closed** |
 
 ---
 
@@ -88,7 +88,12 @@ Response: ERR-VAL-SYS-00-01 / keHoachId must be a UUID
 
 ---
 
-## BUG-CTDT-NAME-02 — BE reject 422 cho tên CTĐT hợp lệ (pattern reject ngầm)
+## ~~BUG-CTDT-NAME-02~~ [CLOSED] — BE reject 422 cho tên CTĐT hợp lệ (pattern reject ngầm)
+
+> **Re-test:** 2026-05-10 R10 — ✅ PASS (Closed-verified). BE đã accept cả 2 case từng reject:
+> - Case A (CTĐT abbreviation + Vietnamese diacritics): tên `CTĐT 2026 - Verify NAME-02 R10 abbreviation test` → `POST /api/v1/chuong-trinh-dao-taos` reqid=226 trả 201, record `CTDT-BTP-TW-2026-0006` Dự thảo. Screenshot [r10-verify-2026-05-10-ctdt-name-02-abbreviation-pass.png](../../screenshots/r10-verify-2026-05-10-ctdt-name-02-abbreviation-pass.png).
+> - Case B (ASCII no-diacritic): tên `CTDT 2026 - Verify NAME-02 R10 ASCII no diacritic` → `POST /api/v1/chuong-trinh-dao-taos` reqid=245 trả 201, record `CTDT-BTP-TW-2026-0007` Dự thảo. Screenshot [r10-verify-2026-05-10-ctdt-name-02-ascii-pass.png](../../screenshots/r10-verify-2026-05-10-ctdt-name-02-ascii-pass.png).
+> Cả 2 record verify-only đã được xóa (Xóa qua UI) sau khi capture, list về baseline 6/6 → screenshot [r10-verify-2026-05-10-r7-3-6-baseline-6-records.png](../../screenshots/r10-verify-2026-05-10-r7-3-6-baseline-6-records.png). Không còn pattern "phải bắt đầu bằng Chương trình đào tạo"; UI form vs curl direct kết quả identical (đều 201). Tài khoản test: `cb_nv_tw_02`. Account: BTP TW. Kế hoạch năm: `KH ĐT năm 2026 - Cấp TW (BTP) - R8`. Lĩnh vực: Doanh nghiệp / Lao động. Bug đóng — không cần escalate dev.
 
 > **Phát hiện:** 2026-05-09 R9 final khi seed variant 6 R7.3.6 cấp ĐP STP-BG.
 

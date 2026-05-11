@@ -28,7 +28,7 @@
 
 Re-seed 3 record KH năm trạng thái `Nháp` cho 3 cấp Mô hình A (TW/BN/DP) qua UI SCR-III-00 + Modal "Tạo kế hoạch đào tạo". 3/3 POST `/api/v1/ke-hoach-dao-taos` trả 201 Created. Đã DELETE 2 record NHAP cũ (BN-0002, DP-0003) qua API 204 (UI thiếu nút Xoá — bug mới). Record TW-0001 cũ giữ nguyên (state `CHO_DUYET` không xoá được theo SRS BR-FLOW-03).
 
-**Bug:** [bug-report-seed-r7-3-5-kh-nam.md](../../bug-reports/dao-tao/bug-report-seed-r7-3-5-kh-nam.md) — **3 Open** (1 Major BR-AUTH-08 cross-tenant data leak re-confirmed BACKEND + 1 Major UI thiếu nút Xoá + 1 Medium date timezone off-by-one BACKEND).
+**Bug:** [bug-report-seed-r7-3-5-kh-nam-r8.md](../../bug-reports/dao-tao/bug-report-seed-r7-3-5-kh-nam-r8.md) — R8 logged 3 bug (`KH-001/002/003`). **R10 status:** 2/3 đóng (KH-002 UI Xoá Closed R10 + KH-003 date Closed R10; KH-001 cross-tenant Open RE-CONFIRMED).
 
 ---
 

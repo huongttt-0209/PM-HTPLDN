@@ -27,7 +27,20 @@ Phát hiện **3** bug khi test FR-VIII-26 — trong đó **2 Critical** liên q
 |---|---|---|---|---|---|---|---|
 | ~~BUG-FR26-FE-01~~ | **Critical** | P0 | UI/UX | TC02 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1278 + AC line 1316 | ~~FE chưa implement page Quên mật khẩu — `/auth/forgot-password` redirect /login~~ | **Closed** |
 | ~~BUG-FR26-FE-02~~ | **Critical** | P0 | UI/UX | TC02-TC07 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1282-1284 + AC line 1314-1315 | ~~FE chưa implement page Reset mật khẩu — `/reset-password?token=X` redirect /login~~ | **Closed** |
-| BUG-FR26-001 | Minor | P3 | Code | TC04/TC06/TC07 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1295-1303 | errCode mismatch — BE `ERR-AUTH-RESET-01` / `ERR-VAL-SYS-00-01` / `ERR-VAL-VIII-CP-04` ≠ SRS `ERR-PWD-04/05/06` | Open (defer Minor) |
+| ~~BUG-FR26-001~~ | Minor | P3 | Code | TC04/TC06/TC07 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1295-1303 | ~~errCode mismatch — BE `ERR-AUTH-RESET-01` / `ERR-VAL-SYS-00-01` / `ERR-VAL-VIII-CP-04` ≠ SRS `ERR-PWD-04/05/06`~~ | **Closed-verified 2026-05-10** |
+
+> **Re-verify 2026-05-10 14:28-14:29 (BUG-FR26-001 errCode):** ✅ **CLOSED — BE đã align convention SRS.**
+>
+> Trigger forgot-password cho `cb_nv_bn_03@htpldn.test` → fetch token MailHog `180c816d-b9c2-4ad4-a757-8812b182eca6` → 4 fetch direct test:
+>
+> | TC | Trigger | SRS expects | BE trước (R7) | BE sau (2026-05-10) | Status |
+> |---|---|---|---|---|---|
+> | TC07 | newPassword ≠ newPasswordConfirm | `ERR-PWD-06` | `ERR-VAL-VIII-CP-04` | **`ERR-PWD-06`** ✅ | Match SRS line 1302 |
+> | TC06 | weak password (`weak`) | `ERR-PWD-05` | `ERR-VAL-SYS-00-01` | **`ERR-PWD-05`** ✅ | Match SRS line 1301 |
+> | TC02 | happy path (consume token) | (no errCode, 200) | 200 | 200 ✅ | Token consumed OK |
+> | TC04 | reuse same token | `ERR-PWD-04` | `ERR-AUTH-RESET-01` | **`ERR-PWD-04`** ✅ | Match SRS line 1300 |
+>
+> **Conclusion:** BE đổi convention từ `ERR-AUTH-RESET-XX` / `ERR-VAL-SYS-XX` / `ERR-VAL-VIII-CP-XX` → `ERR-PWD-04/05/06` đúng SRS line 1300-1302. Pattern fix giống BUG-FR22-003 (đổi `ERR-VAL-VIII-22-08` → `ERR-REG-01`). Tất cả 3/3 bug FR-VIII-26 đã closed.
 
 > **Re-test 2026-05-07 13:50 (sau dev claim fix):**
 > - **BUG-FR26-FE-01:** ✅ PASS (Closed-verified). Navigate `/auth/forgot-password` (incognito) → page render đầy đủ form Email + button "Gửi link đặt lại mật khẩu" + link "Quay lại đăng nhập". Fill email `test.r778b@example.com` + submit → POST `/api/v1/auth/forgot-password` 200 + alert success "Yêu cầu đã được gửi. Nếu email ... đã đăng ký..., link đặt lại mật khẩu sẽ được gửi đến hộp thư của bạn. Link có hiệu lực trong 30 phút." Match SRS AC line 1316 "nhận mail link reset 30 phút". Evidence: [r7-7-8c-retest-forgot-password-page.png](image/r7-7-8c-retest-forgot-password-page.png).

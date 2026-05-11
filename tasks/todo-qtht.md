@@ -20,8 +20,8 @@
 | **P1** | 6 | 0 | 0 | 6 | 0 | 0 | 0 | 0 | ✅[R7.1.1](#r7-1-1) · ✅[R7.1.2](#r7-1-2) · ✅[R7.1.3](#r7-1-3) · ✅[R7.1.4](#r7-1-4) · ✅[R7.1.5](#r7-1-5) · ✅[R7.1.6](#r7-1-6) |
 | **P2** | 3 | 0 | 0 | 1 | 2 | 0 | 0 | 0 | ✅[R7.2.1](#r7-2-1) · ⚠️[R7.2.9](#r7-2-9) · ⚠️[R7.2.9b](#r7-2-9b) |
 | **P5** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.5.5](#r7-5-5) |
-| **P7** | 6 | 0 | 0 | 5 | 1 | 0 | 0 | 0 | ✅[R7.7.8](#r7-7-8) · ✅[R7.7.8a](#r7-7-8a) · ⚠️[R7.7.8b](#r7-7-8b) · ✅[R7.7.8c](#r7-7-8c) · ✅[R7.7.8d](#r7-7-8d) · ✅[R7.7.8e](#r7-7-8e) |
-| **Tổng** | **16** | **0** | **0** | **13** | **3** | **0** | **0** | **0** |  |
+| **P7** | 6 | 0 | 0 | 6 | 0 | 0 | 0 | 0 | ✅[R7.7.8](#r7-7-8) · ✅[R7.7.8a](#r7-7-8a) · ✅[R7.7.8b](#r7-7-8b) · ✅[R7.7.8c](#r7-7-8c) · ✅[R7.7.8d](#r7-7-8d) · ✅[R7.7.8e](#r7-7-8e) |
+| **Tổng** | **16** | **0** | **0** | **14** | **2** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -42,7 +42,7 @@
 - ✅ **R7.1.5** 🆕 Seed 5 ngày lễ 2026 qua UI Tab Ngày lễ SCR-VIII-06 (FR-VIII-29) <a id="r7-1-5"></a>
   - **Cần:** account `qtht_02`
   - **Kết quả:** PASS 6/6 — 4 pre-existing + Tết NĐ R8 lần 6 (API) + record mới `21/05/2026` qua UI sau cache clear lần 8. R8 lần 8 (2026-05-09 11:18) BUG-NGAY-LE-001 closed-verified. [bug-ngay-le-001-CLOSED-lan-8-2026-05-09.png](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-cau-hinh-ht/bug-ngay-le-001-CLOSED-lan-8-2026-05-09.png)
-  - **Bug:** [bug-report-seed-r7-1-5-ngay-le.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-cau-hinh-ht/bug-report-seed-r7-1-5-ngay-le.md) — 1/1 đóng (BUG-NGAY-LE-001 Closed-verified R8 lần 8 — root cause: FE bundle cached, cần caches.delete + SW unregister + hard reload `ignoreCache` mới load fix; BUG-NGAY-LE-002 dropped)
+  - **Bug:** [Pass-bug-report-seed-r7-1-5-ngay-le.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-cau-hinh-ht/Pass-bug-report-seed-r7-1-5-ngay-le.md) — 1/1 đóng (BUG-NGAY-LE-001 Closed-verified R8 lần 8 — root cause: FE bundle cached, cần caches.delete + SW unregister + hard reload `ignoreCache` mới load fix; BUG-NGAY-LE-002 dropped)
 
 - ✅ **R7.1.6** 🆕 Seed 9 DM còn lại qua UI SCR-VIII-01 (account qtht_02) <a id="r7-1-6"></a>
   - **Kết quả:** PASS 9/9 — DM2 CHUONG_TRINH_HT 2→3 sau R8 seed CT_HTPLDN (re-verify 2026-05-08). [seed-checklist-r7-1-6-9-dm-con-lai.md](../output/qa-reports/round7-2026-05-06/seed/qtht-danh-muc/seed-checklist-r7-1-6-9-dm-con-lai.md)
@@ -75,18 +75,18 @@
   - **Kết quả:** PASS 6/6 — R8 re-verify 2026-05-09: 6 tabs SCR-VIII-08 render OK + BE counter reset post-unlock OK + TK pool 89 records (HOAT_DONG:37/CHO_KICH_HOAT:52). [functional-test-report-FR-VIII-15-tk-sm.md](../output/qa-reports/round7-2026-05-06/functional/qtht-tai-khoan/functional-test-report-FR-VIII-15-tk-sm.md)
   - **Bug:** [Pass-bug-report-function-r7-7-8a-tk-sm.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/Pass-bug-report-function-r7-7-8a-tk-sm.md) — 2/2 đóng (TK-SM-002 + 003 Closed-verified 2026-05-07, persist R8).
 
-- ⚠️ **R7.7.8b** 🆕 FR-VIII-22 Self-reg DN E2E `[~88% — 7/8 PASS, 1 defer]` <a id="r7-7-8b"></a>
-  - **Kết quả:** ⚠️ 7/8 PASS + 1 defer. R8 re-verify 2026-05-09: BUG-FR22-001a + 002 closed persist; TC04 email trùng vẫn defer (BE captcha invisible + rate-limit); 4 bug Minor/Medium chờ BA. [functional-test-report-FR-VIII-22-self-reg-dn.md](../output/qa-reports/round7-2026-05-06/functional/qtht-tai-khoan/functional-test-report-FR-VIII-22-self-reg-dn.md)
-  - **Bug:** [bug-report-function-r7-7-8b-self-reg-dn.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/bug-report-function-r7-7-8b-self-reg-dn.md) — 2/5 đóng (FR22-002 + 001a Closed; FR22-004 đợi BA; 003/005 defer Minor)
+- ✅ **R7.7.8b** 🆕 FR-VIII-22 Self-reg DN E2E `[100% — 8/8 PASS]` <a id="r7-7-8b"></a>
+  - **Kết quả:** PASS 8/8. R8 re-verify 2026-05-10: 5/5 bug Closed (FR22-001/002/003/004/005). BE drop checksum + WRN-DN-01 + đổi errCode → ERR-REG-01 + FE message "vĩnh viễn". [functional-test-report-FR-VIII-22-self-reg-dn.md](../output/qa-reports/round7-2026-05-06/functional/qtht-tai-khoan/functional-test-report-FR-VIII-22-self-reg-dn.md)
+  - **Bug:** [Pass-bug-report-function-r7-7-8b-self-reg-dn.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/Pass-bug-report-function-r7-7-8b-self-reg-dn.md) — 5/5 đóng
 
 - ✅ **R7.7.8c** 🆕 FR-VIII-26 reset MK + kích hoạt lần đầu <a id="r7-7-8c"></a>
-  - **Kết quả:** PASS 6/7 + 1 Minor defer. R8 re-verify 2026-05-09: 3 BE endpoints persist + cross-verify ở R7.2.9b NHT_04_UI full E2E mail flow. [functional-test-report-FR-VIII-26-reset-mk.md](../output/qa-reports/round7-2026-05-06/functional/qtht-tai-khoan/functional-test-report-FR-VIII-26-reset-mk.md)
-  - **Bug:** [bug-report-function-r7-7-8c-reset-mk.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/bug-report-function-r7-7-8c-reset-mk.md) — 2/3 đóng (FR26-FE-01/02 Closed; FR26-001 Minor defer Open).
+  - **Kết quả:** PASS 7/7. R8 re-verify 2026-05-10: 3 BE endpoints persist + 3 errCode TC04/06/07 đã đổi sang `ERR-PWD-04/05/06` match SRS. [functional-test-report-FR-VIII-26-reset-mk.md](../output/qa-reports/round7-2026-05-06/functional/qtht-tai-khoan/functional-test-report-FR-VIII-26-reset-mk.md)
+  - **Bug:** [Pass-bug-report-function-r7-7-8c-reset-mk.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/Pass-bug-report-function-r7-7-8c-reset-mk.md) — 3/3 đóng
 
 - ✅ **R7.7.8d** 🆕 FR-VIII-28 Audit log functional <a id="r7-7-8d"></a>
   - **Kết quả:** PASS 7/7. R8 re-verify 2026-05-09: 1468 entries / filter `?hanhDong=CREATE` 410 / page 50 default / Export `POST /audit-logs/export` 200 OK qua UI button. 6 bug closed persist. [functional-test-report-FR-VIII-28-audit-log.md](../output/qa-reports/round7-2026-05-06/functional/qtht-nhat-ky/functional-test-report-FR-VIII-28-audit-log.md)
   - **Bug:** [Pass-bug-report-function-r7-7-8d-audit-log.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-nhat-ky/Pass-bug-report-function-r7-7-8d-audit-log.md) — 6/6 đóng (re-test 2026-05-07 ALL Closed-verified)
 
 - ✅ **R7.7.8e** 🆕 FR-VIII-14 Vai trò CRUD (VAI_TRO entity, SCR-VIII-02) <a id="r7-7-8e"></a>
-  - **Kết quả:** PASS 11/11 + 1 Minor defer. R8 re-verify 2026-05-09: 12 vai trò render (11 lock system + 1 custom QA_VT_DEL_TEST_R7), permission count đúng. BUG-VT-001 closed persist. [functional-test-report-FR-VIII-14-vai-tro.md](../output/qa-reports/round7-2026-05-06/functional/qtht-vai-tro/functional-test-report-FR-VIII-14-vai-tro.md)
-  - **Bug:** [bug-report-function-r7-7-8e-vai-tro.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-vai-tro/bug-report-function-r7-7-8e-vai-tro.md) — 6/7 đóng (VT-001/003/004/005/006/009 Closed; VT-008 Minor defer Open).
+  - **Kết quả:** PASS 11/11. R8 re-verify 2026-05-10: 12 vai trò render + BUG-VT-008 errCode đổi `ERR-VAL-VIII-111-01` → `ERR-VT-01` match SRS. [functional-test-report-FR-VIII-14-vai-tro.md](../output/qa-reports/round7-2026-05-06/functional/qtht-vai-tro/functional-test-report-FR-VIII-14-vai-tro.md)
+  - **Bug:** [Pass-bug-report-function-r7-7-8e-vai-tro.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-vai-tro/Pass-bug-report-function-r7-7-8e-vai-tro.md) — 7/7 đóng

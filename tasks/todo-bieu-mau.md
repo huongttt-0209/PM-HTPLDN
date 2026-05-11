@@ -18,9 +18,9 @@
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P3** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.3.7](#r7-3-7) |
-| **P4** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.4.C1](#r7-4-c1) |
+| **P4** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.4.C1](#r7-4-c1) |
 | **P7** | 2 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | ⚠️[R7.7.10](#r7-7-10) · ⚠️[R7.7.10b](#r7-7-10b) |
-| **Tổng** | **4** | **0** | **0** | **1** | **3** | **0** | **0** | **0** |  |
+| **Tổng** | **4** | **0** | **0** | **2** | **2** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -28,13 +28,13 @@
 - ✅ **R7.3.7** ✏️ Seed 4 TM (v3.5 enum `NHAP/CONG_KHAI/AN`) + 4 BM (3 NHAP + 1 AN) <a id="r7-3-7"></a>
   - **Kết quả:** R8 re-seed ✅ 2026-05-09 — 4 TM (3 NHAP + 1 AN) + 4 BM (3 NHAP + 1 AN) cover 4 LV (SHTT/Thuế/Thương mại/Lao động). [r7-3-7-r8-bm-list-4-bm.png](../output/qa-reports/round7-2026-05-06/seed/bieu-mau/r7-3-7-r8-bm-list-4-bm.png)
 
-- ⚠️ **R7.4.C1** ✏️ Workflow BM v3.5 — SM-BIEUMAU 3 transition + Switch công khai 4 trường + BR-PUBLIC-01/02/03 `[~88% — 7/8 PASS]` <a id="r7-4-c1"></a>
-  - **Kết quả:** R8 lần 3 ✅ 7/8 PASS — SM 3/3 + BR-PUBLIC-01/02/03 PASS. BUG-BM-001 fully fixed (Switch added). 5/6 bug closed. [workflow-r7-4-c1-r8](../output/qa-reports/round7-2026-05-06/workflow/bieu-mau/workflow-test-report-r7-4-c1-bm-r8.md)
-  - **Bug:** [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) — 5/6 đóng (BUG-BM-001 R8 lần 3 + 002/003/004/006). BUG-BM-005 R8 lần 6 (2026-05-10) sweep 6/6 verify lại — 5 closed persist không regress, BUG-BM-005 vẫn silent 409 lặp 5 round liên tiếp.
+- ✅ **R7.4.C1** ✏️ Workflow BM v3.5 — SM-BIEUMAU 3 transition + Switch công khai 4 trường + BR-PUBLIC-01/02/03 `[100% — 8/8 PASS]` <a id="r7-4-c1"></a>
+  - **Kết quả:** R8 lần 7 ✅ 8/8 PASS — BUG-BM-005 closed (manual + MCP MutationObserver verified). 6/6 bug đóng. [workflow-r7-4-c1-r8](../output/qa-reports/round7-2026-05-06/workflow/bieu-mau/workflow-test-report-r7-4-c1-bm-r8.md)
+  - **Bug:** [Pass-bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/Pass-bug-report-flow-bm-r7-4-c1.md) — 6/6 đóng (BUG-BM-005 closed R8 lần 7 2026-05-10).
 
 - ⚠️ **R7.7.10** ✏️ Biểu mẫu v3.5 — 47 TC (7 cũ + 10 CR-01 + 30 CRUD/workflow) `[~47% — 22/47 PASS, 11 BLOCKED + 14 DEFER]` <a id="r7-7-10"></a>
   - **Kết quả:** R8 lần 3 — BUG-BM-001 Switch closed → 10 CR-01 (BM-041..050) UNBLOCKED chờ test riêng. BUG-BM-007/008 vẫn Open. Smoke 5/5 PASS regression-free từ R8 lần 2. [functional-r7-7-10-r8](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10-bm-r8.md)
-  - **Bug:** [bug-report-function-bm-r7-7-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-function-bm-r7-7-10.md) — 0/2 đóng (BUG-BM-007 Critical MinIO localhost vẫn reproduced R8 lần 3 · BUG-BM-008 Medium silent reject .txt vẫn reproduced R8 lần 3). Workflow bugs riêng tại [bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-flow-bm-r7-4-c1.md) (5/6 đóng R8 lần 3).
+  - **Bug:** [bug-report-function-bm-r7-7-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-function-bm-r7-7-10.md) — 0/2 đóng (BUG-BM-007 Critical MinIO localhost vẫn reproduced R8 lần 3 · BUG-BM-008 Medium silent reject .txt vẫn reproduced R8 lần 3). Workflow bugs riêng tại [Pass-bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/Pass-bug-report-flow-bm-r7-4-c1.md) (5/6 đóng R8 lần 3).
 
 - ⚠️ **R7.7.10b** ✏️ Defer-unblock multi-account + size + audit `[~75% — 6/8 unblocked: 4 ✅ PASS + 2 ⚠️ PARTIAL + 2 🔁 DEFER tool block]` <a id="r7-7-10b"></a>
   - **Kết quả:** ✅ PASS BM-032 QTHT R-only + BM-033 BN isolation 2 chiều + BM-034 ĐP scope 2 chiều + BM-040 Audit log 20+37 entries; ⚠️ PARTIAL BM-035 NHT/CG (spec test outdated, NHT có R menu đúng v3.5 perm matrix; TVV defer pwd) + BM-015 (BE reject 21MB qua TCP reset, no graceful 413). 🔁 BM-028/029 defer MCP tool block. [functional-r7-7-10b](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10b-bm.md)

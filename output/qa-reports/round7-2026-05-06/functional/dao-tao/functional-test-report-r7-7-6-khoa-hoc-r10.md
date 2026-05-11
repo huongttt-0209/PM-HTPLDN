@@ -4,6 +4,8 @@
 > **Test mode:** UI click thực tế (per memory rule `feedback_qa_test_via_ui_not_api`) + API direct cho validation/state read.
 > **Trigger:** User explicit "chạy R7.7.6" sau B7+B11 R10 unblock + "chạy R7.7.6 giúp tôi" phase 2 sau R7.3.13 + R7.4.B12 R10 unblock.
 
+> **🔄 R10 21:30 ADDENDUM (Re-verify):** 4 BUG validation LH (CONFLICT-01 + VAL-01/02/03) ĐÃ CLOSED sau commit `af8276fd`. **DT-056a vẫn ⚠️ partial** — 4/5 spec PASS (ERR-LH-01/02/03/04) + 1 defer (ERR-LH-05 "xóa buổi có điểm danh" chờ HOC_VIEN entity, BUG-HV-BE-01 R7.3.12). Tổng count 15/19 KH-pure giữ nguyên. Các đoạn dưới ghi "4 BUG candidates Open" là history snapshot 02:00-09:50; phần "DT-056a ⚠️" giữ nguyên vì defer chưa giải.
+
 ---
 
 ## 🎯 Tóm tắt nhanh (cho PM/BA)
@@ -14,7 +16,7 @@
 |---|:-:|:-:|---|
 | **A. Inherit từ workflow R10** (B0/B1/B7/B11) | 7 | ✅ | DT-020/21/22/23/24/25/26 đã PASS |
 | **B. Execute mới R10 phase 1** | 6 | ✅ + ⚠️ | DT-001/002/003 inline + DT-015 + DT-029 + DT-053 + DT-038 partial |
-| **B'. Inherit từ B12+B13 phase 2** | 2 | ✅ + ⚠️ | DT-056 ✅ (R7.4.B12 R10 8/8 CRUD) + DT-056a ⚠️ (4 BUG candidates BE validation) |
+| **B'. Inherit từ B12+B13 phase 2** | 2 | ✅ + ⚠️ | DT-056 ✅ (R7.4.B12 R10 8/8 CRUD) + DT-056a ⚠️ 4/5 PASS R10 21:30 (4 BUG validation closed `af8276fd`; ERR-LH-05 defer chờ HOC_VIEN) |
 | **C. BLOCKED bởi BUG-DT-FORM-GV-01** | 1 | 🚫 | DT-004 — FE form thiếu field `giangVienIds` required |
 | **D. Block downstream HV** | 5+ | 🚫 | DT-011/019/031b/052/054/055 chờ HOC_VIEN BUG-HV-BE-01 (R7.3.12) |
 | **F. Defer permission-matrix** | 5 | ⏭ | DT-032..036 — defer permission-matrix.md riêng |
@@ -171,26 +173,26 @@ R7.4.B12 R10 đã verify đầy đủ 8 bước CRUD UI cho LICH_HOC trên KH-00
 5. ✅ Delete row icon → modal confirm → DELETE 204
 6. ✅ FE conditional render: TRUC_TUYEN → field "Link Zoom"; TRUC_TIEP → field "Địa điểm"
 
-**Reference:** [workflow-test-report-r7-4-b12-r10.md](../../workflow/dao-tao/workflow-test-report-r7-4-b12-r10.md) — 7/8 PASS (bước 7 conflict FAIL → BUG separate).
+**Reference:** [workflow-test-report-r7-4-b12-r10.md](../../workflow/dao-tao/workflow-test-report-r7-4-b12-r10.md) — R10 21:30: 8/8 PASS (R10 02:45 ban đầu 7/8, conflict bước 7 fixed commit `af8276fd`).
 
 → **DT-056 ✅** — full CRUD lifecycle PASS qua UI.
 
-### DT-056a — LICH_HOC negative validation ⚠️ PARTIAL (inherit R7.3.13 + R7.4.B12 R10)
+### DT-056a — LICH_HOC negative validation ⚠️ 4/5 PASS R10 21:30 (inherit R7.3.13 + R7.4.B12 R10; R10 02:45 ⚠️ 1/5 → R10 21:30 ⚠️ 4/5 PASS, ERR-LH-05 defer chờ HOC_VIEN)
 
-4 BUG candidates BE LICH_HOC validation đã log từ R7.3.13 R10 + R7.4.B12 R10:
+4 BUG candidates BE LICH_HOC validation đã log từ R7.3.13 R10 + R7.4.B12 R10. **Update R10 21:30:** ALL 4 đã ĐÓNG sau commit `af8276fd`.
 
-| Spec error | BE actual | Status |
-|---|---|:-:|
-| ERR-LH-01 (ngày ngoài khoảng KH) | 200 accept (no validation) | ❌ Open Major |
-| ERR-LH-02 (giờ KT ≤ BĐ) | `ERR-VAL-III-23-02 Giờ bắt đầu phải sớm hơn giờ kết thúc` | ✅ PASS |
-| ERR-LH-03 (TRUC_TUYEN thiếu link) | `ERR-SYS-00-00-01` 500 generic | ❌ Open Minor |
-| ERR-LH-04 (TRUC_TIEP thiếu địa điểm) | `ERR-SYS-00-00-01` 500 generic | ❌ Open Minor |
-| ERR-LH-05 (xóa buổi đã có điểm danh) | Chưa test (block bởi HOC_VIEN) | ⏭ Defer |
-| BR-LH-CONFLICT (overlap time cùng KH) | 201 accept (no validation) | ❌ Open Major |
+| Spec error | BE actual (R10 02:45) | Status R10 02:45 | Re-verify R10 21:30 |
+|---|---|:-:|:-:|
+| ERR-LH-01 (ngày ngoài khoảng KH) | 200 accept (no validation) | ❌ Open Major | ✅ FIX → 400 `ERR-VAL-III-23-04` |
+| ERR-LH-02 (giờ KT ≤ BĐ) | `ERR-VAL-III-23-02 Giờ bắt đầu phải sớm hơn giờ kết thúc` | ✅ PASS | ✅ PASS |
+| ERR-LH-03 (TRUC_TUYEN thiếu link) | `ERR-SYS-00-00-01` 500 generic | ❌ Open Minor | ✅ FIX → 400 `ERR-VAL-III-23-05` |
+| ERR-LH-04 (TRUC_TIEP thiếu địa điểm) | `ERR-SYS-00-00-01` 500 generic | ❌ Open Minor | ✅ FIX → 400 `ERR-VAL-III-23-06` |
+| ERR-LH-05 (xóa buổi đã có điểm danh) | Chưa test (block bởi HOC_VIEN) | ⏭ Defer | ⏭ Defer |
+| BR-LH-CONFLICT (overlap time cùng KH) | 201 accept (no validation) | ❌ Open Major | ✅ FIX → 409 `ERR-BIZ-III-23-01` |
 
-**Reference:** [bug-report-r7-4-b12-lich-hoc-validation.md](../../bug-reports/dao-tao/bug-report-r7-4-b12-lich-hoc-validation.md) — 4 BUG candidates Open.
+**Reference:** [Pass-bug-report-r7-4-b12-lich-hoc-validation.md](../../bug-reports/dao-tao/Pass-bug-report-r7-4-b12-lich-hoc-validation.md) — 4/4 đóng (Closed-verified R10 21:30 2026-05-10, fix commit `af8276fd`).
 
-→ **DT-056a ⚠️** — 1/5 spec validation PASS, 4 BUG candidates Open (ERR-LH-01/03/04 + CONFLICT). ERR-LH-05 defer chờ HOC_VIEN.
+→ **DT-056a ⚠️ R10 21:30** — 4/5 spec validation PASS sau fix `af8276fd` (ERR-LH-01/02/03/04 + CONFLICT). ERR-LH-05 defer chờ HOC_VIEN entity (BUG-HV-BE-01 R7.3.12 Open).
 
 ---
 
@@ -219,7 +221,7 @@ R7.4.B12 R10 đã verify đầy đủ 8 bước CRUD UI cho LICH_HOC trên KH-00
 | TC ID | Test Case | Block reason | Phase 2 status |
 |---|---|---|:-:|
 | ~~DT-056~~ | LICH_HOC CRUD | ~~AntD picker tech limit~~ | ✅ inherit R7.4.B12 R10 (xem Phase B') |
-| ~~DT-056a~~ | LICH_HOC validation ERR-LH-01..05 | ~~Cascade DT-056~~ | ⚠️ inherit B12+R7.3.13 R10 (xem Phase B') |
+| ~~DT-056a~~ | LICH_HOC validation ERR-LH-01..05 | ~~Cascade DT-056~~ | ⚠️ 4/5 PASS R10 21:30 (4 BUG closed `af8276fd`; ERR-LH-05 defer chờ HOC_VIEN; xem Phase B') |
 
 → Phase E unblock R10 phase 2 — DatePicker workaround (R7.3.13) + B12 R10 đã verify CRUD UI.
 
@@ -304,7 +306,7 @@ Test plan DT-029 ghi error `ERR-CTDT-04`, BE trả `ERR-STATE-III-01-01`. Cần 
 
 | Task | Pre-R10 | Post-R10 phase 2 | Reason |
 |---|---|---|---|
-| **R7.7.6 Functional 40 TC KH** | 🟢 sẵn sàng | ⚠️ **PARTIAL 15/19 KH-pure** (13 phase 1 + 2 inherit B12) + 1 BLOCKED FE bug + 9 BLOCK HV + 5 defer | Inherit DT-056 ✅ + DT-056a ⚠️; DT-004 BLOCKED bởi BUG-DT-FORM-GV-01 |
+| **R7.7.6 Functional 40 TC KH** | 🟢 sẵn sàng | ⚠️ **PARTIAL 15/19 KH-pure** (13 phase 1 + 2 inherit B12) + 1 BLOCKED FE bug + 9 BLOCK HV + 5 defer | Inherit DT-056 ✅ + DT-056a ⚠️ 4/5 (ERR-LH-05 defer); DT-004 BLOCKED bởi BUG-DT-FORM-GV-01 |
 | DT-004 happy path | ⏭ defer | 🚫 BLOCKED | FE form thiếu field `giangVienIds` required (BUG-DT-FORM-GV-01) |
 | HV CRUD + điểm danh + KQ + công bố KQ | 🚫 | 🚫 | Chờ HOC_VIEN entity BUG-HV-BE-01 (R7.3.12) đóng |
 
@@ -332,6 +334,7 @@ GET   /api/v1/khoa-hocs/{id}/bai-giangs    → 404 ERR-SYS-00-04-01 (DT-038 nest
 | R9 | 2026-05-09 | ⏳ chờ B7+B11+B12 unblock |
 | **R10 phase 1** | **2026-05-10 02:00** | **⚠️ 13/19 KH-pure** — Phase A 7 inherit + Phase B 6 new PASS. DT-004/056/056a defer/block. |
 | **R10 phase 2** | **2026-05-10 09:50** | **⚠️ 15/19 KH-pure** (+2) — Phase B' inherit DT-056 ✅ + DT-056a ⚠️ từ R7.4.B12+R7.3.13. DT-004 retry → 🚫 BLOCKED bởi BUG-DT-FORM-GV-01 (FE form thiếu field `giangVienIds`). |
+| **R10 phase 3** | **2026-05-10 21:30** | **⚠️ 15/19 KH-pure** giữ nguyên — 4 BUG LH validation (CONFLICT-01 + VAL-01/02/03) closed sau commit `af8276fd`. **DT-056a vẫn ⚠️** (4/5 spec PASS, ERR-LH-05 defer chờ HOC_VIEN). DT-004 vẫn 🚫. |
 
 ---
 

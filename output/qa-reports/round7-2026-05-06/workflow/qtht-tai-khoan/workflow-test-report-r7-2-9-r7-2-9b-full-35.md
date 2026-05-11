@@ -71,7 +71,7 @@
 
 | Bug ID | Severity | Type | SRS Reference | File bug | Status |
 |--------|----------|------|---|---|--------|
-| BUG-FR21-LOGOUT-001 | Major | Workflow | `FR-VIII-21 §Processing Bước 2-3 + §Postconditions + §Acceptance Criteria` | [bug-report-r7-2-9b-logout-no-api-call.md](../../bug-reports/qtht-tai-khoan/bug-report-r7-2-9b-logout-no-api-call.md) | Open |
+| BUG-FR21-LOGOUT-001 | Major | Workflow | `FR-VIII-21 §Processing Bước 2-3 + §Postconditions + §Acceptance Criteria` | [Pass-bug-report-r7-2-9b-logout-no-api-call.md](../../bug-reports/qtht-tai-khoan/Pass-bug-report-r7-2-9b-logout-no-api-call.md) | ✅ Closed-verified 2026-05-10 (FE đã gọi `POST /api/v1/auth/logout` 200 trước khi redirect) |
 
 > **Tổng:** 1 bug đã log riêng (có SRS reference cụ thể). Ngoài ra có 3 observation thuộc category "không log file riêng" (xem Note phía dưới).
 
@@ -97,7 +97,7 @@
 
 **Kết luận:** FE permission filter HOẠT ĐỘNG ĐÚNG ở submenu level. Parent menu hiện vì có ≥1 submenu permitted. **KHÔNG phải bug → KHÔNG log file riêng.** (Phần test ma trận phân quyền đầy đủ thuộc scope R7.8.5.)
 
-### Finding #1 — Logout UI menu không gọi BE endpoint → đã log [BUG-FR21-LOGOUT-001](../../bug-reports/qtht-tai-khoan/bug-report-r7-2-9b-logout-no-api-call.md)
+### Finding #1 — Logout UI menu không gọi BE endpoint → đã log [BUG-FR21-LOGOUT-001](../../bug-reports/qtht-tai-khoan/Pass-bug-report-r7-2-9b-logout-no-api-call.md) ✅ Closed-verified 2026-05-10
 
 **Reproduce verify (2026-05-09):** Login `cb_nv_tw_04` → click "Đăng xuất" UI menu → network log preserved chỉ thấy `GET /api/v1/auth/me → 401` sau redirect, KHÔNG có `POST /api/v1/auth/logout`.
 

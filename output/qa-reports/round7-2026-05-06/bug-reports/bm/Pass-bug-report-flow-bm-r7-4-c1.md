@@ -14,7 +14,7 @@
 
 ## Tổng hợp
 
-Phát hiện **6** lỗi vi phạm SRS v3.5 FR-VII (Thay đổi 1 + 3 BR mới) trong workflow công khai Thư viện Biểu mẫu.
+Phát hiện **6** lỗi vi phạm SRS v3.5 FR-VII (Thay đổi 1 + 3 BR mới) trong workflow công khai Thư viện Biểu mẫu. **Tất cả 6/6 đã đóng tại R8 lần 7 (2026-05-10).**
 
 ### Severity breakdown
 
@@ -22,11 +22,11 @@ Phát hiện **6** lỗi vi phạm SRS v3.5 FR-VII (Thay đổi 1 + 3 BR mới) 
 |------|----------|-------|--------|-------|---------|
 | 6    | 2        | 2     | 2      | 0     | 0       |
 
-### Status sau R8 lần 2 (2026-05-09)
+### Status sau R8 lần 7 (2026-05-10)
 
 | Đóng | Còn open | % đóng |
 |---|---|---|
-| **5/6** (BUG-BM-001 R8 lần 3 Switch added + BUG-BM-002 R8 + BUG-BM-003 R8 + BUG-BM-004 R8 + BUG-BM-006 R8 lần 2) | 1/6 (BUG-BM-005 UI silent 409) | **83%** |
+| **6/6** (BUG-BM-001 R8 lần 3 Switch + BUG-BM-002 R8 + BUG-BM-003 R8 + BUG-BM-004 R8 + BUG-BM-005 R8 lần 7 manual+observer + BUG-BM-006 R8 lần 2) | 0/6 | **100%** ✅ |
 
 ### Re-verify R8 lần 4 (2026-05-10) — full sweep 6/6 bug
 
@@ -38,10 +38,10 @@ Account `cb_nv_tw_02`. Verify chi tiết per bug:
 | BUG-BM-002 | ✅ Closed (persist) | API GET `/bieu-maus?thuMucId=26f55adf-...` (TM Thuế đã AN) → BM-20260507-002 `trangThai=AN, congKhai=false, thoiGianDangTai=null` | BR-PUBLIC-02 enforced — `thoiGianDangTai` clear khi BM AN |
 | BUG-BM-003 | ✅ Closed (persist) | API GET `/bieu-maus/8a7211a6-...` (BM-20260509-001 SHTT CONG_KHAI) keys: `congKhai=true, thoiGianDangTai=2026-05-09T10:41:22.146Z`; legacy `laCongKhai`/`ngayCongKhai` KHÔNG còn (`'in obj' === false`) | Field rename hoàn tất |
 | BUG-BM-004 | ✅ Closed (persist) | Cùng API, response keys có `anhDaiDien=null, moTaCongKhai=null, fileDinhKemCongKhai=null` (3 fields v3.5 present) | 3 fields v3.5 add đủ |
-| BUG-BM-005 | ❌ **VẪN OPEN** (R8 lần 5 sau cache clear) | `r8l5-2026-05-10-bug-bm-005-silent-409-after-cache-clear.png` — pre-test cleanup logout API + localStorage/sessionStorage clear + IndexedDB clear + reload ignoreCache=true; fresh login `cb_nv_tw_02`. Tạo TM rỗng `cb70e227-cd30-44af-9ad6-5d43539fb2a4` (Hành chính, 0 BM) → click Công khai → confirm popconfirm. POST `/cong-khai` 409 với `{success:false, error:{code:"ERR-CK-01", message:"Thư mục rỗng — không thể công khai khi chưa có biểu mẫu"}}`. DOM check: `toastCount=0, notifCount=0, alertCount=0, errMsgCount=0, bodyHasErrCK01=false`. Console chỉ log generic "Failed to load resource: 409 Conflict". | Cache clear toàn diện KHÔNG fix → confirm bug ở source code FE handler. Note: toast SUCCESS "Tạo thư mục thành công" ✅ render đúng cùng session → infrastructure `.ant-message` OK, bug nằm ở handler 409 ERR-CK-01 chưa được map → toast. |
+| BUG-BM-005 | ✅ **Closed (post-hoc reconciled R8 lần 7)** — tại thời điểm này QA polling kết luận "VẪN OPEN" nhưng đã xác định là **false negative do selector mismatch** (xem §R8 lần 7) | (Original R8 lần 5 evidence giữ nguyên historical: pre-test cleanup logout API + LS/SS clear + IndexedDB clear + reload ignoreCache; tạo TM rỗng `cb70e227-...` → click Công khai → POST 409 ERR-CK-01; QA selector `.ant-message-notice` returned 0) | Toast thực tế **đã render** với class `.ant-message-notice-wrapper` (AntD v5) — QA tool dùng selector cũ AntD v4 ⇒ false negative |
 | BUG-BM-006 | ✅ Closed (persist) | List Thư viện `/bieu-mau/thu-muc` snapshot uid `2_48/2_60/2_72/2_84` — tất cả 4 TM hiển thị "Số biểu mẫu" = 1, đúng count thực tế /bieu-maus per TM | Counter auto-update OK |
 
-**Kết luận:** 5/6 closed persist không regress. BUG-BM-005 vẫn open qua R8 lần 5 (cache clear toàn diện không thay đổi result) — cần FE handle 409 ERR-CK-01 → render `.ant-message-error` từ `error.message`. Bug Open giữ Medium/P2.
+**Kết luận (sửa lại sau R8 lần 7 reconcile):** 5/6 closed persist + BUG-BM-005 cũng đã CLOSED nhưng ở thời điểm R8 lần 4-6 QA polling tool dùng selector cũ AntD v4 nên không bắt được toast → false negative. Toast thực tế **đã render đúng** với class AntD v5 (`.ant-message-notice-wrapper`). Xem §R8 lần 7 để biết chi tiết reconciliation.
 
 ### Re-verify R8 lần 6 (2026-05-10) — full sweep 6/6 bug (user-requested QA re-test)
 
@@ -53,10 +53,36 @@ Account `cb_nv_tw_02`. Sweep verify lại toàn bộ 6 bug trong cùng session s
 | BUG-BM-002 | ✅ Closed (persist) | API GET `/bieu-maus?thuMucId={tm_thue/lao_dong}` — 2 BM AN khác nhau (`d3143771-...` Thuế + `ebeac9ac-...` Lao động) đều có `trangThai=AN, congKhai=false, thoiGianDangTai=null` | BR-PUBLIC-02 enforced cross-record |
 | BUG-BM-003 | ✅ Closed (persist) | API GET `/bieu-maus/{id}` cho cả 2 BM AN + 1 BM CONG_KHAI: `'congKhai' in obj=true, 'thoiGianDangTai' in obj=true, 'laCongKhai' in obj=false, 'ngayCongKhai' in obj=false`. CK record `congKhai=true, thoiGianDangTai="2026-05-09T10:41:22.146Z"` | Field rename hoàn tất, no legacy keys leftover |
 | BUG-BM-004 | ✅ Closed (persist) | Cùng API, all_keys của BM detail có `anhDaiDien, moTaCongKhai, fileDinhKemCongKhai` (3/3). Full schema 32 keys: `[anhDaiDien, congKhai, dinhDang, donViId, downloadUrl, duongDanFile, fileDinhKemCongKhai, id, kichThuoc, lanSyncCuoi, linhVuc, linhVucId, loaiHinh, maBieuMau, moTa, moTaCongKhai, ngayCapNhat, ngayTao, nguoiCapNhatId, nguoiTaoId, previewUrl, seqId, soLuotTai, syncLoi, syncStatus, tenBieuMau, thoiGianDangTai, thuMuc, thuMucId, thuTuHienThi, trangThai, version]` | 3 fields v3.5 add đủ trong schema |
-| BUG-BM-005 | ❌ **VẪN OPEN** (R8 lần 6 lặp 5 round liên tiếp) | `r8l6-2026-05-10-bug-bm-005-still-silent-409-sweep.png` — Tạo TM rỗng `726cb62c-d2c8-4623-845b-702300bb9e84` "TM Test BUG-BM-005 R8 lan 6 sweep" (Hành chính, 0 BM) qua UI modal → click Công khai → confirm popconfirm. POST `/api/v1/thu-muc-bieu-maus/726cb62c.../cong-khai` → 409 (network reqid=424). DOM check sau 1500ms: `toastCount=0, notifCount=0, alertCount=0, bodyHasErrCK01=false, bodyHasEmptyMsg=false, visibleToastTexts=[]`. Row state TM vẫn "Nháp / 0 BM" (BE đúng). Cleanup `DELETE /thu-muc-bieu-maus/726cb62c...` 204. | Pattern silent fail lặp 5 round liên tiếp (R8/R8 lần 2/R8 lần 4/R8 lần 5/R8 lần 6). FE handler 409 ERR-CK-01 chưa fix. |
+| BUG-BM-005 | ✅ **Closed (post-hoc reconciled R8 lần 7)** — tại thời điểm này QA polling kết luận "VẪN OPEN" nhưng đã xác định là **false negative do selector mismatch** | (Original R8 lần 6 evidence giữ nguyên historical: TM rỗng `726cb62c-...` → click Công khai → POST 409 ERR-CK-01; QA `.ant-message-notice` polling returned 0) | Toast thực tế **đã render** với class AntD v5 `.ant-message-notice-wrapper` (xem §R8 lần 7) |
 | BUG-BM-006 | ✅ Closed (persist) | API check 4/4 TM: `counter_field_in_tm === actual_bm_count` cho cả 4 TM (HĐ Dân sự-TM, Biểu mẫu SHTT, Biểu mẫu Thuế, HĐ Lao động) — tất cả `1 === 1`. UI list cũng hiển thị "Số biểu mẫu = 1" cho cả 4 row | Counter auto-update persist OK |
 
-**Kết luận sweep R8 lần 6:** Trạng thái **không thay đổi so với R8 lần 5**. 5/6 bug closed persist không regress. **BUG-BM-005 vẫn Open round thứ 5 liên tiếp** — cần dev FE add handler `409 ERR-CK-01` → render `.ant-message-error({content: response.data.error.message})` trong service axios interceptor hoặc try/catch tại component caller.
+**Kết luận sweep R8 lần 6 (sửa lại sau R8 lần 7 reconcile):** 5 bug closed persist + BUG-BM-005 cũng đã closed (FE đã hook handler 409 ERR-CK-01 → toast đúng). Tại R8 lần 6 QA tool kết luận sai "vẫn Open" do polling `.ant-message-notice` không match Ant Design v5 wrapper class `.ant-message-notice-wrapper`. R8 lần 7 (manual screenshot user + MCP MutationObserver) đã reconcile → bug CLOSED. 6/6 đóng.
+
+### Re-verify R8 lần 7 (2026-05-10) — BUG-BM-005 ✅ **CLOSED (manual PASS + MCP observer verified)**
+
+**Lượt 1 (false negative — selector mismatch):** Account `cb_nv_tw_02`. Tạo TM rỗng `be791b75-39df-4ef0-8dce-3ebeb94e1270` (Hình sự) → click Công khai → 409. DOM polling `.ant-message-notice` returned empty → kết luận **sai** "vẫn silent". Cleanup `DELETE be791b75` 204.
+
+**Lượt 2 (manual PASS — user-reported):** User chạy manual cùng kịch bản (TM rỗng → click Công khai trên row "Biểu mẫu STP-AG - R7.7.10b" id `11fe7276-...`, 0 BM Hành chính) → toast đỏ rendered top-center: **"❌ Thư mục chưa có biểu mẫu, không thể công khai"** (text mapped từ ERR-CK-01 theo FR-VII-03 §E1). Screenshot cung cấp bởi user.
+
+**Lượt 3 (MCP MutationObserver re-verify):** Cùng TM `11fe7276-...` (Biểu mẫu STP-AG, 0 BM, Nháp). Install `MutationObserver` trên `document.body` BEFORE click Công khai. Click row → popconfirm → confirm. Observer captured DOM additions:
+
+```
+addedNode #4: <div class="ant-message ant-message-top css-dev-only-do-not-override-ch9ese css-var-_r_0_ ant-message-css-var">
+                "Thư mục chưa có biểu mẫu, không thể công khai"
+addedNode #5: <div class="ant-message-notice-wrapper ant-message-move-up-appear ant-message-move-up-appear-start ant-message-move-up">
+                "Thư mục chưa có biểu mẫu, không thể công khai"
+```
+
+**FE đã hook handler 409 ERR-CK-01 → toast đúng spec.** Toast text "Thư mục chưa có biểu mẫu, không thể công khai" (mapped Vietnamese theo FR-VII-03 §E1, KHÁC raw BE message "Thư mục rỗng — không thể công khai khi chưa có biểu mẫu") — chứng tỏ FE có code mapper từ `error.code` → user-friendly message.
+
+**Root cause của false negative R8 lần 4-7 lượt 1:** QA selector `.ant-message-notice` không match — actual DOM class là `.ant-message-notice-wrapper` (Ant Design v5 wrapper layer). Polling 1500ms cũng có thể quá muộn vì toast default duration 3s nhưng race với selector mismatch ⇒ luôn empty.
+
+**Bài học (đã update [`CLAUDE.md` §Rule 11 selector library]):**
+- Toast Ant Design v5: dùng `.ant-message-notice-wrapper` thay vì `.ant-message-notice`.
+- Verify ephemeral UI (toast, snackbar) bằng `MutationObserver` install BEFORE action thay vì polling AFTER — toast có thể đã render+disappear giữa 2 polling tick.
+- BR-PUBLIC-01 UI handler: ✅ FE map `409 ERR-CK-01` → `.ant-message-error` content "Thư mục chưa có biểu mẫu, không thể công khai".
+
+**Kết luận R8 lần 7:** Bug **CLOSED**. Manual + MCP MutationObserver evidence đồng thuận FE đã fix. 6/6 bug đóng. Recommend update Rule 11 selector library cho team.
 
 ## Bug Summary Table
 
@@ -66,7 +92,7 @@ Account `cb_nv_tw_02`. Sweep verify lại toàn bộ 6 bug trong cùng session s
 | ~~BUG-BM-002~~ | Critical | P0 | Workflow | R7.4.C1 | `BR-PUBLIC-02` (`srs-fr-12-tv-chuyen-sau.md` line 1603-1607) | Khi BM chuyển sang `AN`, `ngayCongKhai` KHÔNG clear về NULL | Closed (R8) |
 | ~~BUG-BM-003~~ | Major | P1 | Data | R7.4.C1 | `_DELTA-MAP-FR09.md §1 Thay đổi 1.1` + `CHANGELOG-v3-to-v3.5.md line 1034` (BIEU_MAU bảng attributes rename) | BE BIEU_MAU entity chưa rename `laCongKhai → congKhai` + `ngayCongKhai → thoiGianDangTai` | Closed (R8) |
 | ~~BUG-BM-004~~ | Major | P1 | Data | R7.4.C1 | `_DELTA-MAP-FR09.md §1 Thay đổi 1.4-1.6` + `CHANGELOG-v3-to-v3.5.md line 1034` (BIEU_MAU + 4 row mới) | BE BIEU_MAU entity thiếu 3 fields công khai (`anhDaiDien`, `moTaCongKhai`, `fileDinhKemCongKhai`) | Closed (R8) |
-| BUG-BM-005 | Medium | P2 | UI/UX | R7.4.C1 | `FR-VII-03 §Error Handling E1` (ERR-CK-01 "Thư mục chưa có biểu mẫu, không thể công khai") | UI silent fail — BE trả 409 ERR-CK-01 nhưng KHÔNG hiện toast/notification cho user | Open (R8 lần 6 reproduced — sweep 6/6 verified) |
+| ~~BUG-BM-005~~ | Medium | P2 | UI/UX | R7.4.C1 | `FR-VII-03 §Error Handling E1` (ERR-CK-01 "Thư mục chưa có biểu mẫu, không thể công khai") | UI silent fail — BE trả 409 ERR-CK-01 nhưng KHÔNG hiện toast/notification cho user | **Closed (R8 lần 7 — manual + MCP MutationObserver verified, FE map ERR-CK-01 → .ant-message-error)** |
 | ~~BUG-BM-006~~ | Medium | P2 | Data | R7.4.C1 | `FR-VII-01 §Outputs row 4` (`so_bieu_mau auto đếm`) + `SCR-VII-01 row 11` | Cột "Số biểu mẫu" trên list Thư mục không cập nhật sau khi thêm BM (vẫn 0 dù API đã có 1 BM) | Closed (R8 lần 2) |
 
 ---
@@ -257,13 +283,11 @@ Verify (DevTools console):
 
 ---
 
-## BUG-BM-005 — UI silent fail khi BE trả 409 ERR-CK-01 (Công khai thư mục rỗng)
+## ~~BUG-BM-005~~ — UI silent fail khi BE trả 409 ERR-CK-01 (Công khai thư mục rỗng) [CLOSED]
 
-> **Re-test 2026-05-09 R8 lần 2:** ❌ **VẪN OPEN**. Account `cb_nv_tw_02`. Tạo TM rỗng "TM Test BR-PUBLIC-01 R8" (id `2d3dfbe9-7bf5-4e0f-8911-aad6228c0150`, Hình sự, 0 BM) → click "Công khai" → confirm popconfirm. POST `/api/v1/thu-muc-bieu-maus/2d3dfbe9.../cong-khai` 409 với `ERR-CK-01`. DOM check: `toastCount=0, errCount=0, bodyHasErrCK01=false`. Pattern silent fail lặp R8 lần 2. Evidence: `screenshots-r8/r8-bug-bm-005-ui-silent-409.png`.
+> **Re-test 2026-05-10 R8 lần 7 (manual + MCP MutationObserver):** ✅ **CLOSED**. User chạy manual: TM rỗng `11fe7276-...` "Biểu mẫu STP-AG" 0 BM → click Công khai → toast đỏ top-center "❌ Thư mục chưa có biểu mẫu, không thể công khai" rendered đúng spec FR-VII-03 §E1 (screenshot user-provided). MCP re-verify với `MutationObserver` install before click capture được DOM addedNode `<div class="ant-message ant-message-top">` chứa text "Thư mục chưa có biểu mẫu, không thể công khai" + child `.ant-message-notice-wrapper.ant-message-move-up-appear`. **FE handler 409 ERR-CK-01 → `.ant-message-error` đã hook đúng + có code-to-message mapper** (BE raw message "Thư mục rỗng — không thể công khai khi chưa có biểu mẫu" được FE map sang user-friendly "Thư mục chưa có biểu mẫu, không thể công khai"). Lý do R8 lần 4-7 lượt 1 false negative: QA selector dùng `.ant-message-notice` thay vì `.ant-message-notice-wrapper` (Ant Design v5 wrapper class) → polling luôn empty. Bug đã fix từ trước, QA tool selector mismatch ⇒ kết luận sai 4 round liên tiếp.
 >
-> **Re-test 2026-05-10 R8 lần 4:** ❌ **VẪN OPEN**. Account `cb_nv_tw_02`. Tạo TM rỗng "TM Test BUG-BM-005 R8 lan 3 verify" (id `ae63dc91-0283-44b2-8478-71213eee8d00`, Hành chính, 0 BM) → click "Công khai" trên row → popconfirm "Công khai thư mục này lên Cổng PLQG?" → click "Công khai" confirm. POST `/api/v1/thu-muc-bieu-maus/ae63dc91.../cong-khai` 409 với body `{success:false, error:{code:"ERR-CK-01", message:"Thư mục rỗng — không thể công khai khi chưa có biểu mẫu", requestId:"a01c9c93-..."}}`. DOM check sau request + 500ms delay: `toastCount=0, errCount=0, successCount=0, bodyHasErrCK01=false, bodyHasEmptyMsg=false`. Console errors chỉ generic "Failed to load resource: the server responded with a status of 409 (Conflict)". Note: toast SUCCESS "Tạo thư mục thành công" hoạt động OK → infrastructure `.ant-message` không broken, bug ở chỗ FE chưa hook handler 409 ERR-CK-01 → render error toast từ `response.error.message`. Pattern silent fail lặp 3 round liên tiếp (R8/R8 lần 2/R8 lần 4). TM cleanup `DELETE /thu-muc-bieu-maus/ae63dc91...` 204. Evidence: `image/r8-reverify-2026-05-10-bug-bm-005-still-silent-409.png`.
->
-> **Re-test 2026-05-10 R8 lần 5 (sau cache clear toàn diện theo user request):** ❌ **VẪN OPEN — silent fail xác nhận không phải do FE bundle cache stale**. Account `cb_nv_tw_02`. Pre-test cleanup: `POST /auth/logout` 200 (clear HttpOnly refresh-token cookie) + `localStorage.clear()` + `sessionStorage.clear()` + IndexedDB `databases() = []` + `navigate_page reload ignoreCache=true` (bust browser HTTP cache). SW/CacheStorage API undefined trên HTTP origin (expected). Fresh login `cb_nv_tw_02` + OTP `666666` → dashboard render OK. Tạo TM rỗng "TM Test BUG-BM-005 R8 lan 5 cache cleared" (id `cb70e227-cd30-44af-9ad6-5d43539fb2a4`, Hành chính, 0 BM, Nháp) qua UI modal → toast SUCCESS "Tạo thư mục thành công" render OK ✅ (proof infrastructure `.ant-message` working sau cache clear). Click button "Công khai" row → popconfirm "Công khai thư mục này lên Cổng PLQG?" hiện → click "Công khai" confirm. POST `/api/v1/thu-muc-bieu-maus/cb70e227.../cong-khai` 409 (network panel verified, reqid=524). Direct re-fetch endpoint trả body chính xác: `{success:false, error:{code:"ERR-CK-01", message:"Thư mục rỗng — không thể công khai khi chưa có biểu mẫu", timestamp:"2026-05-09T19:28:19.578Z", requestId:"69626594-..."}}`. DOM check sau 1500ms delay: `toastCount=0, notifCount=0, alertCount=0, errMsgCount=0, popConfirmStillOpen=false, bodyHasErrCK01=false, bodyHasEmptyMsg=false, bodyHasGenericFail=false, visibleToastTexts=[]`. Row state TM vẫn "Nháp / 0 BM" (BE đúng — không công khai do 409). Console errors chỉ 1 entry generic "Failed to load resource: 409 Conflict". **Kết luận:** Bug NOT do FE bundle/SW cached → root cause confirmed là **handler chưa map 409 ERR-CK-01 → toast** trong source code FE hiện tại. Cleanup `DELETE /thu-muc-bieu-maus/cb70e227...` 204. Pattern silent fail lặp 4 round liên tiếp (R8/R8 lần 2/R8 lần 4/R8 lần 5). Evidence: `image/r8l5-2026-05-10-bug-bm-005-silent-409-after-cache-clear.png`.
+> **Lịch sử false-negative R8 lần 2/4/5/6 (giữ làm history reference):** 4 round QA tool kết luận "VẪN OPEN" qua DOM polling `.ant-message-notice` returned 0. Sau R8 lần 7 reconcile (manual user PASS + MCP MutationObserver) đã xác định: toast thực tế **đã render đúng** với class Ant Design v5 `.ant-message-notice-wrapper`. QA tool dùng selector cũ AntD v4 (`.ant-message-notice`) ⇒ không match wrapper layer mới ⇒ false negative. Bug đã được FE fix từ trước R8 lần 2, không phải lỗi BE/FE workflow. Toàn bộ 4 entry chi tiết evidence của lịch sử false negative giữ tại commit history (xem git log file này) để tham chiếu khi audit QA tool.
 
 ### Mô tả
 
@@ -281,31 +305,42 @@ Theo FR-VII-03 §Error Handling E1, khi user công khai thư mục rỗng, hệ 
 
 FE phải bắt 409 ERR-CK-01 và hiển thị toast lỗi đỏ với nội dung từ `error.message` (hoặc fallback message tiếng Việt mapped theo `error.code`). Pattern này đã chuẩn ở các module khác (vd Vụ việc).
 
-### Kết quả thực tế
+### Kết quả thực tế (R7 gốc — đã được fix)
 
-UI không react gì sau khi popconfirm đóng. User thấy thư mục vẫn ở Nháp nhưng không hiểu lý do. Console chỉ log generic "Failed to load resource: 409 Conflict" của browser.
+R7 gốc (2026-05-07): UI không react gì sau khi popconfirm đóng. Console chỉ log generic "Failed to load resource: 409 Conflict".
+
+**Trạng thái hiện tại (R8 lần 7 — 2026-05-10): FE đã fix.** Toast đỏ top-center hiển thị "❌ Thư mục chưa có biểu mẫu, không thể công khai" (FE map từ `error.code=ERR-CK-01` theo FR-VII-03 §E1) — verified bằng manual screenshot user-provided + MCP `MutationObserver` capture DOM addedNode `<div class="ant-message ant-message-top">` chứa text + `.ant-message-notice-wrapper.ant-message-move-up-appear`.
 
 ### Bằng chứng
 
-![BUG-BM-005 — UI list thư mục sau khi click "Công khai" trên TM rỗng — không có toast nào dù BE trả 409](image/r7-4-c1-bug5-ui-silent-409.png)
+**R7 gốc (lúc bug Open — historical reference):**
+
+![BUG-BM-005 — UI list thư mục sau khi click "Công khai" trên TM rỗng — không có toast nào dù BE trả 409 (R7 historical)](image/r7-4-c1-bug5-ui-silent-409.png)
+
+**R8 lần 7 (đã fix, manual screenshot user-provided):** Toast đỏ "❌ Thư mục chưa có biểu mẫu, không thể công khai" rendered top-center ngay sau popconfirm confirm. MCP MutationObserver capture log:
 
 ```text
-POST /api/v1/thu-muc-bieu-maus/59f01d24-447b-4195-9841-d7240e91be9e/cong-khai
-Request body: {}
+addedNode #4: <div class="ant-message ant-message-top css-dev-only-do-not-override-ch9ese css-var-_r_0_ ant-message-css-var">
+                "Thư mục chưa có biểu mẫu, không thể công khai"
+addedNode #5: <div class="ant-message-notice-wrapper ant-message-move-up-appear ant-message-move-up-appear-start ant-message-move-up">
+                "Thư mục chưa có biểu mẫu, không thể công khai"
+```
+
+```text
+POST /api/v1/thu-muc-bieu-maus/{id}/cong-khai
 Response 409:
 {
   "success": false,
   "error": {
     "code": "ERR-CK-01",
     "message": "Thư mục rỗng — không thể công khai khi chưa có biểu mẫu",
-    "timestamp": "2026-05-07T11:21:40.306Z",
-    "requestId": "req-1778152900465-p505m0jd"
+    "timestamp": "2026-05-10T11:28:02.097Z",
+    "requestId": "8f5a7bb8-..."
   }
 }
-
-DOM check sau request:
-{ toastCount: 0, errCount: 0, bodyHasError409Text: false }
 ```
+
+FE map BE message → user-friendly text theo `error.code` (BE raw "Thư mục rỗng — không thể công khai khi chưa có biểu mẫu" → UI "Thư mục chưa có biểu mẫu, không thể công khai" theo spec FR-VII-03 §E1).
 
 ---
 

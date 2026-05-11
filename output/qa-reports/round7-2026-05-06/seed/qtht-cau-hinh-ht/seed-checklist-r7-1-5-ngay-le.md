@@ -28,7 +28,7 @@
 
 **Snapshot lịch sử (2026-05-06 14:12):** 15/5 khoảng cover đầy đủ qua API direct workaround (UI tab chưa deploy DEPLOY-004 lúc đó). 5 khoảng: Tết DL/Tết NĐ 7 ngày/Giỗ Tổ/30-4+1-5+nghỉ bù/Quốc khánh+nghỉ bù.
 
-**Bug:** [BUG-NGAY-LE-001](../../bug-reports/qtht-cau-hinh-ht/bug-report-seed-r7-1-5-ngay-le.md) Major Open lần 6/6 — FE [Đồng ý] silent fail, không trigger POST. Workaround API direct OK.
+**Bug:** [BUG-NGAY-LE-001](../../bug-reports/qtht-cau-hinh-ht/Pass-bug-report-seed-r7-1-5-ngay-le.md) Major Open lần 6/6 — FE [Đồng ý] silent fail, không trigger POST. Workaround API direct OK.
 
 ---
 

@@ -26,7 +26,7 @@
 
 Hoàn tất R7.3.10 R8 — seed thêm **3 record (1 SLIDE + 2 PDF)** lên trên 5 VIDEO cũ R7. Final 8 records cover 3 loại × 7 LV. Dùng API atomic `POST /api/v1/bai-giangs` (JSON body) + `PATCH` follow-up cho `fileUrl + dungLuong` (BE schema serialize 2 field separate, không phải nested `fileBaiGiang`).
 
-**Bug:** [bug-report-bai-giang-r7-3-10.md](../../bug-reports/dao-tao/bug-report-bai-giang-r7-3-10.md) — 1 Major BE missing validation `fileBaiGiang/urlYoutube` theo `loaiTaiLieu` (vi phạm SRS FR-III-07 Inputs row 4-5 + Error Handling E2/E3).
+**Bug:** [Pass-bug-report-bai-giang-r7-3-10.md](../../bug-reports/dao-tao/Pass-bug-report-bai-giang-r7-3-10.md) — 1/1 đóng (Closed-verified R10 2026-05-10, fix qua commit `e3f4921a`).
 
 ---
 

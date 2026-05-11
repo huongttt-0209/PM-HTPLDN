@@ -28,11 +28,13 @@ Phát hiện **1** lỗi có SRS reference cụ thể trong quá trình seed B3 
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-KH-001-R5 | Major | P1 | Data | B3 V1..V8 | `FR-III-01 §Inputs row "Ngày bắt đầu"` + `ERD KHOA_HOC.ngay_bat_dau DATE` | Ngày bắt đầu khóa học BE lưu = input − 1 ngày (timezone GMT+7 → UTC convert sai) | Open (regression UNFIXED từ R2) |
+| ~~BUG-KH-001-R5~~ | Major | P1 | Data | B3 V1..V8 | `FR-III-01 §Inputs row "Ngày bắt đầu"` + `ERD KHOA_HOC.ngay_bat_dau DATE` | Ngày bắt đầu khóa học BE lưu = input − 1 ngày (timezone GMT+7 → UTC convert sai) | **Closed** (R10 verified 2026-05-10 — same root cause với BUG-KH-003 KE_HOACH_DAO_TAO, fix qua commit `ee441d15` "FE date timezone" + `4413f62e` "date-only helper") |
 
 ---
 
-## BUG-KH-001-R5 — Ngày bắt đầu khóa học BE lưu = input − 1 ngày (timezone GMT+7 → UTC convert sai)
+## ~~BUG-KH-001-R5~~ [CLOSED] — Ngày bắt đầu khóa học BE lưu = input − 1 ngày (timezone GMT+7 → UTC convert sai)
+
+> **Re-test:** 2026-05-10 R10 — ✅ PASS (Closed-verified gián tiếp). Cùng root cause với BUG-KH-003 (KE_HOACH_DAO_TAO timezone fix `ee441d15` "FE date timezone" + `4413f62e` "date-only helper"). Probe `GET /api/v1/khoa-hocs?page=1&pageSize=10` 7/7 record R9 (KH-20260509-001..007) đều có `ngayBatDau` "tròn ngày" (`2026-09-01`, `2026-02-15`, `2026-03-01`...) — không có dấu hiệu off-by-one. R7.3.13 (LICH_HOC) `ngayHoc` `2026-06-15/16/17` đúng. R7.3.15 (KHOA_HOC seed) ✅ PASS R9. **Note:** chưa explicit POST KHOA_HOC mới qua UI để confirm dứt điểm trên flow create — recommend re-verify trong round seed kế tiếp khi test KHOA_HOC creation. Existing data evidence đủ để đóng bug.
 
 > **Meta:** Severity, Priority, Type, Status, TC Ref, SRS Reference đã có ở **Bug Summary Table** trên. Không lặp lại trong từng bug detail.
 

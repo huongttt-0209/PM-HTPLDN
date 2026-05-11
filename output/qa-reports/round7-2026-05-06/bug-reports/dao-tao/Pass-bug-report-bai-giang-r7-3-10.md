@@ -28,11 +28,23 @@ Phát hiện **1 lỗi Major** trong quá trình seed BAI_GIANG R8: BE thiếu v
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-BG-001 | Major | P1 | Negative | R7.3.10-R8 | `FR-III-07 Inputs row 4 line 648` (`file_bai_giang Cond: bắt buộc nếu SLIDE/PDF`) + `Error Handling E1/E2 line 689-690` (`ERR-BG-01/02`) | BE missing validation `fileBaiGiang/urlYoutube` theo `loaiTaiLieu` — POST với fileBaiGiang=null/omitted vẫn 201 Created cho PDF/SLIDE | Open |
+| ~~BUG-BG-001~~ | Major | P1 | Negative | R7.3.10-R8 | `FR-III-07 Inputs row 4 line 648` (`file_bai_giang Cond: bắt buộc nếu SLIDE/PDF`) + `Error Handling E1/E2 line 689-690` (`ERR-BG-01/02`) | BE missing validation `fileBaiGiang/urlYoutube` theo `loaiTaiLieu` — POST với fileBaiGiang=null/omitted vẫn 201 Created cho PDF/SLIDE | **Closed** (R10 verified, fix qua commit `e3f4921a` "Guard validateFileUrl chống null/missing") |
 
 ---
 
-## BUG-BG-001 — BE missing validation `fileBaiGiang/urlYoutube` theo `loaiTaiLieu`
+## ~~BUG-BG-001~~ [CLOSED] — BE missing validation `fileBaiGiang/urlYoutube` theo `loaiTaiLieu`
+
+> **Re-test:** 2026-05-10 R10 — ✅ PASS (Closed-verified). Sau cache clear + fresh login `cb_nv_tw_02`, probe 11 shape `POST /api/v1/bai-giangs` (10 negative + 1 positive) — BE đã có validation guard đầy đủ cho cả 3 loaiTaiLieu:
+> - **PDF (4 shape):** omit / null / string / object → 400 `ERR-BG-PDF-EXT "File PDF (.pdf) là bắt buộc"`
+> - **SLIDE (2 shape):** object schema B/C → 400 `ERR-BG-SLIDE-EXT "File SLIDE (.pptx) là bắt buộc"`
+> - **VIDEO (4 shape):** omit / null / empty / malformed URL → 400 `ERR-BG-VIDEO-URL "URL YouTube là bắt buộc cho loại VIDEO"` hoặc `"URL video phải là YouTube URL hợp lệ"`
+> - **VIDEO positive (1 shape):** `fileUrl: "https://youtube.com/watch?v=TEST_R10"` → 201 Created ✅ (cleanup DELETE 204)
+>
+> **Note schema drift:** BE field name cho VIDEO là `fileUrl` (KHÔNG phải `urlYoutube` như bug original assume — explain why probe original không trigger validation: payload dùng key sai → BE silently drop). Schema BG entity: `tenBaiGiang, moTa, loaiTaiLieu, fileUrl, dungLuong, anhDaiDien, congKhai, thoiGianDangTai, moTaCongKhai, fileDinhKemCongKhai, linhVucs[]`. Recommend update SRS Inputs để khớp tên field BE: `file_url` thay vì `file_bai_giang/url_youtube`.
+>
+> **Note error code drift vs SRS:** BE dùng `ERR-BG-PDF-EXT / ERR-BG-SLIDE-EXT / ERR-BG-VIDEO-URL` (HTTP 400), SRS spec `ERR-BG-02 "Sai định dạng"` (HTTP 422). Validation logic match spec, naming khác. Acceptable — không re-open.
+>
+> Fix theo `_qa-summary-2026-05-10.md` line 157: commit `e3f4921a` "Guard validateFileUrl chống null/missing". Screenshot evidence: [r10-verify-2026-05-10-bg-001-pdf-slide-video-validation-pass.png](../../screenshots/r10-verify-2026-05-10-bg-001-pdf-slide-video-validation-pass.png).
 
 ### Mô tả
 

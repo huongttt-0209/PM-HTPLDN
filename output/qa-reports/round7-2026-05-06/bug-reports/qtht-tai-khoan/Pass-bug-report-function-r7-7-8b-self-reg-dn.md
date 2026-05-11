@@ -13,7 +13,7 @@
 
 ## Tổng hợp
 
-Phát hiện **5** bug khi test FR-VIII-22 Self-reg DN.
+Phát hiện **5** bug khi test FR-VIII-22 Self-reg DN. **Re-verify 2026-05-10 — TẤT CẢ 5 BUG ĐÃ ĐÓNG.**
 
 ### Severity breakdown
 
@@ -26,10 +26,24 @@ Phát hiện **5** bug khi test FR-VIII-22 Self-reg DN.
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |---|---|---|---|---|---|---|---|
 | ~~BUG-FR22-002~~ | Major | P1 | Workflow | TC02 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1032 + 1074 | ~~FE+BE cho phép MST 13 chữ số (chi nhánh) — SRS chỉ định regex `^\d{10}$`, chi nhánh không tự đăng ký riêng~~ | **Closed** |
-| BUG-FR22-004 | Medium | P2 | Workflow | TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1032 | BE thêm validation MST checksum theo TT 105/2020 — KHÔNG có trong SRS spec; cần BA confirm bổ sung hay drop | Open (đợi BA) |
-| BUG-FR22-001 | Minor | P3 | UI/UX | TC01 + TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1089-1090 + 1280 | UI thiếu ô "Tên đăng nhập" readonly hiển thị MST + UI message "hiệu lực 24 giờ" ≠ SRS line 1280 "vĩnh viễn" | Closed (a) / Open (b) |
-| BUG-FR22-003 | Minor | P3 | Code | TC03 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1074-1079 | errCode mismatch — BE `ERR-VAL-VIII-22-XX` thay SRS `ERR-REG-XX` | Open (defer Minor) |
-| BUG-FR22-005 | Minor | P3 | Workflow | TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1070-1079 | BE warning WRN-DN-01 quy mô-lao động (NĐ 39/2018) — không có trong FR-VIII-22 §Error Handling | Open (defer Minor) |
+| ~~BUG-FR22-004~~ | Medium | P2 | Workflow | TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1032 | ~~BE thêm validation MST checksum theo TT 105/2020 — KHÔNG có trong SRS spec; cần BA confirm bổ sung hay drop~~ | **Closed-verified 2026-05-10** |
+| ~~BUG-FR22-001~~ | Minor | P3 | UI/UX | TC01 + TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1089-1090 + 1280 | ~~UI thiếu ô "Tên đăng nhập" readonly hiển thị MST + UI message "hiệu lực 24 giờ" ≠ SRS line 1280 "vĩnh viễn"~~ | **Closed (a) R7 + (b) Closed-verified 2026-05-10** |
+| ~~BUG-FR22-003~~ | Minor | P3 | Code | TC03 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1074-1079 | ~~errCode mismatch — BE `ERR-VAL-VIII-22-XX` thay SRS `ERR-REG-XX`~~ | **Closed-verified 2026-05-10** |
+| ~~BUG-FR22-005~~ | Minor | P3 | Workflow | TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1070-1079 | ~~BE warning WRN-DN-01 quy mô-lao động (NĐ 39/2018) — không có trong FR-VIII-22 §Error Handling~~ | **Closed-verified 2026-05-10** |
+
+> **Re-verify 2026-05-10 14:11-14:13 (round QA verify after dev claim fix all 4 remaining):** ✅ **ALL 4 OPEN BUGS NOW CLOSED.** Cache clear toàn diện + isolated context. Test 3 POST request `/api/v1/auth/register-doanh-nghiep` cover hết 4 case:
+>
+> - **BUG-FR22-004:** ✅ POST với MST `1234567890` (10 digits, sai checksum theo TT 105/2020) + form happy path (TNHH/Hà Nội/Thương mại/Siêu nhỏ) → **201 Created** record id `9bb9ff87-019b-4114-9b66-388a0d8d0e9c`. **BE drop checksum validation** — match SRS line 1032 `regex ^\d{10}$` exact. Previously R7.5.7: 422 ERR-VAL-SYS-00-01.
+>
+> - **BUG-FR22-001(b):** ✅ Response message: `"Đăng ký doanh nghiệp thành công. Vui lòng kiểm tra email để kích hoạt tài khoản (link có hiệu lực vĩnh viễn)."` — match SRS line 1280 "vĩnh viễn nếu là kích hoạt lần đầu" EXACTLY. FE đã sửa từ "24 giờ" → "vĩnh viễn".
+>
+> - **BUG-FR22-005:** ✅ POST với `quyMo: "NHO"` + `soLaoDong/doanhThu/tongNguonVon: 0` (mismatch theo NĐ 39/2018) → **201 Created** record id `b4a8c774-d44f-41e5-8b2b-2e952d4b89bc`. **BE drop rule WRN-DN-01** — KHÔNG còn trả 400 với gợi ý "Siêu nhỏ". Match SRS FR-VIII-22 §Error Handling chỉ có 6 errors ERR-REG-01..06.
+>
+> - **BUG-FR22-003:** ✅ POST với MST `1234567890` (đã đăng ký Test 1) + email mới → **409 Conflict** (semantically correct vs 422 cũ) + body `{"code":"ERR-REG-01","message":"Mã số thuế này đã đăng ký trong hệ thống"}`. errCode đã đổi từ `ERR-VAL-VIII-22-08` → `ERR-REG-01` match SRS line 1074 EXACTLY.
+>
+> **Conclusion:** Tất cả 5 bug FR-VIII-22 đã closed. Self-reg DN flow now fully match SRS spec. Rate-limit thực tế 500/min (response header `x-ratelimit-limit:500`) — không phải 3/60s như assume R7.
+>
+> Evidence: [fr22-reverify-2026-05-10-all-closed.png](image/fr22-reverify-2026-05-10-all-closed.png).
 
 > **Re-test 2026-05-07 14:10 (sau dev claim fix):**
 > - **BUG-FR22-002:** ✅ PASS (Closed-verified). Navigate `/register/doanh-nghiep` → fill MST `1234567890123` (13 chữ số chi nhánh) → inline error xuất hiện ngay: "Mã số thuế phải đúng 10 chữ số (theo TT 105/2020/TT-BTC). Chi nhánh không tự đăng ký riêng." Match SRS line 1074 ERR-REG-01a EXACTLY. FE block submit. Evidence: [r7-7-8b-retest-fr22-002-mst-13-inline-error.png](image/r7-7-8b-retest-fr22-002-mst-13-inline-error.png).

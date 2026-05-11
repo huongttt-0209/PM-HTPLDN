@@ -63,7 +63,7 @@ R9 verify state R8 vẫn comprehensive. KHÔNG add record mới vì:
 
 ## Bug tracking
 
-- **BUG-BG-001** Major (R8 logged) — BE missing validation `fileBaiGiang/urlYoutube` theo `loaiTaiLieu` (vi phạm SRS FR-III-07 Inputs row 4 + Error E2). 0/1 đóng. R9 không re-test (cần dev fix trước).
+- ~~**BUG-BG-001**~~ Major (R8 logged) — BE missing validation `fileBaiGiang/urlYoutube` theo `loaiTaiLieu`. **Closed-verified R10 2026-05-10** (commit `e3f4921a` "Guard validateFileUrl chống null/missing"; 11 probe shape PDF/SLIDE/VIDEO PASS). Xem [Pass-bug-report-bai-giang-r7-3-10.md](../../bug-reports/dao-tao/Pass-bug-report-bai-giang-r7-3-10.md).
 
 ---
 

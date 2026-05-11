@@ -1,5 +1,12 @@
 # Bug Report — Kế hoạch đào tạo năm (R7.3.5 — R8 re-run)
 
+> **📋 Consolidation note:** File này là **bug report active** cho task R7.3.5. Đã gộp + thay thế file R7 cũ `bug-report-seed-r7-3-5-kh-nam.md` (lưu trữ tại [`_archive/bug-report-seed-r7-3-5-kh-nam.md`](_archive/bug-report-seed-r7-3-5-kh-nam.md)).
+>
+> **Mapping ID R7 → R8:**
+> - `BUG-KHNAM-001` (R7 Critical) → `BUG-KH-001` (R8 Major, downgrade sau evidence backend `donViId` mismatch) — cross-tenant leak
+> - `BUG-KHNAM-002` (R7 Medium) → `BUG-KH-003` (R8 Medium) — date off-by-one (R8 xác định gốc backend chứ không phải FE)
+> - `BUG-KH-002` = bug mới R8, không có trong R7
+
 | Thông tin | Giá trị |
 |-----------|---------|
 | **Dự án** | PM HTPLDN — Phần mềm Hỗ trợ Pháp lý Doanh nghiệp |
@@ -31,13 +38,20 @@ Phát hiện **3 lỗi có SRS reference cụ thể** trong quá trình re-seed 
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-KH-001 | Major | P0 | Permission | R7.3.5-R8 | `BR-AUTH-08 line 1903` + `FR-III-14 Processing-Xem danh sách Bước 2 BR-DATA-02` | Backend trả KH năm cross-đơn vị — CB NV bất kỳ cấp đều thấy KH năm của tất cả 3 cấp | Open |
-| BUG-KH-002 | Major | P1 | UI/UX | R7.3.5-R8 | `FR-III-14 Processing-Xóa Bước 1-5 line 1037-1045` | UI chi tiết KH năm Nháp thiếu nút "Xoá" mặc dù backend cho DELETE 204 | Open |
-| BUG-KH-003 | Medium | P2 | Data | R7.3.5-R8 | `FR-III-14 Inputs row 3-4 line 991-992` | Date timezone off-by-one ở backend — input `01/01/2026` lưu thành `2025-12-31` | Open |
+| BUG-KH-001 | Major | P0 | Permission | R7.3.5-R8 | `BR-AUTH-08 line 1903` + `FR-III-14 Processing-Xem danh sách Bước 2 BR-DATA-02` | Backend trả KH năm cross-đơn vị — CB NV bất kỳ cấp đều thấy KH năm của tất cả 3 cấp | **Open** (R10 RE-CONFIRMED) |
+| ~~BUG-KH-002~~ | Major | P1 | UI/UX | R7.3.5-R8 | `FR-III-14 Processing-Xóa Bước 1-5 line 1037-1045` | UI chi tiết KH năm Nháp thiếu nút "Xoá" mặc dù backend cho DELETE 204 | **Closed** (R10 verified) |
+| ~~BUG-KH-003~~ | Medium | P2 | Data | R7.3.5-R8 | `FR-III-14 Inputs row 3-4 line 991-992` | Date timezone off-by-one ở backend — input `01/01/2026` lưu thành `2025-12-31` | **Closed** (R10 verified, record cũ R8 vẫn còn data lệch trong DB) |
 
 ---
 
 ## BUG-KH-001 — Backend trả KH năm cross-đơn vị (vi phạm BR-AUTH-08 / BR-DATA-02 multi-tenant scoping)
+
+> **Re-test:** 2026-05-10 R10 — ❌ FAIL (RE-CONFIRMED Open). Sau cache clear + fresh login `cb_nv_bn_02` (BTC, donViId `...0002`), gọi `GET /api/v1/ke-hoach-dao-taos?page=1&pageSize=50` vẫn trả 7 record gồm 3 donViId khác nhau:
+> - TW (`...000001`): 3 record (KH-20260509-0001 NHAP + KH-20260508-0004 DA_DUYET + KH-20260508-0001 DA_CONG_KHAI) — ❌ leak
+> - BN (`...000002`): 2 record (KH-20260509-0002 TU_CHOI + KH-20260508-0005 DA_CONG_KHAI) — ✅ own unit
+> - DP (`...000008`): 2 record (KH-20260509-0003 NHAP + KH-20260508-0006 DA_CONG_KHAI) — ❌ leak
+>
+> Mong đợi `cb_nv_bn_02` (BTC) chỉ thấy 2 record BN. Thực tế thấy cả 7 → cross-tenant leak vẫn còn, không có WHERE clause filter `donViId` ở list endpoint. Screenshot: [r10-verify-2026-05-10-kh-001-cross-tenant-bn-sees-7-records.png](../../screenshots/r10-verify-2026-05-10-kh-001-cross-tenant-bn-sees-7-records.png). **Bug giữ Open — escalate BE team.**
 
 ### Mô tả
 
@@ -95,7 +109,9 @@ meta.total: 4
 
 ---
 
-## BUG-KH-002 — UI chi tiết KH năm Nháp thiếu nút "Xoá" (backend hỗ trợ DELETE 204)
+## ~~BUG-KH-002~~ [CLOSED] — UI chi tiết KH năm Nháp thiếu nút "Xoá" (backend hỗ trợ DELETE 204)
+
+> **Re-test:** 2026-05-10 R10 — ✅ PASS (Closed-verified). Sau cache clear + fresh login `cb_nv_bn_02`, tạo KH năm mới `KH-20260510-0001` (state Nháp) + vào màn chi tiết: thấy đủ **3 button: `[Chỉnh sửa]` + `[Xoá]` + `[Trình duyệt]`**. Click `[Xoá]` → popconfirm "Xoá" → record biến mất khỏi list (1-8 → 1-7 mục). Match SRS FR-III-14 Processing-Xóa Bước 1-5. Screenshot: [r10-verify-2026-05-10-kh-002-003-pass-detail-with-xoa.png](../../screenshots/r10-verify-2026-05-10-kh-002-003-pass-detail-with-xoa.png) (chi tiết Nháp với button Xoá visible).
 
 ### Mô tả
 
@@ -151,7 +167,15 @@ buttons in main content:
 
 ---
 
-## BUG-KH-003 — Date timezone off-by-one ở backend (input `01/01/2026` lưu `2025-12-31`)
+## ~~BUG-KH-003~~ [CLOSED] — Date timezone off-by-one ở backend (input `01/01/2026` lưu `2025-12-31`)
+
+> **Re-test:** 2026-05-10 R10 — ✅ PASS (Closed-verified). Tạo KH năm mới qua UI form modal với input `Thời gian thực hiện = 01/01/2026 → 31/12/2026`. POST `/api/v1/ke-hoach-dao-taos` reqid=685 trả 201. GET list reqid=686 + GET detail trả `thoiGianBatDau: "2026-01-01"`, `thoiGianKetThuc: "2026-12-31"` ✅ ĐÚNG. UI list + chi tiết hiển thị `01/01/2026 → 31/12/2026` ✅.
+>
+> So sánh trên cùng list `cb_nv_bn_02` thấy:
+> - Record R10 + R9 (`KH-20260510-0001`, `KH-20260509-0001/0002/0003`): dates đúng `2026-01-01 / 2026-12-31` ✅
+> - Record R8 cũ (`KH-20260508-0001/0004/0005/0006`): dates vẫn lệch `2025-12-31 / 2026-12-30` ❌ (DB legacy data — không phải code bug, BE đã fix logic)
+>
+> **Note residual:** 4 record R8 cũ trong DB vẫn giữ data lệch — KHÔNG migrate. Khuyến nghị: nếu downstream task cần date đúng, re-tạo hoặc UPDATE manual. Bug code-side đã closed.
 
 ### Mô tả
 

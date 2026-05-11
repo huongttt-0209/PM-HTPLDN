@@ -1,4 +1,15 @@
-# Bug Report — Kế hoạch đào tạo năm (R7.3.5)
+# Bug Report — Kế hoạch đào tạo năm (R7.3.5) [SUPERSEDED]
+
+> **⚠️ ARCHIVED 2026-05-10:** File này là log R7 ban đầu (09:35-09:55 cùng ngày 2026-05-08). **KHÔNG dùng làm source-of-truth nữa.**
+>
+> **Active bug report:** [`../bug-report-seed-r7-3-5-kh-nam-r8.md`](../bug-report-seed-r7-3-5-kh-nam-r8.md) — R8 đã gộp đầy đủ 2 bug R7 + 1 bug mới + diagnosis sâu hơn + Re-test note R10.
+>
+> **Mapping ID R7 → R8:**
+> - `BUG-KHNAM-001` → `BUG-KH-001` (cross-tenant, downgrade Critical→Major sau evidence backend)
+> - `BUG-KHNAM-002` → `BUG-KH-003` (date off-by-one, xác định gốc backend)
+> - R8 thêm `BUG-KH-002` (UI thiếu Xoá) — không có trong R7
+>
+> Giữ file ở `_archive/` chỉ để truy vết lịch sử R7.
 
 | Thông tin | Giá trị |
 |-----------|---------|

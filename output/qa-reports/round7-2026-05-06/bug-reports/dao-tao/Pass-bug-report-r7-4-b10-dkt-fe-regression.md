@@ -22,11 +22,21 @@ Phát hiện R9 (2026-05-10) khi re-probe R7.4.B10 — block reason R8 ("chờ R
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-DKT-FE-REGRESSION-01 | Major | P1 | UI/FE | R7.4.B10 | `srs-fr-03-dao-tao.md FR-III-NEW-02 line 1094-1113 + FR-III-NEW-03 line 1117-1138` | FE thiếu render action buttons (Sửa/Xóa/Phân phối/Trình duyệt) cho ĐKT — list row Thao tác cell rỗng + detail page chỉ "Quay lại" | **Open** |
+| ~~BUG-DKT-FE-REGRESSION-01~~ | Major | P1 | UI/FE | R7.4.B10 | `srs-fr-03-dao-tao.md FR-III-NEW-02 line 1094-1113 + FR-III-NEW-03 line 1117-1138` | FE thiếu render action buttons (Sửa/Xóa/Phân phối/Trình duyệt) cho ĐKT — list row Thao tác cell rỗng + detail page chỉ "Quay lại" | **Closed** (R10 verified, fix qua commit `ab0f24b6` stale-fixed sweep) |
 
 ---
 
-## BUG-DKT-FE-REGRESSION-01 — FE thiếu render action buttons cho ĐKT
+## ~~BUG-DKT-FE-REGRESSION-01~~ [CLOSED] — FE thiếu render action buttons cho ĐKT
+
+> **Re-test:** 2026-05-10 R10 — ✅ PASS (Closed-verified). Sau cache clear + fresh login `cb_nv_tw_02`, navigate Quản lý đào tạo → Ngân hàng câu hỏi & Đề kiểm tra → tab "Đề kiểm tra":
+> - **List row Thao tác cell:** giờ render đầy đủ **3 button** `edit / send / delete` cho mọi 5 ĐKT NHAP (R8 baseline 4 + R9 add 1 SHTT) — không còn cell rỗng.
+> - **Detail page action area** (ĐKT "Sở hữu trí tuệ 2026 - R9", state Nháp): có **3 button đầy đủ** + Quay lại:
+>   - `edit Chỉnh sửa` (uid 34_20)
+>   - `send Phân phối` (uid 34_21) — match SRS FR-III-NEW-03
+>   - `delete Xóa` (uid 34_22) — match SRS FR-III-NEW-02
+>   - `arrow-left Quay lại danh sách` (uid 34_0)
+>
+> Match SRS spec: FR-III-NEW-02 line 1094-1113 (Sửa+Xóa) + FR-III-NEW-03 line 1117-1138 (Phân phối). Không có button "Trình duyệt" — vì state machine ĐKT không có CHO_DUYET (chỉ NHAP → DA_PHAN_PHOI), match SRS. Fix theo `_qa-summary-2026-05-10.md` line 174 stale-fixed sweep commit `ab0f24b6`. Screenshot: [r10-verify-2026-05-10-dkt-fe-regression-detail-3-buttons.png](../../screenshots/r10-verify-2026-05-10-dkt-fe-regression-detail-3-buttons.png).
 
 ### Mô tả
 

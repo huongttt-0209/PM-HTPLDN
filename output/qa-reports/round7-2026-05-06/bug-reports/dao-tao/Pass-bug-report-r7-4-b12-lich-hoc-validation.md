@@ -8,10 +8,26 @@
 
 | ID | Severity | Title | Status |
 |---|:-:|---|:-:|
-| BUG-LH-CONFLICT-01 | **Major** | BE accept overlap time — 2 buổi cùng ngày + chồng giờ của cùng KH được tạo thành công | Open |
-| BUG-LH-VAL-01 | Minor | TRUC_TUYEN thiếu `linkZoom` → BE 500 generic thay vì 422 ERR-LH-03 | Open |
-| BUG-LH-VAL-02 | Minor | TRUC_TIEP thiếu `diaDiem` → BE 500 generic thay vì 422 ERR-LH-04 | Open |
-| BUG-LH-VAL-03 | **Major** | `ngayHoc` ngoài khoảng `[ngayBatDau, ngayKetThuc]` của KH cha → BE 200 accept vi phạm ERR-LH-01 | Open |
+| ~~BUG-LH-CONFLICT-01~~ | **Major** | BE accept overlap time — 2 buổi cùng ngày + chồng giờ của cùng KH được tạo thành công | **Closed** (R10 verified) |
+| ~~BUG-LH-VAL-01~~ | Minor | TRUC_TUYEN thiếu `linkZoom` → BE 500 generic thay vì 422 ERR-LH-03 | **Closed** (R10 verified) |
+| ~~BUG-LH-VAL-02~~ | Minor | TRUC_TIEP thiếu `diaDiem` → BE 500 generic thay vì 422 ERR-LH-04 | **Closed** (R10 verified) |
+| ~~BUG-LH-VAL-03~~ | **Major** | `ngayHoc` ngoài khoảng `[ngayBatDau, ngayKetThuc]` của KH cha → BE 200 accept vi phạm ERR-LH-01 | **Closed** (R10 verified) |
+
+> **Re-test:** 2026-05-10 R10 — ✅ ALL 4 PASS (Closed-verified). Sau cache clear + fresh login `cb_nv_tw_02`, probe 6 case POST `/api/v1/khoa-hocs/{KH-002}/lich-hocs` (KH-002 có ngayBatDau=2026-06-01, ngayKetThuc=2026-06-03):
+>
+> | # | Probe | HTTP | Error code |
+> |---|---|:-:|---|
+> | V3 | ngayHoc=2025-01-01 (trước range) | 400 | `ERR-VAL-III-23-04 "Ngày học phải nằm trong khoảng 2026-06-01 – 2026-06-03 của khóa học"` ✅ |
+> | V3b | ngayHoc=2027-01-01 (sau range) | 400 | `ERR-VAL-III-23-04` ✅ |
+> | V1 | TRUC_TUYEN no linkZoom | 400 | `ERR-VAL-III-23-05 "Buổi học trực tuyến phải có linkZoom"` ✅ |
+> | V2 | TRUC_TIEP no diaDiem | 400 | `ERR-VAL-III-23-06 "Buổi học trực tiếp phải có địa điểm"` ✅ |
+> | V4 base | 02/06 08:00-10:00 TRUC_TIEP | 201 | created (in-range, no overlap) |
+> | V4 overlap | 02/06 09:00-10:30 (overlap base 08-10) | 409 | `ERR-BIZ-III-23-01 "Buổi học bị trùng giờ với buổi đã có (08:00:00–10:00:00)"` ✅ |
+> | V4 non-overlap | 02/06 10:30-12:00 (boundary touching) | 201 | created (boundary OK) |
+>
+> Cả 2 record V4 (base + non-overlap) cleanup DELETE 204. Fix theo `_qa-summary-2026-05-10.md` line 176 stale-fixed sweep commit `af8276fd`. **Note error code drift vs SRS:** BE dùng `ERR-VAL-III-23-04/05/06` + `ERR-BIZ-III-23-01` (HTTP 400/409), bug original spec `ERR-LH-01/03/04/CONFLICT-01` (HTTP 422). Validation logic match spec, naming khác (per FR-III-22 / FR-III-23 numbering convention BE đang dùng). Acceptable — không re-open.
+>
+> Screenshot: [r10-verify-2026-05-10-lich-hoc-4-bugs-pass.png](../../screenshots/r10-verify-2026-05-10-lich-hoc-4-bugs-pass.png)
 
 ---
 

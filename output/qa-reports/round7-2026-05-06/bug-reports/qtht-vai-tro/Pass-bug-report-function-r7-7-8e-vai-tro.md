@@ -31,7 +31,9 @@ Phát hiện **7** lỗi khi test FR-VIII-14 + SCR-VIII-02 trên 11 TC (TC01-TC1
 | ~~BUG-VT-004~~ | Major | P1 | UI/UX | TC03 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 644 | ~~FE silent trên 409 — modal đóng, không toast/inline error~~ | Closed |
 | ~~BUG-VT-005~~ | Medium | P2 | UI/UX | TC02/TC06 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 619 (§Inputs row 4) | ~~Form Add/Edit modal thiếu trường Trạng thái (trang_thai bắt buộc)~~ | Closed |
 | ~~BUG-VT-006~~ | Minor | P3 | UI/UX | TC02 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 1522 (SCR-VIII-02) | ~~Form Add button [Thêm] ≠ SRS [Lưu] (Form Edit lại đúng [Lưu])~~ | Closed |
-| BUG-VT-008 | Minor | P3 | Code | TC03/TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 644-645 | errCode mismatch — BE `ERR-VAL-VIII-111-XX` thay SRS `ERR-VT-XX` | Open (defer Minor) |
+| ~~BUG-VT-008~~ | Minor | P3 | Code | TC03/TC08 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 644-645 | ~~errCode mismatch — BE `ERR-VAL-VIII-111-XX` thay SRS `ERR-VT-XX`~~ | **Closed-verified 2026-05-10** |
+
+> **Re-verify 2026-05-10 BUG-VT-008:** ✅ **CLOSED.** Login qtht_02 → POST `/api/v1/vai-tro` với body `{maVaiTro: "QTHT", tenVaiTro: "Test ma trung verify", moTa: "verify", cap: "TW"}` → **409** + body `{"code":"ERR-VT-01","message":"Mã vai trò 'QTHT' đã tồn tại"}`. errCode đã đổi `ERR-VAL-VIII-111-01` → `ERR-VT-01` match SRS line 644 EXACTLY. Status code đổi 409 (semantic correct vs 409 cũ). Pattern fix giống BUG-FR22-003 (`ERR-VAL-VIII-22-08` → `ERR-REG-01`) + BUG-FR26-001 (`ERR-AUTH-RESET-01` → `ERR-PWD-04`). BE đã align toàn bộ convention errCode sang SRS spec.
 | ~~BUG-VT-009~~ | Medium | P2 | UI/UX | TC10 | `srs-update-2026-5-5/srs-fr-10-quan-tri.md` line 610 + 625 | ~~FE cho non-QTHT thấy button [+ Thêm mới] + mở modal CRUD (BE 403 đúng nhưng UI lộ entrypoint)~~ | Closed |
 
 > **Re-test 2026-05-07 (sau dev claim fix):** ❌ 5/7 STILL OPEN, 2/7 not verified.
