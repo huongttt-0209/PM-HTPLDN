@@ -182,7 +182,7 @@ CRUD core + state machine + BR-PUBLIC-01 (BE-side) hoạt động đúng. R7.7.1
 | BUG-BM-007 | Critical | BM-007, BM-008 (preview + download) |
 | BUG-BM-008 | Medium | BM-016 (silent reject upload) |
 
-**File 3 — R7.7.10b functional bugs:** [`bug-report-r7-7-10b-bm.md`](../../bug-reports/bm/bug-report-r7-7-10b-bm.md) (1 bug)
+**File 3 — R7.7.10b functional bugs:** [`Pass-bug-report-r7-7-10b-bm.md`](../../bug-reports/bm/Pass-bug-report-r7-7-10b-bm.md) (1 bug, closed R8 lần 9)
 
 | Bug ID | Severity | TC chặn |
 |--------|----------|---------|
@@ -196,7 +196,7 @@ CRUD core + state machine + BR-PUBLIC-01 (BE-side) hoạt động đúng. R7.7.1
 2. **Fix BUG-BM-002** (BE BR-PUBLIC-02): unblock BM-043 cascade.
 3. **Fix BUG-BM-007** (MinIO localhost config): unblock BM-007 + BM-008 + BM-010.
 4. **Fix BUG-BM-009** (R7.7.10b — upload >20MB graceful 413 + Vietnamese error + session preserve): unblock BM-015 PASS clean.
-5. **Round R7.7.10b — DONE 2026-05-10** ✅: unblocked 6 TC (BM-032/033/034/040 ✅ PASS + BM-039 implicit ✅ + BM-015/035 ⚠️ PARTIAL); BM-028/029 deferred do MCP tool block; BM-035 sub-defer TVV pwd → see [`functional-test-report-r7-7-10b-bm.md`](functional-test-report-r7-7-10b-bm.md) + [`bug-report-r7-7-10b-bm.md`](../../bug-reports/bm/bug-report-r7-7-10b-bm.md). Pass rate **49%** PASS only (23/47) hoặc **62%** PASS+PARTIAL (29/47).
+5. **Round R7.7.10b — DONE 2026-05-10** ✅: unblocked 6 TC (BM-032/033/034/040 ✅ PASS + BM-039 implicit ✅ + BM-015/035 ⚠️ PARTIAL); BM-028/029 deferred do MCP tool block; BM-035 sub-defer TVV pwd → see [`functional-test-report-r7-7-10b-bm.md`](functional-test-report-r7-7-10b-bm.md) + [`Pass-bug-report-r7-7-10b-bm.md`](../../bug-reports/bm/Pass-bug-report-r7-7-10b-bm.md). Pass rate **49%** PASS only (23/47) hoặc **62%** PASS+PARTIAL (29/47).
 6. **Round R7.7.10c** (next):
    - Real browser test (Playwright/manual) BM-028/029 bulk import — workaround MCP `upload_file` incompatible custom dropzone.
    - TVV password discovery hoặc tạo TVV mới với fixture password → BM-035b sub-defer.

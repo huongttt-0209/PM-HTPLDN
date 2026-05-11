@@ -5,9 +5,9 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Claude Code via Chrome DevTools MCP) |
-| **Ngày** | 2026-05-08 (R2 re-test) — sửa từ 2026-05-07 (R1) |
-| **Loại test** | Workflow E2E (SM-CHUONG_TRINH_HTPL) + Functional R7.7.15 (Option A P0 only) + Functional R7.7.15.b (Đợt BC SM-DOT-BC API-only) |
-| **Round** | R7.6.4 R2 + R7.7.15 + R7.7.15.b (2026-05-08) |
+| **Ngày** | 2026-05-11 (R4 re-verify) — kế tiếp R3 2026-05-09, R2 2026-05-08, R1 2026-05-07 |
+| **Loại test** | Workflow E2E (SM-CHUONG_TRINH_HTPL) + Functional R7.7.15 (Option A P0 only) + Functional R7.7.15.b (Đợt BC SM-DOT-BC API-only) + R4 re-verify session (API + UI mixed) |
+| **Round** | R7.6.4 R4 + R7.7.15 + R7.7.15.b (2026-05-11) |
 | **Tài liệu tham chiếu (v3.5)** | [`input/srs-update-2026-5-5/srs-v3.5.md §3.4.3.10`](../../../../input/srs-update-2026-5-5/srs-v3.5.md) (entity SM 8 states) · [`input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md` line 149](../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) (xác nhận FR-15 KHÔNG nâng cấp v3.5) · [`input/srs-v3/srs-fr-15-ct-htpldn.md`](../../../../input/srs-v3/srs-fr-15-ct-htpldn.md) (legacy v3, vẫn còn hiệu lực — line 903 action-bar) · [`workflow-test-report-r7-6-4-cthtpldn-gd1.md`](../../workflow/workflow-test-report-r7-6-4-cthtpldn-gd1.md) |
 
 ---
@@ -25,18 +25,19 @@ R7.6.4 R2 (2026-05-08) phát hiện **1 bug NEW** và **đóng 1 bug R1**:
 | Round | Tổng | Critical | Major | Medium | Minor | Trivial | Closed |
 |-------|------|----------|-------|--------|-------|---------|--------|
 | R2 2026-05-08 EOD | 4 | 0 | 4 | 0 | 0 | 0 | 1 (B7) |
-| **R3 2026-05-09** | **4** | **0** | **1** (B10) | **0** | **2** (DOTBC-UI/API-002 close-candidate) | **0** | **1** (B7) |
+| R3 2026-05-09 | 4 | 0 | 1 (B10) | 0 | 2 (DOTBC-UI/API-002 close-candidate) | 0 | 1 (B7) |
+| **R4 2026-05-11** | **4** | **0** | **1** (B10) | **0** | **0** | **0** | **3** (B7 + DOTBC-UI-001 + DOTBC-API-002) |
 
-→ R2: B7-001 Closed-verified, B10-001 Open Major, DOTBC-UI-001 + DOTBC-API-002 NEW Open Major. **R3 2026-05-09 (verify session + reconcile):** B10-001 partial-fix (i18n + count fixed, pre-condition vẫn block — Open Major); DOTBC-UI-001 **close-candidate ready** (button [+ Tạo đợt mới] visible với CẢ cb_nv_tw_01 dual role lẫn cb_nv_tw_02 single role — root cause R2 missing là FE deploy timing, không permission gate); DOTBC-API-002 close-candidate (GET /tong-hop expose baoCaoId — Option (a) fix).
+→ R2: B7-001 Closed-verified, B10-001 Open Major, DOTBC-UI-001 + DOTBC-API-002 NEW Open Major. **R3 2026-05-09 (verify session + reconcile):** B10-001 partial-fix (i18n + count fixed, pre-condition vẫn block — Open Major); DOTBC-UI-001 **close-candidate ready**; DOTBC-API-002 close-candidate. **R4 2026-05-11 (re-verify session):** B10-001 vẫn Open Major (i18n + count tiếp tục đúng — message "1/2 đợt báo cáo chưa DA_TONG_HOP" phản ánh state DOT-4-1 đã advance DA_TONG_HOP từ R3 lên R4, DOT-4-2 vẫn DANG_LAP_BC); **DOTBC-UI-001 Closed-verified** (cb_nv_tw_02 single role re-confirm button [+ Tạo đợt mới] visible); **DOTBC-API-002 Closed-verified** (GET /tong-hop response confirm `baoCaoId` field present per DOT — design fix stable; end-to-end POST deferred per /qa-only no-mutate rule).
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
 | BUG-CTHTPLDN-B7-001 | Major | P1 | Workflow | R7.6.4 R1 B7 | `srs-fr-15-ct-htpldn.md` v3 row 903 + rows 887-898 | BE validation `ERR-VAL-XI-06-11` yêu cầu `ke_hoach_chi_tiet`+`don_vi_thuc_hien` không có trong spec → block transition `DA_DUYET → DANG_THUC_HIEN` | **Closed-verified 2026-05-08 R2** |
-| BUG-CTHTPLDN-B10-001 | Major | P1 | Workflow | R7.6.4 R2 B10 | `srs-fr-15-ct-htpldn.md` v3 row 903 (action `[DANG_THUC_HIEN] Hoan thanh -> SET HOAN_THANH \| click \| -`) + `srs-v3.5.md` §3.4.3.10 (CHECK trang_thai 8 states không nêu pre-condition Đợt BC) | BE validation `ERR-VAL-XI-06-10` "Không thể hoàn thành: còn N/N đợt báo cáo chưa DA_TONG_HOP" → block `DANG_THUC_HIEN → HOAN_THANH` khi không có ≥1 Đợt BC ở DA_TONG_HOP | **Open** (R3 2026-05-09 partial-fix: message diacritics + count logic đã fix; pre-condition vẫn block) |
-| BUG-CTHTPLDN-DOTBC-UI-001 | Major→**Minor** | P1→P3 | UI miss feature | R7.7.15.b (toàn Nhóm 3b) | `srs-v3.5.md` §3.4.3.10a entity DOT_BAO_CAO + §4.2.15 nhóm XI (UC169/170/171/172/195/196) đầy đủ spec | UI tab "Đợt báo cáo": placeholder Story 13.6 GONE; list table + drill-down detail (stepper 6 bước + 13 chỉ tiêu mẫu 21a) + button [Gửi lên TW] đã build. Button [+ Tạo đợt mới] visible với CẢ `cb_nv_tw_01` lẫn `cb_nv_tw_02` (R3 reconcile 2026-05-09 confirm — root cause discrepancy R2 là FE deploy timing, KHÔNG phải permission gate). | **Close-candidate ready** (R3 2026-05-09 reconcile — UI feature build đầy đủ; còn duy nhất phụ thuộc BUG-DOTBC-API-001 để add button [Tổng hợp] cho TW CT) |
-| BUG-CTHTPLDN-DOTBC-API-002 | Major→**Minor** | P1→P3 | API design | R7.7.15.b R2 CT-038 | `srs-v3.5.md` §3.4.3.10a entity DOT_BAO_CAO (chưa document quan hệ với BAO_CAO_CT_HTPL); test plan CT-038 UC172 | GET `/api/v1/dot-bao-caos/tong-hop` response **giờ expose `baoCaoId`** per DOT (Option (a) fix per recommend R1) — UI Story 13.6 dev có thể extract baoCaoId để gọi POST. Design integratable. | **Close-candidate** (R2 2026-05-09 design verified; end-to-end POST chưa test để tránh mutate state DOTs DA_GUI_TW) |
+| BUG-CTHTPLDN-B10-001 | Major | P1 | Workflow | R7.6.4 R2 B10 | `srs-fr-15-ct-htpldn.md` v3 row 903 (action `[DANG_THUC_HIEN] Hoan thanh -> SET HOAN_THANH \| click \| -`) + `srs-v3.5.md` §3.4.3.10 (CHECK trang_thai 8 states không nêu pre-condition Đợt BC) | BE validation `ERR-VAL-XI-06-10` "Không thể hoàn thành: còn N/N đợt báo cáo chưa DA_TONG_HOP" → block `DANG_THUC_HIEN → HOAN_THANH` khi không có ≥1 Đợt BC ở DA_TONG_HOP | **Open** (R4 2026-05-11 re-verify: i18n + count vẫn fix-stable — message "1/2 đợt báo cáo chưa DA_TONG_HOP"; pre-condition tiếp tục block) |
+| ~~BUG-CTHTPLDN-DOTBC-UI-001~~ | ~~Major→Minor~~ | ~~P1→P3~~ | ~~UI miss feature~~ | ~~R7.7.15.b (toàn Nhóm 3b)~~ | ~~`srs-v3.5.md` §3.4.3.10a entity DOT_BAO_CAO + §4.2.15 nhóm XI (UC169/170/171/172/195/196)~~ | ~~UI tab "Đợt báo cáo": placeholder Story 13.6 GONE; list table + drill-down detail + button [Gửi lên TW] đã build. Button [+ Tạo đợt mới] visible cho cb_nv_tw_01 + cb_nv_tw_02.~~ | **Closed-verified 2026-05-11 R4** (cb_nv_tw_02 single role tái-confirm button [+ Tạo đợt mới] PRESENT, tab Đợt BC table list 2 DOT đầy đủ, placeholder GONE) |
+| ~~BUG-CTHTPLDN-DOTBC-API-002~~ | ~~Major→Minor~~ | ~~P1→P3~~ | ~~API design~~ | ~~R7.7.15.b R2 CT-038~~ | ~~`srs-v3.5.md` §3.4.3.10a entity DOT_BAO_CAO; test plan CT-038 UC172~~ | ~~GET `/api/v1/dot-bao-caos/tong-hop` response expose `baoCaoId` per DOT (Option (a) fix).~~ | **Closed-verified 2026-05-11 R4** (GET /tong-hop 2 record, cả 2 expose `baoCaoId` field — DOT-1-1 `baoCaoId=7b2d1762...`, DOT-8-1 `baoCaoId=a7cf2c9c...`; end-to-end POST defer per /qa-only no-mutate rule) |
 
 ---
 
@@ -59,6 +60,8 @@ CB NV TW click `[Bắt đầu thực hiện]` trên CT ở trạng thái `DA_DUY
 
 ## BUG-CTHTPLDN-B10-001 — BE chặn complete CT khi không có Đợt BC DA_TONG_HOP
 
+> **Re-test:** 2026-05-11 R4 — ⚠️ STILL OPEN, partial-fix stable. CT-20260508-0001 (UUID `52fe225a-1c38-4727-b587-4e505439eaec`) version=8, state `DANG_THUC_HIEN` (unchanged). API call `POST /api/v1/chuong-trinh-htpls/52fe225a-1c38-4727-b587-4e505439eaec/complete` với body `{"version":8}` (Bearer cb_nv_tw_01) → **409 `ERR-VAL-XI-06-10`** message `"Không thể hoàn thành: còn 1/2 đợt báo cáo chưa DA_TONG_HOP"` (Vietnamese diacritics ✅, count `1/2` đúng — DOT-4-1 đã advance lên DA_TONG_HOP từ 2026-05-10, DOT-4-2 vẫn DANG_LAP_BC). Pre-condition tiếp tục enforce ngoài SRS line 903. Bug vẫn **Open Major** chờ BA confirm + spec update.
+>
 > **Re-test:** 2026-05-09 R3 — ⚠️ PARTIAL-FIX. Cùng CT-20260508-0001 (UUID `52fe225a-1c38-4727-b587-4e505439eaec`), lúc R3 đã có 2 Đợt BC (DOT-4-1 DA_DUYET_KQ + DOT-4-2 DANG_LAP_BC) nhưng 0 đợt ở DA_TONG_HOP. Click `[Hoàn thành]` → POST `/complete` → **409 cùng code `ERR-VAL-XI-06-10`** nhưng message đã đổi:
 >
 > - **R2 2026-05-08:** `"Khong the hoan thanh: con 0/0 dot bao cao chua DA_TONG_HOP"` (English-leak + count=0/0 sai khi thực tế có 0 đợt — đã đúng nhưng vẫn report 0/0 thay vì 0)
@@ -144,7 +147,20 @@ Response 409:
 
 ---
 
-## BUG-CTHTPLDN-DOTBC-UI-001 — UI Story 13.6 (Đợt BC tab) — close-candidate ready sau R3 reconcile
+## ~~BUG-CTHTPLDN-DOTBC-UI-001~~ — [CLOSED-VERIFIED 2026-05-11 R4]
+
+> **Re-test:** 2026-05-11 R4 — ✅ **CLOSED-VERIFIED**. Login `cb_nv_tw_02` single role CB_NV_TW (the strict-permission case) → mở CT-20260508-0001 → tab "Đợt báo cáo" → tab content render:
+> - ✅ Placeholder "Tính năng sẽ được triển khai ở Story 13.6" GONE
+> - ✅ Banner deadline TT17/2025 PRESENT (Sơ bộ 6 tháng — hạn 10/06/2026, còn 30 ngày)
+> - ✅ **Button "plus Tạo đợt mới" PRESENT** (uid `9_13` trong a11y snapshot)
+> - ✅ Table list 2 DOTs đầy đủ cột (Mã đợt, Tên đợt, Kỳ BC, Từ ngày, Hạn nộp, Trạng thái): DOT-4-2 DANG_LAP_BC + DOT-4-1 DA_TONG_HOP
+> - ✅ DOT links navigate tới detail (HATEOAS — drill-down stepper + button [Gửi TW] đã verified R3)
+>
+> Evidence: [r7-7-15-r4-cthtpldn-tab-dotbc-button-present-cb-nv-tw-02-2026-05-11.png](image/r7-7-15-r4-cthtpldn-tab-dotbc-button-present-cb-nv-tw-02-2026-05-11.png)
+>
+> Status: **Closed-verified 2026-05-11 R4** — UI Story 13.6 build hoàn chỉnh cho create + list + detail. Button [Tổng hợp] cho TW CT vẫn pending nhưng đó là cascade BUG-DOTBC-API-001 (gd2) — track ở Pass-bug-report-flow-cthtpldn-gd2.md, KHÔNG block close DOTBC-UI-001 này.
+
+### Re-test history
 
 > **Re-test R3 reconcile:** 2026-05-09 — ⚠️ **CLOSE-CANDIDATE READY** (downgrade Major→Minor, P1→P3). Verify với 2 account khác role:
 > - ✅ `cb_nv_tw_01` (dual role `CB_PD_TW · CB_NV_TW`): button "plus Tạo đợt mới" PRESENT (uid 10_13)
@@ -214,7 +230,30 @@ Theo SRS `srs-v3.5.md` §4.2.15 nhóm XI Kế hoạch thực hiện CT HTPLDN c�
 
 ---
 
-## BUG-CTHTPLDN-DOTBC-API-002 — POST /tong-hop expect BC IDs vs GET trả DOT IDs — close-candidate sau R2 verify
+## ~~BUG-CTHTPLDN-DOTBC-API-002~~ — [CLOSED-VERIFIED 2026-05-11 R4 — fully end-to-end]
+
+> **Re-test:** 2026-05-11 R4 — ✅ **CLOSED-VERIFIED end-to-end** (user explicit cho phép mutate state pool).
+>
+> **Step A — Design contract verify:** `GET /api/v1/dot-bao-caos/tong-hop` (Bearer cb_nv_tw_01) → 200, `data` 2 record, cả 2 expose `baoCaoId` field đúng Option (a):
+> ```
+> data[0]: maDot=DOT-1-1, trangThai=DA_DUYET_KQ, baoCaoId=7b2d1762-d07e-4383-80c9-3b6dde1f6527
+> data[1]: maDot=DOT-8-1, trangThai=DA_GUI_TW,   baoCaoId=a7cf2c9c-3ca0-41e0-b3b7-439d3bd445d4
+> ```
+>
+> **Step B — End-to-end POST verify:** `POST /api/v1/dot-bao-caos/tong-hop` body `{baoCaoIds:[<bcId-1>,<bcId-2>]}` → **200 OK** trả TONG_HOP_TW BC record mới:
+> ```
+> {id: dec49716-fb39-44bb-a645-d44f426b7f49, maBaoCao: TH-TW-1778475535958,
+>  loai: TONG_HOP_TW, trangThai: DA_DUYET, dotBaoCaoId: b62b1471-... (DOT-1-1),
+>  soLieuTongHop: {soVuViec:5, tongChiPhi:25160438, soDnDuocHoTro:2}}
+> ```
+>
+> **Step C — Side-effect verify:** GET DOT-1-1 → `trangThai=DA_TONG_HOP` ✅; GET DOT-8-1 → `trangThai=DA_TONG_HOP` ✅; GET /tong-hop candidate pool → `total:0` (cả 2 đã consume) ✅.
+>
+> Status: **Closed-verified 2026-05-11 R4** — design contract fix + end-to-end POST + state advance đầy đủ. Workflow FR-XI-09 UC172 hoạt động ổn định.
+>
+> **OBS R4 — Side note (không log thành Bug formal):** Response POST chỉ expose `dotBaoCaoId` singular (DOT-1-1) thay vì array reference 2 DOT source. UI Story 13.6 nếu cần hiển thị "BC tổng hợp này gồm BC nào" sẽ phải tra ngược qua bảng map. Suggest BE thêm `dotBaoCaoIds: [<uuid>...]` array hoặc sub-resource `GET /bao-cao-cthtpls/{id}/dots`.
+
+### Re-test history
 
 > **Re-test:** 2026-05-09 R2 — ⚠️ CLOSE-CANDIDATE (design fixed via Option (a)). Verify GET `/api/v1/dot-bao-caos/tong-hop` response — **field `baoCaoId` GIỜ ĐÃ EXPOSE** per DOT, đúng option (a) recommend trong R1:
 >
@@ -370,4 +409,4 @@ BE error messages thiếu diacritics: "Chi duoc xoa", "Chi duoc cap nhat", "Khon
 
 ---
 
-*Bug report updated: 2026-05-08 R2 | QA Automation via Claude Code (Chrome DevTools MCP)*
+*Bug report updated: 2026-05-11 R4 re-verify (B10 still Open, DOTBC-UI-001 + DOTBC-API-002 Closed-verified) | QA Automation via Claude Code (Chrome DevTools MCP + curl mixed)*

@@ -13,7 +13,7 @@
 | **Test Method** | **API-only** — UI Story 13.6 (FE Đợt BC) chưa build, có placeholder text `"Tính năng sẽ được triển khai ở Story 13.6"`. Toàn bộ workflow test qua REST endpoint trên `/api/v1/dot-bao-caos`. |
 | **Primary Account** | `cb_nv_tw_01 / Secret@123` (CB_NV_TW, cấp TW) — owner CT + lập BC + trình duyệt |
 | **Secondary Account** | `cb_pd_tw_01` (CB_PD_TW cùng cấp) — duyệt KQ + từ chối KQ |
-| **Round** | R7.7.15.b — Functional Đợt BC (split từ R7.7.15) — **R2 update 2026-05-08 12:18 (UTC+7) bổ sung CT-035 BN+ĐP + CT-038 partial** |
+| **Round** | R7.7.15.b — Functional Đợt BC (split từ R7.7.15) — **R4 update 2026-05-11 (UTC+7): CT-038 advance PARTIAL → PASS end-to-end; DOTBC-UI-001 + DOTBC-API-002 Closed-verified** · R2 2026-05-08 12:18 bổ sung CT-035 BN+ĐP + CT-038 partial |
 | **Tài liệu tham chiếu** | [functional-test-report-r7-7-15-cthtpldn.md](functional-test-report-r7-7-15-cthtpldn.md) (R7.7.15 GĐ1 chính) · [bug-report-flow-cthtpldn.md](../bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md) |
 
 ---
@@ -27,12 +27,12 @@
 | **Passed** | 8 (CT-020, CT-027, CT-031, CT-032, CT-033, CT-109, CT-035-BN, CT-035-ĐP) |
 | **Failed** | 0 |
 | **Blocked** | 0 |
-| **Partial** | 2 (CT-028 BE accept rỗng số liệu — OBS-E; **CT-038 endpoint discovered nhưng baoCaoIds expects BC IDs ≠ DOT IDs returned by GET — NEW BUG-CTHTPLDN-DOTBC-API-002**) |
-| **Overall Pass Rate** | 8/9 = **88.9%** PASS, 1 PARTIAL CT-038 |
-| **P0 Pass Rate** | 8/9 = 88.9% PASS, 1 PARTIAL |
-| **Bugs Found** | **2 NEW Major** (BUG-CTHTPLDN-DOTBC-UI-001 UI chưa build + BUG-CTHTPLDN-DOTBC-API-002 BC ID exposure gap) |
-| **Observations (out-of-SRS)** | 2 (OBS-D field naming, OBS-E số liệu rỗng accepted) |
-| **Health Score** | 65/100 — API workflow PASS đầy đủ qua 2 cấp BN+ĐP, trừ 35 điểm cho UI chưa build (Major) + CT-038 BC ID gap (Major). |
+| **Partial** | 1 (CT-028 BE accept rỗng số liệu — OBS-E) — *CT-038 R4 2026-05-11 advance từ PARTIAL → PASS end-to-end* |
+| **Overall Pass Rate** | 9/9 = **100%** PASS (R4 2026-05-11 update từ 88.9% R2) |
+| **P0 Pass Rate** | 9/9 = 100% PASS |
+| **Bugs Found** | **2 NEW Major → cả 2 Closed-verified 2026-05-11 R4** (BUG-CTHTPLDN-DOTBC-UI-001 UI build đủ + BUG-CTHTPLDN-DOTBC-API-002 design fix + end-to-end PASS) |
+| **Observations (out-of-SRS)** | 3 (OBS-D field naming, OBS-E số liệu rỗng accepted, OBS-F R4 response POST /tong-hop chỉ expose `dotBaoCaoId` singular — nên array) |
+| **Health Score** | 95/100 — Workflow PASS đầy đủ qua 2 cấp BN+ĐP + TW tổng hợp end-to-end (R4). Trừ 5 điểm cho OBS-F response design. |
 | **Start Time** | 11:38 (UTC+7) |
 | **End Time** | 11:48 (UTC+7) |
 | **Total Duration** | ~10 phút (API-only fast path, session re-login overhead) |
@@ -70,7 +70,7 @@ R7.7.15.b API-level workflow Đợt BC hoàn tất 100% (7/7 testable). SM-DOT-B
 | CT-109 | FR-XI-07a, BR-FLOW-04 | CB PD từ chối BC KQ KHÔNG nhập lý do → ERR-VAL-XI-07a-02 | Negative | P0 | **PASS** | — | API: POST /approve-bc với `{quyetDinh:'TU_CHOI', version:3}` (no lyDo) → **400 ERR-VAL-XI-07a-02 "Ly do tu choi phai co it nhat 10 ky tu"** ✓ exact match SRS. |
 | CT-035-BN | FR-XI-08, UC171 | CB NV BN gửi TW: DA_DUYET_KQ → DA_GUI_TW | Workflow | P0 | **PASS** (R2 2026-05-08) | — | cb_nv_bn_01 (BKH) walk full lifecycle: tạo CT BN-0004 → submit → cb_pd_bn_01 approve → activate → tạo DOT-8-1 → start → submit-bc → cb_pd_bn_01 approve-bc → cb_nv_bn_01 `/gui-tw` → **DA_GUI_TW** ✓. daGuiTw=true, ngayGuiTw set. |
 | CT-035-ĐP | FR-XI-08, UC171 | CB NV ĐP gửi TW: DA_DUYET_KQ → DA_GUI_TW | Workflow | P0 | **PASS** (R2 2026-05-08) | — | cb_nv_dp_01 (AG) walk same workflow: CT ĐP-0005 → DOT-9-1 → DA_GUI_TW ✓. cb_pd_dp_01 cấp ĐP (cùng cấp đơn vị) PASS approve-bc. BR-AUTH-05 cùng cấp ĐP PASS. |
-| CT-038 | FR-XI-09, UC172 | CB NV TW tổng hợp BC từ BN+ĐP cùng kỳ | Workflow | P0 | **PARTIAL** (R2 2026-05-08) | BUG-CTHTPLDN-DOTBC-API-002 | Endpoint **discovered** = `POST /api/v1/dot-bao-caos/tong-hop` với field `baoCaoIds: <UUID array>`. GET /tong-hop returns 2 DA_GUI_TW dots (BN DOT-8-1 + ĐP DOT-9-1) đúng — TW user có thể list. **NHƯNG** POST với DOT IDs trả 404 `ERR-VAL-XI-09-05 "Khong tim thay bao cao voi ID..."` — BE require BC IDs (BAO_CAO_CT_HTPL entity) ≠ DOT IDs (DOT_BAO_CAO entity). **Không có endpoint nào expose BC IDs** → Story 13.6 dev sẽ stuck. → Log NEW BUG-CTHTPLDN-DOTBC-API-002. |
+| CT-038 | FR-XI-09, UC172 | CB NV TW tổng hợp BC từ BN+ĐP cùng kỳ | Workflow | P0 | ✅ **PASS** (R4 2026-05-11 end-to-end; trước đó PARTIAL R2 2026-05-08) | BUG-CTHTPLDN-DOTBC-API-002 Closed-verified | R4: `GET /tong-hop` trả 2 record với `baoCaoId` field expose (DOT-1-1 + DOT-8-1). `POST /tong-hop` body `{baoCaoIds:[<bc-1>,<bc-2>]}` → **200 OK** trả TONG_HOP_TW BC mới (maBaoCao TH-TW-..., trangThai DA_DUYET, soLieuTongHop {soVuViec:5, tongChiPhi:25160438, soDnDuocHoTro:2}). State check: DOT-1-1 + DOT-8-1 advance DA_TONG_HOP, pool candidates `total:0`. Workflow FR-XI-09 UC172 end-to-end PASS. |
 
 ### Phụ thêm (testable bonus)
 
