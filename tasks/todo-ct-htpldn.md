@@ -17,17 +17,17 @@
 
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
-| **P6** | 2 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | ⚠️[R7.6.4](#r7-6-4) · ✅[R7.6.5](#r7-6-5) |
+| **P6** | 2 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | ✅[R7.6.4](#r7-6-4) · ✅[R7.6.5](#r7-6-5) |
 | **P7** | 2 | 0 | 0 | 2 | 0 | 0 | 0 | 0 | ✅[R7.7.15](#r7-7-15) · ✅[R7.7.15.b](#r7-7-15-b) |
 | **Trụ E** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.E2](#r7-e2) |
-| **Tổng** | **5** | **0** | **0** | **4** | **1** | **0** | **0** | **0** |  |
+| **Tổng** | **5** | **0** | **0** | **5** | **0** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
-- ⚠️ **R7.6.4** 🔄 Workflow CT HTPLDN GĐ1 11 bước `[~91% — 10/11 PASS, B10 Open partial-fix]` <a id="r7-6-4"></a>
-  - **Kết quả:** ⚠️ PASS 10/11 (R4 2026-05-11 re-verify). B10 vẫn 409 ERR-VAL-XI-06-10; R4 message "1/2 đợt chưa DA_TONG_HOP" (i18n + count stable). [workflow-test-report-r7-6-4-cthtpldn-gd1.md](../output/qa-reports/round7-2026-05-06/workflow/ct-htpldn/workflow-test-report-r7-6-4-cthtpldn-gd1.md)
-  - **Bug:** [bug-report-flow-cthtpldn.md](../output/qa-reports/round7-2026-05-06/bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md) — 1/2 đóng (B7-001 Closed-verified; B10-001 Open Major partial-fix R4)
+- ✅ **R7.6.4** 🔄 Workflow CT HTPLDN GĐ1 11 bước `[11/11 PASS R5 — B10 closed end-to-end]` <a id="r7-6-4"></a>
+  - **Kết quả:** ✅ PASS 11/11 (R5 2026-05-11). CT-20260508-0001 full workflow advance DU_THAO → CHO_PHE_DUYET → DA_DUYET → DANG_THUC_HIEN → **HOAN_THANH** (R5 với 3/3 DOT DA_TONG_HOP). [workflow-test-report-r7-6-4-cthtpldn-gd1.md](../output/qa-reports/round7-2026-05-06/workflow/ct-htpldn/workflow-test-report-r7-6-4-cthtpldn-gd1.md)
+  - **Bug:** [Pass-bug-report-flow-cthtpldn.md](../output/qa-reports/round7-2026-05-06/bug-reports/ct-htpldn/Pass-Pass-bug-report-flow-cthtpldn.md) — 4/4 đóng (B7-001 R2, B10-001 R5 full PASS, DOTBC-UI-001 R4, DOTBC-API-002 R4)
 
 - ✅ **R7.6.5** 🔄 Workflow CT HTPLDN GĐ2 Đợt BC 7 bước `[7/7 hiệu lực R4 — 5 PASS R4 + 1 N/A + 1 R1 PASS]` <a id="r7-6-5"></a>
   - **Kết quả:** ✅ R4 2026-05-11 re-run E2E PASS. DOT-4-3 chain B1→B7 all 200; sub-resource `POST /{id}/tong-hop` NEW; enum `quyetDinh` đổi `PHE_DUYET`→`DUYET`. [workflow-test-report-r7-6-5-cthtpldn-gd2.md](../output/qa-reports/round7-2026-05-06/workflow/workflow-test-report-r7-6-5-cthtpldn-gd2.md)
@@ -35,11 +35,11 @@
 
 - ✅ **R7.7.15** 🔄 CT HTPLDN 44 TC (Option A P0 only) — split R7.7.15.b cho Đợt BC <a id="r7-7-15"></a>
   - **Kết quả:** PASS 16/16 P0 (100%). CRUD+Search+Validation+Workflow+Auth+Cross-cutting OK. [functional-test-report-r7-7-15-cthtpldn.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-r7-7-15-cthtpldn.md)
-  - **Bug:** 3 OBS Minor + B10-001 Open. [bug-report-flow-cthtpldn.md](../output/qa-reports/round7-2026-05-06/bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md)
+  - **Bug:** 3 OBS Minor. [Pass-bug-report-flow-cthtpldn.md](../output/qa-reports/round7-2026-05-06/bug-reports/ct-htpldn/Pass-bug-report-flow-cthtpldn.md) — 4/4 đóng R5
 
 - ✅ **R7.7.15.b** 🆕 Functional Đợt BC 9 P0 TC API-only (R4 2026-05-11) `[100% — 9/9 PASS]` <a id="r7-7-15-b"></a>
   - **Kết quả:** PASS 9/9 (R4 2026-05-11). BN+ĐP gửi TW DA_GUI_TW PASS + CT-038 end-to-end POST /tong-hop PASS (200 OK, tạo TONG_HOP_TW BC, 2 DOT advance DA_TONG_HOP). [functional-test-report-r7-7-15-b-dot-bc.md](../output/qa-reports/round7-2026-05-06/functional/functional-test-report-r7-7-15-b-dot-bc.md)
-  - **Bug:** [bug-report-flow-cthtpldn.md](../output/qa-reports/round7-2026-05-06/bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md) — 2/2 đóng R4 (DOTBC-UI-001 + DOTBC-API-002 Closed-verified 2026-05-11)
+  - **Bug:** [Pass-bug-report-flow-cthtpldn.md](../output/qa-reports/round7-2026-05-06/bug-reports/ct-htpldn/Pass-bug-report-flow-cthtpldn.md) — 2/2 đóng R4 (DOTBC-UI-001 + DOTBC-API-002 Closed-verified 2026-05-11)
 
 - ✅ **R7.E2** 🔄 CT HTPLDN GĐ1 (FR-15) — verify 3 CT data còn <a id="r7-e2"></a>
   - **Kết quả:** PASS 3/3 — CT-20260507-0001/0002/0003 cover 3 path R7.6.4 (DA_DUYET/DU_THAO/HUY). API total=3. [verify-checklist-r7-e2-ct-htpldn-gd1.md](../output/qa-reports/round7-2026-05-06/seed/chuong-trinh-htpldn/verify-checklist-r7-e2-ct-htpldn-gd1.md)

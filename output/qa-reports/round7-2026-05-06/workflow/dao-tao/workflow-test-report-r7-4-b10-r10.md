@@ -53,12 +53,12 @@ NHAP ──[POST /distribute]──> DA_PHAN_PHOI
 - Combobox `Cách tạo` luôn render disabled + value rỗng + required + ant-select-status-error
 - Form luôn invalid khi click "Cập nhật" → bước Sửa BLOCKED qua UI
 - BE PATCH endpoint OK (responding với validation lỗi `version` field nếu có call)
-- → File: [bug-report-r7-4-b10-dkt-form-modal.md](../../bug-reports/dao-tao/bug-report-r7-4-b10-dkt-form-modal.md)
+- → File: [Pass-bug-report-r7-4-b10-dkt-form-modal.md](../../bug-reports/dao-tao/Pass-bug-report-r7-4-b10-dkt-form-modal.md)
 
 **BUG-DKT-CREATE-FORM-01** — Major P1 — Modal Tạo ĐKT thiếu field chọn câu hỏi (`cauHoiIds`)
 - Modal Tạo có 4 field: Tên / Cách tạo / Thời gian / Điểm — không có UI chọn câu hỏi từ NHCH
 - Submit POST → 422 `cauHoiIds must contain at least 1 elements`
-- → File: [bug-report-r7-4-b10-dkt-form-modal.md](../../bug-reports/dao-tao/bug-report-r7-4-b10-dkt-form-modal.md)
+- → File: [Pass-bug-report-r7-4-b10-dkt-form-modal.md](../../bug-reports/dao-tao/Pass-bug-report-r7-4-b10-dkt-form-modal.md)
 
 ---
 

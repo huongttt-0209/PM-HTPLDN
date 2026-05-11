@@ -9,7 +9,7 @@
 
 | ID | Severity | Title | Status |
 |---|:-:|---|:-:|
-| BUG-HV-BE-01 | **Major** | POST `/api/v1/hoc-viens` (qtht_01) với valid DTO match swagger schema → 500 `ERR-SYS-00-00-01` (service crash) | Open |
+| ~~BUG-HV-BE-01~~ | **Major** | POST `/api/v1/hoc-viens` (qtht_01) với valid DTO match swagger schema → 500 `ERR-SYS-00-00-01` (service crash) | **Closed** (R11 verified 2026-05-11 — BE thay crash 500 bằng 403 guard đúng spec FR-III-04) |
 | ~~BUG-HV-FE-01~~ | ~~Major~~ | ~~FE thiếu route HV master CMS~~ → **WITHDRAWN** sau cite SRS FR-III-04: HV được tạo qua chuyên trang DN/NHT (UC23), KHÔNG có CMS form CB NV/QTHT manage. FE thiếu page master là **đúng spec**. Cần verify riêng chuyên trang DN có hoạt động không (out of scope task seed). | N/A |
 | ~~BUG-HV-PERM-01~~ | ~~Medium~~ | ~~Permission cb_nv_tw_02 + cb_pd_tw_02 403~~ → **WITHDRAWN** sau cite SRS FR-III-04 line 397-399: Tác nhân = DN/NHT (chuyên trang). CB NV chỉ duyệt DANG_KY_DAO_TAO (FR-III-03 UC22 RU* trên DKDT), KHÔNG CRUD HV master. → 403 đúng spec. QTHT 200 vì admin scope `👁️ R` toàn hệ thống. | N/A |
 
@@ -29,7 +29,18 @@
 
 ---
 
-## BUG-HV-BE-01 — POST /hoc-viens 500 với valid DTO (qtht_01)
+## ~~BUG-HV-BE-01~~ [CLOSED] — POST /hoc-viens 500 với valid DTO (qtht_01)
+
+> **Re-test:** 2026-05-11 R11 — ✅ PASS (Closed-verified). Sau cache clear + fresh login `qtht_01`, probe 3 case POST `/api/v1/hoc-viens`:
+> - **P1 minimal valid** `{hoTen, email}` → **403 `ERR-PERM-SYS-00-01 "Forbidden"`** (không còn 500 crash)
+> - **P2 full fields** `{hoTen, email, soDienThoai, donVi}` → **403** (cùng pattern)
+> - **P3 invalid email** `{hoTen, email: "not-an-email"}` → **403** (permission check trước validation)
+>
+> BE giờ enforce **permission guard 403** thay vì crash 500. Match SRS FR-III-04 (UC23): HV master tạo qua chuyên trang DN/NHT, KHÔNG qua admin POST. QTHT chỉ có quyền `👁️ R` toàn hệ thống — verify GET `/api/v1/hoc-viens` (qtht_01) → **200 trả 6 records** (đã seed bởi DN/NHT/dev R11 2026-05-11), confirm permission scope đúng.
+>
+> 6 records HV trong DB (`QA R7 BC008 HV` + `QA R7 HV 01..05`) — source unclear nhưng có khả năng tạo qua chuyên trang DN/NHT FR-III-04 hoặc admin DB-direct seed. Không qua endpoint POST /hoc-viens vì giờ guard 403.
+>
+> Bug code-side đã closed. Screenshot: [r11-hv-be-01-no-more-500-crash.png](../../screenshots/r11-hv-be-01-no-more-500-crash.png).
 
 ### Mô tả
 Endpoint `POST /api/v1/hoc-viens` đã deploy + swagger expose schema đúng (`hoTen`, `email` required + `soDienThoai`, `donVi` optional). Body hợp lệ với schema vẫn trả 500 generic, không phải 422 validation. Service layer crash.

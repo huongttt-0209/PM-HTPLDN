@@ -143,7 +143,7 @@ UI chỉ render placeholder "Tính năng sẽ được triển khai ở Story 13
 > - BN/ĐP DOT ở `DA_GUI_TW` (cascade về TW receive)
 >
 > **Evidence R4:**
-> - **DOT-1-1** (donVi TW, was `DA_DUYET_KQ`, baoCaoId 7b2d1762...) → advance `DA_TONG_HOP` qua R4 CT-038 end-to-end PASS (xem bug-report-flow-cthtpldn.md DOTBC-API-002 Step B/C, response 200 OK + state side-effect verify).
+> - **DOT-1-1** (donVi TW, was `DA_DUYET_KQ`, baoCaoId 7b2d1762...) → advance `DA_TONG_HOP` qua R4 CT-038 end-to-end PASS (xem Pass-bug-report-flow-cthtpldn.md DOTBC-API-002 Step B/C, response 200 OK + state side-effect verify).
 > - **DOT-4-1** (donVi TW, was `DA_DUYET_KQ` ở R3, baoCaoId 9a2ffc10...) → GET R4 trả `trangThai=DA_TONG_HOP, version=5, ngayCapNhat=2026-05-10T06:03:01` — advance giữa R3 verify và R4 (ai đó/dev gọi resource-level endpoint).
 >
 > Cả 2 DOT đều TW CT path, KHÔNG qua `DA_GUI_TW` (`daGuiTw=false`), advance `DA_DUYET_KQ → DA_TONG_HOP` trực tiếp. Bug premise R1-R3 "TW CT deadlock vĩnh viễn" → **invalid**.

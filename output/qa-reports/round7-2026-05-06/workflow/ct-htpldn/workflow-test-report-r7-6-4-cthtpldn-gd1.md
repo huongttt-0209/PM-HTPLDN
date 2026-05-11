@@ -8,7 +8,7 @@
 > - **Detailed FR-XI-01..09 spec (legacy v3, vẫn còn hiệu lực):** [`input/srs-v3/srs-fr-15-ct-htpldn.md`](../../../../input/srs-v3/srs-fr-15-ct-htpldn.md) — fields form Tab Thông tin (rows 887-898) + action-bar transitions (line 903) + state machine MH-CT-01..04
 > - Process map: [`input/quy-trinh-nghiep-vu/02-thu-tu-module.md §⑤`](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md)
 >
-> **Bug report:** [`bug-report-flow-cthtpldn.md`](../bug-reports/ct-htpldn/bug-report-flow-cthtpldn.md)
+> **Bug report:** [`Pass-bug-report-flow-cthtpldn.md`](../bug-reports/ct-htpldn/Pass-bug-report-flow-cthtpldn.md)
 
 ---
 

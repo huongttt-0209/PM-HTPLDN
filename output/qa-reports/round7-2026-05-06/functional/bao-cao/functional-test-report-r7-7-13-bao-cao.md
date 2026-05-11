@@ -12,7 +12,7 @@
 | **Test Method** | UI-based qua Chrome DevTools MCP (theo CLAUDE.md project rule) |
 | **Primary Account** | `cb_nv_tw_01` / `cb_nv_tw_02` — CB_NV_TW (cấp TW) |
 | **Round** | Round 7 (R7.7.13 lần 1) |
-| **Tài liệu tham chiếu** | [funtion 7.11](../../../funtion/7.11-bao-cao-thong-ke.md) · [test-strategy](../../../test-strategy.md) · [todo R7.7.13](../../../../tasks/todo-bao-cao.md#r7-7-13) · [bug-report-r7-7-13](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md) · [bug-report-r7-4-b0-jwt-revoke](../../bug-reports/dao-tao/bug-report-r7-4-b0-jwt-revoke.md) |
+| **Tài liệu tham chiếu** | [funtion 7.11](../../../funtion/7.11-bao-cao-thong-ke.md) · [test-strategy](../../../test-strategy.md) · [todo R7.7.13](../../../../tasks/todo-bao-cao.md#r7-7-13) · [bug-report-r7-7-13](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md) · [Pass-bug-report-r7-4-b0-jwt-revoke](../../bug-reports/dao-tao/Pass-bug-report-r7-4-b0-jwt-revoke.md) |
 
 ---
 
