@@ -14,7 +14,7 @@
 
 ## Tổng hợp
 
-Phát hiện **1** lỗi mới có SRS reference cụ thể trong R7.7.10b — về xử lý upload file vượt quá giới hạn 20MB.
+Phát hiện **1** lỗi mới có SRS reference cụ thể trong R7.7.10b — về xử lý upload file vượt quá giới hạn 20MB. **Đã closed tại R8 lần 9 (2026-05-11).**
 
 ### Severity breakdown
 
@@ -22,17 +22,47 @@ Phát hiện **1** lỗi mới có SRS reference cụ thể trong R7.7.10b — v
 |------|----------|-------|--------|-------|---------|
 | 1    | 0        | 0     | 1      | 0     | 0       |
 
-> **Severity Medium chứ không Minor:** Hiện tượng "session bị invalidate sau upload >20MB" làm UX confusing — user không biết vì sao bị logout sau khi click submit.
+### Status sau R8 lần 9 (2026-05-11)
+
+| Đóng | Còn open | % đóng |
+|---|---|---|
+| **1/1** (BUG-BM-009 — FE pre-check + session preserve verified) | 0/1 | **100%** ✅ |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-BM-009 | Medium | P2 | Negative | BM-015 | `FR-VII-04 §Inputs row "File"` (max 20MB doc/docx/xls/xlsx) + `§Error Handling EN-FILE-SIZE` | Upload file >20MB rejected via TCP `ERR_CONNECTION_RESET` thay vì HTTP 413 + Vietnamese error; side-effect kill auth session | Open |
+| ~~BUG-BM-009~~ | Medium | P2 | Negative | BM-015 | `FR-VII-04 §Inputs row "File"` (max 20MB doc/docx/xls/xlsx) + `§Error Handling EN-FILE-SIZE` | Upload file >20MB rejected via TCP `ERR_CONNECTION_RESET` thay vì HTTP 413 + Vietnamese error; side-effect kill auth session | **Closed (R8 lần 9 — FE chọn Option B pre-check spec FR-VII-04: toast `"File vượt quá 20MB (21.0 MB)"` rendered, file blocked client-side, session preserved)** |
 
 ---
 
-## BUG-BM-009 — Upload file >20MB không có graceful 413 + invalidate auth session
+## ~~BUG-BM-009~~ — Upload file >20MB không có graceful 413 + invalidate auth session [CLOSED]
+
+> **Re-test 2026-05-11 R8 lần 9:** ✅ **CLOSED**. Account `cb_nv_tw_02` (kill all chrome MCP + relaunch + logout API + LS/SS clear + fresh login + OTP `666666`). Test 3 phương án:
+>
+> **(1) API direct (bypass FE):** `POST /api/v1/bieu-maus` với 21MB blob (22020096 bytes, ZIP magic `PK\x03\x04`). Network panel: reqid=360 `POST /api/v1/bieu-maus → net::ERR_CONNECTION_ABORTED`. JS exception `TypeError: Failed to fetch`. BE/proxy TCP reset behavior chưa thay đổi cho path direct API — đây là edge case khi bypass FE, không phải user flow.
+>
+> **(2) Session preserve check (sau API fail):** Subsequent `GET /api/v1/auth/me` → reqid=361 **304 Not Modified** (session intact). Đây là FIX so với R7 (lúc đó trả 401 → user bị logout). Verify pre-upload `auth/me=200` + post-upload `auth/me=200` → session preserved cross POST fail. ✅ Side-effect kill auth session đã được fix.
+>
+> **(3) UI MCP với MutationObserver (path user thực):** Navigate `/bieu-mau/them-moi?thuMucId=6ad5bf52-...` (TM "Biểu mẫu BKH - R7.7.10b"). Install MutationObserver trên `document.body` BEFORE upload. MCP `upload_file` với `test-bm-21mb.docx` 22020096 bytes vào dropzone uid `15_22` (button "File biểu mẫu"). Observer captured sau 2500ms:
+>
+> ```text
+> addedNode #1: <div class="ant-message ant-message-top css-dev-only-do-not-override-ch9ese css-var-_r_0_ ant-message-css-var">
+>                 "File vượt quá 20MB (21.0 MB)"
+> addedNode #2: <div class="ant-message-notice-wrapper ant-message-move-up-appear ant-message-move-up-appear-start ant-message-move-up">
+>                 "File vượt quá 20MB (21.0 MB)"
+> ```
+>
+> Toast tiếng Việt với size info **đã render đúng**, file bị filter client-side (`.ant-upload-list-item` count = 0), KHÔNG có POST đi BE → BE/proxy không bị trigger TCP reset → auth session intact tự nhiên.
+>
+> **Kết luận:** Per spec FR-VII-04 §Inputs row File, FE đã chọn **Option B "FE pre-check tối ưu"** (preferred behavior trong spec) thay vì Option A (BE 413 + FE catch). FE pre-check satisfies:
+> - ✅ Vietnamese error message ("File vượt quá 20MB (21.0 MB)" — kèm size thực)
+> - ✅ User không gửi file quá lớn → tránh hiện tượng TCP reset
+> - ✅ Session preserved (vì FE block trước khi POST)
+>
+> Bug đóng. Pattern fix giống BUG-BM-008 (FE add `beforeUpload` validation + `message.error`). Evidence: `image/r8l9-2026-05-11-bug-bm-009-fe-precheck-toast-21mb.png`.
+>
+> **Note observation (non-bug):** API direct call (curl/Postman/custom client) bypass FE vẫn TCP reset. Đây là defense-in-depth concern (BE/proxy layer chưa có 413 graceful) — không ảnh hưởng user-facing flow nhưng nên log observation cho team backend xem xét sau.
 
 ### Mô tả
 
@@ -86,22 +116,30 @@ GET /api/v1/auth/me → 401
 
 ### Bằng chứng
 
-![BUG-BM-009 — Form thêm BM hiển thị hint "Tối đa 20MB" trong dropzone](image/bug-bm-009-upload-21mb-conn-reset.png)
+**R7.7.10b gốc (historical — bug Open):**
 
-**Network evidence (DevTools):**
+![BUG-BM-009 — Form thêm BM hiển thị hint "Tối đa 20MB" trong dropzone (R7 historical)](image/bug-bm-009-upload-21mb-conn-reset.png)
 
-```
+```text
 reqid=2154 POST /api/v1/bieu-maus [net::ERR_CONNECTION_RESET]
-reqid=2155 GET /api/v1/auth/me [401]
+reqid=2155 GET /api/v1/auth/me [401]   ← session bị kill
+JS exception: { error: "Failed to fetch" }
 ```
 
-**JS exception trapped:**
+**R8 lần 9 (đã fix — FE pre-check + session preserve):**
 
-```
-{ error: "Failed to fetch" }
-```
+![BUG-BM-009 R8 lần 9 — Form Thêm BM sau khi MCP upload 21MB (toast auto-dismissed, file không trong list)](image/r8l9-2026-05-11-bug-bm-009-fe-precheck-toast-21mb.png)
 
-**Sau khi thử reload page:** browser tự động redirect `/dashboard` → `/login` vì session cookie không còn valid với BE.
+```text
+MutationObserver capture (UI flow):
+  addedNode "ant-message ant-message-top": "File vượt quá 20MB (21.0 MB)"
+  addedNode "ant-message-notice-wrapper":  "File vượt quá 20MB (21.0 MB)"
+  fileItemsCount: 0   ← file bị FE filter, không POST
+
+Network panel (API direct via evaluate_script):
+  reqid=360 POST /api/v1/bieu-maus → net::ERR_CONNECTION_ABORTED  (observation — bypass FE)
+  reqid=361 GET /api/v1/auth/me → 304 Not Modified  ← session PRESERVED (so với R7 401)
+```
 
 ---
 

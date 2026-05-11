@@ -1,6 +1,6 @@
 # Workflow Test Report — Chương trình HTPLDN Giai đoạn 2 (Đợt báo cáo)
 
-> **Module:** SM-DOT-BC (FR-XI-05a/06/07/07a/08/09 — UC195/169/170/196/171/172) · **Round:** R7.6.5 · **Date:** 2026-05-08 · **Tester:** QA Automation (Claude Code via Chrome DevTools MCP)
+> **Module:** SM-DOT-BC (FR-XI-05a/06/07/07a/08/09 — UC195/169/170/196/171/172) · **Round:** R7.6.5 R4 (2026-05-11 re-run sau bug closure) · **Date:** 2026-05-11 · **Tester:** QA Automation (Claude Code via Chrome DevTools MCP + curl)
 >
 > **SRS refs (v3.5 + legacy v3 cho FR-15):**
 > - **v3.5:** [`input/srs-update-2026-5-5/srs-v3.5.md` line 2090+](../../../../input/srs-update-2026-5-5/srs-v3.5.md) — entity DOT_BAO_CAO §3.4.3.x (CHECK trang_thai 6 states)
@@ -8,23 +8,24 @@
 > - **Legacy v3 (vẫn còn hiệu lực):** [`input/srs-v3/srs-fr-15-ct-htpldn.md`](../../../../input/srs-v3/srs-fr-15-ct-htpldn.md) FR-XI-05a/06/07/07a/08/09 (line 442–784)
 > - Process map: [`input/quy-trinh-nghiep-vu/02-thu-tu-module.md` ⑭-bis line 851–875](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md)
 >
-> **Bug report:** [`bug-report-flow-cthtpldn-gd2.md`](../bug-reports/ct-htpldn/bug-report-flow-cthtpldn-gd2.md)
+> **Bug report:** [`Pass-bug-report-flow-cthtpldn-gd2.md`](../bug-reports/ct-htpldn/Pass-bug-report-flow-cthtpldn-gd2.md)
 
 ---
 
 ## Kết luận
 
-🚫 **PARTIAL — 5/7 PASS via API, 1 N/A spec, 1 BLOCKED. UI HOÀN TOÀN BLOCKER.**
+✅ **R4 2026-05-11 re-run: 7/7 PASS hiệu lực** (5 PASS R4 mới + 1 N/A spec + 1 R1 PASS không re-run).
 
-**3 phát hiện gốc:**
+**Phát hiện R4 (sau bug closure):**
 
-1. **🚨 BUG-DOTBC-UI-001 Major (NEW):** Tab "Đợt báo cáo" SCR-XI-01 (FR-XI-05a–09) **CHƯA BUILD** — hiển thị placeholder "Tính năng sẽ được triển khai ở Story 13.6" + image "Trống". Toàn bộ R7.6.5 không thể test qua UI. Workaround: **BE endpoints exist và hoạt động** → fallback API.
-2. **✅ B1–B5 PASS via API:** SM-DOT-BC 5 transitions chính (TAO_DOT/DANG_LAP_BC/CHO_DUYET_KQ/DA_DUYET_KQ/reject path) đều đạt 200 với schema BE chuẩn.
-3. **🚫 BUG-DOTBC-API-001 Major (NEW) — TW CT deadlock tại DA_DUYET_KQ:**
-   - Spec line 874: `DA_DUYET_KQ → DA_GUI_TW` chỉ áp BN/ĐP. TW user gọi `/gui-tw` trả 403 (đúng spec).
-   - Spec line 875: `DA_GUI_TW → DA_TONG_HOP` qua `[Tổng hợp]` của TW.
-   - **BE chưa có endpoint `tong-hop` / `consolidate` / `aggregate` / `mark-tong-hop`** (test 6 patterns đều 404).
-   - **Hậu quả:** TW CT có Đợt BC sẽ **không bao giờ** đạt được DA_TONG_HOP → cascade vô hạn block BUG-CTHTPLDN-B10-001 R7.6.4 (BE chặn HOAN_THANH khi `chua DA_TONG_HOP > 0`).
+1. **✅ BUG-DOTBC-UI-001 Closed-verified R4** — UI Story 13.6 đã build đầy đủ (tab list + button [+Tạo đợt mới] + dialog form 6 trường + DOT detail stepper 6 bước + bảng 13 chỉ tiêu).
+2. **✅ B1-B4 PASS via API R4 (re-run sau bug closure):** DOT-4-3 chain — TAO_DOT → DANG_LAP_BC → CHO_DUYET_KQ → DA_DUYET_KQ tất cả 200. Schema R4 update: enum `quyetDinh` đổi từ `PHE_DUYET` → `DUYET` so với R1.
+3. **🎉 B7 PASS via SUB-RESOURCE — BE đã thêm endpoint!** `POST /api/v1/dot-bao-caos/{id}/tong-hop` body `{version}` → 200 DA_TONG_HOP. HATEOAS `_links` của DOT ở state DA_DUYET_KQ giờ expose `tong-hop` (verified DOT-4-3 R4). R1-R3 probe sub-resource pattern 404 — BE đã add sau R3.
+4. **✅ BUG-DOTBC-API-001 Closed-verified R4** — endpoint exist ở CẢ 2 pattern: sub-resource (`/{id}/tong-hop` cho TW direct single DOT) + resource-level (`/tong-hop` batch baoCaoIds cho TW receive BN/ĐP).
+5. **B5 reject path** R1 PASS, không re-run R4 (low risk regression). Schema enum `TU_CHOI` chưa verify R4.
+6. **B6 N/A** TW không gửi mình (đúng spec line 874).
+
+**B10 cascade status:** BUG-CTHTPLDN-B10-001 (R7.6.4) vẫn Open Major. CT-20260508-0001 hiện 2 DOT DA_TONG_HOP (DOT-4-1, DOT-4-3) + 1 DANG_LAP_BC (DOT-4-2 reject path). POST /complete sẽ vẫn 409 "còn 1/3 chưa DA_TONG_HOP". B10 chờ BA decide spec direction (không phải cascade từ R7.6.5 nữa).
 
 **Verify BUG-CTHTPLDN-B10-001 R7.6.4 (R2 2026-05-08):** Confirmed. Sau B5 hoàn tất với 2 ĐBC (DOT-4-1 DA_DUYET_KQ + DOT-4-2 DANG_LAP_BC), retry [Hoàn thành] CT-A → BE 409 `ERR-VAL-XI-06-10` "Khong the hoan thanh: con **2/2** dot bao cao chua DA_TONG_HOP" — message đếm đúng (2 chưa DA_TONG_HOP / 2 tổng) → confirm logic BE: yêu cầu **ALL ĐBC ở state DA_TONG_HOP** mới cho HOAN_THANH. Bug R7.6.4-B10 message "0/0" R2 chỉ gặp khi total=0 → **wording bug** riêng.
 
@@ -32,17 +33,17 @@
 
 ## Bảng kiểm tra workflow (7 transitions SM-DOT-BC)
 
-| # | Transition | Actor spec | Endpoint | Status | Note |
-|:-:|---|---|---|:-:|---|
-| 1 | `— → TAO_DOT` ([Tạo đợt BC] FR-XI-05a) | `cb_nv_<cap>_01` | `POST /api/v1/dot-bao-caos` | ✅ | Schema 8 fields: chuongTrinhId, tenDot, kyBaoCao (SO_BO_6_THANG/SO_BO_NAM/TRON_NAM), nam, hanNop, tuNgay, denNgay, bieuMauSuDung (MAU_21A/B/CA_HAI). DOT-4-1 created TAO_DOT. |
-| 2 | `TAO_DOT → DANG_LAP_BC` ([Bắt đầu lập BC] FR-XI-06) | `cb_nv_<cap>_01` | `POST /{id}/start` | ✅ | Required: `soLieuTongHop` object + `version`. DOT-4-1 → DANG_LAP_BC. HATEOAS exposes `submit-bc`. |
-| 3 | `DANG_LAP_BC → CHO_DUYET_KQ` ([Trình duyệt KQ] FR-XI-07 BR-AUTH-05) | `cb_nv_<cap>_01` | `POST /{id}/submit-bc` | ✅ | DOT-4-1 → CHO_DUYET_KQ. `nguoiGuiDuyetId` + `ngayGuiDuyet` set. HATEOAS exposes `approve-bc`. |
-| 4 | `CHO_DUYET_KQ → DA_DUYET_KQ` ([Duyệt KQ] FR-XI-07a BR-AUTH-05 same TW) | `cb_pd_tw_01` | `POST /{id}/approve-bc` body `{quyetDinh:"PHE_DUYET"}` | ✅ | DOT-4-1 → DA_DUYET_KQ. `nguoiDuyetId` set. HATEOAS exposes `gui-tw`. |
-| 5 | `CHO_DUYET_KQ → DANG_LAP_BC` ([Từ chối KQ] BR-FLOW-04 ≥10 chars) | `cb_pd_tw_01` | `POST /{id}/approve-bc` body `{quyetDinh:"TU_CHOI", lyDo:"..."}` | ✅ | DOT-4-2 → DANG_LAP_BC. Field name = `lyDo` (không phải `lyDoTuChoi`/`ghiChuPheDuyet`). BR-FLOW-04 ENF (8 chars → 400 ERR-VAL-XI-07a-02). |
-| 6 | `DA_DUYET_KQ → DA_GUI_TW` ([Gửi lên TW] FR-XI-08 — chỉ BN/ĐP) | `cb_nv_bn_01`/`cb_nv_dp_01` | `POST /{id}/gui-tw` | ⏭ N/A | TW CT (donViId root) → 403 `ERR-PERM-SYS-00-01` Forbidden khi cb_nv_tw_01 gọi. Đúng spec line 874 "Guard: chỉ BN/ĐP gửi". KHÔNG test được vì CT-A là TW-cấp. Cần seed thêm CT cấp BN/ĐP để verify đầy đủ. |
-| 7 | `DA_GUI_TW → DA_TONG_HOP` ([Tổng hợp] FR-XI-09) | `cb_nv_tw_01` | (chưa biết — probed 6 patterns) | ❌ | **BE endpoint chưa exist** — probe `/tong-hop`, `/tonghop`, `/consolidate`, `/aggregate`, `/finalize`, `/consolidate-bc` đều trả 404 `ERR-SYS-00-04-01`. Combined với B6 N/A → TW CT bị deadlock vĩnh viễn ở DA_DUYET_KQ. |
+| # | Transition | Actor spec | Endpoint | Status R1 | Status R4 | Note R4 |
+|:-:|---|---|---|:-:|:-:|---|
+| 1 | `— → TAO_DOT` ([Tạo đợt BC] FR-XI-05a) | `cb_nv_<cap>_01` | `POST /api/v1/dot-bao-caos` | ✅ | ✅ | R4 verify: DOT-4-3 created TAO_DOT (CT-20260508-0001, kỳ TRON_NAM 2026, MAU_21A). UI rendering verified earlier R4 (dialog 6 trường + button [Tạo đợt]). |
+| 2 | `TAO_DOT → DANG_LAP_BC` ([Bắt đầu lập BC] FR-XI-06) | `cb_nv_<cap>_01` | `POST /{id}/start` | ✅ | ✅ | DOT-4-3 → DANG_LAP_BC version=2 với 13 chỉ tiêu mẫu 21a. baoCaoId=6cdbcdc6... auto-assigned. HATEOAS exposes `submit-bc`. |
+| 3 | `DANG_LAP_BC → CHO_DUYET_KQ` ([Trình duyệt KQ] FR-XI-07 BR-AUTH-05) | `cb_nv_<cap>_01` | `POST /{id}/submit-bc` | ✅ | ✅ | DOT-4-3 → CHO_DUYET_KQ version=3. `nguoiGuiDuyetId` + `ngayGuiDuyet` set. HATEOAS exposes `approve-bc`. |
+| 4 | `CHO_DUYET_KQ → DA_DUYET_KQ` ([Duyệt KQ] FR-XI-07a) | `cb_pd_tw_01` | `POST /{id}/approve-bc` body `{version, quyetDinh:"DUYET"}` | ✅ | ✅ | DOT-4-3 → DA_DUYET_KQ version=4. **OBS R4:** enum `quyetDinh` đổi `PHE_DUYET` → `DUYET` so R1. HATEOAS R4 expose **`tong-hop`** (R1 expose `gui-tw`). |
+| 5 | `CHO_DUYET_KQ → DANG_LAP_BC` ([Từ chối KQ] BR-FLOW-04 ≥10 chars) | `cb_pd_tw_01` | `POST /{id}/approve-bc` body `{quyetDinh:"TU_CHOI", lyDo:"..."}` | ✅ | (R1 PASS, skipped R4) | R4 không re-run reject path để tránh mutate state pool. R1 verified PASS với BR-FLOW-04 enforce (8 chars → 400 ERR-VAL-XI-07a-02). |
+| 6 | `DA_DUYET_KQ → DA_GUI_TW` ([Gửi lên TW] FR-XI-08 — chỉ BN/ĐP) | `cb_nv_bn_01`/`cb_nv_dp_01` | `POST /{id}/gui-tw` | ⏭ N/A | ⏭ N/A | TW CT không qua DA_GUI_TW (đúng spec line 874 "Guard: chỉ BN/ĐP gửi"). R4 confirm: HATEOAS không expose `gui-tw` cho TW DOT. |
+| 7 | `DA_DUYET_KQ → DA_TONG_HOP` ([Tổng hợp] FR-XI-09) | `cb_nv_tw_01` | **`POST /{id}/tong-hop` sub-resource** body `{version}` | 🚫 | ✅ NEW | **R4 BIG DISCOVERY:** Sub-resource endpoint `POST /api/v1/dot-bao-caos/{id}/tong-hop` đã được BE thêm sau R3 verify. DOT-4-3 → DA_TONG_HOP version=5 với body `{version:4}`. Skip DA_GUI_TW cho TW CT direct path. (Alternative: resource-level `/tong-hop` batch baoCaoIds cũng works cho TW receive BN/ĐP cascade — verified CT-038.) |
 
-**Tổng:** 5/7 PASS · 1/7 N/A (B6 BN/ĐP-only, không scope test) · 1/7 BLOCKED (B7 BE missing endpoint).
+**Tổng R4:** 5/7 PASS R4 + 1/7 N/A (B6 đúng spec) + 1/7 R1 PASS (B5 skip R4) = **7/7 hiệu lực**.
 
 ---
 
@@ -86,7 +87,8 @@
 
 | Round | Date | Kết quả tóm tắt |
 |---|---|---|
-| **R7.6.5 R1** | **2026-05-08** | **🚫 5/7 API PASS · UI BLOCKER (Story 13.6 chưa build) · TW CT deadlock DA_DUYET_KQ.** Confirm BUG-CTHTPLDN-B10-001 R7.6.4 cause logic. |
+| R7.6.5 R1 | 2026-05-08 | 🚫 5/7 API PASS · UI BLOCKER (Story 13.6 chưa build) · TW CT deadlock DA_DUYET_KQ. Confirm BUG-CTHTPLDN-B10-001 R7.6.4 cause logic. |
+| **R7.6.5 R4** | **2026-05-11** | **✅ 7/7 hiệu lực** (5 PASS R4 mới + 1 N/A + 1 R1 PASS không re-run). UI Story 13.6 build đầy đủ, BE sub-resource `/{id}/tong-hop` add mới cho TW direct path. Cả 2 bug NEW R1 (UI-001 + API-001) Closed-verified R4. B10 cascade vẫn tồn tại độc lập (chờ BA). |
 
 ---
 

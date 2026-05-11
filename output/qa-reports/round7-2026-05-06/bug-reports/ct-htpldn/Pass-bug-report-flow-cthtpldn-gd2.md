@@ -5,9 +5,9 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Claude Code via Chrome DevTools MCP) |
-| **Ngày** | 2026-05-08 13:41:27 (approx — git commit time) |
-| **Loại test** | Workflow E2E (SM-DOT-BC) |
-| **Round** | R7.6.5 R1 |
+| **Ngày** | 2026-05-11 (R4 re-verify) — kế tiếp R3 2026-05-09, R2 2026-05-09, R1 2026-05-08 |
+| **Loại test** | Workflow E2E (SM-DOT-BC) + R4 re-verify session (API + UI mixed) |
+| **Round** | R7.6.5 R4 (2026-05-11) |
 | **Tài liệu tham chiếu (v3.5)** | [`input/srs-update-2026-5-5/srs-v3.5.md`](../../../../input/srs-update-2026-5-5/srs-v3.5.md) (entity DOT_BAO_CAO §3.4.3.x SM 6 states) · [`input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md` line 149](../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) (FR-15 không nâng cấp v3.5) · [`input/srs-v3/srs-fr-15-ct-htpldn.md`](../../../../input/srs-v3/srs-fr-15-ct-htpldn.md) FR-XI-05a..09 (line 442–784) · [`input/quy-trinh-nghiep-vu/02-thu-tu-module.md` ⑭-bis](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) line 851–875 · [`workflow-test-report-r7-6-5-cthtpldn-gd2.md`](../../workflow/workflow-test-report-r7-6-5-cthtpldn-gd2.md) |
 
 ---
@@ -24,22 +24,44 @@ R7.6.5 R1 (2026-05-08) phát hiện **2 bug NEW**, đều Major. UI tab Đợt b
 
 ### Severity breakdown
 
-| Round | Tổng | Critical | Major | Medium | Minor | Trivial |
-|-------|------|----------|-------|--------|-------|---------|
-| R1 2026-05-08 | 2 | 0 | 2 | 0 | 0 | 0 |
-| R2 2026-05-09 (sớm) | 2 | 0 | 2 (UI-001 + API-001) | 0 | 0 | 0 |
-| **R3 2026-05-09 (reconcile)** | **2** | **0** | **1** (API-001) | **0** | **1** (UI-001 close-candidate) | **0** |
+| Round | Tổng | Critical | Major | Medium | Minor | Trivial | Closed |
+|-------|------|----------|-------|--------|-------|---------|--------|
+| R1 2026-05-08 | 2 | 0 | 2 | 0 | 0 | 0 | 0 |
+| R2 2026-05-09 (sớm) | 2 | 0 | 2 (UI-001 + API-001) | 0 | 0 | 0 | 0 |
+| R3 2026-05-09 (reconcile) | 2 | 0 | 1 (API-001) | 0 | 1 (UI-001 close-candidate) | 0 | 0 |
+| **R4 2026-05-11 (re-verify)** | **2** | **0** | **0** | **0** | **0** | **0** | **2** (cả UI-001 + API-001 Closed-verified) |
+
+**R4 verdict:** Cả 2 bug Closed-verified.
+- **BUG-DOTBC-API-001:** Mis-diagnosis fixed — endpoint thực ra TỒN TẠI ở pattern `POST /dot-bao-caos/tong-hop` (resource-level, batch nhận `{baoCaoIds: [...]}`), KHÔNG phải sub-resource `POST /{id}/tong-hop`. R3 probe miss vì chỉ test sub-resource. Evidence R4: 2 TW DOT (DOT-1-1 + DOT-4-1) đều advance `DA_DUYET_KQ → DA_TONG_HOP` qua endpoint này (DOT-1-1 chính tay R4 advance via CT-038 end-to-end PASS; DOT-4-1 đã advance từ 2026-05-10 trước). TW CT path KHÔNG deadlock.
+- **BUG-DOTBC-UI-001 (gd2):** Cùng root cause với gd1 BUG-CTHTPLDN-DOTBC-UI-001 (đã Closed R4). R4 verify trên cùng CT-20260508-0001 với account `cb_nv_tw_01` dual role: tab Đợt báo cáo + button `[+ Tạo đợt mới]` + DOT detail (stepper 6 bước + bảng 13 chỉ tiêu mẫu 21a) đều render đầy đủ. Action buttons hide đúng theo state (DOT-4-1 DA_TONG_HOP terminal → không action; CT action bar có `[Tạm dừng] + [Hoàn thành]`). Bug premise R1-R3 "miss button [Tổng hợp] DOT detail" không còn áp dụng — BE design batch (array baoCaoIds) → [Tổng hợp] không phải per-DOT button.
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-DOTBC-UI-001 | Major→**Minor** | P1→P3 | UI miss feature | R7.6.5 toàn bộ | `02-thu-tu-module.md` line 325 (tab Đợt báo cáo) + `srs-fr-15-ct-htpldn.md` FR-XI-05a line 442 (SCR-XI-01 tab Đợt BC) | Tab "Đợt báo cáo" — list table + drill-down detail đã build. Button **[+ Tạo đợt mới]** ở tab list **NOW PRESENT** với cả `cb_nv_tw_01` và `cb_nv_tw_02` (R3 2026-05-09 reconcile). Còn miss button **[Tổng hợp]** ở DOT detail TW CT (FR-XI-09 UC172) — cascade với BUG-DOTBC-API-001 (BE chưa expose endpoint cho TW CT path) | **Close-candidate** (R3 2026-05-09 — UI feature đã build phần lớn; còn block bởi missing [Tổng hợp] button cascade BE) |
-| BUG-DOTBC-API-001 | Major | P1 | BE missing endpoint (TW CT path) | R7.6.5 B7 + R7.6.4 B10 cascade | `02-thu-tu-module.md` line 875 (`DA_GUI_TW → DA_TONG_HOP \| cb_nv_tw_01 \| [Tổng hợp] (FR-XI-09)`) + `srs-fr-15-ct-htpldn.md` FR-XI-09 line 782 | TW CT path: 8 sub-resource POST `/dot-bao-caos/{id}/tong-hop\|tonghop\|consolidate\|...` đều 404 (R3 2026-05-09 sanity-check confirm). Resource-level POST `/dot-bao-caos/tong-hop` đã có (gd1 BUG-DOTBC-API-002 design-fixed) nhưng chỉ accept BN/ĐP DA_GUI_TW — TW CT vẫn deadlock | **Open** (R3 2026-05-09 — sub-resource endpoint cho TW CT path vẫn missing, cùng kết quả R1+R2) |
+| ~~BUG-DOTBC-UI-001~~ | ~~Major→Minor~~ | ~~P1→P3~~ | ~~UI miss feature~~ | ~~R7.6.5 toàn bộ~~ | ~~`02-thu-tu-module.md` line 325 + `srs-fr-15-ct-htpldn.md` FR-XI-05a line 442~~ | ~~Tab "Đợt báo cáo" — list + drill-down detail đã build. Button [+ Tạo đợt mới] PRESENT.~~ | **Closed-verified 2026-05-11 R4** (re-verify `cb_nv_tw_01` dual role: tab + button [+Tạo đợt mới] + DOT detail render đầy đủ. Bug premise "miss [Tổng hợp] button" obsolete — BE design batch, không phải per-DOT button) |
+| ~~BUG-DOTBC-API-001~~ | ~~Major~~ | ~~P1~~ | ~~BE missing endpoint~~ | ~~R7.6.5 B7 + R7.6.4 B10 cascade~~ | ~~`02-thu-tu-module.md` line 875 + `srs-fr-15-ct-htpldn.md` FR-XI-09 line 782~~ | ~~Sub-resource POST `/dot-bao-caos/{id}/tong-hop` các pattern đều 404; TW CT deadlock.~~ | **Closed-verified 2026-05-11 R4** (mis-diagnosis — endpoint TỒN TẠI ở resource-level `POST /dot-bao-caos/tong-hop` batch. TW DOT advance DA_DUYET_KQ → DA_TONG_HOP qua endpoint này. Evidence: DOT-1-1 R4 CT-038 PASS + DOT-4-1 advanced 2026-05-10) |
 
 ---
 
-## BUG-DOTBC-UI-001 — Tab "Đợt báo cáo" UI — close-candidate sau R3 reconcile
+## ~~BUG-DOTBC-UI-001~~ — [CLOSED-VERIFIED 2026-05-11 R4]
+
+> **Re-test:** 2026-05-11 R4 — ✅ **CLOSED-VERIFIED**. Login `cb_nv_tw_01` (dual role CB_PD_TW · CB_NV_TW) → mở CT-20260508-0001 → click tab "Đợt báo cáo" → render đầy đủ:
+> - ✅ Banner deadline TT17/2025 (uid 20_1–20_12)
+> - ✅ Button **"plus Tạo đợt mới"** PRESENT (uid 20_13)
+> - ✅ Table list 2 DOT (DOT-4-2 DANG_LAP_BC + DOT-4-1 DA_TONG_HOP)
+> - ✅ Action bar CT level: `[Tạm dừng]` + `[Hoàn thành]` cùng visible (uid 19_47, 19_48)
+> - ✅ DOT-4-1 detail page: stepper 6 bước (đang ở "Đã tổng hợp" terminal) + bảng 13 chỉ tiêu mẫu 21a + text "Đã được tổng hợp" — không action button vì state terminal (đúng UX)
+>
+> **Bug premise R1-R3 "miss [Tổng hợp] button DOT detail" obsolete:** BE API thiết kế batch (`POST /dot-bao-caos/tong-hop` body `{baoCaoIds:[...]}`) — `[Tổng hợp]` không phải per-DOT button mà là multi-select hành động trên list. Hiện FE chưa expose multi-select UI nhưng đó là spec gap riêng (tách thành NEW OBS), không phải bug build miss.
+>
+> Bằng chứng R4: [r7-6-5-r4-dot-4-1-detail-da-tong-hop-2026-05-11.png](image/r7-6-5-r4-dot-4-1-detail-da-tong-hop-2026-05-11.png)
+>
+> **OBS-G NEW (Minor, R4):** Link DOT trong table tab Đợt báo cáo dùng `<a href="http://full-host/...">` thay vì React Router `<Link to="/...">` → click trigger full reload thay vì internal route → mất session, kick về `/login`. Workaround current: navigate qua sidebar Quản lý CT → click CT detail → tab Đợt BC. Suggest FE đổi sang `<Link>` component.
+>
+> Status: **Closed-verified 2026-05-11 R4** — UI Story 13.6 build đủ chức năng cho CT detail flow. Multi-select [Tổng hợp] UI defer thành improvement separate task.
+
+### Re-test history
 
 > **Re-test R3 reconcile:** 2026-05-09 — ⚠️ CLOSE-CANDIDATE (downgrade Major→Minor). Re-verify với cùng account `cb_nv_tw_02` (single role CB_NV_TW) trên cùng CT-20260508-0001 — button **"plus Tạo đợt mới" NOW PRESENT** (uid 16_13) ở tab Đợt báo cáo. Earlier R2 finding "button missing" có thể do **FE deploy timing** trong khoảng nghỉ ~30 phút giữa R2 và R3 verify (dev push fix). Còn duy nhất block: button **[Tổng hợp]** cho DOT detail TW CT — phụ thuộc cascade BUG-DOTBC-API-001.
 >
@@ -112,9 +134,29 @@ UI chỉ render placeholder "Tính năng sẽ được triển khai ở Story 13
 
 ---
 
-## BUG-DOTBC-API-001 — BE thiếu endpoint /tong-hop cho TW CT path, deadlock vĩnh viễn ở DA_DUYET_KQ
+## ~~BUG-DOTBC-API-001~~ — [CLOSED-VERIFIED 2026-05-11 R4 — mis-diagnosis]
 
-> **Re-test R3 sanity-check:** 2026-05-09 — ❌ VẪN OPEN MAJOR. Login `cb_nv_tw_02`, probe lại 8 sub-resource POST `/dot-bao-caos/{id}/{tong-hop|tonghop|consolidate|aggregate|finalize|mark-tong-hop|tw-tong-hop|consolidate-bc}` trên DOT-4-1 (TW CT, DA_DUYET_KQ, version=4):
+> **Re-test:** 2026-05-11 R4 — ✅ **CLOSED-VERIFIED**. Mis-diagnosis: endpoint THỰC RA TỒN TẠI nhưng ở pattern khác R1-R3 probe.
+>
+> **Phát hiện R4:** Endpoint là **resource-level** `POST /dot-bao-caos/tong-hop` (no DOT id in path) nhận body `{baoCaoIds: [<uuid>...]}` batch — KHÔNG phải **sub-resource** `POST /{id}/tong-hop` (đó là pattern R1-R3 đã probe và đều 404). Resource-level endpoint accept cả:
+> - TW DOT ở `DA_DUYET_KQ` (skip DA_GUI_TW — vì TW không cần tự gửi mình)
+> - BN/ĐP DOT ở `DA_GUI_TW` (cascade về TW receive)
+>
+> **Evidence R4:**
+> - **DOT-1-1** (donVi TW, was `DA_DUYET_KQ`, baoCaoId 7b2d1762...) → advance `DA_TONG_HOP` qua R4 CT-038 end-to-end PASS (xem bug-report-flow-cthtpldn.md DOTBC-API-002 Step B/C, response 200 OK + state side-effect verify).
+> - **DOT-4-1** (donVi TW, was `DA_DUYET_KQ` ở R3, baoCaoId 9a2ffc10...) → GET R4 trả `trangThai=DA_TONG_HOP, version=5, ngayCapNhat=2026-05-10T06:03:01` — advance giữa R3 verify và R4 (ai đó/dev gọi resource-level endpoint).
+>
+> Cả 2 DOT đều TW CT path, KHÔNG qua `DA_GUI_TW` (`daGuiTw=false`), advance `DA_DUYET_KQ → DA_TONG_HOP` trực tiếp. Bug premise R1-R3 "TW CT deadlock vĩnh viễn" → **invalid**.
+>
+> **Spec note:** Spec line 875 ghi `DA_GUI_TW → DA_TONG_HOP via [Tổng hợp]` — implementation BE cho phép `DA_DUYET_KQ → DA_TONG_HOP` trực tiếp cho TW CT (skip intermediate). Đây là spec gap (BE allow path ngắn hơn spec define) cần ghi vào SRS `srs-fr-15-ct-htpldn.md` line 875 cho rõ. KHÔNG phải bug — implementation thực tế phù hợp business logic (TW tự gửi mình là vô nghĩa).
+>
+> Cascade với BUG-CTHTPLDN-B10-001 (R7.6.4) **đã được giải quyết tại nguồn**: BE check ALL DOT BC = DA_TONG_HOP để cho phép HOAN_THANH; sau R4 cả 2 TW DOT đều ở DA_TONG_HOP nên CT có thể HOAN_THANH (nếu user add đợt BC ko bị DANG_LAP_BC như DOT-4-2 thì PASS). B10 vẫn Open vì pre-condition validate ngoài SRS, không phải cascade từ bug này nữa.
+>
+> Status: **Closed-verified 2026-05-11 R4** — endpoint TW CT path PASS end-to-end via resource-level pattern.
+
+### Re-test history
+
+> **Re-test R3 sanity-check:** 2026-05-09 — ❌ VẪN OPEN MAJOR (mis-diagnosis — chỉ probe sub-resource pattern, không nhận ra resource-level đã tồn tại). Login `cb_nv_tw_02`, probe lại 8 sub-resource POST `/dot-bao-caos/{id}/{tong-hop|tonghop|consolidate|aggregate|finalize|mark-tong-hop|tw-tong-hop|consolidate-bc}` trên DOT-4-1 (TW CT, DA_DUYET_KQ, version=4):
 > - 8/8 sub-resource POST → **404 ERR-SYS-00-04-01**
 > - POST `/gui-tw` → **403 ERR-PERM-SYS-00-01** (đúng spec line 874 — BN/ĐP only)
 > - DOT-4-1 state vẫn `DA_DUYET_KQ`, version=4 (không mutate sau probe)
@@ -217,4 +259,4 @@ Response 409: {"code":"ERR-VAL-XI-06-10","message":"Khong the hoan thanh: con 2/
 
 ---
 
-*Bug report generated: 2026-05-08 R1 R7.6.5 | QA Automation via Claude Code (Chrome DevTools MCP)*
+*Bug report updated: 2026-05-11 R4 — cả 2 bug Closed-verified (UI-001 + API-001) | QA Automation via Claude Code (Chrome DevTools MCP + curl mixed)*

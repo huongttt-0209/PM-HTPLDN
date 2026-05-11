@@ -190,7 +190,7 @@
 |--------|----------|-------|----|------|
 | BUG-BM-009 | Minor → Medium | Upload BM file >20MB rejected via TCP reset, no graceful 413 + session invalidate | BM-015 | Server-level body limit. Đề xuất 2 fix: (a) Express body-parser explicit limit + 413 Vietnamese error; (b) FE pre-check file.size + investigate session invalidation. |
 
-Bug entry chi tiết tại [`bug-report-r7-7-10b-bm.md`](../../bug-reports/bm/bug-report-r7-7-10b-bm.md).
+Bug entry chi tiết tại [`Pass-bug-report-r7-7-10b-bm.md`](../../bug-reports/bm/Pass-bug-report-r7-7-10b-bm.md) (closed R8 lần 9 2026-05-11).
 
 ---
 
