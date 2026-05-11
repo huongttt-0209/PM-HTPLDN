@@ -116,6 +116,90 @@ Chi tiết workflow + anti-pattern: memory `feedback_todo_update_after_run` §E.
 
 ---
 
+## Functional/Workflow report — 2 bảng tổng hợp BẮT BUỘC sau mỗi round (enforced 2026-05-10)
+
+**Áp dụng cho mọi tester (hiện tại + tương lai) làm việc trong folder `output/qa-reports/`.** Mọi file `functional-test-report-*.md` và `workflow-test-report-*.md` BẮT BUỘC chứa 2 bảng dưới — đặt **ngay sau Verdict + Accounts** (LATEST round), TRƯỚC narrative deep-dive Phase 1/2/3.
+
+### Bảng 1 — Trạng thái toàn bộ TC (snapshot LATEST)
+
+Aggregate **toàn bộ TC** trong test plan của module × cột Status mới nhất × Note 1-line. Update sau MỖI round (R{N} mới nhất ghi vào ô cuối). Không xóa TC cũ — TC thay đổi status flip icon + ghi round phát hiện.
+
+```markdown
+## Bảng trạng thái TC (snapshot R{N} — LATEST YYYY-MM-DD HH:MM:SS)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| TV-001 | Tạo VV | ✅ PASS | R8 | OK clean |
+| TV-022 | Auto-save 30s | ❌ FAIL | R16-P2 | Endpoint /trao-doi missing — BUG-BE-R16-003 |
+| TV-053 | NHT phân công CG | 🚫 BLOCKED | R16-P2 | Cascade R7.3.14 NHT TVV seed |
+| ... | ... | ... | ... | ... |
+| **Tổng** | **N TC** | ✅X · ⚠️Y · ❌Z · 🚫W · ⏭V · 🤷U | | |
+```
+
+**Status icon convention** (terminology Việt):
+- ✅ Đạt (PASS clean)
+- ⚠️ Sai spec (PASS but deviates SRS, log Minor)
+- ❌ Lỗi (FAIL — bug confirmed)
+- 🚫 Không test được (BLOCKED — thiếu data/permission/env)
+- ⏭ Hoãn (SKIP — out-of-scope round này, defer)
+- 🤷 Không xác định (cần re-test, ambiguous evidence) — CẤM kết luận, phải retry method
+
+### Bảng 2 — TC chưa chạy được + cần làm gì để chạy
+
+Aggregate CHỈ TC non-PASS (⚠️/❌/🚫/⏭/🤷). Format **đơn giản, ngôn ngữ tự nhiên, ngắn gọn**. Mục đích: tester/dev/BA nhìn 1 cái biết ngay TC nào kẹt vì gì, cần làm gì để chạy được, ai làm.
+
+```markdown
+## Bảng TC chưa chạy được — cần làm gì để chạy (R{N})
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| TV-022 | Endpoint auto-save 30s chưa có (BUG-BE-R16-003) | BE expose endpoint `/trao-doi-nhap` theo SRS §1496 | Dev BE |
+| TV-053 | NHT chưa có TVV record để phân công | Seed R7.3.14 — walk workflow tạo NHT có TVV | QA seed |
+| TV-040 | TVV stats counter không có trong spec | BA confirm có yêu cầu không | BA |
+```
+
+**Cột "Vì sao chưa chạy được"** — 1 câu ≤20 từ, ngôn ngữ tự nhiên (không ERR code, không endpoint path đầy đủ — đẩy chi tiết vào bug-report).
+
+**Cột "Cần làm gì để chạy"** — action cụ thể, ≤25 từ. Không "Defer" / "TBD" — phải nói rõ task nào / ai cần làm trước.
+
+**Cột "Ai làm"** — chọn 1: `Dev BE` / `Dev FE` / `QA seed` / `QA API` / `BA` / `Infra`.
+
+**Trước Bảng 2 BẮT BUỘC có 1 dòng tóm tắt** "Hiện tại còn N TC chưa chạy được — chia M nhóm: X chờ dev fix · Y chờ seed · Z out-of-scope...". Mục đích: user/QA mới đọc 1 dòng biết tổng thể.
+
+**Cấm:**
+- Đặt 2 bảng ở cuối file — phải ngay sau Verdict.
+- Để Bảng 2 trống mà Bảng 1 có TC non-PASS — phải đối chiếu 1:1.
+- Cột "Vì sao" / "Cần làm gì" >25 từ — đẩy chi tiết ra bug-report.
+- Quên update sau round — round mới overwrite TC vừa retest.
+- Dùng English jargon (BLOCKED/PENDING/DEFERRED) trong cột mô tả.
+
+**Lý do bảng này quan trọng:** user / QA handoff cross-tester / dev / BA cần đọc 1 lần biết ngay "TC nào chạy được, TC nào kẹt vì gì, ai cần unblock". Không có bảng này → tester sau phải đọc full narrative Phase 1/2/3 nhiều round → tốn thời gian + miss status.
+
+### Phân loại 6 nhóm nguyên nhân cho cột "Vì sao chưa chạy được" — BẮT BUỘC (enforced 2026-05-10 22:30:00)
+
+Cột "Vì sao chưa chạy được" trong Bảng 2 KHÔNG được tự nghĩ ra label — phải pick **1 trong 6 nhóm chuẩn** A-F:
+
+| Nhóm | Tên | Trigger phân loại |
+|:-:|---|---|
+| **A** | Thiếu seed data | DB chưa có record / variant / state cần — tester không thấy bug logic, chỉ thiếu data tiền điều kiện |
+| **B** | Chờ dev fix bug | Đã log BUG-{module}-{ID} với SRS ref, status Open hoặc PARTIAL |
+| **C** | Chờ BA confirm spec | 2 spec mâu thuẫn / SRS ambiguous / dev claim verbal BA |
+| **D** | Lỗi env / chờ infra | mTLS sandbox / Cổng PLQG / API key / batch trigger / DB config / mock server |
+| **E** | Dependency upstream chưa xong | TC/task khác chưa PASS, theo format `[need: ≥N entity state X]` |
+| **F** | Lý do khác | DB-level only (DBA query) / out-of-scope round / cost cao (vd timeout 30 ngày) |
+
+Chi tiết trigger phân loại + phương án chuẩn + workflow re-test + anti-patterns: **[`output/template/tc-block-classification-template.md`](output/template/tc-block-classification-template.md)** — áp dụng cho **MỌI round QA + MỌI tester** (hiện tại + tương lai).
+
+**Cấm:**
+- Tự nghĩ ra nhóm 7+ ngoài A-F.
+- Ghi "Defer" / "TBD" / "Skip" trong cột "Vì sao" mà không pick nhóm A-F.
+- Mark nhóm B mà chưa log bug — phải log BUG-{ID} TRƯỚC, mark nhóm B SAU.
+- Mark "🤷 Không xác định" mà không retry method (reload fresh, curl, isolatedContext) trước (xem memory `feedback_deep_review_before_ba_defer`).
+- Defer >2 round nhóm F mà không escalate user lead.
+- Cột "Ai làm" ghi "QA team" / "Dev team" — phải role cụ thể: `Dev BE` / `Dev FE` / `QA seed` / `QA API` / `BA` / `Infra` / `DBA`.
+
+---
+
 ## Quy tắc viết todo.md (enforced bằng hook `.claude/hooks/check-todo-concise.py`)
 
 **Template cứng cho mỗi task:**
@@ -165,6 +249,44 @@ Chi tiết workflow + anti-pattern: memory `feedback_todo_update_after_run` §E.
 1. **Read [output/template/bug-report-template.md](output/template/bug-report-template.md) trước khi Write/Edit bug entry.** Bug entry chỉ có 6 sections: Mô tả / Bước tái hiện / KQ mong đợi / KQ thực tế / Bằng chứng / So sánh (optional permission). KHÔNG thêm Tác động / Đề xuất fix / SRS verification / Phân biệt module.
 2. **2-source SRS verify:** query NotebookLM HTPLDN (id `a4ae45bf-cea0-4325-8fee-b1e0be702cf2`) + grep SRS local — mọi log/đóng/đổi severity.
 3. **Workaround = bug candidate.** Gặp 4xx/5xx → log, không skip vì "tự fix được".
+
+## Bug-report folder discipline — Pass- prefix + image co-locate (enforced 2026-05-10)
+
+**Layout chuẩn `output/qa-reports/round{N}-*/bug-reports/`:**
+```
+bug-reports/
+└── <module>/                          ← chỉ chứa *.md + image/ subfolder
+    ├── bug-report-<X>.md              ← file còn ≥1 bug Open
+    ├── Pass-bug-report-<Y>.md         ← file 100% bug Closed (auto-renamed)
+    └── image/
+        └── *.png / *.jpg / *.jpeg / *.b64.txt
+```
+
+**3 rule cứng (mỗi khi update file bug-report):**
+
+1. **Pass- prefix khi 100% bug Closed.** File `bug-report-*.md` có Bug Summary Table mà mọi row Status = Closed → **bắt buộc rename** thành `Pass-bug-report-*.md` + update mọi inbound link (todo*.md, workflow/functional/seed reports). **Auto-handled by hook** [`auto-rename-pass-prefix.py`](.claude/hooks/auto-rename-pass-prefix.py) — PostToolUse Edit/Write/MultiEdit, đã register settings.json. Tester KHÔNG cần manual rename.
+
+2. **Ảnh phải nằm trong `<module>/image/`.** CẤM:
+   - Ảnh rời cùng cấp với MD (vd `<module>/screenshot.png`).
+   - Subfolder lạ kiểu `<module>/img/`, `<module>/screenshots/`, `<module>/evidence-rN/`, `<module>/evidence-<task>/` — gộp hết về `image/`.
+   - Top-level `bug-reports/image/` chứa ảnh mixed nhiều module — phải distribute về owner.
+   - **Soft-enforced by hook** [`check-bug-report-image-discipline.py`](.claude/hooks/check-bug-report-image-discipline.py) — warn-only stderr, không block (vì cleanup cần move + ref update).
+
+3. **Khi save screenshot mới qua MCP `take_screenshot({filePath})`:** path BẮT BUỘC = `output/qa-reports/round{N}-*/bug-reports/<module>/image/<filename>`. Không save vào parent module folder, không tạo subfolder mới.
+
+**Workflow khi phát hiện drift (loose images / odd subfolders):**
+
+1. Move loose images: `mv <module>/*.png <module>/image/` (lọc các file rời).
+2. Gộp subfolder lạ: `mv <module>/img/* <module>/image/ && rmdir <module>/img` (lặp cho mỗi subfolder lạ).
+3. Distribute top-level image/: grep MD ref `grep -rl <fname>` tìm owner module → move vào module đó. File không có ref → suy luận từ tên file prefix (vd `r7-X-Y` → task ID → module).
+4. Update MD ref: `](../image/X)` / `](screenshots/X)` / `](evidence-*/X)` / `](img/X)` / bare `](X.png)` → đổi hết thành `](image/X)`.
+5. Verify: hook `check-bug-report-image-discipline.py` không còn warn + grep MD không còn broken ref.
+
+**Anti-pattern:**
+- ❌ Save screenshot vào root module folder vì "tiện".
+- ❌ Tạo `evidence-r{N}/` mỗi round — gộp vào `image/`.
+- ❌ Manual rename `bug-report-*` → `Pass-*` mà quên update inbound link → todo.md broken.
+- ❌ Đổi nội dung MD khi rename Pass- (vd thêm dòng "## All closed") — chỉ rename, không edit content.
 
 ## Chrome DevTools MCP — PATTERNS BẮT BUỘC (primary tool từ 2026-04-21)
 

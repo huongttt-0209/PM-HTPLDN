@@ -1,7 +1,7 @@
 # Workflow Test Report — Hỏi đáp pháp lý (FR-02 SM-HOIDAP v3.5)
 
 > **Module:** Hỏi đáp pháp lý (`HOI_DAP`) · **SRS:** [`srs-update-2026-5-5/srs-fr-02-hoi-dap.md`](../../../../../input/srs-update-2026-5-5/srs-fr-02-hoi-dap.md) line 40-47 · **Round:** R7 · **Date:** 2026-05-08 · **Tester:** QA Automation
-> **Bug:** [bug-report-flow-hoi-dap.md](../../bug-reports/hoi-dap/bug-report-flow-hoi-dap.md) — 2 Open (BUG-HD-001 Critical, BUG-HD-002 Major)
+> **Bug:** [Pass-bug-report-flow-hoi-dap.md](../../bug-reports/hoi-dap/Pass-bug-report-flow-hoi-dap.md) — 2 Open (BUG-HD-001 Critical, BUG-HD-002 Major)
 > **Accounts:** `cb_nv_tw_02` (CB tiếp nhận T1) · `cb_nv_tw_01` (CB được phân công, walk T10)
 
 ---
@@ -18,7 +18,7 @@
 |:-:|---|---|---|:-:|---|
 | T1 | `MOI → TIEP_NHAN` (CB tiếp nhận, button [check Tiếp nhận] + confirm modal) | `cb_nv_tw_02` | HD-20260507-001 | ✅ | Modal "Xác nhận tiếp nhận" → click [Tiếp nhận] → state "Tiếp nhận", Người tiếp nhận = cb_nv_tw_02, SLA "22/05/2026 10:21" auto +10 ngày LV |
 | T2 | `TIEP_NHAN → DA_PHAN_CONG` (CB phân công, button [user-switch Phân công] + modal "Phân công xử lý") | `cb_nv_tw_02` | HD-20260507-001 | ✅ | Modal có "Gợi ý phân công" 1 record cb_nv_tw_01 (workload 0). Radio + click [Phân công] → state "Đã phân công", Người phân công = cb_nv_tw_01 |
-| T3 | `DA_PHAN_CONG → DANG_XU_LY` (Người được phân công bắt đầu xử lý, expected button [Phản hồi]/[Bắt đầu xử lý]) | `cb_nv_tw_01` | HD-20260507-001 | 🚫 | **BLOCK FE bug.** Detail state DA_PHAN_CONG không có button action + tab "Đang xử lý" rỗng. Log [BUG-HD-001](../../bug-reports/hoi-dap/bug-report-flow-hoi-dap.md) Critical |
+| T3 | `DA_PHAN_CONG → DANG_XU_LY` (Người được phân công bắt đầu xử lý, expected button [Phản hồi]/[Bắt đầu xử lý]) | `cb_nv_tw_01` | HD-20260507-001 | 🚫 | **BLOCK FE bug.** Detail state DA_PHAN_CONG không có button action + tab "Đang xử lý" rỗng. Log [BUG-HD-001](../../bug-reports/hoi-dap/Pass-bug-report-flow-hoi-dap.md) Critical |
 | T4 | `DANG_XU_LY → DA_TRA_LOI/CHO_PHE_DUYET` (CB tích "Đã trả lời" → BR-FLOW-01 auto) | `cb_nv_tw_01` | — | 🚫 | BLOCK do T3 không tới được DANG_XU_LY |
 | T5 | `CHO_PHE_DUYET → DA_DUYET` (CB Phê duyệt approve) | `cb_pd_tw_02` | — | 🚫 | BLOCK upstream T4 |
 | T6 | `DA_DUYET → CONG_KHAI` (Modal "Công khai" 5 trường CR-01) | `cb_pd_tw_02` | — | 🚫 | BLOCK upstream T5. Indicator B0#8 chưa verify |

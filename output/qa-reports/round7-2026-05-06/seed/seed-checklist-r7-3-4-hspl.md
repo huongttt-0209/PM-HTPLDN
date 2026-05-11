@@ -140,7 +140,7 @@ AND EXISTS VU_VIEC vv
 | **BUG-FUNC-HSPL-005** | Minor | List `?keyword=` param không được áp filter (trả full pool) — BE chỉ accept `?search=`. Spec input row 1 ghi "keyword" — naming mismatch. |
 | **BUG-FUNC-HSPL-006** | Major | List `?search=` không hỗ trợ unaccent (đồng pattern với BUG-FUNC-TVCS-FN-001) — BR-DATA-08 violation. |
 
-> **Note:** Bug 001/002/003 sẽ log riêng vào `bug-report-r7-7-5-tvcs.md` hoặc `bug-report-r7-3-4-hspl.md`. Hiện đã có `bug-report-r7-7-5-tvcs.md` từ functional sweep — append 6 bug HSPL vào đó hoặc tạo file mới.
+> **Note:** Bug 001/002/003 sẽ log riêng vào `Pass-bug-report-r7-7-5-tvcs.md` hoặc `bug-report-r7-3-4-hspl.md`. Hiện đã có `Pass-bug-report-r7-7-5-tvcs.md` từ functional sweep — append 6 bug HSPL vào đó hoặc tạo file mới.
 
 ---
 

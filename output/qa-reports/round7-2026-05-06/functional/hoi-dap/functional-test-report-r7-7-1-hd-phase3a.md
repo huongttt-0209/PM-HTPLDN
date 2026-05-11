@@ -12,7 +12,7 @@
 | **Test Method** | Hybrid — UI MCP cho HD-025/026/064 attempt UI gate + curl fallback supporting evidence sau MCP crash |
 | **Primary Account** | `cb_pd_tw_04` / `Secret@123` — CB Phê duyệt cấp TW (scope full) |
 | **Round** | R7 / R7.7.1 Phase 3a |
-| **Tài liệu tham chiếu** | [todo-hoi-dap.md R7.7.1](../../../../tasks/todo-hoi-dap.md#r7-7-1) · [7.2-hoi-dap-phap-ly.md](../../../../funtion/7.2-hoi-dap-phap-ly.md) HD-025/026/064 · [bug-report-flow-hoi-dap.md](../../bug-reports/hoi-dap/bug-report-flow-hoi-dap.md) |
+| **Tài liệu tham chiếu** | [todo-hoi-dap.md R7.7.1](../../../../tasks/todo-hoi-dap.md#r7-7-1) · [7.2-hoi-dap-phap-ly.md](../../../../funtion/7.2-hoi-dap-phap-ly.md) HD-025/026/064 · [Pass-bug-report-flow-hoi-dap.md](../../bug-reports/hoi-dap/Pass-bug-report-flow-hoi-dap.md) |
 
 ---
 

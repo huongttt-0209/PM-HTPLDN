@@ -29,4 +29,4 @@
 
 - ✅ **R7.7.4.5** 🆕 NHT functional 12 TC `[100% — 11/11 active PASS + BUG-003 P1 ✅ Closed-Fixed R13 4/4]` <a id="r7-7-4-5"></a>
   - **Kết quả:** ✅ 11/11 PASS, BUG-003 R13 dev claim fix 5 đã apply (mail link đầy đủ port :3000). [functional-test-report-r7-7-4-5-nht.md](../output/qa-reports/round7-2026-05-06/functional/nguoi-ho-tro/functional-test-report-r7-7-4-5-nht.md)
-  - **Bug:** [bug-report-r7-7-4-5-nht.md](../output/qa-reports/round7-2026-05-06/bug-reports/nguoi-ho-tro/bug-report-r7-7-4-5-nht.md) — 5/5 đóng (BUG-001/002 Invalid · BUG-003/004/005 Fixed; BUG-003 Major P1 Closed R13 2026-05-09 22:14 — cb_nv_bn_01 BKH fresh ctx, NHT-BKH-0003 activated qua mail link)
+  - **Bug:** [Pass-bug-report-r7-7-4-5-nht.md](../output/qa-reports/round7-2026-05-06/bug-reports/nguoi-ho-tro/Pass-bug-report-r7-7-4-5-nht.md) — 5/5 đóng (BUG-001/002 Invalid · BUG-003/004/005 Fixed; BUG-003 Major P1 Closed R13 2026-05-09 22:14 — cb_nv_bn_01 BKH fresh ctx, NHT-BKH-0003 activated qua mail link)

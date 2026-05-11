@@ -383,6 +383,8 @@ GET /api/v1/vu-viecs/6ac795ea-... → response.data:
 
 ## BUG-VV-PC-WRN-01 — Modal pool empty không có WRN-PC-01 + override
 
+> **Re-test:** 2026-05-10 20:08:00 R14 — 🤷 Không reproduce được điều kiện gốc (vẫn Open). Pool TVV/CG/NHT đã được seed thêm so với R8 — LV Hành chính giờ có 3 record (Hương TVV1 + Hương 3 NHT + NHT TC001 Test BTP TW) qua probe `/api/v1/vu-viecs/{vv-006-id}/goi-y-tvv?limit=20` → `total=3`. Modal Phân công cho VV-002 (LV Lao động pool 8) verify đầy đủ structure v3.5 (2 radio thẻ "Cá nhân"/"Tổ chức tư vấn" + dropdown "Chọn người được phân công" + Ghi chú + Hủy/Xác nhận) — non-empty case work OK. Bug logic vẫn tồn tại theo spec FR-V.I-09 line 768 (E3 WRN-PC-01) cho LV chưa có TVV/CG/NHT match — defer R15+ khi seed pool có ít nhất 1 LV trống. Severity giữ Minor P2. Tested: `cb_nv_tw_03`.
+
 ### Mô tả
 
 Khi pool TVV/CG/NHT cho VV-006 (LV Hành chính) trả empty (do 9 record HOAT_DONG không có ai LV Hành chính), modal hiển thị 2 lần image "Trống" trong dropdown nhưng KHÔNG hiện warning WRN-PC-01 "Không tìm thấy đối tượng phù hợp lĩnh vực" và KHÔNG có nút/option "Tìm thủ công" / "Override LV". CB NV bị stuck — không phân công được, không có path khắc phục.

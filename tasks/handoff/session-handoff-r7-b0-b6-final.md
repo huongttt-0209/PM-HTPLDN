@@ -23,7 +23,7 @@
 | BUG-HD-001 | **Critical** | Hỏi đáp | Detail state DA_PHAN_CONG thiếu button [Phản hồi]/[Bắt đầu xử lý] cho người được phân công — block toàn bộ workflow T3-T9 | Open |
 | BUG-HD-002 | Major | Hỏi đáp | Tab "Đang xử lý" rỗng dù có 3 record DA_PHAN_CONG (filter sai vs spec `IN (TIEP_NHAN, DA_PHAN_CONG, DANG_XU_LY)`) | Open |
 
-Chi tiết: [bug-report-flow-hoi-dap.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/bug-report-flow-hoi-dap.md)
+Chi tiết: [Pass-bug-report-flow-hoi-dap.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/Pass-bug-report-flow-hoi-dap.md)
 
 ---
 

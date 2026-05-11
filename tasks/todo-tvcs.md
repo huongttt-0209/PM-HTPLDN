@@ -18,9 +18,9 @@
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P3** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.3.3](#r7-3-3) |
-| **P4** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.4.A5](#r7-4-a5) |
+| **P4** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.4.A5](#r7-4-a5) |
 | **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.5](#r7-7-5) |
-| **Tổng** | **3** | **0** | **0** | **1** | **2** | **0** | **0** | **0** |  |
+| **Tổng** | **3** | **0** | **0** | **2** | **1** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -29,10 +29,10 @@
   - **Kết quả:** R8 18:18 PASS 3/3 UI fresh cover gap LV. Pool 12→15, TIEP_NHAN cover 6/6 LV. [seed-checklist-r7-3-3-tvcs.md](../output/qa-reports/round7-2026-05-06/seed/tu-van-chuyen-sau/seed-checklist-r7-3-3-tvcs.md)
   - **Bug:** [Pass-bug-report-seed-r7-3-3-tvcs-video-call.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/Pass-bug-report-seed-r7-3-3-tvcs-video-call.md) — 1/1 đóng FE (BUG-TVCS-VIDEO-CALL-001 Closed-verified R8 — form bỏ field hinhThucTv, R8 UI re-verify reproduce pattern)
 
-- ⚠️ **R7.4.A5** ✏️ Workflow TVCS 11 bước (dropdown CG enum đổi) `[~64% — 7/11 PASS R14; BUG-004 FE-fixed-BE-broken]` <a id="r7-4-a5"></a>
-  - **Kết quả:** ⚠️ R14 7/11 PASS (+1 vs R11-R13 nhờ huongcg B3 walk). BUG-004 FE-fixed (modal có textarea Kết quả*) BE-broken (POST `/hoan-thanh{ketQua}` vẫn 422 SM-02). [workflow-test-report-r7-4-a5-tvcs.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-chuyen-sau/workflow-test-report-r7-4-a5-tvcs.md)
-  - **Bug:** [bug-report-r7-4-a5-tvcs-cg-action-block.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/bug-report-r7-4-a5-tvcs-cg-action-block.md) — 3/4 đóng. TVCS-A5-004 Critical Open reclass FE-fixed-BE-broken R14.
+- ✅ **R7.4.A5** ✏️ Workflow TVCS 11 bước <a id="r7-4-a5"></a>
+  - **Kết quả:** R15 9/11 PASS + 2 EXTERNAL = 11/11 covered. BUG-004 closed (commit `f54afbc8` atomic save+complete). [workflow-test-report-r7-4-a5-tvcs.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-chuyen-sau/workflow-test-report-r7-4-a5-tvcs.md)
+  - **Bug:** [Pass-bug-report-r7-4-a5-tvcs-cg-action-block.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/Pass-bug-report-r7-4-a5-tvcs-cg-action-block.md) — 4/4 đóng
 
-- ⚠️ **R7.7.5** 🔄 TVCS functional 61 TC v3.5 `[~57% — 35/61 PASS R14, 13 BLOCKED + 12 SKIP + 1 FAIL]` <a id="r7-7-5"></a>
-  - **Kết quả:** ⚠️ R14 35/61 PASS · 13 BLOCKED · 12 SKIP · 1 FAIL. +4 TC retest PASS (TV-005/030/031 dev fix + TV-008/TV-009 huongcg B3). [functional-test-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/functional/tu-van-chuyen-sau/functional-test-report-r7-7-5-tvcs.md)
-  - **Bug:** [bug-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs.md) — 3/10 đóng (FN-001/002/003 dev fix verified). 7 HSPL Open chưa retest R14.
+- ⚠️ **R7.7.5** 🔄 TVCS functional 61 TC v3.5 `[~87% — 53/61 R17; +1 regression BUG-008]` <a id="r7-7-5"></a>
+  - **Kết quả:** ⚠️ R17 53/61 PASS · TV-022 unblock. [functional-test-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/functional/tu-van-chuyen-sau/functional-test-report-r7-7-5-tvcs.md)
+  - **Bug:** [Pass-bug-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/Pass-bug-report-r7-7-5-tvcs.md) 10/10 + [bug-report-r7-7-5-tvcs-r16.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs-r16.md) 3/8 đóng (Open: 001/004/005/006/008)

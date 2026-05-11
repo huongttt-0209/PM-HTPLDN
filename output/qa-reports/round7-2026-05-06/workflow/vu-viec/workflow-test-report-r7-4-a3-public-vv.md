@@ -2,7 +2,7 @@
 
 > **Module:** Vụ việc HTPL — Quản lý công khai VV lên Cổng PLQG · **Round:** R13 · **Date:** 2026-05-10 03:00:00 → 03:10:00 · **Tester:** Claude Code (Opus 4.7)
 > **Spec:** [`srs-update-2026-5-5/srs-fr-05-vu-viec.md`](../../../../input/srs-update-2026-5-5/srs-fr-05-vu-viec.md) §FR-V.I-NEW-05 (dòng 1357-1456) + SCR-V.I-03 dòng 1787-1788
-> **Bug:** [`../../bug-reports/vu-viec/bug-report-r7-4-a3-public-vv.md`](../../bug-reports/vu-viec/bug-report-r7-4-a3-public-vv.md) — 0/1 đóng (Critical:1)
+> **Bug:** [`../../bug-reports/vu-viec/Pass-bug-report-r7-4-a3-public-vv.md`](../../bug-reports/vu-viec/Pass-bug-report-r7-4-a3-public-vv.md) — 0/1 đóng (Critical:1)
 
 ---
 

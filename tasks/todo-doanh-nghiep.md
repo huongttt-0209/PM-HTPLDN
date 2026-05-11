@@ -20,8 +20,8 @@
 | **P2** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.2.4](#r7-2-4) |
 | **P3** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.3.4](#r7-3-4) |
 | **P5** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.5.2](#r7-5-2) |
-| **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.4](#r7-7-4) |
-| **Tổng** | **4** | **0** | **0** | **3** | **1** | **0** | **0** | **0** |  |
+| **P7** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.7.4](#r7-7-4) |
+| **Tổng** | **4** | **0** | **0** | **4** | **0** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -38,7 +38,7 @@
 - ✅ **R7.5.2** 🔄 Cross-module DN — Tab #2 HSPL + Tab #3 KPI + Tab #4 Chi trả `[need: R7.3.4, R7.4.A3 (vu-viec), R7.6.1 (chi-tra)]` <a id="r7-5-2"></a>
   - **Kết quả:** PASS 4/4 tab — 1 Minor finding raw enum. [functional-r7-5-2-cross-module-dn.md](../output/qa-reports/round7-2026-05-06/functional/doanh-nghiep/functional-r7-5-2-cross-module-dn.md)
 
-- ⚠️ **R7.7.4** ✏️ Functional DN — 17 TC chuẩn v3.5 (4 TC mới DN-021..024) `[need: R7.2.4]` <a id="r7-7-4"></a>
+- ✅ **R7.7.4** ✏️ Functional DN — 24 TC v3.5 (20 active + 4 DEPRECATED spec cut) `[need: R7.2.4]` <a id="r7-7-4"></a>
   - **Cần:** R7.2.4 ✅ · `TINH_THANH` ✅ · `LINH_VUC_KINH_DOANH` ✅ (12 LV)
-  - **Kết quả:** R13 2026-05-10 12:25:00 ⚠️ 16✅+1❌(DN-022 /me lv)+1🚫(DN-020 Tier3). [functional-test-report-r7-7-4-dn.md](../output/qa-reports/round7-2026-05-06/functional/doanh-nghiep/functional-test-report-r7-7-4-dn.md)
-  - **Bug:** [bug-report-r7-7-4-dn.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/bug-report-r7-7-4-dn.md) 5/6 đóng (Open: 022-ME-MISSING-LV-001) + [fr22.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/Pass-bug-report-r7-7-4-fr22-cho-phan-quyen-not-bypassed.md) 1/1.
+  - **Kết quả:** R14 2026-05-10 14:50:00 ✅ PASS 19/20 active + 1🚫DN-020 Tier3 VNeID (BA confirm cắt scope). 4 DEPRECATED (DN-003+010/011/012). [functional-test-report-r7-7-4-dn.md](../output/qa-reports/round7-2026-05-06/functional/doanh-nghiep/functional-test-report-r7-7-4-dn.md)
+  - **Bug:** [Pass-bug-report-r7-7-4-dn.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/Pass-bug-report-r7-7-4-dn.md) 6/6 đóng + [fr22.md](../output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/Pass-bug-report-r7-7-4-fr22-cho-phan-quyen-not-bypassed.md) 1/1.

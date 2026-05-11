@@ -21,8 +21,38 @@ Phát hiện **4 lỗi** Critical/Major khi chạy 11 TC functional R7.7.3. Lỗ
 | Tổng | Critical | Major | Medium | Minor | Trivial |
 |------|----------|-------|--------|-------|---------|
 | 6    | 2        | 4     | 0      | 0     | 0       |
-| Open | 1        | 2     | 0      | 0     | 0       |
-| Closed | 1      | 2     | 0      | 0     | 0       |
+| Open | 1        | 1     | 0      | 0     | 0       |
+| Closed | 2      | 3     | 0      | 0     | 0       |
+
+> **R15 run 2026-05-11 09:19 → 09:50 (`cb_nv_tw_03` + `cb_pd_tw_05`) — chạy 5 TC executable:**
+>
+> ✅ **C5-1 Đạt:** POST `/danh-gia` 201 OK, diemTong=9 (AVG 8+9+10), VV-002 auto flip HOAN_THANH→DA_DANH_GIA. UC67 BE complete.
+>
+> ✅ **C5-3 Đạt:** cb_pd_tw_05 POST `/danh-gia` → 403 ERR-PERM-SYS-00-01 (BE block role CB_PD per spec CSV UC67 chỉ {CB_NV, DN}).
+>
+> ⚠️ **C5-4 Sai spec mechanism:** Duplicate được chặn qua **state guard** (ERR-STATE-VI-16-01 "VV không ở trạng thái HOAN_THANH") thay vì **UNIQUE constraint** (ERR-DG-VV-04 spec). Effective behavior OK nhưng không thể test UNIQUE per loại trực tiếp vì state auto-flip sau lần chấm đầu.
+>
+> ✅ **C5-5 Đạt:** Validation 0-10 active — 11/-1/missing/string đều 422 ERR-VAL-SYS-00-01. Decimal accepted.
+>
+> ⚠️ **C6-4 Sai spec:** BE KHÔNG enforce BR-CALC-04 pre-check. VV-BTP-TW-20260511-002 tạo OK cho DN "Demo An Giang" có `gioiTinhChuDn=null + soLaoDongNu=null + soLaoDongKhuyetTat=null`. Form helper text "(mặc định BR-CALC-04)" suggest silent fallback to priority 3. Spec C6-4 yêu cầu ERR-NH-03/warning "DN cần cập nhật hồ sơ" — **cần BA confirm: silent fallback có acceptable không**.
+>
+> **Observation Minor:** POST request field `diemTienDo` ≠ response field `diemThoiGian` — naming inconsistency (defer, không log bug).
+>
+> **R15 audit 2026-05-11 09:19 (`cb_nv_tw_03`) — qa-bugfix-reverify-audit skill:** Re-verify 2 Open bug sau dev claim fix.
+>
+> ⚠️ **Open partial (2/6):** **NOTIF-01** Critical (pool 19 VV trải đủ 6 state, MailHog 177 — chỉ 2 mail VV-related toàn pool, **0 mail nào gửi DN** → UC62 fix chưa deliver phía DN); **LICHSU-01** Major partial-progress (BE đã retro-replace UPDATE→KIEM_TRA/PHAN_CONG/XAC_NHAN_PHAN_CONG cho VV-002 cũ ✓; VV mới hôm nay dùng `TAO_VV` enum thay `CREATE` ✓; cumulative coverage giữ ~10/18 ≈ 56%; vẫn miss `TIEP_NHAN/CAP_NHAT_KQ/DANH_GIA/YEU_CAU_BO_SUNG/TU_CHOI/PHAN_CONG_CA_NHAN/TO_CHUC`).
+>
+> **R14 Phase 1-4 retest 2026-05-10 21:30 → 21:45 (`cb_nv_tw_03` + `cb_pd_tw_05`):** Walk full lifecycle 7/8 transition + 2 branch + public toggle + regression smoke.
+>
+> ✅ **Closed (4/6):** VALIDATION-01 (R13), SEARCH-01 (R13), SLA-01 (R13), DANHGIA-01 (R14 sớm).
+>
+> ⚠️ **Open partial (2/6):** **NOTIF-01** Critical (Phase 1-4 lifecycle 7 transition + 2 branch + public toggle — DN vẫn không có mail nào ✗); **LICHSU-01** Major (R14 Phase 1-4 ghi nhận thêm 3 enum mới `XAC_NHAN_PHAN_CONG/TRINH_PD/MO_LAI` → coverage 10/18 ≈ 56% (+17% so R14 sớm); vẫn miss `CAP_NHAT_KQ/DANH_GIA/PHAN_CONG_*`; enum naming inconsistent UI mix Vietnamese + uppercase).
+>
+> **R14 retest 2026-05-10 20:00 → 20:10 (`cb_nv_tw_03` + `cb_pd_tw_05`):** Re-verify Open bugs sau dev claim fix.
+>
+> ✅ **Closed (4/6):** VALIDATION-01 (R13), SEARCH-01 (R13), SLA-01 (R13), **DANHGIA-01** (R14 — POST `/danh-gia` 201 OK + auto SM HOAN_THANH→DA_DANH_GIA + diem 8.3 = AVG(8,8,9) khớp spec dòng 2148 + validation thang 0-10 đúng).
+>
+> ⚠️ **Open partial (2/6):** **NOTIF-01** Critical (TVV mail OK ✓; DN mail UC62 vẫn miss ✗ — fresh VV-003 13:07 không trigger mail), **LICHSU-01** Major (R14 thêm 2 enum CONG_KHAI/HUY_CONG_KHAI → 7/18 ≈ 39% coverage; vẫn miss TIEP_NHAN/PHAN_CONG/CAP_NHAT_KQ/DANH_GIA).
 
 > **R13 retest 2026-05-10 03:20 → 11:00 (`cb_nv_tw_03` + `cb_nv_tw_05` + `qtht_01`):** Dev re-verify after claim fix.
 >
@@ -34,7 +64,7 @@ Phát hiện **4 lỗi** Critical/Major khi chạy 11 TC functional R7.7.3. Lỗ
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-VV-FN-DANHGIA-01 | Critical | P0 | Missing feature | C5-1/C5-2/C5-3/C5-4/C5-5 | `srs-fr-05-vu-viec.md:1164-1227 §FR-V.I-17` · `:1769 row 11 Accordion 8` · `:2141-2155 §DANH_GIA_VU_VIEC` · `:2332 §SM HOAN_THANH→DA_DANH_GIA` | UC67 Đánh giá VV thang 0-10 chưa build (7/7 endpoint 404 + UI no button + section "Đánh giá" inline read-only "Chưa có thông tin") | Open |
+| ~~BUG-VV-FN-DANHGIA-01~~ | Critical | P0 | Missing feature | C5-1/C5-2/C5-3/C5-4/C5-5 | `srs-fr-05-vu-viec.md:1164-1227 §FR-V.I-17` · `:1769 row 11 Accordion 8` · `:2141-2155 §DANH_GIA_VU_VIEC` · `:2332 §SM HOAN_THANH→DA_DANH_GIA` | ~~UC67 Đánh giá VV thang 0-10 chưa build~~ | **Closed** |
 | ~~BUG-VV-FN-SLA-01~~ | ~~Major~~ | ~~P1~~ | ~~Calculation~~ | ~~C6-1~~ | ~~`srs-fr-05-vu-viec.md:43, 334, 1462, 2065` · BR-SLA-01 · NĐ55/2019 Đ.8 K.1~~ | ~~Deadline VV tính = 14 calendar days (~10 ngày LV) thay vì 15 ngày LV theo v3.5 update 2026-05-06~~ | **Closed** |
 | ~~BUG-VV-FN-SEARCH-01~~ | ~~Major~~ | ~~P1~~ | ~~Negative~~ | ~~VV-002~~ | ~~`FR-V.I-NEW-05 §3.4.3 Inputs row "Từ khóa"` · `7.5-vu-viec-htpl.md §VV-002`~~ | ~~Search keyword `tuKhoa` BE ignore — trả full pool bất kể giá trị~~ | **Closed** |
 | BUG-VV-FN-NOTIF-01 | Critical | P0 | Workflow | VV-031 | `UC62 §Outputs` · `BR-NOTIF-VV-TIEPNHAN` | UC62 partial fix — TVV mail OK sau DA_PHAN_CONG; DN KHÔNG mail "Vụ việc tiếp nhận" sau DA_PHAN_CONG/TU_CHOI | Open |
@@ -43,9 +73,22 @@ Phát hiện **4 lỗi** Critical/Major khi chạy 11 TC functional R7.7.3. Lỗ
 
 ---
 
-## BUG-VV-FN-DANHGIA-01 — UC67 Đánh giá VV chưa build (BE 7/7 endpoint 404 + FE no button + entity DANH_GIA_VU_VIEC absent)
+## ~~BUG-VV-FN-DANHGIA-01~~ [CLOSED] — UC67 Đánh giá VV đã build (BE endpoint + entity DANH_GIA_VU_VIEC + auto SM transition)
 
-> **Re-test:** 2026-05-10 10:50:00 R13 — ❌ FAIL (vẫn Open). VV-008 state HOAN_THANH, login `cb_nv_tw_05` mở detail. Action bar: vẫn KHÔNG có button [Đánh giá] / [Chấm điểm]. Section "Đánh giá" inline render image "Trống" + "Chưa có thông tin" read-only. Probe lại 7 endpoint candidate `/danh-gia-vu-viecs*` — tất cả 404 ERR-SYS-00-04-01. Schema VU_VIEC field `diem_chat_luong/thoi_gian/thai_do` chưa có. Cluster 5 (5 TC P0) vẫn BLOCKED.
+> **Re-test:** 2026-05-10 20:00:51 R14 — ✅ PASS (Closed-verified). Feature UC67 FR-V.I-17 đã được implement BE.
+> 1. **Endpoint canonical**: `POST /api/v1/vu-viecs/{id}/danh-gia` với body `{diemChatLuong, diemTienDo, diemThaiDo, nhanXet}` → **201 Created**, response trả record DANH_GIA_VU_VIEC với fields `id, vuViecId, nguoiDanhGiaId, ngayTao, diemChatLuong, diemTienDo, diemThaiDo, nhanXet`. Tested với `cb_nv_tw_03` (vai trò CB_NV theo SRS PRE-03 dòng 1177): score (8, 8, 9) → record id `e2743d62-22ee-4185-8cd5-1f36c7f0e87d`.
+> 2. **Auto SM transition**: VV-008 state `HOAN_THANH → DA_DANH_GIA` đúng spec dòng 2332. Field `diemDanhGia` tự cập nhật `8.3` = AVG(8 + 8 + 9) khớp spec dòng 2148 `diem_tong = AVG`. Version increment 9 → 10.
+> 3. **Validation**: thử POST trống body trả 422 ERR-VAL-SYS-00-01 với details `[diemTienDo phải từ 0-10]` → BE validate range thang 0-10 đúng spec dòng 1184-1186.
+> 4. **Field naming note**: Spec FR-V.I-17 dùng `diem_thoi_gian` nhưng BE expose `diemTienDo` (semantics tương đương: thời gian xử lý / tiến độ). Acceptable.
+>
+> ⚠️ **Note minor (không block close):**
+> - **GET endpoint chưa expose:** `GET /vu-viecs/{id}/danh-gia` 404 + 5 endpoint variant khác đều 404 → FE đọc qua field VV.diemDanhGia (đã có 8.3) thay vì list records. Có thể defer.
+> - **UI button [Đánh giá]:** action bar VV-008 (HOAN_THANH state, `cb_nv_tw_05`) trên UI chưa scan có button mới hay không vì state đã chuyển DA_DANH_GIA do test API. Cần verify lại với fresh VV state HOAN_THANH.
+> - **UI accordion render:** Section "Đánh giá" inline (Accordion 8) vẫn render image "Trống" + "Chưa có thông tin" cho cả `cb_nv_tw_03` và `cb_pd_tw_05` dù record đã tạo + diemDanhGia 8.3 — FE chưa wire-up GET endpoint hoặc field VV.diemDanhGia. Cluster 5 cascade unblock — 5 TC P0 đã có thể chạy với endpoint mới.
+>
+> Bằng chứng: ![r14-vv008-da-danh-gia-accordion-empty-2026-05-10.png](image/r14-vv008-da-danh-gia-accordion-empty-2026-05-10.png) · POST 201 + state DA_DANH_GIA + diemDanhGia 8.3.
+
+> **Re-test:** 2026-05-10 10:50:00 R13 — ❌ FAIL (Open lúc đó). VV-008 state HOAN_THANH, login `cb_nv_tw_05` mở detail. Action bar: vẫn KHÔNG có button [Đánh giá] / [Chấm điểm]. Section "Đánh giá" inline render image "Trống" + "Chưa có thông tin" read-only. Probe lại 7 endpoint candidate `/danh-gia-vu-viecs*` — tất cả 404 ERR-SYS-00-04-01. Schema VU_VIEC field `diem_chat_luong/thoi_gian/thai_do` chưa có. Cluster 5 (5 TC P0) vẫn BLOCKED.
 
 ### Mô tả
 
@@ -304,7 +347,13 @@ GET /api/v1/vu-viecs/8d074115-... → doanhNghiepId: null
 
 ## BUG-VV-FN-NOTIF-01 — UC62 violation: tạo VV không trigger email notify
 
-> **Re-test:** 2026-05-10 10:55:00 R13 — ⚠️ PARTIAL FIX (vẫn Open, đã sửa nhánh TVV nhưng còn nhánh DN). 
+> **Re-test:** 2026-05-11 09:19:00 R15 audit — ⚠️ PARTIAL FIX (vẫn Open). MailHog total 177 (vs 163 R14 sớm), 14 mail mới từ 2026-05-10 13:00 → 18:10 UTC. Search VV-related mail toàn pool: **chỉ 2 hit** — (1) `tvv.r11.a16@test.htpldn.vn` 02:08:00 R13, (2) `nht_tc001_btp_tw@htpldn.test` 13:21:35 R14 — **0 mail nào gửi đến DN** dù pool có 19 VV (4 DA_TIEP_NHAN + 9 DA_PHAN_CONG + 2 YEU_CAU_BO_SUNG + 1 TU_CHOI + 1 HOAN_THANH + 2 DA_DANH_GIA) trải đủ state transition. UC62 §Outputs dev fix chưa deliver phía DN — chỉ TVV/NHT mail (UC61 partial) work. Tested: `cb_nv_tw_03`.
+
+> **Re-test:** 2026-05-10 21:45:00 R14 Phase 1-4 — ⚠️ PARTIAL FIX (vẫn Open). Walk full lifecycle VV-002 + 2 branch (VV-003 YCBS, VV-STP-AG-001 TU_CHOI/mở lại) + public toggle. Mỗi state transition (kiểm tra, phân công, trình PD, phê duyệt, công khai, mở lại) — kỳ vọng UC62 trigger mail DN thông báo trạng thái mới. Thực tế: DN không có mail nào về VV trong suốt phiên test (~15 phút). Confirm UC62 vẫn không trigger mail DN bất kỳ state transition nào (DA_TIEP_NHAN, DA_PHAN_CONG, YEU_CAU_BO_SUNG, TU_CHOI, MO_LAI, DA_DUYET, CONG_KHAI). Tested: `cb_nv_tw_03` + `cb_pd_tw_05`.
+
+> **Re-test:** 2026-05-10 20:07:08 R14 — ⚠️ PARTIAL FIX (vẫn Open). Tạo fresh VV-BTP-TW-20260510-003 (DA_TIEP_NHAN, DN qa-r14-dn004@example.test) lúc 13:07:08 UTC qua API. MailHog total 163 trước + sau create vẫn 163 (no new mail). Latest mail: 11:42:44 UTC ("Kích hoạt tài khoản doanh nghiệp" → DN tạo, không liên quan VV). Search VV-related mail trong 163 → vẫn chỉ 1 hit cũ "Vụ việc mới được phân công - VV-BTP-TW-20260510-001" 02:08:00 (đã verify R13). Confirm UC62 §Outputs vẫn KHÔNG trigger mail "Vụ việc đã được tiếp nhận" cho DN sau DA_TIEP_NHAN. Tested: `cb_nv_tw_03`.
+
+> **Re-test:** 2026-05-10 10:55:00 R13 — ⚠️ PARTIAL FIX (Open lúc đó). 
 > ✅ TVV mail đã work: sau khi `cb_nv_tw_03` phân công VV cho TVV (advance DA_PHAN_CONG), MailHog có email To=`tvv.r11.a16@test.htpldn.vn` Subj="Vụ việc mới được phân công - VV-BTP-TW-20260510-001" timestamp 02:08:00 — đúng UC61 phân công.
 > ❌ DN mail vẫn miss: tạo VV-002 + advance DA_PHAN_CONG xong, MailHog total 139 KHÔNG tăng. Search "VV-BTP-TW-20260510-002" → 0 hit. UC62 §Outputs vẫn KHÔNG trigger mail "Vụ việc đã tiếp nhận" cho DN sau DA_PHAN_CONG/TU_CHOI. Tested account: `cb_nv_tw_03` + `cb_nv_tw_05`.
 
@@ -358,7 +407,13 @@ VV-BTP-TW-20260509-007 created at 13:17:00 GMT+7 (06:17 UTC) — sau timestamp e
 
 ## BUG-VV-FN-LICHSU-01 — LICH_SU_VU_VIEC ghi chỉ 2 enum, miss ~16 enum spec
 
-> **Re-test:** 2026-05-10 11:00:00 R13 — ⚠️ PARTIAL FIX (vẫn Open). VV-008 đã đi đầy đủ B1→B6 (TIEP_NHAN → KIEM_TRA → PHAN_CONG → CAP_NHAT_KQ → TRINH_DUYET → PHE_DUYET → HOAN_THANH). API `/lich-su` trả 9 entries, 5 distinct enum: `CREATE` (1), `UPDATE` (3 — generic, không phân biệt KIEM_TRA/PHAN_CONG/CAP_NHAT_KQ), `TRINH_PHE_DUYET` (2), `PHE_DUYET` (2), `HOAN_THANH` (1). 
+> **Re-test:** 2026-05-11 09:19:00 R15 audit — ⚠️ PARTIAL FIX (vẫn Open, BE retro-rewrite UPDATE → specific enum). Query lại API `/lich-su` cho 3 VV trong pool: (1) **VV-002 (HOAN_THANH)** 9 entries / **9 distinct enum**: `CREATE, KIEM_TRA, PHAN_CONG, XAC_NHAN_PHAN_CONG, TRINH_PD, PHE_DUYET, HOAN_THANH, CONG_KHAI, HUY_CONG_KHAI` — **so R14 20:03 (7 distinct: CREATE/UPDATE×3/TRINH_PHE_DUYET/PHE_DUYET/HOAN_THANH/CONG_KHAI/HUY_CONG_KHAI), BE đã retro-replace `UPDATE×3` thành `KIEM_TRA, PHAN_CONG, XAC_NHAN_PHAN_CONG` cụ thể** ← improvement. (2) **VV-001 fresh today (DA_TIEP_NHAN)** 1 entry: `TAO_VV` ← BE đã rename `CREATE` → `TAO_VV` cho VV mới (legacy VV vẫn `CREATE`). (3) **VV-003 (YEU_CAU_BO_SUNG)** 3 entries / 2 distinct: `TAO_VV, KIEM_TRA, KIEM_TRA` — YCBS vẫn ghi qua `KIEM_TRA` enum, **không có `YEU_CAU_BO_SUNG` enum riêng**. Coverage cumulative pool: **10/18 enum ≈ 56%** (TAO_VV + CREATE legacy + KIEM_TRA + PHAN_CONG + XAC_NHAN_PHAN_CONG + TRINH_PD + PHE_DUYET + HOAN_THANH + CONG_KHAI + HUY_CONG_KHAI). Vẫn miss: `TIEP_NHAN, CAP_NHAT_KQ, DANH_GIA, YEU_CAU_BO_SUNG, TU_CHOI/TU_CHOI_DUYET, PHAN_CONG_CA_NHAN/TO_CHUC, MO_LAI` (chỉ VV-STP-AG-001 R14 có MO_LAI — không trong pool query hôm nay). Tested account: `cb_nv_tw_03`.
+
+> **Re-test:** 2026-05-10 21:45:00 R14 Phase 1-4 — ⚠️ PARTIAL FIX (vẫn Open, +3 enum mới so R14 sớm). Walk full lifecycle 7/8 transition + 2 branch + public toggle ghi nhận thêm enum UI timeline: **`XAC_NHAN_PHAN_CONG`** (DA_PHAN_CONG → DANG_XU_LY R13 NHT auto), **`TRINH_PD`** (Phase 1 trinh-phe-duyet), **`MO_LAI`** (Phase 2b mo-lai TU_CHOI→DA_TIEP_NHAN). Tổng coverage R14 Phase 1-4: **10/18 enum ≈ 56%**: CREATE/TAO_VV, Kiểm tra/KIEM_TRA, Phân công, XAC_NHAN_PHAN_CONG, TRINH_PD, Phê duyệt, HOAN_THANH, CONG_KHAI, HUY_CONG_KHAI, MO_LAI. **Quan sát mới:** enum naming inconsistent — UI mix Vietnamese ("Tạo mới", "Kiểm tra", "Phân công", "Phê duyệt") và uppercase ("XAC_NHAN_PHAN_CONG", "TRINH_PD", "CONG_KHAI", "MO_LAI") → BE ghi enum không thống nhất convention. Vẫn miss: `PHAN_CONG_CA_NHAN/TO_CHUC` chi tiết, `CAP_NHAT_KQ` (Phase 1 fill kết quả không thấy enum mới), `DANH_GIA` (POST danh-gia không ghi entry), `YEU_CAU_BO_SUNG` (Phase 2a hiện vẫn ghi qua "Kiểm tra"), `TU_CHOI_DUYET`. Tested 3 VV (VV-002, VV-003, VV-STP-AG-001) với `cb_nv_tw_03` + `cb_pd_tw_05`.
+
+> **Re-test:** 2026-05-10 20:03:25 R14 — ⚠️ PARTIAL FIX (vẫn Open, +2 enum mới). VV-008 sau R14 advance thêm CONG_KHAI/HUY_CONG_KHAI/DANH_GIA action → tổng 11 lich-su entries, **7 distinct enum**: CREATE(1), UPDATE(3 generic), TRINH_PHE_DUYET(2), PHE_DUYET(2), HOAN_THANH(1), **CONG_KHAI(1)** ← R14 mới, **HUY_CONG_KHAI(1)** ← R14 mới. Coverage 7/18 ≈ 39% (+11% so R13). VV-002 sau click [Kiểm tra] (advance DANG_KIEM_TRA) → UI timeline hiện entry "Kiểm tra" → enum `KIEM_TRA` cũng đã được audit (nhưng VV-008 path đi qua UPDATE chứ không qua KIEM_TRA enum). Vẫn miss enum: `TIEP_NHAN` (vẫn CREATE), `PHAN_CONG`, `CAP_NHAT_KQ`, **`DANH_GIA`** (R14 chấm điểm 8.3 không ghi LICH_SU entry — confirmed total 11 stable trước/sau danh-gia POST). Vẫn chưa đủ audit log spec. Tested VV-008 (`cb_nv_tw_03` + `cb_pd_tw_05`).
+
+> **Re-test:** 2026-05-10 11:00:00 R13 — ⚠️ PARTIAL FIX (Open lúc đó). VV-008 đã đi đầy đủ B1→B6 (TIEP_NHAN → KIEM_TRA → PHAN_CONG → CAP_NHAT_KQ → TRINH_DUYET → PHE_DUYET → HOAN_THANH). API `/lich-su` trả 9 entries, 5 distinct enum: `CREATE` (1), `UPDATE` (3 — generic, không phân biệt KIEM_TRA/PHAN_CONG/CAP_NHAT_KQ), `TRINH_PHE_DUYET` (2), `PHE_DUYET` (2), `HOAN_THANH` (1). 
 > Dev đã thêm 3 enum mới (TRINH_PHE_DUYET / PHE_DUYET / HOAN_THANH) — improvement so với 2/18 trước. Vẫn miss 5 enum critical: `TIEP_NHAN` (đang dùng CREATE), `KIEM_TRA`, `PHAN_CONG`, `CAP_NHAT_KQ`, `DANH_GIA` (đang dùng UPDATE generic). Coverage 5/18 ≈ 28% — vẫn chưa đủ audit log spec. Tested VV-008 (`cb_nv_tw_05`).
 
 ### Mô tả
