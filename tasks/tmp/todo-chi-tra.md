@@ -18,9 +18,9 @@
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P6** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.6.1](#r7-6-1) |
-| **P7** | 5 | 0 | 0 | 4 | 0 | 1 | 0 | 0 | ✅[R7.7.12](#r7-7-12) · ✅[R7.7.12.1](#r7-7-12-1) · 🚫[R7.7.12.2](#r7-7-12-2) · ✅[R7.7.12.3](#r7-7-12-3) · ✅[R7.7.12.4](#r7-7-12-4) |
+| **P7** | 5 | 0 | 0 | 4 | 1 | 0 | 0 | 0 | ✅[R7.7.12](#r7-7-12) · ✅[R7.7.12.1](#r7-7-12-1) · ⚠️[R7.7.12.2](#r7-7-12-2) · ✅[R7.7.12.3](#r7-7-12-3) · ✅[R7.7.12.4](#r7-7-12-4) |
 | **Trụ E** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.E3](#r7-e3) |
-| **Tổng** | **7** | **0** | **0** | **6** | **0** | **1** | **0** | **0** |  |
+| **Tổng** | **7** | **0** | **0** | **6** | **1** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -36,9 +36,9 @@
 - ✅ **R7.7.12.1** 🆕 Smoke regression IMPACT — FR-07/08/11/13 × 5 phút <a id="r7-7-12-1"></a>
   - **Kết quả:** PASS 4/4 module render OK, 0 console error, ⚠️ DN count 23 vs 36 (R7.2.4) cần investigate. [smoke-test-report-r7-7-12-1-fr06-impact.md](../output/qa-reports/round7-2026-05-06/functional/chi-tra/smoke-test-report-r7-7-12-1-fr06-impact.md)
 
-- 🚫 **R7.7.12.2** 🆕 FR-V.II-14 DN bổ sung HS `[block: không có HSCT thuộc QA DN]` <a id="r7-7-12-2"></a>
-  - **Kết quả:** 🚫 BLOCKED 2026-05-10 02:10. POST /ho-so-chi-tras 404 ERR-SYS-00-04-01. Pool 4 YCBS thuộc DN khác, no credentials. QA DN reg sở hữu 0 HSCT.
-  - **Cần:** dev seed HSCT cho QA DN (MST 1234567899) HOẶC mở DVC integration test path
+- ⚠️ **R7.7.12.2** 🆕 FR-V.II-14 DN bổ sung HS `[~44% — R2 deep review DVC-only, 8/18 PASS, log 3 bug]` <a id="r7-7-12-2"></a>
+  - **Kết quả:** ⚠️ 8/18 PASS R2 2026-05-12 01:30:00. Spec DVC-only, BUG-010 ngayYCBS null 6/6, defer DVC sandbox. [functional-test-report-r7-7-12-2-fr14-bo-sung.md](../output/qa-reports/round7-2026-05-06/functional/chi-tra/functional-test-report-r7-7-12-2-fr14-bo-sung.md)
+  - **Bug:** [bug-report-r7-7-12-2-fr14-bo-sung.md](../output/qa-reports/round7-2026-05-06/bug-reports/chi-tra/bug-report-r7-7-12-2-fr14-bo-sung.md) — 0/3 đóng (2 Major + 1 Minor)
 
 - ✅ **R7.7.12.3** 🆕 CB PD trả về DANG_THAM_DINH + PHE_DUYET_CHI_TRA N:1 <a id="r7-7-12-3"></a>
   - **Kết quả:** ✅ PASS R2 2026-05-09 23:46. B8 HSCT000027 CPD→DTD by cb_pd_dp_02. N:1 visibility OK với cb_pd_dp_05 (BG). BR-AUTH-05 scope OK. [functional-test-report-fr-v.ii-12-cbpd-tra-ve-2026-05-06.md](../output/qa-reports/round7-2026-05-06/functional/chi-tra/functional-test-report-fr-v.ii-12-cbpd-tra-ve-2026-05-06.md)

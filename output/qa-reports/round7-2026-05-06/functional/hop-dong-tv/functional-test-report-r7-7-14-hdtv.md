@@ -37,7 +37,7 @@
 
 Module HĐ TV ổn định cho luồng CRUD + phân quyền + cross-module integration với VV. Còn **2 TC chưa Đạt clean** (HDTV-028/032/034 — xem Bảng 2 để biết cần làm gì) — KHÔNG block release vì:
 - 1 bug Medium (BUG-032 — TVV detail thiếu section HĐ TV) → Dev FE bổ sung.
-- 1 bug Minor (BUG-034 — route standalone `/hop-dong-tv/danh-sach` còn render) → chờ BA confirm spec xử lý.
+- 1 bug Minor (BUG-034 — route standalone `/hop-dong-tv/danh-sach` còn render) → **BA 2026-05-11 chốt không public/menu; nếu giữ thì route ẩn có guard/redirect, không phải luồng nghiệp vụ chính.**
 
 ### Phân loại TC theo nhóm test (Pass Rate breakdown)
 
@@ -85,24 +85,24 @@ Module HĐ TV ổn định cho luồng CRUD + phân quyền + cross-module integ
 | HDTV-031 | Form HD dropdown CG picker | UI Form | P1 | ✅ Đạt | ~~BUG-031~~ | FE/BE param case thống nhất (R6 Closed) |
 | HDTV-032 | TVV-HD section Lịch sử | Integration | P1 | ❌ **Lỗi** | **BUG-032** | TVV detail tab Lịch sử thiếu sub-section HD |
 | HDTV-033 | Entry point modal/drawer | Integration | P0 | ✅ Đạt | ~~BUG-033~~ | VV accordion + HDTV detail có Create/Edit/Delete (R6 Closed) |
-| HDTV-034 | Route standalone `/hop-dong-tv/danh-sach` | UX/Spec | P2 | ⚠️ **Sai spec** | **BUG-034** | Route vẫn render trái spec v3.5 M-01 — chờ BA |
+| HDTV-034 | Route standalone `/hop-dong-tv/danh-sach` | UX/Spec | P2 | ⚠️ **Sai spec** | **BUG-034** | BA 2026-05-11: không public/menu; nếu giữ route thì ẩn + guard/redirect |
 | HDTV-035 | RangePicker text input commit | Negative | P2 | ✅ Đạt | ~~BUG-035~~ | FE commit cả tuNgay + denNgay đầy đủ (R6 Closed) |
 | HDTV-036 | Permission inversion CB > QTHT | Authorization | P1 | ✅ Đạt | ~~BUG-036~~ | 3 CB role không còn Create btn standalone (R6 Closed) |
 | **Tổng** | **24 TC** | | | **✅21 · ⚠️2 · ❌1 · 🚫0** | | R6: 6/8 bug PASS Closed-verified |
 
-> **Ghi chú scope:** HDTV-001..012 (list/menu/search standalone) defer ngoài scope round 7 — per SRS v2.1 chuyển HĐ TV thành sub-resource VV/TVV, không có menu độc lập. Khi BA quyết định BUG-034 (route standalone) thì re-scope nhóm này.
+> **Ghi chú scope:** HDTV-001..012 (list/menu/search standalone) defer ngoài scope round 7 — per SRS v2.1 chuyển HĐ TV thành sub-resource VV/TVV, không có menu độc lập. **BA 2026-05-11 đã chốt BUG-034: route standalone không public/menu; nếu giữ thì chỉ là route kỹ thuật/ẩn có guard/redirect.**
 
 ### Bảng 2 — TC chưa Đạt — vì sao và cần làm gì
 
-Hiện tại còn **3 TC chưa Đạt clean** (1 ❌ Lỗi + 2 ⚠️ Sai spec) — chia 2 nhóm: **2 chờ Dev FE bổ sung UI · 1 chờ BA confirm spec**.
+Hiện tại còn **3 TC chưa Đạt clean** (1 ❌ Lỗi + 2 ⚠️ Sai spec) — chia 2 nhóm: **2 chờ Dev FE bổ sung UI · 1 chờ Dev FE xử lý route theo BA**.
 
 | TC ID | Vì sao chưa chạy được (Đạt) | Cần làm gì để Đạt | Ai làm | Nhóm |
 |---|---|---|:-:|:-:|
 | HDTV-028 | TVV detail (`/chuyen-gia-tvv/{id}`) không có section "Hợp đồng tư vấn" liệt kê HD theo TVV. Đã verify R6 multi-TVV. | FE bổ sung section gọi API `/tu-van-viens/{id}/hop-dong-tu-vans` render table HD theo TVV trong tab Năng lực hoặc tab riêng. | Dev FE | B (Chờ dev fix) |
 | HDTV-032 | TVV detail tab "Lịch sử" chỉ gọi `lich-su-ho-tro` — thiếu sub-section render danh sách HD đã ký theo TVV. | FE bổ sung sub-section "Hợp đồng đã ký" trong tab Lịch sử per SRS v3 line 241. | Dev FE | B (Chờ dev fix) |
-| HDTV-034 | Route `/hop-dong-tv/danh-sach` (standalone list) vẫn render được dù SRS v2.1 đã chuyển HĐ TV thành sub-resource. | BA quyết định: **(A)** xóa route hoàn toàn (404) **hoặc (B)** giữ ẩn cho QTHT/admin. Sau khi BA confirm, dev FE thực hiện. | BA | C (Chờ BA confirm spec) |
+| HDTV-034 | Route `/hop-dong-tv/danh-sach` (standalone list) vẫn render được dù SRS v2.1 đã chuyển HĐ TV thành sub-resource. | **BA 2026-05-11 chốt:** không public/menu; nếu giữ route kỹ thuật thì phải ẩn, có guard quyền, tốt nhất redirect về ngữ cảnh VV/TVV hoặc chỉ dùng nội bộ admin/dev. | Dev FE | B (Chờ dev fix theo BA) |
 
-> **Phân loại nhóm:** B = Chờ dev fix bug (đã log BUG-{ID}) · C = Chờ BA confirm spec.
+> **Phân loại nhóm:** B = Chờ dev fix bug/route theo BA (đã log BUG-{ID}).
 
 ---
 
@@ -133,16 +133,14 @@ Hiện tại còn **3 TC chưa Đạt clean** (1 ❌ Lỗi + 2 ⚠️ Sai spec) 
 | **Severity** | Minor |
 | **Priority** | P2 |
 | **TC Reference** | HDTV-034 |
-| **Status** | **Open** (chờ BA confirm) |
-| **Assignee** | BA (quyết định spec) → Dev FE (thực hiện) |
+| **Status** | **Open** (BA đã chốt, chờ Dev FE xử lý) |
+| **Assignee** | Dev FE |
 
 **Mô tả:** SRS v3.5 line 660 M-01 + spec v3 line 241 quy định HĐ TV chỉ truy cập qua VV/TVV modal/drawer, KHÔNG có route standalone. Hiện tại `/hop-dong-tv/danh-sach` vẫn render được table list (dù không có menu sidebar dẫn đến).
 
 **Tác động:** Tester / dev nhập trực tiếp URL vẫn truy cập được — vi phạm "single source of truth" pattern của spec v2.1.
 
-**Đề xuất BA xác nhận:**
-- **Phương án A:** Xóa route hoàn toàn → trả 404 khi nhập URL.
-- **Phương án B:** Giữ route nhưng ẩn cho mọi role trừ QTHT/admin (làm trang quản trị nội bộ).
+**BA update 2026-05-11:** Không hiển thị route standalone như màn hình/menu nghiệp vụ độc lập. Nếu giữ route kỹ thuật thì phải là route ẩn, có guard quyền, tốt nhất redirect về ngữ cảnh Vụ việc/TVV hoặc chỉ dùng nội bộ admin/dev. QA không coi route này là luồng chính.
 
 ---
 
@@ -262,9 +260,9 @@ Không có bug Critical/Major còn Open. Tất cả Critical (BUG-021) và Major
 
 1. **BUG-032 (Medium)** — FE bổ sung section "Hợp đồng tư vấn" trong TVV detail (`/chuyen-gia-tvv/{id}`) — gọi `/tu-van-viens/{id}/hop-dong-tu-vans` render table HD theo TVV. Unblock HDTV-028 + HDTV-032.
 
-### Chờ BA xác nhận spec (Spec Clarification)
+### Chờ Dev xử lý theo BA
 
-2. **BUG-034 (Minor)** — Route standalone `/hop-dong-tv/danh-sach` vẫn render trái spec v3.5 M-01. BA quyết định: (A) xóa route → 404, hoặc (B) giữ ẩn cho QTHT/admin.
+2. **BUG-034 (Minor)** — Route standalone `/hop-dong-tv/danh-sach` vẫn render trái spec v3.5 M-01. BA 2026-05-11 chốt không public/menu; nếu giữ route thì ẩn + guard/redirect, không phải luồng nghiệp vụ chính.
 
 ### Khuyến nghị bổ sung
 
@@ -314,7 +312,7 @@ Không có bug Critical/Major còn Open. Tất cả Critical (BUG-021) và Major
 | FR-X.3-01 entry-point sub-resource VV | HDTV-027 / HDTV-033 | ✅ 2/2 Đạt (R6) |
 | FR-X.3-01 entry-point sub-resource TVV | HDTV-028 / HDTV-032 | ⚠️ 0/2 Sai spec — BUG-032 Open |
 | FR-X.3-01 N:N integration | HDTV-026 | ✅ Đạt (R3) |
-| Spec v3.5 M-01 sub-resource only | HDTV-034 | ⚠️ Sai spec — BUG-034 chờ BA |
+| Spec v3.5 M-01 sub-resource only | HDTV-034 | ⚠️ Sai spec — BUG-034 chờ Dev xử lý theo BA 2026-05-11 |
 
 ---
 

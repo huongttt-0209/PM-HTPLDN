@@ -43,9 +43,9 @@
   - **Kết quả:** ⚠️ 10/11 PASS R9 2026-05-09 18:30:00 — TP-HD-09 (TVN_BRIDGE) hoãn chờ R7.6.3. [workflow-test-report-r7-4-a4-hoi-dap.md](../output/qa-reports/round7-2026-05-06/workflow/hoi-dap/workflow-test-report-r7-4-a4-hoi-dap.md)
   - **Bug:** [Pass-bug-report-r7-4-a4-hd-workflow-block.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/Pass-bug-report-r7-4-a4-hd-workflow-block.md) — 3/3 đóng (HD-A4-001/002/003 Closed-verified R8 2026-05-09 17:25:00)
 
-- ⚠️ **R7.7.1** ✏️ Hỏi đáp 60 TC v3.5 (35 base updated + 25 mới HD-040..064) `[~77% — 46/60 PASS, 2 Open SLA tier bug R10g 17:20]` <a id="r7-7-1"></a>
-  - **Cần:** HD-027/045/047/048/060..062 R7.6.3 ⏳ (7); HD-022c/d ❌ Lỗi tier BR-SLA-02 chờ dev FE/BE fix (2)
-  - **Kết quả mới:** ❌ R10g 2026-05-11 17:20:00 — Dev SQL DONE 6/6, nhưng phát hiện 2 bug mới HD-022c/d badge tier mismatch BR-SLA-02. [bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/bug-report-r7-7-1-hd-022-sla-tier-mismatch.md)
+- ⚠️ **R7.7.1** ✏️ Hỏi đáp 60 TC v3.5 (35 base updated + 25 mới HD-040..064) `[~80% — 48/60 PASS, 7 chờ R7.6.3 infra]` <a id="r7-7-1"></a>
+  - **Cần:** HD-027/045/047/048/060..062 R7.6.3 ⏳ (7)
+  - **Kết quả mới:** ✅ R11 2026-05-12 00:27:19 — HD-022c/d Closed-verified, FE map color theo `muc_do_canh_bao` BE đúng BR-SLA-02. [Pass-bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-022-sla-tier-mismatch.md)
   - **Kết quả:** ✅ R10g 2026-05-11 14:25:00 — HD-055 PASS dev FE fix UX. [phase9](../output/qa-reports/round7-2026-05-06/functional/hoi-dap/functional-test-report-r7-7-1-hd-phase9.md)
   - **Kết quả:** ✅ R10f 2026-05-11 10:35:00 — +2 PASS (HD-022b + HD-057) sau dev SQL 4/6 câu. [phase9](../output/qa-reports/round7-2026-05-06/functional/hoi-dap/functional-test-report-r7-7-1-hd-phase9.md)
   - **Kết quả:** ✅ Phase 9 2026-05-11 09:15:00 — HD-053 Closed-verified R10e. 6/6 bug flow đóng. [phase9](../output/qa-reports/round7-2026-05-06/functional/hoi-dap/functional-test-report-r7-7-1-hd-phase9.md)
@@ -61,5 +61,5 @@
   - **Bug:** [Pass-bug-report-flow-hoi-dap.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/Pass-bug-report-flow-hoi-dap.md) — 6/6 đóng (HD-053 Closed-verified R10e 2026-05-11 09:13:00; HD-021/022/016 R10d; HD-032/043 R10c)
   - **Bug:** [Pass-bug-report-r7-7-1-hd-055-modal-publish-fail-ux.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-055-modal-publish-fail-ux.md) — 1/1 đóng (HD-055 Closed-verified R10g 14:25:00 — modal alert error + nút Thử lại + form retain)
   - **Bug:** [Pass-bug-report-r7-7-1-hd-014-reject-err-code-mismatch.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-014-reject-err-code-mismatch.md) — 1/1 đóng (HD-014 Closed-verified R10g 14:20:00 — BE trả ERR-PD-02 đúng spec)
-  - **Bug:** [bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/bug-report-r7-7-1-hd-022-sla-tier-mismatch.md) — 0/2 đóng (BUG-HD-022-SLA-TIER-001 + 002 Open R10g 17:20:00 — FE/BE map color tier sai BR-SLA-02, dùng daysRemaining thay vì ratio)
+  - **Bug:** [Pass-bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../output/qa-reports/round7-2026-05-06/bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-022-sla-tier-mismatch.md) — 2/2 đóng (BUG-HD-022-SLA-TIER-001 + 002 Closed-verified R11 2026-05-12 00:27:19 — FE map `muc_do_canh_bao` BE đúng spec; caveat tier 4 chưa kiểm)
   - **Bug:** [Pass-bug-report-be-login-500-r7-7-1.md](../output/qa-reports/round7-2026-05-06/bug-reports/system-be/Pass-bug-report-be-login-500-r7-7-1.md) — 1/1 đóng (BUG-BE-LOGIN-001 Closed-verified)

@@ -45,6 +45,6 @@
   - **Bug:** [Pass-bug-report-audit-r7-0-6-fr-07-buttons.md](../output/qa-reports/round7-2026-05-06/bug-reports/doanh-nghiep/Pass-bug-report-audit-r7-0-6-fr-07-buttons.md) — 2/2 đóng (FR07-UI-001/002 Major Closed)
 
 - ✅ **R7.0.7** 🆕 Deep review SRS FR-10 v3.5 + log inconsistency <a id="r7-0-7"></a>
-  - **Kết quả:** 11 SRS bug (3 Major BLOCK + 8 Minor doc) + 10 câu BA. Sync 9 file QA spec.
-  - **Bug:** [bug-report-srs-fr10-inconsistency.md](../output/BA-report/bug-report-srs-fr10-inconsistency.md) — 0/11 đóng (3 Major: BUG-SRS-FR10-001 NGAY_LE schema / 002 TINH_THANH UI / 003 CHO_PHAN_QUYEN scenario; 8 Minor doc)
+  - **Kết quả:** 11 SRS bug (3 Major đã BA chốt/Closed R8 + 8 Minor doc còn Open) + 10 câu BA. Sync 9 file QA spec.
+  - **Bug:** [bug-report-srs-fr10-inconsistency.md](../output/BA-report/bug-report-srs-fr10-inconsistency.md) — 3/11 đóng (BUG-SRS-FR10-001 NGAY_LE schema / 002 TINH_THANH UI / 003 CHO_PHAN_QUYEN scenario Closed R8; 8 Minor doc Open)
   - **Output:** [6.10-sm-taikhoan.md](../output/smoke/6.10-sm-taikhoan.md) · [7.10-quan-tri-he-thong.md](../output/funtion/7.10-quan-tri-he-thong.md) · [6.10-smoke-taikhoan.md](../output/smoke-specs/6.10-smoke-taikhoan.md) · [02-thu-tu-module.md](../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) · [test-strategy.md](../output/test-strategy.md) · [permission-matrix-by-fr.md](../output/permission-matrix-by-fr.md) · [permission-matrix-by-role.md](../output/permission-matrix-by-role.md) · [7.7-quan-ly-doanh-nghiep.md](../output/funtion/7.7-quan-ly-doanh-nghiep.md)

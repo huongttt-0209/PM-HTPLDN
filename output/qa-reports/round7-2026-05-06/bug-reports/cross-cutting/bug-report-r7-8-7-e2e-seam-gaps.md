@@ -5,33 +5,36 @@
 | **Dự án** | PM Hỗ trợ Pháp lý Doanh nghiệp |
 | **Môi trường** | http://103.172.236.130:3000 |
 | **Người test** | QA huongttt via Claude Code (Chrome DevTools MCP) |
-| **Ngày** | 2026-05-11 20:30:00 |
+| **Ngày** | 2026-05-12 02:25:00 |
 | **Loại test** | Cross-cutting / E2E Workflow / Seam handoff |
 | **Round** | Round 7 — R7.8.7 |
-| **Tài liệu tham chiếu** | [`workflow-test-report-r7-8-7-e2e-dn.md`](../../workflow/cross-cutting/workflow-test-report-r7-8-7-e2e-dn.md) · [`02-thu-tu-module.md`](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) · [`srs-v3.5.md`](../../../../input/srs-update-2026-5-5/srs-v3.5.md) |
+| **Tài liệu tham chiếu** | [`workflow-test-report-r7-8-7-e2e-dn.md`](../../workflow/cross-cutting/workflow-test-report-r7-8-7-e2e-dn.md) · [`functional-test-report-r7-8-7-s5-phancong.md`](../../functional/vu-viec/functional-test-report-r7-8-7-s5-phancong.md) · [`02-thu-tu-module.md`](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) · [`srs-v3.5.md`](../../../../input/srs-update-2026-5-5/srs-v3.5.md) |
 
 ---
 
 ## Tổng hợp
 
-Phát hiện **2 lỗi có SRS reference cụ thể** khi run E2E 12 bước DN. Bug chính BUG-E2E-S4 (UC52 DN portal chưa triển khai) **block golden path** — DN không thể tự gửi yêu cầu HTPL theo SCR-V.I-04. Workaround CB manual entry test được Seam 3 OK. Bug phụ BUG-E2E-S6 là note cần BA confirm BR-CALC-04 filter cấp đơn vị.
+Phát hiện **2 lỗi có SRS reference cụ thể** khi run E2E 12 bước DN + Re-verify S5 (2026-05-12 02:25:00). BUG-E2E-S4 (UC52 DN portal chưa triển khai) vẫn **block golden path** — DN không thể tự gửi yêu cầu HTPL theo SCR-V.I-04. BUG-E2E-S6 closed-verified do SRS local đã trả lời (NHT/TVV PL toàn quốc theo NĐ 77/2008 Đ.19 → mix cấp đúng spec, không phải bug). Bug mới BUG-E2E-S5 phát hiện sau re-run đầy đủ S5: Outputs SCR-V.I-03 Accordion 5 vẫn label "Địa bàn" + address thay vì "Đơn vị quản lý" + Sở TP/Bộ ngành (v3.5 rev. 2 G2+G4 chưa apply ở FE).
 
 ### Severity breakdown
 
 | Tổng | Critical | Major | Medium | Minor | Trivial |
 |------|----------|-------|--------|-------|---------|
-| 2    | 1        | 0     | 1      | 0     | 0       |
+| 3    | 1        | 0     | 1 (closed) | 1     | 0       |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |---|---|---|---|---|---|---|---|
 | BUG-E2E-S4 | **Critical** | P0 | Workflow | R7.8.7-S4 | `srs-update-2026-5-5/srs-v3.5.md SCR-V.I-04 + FR-V.I-02 UC52` | DN không có CTA gửi yêu cầu HTPL — UC52 chưa triển khai (app tự khai báo qua toast) | Open |
-| BUG-E2E-S6 | Medium | P2 | Workflow | R7.8.7-S6 | `srs-update-2026-5-5/srs-v3.5.md BR-CALC-04 + FR-V.I-09` | BR-CALC-04 suggest mix cấp TW+BN+AG, không scope theo cấp đơn vị VV — chờ BA confirm | Open |
+| BUG-E2E-S5 | Minor | P2 | UI/UX | R7.8.7-S5 | `srs-fr-05-vu-viec.md` line 18 (v3.5 rev. 2 G2+G4) + FR-V.I-09 Outputs.6 (`don_vi_quan_ly`) | SCR-V.I-03 Accordion 5 hiển thị label "Địa bàn" + value address thay vì "Đơn vị quản lý" + Sở TP/Bộ ngành | Open |
+| ~~BUG-E2E-S6~~ | ~~Medium~~ | ~~P2~~ | ~~Workflow~~ | ~~R7.8.7-S6~~ | ~~`srs-update-2026-5-5/srs-v3.5.md BR-CALC-04 + FR-V.I-09`~~ | ~~BR-CALC-04 suggest mix cấp TW+BN+AG, không scope theo cấp đơn vị VV — chờ BA confirm~~ | Closed |
 
 ---
 
 ## BUG-E2E-S4 — DN không có CTA gửi yêu cầu HTPL, UC52 chưa triển khai
+
+> **Re-test:** 2026-05-12 02:05:00 R7.8.7 — Open giữ nguyên. DN `9999999990` login OK, 16 button trên `/vu-viec/danh-sach`, **0 button** match `Tạo mới/Gửi yêu cầu/Thêm mới`. Probe POST `/api/v1/vu-viecs` với DN auth cookie → 404 `ERR-SYS-00-04-01`. Bug chưa fix.
 
 ### Mô tả
 
@@ -113,7 +116,79 @@ Toast (uid 32_1) hiện sau click [Thêm mới] tại /vu-viec/danh-sach (CB_NV_
 
 ---
 
-## BUG-E2E-S6 — BR-CALC-04 suggest mix cấp TW+BN+AG, không scope theo cấp đơn vị VV
+## BUG-E2E-S5 — SCR-V.I-03 Accordion 5 vẫn label "Địa bàn" + value address (chưa apply v3.5 rev. 2 G2+G4)
+
+### Mô tả
+
+Sau khi CB_NV_TW phân công VV cho cá nhân (TVV/NHT) thành công, accordion "Phân công Người hỗ trợ / Tư vấn viên" mở ra hiển thị Outputs với label `Địa bàn` + value là **địa chỉ thường trú** (vd `"88 Nguyễn Trãi, TP. Châu Đốc, An Giang"`). Theo SRS v3.5 rev. 2 G2+G4 ([`srs-fr-05-vu-viec.md` line 18](../../../../../input/srs-update-2026-5-5/srs-fr-05-vu-viec.md) + FR-V.I-09 Outputs.6) phải đổi label thành `Đơn vị quản lý` + value phải là **Sở TP/Bộ ngành công nhận** TVV (vd `Sở Tư pháp An Giang`), KHÔNG dùng "địa bàn" vì Thẻ TVV PL có hiệu lực toàn quốc theo NĐ 77/2008 Điều 19. App FE chưa apply rename label/data field này.
+
+### Các bước tái hiện
+
+1. Login CB_NV_TW_10 / `Secret@123` qua MCP isolatedContext `r787_s5_cb_nv_tw_10`.
+2. Mở VV `VV-QA-R7-PRIVACY-DNAG003` (UUID `aaff0000-0000-4000-8000-000000000002`) state "Đã tiếp nhận".
+3. Click "Kiểm tra hồ sơ" → 6 hạng mục defaults Đạt → click "Xác nhận" → state advance "Đang kiểm tra" (`POST /api/v1/vu-viecs/{id}/kiem-tra 201`).
+4. Click button "Phân công" → modal "Phân công tư vấn viên" mở.
+5. Giữ thẻ default "Cá nhân" → click dropdown "Chọn người được phân công" → pick TVV `TVV-BTP-TW-0034 "TVV R12 A18 UI Walk"` (0 VV).
+6. Click "Xác nhận" → state advance "Đã phân công" + timeline ghi `Phân công (cá nhân) 12/05/2026 02:21 CB Nghiệp vụ TW 10`.
+7. Click accordion "Phân công Người hỗ trợ / Tư vấn viên" mở rộng.
+8. **Quan sát:** field hiển thị `Địa bàn | 88 Nguyễn Trãi, TP. Châu Đốc, An Giang` (address của TVV) — KHÔNG có label "Đơn vị quản lý" + KHÔNG có "Sở TP/Bộ ngành".
+
+### Kết quả mong đợi
+
+Theo [`srs-fr-05-vu-viec.md`](../../../../../input/srs-update-2026-5-5/srs-fr-05-vu-viec.md):
+- **Line 18** (v3.5 rev. 2, G2+G4): "SCR-V.I-03 Accordion 5 thêm 'Khi loai=`TO_CHUC` → hiển thị tên tổ chức' + đổi label '**địa bàn**' → '**đơn vị quản lý**' (NĐ 77/2008 Đ.19)".
+- **FR-V.I-09 Outputs.6** (`don_vi_quan_ly`): "Đơn vị quản lý (Sở TP/Bộ ngành công nhận) — **KHÔNG dùng 'địa bàn'** do Thẻ TVV PL có hiệu lực toàn quốc theo NĐ 77/2008 Điều 19".
+- Value mong đợi: `Sở Tư pháp <tỉnh>` hoặc `<Bộ ngành công nhận>` của TVV được chọn.
+- Bonus G2: nếu phân công loại `TO_CHUC`, thêm row "Tên tổ chức: <tên TC TV>".
+
+### Kết quả thực tế
+
+Accordion 5 sau phân công cá nhân hiển thị 4 fields:
+```
+Lĩnh vực:                Doanh nghiệp
+Địa bàn:                 88 Nguyễn Trãi, TP. Châu Đốc, An Giang   ← SAI label + sai data
+NHT/TVV phụ trách:       TVV R12 A18 UI Walk
+[Sub-table 4 cột]        Tư vấn viên | Trạng thái | Ngày phân công | Lý do từ chối
+                         TVV R12 A18 UI Walk | Chờ xác nhận | 12/05/2026 02:21 | —
+```
+
+→ App vẫn hiển thị label `Địa bàn` + value là address (không phải Sở TP/Bộ ngành). 2 thẻ Cá nhân/Tổ chức trong modal phân công đã đúng spec v3.5 (UC59 refactor), nhưng Outputs UI chưa rename label theo G2+G4.
+
+### Bằng chứng
+
+**Screenshot accordion 5 sau phân công, hiển thị label "Địa bàn":**
+
+![Accordion 5 hiển thị label "Địa bàn" + address thay vì "Đơn vị quản lý" + Sở TP](image/r787-s5-bug-output-label-diaban-vs-spec-donviquanly.png)
+
+**Endpoint trace verify phân công thành công:**
+
+```
+POST /api/v1/vu-viecs/aaff0000-0000-4000-8000-000000000002/kiem-tra → 201 (state DA_TIEP_NHAN → DANG_KIEM_TRA)
+GET  /api/v1/vu-viecs/aaff0000-0000-4000-8000-000000000002/goi-y-tvv?limit=20 → 200 (4 records sort workload ASC)
+POST /api/v1/vu-viecs/aaff0000-0000-4000-8000-000000000002/phan-cong → 201 (state DANG_KIEM_TRA → DA_PHAN_CONG)
+```
+
+**API response `goi-y-tvv` shape:**
+```json
+{
+  "success": true,
+  "data": [
+    {"maTvv":"TVV-BTP-TW-0034","hoTen":"TVV R12 A18 UI Walk","loaiTvv":"TVV","diemDanhGiaTb":null,"activeWorkload":0},
+    {"maTvv":"TVV-BTP-TW-0035","hoTen":"TVV R13 A19 Gate Verify","loaiTvv":"TVV","activeWorkload":0},
+    {"maTvv":"NHT-STP-AG-0001","hoTen":"Phùng Thị NHT An Giang","loaiTvv":"NHT","activeWorkload":0},
+    {"maTvv":"TVV-BTP-TW-0032","hoTen":"TVV R11 Verify Mail Fix","loaiTvv":"TVV","diemDanhGiaTb":8.3,"activeWorkload":2}
+  ],
+  "meta": {"total":4,"casePriorityScore":2,"isHighPriority":false,"linhVucId":"bbbbbbbb-0000-4000-8000-00000000001a","boRaLinhVuc":false}
+}
+```
+
+→ Response BE chỉ có field `maTvv` / `hoTen` / `loaiTvv` / `diemDanhGiaTb` / `activeWorkload`. **KHÔNG có field `don_vi_quan_ly`** (Sở TP/Bộ ngành) trong response gợi ý. FE đang fallback render `dia_chi` của TVV thay vì query thêm `don_vi_quan_ly` từ entity TVV.
+
+---
+
+## ~~BUG-E2E-S6~~ [CLOSED] — BR-CALC-04 suggest mix cấp TW+BN+AG (Not a bug, SRS verified)
+
+> **Re-test:** 2026-05-11 19:05:00 R7.8.7 — ✅ Closed (Not a bug). SRS local verified [`srs-fr-05-vu-viec.md:65-70`](../../../../../input/srs-update-2026-5-5/srs-fr-05-vu-viec.md) (BR-CALC-04 chỉ 4 tiêu chí: DN nữ làm chủ +3, LĐ nữ +2, LĐ KT +2, FIFO +1 — KHÔNG có rule filter cấp đơn vị) + FR-V.I-09 Outputs.6 (`don_vi_quan_ly`): "KHÔNG dùng 'địa bàn' do Thẻ TVV PL có hiệu lực toàn quốc theo NĐ 77/2008 Điều 19" + CHANGELOG-v3-to-v3.5.md line 340 (bỏ "địa bàn" trong Processing filter) → **App đúng spec**, mix cấp TW+BN+AG là feature theo NĐ 77/2008 Đ.19 (TVV PL có hiệu lực toàn quốc).
 
 ### Mô tả
 
@@ -194,8 +269,9 @@ GET /api/v1/vu-viecs/cdeb01f4-0f80-4b7a-ac1f-7f439c9bcd32/goi-y-tvv?limit=20 →
 **Accounts dùng:**
 - DN: `9999999990` / `Secret@123` (DN-HNI-0004 "Công ty TNHH DN Test 01")
 - CB workaround: `cb_nv_tw_10` / `Secret@123` (CB Nghiệp vụ TW 10, BTP-TW)
-- NHT chosen for assign: `NHT-BTP-TW-0008` "NHT R11 BUG003 Verify"
+- NHT chosen for assign (S6 original): `NHT-BTP-TW-0008` "NHT R11 BUG003 Verify"
+- TVV chosen for assign (S5 re-verify 2026-05-12): `TVV-BTP-TW-0034` "TVV R12 A18 UI Walk"
 
 ---
 
-*Bug report generated: 2026-05-11 20:30:00 | QA huongttt via Claude Code (Chrome DevTools MCP)*
+*Bug report generated: 2026-05-11 20:30:00 | Updated 2026-05-12 02:25:00 — re-verify S5 + close S6 (Not a bug) + log new BUG-E2E-S5 label "Địa bàn" | QA huongttt via Claude Code (Chrome DevTools MCP)*

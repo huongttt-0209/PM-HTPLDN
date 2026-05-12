@@ -56,7 +56,7 @@
 | **CT-003** | DVC/LGSP intake → CHO_TIEP_NHAN | Workflow | P0 | ⏰ | — | LGSP external integration ngoài scope round này (đã thống nhất R7.6.1 B1) |
 | **CT-004** | B3: DKT → DDG (kiểm tra Đạt) | Workflow | P0 | ✅ | R7.6.1 R1 | HSCT000067 qua B3 PASS — note: form chỉ 4 mục thay 18 (BUG-CHITRA-002) |
 | **CT-005** | B4: DKT → YEU_CAU_BO_SUNG (`bo_sung_count++`) | Workflow | P1 | ✅ | R7.6.1 R1 | HSCT000066 qua B4 PASS |
-| **CT-006** | Lần 4 bổ sung — `bo_sung_count=3` behavior | Edge | P0 | 🚫 | — | Chờ BA confirm Q1 (A=disable / B=BE block / C=auto TU_CHOI). Spec ambiguous |
+| **CT-006** | Lần 4 bổ sung — `bo_sung_count=3` behavior | Edge | P0 | 🚫 | — | **BA 2026-05-11 chốt:** không cho yêu cầu bổ sung lần 4; backend phải chặn rõ ràng, không auto `TU_CHOI` nếu CB NV chưa quyết định |
 | **CT-007** | Đánh giá mức HT auto-calc 4 thành phần BR-CALC-01/02 | Calculation | P0 | ⚠️ | R7.7.12 R2 | 11/18 DA_THANH_TOAN PASS BR-CALC-02 `MIN(deNghi, phiTV×pct/100, tran)`. 5 records off-by-1 VND (rounding inconsistency), 2 records material deviation (HSCT200022/200024) |
 | **CT-008** | Siêu nhỏ 100% / trần 3M — verify công thức MIN | Calculation | P0 | ⚠️ | R7.7.12 R2 | HSCT000071 (đề nghị 1M, phiTV 1M, pct 100%, tran 3M) → duyet 1M = MIN(1M, 1M, 3M) ✅. HSCT000078 (đề nghị 2.5M) → 2.5M ✅. HSCT200022 SAI (đề nghị 35M, pct 80%, tran 50M) → duyet 28M expected 20M = MIN(35M, 20M, 50M) — material BUG |
 | **CT-009** | Nhỏ 30% / trần 5M — verify công thức MIN | Calculation | P0 | ⚠️ | R7.7.12 R2 | HSCT000074 (đề nghị 30M, phiTV 30M, pct 30%, tran 5M) → duyet 5M = MIN(30M, 9M, 5M) ✅. HSCT000055/035/069 off-by-1 VND rounding |
@@ -71,7 +71,7 @@
 | **CT-018** | Over-cap: DN gần trần năm → cấp đủ phần dư | Edge | P1 | ⏰ | — | Cần seed DN với da_chi_trong_nam ≈ 80-90% trần. Defer round sau khi có data + dev fix BUG-CHITRA-001 |
 | **CT-019** | Annual reset 1/1 (BR-EC-14) | Edge | P2 | ⏰ | — | Cần thay đổi system clock — defer (test môi trường) |
 | **CT-020** | Immutability sau DA_DUYET (BR-FLOW-03) | Immutability | P0 | 🚫 | — | API verify: DA_DUYET record (HSCT000031/034/064) không có endpoint UPDATE soTienDuyet/mucHoTro. Cần test PATCH 403/422 — defer round sau |
-| **CT-021** | SLA 4 mức cảnh báo SCR-V.II-01 #16 | Business Rule | P1 | 🚫 | — | Chờ BA confirm Q2 ngưỡng cụ thể (R1=warning, R2=urgent, R3=critical, R4=overdue?) |
+| **CT-021** | SLA 4 mức cảnh báo SCR-V.II-01 #16 | Business Rule | P1 | 🚫 | — | **BA 2026-05-11 chốt cần bổ sung SRS/UC108:** warning 70-<85%, urgent 85-<100%, critical >=100% chưa hoàn thành, overdue quá deadline; QA không tự suy diễn ngoài ngưỡng này |
 | **CT-022** | Xuất Excel danh sách HS chi trả | Happy | P2 | ✅ | R7.7.12 R2 | UI có button "Xuất Excel" (uid 33_25). Không click test do scope timeout. Render OK |
 | **CT-023** | QTHT xem (👁️ R) — không tạo/sửa/xóa | Authorization | P1 | ✅ | R7.7.12 R2 | qtht_01 GET 108 record ✅. KHÔNG test POST/PATCH/DELETE — kế thừa permission matrix |
 | **CT-024** | CB_PD phê duyệt (📝 RU*) — không tạo/xóa | Authorization | P0 | ✅ | R7.7.12.3 R2 | cb_pd_dp_02 thực hiện B8 (UPDATE state) PASS. cb_pd_dp_05 GET BG scope ✅ |
@@ -119,7 +119,7 @@ Bug đã log đủ qua các round. Round R7.7.12 không phát hiện bug mới (
 | Priority | Action | Owner | Deadline |
 |---|---|---|---|
 | **P1** | Dev fix BUG-CHITRA-001 — re-seed pool 108 đầy đủ BR-CALC-01 (tranHoTroNam + mucHoTroPhanTram đúng spec) | Dev BE | Trước R8 |
-| **P2** | BA confirm Q1 (CT-006 lần 4 bổ sung) + Q2 (CT-021 SLA 4 ngưỡng) | BA | Trước R8 |
+| **P2** | Dev/QA cập nhật expected theo BA: CT-006 lần 4 bị BE chặn; CT-021 bám ngưỡng SLA 4 mức đã chốt và chờ SRS/UC108 ghi chính thức | Dev BE + QA + BA SRS | Trước R8 |
 | **P2** | Dev rename endpoint `/tu-choi` (B8) → `/tra-ve-tham-dinh` + đổi UI button label "Trả về thẩm định" (BUG-CHITRA-006) | Dev FE+BE | R8 |
 | **P3** | Tạo DN account khớp owner pool HSCT000xxx để unblock Bước 2a (CT-033 + CT-032 + CT-017 + CT-026) | DevOps/QA | R8 |
 | **P3** | LGSP/DVC integration mock environment cho CT-003 + CT-034 | DevOps | Sau R8 |

@@ -18,9 +18,9 @@
 - ✅ BUG-FUNC-DG-004 (Major) — Dropdown "Lĩnh vực" gọi `/danh-muc?loaiDanhMuc=LINH_VUC_PL` 200 (param key đã sửa từ `loaiDanhMuc=LINH_VUC_PL` cho endpoint `/danh-mucs` 404 → endpoint `/danh-muc` singular 200)
 - ✅ BUG-FUNC-DG-005 (Major) — Dropdown "Vai trò" render đúng 2 enum static `Trưởng nhóm / Đánh giá viên`
 
-> **TODO ambiguity SRS** — đã ghi nhận R6.4.D1 + R7.4.D1: SRS Master srs-v3.md có **3 phiên bản state machine ĐG khác nhau** (DB ENUM 6 state vs Workflow Master Phụ lục C.6 7 state vs UI filter 9 trạng thái). File `srs-fr-08-danh-gia.md` line 1066-1102 dùng SM 7 state — test áp theo nguồn này. **App R7 stepper render 9 step** — gần phiên bản 3, label tiếng Việt khác. Cần BA/dev confirm chuẩn nào là canonical.
+> **BA update 2026-05-11:** state machine canonical của FR-08 là SM-DANHGIA 8 trạng thái nghiệp vụ + `HUY`: `LAP_KE_HOACH → PHAN_CONG → CHO_DUYET_PC → THUC_HIEN → BAO_CAO → CHO_PHE_DUYET → HOAN_THANH`, kèm nhánh `HUY`. Các phiên bản 6/7 state cũ không còn là source of truth.
 
-> **Observation về SM mismatch app vs SRS R6:** R6 spec Bước 2 = `LAP_KE_HOACH → PHAN_CONG`, Bước 3 = `PHAN_CONG → CHO_DUYET_PC`. **Thực tế R7 app:** Submit phân công bằng CB NV → state `PHAN_CONG`; cb_pd duyệt → state `CHO_DUYET_PC`. Order labels có ngược logic so với label tiếng Việt thường ("Chờ duyệt PC" thường nên ở step 3 cho biết đang chờ, sau khi đã duyệt → next state mới phải là Thực hiện). Suy đoán: app đã rename mà chưa update label đúng. Defer log bug — chờ BA confirm SM canonical.
+> **BA update 2026-05-11 cho duyệt phân công:** sau khi CB_PD phê duyệt phân công, state chính thức phải là `THUC_HIEN`, label "Thực hiện đánh giá". Evidence R7 app chuyển/giữ `CHO_DUYET_PC` sau duyệt là mismatch cần Dev sửa, không còn chờ BA.
 
 ---
 
@@ -32,9 +32,9 @@
 | — | (back-fill tiêu chí — FR-VI-02 / UC84) | `cb_nv_tw_01` | DG-0001: 4 tiêu chí TT17 (40+30+20+10=100%) | ✅ | Click [Nhập từ danh mục] → modal multi-select 8 tiêu chí, chọn 4 nhóm "Hiệu quả HTPL" → PUT `/tieu-chis` 200. BR-CALC-04 ✅ Σ=100%. **BUG-FUNC-DG-002 Closed** (action-bar đầy đủ) |
 | 2 | `LAP_KE_HOACH → PHAN_CONG` (Phân công người chấm — UC85 / FR-VI-03) | `cb_nv_tw_01` | DG-0001: 1 NGUOI_DUNG `cb_nv_tw_02` vai trò Trưởng nhóm, lĩnh vực Lao động + Hôn nhân gia đình (multi) | ✅ | Modal "Thêm người đánh giá" — 3 dropdowns load OK: Người ĐG (10 NGUOI_DUNG) + Vai trò (2 enum) + Lĩnh vực (10 LV). POST `/phan-congs` 201. **BUG-FUNC-DG-003/004/005 cùng Closed** |
 | 3 | (`PHAN_CONG → ?`) Trình duyệt phân công — FR-VI-03 + BR-AUTH-05 | `cb_nv_tw_01` | DG-0001 click [Trình phê duyệt] → confirm dialog | ✅ | POST `/phan-congs/submit` 200. State giữ `PHAN_CONG` (badge "Phân công"). Button [Trình phê duyệt] disappear sau submit. Step 1 stepper ✓ check icon |
-| 4 | `PHAN_CONG → CHO_DUYET_PC` (Duyệt PC — FR-VI-04) | `cb_pd_tw_01` | DG-0001 click [Phê duyệt] tại Tab Phân công | ✅ | POST `/phan-congs/approve` 200. State chuyển sang `CHO_DUYET_PC` (badge "Chờ duyệt PC"). Step 1+2 stepper ✓ check icon |
+| 4 | `CHO_DUYET_PC → THUC_HIEN` (Duyệt PC — FR-VI-04) | `cb_pd_tw_01` | DG-0001 click [Phê duyệt] tại Tab Phân công | ⚠️ | POST `/phan-congs/approve` 200 nhưng observed state `CHO_DUYET_PC`. **BA 2026-05-11 expected:** duyệt xong phải chuyển `THUC_HIEN` / "Thực hiện đánh giá". |
 | 5 | `CHO_DUYET_PC → PHAN_CONG` (Từ chối PC — BR-FLOW-04) | `cb_pd_tw_01` | — | ⏭ | Reject path — skip (chỉ 1 đợt, happy path đã pass; deferred test riêng round sau với đợt thứ 2) |
-| 6 | `CHO_DUYET_PC → THUC_HIEN` Chọn VV vào đợt (UC87 / FR-VI-05) | `cb_nv_tw_01` | — | ❌ | **BUG-FUNC-DG-006 Major:** Endpoint `GET /vu-viec-eligible` trả `[]` empty mặc dù system có 20 VV state HOAN_THANH (≥3 VV match date range đợt). UI Tab Thực hiện hiện "0/0 VV - Không có VV phù hợp". Filter logic BE có lỗi hoặc cần linh_vuc match người ĐG (chưa rõ spec). |
+| 6 | `THUC_HIEN` Chọn VV vào đợt (UC87 / FR-VI-05) | `cb_nv_tw_01` | — | ❌ | **BUG-FUNC-DG-006 Major:** Endpoint `GET /vu-viec-eligible` trả `[]` empty mặc dù system có 20 VV state HOAN_THANH. **BA 2026-05-11 expected filter:** `HOAN_THANH` + trong kỳ + đúng phạm vi đơn vị; không lọc theo lĩnh vực người đánh giá nếu SRS chưa bổ sung. |
 | 7 | `THUC_HIEN` Chấm điểm VV theo từng tiêu chí | Người được PC (`cb_nv_tw_02`) | — | 🚫 | Cascade B6 BUG-FUNC-DG-006 |
 | 8 | `THUC_HIEN → BAO_CAO` (Auto khi chấm xong — FR-VI-06/07 + BR-CALC-04) | System | — | 🚫 | Cascade B6 |
 | 9 | `BAO_CAO → CHO_PHE_DUYET` (Trình BC — FR-VI-08) | `cb_nv_tw_01` | — | 🚫 | Cascade B6 |

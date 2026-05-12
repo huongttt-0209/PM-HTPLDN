@@ -1,16 +1,13 @@
-# Bug Report — Tư vấn chuyên sâu (R16 → R17 → R18 → R19 — Phase 2 nhóm B + FE)
+# Bug Report — Tư vấn chuyên sâu (R16 → R17 → R18 → R19 → R20 — Phase 2 nhóm B + FE)
 
 | Thông tin | Giá trị |
 |-----------|---------|
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000 |
 | **Người test** | QA Automation via Claude Code |
-| **Ngày tạo (R16)** | 2026-05-10 20:30:00 |
-| **Cập nhật R17** | 2026-05-11 02:18:00 — 3/7 bug Closed (BUG-002/003/007) + log BUG-008 regression |
-| **Cập nhật R18** | 2026-05-11 06:51:00 — BUG-005 verdict correction (BE OK / FE NOT FIXED) |
-| **Cập nhật R19 (LATEST)** | 2026-05-11 — Re-verify sau clear cache với acc `_06` + NHT |
+| **Ngày** | 2026-05-12 14:30:00 |
 | **Loại test** | Functional (R7.7.5 deep review nhóm B + FE) |
-| **Round** | R16 → R17 → R18 → R19 |
+| **Round** | R20 |
 | **Tài liệu tham chiếu** | [`srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md`](../../../../../input/srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md), [`functional-test-report-r7-7-5-tvcs.md`](../../functional/tu-van-chuyen-sau/functional-test-report-r7-7-5-tvcs.md) |
 
 ---
@@ -27,6 +24,8 @@ Phát hiện **7** lỗi (5 BE + 2 FE) trong R16 deep review của R7.7.5 sau kh
 |------|----------|-------|--------|-------|---------|
 | 8    | 0        | 7     | 1      | 0     | 0       |
 
+**Status sau R20 (2026-05-12):** Closed 4/8 (002/003/006/007) · Open 4/8 (001/004/005/008 — trong đó 004/005/008 đã ⚠️ PARTIAL).
+
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
@@ -36,7 +35,7 @@ Phát hiện **7** lỗi (5 BE + 2 FE) trong R16 deep review của R7.7.5 sau kh
 | ~~BUG-BE-TVCS-R16-003~~ | Major | P1 | Workflow | TV-022 | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md:1496` | ~~Auto-save draft 30s vào TRAO_DOI_NHAP — endpoint chưa expose, không có khôi phục DRAFT~~ | Closed |
 | BUG-FE-TVCS-R16-004 | Medium | P2 | Permission | TV-039 (NHT) | `output/permission-matrix.md §9 NHT (no FR-12 entity)` | NHT thấy menu "Quản lý tư vấn → Tư vấn chuyên sâu" và mở được trang `/tv-chuyen-sau/danh-sach` — vi phạm matrix (FE chưa hide theo role) | Open |
 | BUG-FE-TVCS-R16-005 | Major | P1 | UI | TV-045, TV-047 (UI side) | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md §Công khai TVCS DA_DUYET (BR-PUBLIC-01..03)` | UI detail TVCS DA_DUYET KHÔNG có button [Công khai] / [Hủy công khai] / panel hiển thị `congKhai` + `thoiGianDangTai` + `moTaCongKhai` — workflow API tồn tại nhưng FE chưa expose | Open |
-| BUG-BE-TVCS-R16-006 | Major | P1 | Data | TV-059 | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md:1297` (Thay đổi 13) | TVCS thiếu cột FK `hop_dong_tv_id` — detail GET không trả field, PATCH với `hopDongTvId` 200 nhưng silently dropped, không persist | Open |
+| ~~BUG-BE-TVCS-R16-006~~ | Major | P1 | Data | TV-059 | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md:1297` (Thay đổi 13) | ~~TVCS thiếu cột FK `hop_dong_tv_id` — detail GET không trả field, PATCH với `hopDongTvId` 200 nhưng silently dropped, không persist~~ | Closed |
 | ~~BUG-BE-TVCS-R16-007~~ | Major | P0 | Permission | TV-053 (cross) | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md §BR-AUTH-10 (Thay đổi 10)` | ~~HSPL DN detail GET (`/ho-so-phap-ly-dns/{id}`) không apply BR-AUTH-10 — NHT có thể GET 200 bất kỳ HSPL nào không cùng đơn vị + không có VV phân công. List filter đúng nhưng detail leak~~ | Closed (regression BUG-008) |
 | BUG-BE-TVCS-R17-008 | Major | P0 | Permission | TV-053 happy | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md:669-671 (FR-X.1-04)` + `srs-v3.5.md:5304 (BR-AUTH-10)` | Regression do fix BUG-007: BE blanket-deny endpoint `/doanh-nghieps` cho role NHT thay vì BR-AUTH-10 row-level filter. NHT có VV phân công với DN-X vẫn không đọc được DN-X (happy path → 403 ERR-AUTH-DN-00-01). Vi phạm Acceptance Criteria FR-X.1-04 line 669-670. | Open |
 
@@ -72,6 +71,22 @@ Phát hiện **7** lỗi (5 BE + 2 FE) trong R16 deep review của R7.7.5 sau kh
 | BUG-008 | ❌ NOT FIXED | 14:28:41 — `nht_tc001_btp_tw` có VV-BTP-TW-20260510-002 phân công với DN-003 (DNTN Hoàng Gia AG). GET `/api/v1/doanh-nghieps/e0000000-0000-4000-8000-000000000003` → **403 ERR-AUTH-DN-00-01** "Role không được phép truy cập endpoint CMS này" (blanket-deny). Trái lại GET `/api/v1/ho-so-phap-ly-dns?doanhNghiepId={DN-003}` → 200 với row-level filter đúng → BE inconsistent giữa 2 endpoint cùng entity. Screenshot: `image/r19-bug-008-nht-happy-403.png` | Không đổi (regression vẫn mở) |
 
 > **Re-test R19:** 2026-05-11 14:25:00-14:30:00 — **5 Open bugs đều CONFIRMED NOT FIXED sau clear cache hoàn toàn.** Acc dùng: `cb_nv_tw_06` (BTP·TW, CB_NV_TW) cho BE probes + `nht_tc001_btp_tw` (BTP·TW, NHT) cho FE menu + happy path BR-AUTH-10. Cache state pre-test: localStorage=0 entries, cookie="", new isolatedContext `r19_clean`. **Dev chưa push fix mới giữa R17 và R19 (~12h gap).**
+
+### Bug Re-verify R20 — 2026-05-12 (sau dev deploy ~22h gap, isolatedContext mới)
+
+> **Mục đích R20:** Skill `qa-bugfix-reverify-audit` audit 5 Open bug. Login lại từ đầu trong 2 isolatedContext mới (`r20_cbnvtw06` cho BE/FE probe + `r20_nht01` cho NHT scope), KHÔNG reuse session R19.
+>
+> **Phương pháp:** Fresh login `cb_nv_tw_06` (BTP·TW) + `nht_01` (STP-AG; thay cho `nht_tc001_btp_tw` đã xóa khỏi `input/users.csv`). Probe API direct + UI snapshot. Verify so SRS local + permission matrix local.
+
+| Bug ID | Verdict R20 | Bằng chứng (HH:MM:SS) | Δ so với R19 |
+|---|---|---|---|
+| BUG-001 | ❌ NOT FIXED | 8/8 TLPL endpoint candidates (`tu-lieu-phap-luats`, `tu-lieu-phap-luat`, `tlpl`, `tu-lieu-phap-luats?tvcsId=`, `tu-lieu-phap-luat?tvcsId=`, `linh-vuc-phap-luats`, `can-cu-phap-ly`, `van-ban-phap-luat`) → 404 ERR-SYS-00-04-01 "Cannot GET ..." (acc `cb_nv_tw_06`). Detail TVCS keys vẫn không có `tuLieuPhapLuats`/`cancuPhapLy`/`vanBan`/`tlpl`. | Không đổi |
+| BUG-004 | ⚠️ PARTIAL FIXED | (a) Sidebar NHT `nht_01` (STP-AG) sau login → **KHÔNG còn nhóm "Quản lý tư vấn"** + KHÔNG còn submenu "Tư vấn chuyên sâu". So sánh R19: vẫn render → ✅ FE hide menu fix OK. (b) Tuy nhiên direct URL `/tv-chuyen-sau/danh-sach` vẫn render **đầy đủ filter + table + 4 records data** + BE `/api/v1/noi-dung-tu-van-cs?pageSize=20` → **200 + 4 records** (KHÔNG còn 403+toast như R16). `/auth/me` permissions trả `read_noi_dung_tu_van_cs` cho NHT — **vi phạm permission matrix line 518-540 (NHT không có entry TU_VAN_CHUYEN_SAU)**. → Route guard + BE permission scope cho NHT × TVCS vẫn cần xử lý. Screenshot: `image/r20-bug-004-partial-route-leak.png` | Sidebar fixed; route + BE list scope mới phát hiện (R16 BE từng 403, R20 BE 200 — regression nhỏ) |
+| BUG-005 | ⚠️ PARTIAL FIXED | (a) Detail page TVCS DA_DUYET `aa555059-0000-4000-8000-000000000001` (TVCS-QA-R7-HD059 congKhai=false) hiển thị **accordion mới "Trạng thái công khai"** + **5 field readonly** (Công khai / Thời gian đăng tải / Mô tả công khai / Ảnh đại diện / File đính kèm) + **button [Công khai]** ở cuối page. Click → modal "Công khai nội dung tư vấn" mở với field `Mô tả công khai *` (required, multiline, char counter `0/1000`). ✅ FE wire xong workflow Công khai. (b) Nhưng modal **chỉ có 1 field `moTaCongKhai`** — **thiếu `anhDaiDien` (upload jpg/png/gif max 5MB)** + **thiếu `fileDinhKemCongKhai` (multi-upload PDF/DOC/XLS max 20MB)** theo SRS `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md:1129+1139` (Accordion 8b form). (c) Test detail TVCS `5edbd82a-d506-4552-a584-60d2e438fb67` (TVCS-20260510-0002 congKhai=true): panel hiển thị đúng `Đã công khai`/`10/05/2026`/mô tả thật, **NHƯNG KHÔNG có button [Hủy công khai]** ở cuối page — workflow huỷ công khai chưa wire UI (BE API tồn tại từ R16). Screenshot: `image/r20-bug-005-fixed-cong-khai-modal.png` + `image/r20-bug-005-partial-no-huy-button.png` | R19 chưa wire FE; R20 [Công khai] xong, còn thiếu [Hủy công khai] + 2 upload field |
+| ~~BUG-006~~ | ✅ FIXED (Closed-verified) | (a) GET detail `/api/v1/noi-dung-tu-van-cs/{tiepNhanId}` keys NOW INCLUDE `hopDongTvId` (42 keys total, ở vị trí giữa). R19: keys không có field này. (b) PATCH `{ hopDongTvId: "b8c4e159-43da-475c-808e-81ec17e7288e", version: 1 }` → **200 OK + version 1→2**. (c) Re-fetch GET sau PATCH: `data.hopDongTvId === "b8c4e159-..."` ← **field persist đúng**. BE schema thêm cột `hop_dong_tv_id` theo SRS Thay đổi 13. | Closed — TV-059 unblocked |
+| BUG-008 | ⚠️ PARTIAL FIXED | (a) `nht_01` GET `/api/v1/doanh-nghieps/e0000000-0000-4000-8000-000000000006` (DN-006 Thành Đạt BG) → 403 `ERR-AUTH-VPD-00-02` "Đơn vị không nằm trong phạm vi truy cập của bạn" (BR-AUTH-08 đơn vị scope). (b) GET DN-003 (Hoàng Gia AG) → 403 `ERR-AUTH-VPD-00-04` "Không có phân công vụ việc với doanh nghiệp này" (BR-AUTH-10 row-level). → **Blanket-deny `ERR-AUTH-DN-00-01` "Role không được phép truy cập endpoint CMS này" đã GỠ; BE giờ phân loại đúng BR-AUTH-08 vs BR-AUTH-10** ✅. (c) Tuy nhiên happy path: `nht_01` (STP-AG) có 4 VV phân công với Bình Minh AG (per VV list, `tenNguoiHoTro` match), NHT entity tồn tại id `22e9748b-a68c-4700-9a27-688814233e4c` taiKhoanId match userId, nhưng VV detail GET → 403 `ERR-AUTH-VPD-00-04` "Vụ việc không được phân công cho bạn"; DN list `/doanh-nghieps?pageSize=100` → total=0 → **happy path vẫn 403** (cùng symptom R17 nhưng error code khác). Suspected: BE detail-level scope mismatch giữa `nguoiHoTroId` (NHT entity id) vs `taiKhoanId`. Screenshot: `image/r20-bug-008-partial-blanket-deny-removed.png` | Blanket-deny gỡ + BR-AUTH-10 wire-up; happy path còn 403 với error code mới |
+
+> **Re-test R20:** 2026-05-12 — Acc dùng: `cb_nv_tw_06` (BTP·TW, CB_NV_TW) cho BE probes BUG-001/005/006 + `nht_01` (STP-AG, NHT) cho BUG-004 + BUG-008 (thay `nht_tc001_btp_tw` đã xóa khỏi `input/users.csv`). **1/5 bug Closed (BUG-006), 3/5 PARTIAL FIXED (BUG-004/005/008), 1/5 NOT FIXED (BUG-001).** Tổng cộng từ R16: 4/8 Closed (002/003/006/007), 4/8 Open (001 + 3 PARTIAL).
 
 > **Chú thích Type:** `Workflow` = chuyển trạng thái, `Data` = toàn vẹn dữ liệu / filter.
 > **Chú thích Severity:** `Major` = tính năng quan trọng lỗi, có workaround (tạm thời CG ghi tay vào nội dung tư vấn thay vì đính kèm TLPL; DN không có cổng public xem TVCS công khai).
@@ -355,7 +370,9 @@ DOM scan probe `Array.from(document.querySelectorAll('*')).filter(el => el.textC
 
 ---
 
-## BUG-BE-TVCS-R16-006 — TVCS thiếu cột FK hop_dong_tv_id (Thay đổi 13 v3.5)
+## ~~BUG-BE-TVCS-R16-006~~ — TVCS thiếu cột FK hop_dong_tv_id (Thay đổi 13 v3.5) [CLOSED]
+
+> **Re-test:** 2026-05-12 R20 — ✅ PASS (Closed-verified). GET detail `/api/v1/noi-dung-tu-van-cs/{tiepNhanId}` (acc `cb_nv_tw_06`) trả 42 keys NOW INCLUDE `hopDongTvId`. PATCH `{ hopDongTvId, version }` → 200 OK + version bump. Re-fetch: field persist đúng giá trị. BE schema thêm cột `hop_dong_tv_id` theo SRS Thay đổi 13 line 1297. TV-059 unblock.
 
 ### Mô tả
 

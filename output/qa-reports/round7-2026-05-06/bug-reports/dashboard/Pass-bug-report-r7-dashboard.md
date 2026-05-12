@@ -5,16 +5,16 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000 |
 | **Người test** | QA Automation (Claude Opus 4.7) |
-| **Ngày** | 2026-05-10 10:37:30 (UTC+7) · **R2 retest:** 2026-05-10 12:30:00 (UTC+7) · **R3 retest:** 2026-05-10 20:40:00 (UTC+7) · **R3.1 expand permission:** 2026-05-10 22:48:00 (UTC+7) |
+| **Ngày** | 2026-05-12 09:02:00 (UTC+7) |
 | **Loại test** | Functional + Cross-check API ↔ UI + Permission probe |
-| **Round** | Round 7 (R1 + R2 + R3 + R3.1 retest+expand) |
+| **Round** | R7 |
 | **Tài liệu tham chiếu** | [functional-test-report-r7-dashboard.md](../../functional/dashboard/functional-test-report-r7-dashboard.md) · [tasks/todo-dashboard.md](../../../../tasks/todo-dashboard.md) |
 
 ---
 
 ## Tổng hợp
 
-Phát hiện **5** lỗi có SRS reference cụ thể trong functional test Dashboard. 4 bug đầu (DASH-001..004) đã Closed sau dev fix lần 2 R3 (20:40). R3.1 expand permission probe (22:48) phát hiện **BUG-DASH-005 Major mới** — DN role login dashboard render full SCR-I-01 vi phạm permission matrix P1=✗ (DN/NHT/CG: NHT+CG redirect đúng, DN bypass).
+Phát hiện **5** lỗi có SRS reference cụ thể trong functional test Dashboard. 4 bug đầu (DASH-001..004) đã Closed sau dev fix lần 2 R3 (20:40). R3.1 expand permission probe (22:48) phát hiện **BUG-DASH-005 Major** — DN role login dashboard render full SCR-I-01 vi phạm permission matrix P1=✗. R4 re-verify (2026-05-12 09:02): BUG-DASH-005 đã được fix — DN navigate `/dashboard` auto-redirect `/vu-viec/danh-sach`, KHÔNG render SCR-I-01, KHÔNG gọi `/api/v1/dashboard`. **Tất cả 5/5 bug Closed-verified.** Spot-check BUG-DASH-001/002/003/004 không regression với pool VV evolved 18→31.
 
 ### Severity breakdown
 
@@ -26,15 +26,17 @@ Phát hiện **5** lỗi có SRS reference cụ thể trong functional test Dash
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-DASH-005 | Major | P1 | Permission | DASH-P7 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:682-686 §Quyền truy cập màn hình` + Ma trận P1 (DN=✗) | Role DN login `/dashboard` render full SCR-I-01 (KHÔNG redirect, vi phạm P1=✗) | Open |
 | ~~BUG-DASH-001~~ | Medium | P1 | Validation | DASH-11 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:268 FR-I-02 §Processing Bước 4` + `:270 §Drill-down` | ~~KPI-02 dashboard count=16 loại trừ TU_CHOI sai spec (phải = 17 bao gồm cả TU_CHOI)~~ | Closed |
 | ~~BUG-DASH-002~~ | Minor | P3 | UI/UX | DASH-10 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:100 mermaid` + `srs-fr-01-dashboard.md:611` | ~~Drill-down KPI-07 thiếu URL param `trang_thai=DANG_HOAT_DONG` (tab default rescue)~~ | Closed |
 | ~~BUG-DASH-003~~ | Major | P1 | Validation | DASH-12, DASH-13 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:270 §Drill-down` + `:268 FR-I-03/04 §Processing` | ~~Drill KPI-03/04 URL `trangThai=DANG_XU_LY/HOAN_THANH` không khớp dashboard count (composite state mismatch)~~ | Closed |
 | ~~BUG-DASH-004~~ | Major | P1 | UI/UX | DASH-14, DASH-15 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:100 mermaid` (KPI-05/06 drill) | ~~Drill KPI-05/06 navigate `/dao-tao/chuong-trinh/danh-sach` (sai page Chương trình ≠ Khóa học, no filter, no date)~~ | Closed |
+| ~~BUG-DASH-005~~ | Major | P1 | Permission | DASH-P7 | `srs-update-2026-5-5/srs-fr-01-dashboard.md:682-686 §Quyền truy cập màn hình` + Ma trận P1 (DN=✗) | ~~Role DN login `/dashboard` render full SCR-I-01 (KHÔNG redirect, vi phạm P1=✗)~~ | Closed |
 
 ---
 
-## BUG-DASH-005 — Role DN login `/dashboard` render full SCR-I-01 (KHÔNG redirect, vi phạm permission matrix)
+## ~~BUG-DASH-005~~ [CLOSED] — Role DN login `/dashboard` render full SCR-I-01 (KHÔNG redirect, vi phạm permission matrix)
+
+> **Re-test:** 2026-05-12 09:02:00 R4 — ✅ PASS (Closed-verified). Dev đã fix route guard FE cho DN role: (a) Login DN `9999999990` → default landing `/vu-viec/danh-sach` (KHÔNG còn `/dashboard`); (b) Direct navigate `/dashboard` (URL bar) → FE intercept auto-redirect `/vu-viec/danh-sach`, KHÔNG render SCR-I-01, KHÔNG gọi `/api/v1/dashboard`; (c) Sidebar DN = 4 mục (Tổng quan + Đào tạo + Vụ việc + Doanh nghiệp được hỗ trợ) — Cổng DN Nhóm VII. Network log sau navigate: 6 request fetch (`/auth/me`, `/thong-baos/unread-count`, `/vu-viecs?page=1&pageSize=20`, `/danh-muc/tree`, `/ngay-le?nam=2026`, `/ngay-le?nam=2027`) — KHÔNG có `/api/v1/dashboard` confirmed full route guard. Evidence: [r7-r4-bug05-CLOSED-dn-redirect-vu-viec.png](image/r7-r4-bug05-CLOSED-dn-redirect-vu-viec.png).
 
 ### Mô tả
 

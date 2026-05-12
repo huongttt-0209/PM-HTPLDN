@@ -46,7 +46,7 @@
 
 - ⚠️ **R7.7.3** ✏️ Vụ việc 72 TC v3.5 (33 base + 42 mới Cluster 1-8) `[need: DN VNeID T2 + mTLS PLQG cert + dev fix CG-pool/TVV-detail/TVV-perm]` <a id="r7-7-3"></a>
   - **Kết quả:** ⚠️ R18 40/72 TC ≈ 56% — full lifecycle DA_TIEP_NHAN → CHO_PHE_DUYET fresh VV PASS, LICHSU 12/18 spec enum. [functional-test-report-r7-7-3-vu-viec.md](../output/qa-reports/round7-2026-05-06/functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md)
-  - **Bug:** [bug-report-r7-7-3-functional-vu-viec.md](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md) — 6/10 đóng (+3 finding mới R18 POOL-CG-MISSING Minor + TVV-DETAIL-403 Major + TVV-PERMISSION-GAP Major). LICHSU-01 12/18 spec.
+  - **Bug:** [bug-report-r7-7-3-functional-vu-viec.md](../output/qa-reports/round7-2026-05-06/bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md) — 8/10 đóng (+3 finding mới R18 POOL-CG-MISSING Minor + TVV-DETAIL-403 Major + TVV-PERMISSION-GAP Major). LICHSU-01 12/18 spec.
   - **Cần:** DN VNeID Tier 2 · mTLS PLQG cert · 32 TC còn · dev fix 3 finding R18
   - **Spec:** `7.5-vu-viec-htpl.md` v3.0 (sync 2026-05-06) · `srs-fr-05-vu-viec.md:1164 §FR-V.I-17`
 

@@ -173,7 +173,8 @@ Then include details:
 - TC/path chạy được ngay: <list hoặc "không có">.
 - TC/path chạy được sau setup QA-side: <list + setup chính>.
 - TC/path vẫn block bởi bên ngoài: <list + owner/blocker>.
-- Việc cần làm tiếp: <1-3 action ngắn, rõ>.
+- Cần dev BE seed dữ liệu **trong hệ thống** để hoàn thành full luồng: <list entity/state/scope cụ thể trong DB của hệ thống + lý do QA không tự seed được từ UI/API; hoặc "không có">. *(KHÔNG dùng cho dependency ngoài hệ thống như Cổng PLQG / mTLS / external API — phân loại sang env/tooling.)*
+- Việc cần làm tiếp: <1-3 action ngắn, rõ — nếu có dev BE seed thì PHẢI nhắc lại ở đây như 1 action riêng>.
 - Sau khi chạy xong follow-up TC: dùng `qa-module-status-audit` để kết luận module đã full luồng hay chưa.
 ```
 
@@ -187,6 +188,7 @@ End with:
 - `Setup Cần Chuẩn Bị Để Chạy TC Tiếp` must be present when any TC is runnable after preparation. If none, state `Không có setup QA-side có thể chuẩn bị`.
 - `Spec / BA Confirmation Check` must be present when any item is categorized as `chờ BA confirm spec`. If no BA/spec item exists, state `Không có case cần BA confirm`.
 - `Bug Open` and `Bug Closed` counts must appear in the top summary table. If exact counts cannot be derived, use `N/A` and explain why in `Bug Summary`.
+- If completing the full flow requires BE-side seed data **inside the HTPLDN system itself** that QA cannot create from UI/API (e.g. direct DB insert into the system's own DB, BE-only state advance not exposed via UI/API, batch trigger inside the system, time-travel/backdate on system records, mass insert into system entities), add a dedicated bullet `Cần dev BE seed dữ liệu để hoàn thành full luồng` in `Tóm Tắt Cuối`. Name the exact entity, state, scope, count, and reason QA cannot self-seed. Also restate it in `Việc cần làm tiếp` as its own action. Do not bury BE-seed requests inside generic next-action prose. **This bullet is scoped to on-system seed gaps only — external-system dependencies (Cổng PLQG sandbox, mTLS cert, external API mock, infra setup) belong in `chờ env/tooling`, `integration/API endpoint chưa deploy`, or `cần mock/stub lỗi external service` — không gộp vào BE seed bullet.**
 
 ## Rules
 

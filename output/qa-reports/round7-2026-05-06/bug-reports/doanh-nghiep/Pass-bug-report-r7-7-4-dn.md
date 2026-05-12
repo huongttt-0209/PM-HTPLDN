@@ -5,10 +5,9 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000 |
 | **Người test** | huongttt + Claude (MCP chrome-devtools) |
-| **Ngày tạo** | 2026-05-08 09:55:00 (lần đầu) |
-| **Cập nhật mới nhất** | 2026-05-10 14:50:00 (R14 close BUG-DN-022 — final) |
+| **Ngày** | 2026-05-10 14:50:00 |
 | **Loại test** | Functional / Permission / Data / UI Route |
-| **Round** | R7 → R14 |
+| **Round** | R14 |
 | **Tài liệu tham chiếu** | [`srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md`](../../../../../input/srs-update-2026-5-5/srs-fr-07-doanh-nghiep.md) v3.5 · [permission-matrix-by-fr.md §FR-07](../../../../permission-matrix-by-fr.md) · [functional-test-report-r7-7-4-dn.md](../../functional/doanh-nghiep/functional-test-report-r7-7-4-dn.md) |
 
 ---

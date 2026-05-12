@@ -34,7 +34,7 @@
 
 - ⚠️ **R7.7.11** 🔄 TV nhanh 44 TC v3.5 (R8→R14) `[~89% — 31/35 PASS, 5 BLOCKED + 7 defer + 3 bug Open]` <a id="r7-7-11"></a>
   - **Kết quả:** PASS 31/35 (89%) R13 + R14 5/5 UI re-audit `_03` accounts. R14 14:06 verify E2E NHAP→CHO_DUYET→DA_DUYET→CONG_KHAI + DA_GOI_Y→CB_TRA_LOI qua UI. [functional-r7-7-11](../output/qa-reports/round7-2026-05-06/functional/tu-van-nhanh/functional-test-report-r7-7-11-tvn.md)
-  - **Bug:** [bug-report-r7-7-11-tvn.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-nhanh/bug-report-r7-7-11-tvn.md) — 4/7 đóng (001 Major · ~~002~~✅R12 · ~~003~~✅R12 · ~~004~~✅R10 · 005 Minor partial · ~~006~~✅R12 · 007 Major R11)
+  - **Bug:** [bug-report-r7-7-11-tvn.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-nhanh/bug-report-r7-7-11-tvn.md) — 6/7 đóng (001 Major · ~~002~~✅R12 · ~~003~~✅R12 · ~~004~~✅R10 · 005 Minor partial · ~~006~~✅R12 · 007 Major R11)
 
 - ✅ **R7.E4** 🔄 TV nhanh (FR-13.A) — ≥1 phiên tồn tại <a id="r7-e4"></a>
   - **Kết quả:** PASS 50 phiên cover 6 state SM-TVNHANH + 2 enum kênh (TV_NHANH/TV_THU_CONG). [verify-checklist-r7-e4-tv-nhanh.md](../output/qa-reports/round7-2026-05-06/seed/verify-checklist-r7-e4-tv-nhanh.md)

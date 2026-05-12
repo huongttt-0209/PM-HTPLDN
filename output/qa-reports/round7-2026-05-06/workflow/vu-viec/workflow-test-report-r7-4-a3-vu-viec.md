@@ -148,7 +148,7 @@
 ### Bug status update R12
 
 - (R11 bug giữ nguyên status — không re-verify trong R12).
-- **Observation R12 NEW** (chưa log Bug, cần BA confirm spec): CG role không có UI để accept assignment trên VV detail (B3 transition). Per FR-IV-CG-01 spec, CG access VV qua TVCS, nhưng B3 actor "NHT chấp nhận" theo FR-05 §B3 v3.5 không khớp với role permission matrix (CG có permission TVCS không có VV). Cần BA clarify: B3 actor là NHT only, hay TVV/CG cũng được?
+- **BA update 2026-05-11 cho B3:** bước chấp nhận/từ chối phân công trong FR-05 áp dụng cho **người được phân công** gồm NHT/TVV/CG cá nhân hoặc TVV do tổ chức tư vấn cử. Observation R12 về CG không có UI accept không còn là câu hỏi BA; nếu CG/TVV được phân công mà không xem/chấp nhận được VV thì Dev cần xử lý quyền/route theo assignment hợp lệ.
 
 ### Status R7.4.A3 sau R12
 
@@ -184,7 +184,7 @@
 - **BUG-VV-PC-002** Major P1 → ✅ **Closed** — BE trả 2 entity cấp TW (R8 chỉ 1). Pool restrictive nhưng hợp lý.
 - **BUG-VV-SCHEMA-01** Critical P0 → ✅ **Closed** — schema v3.5 đầy đủ trong response sau B2 mode TO_CHUC submit.
 - **BUG-VV-AUTH-01** Critical P0 → ✅ **Closed/Reclass** — seed gap. NHT có legacy `nht_<NN>` accounts (Secret@123 + OTP 666666). TVV/CG seed credentials chưa probe ra (throttle 429), cần dev/seed team cấp hoặc dùng VNeID Tier 2 sandbox.
-- **BUG-VV-NHT-SCOPE-01** Critical P0 → ✅ **Closed/Reclass** — không phải BE bug. BE BR-AUTH-VPD đang enforce donVi-based scope đúng spec. Vấn đề thực = design assignment-scope vs donVi-scope cần BA confirm.
+- **BUG-VV-NHT-SCOPE-01** Critical P0 → ✅ **Closed/Reclass** — không phải BE bug. BE BR-AUTH-VPD đang enforce donVi-based scope đúng spec. **BA 2026-05-11 chốt không cho phân công người/tổ chức ngoài scope nếu người nhận không xem được VV**; UI phải lọc ứng viên hoặc BE reject ngay khi phân công.
 - **BUG-VV-NHT-NOTIF-01** Major P1 → giữ Open (R10 NEW, chưa re-verify R11).
 - **BUG-VV-SLA-01** Major P1 → giữ Open.
 - **BUG-VV-PC-WRN-01** Minor → giữ Open.

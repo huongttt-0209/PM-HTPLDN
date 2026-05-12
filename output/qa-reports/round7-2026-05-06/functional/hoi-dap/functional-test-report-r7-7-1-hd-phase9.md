@@ -15,7 +15,7 @@
 
 ## Verdict
 
-✅ **3/3 bug Closed-verified Phase 9** (HD-053 R10e + HD-014 R10g + HD-055 R10g) + ✅ **3 TC PASS sau dev seed** (HD-022b + HD-057 + HD-055) + ❌ **2 bug mới phát hiện R10g 17:20:00** (HD-022c + HD-022d badge SLA tier sai BR-SLA-02 — log [bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../../bug-reports/hoi-dap/bug-report-r7-7-1-hd-022-sla-tier-mismatch.md)) + 🚫 **7 TC còn chưa chạy được** (chờ R7.6.3 Cổng PLQG deploy). Coverage R7.7.1 **46/60 (77%)** giữ nguyên — HD-022b + HD-057 PASS, HD-022c/d Lỗi (không +PASS coverage), 7 chờ infra.
+✅ **3/3 bug Closed-verified Phase 9** (HD-053 R10e + HD-014 R10g + HD-055 R10g) + ✅ **3 TC PASS sau dev seed** (HD-022b + HD-057 + HD-055) + ❌ **2 bug mới phát hiện R10g 17:20:00** (HD-022c + HD-022d badge SLA tier sai BR-SLA-02 — log [Pass-bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../../bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-022-sla-tier-mismatch.md)) + 🚫 **7 TC còn chưa chạy được** (chờ R7.6.3 Cổng PLQG deploy). Coverage R7.7.1 **46/60 (77%)** giữ nguyên — HD-022b + HD-057 PASS, HD-022c/d Lỗi (không +PASS coverage), 7 chờ infra.
 
 ### Update 2026-05-11 17:20:00 — Dev SQL VERIFIED full 6/6 + bug mới SLA tier
 
@@ -63,7 +63,7 @@ Dev BE đã chạy ĐỦ 6 SQL UPDATE (4 gốc + 2 bổ sung deadline) — QA re
 
 **Nguyên nhân:** App có vẻ map color theo `daysRemaining` (>=2 → success, ==0 → orange) thay vì `ratio elapsed/span` theo spec → tier sai 1 bậc với HD-022c và HD-022d. DB field `muc_do_canh_bao` có 4 giá trị enum đúng spec (`BINH_THUONG`/`SAP_HET`/`QUA_HAN`/`QUA_HAN_NGHIEM_TRONG`) nhưng badge UI không render đúng.
 
-**Cần làm gì:** Dev FE/BE sửa logic compute `muc_do_canh_bao` + map AntD tag color (`success`/`warning`/`error`/`black`) theo ratio đúng BR-SLA-02. Log chi tiết: [bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../../bug-reports/hoi-dap/bug-report-r7-7-1-hd-022-sla-tier-mismatch.md)
+**Cần làm gì:** Dev FE/BE sửa logic compute `muc_do_canh_bao` + map AntD tag color (`success`/`warning`/`error`/`black`) theo ratio đúng BR-SLA-02. Log chi tiết: [Pass-bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../../bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-022-sla-tier-mismatch.md)
 
 **Ai làm:** Dev FE + Dev BE (depending on where `muc_do_canh_bao` được compute).
 
@@ -89,7 +89,7 @@ Dev BE đã chạy ĐỦ 6 SQL UPDATE (4 gốc + 2 bổ sung deadline) — QA re
 | HD-035 re-verify | API search `?keyword=lương&trangThai=<X>` với 3 state processed: DA_DUYET (total=2, snippet match), HOAN_THANH (total=3, snippet match), CONG_KHAI (total=0 vì pool 0 record). Search full-text hoạt động đúng cho processed state. | API response |
 | HD-008 re-verify | GET `/api/v1/hoi-daps?size=20` — 9/10 record có deadline = ngayTiepNhan + 5 working days (calendar diff 5-6). 1 outlier HD-20260510-002 (mucDoPhucTap=THUONG, deadline +36 cal days) — có thể user override hoặc edge case. Main path BR-SLA-01 OK. | API response |
 
-> **Defects status Phase 9 (sau R10g 17:20:00):** 3 Closed-verified — (1) BUG-HD-053 R10e; (2) BUG-HD-055-PUBLISH-FAIL-UX-001 R10g 14:25:00 [Pass-bug-report](../../bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-055-modal-publish-fail-ux.md); (3) BUG-HD-014-REJECT-ERR-CODE-001 R10g 14:20:00 [Pass-bug-report](../../bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-014-reject-err-code-mismatch.md). **2 bug mới Open R10g 17:20:00** — BUG-HD-022-SLA-TIER-001/002 (FE/BE map sai BR-SLA-02): [bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../../bug-reports/hoi-dap/bug-report-r7-7-1-hd-022-sla-tier-mismatch.md).
+> **Defects status Phase 9 (sau R10g 17:20:00):** 3 Closed-verified — (1) BUG-HD-053 R10e; (2) BUG-HD-055-PUBLISH-FAIL-UX-001 R10g 14:25:00 [Pass-bug-report](../../bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-055-modal-publish-fail-ux.md); (3) BUG-HD-014-REJECT-ERR-CODE-001 R10g 14:20:00 [Pass-bug-report](../../bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-014-reject-err-code-mismatch.md). **2 bug mới Open R10g 17:20:00** — BUG-HD-022-SLA-TIER-001/002 (FE/BE map sai BR-SLA-02): [Pass-bug-report-r7-7-1-hd-022-sla-tier-mismatch.md](../../bug-reports/hoi-dap/Pass-bug-report-r7-7-1-hd-022-sla-tier-mismatch.md).
 
 ---
 

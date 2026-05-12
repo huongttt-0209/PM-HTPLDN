@@ -12,7 +12,7 @@
 | **Test Method** | UI MCP (Chrome DevTools) + API cross-check qua `evaluate_script(fetch)` |
 | **Primary Account** | `qtht_01 / Secret@123` (QTHT, BTP-TW) |
 | **Round** | Round 7 |
-| **Tài liệu tham chiếu** | [tasks/todo-dashboard.md](../../../../tasks/todo-dashboard.md) · [bug-report-r7-dashboard.md](../../bug-reports/dashboard/bug-report-r7-dashboard.md) |
+| **Tài liệu tham chiếu** | [tasks/todo-dashboard.md](../../../../tasks/todo-dashboard.md) · [Pass-bug-report-r7-dashboard.md](../../bug-reports/dashboard/Pass-bug-report-r7-dashboard.md) |
 
 ---
 
@@ -58,20 +58,37 @@
 
 ### Verdict R3.1 expand permission 2026-05-10 22:30-22:48: **⚠️ CONDITIONAL PASS — 33/34 TC ✅ (Pass Rate 97%), phát hiện 1 BUG Major mới (BUG-DASH-005 DN dashboard render bypass).** Q1+Q2 spec verified 2-source (NotebookLM + SRS local) → KHÔNG còn "chờ BA confirm". 4 CB role permission probe (TW/BN/DP scope test) ✅ PASS — Đơn vị dropdown HIDDEN cho BN/DP (BR-AUTH-08 locked), VISIBLE cho TW (full scope). 3 actor role (DN/NHT/CG) probe: NHT + CG ✅ redirect `/dao-tao/chuong-trinh/danh-sach` đúng spec; **DN ❌ render full SCR-I-01 vi phạm permission matrix P1=✗** → log BUG-DASH-005 Major P1. Còn 1 TC hoãn: DASH-P8 Auto-refresh 60s tick.
 
-### Verdict R3.2 DASH-P8 auto-refresh (LATEST) 2026-05-10 22:53-23:03: **⚠️ DASH-P8 PARTIAL PASS (1/7 sub-aspect automated)** — ✅ **P8.1 60s tick verified strong** (8 chu kỳ liên tiếp 22:53→23:02 + 3 endpoint re-fetch consistent + timestamp tiến đều 60s). 🚫 6 sub-aspect (P8.2 closed-period pause, P8.3 manual refresh button, P8.4 pending filter preserved, P8.5 tab visibility, P8.6 per-widget timeout 30s, P8.7 ≥50% widget fail isolation banner) cần **manual QA round riêng** vì FE custom theme AntD Năm dropdown không response synthetic events + isolatedContext không simulate visibility API + cần BE mock cho timeout/fail isolation. **Pass Rate cumulative 33/34 TC ✅ (97%) + 1 ❌ (BUG-DASH-005)** — DASH-P8 không tạo bug mới, chỉ partial coverage.
+### Verdict R5 DASH-P8 sub-aspect test (LATEST) 2026-05-12 09:22:00: **⚠️ DASH-P8 PARTIAL PASS — 3/4 sub-aspect đã test OK (P8.2 ✅ + P8.3 ✅ + P8.4 ⚠️ Sai spec suspect) + P8.5 🚫 tooling block.** Test bằng MCP Chrome DevTools:
+
+- **P8.2 (Closed period pause)** ✅ Đạt — Năm=2024 + Apply → URL `?nam=2024`, FE render badge **"Kỳ đã đóng"** + ẨN HOÀN TOÀN nút "Làm mới" + ẨN "Cập nhật lúc" (`exists: false` qua DOM query). Confirm spec FR-I-CROSS-02 auto-refresh pause cho kỳ đóng. Bonus: chart "Đánh giá hiệu quả hỗ trợ" + "Chất lượng đào tạo" render empty state "Chưa có dữ liệu đánh giá trong kỳ" / "Chưa có dữ liệu đào tạo trong kỳ" (no data 2024). Evidence: [r7-r5-P8.2-closed-period-pause-success.png](image/r7-r5-P8.2-closed-period-pause-success.png).
+
+- **P8.3 (Manual refresh button single-click)** ✅ Đạt — Click "Làm mới" → 4 endpoint re-fetch single time: `/api/v1/dashboard?nam=2026 [304]` + `/dashboard/chart/hieu-qua-ho-tro [304]` + `/dashboard/chart/chat-luong-dao-tao [304]` + `/thong-baos/unread-count [304]`. Timestamp 02:14 → 02:15 (1 tick increment). Note: "disable briefly" behavior <200ms quá nhanh, MCP poll sample không catch được — re-fetch là AC chính, đạt. Evidence: [r7-r5-P8.3-manual-refresh-success.png](image/r7-r5-P8.3-manual-refresh-success.png).
+
+- **P8.4 (Pending filter preserved 60s)** ⚠️ Sai spec / suspect bug — Apply Năm=2026 → open dropdown → click 2025 (pending, KHÔNG Apply) → wait 70s. Kết quả: URL `?nam=2026` (applied unchanged ✓), dropdown display revert "2025" → **"2026"** (overwritten). Cập nhật lúc 02:16 → 02:17 confirm 1 auto-refresh tick. Spec AC "pending UI không bị overwrite" VI PHẠM. Cần 2-source SRS verify (NotebookLM + grep local) trước khi log BUG-DASH-006. Evidence: [r7-r5-P8.4-pending-filter-overwrite-suspect.png](../../bug-reports/dashboard/image/r7-r5-P8.4-pending-filter-overwrite-suspect.png).
+
+- **P8.5 (Tab visibility hidden ≥60s)** 🚫 BLOCKED — retry 2 method:
+  1. `Object.defineProperty(document, 'visibilityState', 'hidden')` + `dispatchEvent('visibilitychange')` → React useEffect không bind override (FE subscribe Chrome native event, không phải override JS).
+  2. MCP `select_page` bring background page → 70s sleep → quay lại: Cập nhật lúc 02:18 → 02:21 (3 ticks tiếp tục chạy). Chrome `bringToFront` không trigger page-level visibilitychange event giống Cmd+Tab thật.
+  → Cần manual QA Cmd+Tab real OS focus switch để verify spec "pause khi tab ẩn + reload+reset khi quay lại". Tooling limit confirmed. Evidence: [r7-r5-P8.5-tab-visibility-tooling-block.png](image/r7-r5-P8.5-tab-visibility-tooling-block.png).
+
+**Pass Rate R5:** DASH-P8 (composite) flip ⚠️→ ⚠️ partial pass (P8.1 ✅ R3.2 + P8.2 ✅ R5 + P8.3 ✅ R5 + P8.4 ⚠️ R5 + P8.5 🚫 R5; P8.6/P8.7 vẫn cần BE mock). Cumulative TC: ✅33 + ⚠️1 (DASH-P8) + 1 suspect bug P8.4 (chưa log BUG, cần SRS 2-source verify).
+
+### Verdict R4 re-verify 2026-05-12 09:02:00: **✅ PASS — 5/5 bug Closed-verified.** Dev fix BUG-DASH-005 thành công: DN login `9999999990` default landing → `/vu-viec/danh-sach` (KHÔNG còn `/dashboard`); direct navigate `/dashboard` URL bar → FE auto-redirect `/vu-viec/danh-sach`, KHÔNG render SCR-I-01, KHÔNG gọi `/api/v1/dashboard` (verified qua network log 6 fetch). Spot-check 4 bug Closed cũ (R3) không regression với pool VV evolved 18→31: KPI-02 drill 31=31 (include TU_CHOI); KPI-07 drill `?trangThai=HOAT_DONG` 8=8; KPI-03 drill composite 5 enums 23=23; KPI-04 drill `HOAN_THANH` 1=1; KPI-05 drill `/dao-tao/khoa-hoc/danh-sach?tab=DANG_DIEN_RA&nam=2026` heading "Khóa học". **Pass Rate cumulative 33/34 TC ✅ (97%) + DASH-P7-DN flip ❌→✅** — DASH-P8 partial 1/7 sub-aspect vẫn cần manual QA round riêng (không thay đổi từ R3.2).
+
+### Verdict R3.2 DASH-P8 auto-refresh 2026-05-10 22:53-23:03: **⚠️ DASH-P8 PARTIAL PASS (1/7 sub-aspect automated)** — ✅ **P8.1 60s tick verified strong** (8 chu kỳ liên tiếp 22:53→23:02 + 3 endpoint re-fetch consistent + timestamp tiến đều 60s). 🚫 6 sub-aspect (P8.2 closed-period pause, P8.3 manual refresh button, P8.4 pending filter preserved, P8.5 tab visibility, P8.6 per-widget timeout 30s, P8.7 ≥50% widget fail isolation banner) cần **manual QA round riêng** vì FE custom theme AntD Năm dropdown không response synthetic events + isolatedContext không simulate visibility API + cần BE mock cho timeout/fail isolation. **Pass Rate cumulative 33/34 TC ✅ (97%) + 1 ❌ (BUG-DASH-005)** — DASH-P8 không tạo bug mới, chỉ partial coverage.
 
 ---
 
-## Bảng trạng thái TC (snapshot R3.2 — LATEST 2026-05-10 23:03:00)
+## Bảng trạng thái TC (snapshot R4 — LATEST 2026-05-12 09:02:00)
 
 | TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
 |---|---|:-:|:-:|---|
 | DASH-01..09 | KPI render 9 counter | ✅ Đạt | R1 | 9/9 match API, KPI-07=11 (CG=5+TVV=6) |
-| DASH-10 | KPI-07 drill URL trangThai=HOAT_DONG | ✅ Đạt | R3 | Closed BUG-DASH-002 list 8/8 |
-| DASH-11 | KPI-02 drill list match dashboard | ✅ Đạt | R3 | Closed BUG-DASH-001 dashboard=18=18 |
-| DASH-12 | KPI-03 drill composite "Đang xử lý" | ✅ Đạt | R3 | Closed BUG-DASH-003 7 enums 15/15 |
-| DASH-13 | KPI-04 drill composite "Hoàn thành" | ✅ Đạt | R3 | Closed BUG-DASH-003 2 enums 2/2 |
-| DASH-14 | KPI-05 drill đúng page Khóa học | ✅ Đạt | R3 | Closed BUG-DASH-004 tab=DANG_DIEN_RA |
+| DASH-10 | KPI-07 drill URL trangThai=HOAT_DONG | ✅ Đạt | R4 | Closed BUG-DASH-002 verified 8/8 (R4 re-spot 8=8) |
+| DASH-11 | KPI-02 drill list match dashboard | ✅ Đạt | R4 | Closed BUG-DASH-001 verified (R4 re-spot 31=31) |
+| DASH-12 | KPI-03 drill composite "Đang xử lý" | ✅ Đạt | R4 | Closed BUG-DASH-003 verified (R4 5 enums 23=23) |
+| DASH-13 | KPI-04 drill composite "Hoàn thành" | ✅ Đạt | R4 | Closed BUG-DASH-003 verified (R4 HOAN_THANH 1=1) |
+| DASH-14 | KPI-05 drill đúng page Khóa học | ✅ Đạt | R4 | Closed BUG-DASH-004 verified tab=DANG_DIEN_RA |
 | DASH-15 | KPI-06 drill đúng page Khóa học | ✅ Đạt | R3 | Closed BUG-DASH-004 tab=HOAN_THANH |
 | DASH-F1..F6 | Filter Năm/Đơn vị/Áp dụng/Xóa/Refresh | ✅ Đạt | R2 | Render + commit + reset OK (real user click) |
 | DASH-C1..C3 | Chart legend toggle + render | ✅ Đạt | R2 | Client-side toggle, render OK |
@@ -82,21 +99,18 @@
 | DASH-P6 | Permission CB_NV_DP (AG locality scope) | ✅ Đạt | R3.1 | Match CB_PD_DP scope |
 | DASH-P7-NHT | Actor NHT redirect | ✅ Đạt | R3.1 | URL `/dao-tao/chuong-trinh/danh-sach` đúng spec |
 | DASH-P7-CG | Actor CG redirect | ✅ Đạt | R3.1 | URL `/dao-tao/chuong-trinh/danh-sach` đúng spec |
-| DASH-P7-DN | Actor DN expect redirect Cổng DN | ❌ Lỗi | R3.1 | Render full SCR-I-01 → BUG-DASH-005 Major P1 Open |
-| DASH-P8 | Auto-refresh FR-I-CROSS-02 (composite) | ⚠️ Sai spec | R3.2 | 1/7 sub-aspect ✅ (P8.1 60s tick); 6 sub 🚫 cần manual QA |
-| **Tổng** | **34 TC** | ✅33 · ❌1 · ⚠️1 · 🚫0 · ⏭0 · 🤷0 | | DASH-P8 đếm ⚠️ vì partial automated |
+| DASH-P7-DN | Actor DN expect redirect Cổng DN | ✅ Đạt | R4 | Closed BUG-DASH-005 — DN navigate `/dashboard` → redirect `/vu-viec/danh-sach` |
+| DASH-P8 | Auto-refresh FR-I-CROSS-02 (composite) | ⚠️ Sai spec | R5 | 4/7 sub: P8.1✅ R3.2 + P8.2✅ + P8.3✅ R5 + P8.4⚠️ suspect + P8.5🚫 + P8.6/7 BE mock |
+| **Tổng** | **34 TC** | ✅33 · ❌0 · ⚠️1 · 🚫0 · ⏭0 · 🤷0 | | DASH-P8 đếm ⚠️ vì partial automated |
 
-## Bảng TC chưa chạy được — cần làm gì để chạy (R3.2)
+## Bảng TC chưa chạy được — cần làm gì để chạy (R5)
 
-Hiện tại còn 7 sub-aspect chưa chạy được — chia 1 nhóm: 7 chờ manual QA (1 chờ dev fix bug + 6 chờ test method real user / BE mock).
+Hiện tại còn 3 sub-aspect chưa chạy được — DASH-P7-DN đã ✅ R4 (BUG-DASH-005 Closed). P8.2 + P8.3 đã ✅ R5 qua MCP click chain (dropdown listbox option click thay vì synthetic input event). P8.4 ⚠️ suspect bug. Còn 3 sub-aspect: P8.5 manual QA Cmd+Tab + P8.6/P8.7 BE mock.
 
 | TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
 |---|---|---|:-:|
-| DASH-P7-DN | DN render full dashboard, vi phạm permission matrix P1=✗ (BUG-DASH-005 Major P1 Open) | Dev sửa redirect DN khi truy cập `/dashboard` về Cổng DN Nhóm VII per SCR-I-01 §Quyền | Dev FE |
-| DASH-P8.2 | FE custom theme AntD Năm dropdown không response synthetic events từ MCP automation | Manual QA real user click commit Năm=2024 → Apply → verify ẨN nút Làm mới + ẨN "Cập nhật lúc" | QA seed |
-| DASH-P8.3 | Phụ thuộc P8.2 commit kỳ đóng (cần state baseline) | Manual QA single-click button Refresh → verify disable briefly + re-fetch 1 lần | QA seed |
-| DASH-P8.4 | Phụ thuộc P8.2 commit filter pending | Manual QA thay filter mà không Apply, sleep 60s, verify pending UI không bị overwrite | QA seed |
-| DASH-P8.5 | MCP isolatedContext không simulate `document.hidden` đúng React useEffect | Manual QA Cmd+Tab sang tab khác ≥60s, quay lại verify reload+reset đếm | QA seed |
+| DASH-P8.4 | Pending filter dropdown "2025" bị overwrite về applied "2026" sau auto-refresh tick (vi phạm AC) | (1) 2-source SRS verify (NotebookLM + grep local) AC chính xác. (2) Nếu confirm vi phạm spec → log BUG-DASH-006 P3 Minor (UX không critical, applied state đúng) | QA → Dev FE |
+| DASH-P8.5 | MCP `Object.defineProperty document.hidden` + `select_page bringToFront` đều không trigger Chrome native visibilitychange — auto-refresh tiếp tục tick | Manual QA real user Cmd+Tab sang tab khác ≥60s, quay lại verify (1) tab ẩn KHÔNG có request `/api/v1/dashboard` mới, (2) tab visible reload+reset đếm 60s | QA seed |
 | DASH-P8.6 | Cannot trigger BE timeout từ FE | BE mock 1 widget timeout >30s, verify banner "Trạng thái 28/29 không kéo cả page" | Dev BE |
 | DASH-P8.7 | Cần BE mock half widgets fail | BE mock ≥50% widget lỗi, verify banner + sau 3 chu kỳ banner kèm "Đã thử lại 3 lần" | Dev BE |
 
@@ -285,7 +299,7 @@ Verify lại 4 bug Open sau dev fix lần 2: BUG-DASH-001 (KPI-02 count + drill 
 | BUG-DASH-003 (KPI-03/04 composite state) | Open (NEW R2) | ✅ PASS | Closed |
 | BUG-DASH-004 (KPI-05/06 sai page Chương trình) | Open (NEW R2) | ✅ PASS | Closed |
 
-→ **4/4 bug Closed.** File rename `bug-report-r7-dashboard.md` (PostToolUse hook auto).
+→ **4/4 bug Closed.** File rename `Pass-bug-report-r7-dashboard.md` (PostToolUse hook auto).
 
 ### Hoãn tiếp R3
 
@@ -389,7 +403,7 @@ Verify lại 4 bug Open sau dev fix lần 2: BUG-DASH-001 (KPI-02 count + drill 
 
 ## 3. Bug Report
 
-> **Lưu ý:** Tóm tắt inline. Chi tiết Steps/Evidence xem [bug-report-r7-dashboard.md](../../bug-reports/dashboard/bug-report-r7-dashboard.md).
+> **Lưu ý:** Tóm tắt inline. Chi tiết Steps/Evidence xem [Pass-bug-report-r7-dashboard.md](../../bug-reports/dashboard/Pass-bug-report-r7-dashboard.md).
 
 ### BUG-DASH-001 — Medium — KPI-02 count loại trừ TU_CHOI sai spec
 

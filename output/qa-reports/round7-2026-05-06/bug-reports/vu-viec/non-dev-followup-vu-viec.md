@@ -46,25 +46,19 @@ Dung de test 3 muc con lai cua `VV-022` / BR-SLA-02.
 
 ---
 
-## BA confirm
+## BA confirm — đã chốt 2026-05-11
 
 ### C5-4 — Duplicate danh gia
 
-**Thuc te:** Sau khi CB_NV danh gia lan 1, VV auto flip `HOAN_THANH -> DA_DANH_GIA`. Lan 2 bi chan bang state guard `ERR-STATE-VI-16-01`, khong den UNIQUE constraint `ERR-DG-VV-04`.
+**Thuc te:** Sau khi CB_NV danh gia lan 1, VV auto flip `HOAN_THANH -> DA_DANH_GIA`. Lan 2 bi chan bang state guard `ERR-STATE-VI-16-01`, khong den duplicate rule rieng.
 
-Can BA chot:
-
-- Chap nhan state guard hien tai?
-- Hay bat buoc dung UNIQUE/error `ERR-DG-VV-04` nhu spec test case?
+**BA chot:** Bat buoc chan duplicate bang rule `(vu_viec_id, loai_nguoi_danh_gia)`, khong chi dua vao state `DA_DANH_GIA`. Ma loi duplicate dung la `ERR-DG-VV-03`; `ERR-DG-VV-04` la loi khong co quyen danh gia, khong phai duplicate.
 
 ### C6-4 — BR-CALC-04 fallback
 
 **Thuc te:** Tao VV cho DN thieu cac field uu tien van thanh cong, he thong fallback priority 3 "Trung binh".
 
-Can BA chot:
-
-- Chap nhan fallback priority 3?
-- Hay bat buoc warning/error yeu cau cap nhat DN truoc khi tao VV?
+**BA chot:** Khong chap nhan fallback priority 3 am tham khi thieu field bat buoc. He thong phai canh bao/chan tao VV va yeu cau DN cap nhat du thong tin truoc. Priority 3 chi dung khi du du lieu nhung khong roi vao nhom uu tien cao hon.
 
 ---
 

@@ -5,9 +5,9 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Claude Code via Chrome DevTools MCP) |
-| **Ngày** | 2026-05-10 02:09:00 |
+| **Ngày** | 2026-05-12 01:58:00 |
 | **Loại test** | Functional (Module Báo cáo Thống kê — task R7.7.13) |
-| **Round** | Round 7 (R7.7.13 lần 1) |
+| **Round** | R7 |
 | **Tài liệu tham chiếu** | [funtion 7.11](../../../../funtion/7.11-bao-cao-thong-ke.md) · [SRS CHANGELOG-v3-to-v3.5 §srs-fr-11](../../../../../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) · [todo R7.7.13](../../../../../tasks/todo-bao-cao.md#r7-7-13) |
 
 ---
@@ -16,13 +16,23 @@
 
 Phát hiện **4** lỗi có SRS/UI reference cụ thể trong phase smoke + functional module Báo cáo Thống kê. **Round 1 (2026-05-10 02:09)** log 2 Major UI/UX (Word→PDF rename, Hỏi đáp pháp luật rename) — cả 2 đã được dev fix và Closed-verified ở **Round 2 (2026-05-10 12:35)**. Round 2 phát hiện thêm **1 Critical mới** — endpoint xuất PDF (`/api/v1/bao-cao/export` với `formatXuat=PDF`) trả 500 toàn bộ, nhánh xuất Excel hoạt động bình thường. Round 3 ghi nhận thêm **1 Minor UI** — BC-018 legend/empty-state còn hiển thị key kỹ thuật camelCase.
 
+**R7 re-verify (2026-05-11 23:50:00 — Chrome DevTools MCP, 5 isolatedContext):** 4 bug Open R6 dev claim fix → re-test sạch. Kết quả: **1 Closed-verified** (XLSX-PARTIAL — dev rename enum + Excel template) + **2 Partial fix** (DATA-SCOPE-LEAK 2/4 endpoint OK, KYBAOCAO validation OK aggregation chưa OK) + **1 vẫn Open** (PDF-NOT-SUPPORTED 6/6 sample fail). Bug count Open: 4 → 3 (1 đóng), trong đó 2 bug downgrade scope.
+
+**R7-r2 re-verify (2026-05-12 01:58:00 — 3 isolatedContext):** Xác nhận pattern R7 sau 26 giờ (sang ngày mới) — tất cả verdict R7 không đổi. **Mở rộng matrix DATA-SCOPE-LEAK:** test thêm 4 endpoint chưa cover ở R7 → `/vu-viec-tiep-nhan` + `/vu-viec-dang-ho-tro` cũng đã FIXED scope (nhóm HD+VV OK toàn bộ); `/chi-phi-theo-don-vi` cũng leak (nhóm Chi phí + TVV vẫn missing wire). Bug pattern systematic theo module BE, không random theo role. Cần dev wire `dataScopeMiddleware` cho cả group Chi phí (`/chi-phi-theo-linh-vuc`, `/chi-phi-theo-loai-dn`, `/chi-phi-theo-thoi-gian` chưa test) + group CG/TVV + group CT HTPLDN. Evidence: [image/bug-bc-r7-r2-reverify-evidence.md](image/bug-bc-r7-r2-reverify-evidence.md).
+
 > **Bối cảnh:** Round 1 bị BE bug R7.4.B0 (JWT revoke aggressive ~30s-1min) làm block 36/40 TC. Round 2 (sau dev báo fix JWT) re-test: JWT đã ổn định qua 16 BC switches + 2 export calls trong 1 session, không bị kick `/login`. Đã chạy được 16/16 BC core (BC-004→BC-023, defer 4 ĐT/ĐG) — render OK 100%, 12 BC có data, 4 BC empty hợp lệ (CT HTPLDN seed chưa).
 
-### Severity breakdown (R6 update)
+### Severity breakdown (R7 update — 2026-05-11 23:50:00)
 
 | Tổng | Critical | Major | Medium | Minor | Trivial |
 |------|----------|-------|--------|-------|---------|
-| 7    | 1 (Closed→Open at R4)| 3 (1 Open Major+ 2 Closed) | 2 (XLSX-PARTIAL Open + KYBAOCAO Open NEW R6) | 1 (Closed) | 0       |
+| 7    | 1 (Open — Partial fix R7)| 3 (1 Open Major + 2 Closed) | 1 (KYBAOCAO Partial Open — Aggregation, downgrade Minor) + 1 (XLSX Closed R7) | 1 (Closed R4) | 0       |
+
+**R7 re-verify (2026-05-11 23:50:00 — bộ acc 08, 5 isolatedContext MCP):** **2/4 bug đóng**:
+- **BUG-BC-XLSX-PARTIAL-SUPPORT → CLOSED-R7**: Dev rename enum (`BC_VV_THEO_LINH_VUC` → `BC_VU_VIEC_THEO_LINH_VUC`, `BC_DANH_GIA_HIEU_QUA_HTPL` → `BC_DANH_GIA_HIEU_QUA`) + thêm Excel template 2 BC analytic. 3/3 test với enum mới = 200 binary. R6 fail là do test dùng enum cũ stale.
+- **BUG-BC-KYBAOCAO-NOT-VALIDATED → PARTIAL-CLOSED-R7**: Validation enum 12/12 FIXED (gồm 2 BC R6 silently 200 giờ trả 422 chuẩn `ERR-VAL-SYS-00-01`). Aggregation `theoKy` của `/bao-cao/hoi-dap` chưa fix (vẫn key `2026-05` cả 4 enum) — downgrade severity Medium → Minor, giữ Open cho phần aggregation.
+- **BUG-BC-DATA-SCOPE-LEAK → PARTIAL OPEN R7**: Dev wire `dataScopeMiddleware` cho 2/4 endpoint sample. 4/4 role BN/DP nay nhận đúng `tongHoiDap=0` + `tongVuViec=0` (R6 leak 26/4 full national). Còn 2/4 endpoint `chi-phi-chi-tra` + `so-luong-cg-tvv` vẫn leak `209.592.242 / 8` identical TW. Giữ Critical vì multi-tenant violation chưa hoàn toàn đóng.
+- **BUG-BC-PDF-NOT-SUPPORTED → OPEN R7**: 6/6 BC sample (gồm 2 BC analytic enum mới) đều 422 `ERR-RPT-EXPORT-01` "Không thể tạo file PDF". Dev chưa wire PDF generator. Evidence: [image/bug-bc-r7-reverify-evidence.md](image/bug-bc-r7-reverify-evidence.md).
 
 **R4 audit (2026-05-11 09:30:00 — bộ acc 08):** 4/6 đóng (BUG-BC-WORD-001, BUG-BC-HOIDAP-PL-001 đóng từ R2; BUG-BC-PDF-500-001 downgraded → BUG-BC-PDF-NOT-SUPPORTED, BUG-BC-LEGEND-002 fixed). Mới phát hiện BUG-BC-DATA-SCOPE-LEAK Critical (multi-tenant scoping fail trên endpoint `/api/v1/bao-cao/*` cho CB_NV_BN + CB_NV_DP). BUG-BC-FE-DROPDOWN-MISSING-3 đã retracted (false positive scroll virtual list).
 
@@ -37,10 +47,10 @@ Phát hiện **4** lỗi có SRS/UI reference cụ thể trong phase smoke + fun
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-BC-DATA-SCOPE-LEAK | Critical | P0 | Permission | BC-026..028, BC-030..031 | `srs-v3/srs-fr-11-bao-cao.md §FR-12.4 BR-AUTH-08 + BR-DATA-02 multi-tenant scoping` — CB cấp Bộ Ngành / Sở Địa phương chỉ được xem data đơn vị mình quản lý | Endpoint `/api/v1/bao-cao/*` không apply data scope theo `donViId` của 4 role CB_NV_BN / CB_NV_DP / CB_PD_BN / CB_PD_DP — trả full national data identical TW. Dashboard scope đúng (cùng user thấy 0 vụ việc), nhưng BC endpoint leak full. R5 mở rộng evidence: thêm cb_pd_bn_08 (BTC) + cb_pd_dp_08 (Sở BG) cùng pattern | **Open (R6 re-test FAIL — chưa fix)** |
-| BUG-BC-PDF-NOT-SUPPORTED | Major | P1 | Workflow | BC-025 | `srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md §srs-fr-11-bao-cao.md` Thay đổi 6 line 509-519 — Acceptance Criteria "Given CB nhấn 'Xuất PDF' When click Then tải file `.pdf` theo format TT17/2025" | POST `/api/v1/bao-cao/export` formatXuat=PDF trả 422 `ERR-RPT-EXPORT-01` "Không thể tạo file PDF. Vui lòng thử lại sau hoặc xuất Excel." — verify universal 4/4 BC mẫu cùng pattern (R5) | **Open (R6 re-test FAIL — chưa fix)** |
-| BUG-BC-XLSX-PARTIAL-SUPPORT | Medium | P2 | Workflow | BC-024 mở rộng | `srs-fr-11-bao-cao.md §FR-IX-01 Acceptance Criteria — Xuất Excel cho mọi BC` | POST `/api/v1/bao-cao/export` formatXuat=XLSX trả 422 `ERR-RPT-EXPORT-01` "Loại báo cáo không hỗ trợ xuất" cho 2/10 BC test: `BC_VV_THEO_LINH_VUC` + `BC_DANH_GIA_HIEU_QUA_HTPL`. 8/10 BC còn lại export OK (200 + binary xlsx 6.2-6.6KB) | **Open (R6 re-test FAIL — chưa fix)** |
-| BUG-BC-KYBAOCAO-NOT-VALIDATED | Medium | P2 | Negative validation | BC-034 | `srs-v3/srs-fr-11-bao-cao.md §Input chung Line 67 + §Validation Line 1194` — `ky_bao_cao | text | Y | TUAN/THANG/QUY/NAM/KHOANG` | 2/12 BC sub-route `/api/v1/bao-cao/hoi-dap` + `/api/v1/bao-cao/danh-gia-hieu-qua` không validate `kyBaoCao` enum — silently accept missing/empty/invalid/random + ignore aggregation. 10/12 BC khác validate đúng 422. | **Open (R6 NEW)** |
+| BUG-BC-DATA-SCOPE-LEAK | Critical | P0 | Permission | BC-026..028, BC-030..031 | `srs-v3/srs-fr-11-bao-cao.md §FR-12.4 BR-AUTH-08 + BR-DATA-02 multi-tenant scoping` — CB cấp Bộ Ngành / Sở Địa phương chỉ được xem data đơn vị mình quản lý | Endpoint `/api/v1/bao-cao/*` không apply data scope theo `donViId` của 4 role CB_NV_BN / CB_NV_DP / CB_PD_BN / CB_PD_DP — trả full national data identical TW. R7: hoi-dap + vu-viec-hoan-thanh FIXED (0/0 đúng scope); chi-phi-chi-tra + so-luong-cg-tvv vẫn leak (209M / 8 identical TW). | **Open (R7 Partial — 2/4 endpoint fixed, chi-phi + cg-tvv vẫn leak)** |
+| BUG-BC-PDF-NOT-SUPPORTED | Major | P1 | Workflow | BC-025 | `srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md §srs-fr-11-bao-cao.md` Thay đổi 6 line 509-519 — Acceptance Criteria "Given CB nhấn 'Xuất PDF' When click Then tải file `.pdf` theo format TT17/2025" | POST `/api/v1/bao-cao/export` formatXuat=PDF trả 422 `ERR-RPT-EXPORT-01` "Không thể tạo file PDF. Vui lòng thử lại sau hoặc xuất Excel." — verify universal 6/6 BC mẫu (gồm 2 BC analytic enum mới) cùng pattern (R7) | **Open (R7 re-test FAIL — 6/6 sample vẫn 422)** |
+| BUG-BC-KYBAOCAO-NOT-VALIDATED | Minor | P3 | Negative validation | BC-034 | `srs-v3/srs-fr-11-bao-cao.md §Input chung Line 67 + §Validation Line 1194` — `ky_bao_cao | text | Y | TUAN/THANG/QUY/NAM/KHOANG` | R7: Validation enum FIXED 12/12 (BC-001 + BC-010 R6 silently 200 giờ trả 422 chuẩn). Aggregation `theoKy` của `/bao-cao/hoi-dap` vẫn flat (key `2026-05` cho mọi enum) → downgrade Medium → Minor, giữ Open phần aggregation. | **Open (R7 Partial — Validation Closed, Aggregation `/hoi-dap` chưa fix)** |
+| ~~BUG-BC-XLSX-PARTIAL-SUPPORT~~ | Medium | P2 | Workflow | BC-024 mở rộng | `srs-fr-11-bao-cao.md §FR-IX-01 Acceptance Criteria — Xuất Excel cho mọi BC` | ~~POST `/api/v1/bao-cao/export` formatXuat=XLSX trả 422 `ERR-RPT-EXPORT-01` "Loại báo cáo không hỗ trợ xuất" cho 2/10 BC test~~ | **Closed (R7 — Dev rename enum BC_VV_THEO_LINH_VUC→BC_VU_VIEC_THEO_LINH_VUC + BC_DANH_GIA_HIEU_QUA_HTPL→BC_DANH_GIA_HIEU_QUA và thêm Excel template, 3/3 PASS)** |
 | ~~BUG-BC-PDF-500-001~~ | Critical | P0 | Workflow | BC-025 | (same SRS ref) | ~~POST `/api/v1/bao-cao/export` formatXuat=PDF trả 500 `ERR-SYS-00-00-01`~~ | **Closed (R4)** — không còn 500, chuyển sang 422 (xem BUG-BC-PDF-NOT-SUPPORTED) |
 | ~~BUG-BC-LEGEND-002~~ | Minor | P3 | UI/UX | BC-018 | UI display convention: báo cáo phải hiển thị nhãn nghiệp vụ cho cán bộ, không lộ key kỹ thuật/API field | ~~BC-018 chart legend leak raw camelCase field names (`chenhLech`, `mucHoTroPhanTram`, `tranChiPhi`, `tranChiPhiMoiHoSo`) thay vì label tiếng Việt~~ | **Closed (R4)** |
 | ~~BUG-BC-FE-DROPDOWN-MISSING-3~~ | Medium | P2 | UI/UX | BC-006..010 + CG/TVV + Chất lượng đào tạo | (retracted) | ~~FE dropdown Loại báo cáo chỉ hiển thị 20/23 BC~~ | **Retracted (R4)** — false positive do scroll virtual list quá nhanh, khi scroll chậm có poll thì đủ 23 BC |
@@ -51,6 +61,10 @@ Phát hiện **4** lỗi có SRS/UI reference cụ thể trong phase smoke + fun
 
 ## BUG-BC-PDF-NOT-SUPPORTED — POST `/api/v1/bao-cao/export` formatXuat=PDF trả 422 "Không thể tạo file PDF"
 
+> **R7-r2 Re-test 2026-05-12 01:58:30 — ❌ FAIL (chưa fix).** Login `cb_nv_tw_08` isolatedContext `cb_nv_tw_08-r7-r2`. POST `/api/v1/bao-cao/export` 4 BC sample + `formatXuat: "PDF"` → 4/4 trả 422 `ERR-RPT-EXPORT-01`. Pattern không đổi sau ~26 giờ kể từ R7. Dev chưa wire PDF generator. Evidence: [image/bug-bc-r7-r2-reverify-evidence.md §1](image/bug-bc-r7-r2-reverify-evidence.md).
+>
+> **R7 Re-test 2026-05-11 23:49:38 — ❌ FAIL (chưa fix).** Login `cb_nv_tw_08` isolatedContext `cb_nv_tw_08-r7-reverify`. POST `/api/v1/bao-cao/export` 6 BC sample (4 sample R6 + 2 BC analytic enum mới `BC_VU_VIEC_THEO_LINH_VUC` + `BC_DANH_GIA_HIEU_QUA`) + `formatXuat: "PDF"` → **6/6 trả 422 `ERR-RPT-EXPORT-01`** "Không thể tạo file PDF. Vui lòng thử lại sau hoặc xuất Excel." RequestIds: `8c515c72, 18755ebd, 558816d4, c1b0cd4c, 67b7f76d, 58394b45`. Pattern không đổi từ R5/R6 — PDF generator service chưa wire. Evidence: [image/bug-bc-r7-reverify-evidence.md §1](image/bug-bc-r7-reverify-evidence.md).
+>
 > **R6 Re-test 2026-05-11 16:57:22 — ❌ FAIL (chưa fix).** Login `cb_pd_dp_08` (CB_PD_DP Sở BG, isolatedContext `role-cb_pd_dp_08-r6`). POST `/api/v1/bao-cao/export` 4 BC sample `BC_HOI_DAP / BC_VU_VIEC_HOAN_THANH / BC_CHI_PHI_CHI_TRA / BC_SO_LUONG_CG_TVV` + `formatXuat: "PDF"` → **4/4 trả 422 `ERR-RPT-EXPORT-01`** "Không thể tạo file PDF. Vui lòng thử lại sau hoặc xuất Excel." (`content-length: 232`). RequestIds: `be7277fd, 49bd6633, 4a3ef807, 7eda86d7`. Pattern không đổi từ R5 — PDF universal vẫn fail toàn bộ. Dev claim fix nhưng controller PDF render chưa được merge. Evidence: [image/bug-bc-data-scope-leak-r6-evidence.md §R6 phụ — Export PDF + XLSX retest](image/bug-bc-data-scope-leak-r6-evidence.md#r6-phụ--export-pdf--xlsx-retest-cb_pd_dp_08-2026-05-11-095722).
 >
 > **R6 phát hiện contract change** — dev R6 đổi field body từ `dinhDang` → `formatXuat`. Gửi sai field → 422 `ERR-VAL-SYS-00-01` "formatXuat must be one of the following values: XLSX, PDF". Test script R5 cần adapt body schema.
@@ -328,6 +342,26 @@ Dropdown FE chỉ render 20 options theo 7 group: `Hỏi đáp pháp luật, V�
 
 ## BUG-BC-DATA-SCOPE-LEAK — Endpoint `/api/v1/bao-cao/*` trả full national data cho CB cấp BN/DP
 
+> **R7-r2 Re-verify 2026-05-12 01:59:00 — ⚠️ PARTIAL FIX (xác nhận pattern + mở rộng matrix).** Login `cb_nv_bn_08` + `cb_pd_dp_08` trong 2 isolatedContext. Mở rộng 4 endpoint chưa test R7: `/vu-viec-tiep-nhan` + `/vu-viec-dang-ho-tro` cũng đã FIXED (0 đúng scope); `/chi-phi-theo-don-vi` mở rộng cũng leak 209M identical TW.
+>
+> **Pattern BE phân nhóm:**
+> - Module **HD + VV** (hoi-dap, vu-viec-tiep-nhan, vu-viec-dang-ho-tro, vu-viec-hoan-thanh): wire scope ĐÚNG.
+> - Module **Chi phí + TVV** (chi-phi-chi-tra, chi-phi-theo-don-vi, so-luong-cg-tvv): wire MISSING — toàn bộ leak.
+>
+> Cần dev wire `dataScopeMiddleware` cho cả group Chi phí (`/chi-phi-theo-linh-vuc`, `/chi-phi-theo-loai-dn`, `/chi-phi-theo-thoi-gian` chưa test) + group CG/TVV + group CT HTPLDN. Evidence: [image/bug-bc-r7-r2-reverify-evidence.md §5-§6](image/bug-bc-r7-r2-reverify-evidence.md).
+>
+> **R7 Re-verify 2026-05-11 23:50:00 — ⚠️ PARTIAL FIX (2/4 endpoint sample fixed, 2/4 vẫn leak).** Login 4 role BN/DP trong 4 isolatedContext riêng (`cb_nv_bn_08-r7-reverify`, `cb_nv_dp_08-r7-reverify`, `cb_pd_bn_08-r7-reverify`, `cb_pd_dp_08-r7-reverify`). Baseline TW (`cb_nv_tw_08`): HD=26, VV=4, ChiPhi=209.592.242, TVV=8.
+>
+> | Role | tongHoiDap | tongVuViec | tongChiPhi | tongTvv |
+> |---|---:|---:|---:|---:|
+> | TW (baseline) | 26 | 4 | 209.592.242 | 8 |
+> | CB_NV_BN cb_nv_bn_08 | **0** ✅ | **0** ✅ | 209.592.242 ❌ | 8 ❌ |
+> | CB_NV_DP cb_nv_dp_08 | **0** ✅ | **0** ✅ | 209.592.242 ❌ | 8 ❌ |
+> | CB_PD_BN cb_pd_bn_08 | **0** ✅ | **0** ✅ | 209.592.242 ❌ | 8 ❌ |
+> | CB_PD_DP cb_pd_dp_08 | **0** ✅ | **0** ✅ | 209.592.242 ❌ | 8 ❌ |
+>
+> Dev wire `dataScopeMiddleware` cho `/bao-cao/hoi-dap` + `/bao-cao/vu-viec-hoan-thanh` (4/4 role nhận đúng 0 scope theo `donViId`). Còn `/bao-cao/chi-phi-chi-tra` + `/bao-cao/so-luong-cg-tvv` vẫn leak full national identical TW. Giữ Critical vì multi-tenant violation chưa hoàn toàn đóng — cần dev wire middleware cho toàn bộ 12+ endpoint `/bao-cao/*` còn lại. Evidence: [image/bug-bc-r7-reverify-evidence.md §4](image/bug-bc-r7-reverify-evidence.md) + [image/bug-bc-data-scope-leak-r7-cb-pd-dp-08.png](image/bug-bc-data-scope-leak-r7-cb-pd-dp-08.png).
+>
 > **R6 Re-test 2026-05-11 16:55:00 → 16:57:44 — ❌ FAIL (chưa fix).** Re-verify 4 role bằng `mcp__chrome-devtools__evaluate_script` + fetch credentials:include trong 4 isolatedContext riêng (`role-cb_nv_bn_08-r6`, `role-cb_nv_dp_08-r6`, `role-cb_pd_bn_08-r6`, `role-cb_pd_dp_08-r6`). Login UI flow đầy đủ (form `Tên đăng nhập *` + `Mật khẩu *` + OTP 666666). Cả 4 role nhận `tongHoiDap=26` (full national) trên `/api/v1/bao-cao/hoi-dap?kyBaoCao=NAM&...&donViId=<myDV>` thay vì 0 theo seed thực BTC/Sở BG. `/api/v1/bao-cao/vu-viec-hoan-thanh` cũng cùng pattern (`tongVuViec=4`). Counter-evidence dashboard scope ĐÚNG ở cả 4 role (`/api/v1/dashboard` trả `kpis=0` với `appliedFilter.donViId` đúng theo user). Pattern R4 → R5 → R6 không đổi. Dev claim fix nhưng `dataScopeMiddleware` vẫn chỉ wire `/dashboard/*`, chưa wire `/bao-cao/*`. Evidence: [image/bug-bc-data-scope-leak-r6-evidence.md](image/bug-bc-data-scope-leak-r6-evidence.md).
 >
 > **R4 NEW 2026-05-11 14:35:00 (bộ acc 08):** Phát hiện trong phase multi-role test với `cb_nv_bn_08` (BTC) + `cb_nv_dp_08` (Sở BG). Cả 2 đều thấy số liệu y hệt `cb_nv_tw_08` trên mọi BC mặc dù dashboard của họ scope đúng (= 0 vụ việc / 0 hỏi đáp). Bug Critical vì leak data cross-đơn-vị, vi phạm BR-AUTH-08 + BR-DATA-02. Evidence: [image/bug-bc-data-scope-leak-r4-evidence.md](image/bug-bc-data-scope-leak-r4-evidence.md).
@@ -411,8 +445,17 @@ GET /api/v1/dashboard/overview
 
 ---
 
-## BUG-BC-XLSX-PARTIAL-SUPPORT — Export XLSX trả 422 cho 2/10 BC mẫu test
+## ~~BUG-BC-XLSX-PARTIAL-SUPPORT~~ [CLOSED] — Export XLSX trả 422 cho 2/10 BC mẫu test
 
+> **R7-r2 Re-test 2026-05-12 01:58:30 — ✅ PASS (Closed-verified confirm).** Bonus verify 3 enum (`BC_HOI_DAP` control + `BC_VU_VIEC_THEO_LINH_VUC` + `BC_DANH_GIA_HIEU_QUA`) → 3/3 trả 200 + binary xlsx 6328-6440 bytes, không regression. Evidence: [image/bug-bc-r7-r2-reverify-evidence.md §2](image/bug-bc-r7-r2-reverify-evidence.md).
+>
+> **R7 Re-test 2026-05-11 23:49:46 — ✅ PASS (Closed-verified).** Login `cb_nv_tw_08`. Verify catalog `/api/v1/bao-cao/loai` thấy 2 enum đã rename: `BC_VV_THEO_LINH_VUC` → `BC_VU_VIEC_THEO_LINH_VUC` (UC135), `BC_DANH_GIA_HIEU_QUA_HTPL` → `BC_DANH_GIA_HIEU_QUA` (UC132). POST `/api/v1/bao-cao/export` với enum mới + `formatXuat: "XLSX"`:
+> - `BC_HOI_DAP` (control): 200 binary 6392 bytes ✅
+> - `BC_VU_VIEC_THEO_LINH_VUC`: 200 binary 6440 bytes ✅
+> - `BC_DANH_GIA_HIEU_QUA`: 200 binary 6328 bytes ✅
+>
+> Dev đã (a) rename enum chuẩn hóa, (b) implement Excel template cho 2 BC analytic. R6 fail thực ra do test method dùng enum stale từ R5. Evidence: [image/bug-bc-r7-reverify-evidence.md §2](image/bug-bc-r7-reverify-evidence.md).
+>
 > **R6 Re-test 2026-05-11 16:57:22 — ❌ FAIL (chưa fix).** Login `cb_pd_dp_08` → POST `/api/v1/bao-cao/export` 3 BC + `formatXuat: "XLSX"`. Kết quả: `BC_VV_THEO_LINH_VUC` 422 `ERR-RPT-EXPORT-01` "Loại báo cáo không hỗ trợ xuất" (reqid `72a24ddd`, content-length 198) + `BC_DANH_GIA_HIEU_QUA_HTPL` 422 cùng message (reqid `950af71b`) + control `BC_HOI_DAP` 200 (binary 6393 bytes, content-disposition OK). 2 BC analytic vẫn chưa có template generator. Pattern không đổi từ R5.
 >
 > **R5 NEW 2026-05-11 15:55:00 (bộ acc 08):** Phát hiện trong phase test mở rộng export XLSX (gap coverage ngoài plan 40 TC). 10 BC sample test với enum `loaiBaoCao` đúng + `formatXuat: "XLSX"`: 8 BC trả 200 + binary xlsx 6.2-6.6KB OK, **2 BC trả 422 `ERR-RPT-EXPORT-01` "Loại báo cáo không hỗ trợ xuất"**: `BC_VV_THEO_LINH_VUC` (BC-012) + `BC_DANH_GIA_HIEU_QUA_HTPL` (BC-010). Severity Medium vì 8/10 BC core đã support, 2 BC còn lại là analytic BC chưa cần ship gấp.
@@ -481,6 +524,14 @@ Theo `srs-fr-11-bao-cao.md §FR-IX-01 Acceptance Criteria` button "Xuất Excel"
 
 ## BUG-BC-KYBAOCAO-NOT-VALIDATED — `/bao-cao/hoi-dap` + `/bao-cao/danh-gia-hieu-qua` không validate `kyBaoCao` enum
 
+> **R7-r2 Re-test 2026-05-12 01:58:30 — ⚠️ PARTIAL (Validation confirm Closed, Aggregation `/hoi-dap` vẫn flat).** Validation 2/2 BC fail R6 (hoi-dap + danh-gia-hieu-qua) tiếp tục reject 422 `ERR-VAL-SYS-00-01`. Aggregation `theoKy` của `/bao-cao/hoi-dap` 4 enum TUAN/THANG/QUY/NAM trả response identical `[{ky:"2026-05",soLuong:20},{ky:null,soLuong:6}]` — chưa fix. Evidence: [image/bug-bc-r7-r2-reverify-evidence.md §3-§4](image/bug-bc-r7-r2-reverify-evidence.md).
+>
+> **R7 Re-verify 2026-05-11 23:50:22 — ⚠️ PARTIAL FIX (Validation Closed, Aggregation `/hoi-dap` chưa fix).** Login `cb_nv_tw_08`. Test 12 BC sub-route với `kyBaoCao=INVALID` → **12/12 trả 422** `ERR-VAL-SYS-00-01` "kyBaoCao must be one of the following values: TUAN, THANG, QUY, NAM, KHOANG" — gồm cả 2 BC R6 silently 200 (`/bao-cao/hoi-dap` BC-001 + `/bao-cao/danh-gia-hieu-qua` BC-010). Dev đã thêm `@IsEnum(KyBaoCao)` decorator cho DTO 2 BC fail. **Validation phần: FIXED.**
+>
+> **Aggregation `theoKy` chưa fix** cho `/bao-cao/hoi-dap`: 4 enum (TUAN/THANG/QUY/NAM) đều trả `theoKy[0].ky = "2026-05"` (key flat, không group theo enum). Đối chiếu BC-004 control `/bao-cao/vu-viec-hoan-thanh` group đúng: TUAN=`2026-05-04`, THANG=`2026-05-01`, QUY=`2026-04-01`, NAM=`2026-01-01`. BC-010 `/danh-gia-hieu-qua` không test được vì 0 data.
+>
+> Downgrade severity **Medium → Minor** (validation đã có gate, aggregation gap chỉ ảnh hưởng accuracy chart "Theo kỳ" cho BC-001). Giữ Open cho phần aggregation. Evidence: [image/bug-bc-r7-reverify-evidence.md §3](image/bug-bc-r7-reverify-evidence.md).
+>
 > **R6 NEW 2026-05-11 17:41:09 (cb_nv_tw_08):** Phát hiện trong phase deep review BC-034 OBS (R3-R5 mark Observation, R6 chứng minh là bug). Test 12 BC sub-route với `kyBaoCao=INVALID`: 10/12 trả 422 đúng spec, **2/12 trả 200 silently accept**: `/bao-cao/hoi-dap` (BC-001) + `/bao-cao/danh-gia-hieu-qua` (BC-010). 2 BC này silent accept cả missing + empty + random string + giá trị ngoài enum. Aggregation `theoKy` cũng identical bất kể giá trị kyBaoCao truyền vào.
 >
 > Evidence: [image/bug-bc-kybaocao-not-validated-r6-evidence.md](image/bug-bc-kybaocao-not-validated-r6-evidence.md).

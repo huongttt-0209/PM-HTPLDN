@@ -5,9 +5,9 @@
 | **Dự án** | PM-HTPLDN — Phần mềm Hỗ trợ Pháp lý Doanh nghiệp |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Chrome DevTools MCP) |
-| **Ngày** | 2026-05-07 (R8 log) · **Cập nhật 2026-05-08 (R9 sau dev seed)** · **2026-05-10 20:07:00 (R12 — 2/2 Closed)** |
+| **Ngày** | 2026-05-10 20:07:00 |
 | **Loại test** | Workflow |
-| **Round** | R8 log → R9 re-test (workflow PASS 4/5 qua dev seed) → **R12 dev fix verify (2/2 Closed)** |
+| **Round** | R12 |
 | **Tài liệu tham chiếu** | [workflow-test-report-r7-6-2-tv-nhanh.md](../../workflow/tu-van-nhanh/workflow-test-report-r7-6-2-tv-nhanh.md) (round R9) · [srs-fr-13-tv-nhanh.md](../../../../../input/srs-v3/srs-fr-13-tv-nhanh.md) · [02-thu-tu-module.md §⑫ FR-13](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) |
 
 ---

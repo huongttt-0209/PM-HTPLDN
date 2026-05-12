@@ -5,9 +5,9 @@
 | **Dự án** | PM-HTPLDN — Phần mềm Hỗ trợ Pháp lý Doanh nghiệp |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Chrome DevTools MCP) |
-| **Ngày** | 2026-05-08 (R8 log) → 2026-05-11 17:18:00 (R14b re-verify last update) |
+| **Ngày** | 2026-05-12 02:30:00 |
+| **Round** | R15-P2 |
 | **Loại test** | Functional |
-| **Round** | R8 (Kho Q&A) → R9 (+2 bug mới TVN-004/005) → R10 (2026-05-09 17:18:00 — TVN-004 Closed) → R11 (2026-05-10 19:04:57 — BUG-001 reclassify, +1 bug TVN-007) → R12 (2026-05-10 20:07:00 — verify dev fix: 3 Closed Major) → R14 (2026-05-11 14:06:00 — UI-only re-audit `_03` accounts: 5/5 PASS UI) → **R14b (2026-05-11 17:18:00 — re-verify 3 Open bug: 001 confirmed drift, 005 audit dropdown thiếu TVN module + UNKNOWN entity, 007 chỉ 1 KCH TU_DONG forward-only)** |
 | **Tài liệu tham chiếu** | [functional-test-report-r7-7-11-tvn.md](../../functional/tu-van-nhanh/functional-test-report-r7-7-11-tvn.md) · [srs-fr-13-tv-nhanh.md](../../../../../input/srs-v3/srs-fr-13-tv-nhanh.md) · [02-thu-tu-module.md §⑫ FR-13](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) |
 
 ---
@@ -26,7 +26,15 @@ Phát hiện **7** lỗi có SRS reference cụ thể trong quá trình test R7.
 | R11 (cumulative) | 7 | 0 | 3 | 0 | 3 | 0 | 1 (TVN-004) |
 | R12 (cumulative) | 7 | 0 | 2 | 0 | 2 | 0 | 4 (TVN-002/003/004/006) |
 | R14 (cumulative) | 7 | 0 | 2 | 0 | 2 | 0 | 4 (TVN-002/003/004/006) — 3 Open giữ status sau re-verify |
-| **R14b (cumulative)** | **7** | **0** | **2** | **0** | **2** | **0** | **4 (TVN-002/003/004/006)** — 3 Open re-verified: 001 drift confirmed · 005 dropdown TVN missing · 007 forward-only |
+| R14b (cumulative) | 7 | 0 | 2 | 0 | 2 | 0 | 4 (TVN-002/003/004/006) — 3 Open re-verified: 001 drift confirmed · 005 dropdown TVN missing · 007 forward-only |
+| R15 (cumulative) | 7 | 0 | 0 | 0 | 1 | 0 | 6 (TVN-001/002/003/004/006/007) — TVN-001 Closed (cb_nv_tw_01 single role + 3 endpoint 403) · TVN-007 Closed (HD-20260509-010 back-filled QA-20260510-0011 TU_DONG) · TVN-005 vẫn Open Minor PARTIAL |
+| **R15-P2 (cumulative)** | **8** | **0** | **0** | **0** | **2** | **0** | **6 (TVN-001/002/003/004/006/007)** — **+ BUG-008 mới Minor: WARNING ERR-TVN-01 không surface trong response `/cms-create` khi Kho QA rỗng (TVN-020 ⚠️ PARTIAL)** |
+
+### R15 changes (2026-05-12 01:00:00 — re-verify 3 Open bug, 2 Closed-verified)
+
+- ✅ **BUG-FUNC-TVN-001 Closed-verified** — Re-login `cb_nv_tw_01` (isolatedContext fresh): `/api/v1/auth/me` trả `vaiTro:["CB_NV_TW"]` (1 role only, KHÁC R14b 3 roles). Dashboard header chỉ hiển thị `CB_NV_TW`. Test 3 endpoint approve/reject/approve-bulk trên QA-20260512-0001 CHO_DUYET (id=8adfc6ae) → **đều 403 ERR-PERM-SYS-00-01** ✅ đúng spec BR-AUTH-05. Data drift trên `user_roles` đã fix giữa R14b 17:18:00 → R15 01:00:00. Evidence: `image/r15-bug-001-nv01-single-role-dashboard.png`.
+- ⚠️ **BUG-FUNC-TVN-005 Open PARTIAL** — UI verify `/quan-tri/audit-log` (`qtht_01`): (a) Entry mới `12/05/2026 00:59:37 · KHO_CAU_HOI · CREATE_KHOCAUHOI` của QA-20260512-0001 hiển thị **Module = "Tư vấn"** ✅ + **Entity = "KHO_CAU_HOI"** ✅ (KHÔNG còn UNKNOWN như R14b note). (b) API `?entityType=KHO_CAU_HOI` trả 6 action chuẩn: `APPROVE_KHOCAUHOI/REJECT_KHOCAUHOI/CREATE_KHOCAUHOI/UPDATE_KHOCAUHOI/DELETE_KHOCAUHOI/CONG_KHAI/HUY_CONG_KHAI` ✅. (c) API `?entityType=TU_VAN_NHANH` còn 3 action legacy: `TRA_LOI` (chưa rename GUI_TRA_LOI_TVNHANH cho old data), `UPDATE` (chuyen-kenh chưa rename CHUYEN_KENH), `CREATE` (cms-create chưa rename CREATE_TVNHANH_DN); `GUI_TRA_LOI_TVNHANH` + `DANH_GIA_TVNHANH` đã có ✅. (d) **Dropdown filter Module THIẾU "Tư vấn"** — chỉ 10 option: Hỏi đáp/Đào tạo/CG-TVV/Vụ việc/Chi trả/Doanh nghiệp/Đánh giá/Biểu mẫu/Quản trị/Báo cáo. BE module = `TU_VAN` cho cả KHO_CAU_HOI + TU_VAN_NHANH → user không filter được TVN/KHO_CAU_HOI entries trên UI. Bug giữ Minor Open. Evidence: `image/r15-bug-005-module-dropdown-missing-tuvan.png`.
+- ✅ **BUG-FUNC-TVN-007 Closed-verified** — Re-query KHO_CAU_HOI `nguon=TU_DONG`: **2 record** (R14b chỉ 1). QA-20260510-0011 ngày 11/05 16:18:37 → `hoiDapGocId=3577bfb6-ec53-4a0c-8858-b0507afb3472` = **HD-20260509-010** (đúng case R14b unmatched). HD-20260509-010 đã được back-fill giữa R14b 17:18 → R15. 2/3 HOI_DAP DA_DUYET có matching KCH TU_DONG; HD-QA-R7-064 unlinked nhưng `cauHoi/cauTraLoi` empty (seed-direct artifact, không thuộc workflow BR-FLOW-10). Evidence: `image/r15-bug-007-tudong-2-linked.png`.
 
 ### R14b changes (2026-05-11 17:18:00 — re-verify 3 Open bug dev claim fix)
 
@@ -60,9 +68,10 @@ Phát hiện **7** lỗi có SRS reference cụ thể trong quá trình test R7.
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-FUNC-TVN-001 | **Major** (R11 reclassify) | **P1** | **Data setup** | TVN-010, 011, 012 | `input/users.csv` schema vai trò + `02-thu-tu-module.md §⑫ FR-13 line 784-786` | Account `cb_nv_tw_01` DB gán 3 vai trò `[CB_PD_TW, CB_NV_TW, QA_VT_DEL_TEST_R7]` thay vì single CB_NV_TW per users.csv → bypass guard. BE permission system OK với account pure. | Open (R14b confirm drift còn) |
-| **BUG-FUNC-TVN-005 (R9)** | Minor | P2 | Data | TVN-039 | `srs-fr-13 FR-X.2-01 §Postconditions` + `BR-DATA-05` | Audit log action naming inconsistent — TVN module còn `TRA_LOI` (vs GUI_TRA_LOI_TVNHANH) + `CREATE` generic trên /cms-create + dropdown Module filter thiếu "Tư vấn nhanh" + Entity = `UNKNOWN` | Open (R14b dropdown TVN missing + UNKNOWN entity) |
-| **BUG-FUNC-TVN-007 (R11)** | **Major** | **P1** | **Cross-module** | **TVN-014, 037** | `srs-fr-13 BR-FLOW-10` + `7.13-tu-van-nhanh.md line 105+128+151` | **Auto-import HOI_DAP DA_DUYET → KHO_CAU_HOI nguồn TU_DONG không trigger. HD-20260509-010 DA_DUYET → 0 record TU_DONG.** | Open (R14b filter Tự động chỉ 1 record forward-only) |
+| **BUG-FUNC-TVN-008 (R15 mới)** | Minor | P2 | BE | TVN-020 | `srs-fr-13 §Errors line 215 (E1 ERR-TVN-01 Kho Q&A rỗng WARNING)` + `7.13-tu-van-nhanh.md line 134` | WARNING `ERR-TVN-01` không surface — Kho QA rỗng + DN gửi câu hỏi qua `/cms-create` → 201 success, phiên TVN-20260512-0001 tạo OK + state CB_TRA_LOI + goiYTraLoi=[]; nhưng response KHÔNG có `warningCode`/`warningMessage`. CB NV không nhận được signal "Kho câu hỏi rỗng" → khó hiểu vì sao Top 5 gợi ý empty | Open (Minor — non-blocking, chỉ thiếu signal) |
+| **BUG-FUNC-TVN-005 (R9)** | Minor | P2 | Data | TVN-039 | `srs-fr-13 FR-X.2-01 §Postconditions` + `BR-DATA-05` | Audit log action naming inconsistent — TU_VAN_NHANH module còn 3 legacy action (TRA_LOI/UPDATE/CREATE) + dropdown filter Module thiếu "Tư vấn" → user không filter được TVN/KHO_CAU_HOI entries | Open PARTIAL (R15 KHO_CAU_HOI 6 action chuẩn ✅, Entity KHO_CAU_HOI ✅; TU_VAN_NHANH 3 legacy ⚠️; dropdown thiếu Tư vấn ❌) |
+| ~~BUG-FUNC-TVN-001~~ | **Major** (R11 reclassify) | **P1** | **Data setup** | TVN-010, 011, 012 | `input/users.csv` schema vai trò + `02-thu-tu-module.md §⑫ FR-13 line 784-786` | ~~Account `cb_nv_tw_01` DB gán 3 vai trò → bypass guard~~ | **Closed** (R15 verify cb_nv_tw_01 single role + approve/reject/bulk 403) |
+| ~~BUG-FUNC-TVN-007~~ (R11) | **Major** | **P1** | **Cross-module** | **TVN-014, 037** | `srs-fr-13 BR-FLOW-10` + `7.13-tu-van-nhanh.md line 105+128+151` | ~~Auto-import HOI_DAP DA_DUYET → KHO_CAU_HOI nguồn TU_DONG không trigger. HD-20260509-010 DA_DUYET → 0 record TU_DONG~~ | **Closed** (R15 HD-20260509-010 back-filled QA-20260510-0011) |
 | ~~BUG-FUNC-TVN-002~~ | Major | P1 | Workflow | TVN-040, 041, 042, 043, 044 | `srs-fr-13 v3.5 FR-X.2-06 §Inputs/Processing line 411-457` + `BR-PUBLIC-01/02/03` + `BR-FLOW-05` | ~~FR-X.2-06 (Công khai/Hủy công khai) chưa deploy — schema thiếu 4 field, endpoint 404~~ | **Closed** (R12) |
 | ~~BUG-FUNC-TVN-003~~ | Minor | P2 | UI/UX | TVN-001 | `02-thu-tu-module.md §⑫ FR-13 line 766` + `srs-fr-13 SCR-X2-01 row 4` | ~~Filter trạng thái dropdown thiếu trên UI list — chỉ có Lĩnh vực + Nguồn + dates~~ | **Closed** (R12) |
 | ~~BUG-FUNC-TVN-004~~ (R9) | Major | P1 | UI/UX | TVN-017, 018 | `srs-fr-13 FR-X.2-02 §Processing 3` + `SCR-X2-03 row 7-8` | ~~Top 5 gợi ý không render trên detail phiên DA_GOI_Y~~ | **Closed** (R10 verify) |
@@ -70,7 +79,71 @@ Phát hiện **7** lỗi có SRS reference cụ thể trong quá trình test R7.
 
 ---
 
-## BUG-FUNC-TVN-001 — Account `cb_nv_tw_01` DB role data drift (R11 reclassified Critical → Major)
+## BUG-FUNC-TVN-008 — WARNING `ERR-TVN-01` (Kho QA rỗng) không surface trong response `/cms-create` (R15 mới)
+
+> **Phát hiện:** 2026-05-12 02:10:00 R15 — Open Minor. Test TVN-020 (Negative P1) — Kho QA rỗng khi DN gửi câu hỏi qua Cổng PLQG → expect ERR-TVN-01 WARNING.
+
+**1. Mô tả**
+
+Setup Kho QA rỗng (PATCH 21 KCH `/het-hieu-luc` → state HET_HIEU_LUC, hieuLuc=false, verify `?trangThai=DA_DUYET&hieuLuc=true` count=0). DN gửi câu hỏi qua CMS proxy `POST /api/v1/tu-van-nhanhs/cms-create`. BE chấp nhận tạo phiên `TVN-20260512-0001` (status 201) — non-blocking đúng spec. NHƯNG response KHÔNG có `warningCode='ERR-TVN-01'` hoặc `warningMessage='Chưa có dữ liệu trong kho câu hỏi'`. CB NV không nhận được signal "Kho câu hỏi rỗng" qua API → khó hiểu vì sao Top 5 gợi ý empty trên detail.
+
+**2. Các bước tái hiện**
+
+1. Login `cb_nv_tw_01` → check Kho QA hiện 21 record `DA_DUYET hieuLuc=true`.
+2. PATCH 21 KCH `/het-hieu-luc` `{version}` → tất cả thành `HET_HIEU_LUC hieuLuc=false`.
+3. Verify `GET /api/v1/kho-cau-hois?trangThai=DA_DUYET&hieuLuc=true&pageSize=100` → `items=[]`, total=0 (Kho rỗng).
+4. POST `/api/v1/tu-van-nhanhs/cms-create` body `{cauHoiDn, linhVucPL, kenh:'NHANH', hoTenNguoiGui, emailNguoiGui, sdtNguoiGui}`.
+5. Inspect response.
+
+**3. Kết quả mong đợi (SRS line 215 + 7.13 line 134)**
+
+- `success=true` ✅ (non-blocking đúng spec)
+- Phiên TVN tạo, state phù hợp (MOI hoặc DA_GOI_Y với empty gợi ý).
+- Response chứa `warning.code='ERR-TVN-01'` + `warning.message='Chưa có dữ liệu trong kho câu hỏi'` HOẶC field `warningCode/warningMessage` ở root level.
+
+**4. Kết quả thực tế**
+
+- `status: 201, success: true` ✅
+- `data.maPhien='TVN-20260512-0001'`, `data.trangThai='CB_TRA_LOI'`, `data.goiYTraLoi=null` (sau detail GET là `[]`)
+- **KHÔNG có** `warningCode/warningMessage/warning.code/warning.message` ở root hoặc trong `data`. Toàn bộ keys: `id, nguoiTaoId, nguoiCapNhatId, ngayTao, ngayCapNhat, donViId, version, maPhien, doanhNghiepId, cauHoiDn, kenhTuVan, goiYTraLoi, noiDungTraLoi, nguoiTraLoiId, trangThai, ngayGui, khoCauHoiDaChonId, hoiDapId, ngayTraLoi`.
+- `GET /goi-y` trả `{success:true, data:[]}` — không có error/warning embedded.
+- State machine deviation: phiên skip thẳng `MOI → CB_TRA_LOI`, không qua `DANG_TIM_KIEM → DA_GOI_Y`. Spec SM-TVNHANH không cấm explicitly nhưng standard flow MOI → DANG_TIM_KIEM (matching) → DA_GOI_Y (có/không gợi ý) → CB_TRA_LOI.
+
+**5. Bằng chứng**
+
+```http
+POST /api/v1/tu-van-nhanhs/cms-create
+→ 201 Created
+{
+  "success": true,
+  "data": {
+    "id": "4ecd3935-fbfe-4abb-a755-7c1a282fadf4",
+    "maPhien": "TVN-20260512-0001",
+    "cauHoiDn": "[TVN-020 QA] Thủ tục đăng ký kinh doanh hộ cá thể tại Hà Nội cần giấy tờ gì? Test Kho rỗng → expect ERR-TVN-01 WARNING.",
+    "trangThai": "CB_TRA_LOI",
+    "goiYTraLoi": null,
+    "ngayGui": "2026-05-11T19:09:52.345Z",
+    ...
+  },
+  "meta": null
+  // ❌ KHÔNG có warning / warningCode / warningMessage
+}
+
+GET /api/v1/tu-van-nhanhs/4ecd3935.../goi-y
+→ 200 OK
+{ "success": true, "data": [], "meta": null }
+// ❌ Cũng không có warning embedded
+```
+
+Screenshot: `image/r15-tc-tvn-020-phien-cb-tra-loi-empty-goi-y.png` (UI detail phiên CB_TRA_LOI, Top 5 gợi ý empty, không hiển thị banner "Kho câu hỏi rỗng").
+
+**Khôi phục Kho QA:** PATCH 21 KCH `/kich-hoat` `{version}` ×20 với `cb_nv_tw_01` + ×1 (KCH `aa222034` BN BKH) với `cb_nv_bn_01`. Final count = 21 DA_DUYET hieuLuc=true (delta 0 vs baseline).
+
+---
+
+## ~~BUG-FUNC-TVN-001~~ — Account `cb_nv_tw_01` DB role data drift [CLOSED]
+
+> **Re-test:** 2026-05-12 01:00:00 R15 — ✅ PASS (Closed-verified). Re-login `cb_nv_tw_01` isolatedContext fresh: `/api/v1/auth/me` → `vaiTro:["CB_NV_TW"]` (single role) ✅. Dashboard header chỉ `CB_NV_TW`. Test 3 endpoint mutation trên QA-20260512-0001 CHO_DUYET (id=8adfc6ae): POST `/approve` → **403 ERR-PERM-SYS-00-01**, POST `/reject` → **403 ERR-PERM-SYS-00-01**, POST `/approve-bulk` → **403 ERR-PERM-SYS-00-01**. DB `user_roles` đã fix giữa R14b 17:18:00 → R15 01:00:00. BR-AUTH-05 enforced. Evidence: `image/r15-bug-001-nv01-single-role-dashboard.png`.
 
 > **Re-test:** 2026-05-11 17:18:00 R14b — 🚫 Open. Re-login `cb_nv_tw_01` → dashboard header hiển thị `CB_PD_TW · CB_NV_TW` (2 vai trò). DB `user_roles` table chưa fix. Cần dev DBA xóa `CB_PD_TW` + `QA_VT_DEL_TEST_R7` khỏi user_roles cho user `cb_nv_tw_01`. Evidence: `image/r14b-bug-001-nv01-still-2-roles.png`.
 
@@ -369,6 +442,8 @@ DA_GOI_Y phiên có goiYTraLoi=[]: 1/10 (TVN-QA-20260427-0017 — đúng hiển 
 
 ## BUG-FUNC-TVN-005 (R9) — Audit log action naming inconsistent
 
+> **Re-test:** 2026-05-12 01:00:00 R15 — ⚠️ Open PARTIAL. UI verify `/quan-tri/audit-log` (`qtht_01`): (a) Entry mới `12/05/2026 00:59:37 · KHO_CAU_HOI · CREATE_KHOCAUHOI` cho QA-20260512-0001 hiển thị **Module = "Tư vấn"** ✅ + **Entity = "KHO_CAU_HOI"** ✅ (KHÔNG còn UNKNOWN). (b) API `?entityType=KHO_CAU_HOI` trả 6 hanhDong chuẩn (`APPROVE_KHOCAUHOI/REJECT_KHOCAUHOI/CREATE_KHOCAUHOI/UPDATE_KHOCAUHOI/DELETE_KHOCAUHOI/CONG_KHAI/HUY_CONG_KHAI`) ✅. (c) API `?entityType=TU_VAN_NHANH` còn 3 hanhDong legacy: `TRA_LOI` (chưa rename GUI_TRA_LOI_TVNHANH cho old data trước fix), `UPDATE` (endpoint `/chuyen-kenh` chưa rename CHUYEN_KENH), `CREATE` (endpoint `/cms-create` chưa rename CREATE_TVNHANH_DN); `GUI_TRA_LOI_TVNHANH` + `DANH_GIA_TVNHANH` đã có ✅. (d) **Dropdown filter Module THIẾU "Tư vấn"** — chỉ 10 option (Hỏi đáp/Đào tạo/CG-TVV/Vụ việc/Chi trả/Doanh nghiệp/Đánh giá/Biểu mẫu/Quản trị/Báo cáo). BE module = `TU_VAN` cho cả KHO_CAU_HOI + TU_VAN_NHANH → user không filter trên UI. Bug giữ Minor Open PARTIAL. Evidence: `image/r15-bug-005-module-dropdown-missing-tuvan.png`.
+
 > **Re-test:** 2026-05-11 17:18:00 R14b — 🚫 Open. UI verify `/quan-tri/audit-log` (`qtht_01`): (a) **Dropdown filter "Module" THIẾU "Tư vấn nhanh"** (chỉ 10 option: Hỏi đáp/Đào tạo/CG-TVV/Vụ việc/Chi trả/Doanh nghiệp/Đánh giá/Biểu mẫu/Quản trị/Báo cáo) → user không filter được nhật ký TVN. (b) **4 entry hôm nay (11/05 17:04-17:17) hiển thị Entity = `UNKNOWN` + Loại thao tác = "Tạo mới"** generic, không phải `CREATE_TVNHANH_DN`/`CREATE_KHOCAUHOI` chuẩn. Bug giữ Minor Open. Evidence: `image/r14b-bug-005-module-dropdown-missing-tvn.png`.
 
 > **Re-test:** 2026-05-11 14:06:00 R14 — ⚠️ PARTIAL improved 9/10 actions chuẩn. Sau R14 action chain (Test 2 approve + Test 3 gửi trả lời + Test 5 công khai), audit log entries verify qua UI Quản trị → audit log view: `APPROVE_KHOCAUHOI` (Test 2) + `CONG_KHAI_KHOCAUHOI` (Test 5) + `UPDATE_KHOCAUHOI` chuẩn ✅. TU_VAN_NHANH `GUI_TRA_LOI_TVNHANH` chuẩn ✅ (Test 3 — dev đã rename từ TRA_LOI). **Vẫn còn open:** `CREATE` generic action trên `/cms-create` endpoint chưa rename thành `CREATE_TVNHANH_DN`. Bug giữ Minor Open cho 1/10 action còn lại.
@@ -484,7 +559,9 @@ UI list cell "Số gợi ý" cho row TVN-QA-20260424-0022 = "0" ❌
 
 ---
 
-## BUG-FUNC-TVN-007 — Auto-import HOI_DAP DA_DUYET → KHO_CAU_HOI TU_DONG không trigger (R11)
+## ~~BUG-FUNC-TVN-007~~ — Auto-import HOI_DAP DA_DUYET → KHO_CAU_HOI TU_DONG (R11) [CLOSED]
+
+> **Re-test:** 2026-05-12 01:00:00 R15 — ✅ PASS (Closed-verified). Re-query API `/api/v1/kho-cau-hois?nguon=TU_DONG`: **2 record** (R14b chỉ 1). `QA-20260510-0011` (ngày 11/05 16:18:37) có `hoiDapGocId=3577bfb6-ec53-4a0c-8858-b0507afb3472` = **HD-20260509-010** (đúng case R14b unmatched). Back-fill batch đã chạy giữa R14b 17:18 → R15 01:00 — HD-20260509-010 giờ có KCH TU_DONG DA_DUYET tương ứng. Tổng HOI_DAP DA_DUYET = 3: 2/3 matched (HD-20260509-010 + HD-20260510-006); HD-QA-R7-064 unlinked nhưng `cauHoi`/`cauTraLoi` empty (seed-direct artifact, không qua workflow → BR-FLOW-10 không trigger là expected). Evidence: `image/r15-bug-007-tudong-2-linked.png`.
 
 > **Re-test:** 2026-05-11 17:18:00 R14b — 🚫 Open (PARTIAL forward-only confirmed). UI verify `/tv-nhanh/kho-cau-hoi?nguon=TU_DONG` (`qtht_01`): **chỉ 1/25 record nguồn Tự động** — `QA-20260510-0005` ngày 10/05/2026 20:38 (R7.4.D3.AUTO R10d sau dev fix lần 2 BR-FLOW-10). Filter Đã duyệt = 1, Chờ duyệt = 0. HOI_DAP `HD-20260509-010` DA_DUYET trước fix vẫn KHÔNG có KCH TU_DONG tương ứng → cần BE chạy back-fill batch retro-trigger cho HOI_DAP cũ. Bug giữ Major Open. Evidence: `image/r14b-bug-007-kho-tudong-only-1.png`.
 

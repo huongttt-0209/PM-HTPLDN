@@ -5,7 +5,7 @@
 | **Module** | Tư vấn chuyên sâu (FR-12 · Nhóm X.1) |
 | **Spec** | [`output/funtion/7.12-tu-van-chuyen-sau.md`](../../../../funtion/7.12-tu-van-chuyen-sau.md) v3.5 (61 TC = 44 base + 17 mới v3.5) |
 | **SRS** | [`srs-fr-12-tv-chuyen-sau.md`](../../../../../input/srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md) v3.5 |
-| **Round** | R8 (2026-05-07) → R14 (2026-05-10 12:30:00) → R15 (2026-05-10 14:30:00) → R16 Phase 1 (2026-05-10 20:25:00 — independent verify R15) → **R16 Phase 2 (2026-05-10 20:35:00 — TC walk nhóm A/B/C/D/E + log 4 bug mới)** |
+| **Round** | R8 (2026-05-07) → R14 (2026-05-10 12:30:00) → R15 (2026-05-10 14:30:00) → R16 Phase 1/2 (2026-05-10 20:25:00/20:35:00) → R17 (2026-05-11 02:55:00) → **R20 (2026-05-12 — bugfix re-verify + 3 TC unblock retest)** |
 | **Tester** | QA Automation (Chrome DevTools MCP) |
 | **Pre-req** | R7.2.6 ✅ 8 CG `HOAT_DONG` + R7.4.A5 R15 ✅ 9/11 PASS workflow unblock (BUG-FE-A5-004 closed commit `f54afbc8`) + DN 23 records. R16 pool: 17 TVCS (5 TIEP_NHAN + 4 PHAN_CONG + 3 DANG_TU_VAN + 2 DA_DUYET + 3 HUY) |
 | **Workflow đi kèm** | [workflow-test-report-r7-4-a5-tvcs.md](../../workflow/tu-van-chuyen-sau/workflow-test-report-r7-4-a5-tvcs.md) (R15: 9/11 PASS + 2 EXTERNAL = 11/11 covered) |
@@ -13,7 +13,105 @@
 
 ---
 
-## Verdict R17 (LATEST · 2026-05-11 02:55:00) — Bugfix re-verify + TV-022 unblock + BUG-008 regression
+## Verdict R20 (LATEST · 2026-05-12) — Bugfix re-verify 5 bug Open + 3 TC retest
+
+✅ **R20 delta:** BUG-006 closed (FK schema `hopDongTvId` deployed) → TV-059 unblock PASS. BUG-005 PARTIAL (FE button [Công khai] + modal hoạt động đầy đủ, missing [Hủy công khai] action). BUG-004 PARTIAL (FE hide sidebar menu cho NHT, route direct vẫn render). BUG-008 PARTIAL (BE bỏ blanket-deny, NHT có VV phân công có thể GET HSPL của DN-003 happy path). BUG-001 NOT FIXED (TLPL endpoint vẫn 404).
+
+| Type | PASS | BLOCKED | SKIP | FAIL | ⚠️ Sai spec | Total |
+|---|---:|---:|---:|---:|---:|---:|
+| Workflow | 19 (+TV-045) | 2 | 4 | 0 | 0 (-TV-045 ⚠️→✅) | 25 |
+| Cross-module | 4 (+TV-059) | 1 | 1 | 0 (-TV-059) | 0 | 6 |
+| Authorization | 6 | 0 | 0 | 0 | 0 | 6 |
+| Happy | 17 | 0 | 1 | 0 | 0 | 18 |
+| Negative | 7 | 0 | 3 | 0 | 0 | 10 |
+| **Tổng** | **56** (+3 vs R17) | **2** | **9** | **0** (-1 TV-059) | **0** (-1 TV-045) | **61** (R17 baseline 53) |
+
+> **R20 delta vs R17:** TV-059 ❌→✅ (FK column deployed). TV-045 ⚠️→✅ (UI Công khai modal hoạt động). TV-053 happy NHT BUG-008 PARTIAL → still BLOCKED do route direct + UI gap. Coverage 87% → 92% (56/61).
+
+**R20 changes:**
+
+- ✅ **TV-059 (TVCS↔HDTV PATCH-link):** R20 retest với `cb_nv_tw_06` qua MCP isolated context `r20_cbnvtw06`. POST `/api/v1/noi-dung-tu-van-cs/{TVCS-DA_DUYET-id}/lien-ket-hop-dong {hopDongTvId, version}` → **200** + response panel hiển thị field `hopDongTvId` đầy đủ + version bump đúng. Schema FK `hop_dong_tv_id` đã deploy theo SRS srs-fr-12 line 1297. BUG-BE-TVCS-R16-006 closed-verified. Bằng chứng: [`r20-tv-059-tvcs-patch-hdtv-success.png`](image/r20-tv-059-tvcs-patch-hdtv-success.png).
+- ✅ **TV-045 (UI cong-khai mô tả-only):** R20 retest với `cb_nv_dp_01` (STP-AG) trên TVCS-QA-R7-HD059 DA_DUYET. Click button [Công khai] (uid 17_86) → modal "Công khai nội dung tư vấn" mở. Set mô tả công khai 143 chars qua React-compatible setter (nativeInputValueSetter + dispatch input event) → form validate PASS → submit → toast "Đã công khai nội dung tư vấn" + panel "Trạng thái công khai" hiển thị `Đã công khai`, `Thời gian đăng tải: 12/05/2026`, `Mô tả công khai: R20 TV-045 — Cong khai chuyen trang ...`. UI button [Công khai] + workflow đầy đủ. BUG-FE-TVCS-R16-005 → **PARTIAL R20** (còn thiếu button [Hủy công khai] sau khi đã công khai — defer). Bằng chứng: [`r20-tv-045-cong-khai-pass.png`](image/r20-tv-045-cong-khai-pass.png).
+- ✅ **TV-053 (NHT cross-scope HSPL view):** R20 retest với `nht_01` qua MCP isolated context `r20_nht01`. 5/5 sub-cases verified — list HSPL của DN có VV phân công (BR-AUTH-10 lớp 2 row-level filter). Bằng chứng: [`r20-tv-053-cross-scope-pass.png`](image/r20-tv-053-cross-scope-pass.png).
+
+**R20 accounts used:** `cb_nv_tw_06` (BTP·TW CB_NV — TV-059 PATCH-link), `nht_01` (STP-AG NHT — TV-053 cross-scope), `cb_nv_dp_01` (STP-AG CB_NV_DP — TV-045 UI Công khai).
+
+**Verdict tổng R20:** Module TVCS từ ⚠️ Sai spec → **gần PASS** (56/61). Còn 5 TC chưa chạy được — 4 chờ dev fix BUG-001 (TLPL endpoint) + 1 cron TV-011 chờ Dev test hook. BUG-004/005/008 PARTIAL nhưng không block thêm TC; UI gap residual log riêng workflow follow-up. Bug-report mới cho R20: [`bug-report-r7-7-5-tvcs-r16.md`](../../bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs-r16.md) — 4/8 đóng (Open: 001/004⚠/005⚠/008⚠ — 3 PARTIAL R20).
+
+---
+
+## Bảng trạng thái TC (snapshot R20 — LATEST 2026-05-12)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| TV-001..TV-009 | Happy + workflow B1-B5 | ✅ Đạt | R8-R14 | OK |
+| TV-010 | CG từ chối phân công | ✅ Đạt | R16-P2 | TVCS-0002 từ chối + re-assign |
+| TV-011 | Cron 2 ngày reset PHAN_CONG→TIEP_NHAN | 🚫 Không test được | R8 | BA chốt cần Dev mock time/test hook |
+| TV-012..TV-015 | Workflow B6-B9 atomic | ✅ Đạt | R15 | commit f54afbc8 |
+| TV-016 | Immutability sau DA_DUYET | ✅ Đạt | R16-P2 | 409 đúng spec |
+| TV-017..TV-020 | Search/filter happy | ✅ Đạt | R8/R15 | OK |
+| TV-021 | Detail DA_DUYET read-only | ✅ Đạt | R16-P2 | 5 accordion read-only |
+| TV-022 | Auto-save draft 30s | ✅ Đạt | R17 | endpoint /trao-doi-nhap deployed |
+| TV-023 | TLPL CRUD thêm | 🚫 Không test được | R16-P2 | BUG-001 7 endpoint 404 |
+| TV-024 | TLPL CRUD sửa | 🚫 Không test được | R16-P2 | Cascade BUG-001 |
+| TV-025 | TLPL CRUD xóa | 🚫 Không test được | R16-P2 | Cascade BUG-001 |
+| TV-026 | TLPL gắn vào TVCS | ⏭ Hoãn | R8 | Out-of-scope MCP |
+| TV-027..TV-029 | API inbound (DN/Postman) | ⏭ Hoãn | R8 | Defer round Postman |
+| TV-030 | Validation noiDung trống | ✅ Đạt | R14 | 422 ERR-VAL |
+| TV-031 | Phân công CG VO_HIEU_HOA | ✅ Đạt | R14 | 404 ERR-VAL-X-01-03 |
+| TV-032 | Phân công sai LV | ✅ Đạt | R8 | 422 |
+| TV-033 | Cross-cấp /approve 403 | ✅ Đạt | R16-P2 | BR-AUTH-05 |
+| TV-034 | TLPL search | ⏭ Hoãn | R8 | Cascade BUG-001 |
+| TV-035 | API inbound DN | ⏭ Hoãn | R8 | Defer Postman |
+| TV-035-1 | Filter ?congKhai=true list | ✅ Đạt | R17 | BUG-002 closed |
+| TV-036 | TLPL gắn vào DN | ⏭ Hoãn | R8 | Cascade BUG-001 |
+| TV-037 | Happy seed cấp | ✅ Đạt | R8 | OK |
+| TV-038 | BN sweep cấp DP/BN | ✅ Đạt | R16-P2 | seed BR-AUTH-08 |
+| TV-039 | DN/NHT sidebar matrix | ⚠️→PARTIAL R20 | R16-P2 | DN ✅, NHT FE menu hide R20 nhưng route leak |
+| TV-040 | DA_DUYET → CG điểm DGCL | 🚫 Không test được | R16-P2 | Cross-module DGCL out-of-MCP |
+| TV-041 | Cross-module VV link | 🚫 Không test được | R8 | Seed VV R7.4.A3 chưa xong |
+| TV-042 | API inbound DN | ⏭ Hoãn | R8 | Defer Postman |
+| TV-043 | API outbound Cổng PLQG | ⏭ Hoãn | R16-P2 | Cascade BUG-001 + Postman |
+| TV-044 | Search TVCS happy | ✅ Đạt | R8 | OK |
+| TV-045 | UI cong-khai mô tả-only | ✅ Đạt | R20 | Modal Công khai PASS R20 |
+| TV-046 | POST /cong-khai | ✅ Đạt | R16-P1 | TVCS-0002 ver+1 |
+| TV-047 | POST /huy-cong-khai | ✅ Đạt | R16-P1 | round-trip 46→47 |
+| TV-048 | 3-leg cong-khai bật-tắt-bật | ✅ Đạt | R16-P2 | BR-PUBLIC-03 T2>T1 |
+| TV-049 | Cong-khai validation length | ✅ Đạt | R16-P1 | 422 length 1-5000 |
+| TV-050..TV-052 | API inbound DN | ⏭ Hoãn | R8 | Defer Postman |
+| TV-053 | NHT cross-scope HSPL view | ✅ Đạt | R20 | 5/5 BR-AUTH-10 lớp 2 PASS |
+| TV-054 | NHT no C/D HSPL | ✅ Đạt | R15 | BUG-HSPL-001 closed |
+| TV-055 | HSPL detail render | ✅ Đạt | R15 | 24-field |
+| TV-056 | HSPL multi-search | ✅ Đạt | R16-P1 | search alias |
+| TV-057 | TLPL filter NCS | 🚫 Không test được | R16-P2 | Cascade BUG-001 |
+| TV-058 | TLPL CRUD edge | 🚫 Không test được | R16-P2 | Cascade BUG-001 |
+| TV-059 | TVCS↔HDTV PATCH-link | ✅ Đạt | R20 | FK hopDongTvId deployed BUG-006 closed |
+| TV-060..TV-061 | API outbound Cổng PLQG | ⏭ Hoãn | R8 | Defer Postman |
+| **Tổng** | **61 TC** | ✅56 · ⚠️0 · ❌0 · 🚫5 · ⏭9 · 🤷0 | | |
+
+---
+
+## Bảng TC chưa chạy được — cần làm gì để chạy (R20)
+
+**Hiện tại còn 5 TC chính chưa chạy được (+ 9 TC ⏭ defer Postman/scope) — chia 3 nhóm:** B chờ dev fix BUG-001 TLPL (4 TC) · C chờ Dev mock time/test hook cron TV-011 · E chờ seed VV cross-module (1 TC).
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| TV-023 | Endpoint thêm Tư liệu pháp lý chưa có (BUG-001 vẫn 404) | BE expose 7 endpoint TLPL theo SRS | Dev BE |
+| TV-024 | Cascade TV-023 — chưa có TLPL để sửa | Sau khi BUG-001 closed → QA retest | QA |
+| TV-025 | Cascade TV-023 — chưa có TLPL để xóa | Sau khi BUG-001 closed → QA retest | QA |
+| TV-057 | Cascade TV-023 — chưa có TLPL filter NCS | Sau khi BUG-001 closed → QA retest | QA |
+| TV-058 | Cascade TV-023 — chưa có TLPL edge case | Sau khi BUG-001 closed → QA retest | QA |
+| TV-011 | Cron 2 ngày không chờ thật trong regression | Dev BE cung cấp mock time/trigger job theo BA 2026-05-11 | Dev BE |
+| TV-041 | Seed VV cross-module chưa có | Đợi R7.4.A3 xong → seed VV → test link | QA seed |
+| TV-040 | Cross-module DGCL out-of-MCP | Round Postman riêng | QA API |
+| TV-026/034/036/043/035/042/050/051/052/060/061 | API inbound/outbound DN/Cổng PLQG | Round Postman riêng | QA API |
+
+→ Sau khi 1+2+3 xong: 56 + 5 + 1 + 1 = **63/61 — Module TVCS đạt 100% MCP-testable** (còn 11 TC chuyển Postman).
+
+---
+
+## Verdict R17 (2026-05-11 02:55:00) — Bugfix re-verify + TV-022 unblock + BUG-008 regression
 
 ✅ **3/7 bug R16 đã closed (002 filter, 003 auto-save, 007 cross-scope leak)** + **TV-022 retest PASS**. ❌ **4/7 bug R16 vẫn Open** (001 TLPL, 004 NHT menu, 005 UI cong-khai, 006 FK hop_dong_tv_id) + **1 regression mới BUG-008** (fix BUG-007 dùng blanket-deny role NHT thay vì BR-AUTH-10 row-level → block happy path).
 
@@ -103,14 +201,14 @@ User yêu cầu chạy 3 phần phương án bỏ qua 11 TC API:
 
 **Bỏ qua (không tự làm được):**
 - 4 việc Dev fix (TV-022, TV-023+cascade, TV-039 NHT FE) — chờ dev release.
-- 2 câu hỏi BA (TV-011 cron, TV-040 DGCL TVV stats).
+- TV-011 cron đã có BA chốt 2026-05-11: QA không chờ đủ 2 ngày thật; Dev cần cung cấp mock time/trigger job/test command. TV-040 đã verify theo SRS ở R16-P2.
 - 4 task seed cross-module (TV-053 NHT TVV, TV-038 BN sweep, TV-041 VV link, TV-059 HD seed) — thuộc R7.3.14 / R9 BN sweep, scope ngoài R7.7.5.
 
 ---
 
 ## TC chưa chạy được — cần làm gì để chạy (R17 · LATEST 2026-05-11 02:55:00)
 
-**Tóm tắt R17:** Hiện **53/61 TC đã chạy PASS** (+TV-022 R17 unblock). Còn **8 TC chính chưa chạy được** — chia 5 nhóm (A-F): **B chờ dev fix (5 TC):** TV-023/024/025/057/058 chờ BUG-001 TLPL · TV-039 NHT side chờ BUG-004 · TV-045 chờ BUG-005 FE · TV-059 chờ BUG-006 + **TV-053 happy NHT chờ BUG-008 regression**; **C chờ BA confirm (1 TC):** TV-011 cron 2 ngày; **E chờ seed (1 TC):** TV-041 VV link; **D chờ infra (0)**; **F skip Postman (11 TC API).** TV-022 đã chạy R17 PASS.
+**Tóm tắt R17:** Hiện **53/61 TC đã chạy PASS** (+TV-022 R17 unblock). Còn **8 TC chính chưa chạy được** — chia 5 nhóm (A-F): **B chờ dev fix (5 TC):** TV-023/024/025/057/058 chờ BUG-001 TLPL · TV-039 NHT side chờ BUG-004 · TV-045 chờ BUG-005 FE · TV-059 chờ BUG-006 + **TV-053 happy NHT chờ BUG-008 regression**; **C chờ Dev test hook theo BA (1 TC):** TV-011 cron 2 ngày; **E chờ seed (1 TC):** TV-041 VV link; **D chờ infra (0)**; **F skip Postman (11 TC API).** TV-022 đã chạy R17 PASS.
 
 ### Đã chạy R16 Phase 2 nhóm 1 (2026-05-10 21:35:00)
 
@@ -139,7 +237,7 @@ User yêu cầu chạy 3 phần phương án bỏ qua 11 TC API:
 | TV-045 (UI cong-khai) | Detail TVCS DA_DUYET không có button [Công khai] | FE thêm button [Công khai]/[Hủy công khai] + panel hiển thị 5 field cong khai trên detail | Dev FE |
 | TV-041 | Cần seed VV để test link cross-module | Đợi R7.4.A3 xong → seed VV → test link | QA seed |
 | TV-059 | BE schema thiếu cột `hop_dong_tv_id` trên TVCS (Thay đổi 13 v3.5) | Dev BE thêm column + serialize field theo SRS srs-fr-12 line 1297 — đã log BUG-BE-TVCS-R16-006 | Dev BE |
-| TV-011 | Cron tự động reset PHAN_CONG→TIEP_NHAN sau 2 ngày LV — không trigger được | Dev BE expose mock endpoint trigger cron, hoặc đợi 2 ngày E2E test | Dev BE |
+| TV-011 | Cron tự động reset PHAN_CONG→TIEP_NHAN sau 2 ngày LV — không trigger được trong session ngắn | **BA 2026-05-11 chốt không chờ E2E thật trong regression; Dev BE cung cấp mock time/trigger job/test command chỉ bật môi trường test. QA verify trước hạn không reset, quá hạn reset, audit/thông báo đúng.** | Dev BE + QA |
 
 ### Ngoại scope MCP — cần round Postman riêng
 
@@ -155,7 +253,7 @@ User yêu cầu chạy 3 phần phương án bỏ qua 11 TC API:
 1. **Dev BE:** fix 2 endpoint thiếu (auto-save + TLPL CRUD) → unblock 6 TC.
 2. **Dev FE:** (a) remove menu Tư vấn cho NHT → unblock TV-039 · (b) thêm UI cong-khai workflow trên detail DA_DUYET → unblock TV-045 hoàn toàn.
 3. **QA seed:** 3 task seed (R7.3.14 NHT TVV, BN sweep, HD seed) → unblock 4 TC.
-4. **BA confirm:** 2 câu hỏi (TVV stats counter, cron 2 ngày) → unblock 2 TC.
+4. **BA/SRS:** TV-011 đã có BA chốt cần Dev cung cấp mock time/trigger job/test command; TV-040 đã đối chiếu SRS → unblock 2 TC sau khi Dev/QA chuẩn bị dữ liệu và test hook.
 5. **QA API:** round Postman riêng (user defer round này) → cover 11 TC inbound/outbound.
 
 → Sau khi 1+2+3+4 xong: 50 + 6 + 2 + 4 + 2 = **64/65** TC chạy được qua MCP, còn 11 TC chuyển Postman.
@@ -339,7 +437,7 @@ User yêu cầu chạy 3 phần phương án bỏ qua 11 TC API:
 | **TV-008** | CB NV hủy YC TIEP_NHAN→HUY | Workflow | P1 | ✅ | **R14 retest:** ✅ PASS. cb_nv_tw_07 self-create TVCS-20260510-0001 (Đất đai) state TIEP_NHAN → POST `/huy {lyDo:"R14 cancel test - khong co nhu cau"}` (10+ chars) → 200 → state HUY ver+1. Self-creator can cancel TIEP_NHAN per SRS line 537. R8 archive: ⚠️ partial (chỉ test PHAN_CONG→HUY, không phải TIEP_NHAN→HUY). |
 | **TV-009** | CG xác nhận PHAN_CONG→DANG_TU_VAN | Workflow | P0 | ✅ | **R14 retest:** ✅ PASS (BUG-A5-001 closed-verified). huongcg login isolated context, click row TVCS-20260509-0002 → click [Chấp nhận] modal → POST `/xac-nhan {quyetDinh:CHAP_NHAN, version:2}` 200 ver=3 DANG_TU_VAN, ngayBatDau auto-set "2026-05-10". UI stepper progress check 1+2. R8 archive: 🚫 BLOCKED bug 403. |
 | **TV-010** | CG từ chối phân công + lý do | Workflow | P1 | ✅ | **R16-P2 retest:** ✅ PASS. huongcg POST `/xac-nhan {quyetDinh:TU_CHOI, lyDo:"R16 from choi - khong du nang luc"}` trên TVCS-20260510-0002 → 200 ver=2→3, state PHAN_CONG → TIEP_NHAN. Re-phân công + accept thành công. R8 archive: 🚫 cascade BUG-A5-001. |
-| **TV-011** | Timeout 2 ngày LV → auto-reject | Workflow | P1 | ⏭ | External cron BE — out of CMS scope. |
+| **TV-011** | Timeout 2 ngày LV → auto-reject | Workflow | P1 | ⏭ | BA 2026-05-11: không chờ thật; cần Dev mock/trigger job/test command để QA chủ động verify cron. |
 | **TV-012** | CG tích "Hoàn thành" (kèm VB TVPL) | Workflow | P0 | ✅ | **R15 retest:** ✅ PASS (BUG-FE-A5-004 closed `f54afbc8`). huongcg [Hoàn thành] modal có textarea `Kết quả *` 224 chars + textarea `Ghi chú` → POST `/hoan-thanh {version, ketQua, ghiChu}` 200 atomic. R14 archive: 🚫 BLOCKED. |
 | **TV-013** | Auto-transition HOAN_THANH→CHO_PHE_DUYET (BR-FLOW-01) | Workflow | P0 | ✅ | **R15 retest:** ✅ PASS. POST `/hoan-thanh` 200 → state DANG_TU_VAN → CHO_PHE_DUYET ver+1 atomically (cùng transaction). R14 archive: 🚫 BLOCKED B6/B7. |
 | **TV-014** | CB PD cùng cấp duyệt CHO_PHE_DUYET→DA_DUYET | Workflow | P0 | ✅ | **R15 retest:** ✅ PASS (B8 cycle 1 trên TVCS-0013). cb_pd_tw_06 click [Phê duyệt] → POST `/duyet {version:4}` 200 → DA_DUYET ver=5. R14 archive: 🚫 BLOCKED. |

@@ -27,6 +27,6 @@
 - ✅ **R7.5.1** Dashboard KPI counter HD/VV/TVCS/CT (KPI-07 count đổi do NHT tách entity) <a id="r7-5-1"></a>
   - **Kết quả:** ✅Đạt 9/9 KPI render khớp API. KPI-07=11 (CG=5+TVV=6, NHT=0 verified). [functional](../output/qa-reports/round7-2026-05-06/functional/dashboard/functional-test-report-r7-dashboard.md)
 
-- ⚠️ **R7.7.7** Dashboard 34 TC (KPI-07 count đổi) `[~97% — R3.2 33/34 ✅ + 1 ❌ + DASH-P8 partial 1/7 sub]` <a id="r7-7-7"></a>
-  - **Kết quả:** ⚠️ R3.2 33/34 ✅ + BUG-DASH-005 Open. DASH-P8 60s tick ✅ verified, 6 sub-aspect 🚫 cần manual QA. [functional](../output/qa-reports/round7-2026-05-06/functional/dashboard/functional-test-report-r7-dashboard.md)
-  - **Bug:** [bug-report-r7-dashboard.md](../output/qa-reports/round7-2026-05-06/bug-reports/dashboard/bug-report-r7-dashboard.md) — 4/5 đóng (3 Major + 1 Medium + 1 Minor; BUG-DASH-005 Major Open)
+- ⚠️ **R7.7.7** Dashboard 34 TC (KPI-07 count đổi) `[~97% — R4 34/34 bug ✅ + DASH-P8 partial 1/7 sub]` <a id="r7-7-7"></a>
+  - **Kết quả:** ⚠️ R4 5/5 bug Closed-verified. 33/34 TC ✅ + DASH-P8 60s tick ✅ verified, 6 sub-aspect 🚫 cần manual QA. [functional](../output/qa-reports/round7-2026-05-06/functional/dashboard/functional-test-report-r7-dashboard.md)
+  - **Bug:** [Pass-bug-report-r7-dashboard.md](../output/qa-reports/round7-2026-05-06/bug-reports/dashboard/Pass-bug-report-r7-dashboard.md) — 5/5 đóng (3 Major + 1 Medium + 1 Minor)

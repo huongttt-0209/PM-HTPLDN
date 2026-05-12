@@ -59,7 +59,7 @@
   - **Kết quả:** PASS — perm-matrix 253 entries + CHANGELOG §FR-11 + BC-023b lấp gap UC146 (R9 2026-05-11). [functional-test-report-r7-8-6-uc-renumber.md](../output/qa-reports/round7-2026-05-06/functional/cross-cutting/functional-test-report-r7-8-6-uc-renumber.md)
   - **Spec:** [permission-matrix-by-role.md](../output/permission-matrix-by-role.md) FR-IX block + 7.11-bao-cao-thong-ke.md UC ref khớp v3.5 (BC-023b cho UC146 FR-IX-23); CHANGELOG §srs-fr-11 Thay đổi 1
 
-- ⚠️ **R7.8.7** 🆕 E2E DN full luồng đăng ký → đánh giá → chi trả `[~38% — 5 PASS + 3 PARTIAL + 1 FAIL + 4 BLOCKED]` <a id="r7-8-7"></a>
-  - **Kết quả:** ⚠️ Bước 4 UC52 BLOCKED do FE/BE chưa triển khai. Seam 3 BR-CALC-04 PASS. [workflow-test-report-r7-8-7-e2e-dn.md](../output/qa-reports/round7-2026-05-06/workflow/cross-cutting/workflow-test-report-r7-8-7-e2e-dn.md)
-  - **Bug:** [bug-report-r7-8-7-e2e-seam-gaps.md](../output/qa-reports/round7-2026-05-06/bug-reports/cross-cutting/bug-report-r7-8-7-e2e-seam-gaps.md) — 0/2 đóng (1 Critical, 1 Medium)
-  - **Cần:** Dev triển khai SCR-V.I-04 UC52 + POST `/vu-viecs` · BA confirm BR-CALC-04 cấp · DN-side đánh giá CTA verify
+- ⚠️ **R7.8.7** 🆕 E2E DN full luồng đăng ký → đánh giá → chi trả `[~45% — 5 PASS + 4/5 S5 PASS + 1 FAIL + 1 Critical Open]` <a id="r7-8-7"></a>
+  - **Kết quả:** ⚠️ Bước 4 UC52 vẫn Open Critical. Seam 5 functional 4/5 PASS (modal v3.5 + cascade + sort + guard OK). [workflow-test-report-r7-8-7-e2e-dn.md](../output/qa-reports/round7-2026-05-06/workflow/cross-cutting/workflow-test-report-r7-8-7-e2e-dn.md) · [functional-test-report-r7-8-7-s5-phancong.md](../output/qa-reports/round7-2026-05-06/functional/vu-viec/functional-test-report-r7-8-7-s5-phancong.md)
+  - **Bug:** [bug-report-r7-8-7-e2e-seam-gaps.md](../output/qa-reports/round7-2026-05-06/bug-reports/cross-cutting/bug-report-r7-8-7-e2e-seam-gaps.md) — 1/3 đóng (1 Critical Open, 1 Minor Open, 1 Medium Closed)
+  - **Cần:** Dev triển khai SCR-V.I-04 UC52 + POST `/vu-viecs` · FE rename label "Địa bàn" → "Đơn vị quản lý" + BE expose `don_vi_quan_ly` field

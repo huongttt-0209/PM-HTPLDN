@@ -11,14 +11,18 @@
 | **OTP Bypass** | `666666` |
 | **Test Method** | Hybrid (UI Modal + API verify) |
 | **Primary Account** | `cb_nv_tw_01` / `Secret@123` (CB_NV_TW, Cục BTTP) + `qtht_01` (QTHT) |
-| **Round** | R8 → R9 → R10 → R11 (CB_PD pure session) → R12 (2026-05-10 20:07:00 — CMS proxy + 3 bug Closed) → R13 (2026-05-10 22:00:00 — 8 PASS mới Import Excel + BN scope + No-menu + Công khai) → **R14 (2026-05-11 14:06:00 — UI-only re-audit `_03` accounts: 5/5 UI tests PASS via browse UI; 3 bug Open re-verified clean với accounts pure)** |
+| **Round** | R8 → R9 → R10 → R11 (CB_PD pure session) → R12 (CMS proxy + 3 bug Closed) → R13 (8 PASS mới Import Excel + BN scope) → R14 (UI-only re-audit `_03`) → R15 (BR-FLOW-10 verify, BUG-001/007 Closed) → **R15-P2 (2026-05-12 02:30:00 — QA-only test TVN-020 Kho rỗng: non-block OK, WARNING ERR-TVN-01 missing → BUG-008 mới Minor)** |
 | **Tài liệu tham chiếu** | [7.13-tu-van-nhanh.md](../../../../funtion/7.13-tu-van-nhanh.md) · [bug-report-r7-7-11-tvn.md](../../bug-reports/tu-van-nhanh/bug-report-r7-7-11-tvn.md) · [workflow-test-report-r7-6-2-tv-nhanh.md](../../workflow/tu-van-nhanh/workflow-test-report-r7-6-2-tv-nhanh.md) |
 
 ---
 
 ## 1. Executive Summary
 
-> **R14 (LATEST · 2026-05-11 14:06:00) — UI-only re-audit với `_03` accounts:** 5/5 UI tests PASS qua browse UI (no API). **Test 1** `cb_nv_tw_03` list KCH 24 record permission OK (Thêm câu hỏi/Nhập Excel/Xuất Excel/Làm mới render); **Test 2** `cb_pd_tw_03` approve `QA-20260508-0004` CHO_DUYET → DA_DUYET via modal Detail + confirm dialog (Hiệu lực: Không → Có, Ngày duyệt 14:05:00); **Test 3** `cb_nv_tw_03` chọn gợi ý KCH-0007 + [Gửi trả lời] trên phiên `TVN-QA-20260425-0021` DA_GOI_Y → CB_TRA_LOI (Số gợi ý=2, cập nhật 12:27:00); **Test 4** filter Nguồn=Tự động render đúng record `QA-20260510-0005`; **Test 5** `cb_nv_tw_03` Switch [Công khai] trên DA_DUYET → CONG_KHAI (Thời gian đăng tải 14:06:00, button đổi "Hủy công khai"). Workflow E2E E2E NHAP → CHO_DUYET → DA_DUYET → CONG_KHAI verified pure UI click chain qua MCP, không qua API. 3 bug Open trước R14 (BUG-001 data drift, BUG-005 audit naming, BUG-007 auto-import) giữ status — không re-test bug trong R14 (UI scope only). Evidence inline screenshots `image/r14-ui-test{N}-*.png`.
+> **R15-P2 (LATEST · 2026-05-12 02:30:00) — QA-only test TVN-020 (Kho QA rỗng → ERR-TVN-01 WARNING):** QA tự seed luồng đồng bộ (KHÔNG cần dev seed): backup 21 KCH `DA_DUYET hieuLuc=true` → PATCH ×21 `/het-hieu-luc` → pool 0 → POST `/tu-van-nhanhs/cms-create` → **201 success, phiên TVN-20260512-0001 tạo, state=CB_TRA_LOI, goiYTraLoi=[]** ✅ non-blocking đúng spec FR-13 §line 134; **NHƯNG response KHÔNG có `warning.code='ERR-TVN-01'` hoặc `warningMessage`** ❌ — CB NV không nhận được signal "Kho câu hỏi rỗng" → **BUG-FUNC-TVN-008 (Minor) mới**. Restore: 20 KCH `/kich-hoat` qua `cb_nv_tw_01` + 1 KCH BN BKH `aa222034` qua `cb_nv_bn_01` (BR-AUTH-05 cross-đơn vị) → final 21 (delta 0). TVN-020 flip ⏭→⚠️ Sai spec. Operational learnings: `/kich-hoat` là reverse cho `/het-hieu-luc` (chưa document); BR-AUTH-05 enforce asymmetric (drop accept, restore reject cross-đơn vị). Evidence: `image/r15-tc-tvn-020-phien-cb-tra-loi-empty-goi-y.png`.
+>
+> R15 (2026-05-12 01:25:00) — Follow-up MCP test 5 TC theo user request `/qa-only`:** PASS 5/5 với 3 isolatedContext riêng (cb_nv_tw_01 + cb_pd_tw_01 + qtht_01). **TVN-010/011/012** FE+BE guard 403 confirmed cho cb_nv_tw_01 (FE không render Duyệt/Từ chối/Duyệt hàng loạt + API direct mutation 403 ERR-PERM-SYS-00-01 — BR-AUTH-05 dual-layer). **TVN-014/037** BR-FLOW-10 auto-import HOI_DAP → KCH TU_DONG VERIFIED qua walk full workflow: HD-20260510-002 từ MOI→DANG_XU_LY (R14 seed) → CHO_PHE_DUYET (cb_nv_tw_01 Gửi phản hồi) → DA_DUYET (cb_pd_tw_01 Phê duyệt 01:24:27Z) → query KCH 30s sau → record `7bac45ff...` auto-create `nguon=TU_DONG` `hoiDapGocId=480906b9...` ngayTao=01:24:27Z — latency <30s. Total 3 KCH TU_DONG: 1 R15 fresh + 1 back-fill R14b→R15 + 1 historical R10. **BUG-007 (Major auto-import) Closed-verified** (forward + back-fill both work). **BUG-001 (Major data drift account) Closed-verified** (DB fix R14b→R15, `/auth/me` returns `vaiTro:["CB_NV_TW"]` only). Còn **BUG-005 Open PARTIAL** (audit naming TVN module + dropdown filter Module thiếu "Tư vấn"). Evidence inline `image/r15-*.png` + bug-report `r15-bug-{001,005,007}-*.png`.
+>
+> R14 (2026-05-11 14:06:00) — UI-only re-audit với `_03` accounts:** 5/5 UI tests PASS qua browse UI (no API). **Test 1** `cb_nv_tw_03` list KCH 24 record permission OK (Thêm câu hỏi/Nhập Excel/Xuất Excel/Làm mới render); **Test 2** `cb_pd_tw_03` approve `QA-20260508-0004` CHO_DUYET → DA_DUYET via modal Detail + confirm dialog (Hiệu lực: Không → Có, Ngày duyệt 14:05:00); **Test 3** `cb_nv_tw_03` chọn gợi ý KCH-0007 + [Gửi trả lời] trên phiên `TVN-QA-20260425-0021` DA_GOI_Y → CB_TRA_LOI (Số gợi ý=2, cập nhật 12:27:00); **Test 4** filter Nguồn=Tự động render đúng record `QA-20260510-0005`; **Test 5** `cb_nv_tw_03` Switch [Công khai] trên DA_DUYET → CONG_KHAI (Thời gian đăng tải 14:06:00, button đổi "Hủy công khai"). Workflow E2E E2E NHAP → CHO_DUYET → DA_DUYET → CONG_KHAI verified pure UI click chain qua MCP, không qua API. 3 bug Open trước R14 (BUG-001 data drift, BUG-005 audit naming, BUG-007 auto-import) giữ status — không re-test bug trong R14 (UI scope only). Evidence inline screenshots `image/r14-ui-test{N}-*.png`.
 >
 > R13 (2026-05-10 22:00:00): Coverage expand 8 PASS mới — **TVN-005/006** Import Excel (file 5 valid + 5 invalid → preview 9 dòng, 5 hợp lệ + 4 lỗi với message rõ; commit 5 record QA-20260510-0006..0010 nguồn=Import); **TVN-034** BN scope BR-AUTH-08 (TW=19 records, BN BKH=0 → filter active no leak); **TVN-035** NHT/CG sidebar không có submenu Tư vấn nhanh + Kho câu hỏi; **TVN-036** DN sidebar không có top-level Quản lý tư vấn entirely; **TVN-040** Switch Công khai DA_DUYET → CONG_KHAI + auto thoiGianDangTai; **TVN-041** Hủy công khai → DA_DUYET; **TVN-042** BR-PUBLIC-01 chặn /cong-khai trên CHO_DUYET với 409 ERR-BIZ-KCH-01.
 >
@@ -58,13 +62,15 @@
 
 → **Happy-path + Workflow Pass Rate = 12/12 (100%)** — Kho Q&A core CRUD + workflow approval OK toàn bộ với CB_PD pure session. **R11 đóng góp:** 3 PASS flip (TVN-010/011/012 với cb_pd_tw_01) + 1 BUG reclassify (BUG-001 Critical → Major data drift, không phải BE security hole) + 1 BUG mới (TVN-037 auto-import) + 8 BLOCKED mTLS Cổng PLQG (đúng spec FR-X.2-03/04/05).
 
-### Verdict: **CONDITIONAL PASS R13 — 31/35 PASS (89% pure), FR-X.2-06 deploy + Import Excel + BN scope verified; còn BUG-001 data drift account, BUG-005 audit naming TVN module, BUG-007 auto-import BR-FLOW-10 trước release**
+### Verdict: **PASS R15-P2 — 30/32 PASS đã test (94% pure, 100% non-blocking), TVN-020 ⚠️ Sai spec (BUG-008 Minor WARNING missing); 2 BUG Open Minor (005 + 008), non-blocking release**
+
+## 1.5 Bảng trạng thái TC (snapshot R15-P2 — LATEST 2026-05-12 02:30:00)
 
 R7.7.11 cover **35/44 TC (80%)** sau R13. Backend CRUD + workflow CHO_DUYET ↔ DA_DUYET ↔ NHAP ↔ HET_HIEU_LUC ↔ CONG_KHAI ↔ DA_GOI_Y → CB_TRA_LOI → HOAN_THANH đều OK. **R12 unblock:** CMS proxy `/cms-create` + `/danh-gia/cms-proxy` xử lý DN inbound nội bộ thay mTLS Cổng PLQG (3 PASS TVN-022/029/038) + 3 bug Closed (002/003/006). **R13 expand:** Import Excel commit 5 record qua UI upload + validate 4 lỗi (TVN-005/006), BN scope filter active no leak (TVN-034), 3 role không có menu Tư vấn nhanh (TVN-035/036), Switch Công khai DA_DUYET ↔ CONG_KHAI + BR-PUBLIC-01 enforce (TVN-040/041/042). **Còn 3 bug Open:** (1) BUG-001 data drift account `cb_nv_tw_01`; (2) BUG-005 Minor audit naming TVN module (TRA_LOI/CREATE chưa chuẩn); (3) BUG-007 Major auto-import BR-FLOW-10 không trigger. **5 BLOCKED còn:** TVN-023/024/025/030/031 (mTLS DN-side outbound) + TVN-043/044 (sandbox + race stub). **7 DEFER:** TVN-014 (cùng BUG-007), TVN-015 (DB-level GIN), TVN-020 (batch infra), TVN-026/027/028 (DN search outbound).
 
 ---
 
-## 1.5 Bảng trạng thái TC (snapshot R13 — LATEST 2026-05-10 22:00:00)
+### TC summary table
 
 | TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
 |---|---|:-:|:-:|---|
@@ -81,13 +87,13 @@ R7.7.11 cover **35/44 TC (80%)** sau R13. Backend CRUD + workflow CHO_DUYET ↔ 
 | TVN-011 | CB_PD từ chối + lý do ≥10 | ✅ Đạt | R11 | NHAP + ghiChu stored |
 | TVN-012 | CB_PD duyệt hàng loạt | ✅ Đạt | R11 | 2 record bulk → DA_DUYET |
 | TVN-013 | Toggle hết hiệu lực | ✅ Đạt | R8 | DA_DUYET → HET_HIEU_LUC |
-| TVN-014 | Auto-import HOI_DAP DA_DUYET | ⏭ Hoãn | — | Cùng BUG-007 với TVN-037 |
+| TVN-014 | Auto-import HOI_DAP DA_DUYET | ✅ Đạt | R15 | Forward-only verified — HD-002 → KCH 7bac45ff TU_DONG <30s |
 | TVN-015 | GIN index FTS | ⏭ Hoãn | — | DB-level verify |
 | TVN-016 | List phiên TV 4 tab | ✅ Đạt | R9 | R12 cột Số gợi ý fix |
 | TVN-017 | Detail phiên Top 5 gợi ý | ✅ Đạt | R10 | Score DESC, button [Chọn] OK |
 | TVN-018 | Click [Chọn] auto-fill | ✅ Đạt | R10 | Textarea fill 74 chars |
 | TVN-019 | [Gửi trả lời] DA_GOI_Y → CB_TRA_LOI | ✅ Đạt | R9 | R12 supplementary 199 chars |
-| TVN-020 | Batch processing | ⏭ Hoãn | — | Batch infra |
+| TVN-020 | Kho QA rỗng → ERR-TVN-01 WARNING | ⚠️ Sai spec | R15-P2 | Non-block OK; WARNING không surface — BUG-008 |
 | TVN-021 | Gửi trả lời rỗng → ERR-TVN-02 | ✅ Đạt | R9 | 422 |
 | TVN-022 | DN gửi câu hỏi kênh=NHANH | ✅ Đạt | R12 | CMS proxy `/cms-create` 200 |
 | TVN-023 | DN gửi kênh=THU_CONG → Nhóm II | 🚫 Không test được | R11 | mTLS DN outbound only |
@@ -104,7 +110,7 @@ R7.7.11 cover **35/44 TC (80%)** sau R13. Backend CRUD + workflow CHO_DUYET ↔ 
 | TVN-034 | BN scope BR-AUTH-08 | ✅ Đạt | R13 | TW=19, BN BKH=0 — filter active |
 | TVN-035 | NHT/CG no menu Tư vấn nhanh | ✅ Đạt | R13 | NHT + CG submenu chỉ Tư vấn chuyên sâu |
 | TVN-036 | DN no menu Quản lý tư vấn | ✅ Đạt | R13 | DN sidebar không có top-level |
-| TVN-037 | Auto-import HOI_DAP → KHO TU_DONG | ❌ Lỗi | R11 | BUG-007 BR-FLOW-10 không trigger |
+| TVN-037 | Auto-import HOI_DAP → KHO TU_DONG | ✅ Đạt | R15 | BUG-007 Closed — 3 KCH TU_DONG verified hoiDapGocId map 1-1 |
 | TVN-038 | DN đánh giá update diem_tb | ✅ Đạt | R12 | KCH-0007 null → 4 sau danh-gia |
 | TVN-039 | Audit log 9 action | ⚠️ Sai spec | R9 | KHO chuẩn R12, TVN còn TRA_LOI/CREATE |
 | TVN-040 | Switch [Công khai] DA_DUYET → CONG_KHAI | ✅ Đạt | R13 | Auto thoiGianDangTai 10/05/2026 21:46 |
@@ -112,30 +118,28 @@ R7.7.11 cover **35/44 TC (80%)** sau R13. Backend CRUD + workflow CHO_DUYET ↔ 
 | TVN-042 | BR-PUBLIC-01 chặn /cong-khai trên CHO_DUYET | ✅ Đạt | R13 | 409 ERR-BIZ-KCH-01 |
 | TVN-043 | API Cổng PLQG fail → giữ state | 🚫 Không test được | R8 | Cần Cổng PLQG sandbox |
 | TVN-044 | Mismatch congKhai vs trang_thai | 🚫 Không test được | R8 | Cần BE stub race condition |
-| **Tổng** | **44 TC** | ✅ 28 · ⚠️ 1 · ❌ 1 · 🚫 5 · ⏭ 8 · 🤷 0 + 1 PASS supplementary (TVN-019 R12 re-confirm) → **30 PASS-eq / 30 đã test (loại trừ ⏭/🚫) = 93% pure** | | |
+| **Tổng** | **44 TC** | ✅ 30 · ⚠️ **2 (R15-P2: +TVN-020)** · ❌ 0 · 🚫 5 · ⏭ 6 · 🤷 0 → **30 PASS / 32 đã test (loại trừ ⏭/🚫) = 94% pure, 100% non-blocking (R15-P2)** | | |
 
-## 1.6 Bảng TC chưa chạy được — phân loại 6 nhóm A-F (R13)
+## 1.6 Bảng TC chưa chạy được — phân loại 6 nhóm A-F (R15-P2)
 
-Hiện tại còn **15 TC** chưa PASS — chia 4 nhóm: **3 chờ dev fix bug** (Nhóm B) · **9 lỗi env/chờ infra** (Nhóm D) · **3 lý do khác** (Nhóm F: DB-level + outbound + batch infra). Phân loại theo template `output/template/tc-block-classification-template.md` (cross-project).
+Hiện tại còn **13 TC** chưa PASS — chia 3 nhóm: **2 chờ dev fix bug** (Nhóm B: TVN-039 BUG-005 partial · **TVN-020 BUG-008 WARNING missing**) · **7 lỗi env/chờ infra** (Nhóm D: mTLS DN + sandbox) · **4 lý do khác** (Nhóm F: DB-level + outbound API). **R15-P2 chạy TVN-020** (drop tạm 21 KCH → POST `/cms-create` → 201 non-block OK; WARNING ERR-TVN-01 missing → BUG-008 mới Minor) + restore 21 KCH thành công.
 
 | # | TC ID | Status | Nhóm nguyên nhân | Phương án xử lý | Ai làm |
 |---|---|:-:|---|---|:-:|
-| 1 | TVN-014 | ⏭ Hoãn | **B — Chờ dev fix bug** (BUG-007) | BE wire `HoiDapApprovedEvent` → handler insert KHO TU_DONG | Dev BE |
-| 2 | TVN-037 | ❌ Lỗi | **B — Chờ dev fix bug** (BUG-007) | Cùng BUG-007 → re-test sau khi BE deploy | Dev BE |
-| 3 | TVN-039 | ⚠️ Sai spec | **B — Chờ dev fix bug** (BUG-005 partial) | BE chuẩn hoá AuditAction TVN: TRA_LOI→GUI_TRA_LOI_TVNHANH, CREATE→CREATE_TVNHANH | Dev BE |
-| 4 | TVN-023 | 🚫 Không test được | **D — Lỗi env / chờ infra** (mTLS DN inbound) | mTLS sandbox Cổng PLQG hoặc CMS proxy mở rộng /hoi-daps | Infra / Dev BE |
-| 5 | TVN-024 | 🚫 Không test được | **D — Lỗi env / chờ infra** (endpoint chưa expose) | Dev BE expose `/chuyen-thu-cong` cho CMS proxy nội bộ | Dev BE |
-| 6 | TVN-025 | 🚫 Không test được | **D — Lỗi env / chờ infra** (mTLS guard chặn validation) | mTLS sandbox hoặc proxy bypass dev mode | Infra / Dev BE |
-| 7 | TVN-030 | 🚫 Không test được | **D — Lỗi env / chờ infra** (mTLS guard) | mTLS sandbox hoặc proxy negative case | Infra / Dev BE |
-| 8 | TVN-031 | 🚫 Không test được | **D — Lỗi env / chờ infra** (mTLS guard) | mTLS sandbox hoặc proxy 404 case | Infra / Dev BE |
-| 9 | TVN-043 | 🚫 Không test được | **D — Lỗi env / chờ infra** (Cổng PLQG sandbox) | Dev BE stub Cổng PLQG mock 5xx + verify retry BR-FLOW-05 | Dev BE / Infra |
-| 10 | TVN-044 | 🚫 Không test được | **D — Lỗi env / chờ infra** (race stub) | Dev BE stub delay BR-FLOW-05 + UI render badge transient | Dev BE |
-| 11 | TVN-020 | ⏭ Hoãn | **D — Lỗi env / chờ infra** (Kho rỗng + DN-side) | Drop tạm KCH DA_DUYET + DN gửi qua CMS proxy → verify ERR-TVN-01 | QA seed + Dev BE |
-| 12 | TVN-032 | ⏭ Hoãn | **D — Lỗi env / chờ infra** (batch + config) | Set `cau_hinh.tvnhanh_timeout_ngay=1/1440` HOẶC dev expose batch trigger manual | Dev BE |
-| 13 | TVN-015 | ⏭ Hoãn | **F — Lý do khác** (DB-level only, không UI/API) | DBA query `EXPLAIN ANALYZE SELECT ... @@ to_tsquery` xác định plan GIN | DBA |
-| 14 | TVN-026 | ⏭ Hoãn | **F — Lý do khác** (outbound API + Postman) | QA setup Postman + xin API key Cổng PLQG sandbox | QA API + Infra |
-| 15 | TVN-027 | ⏭ Hoãn | **F — Lý do khác** (outbound API) | Cùng TVN-026 — Postman + API key | QA API + Infra |
-| 16 | TVN-028 | ⏭ Hoãn | **F — Lý do khác** (outbound API) | Cùng TVN-026 — Postman + API key | QA API + Infra |
+| 1 | TVN-039 | ⚠️ Sai spec | **B — Chờ dev fix bug** (BUG-005 partial) | BE chuẩn hoá AuditAction TVN: TRA_LOI→GUI_TRA_LOI_TVNHANH, CREATE→CREATE_TVNHANH + dropdown filter Module thêm "Tư vấn" | Dev BE |
+| 2 | TVN-023 | 🚫 Không test được | **D — Lỗi env / chờ infra** (mTLS DN inbound) | mTLS sandbox Cổng PLQG hoặc CMS proxy mở rộng /hoi-daps | Infra / Dev BE |
+| 3 | TVN-024 | 🚫 Không test được | **D — Lỗi env / chờ infra** (endpoint chưa expose) | Dev BE expose `/chuyen-thu-cong` cho CMS proxy nội bộ | Dev BE |
+| 4 | TVN-025 | 🚫 Không test được | **D — Lỗi env / chờ infra** (mTLS guard chặn validation) | mTLS sandbox hoặc proxy bypass dev mode | Infra / Dev BE |
+| 5 | TVN-030 | 🚫 Không test được | **D — Lỗi env / chờ infra** (mTLS guard) | mTLS sandbox hoặc proxy negative case | Infra / Dev BE |
+| 6 | TVN-031 | 🚫 Không test được | **D — Lỗi env / chờ infra** (mTLS guard) | mTLS sandbox hoặc proxy 404 case | Infra / Dev BE |
+| 7 | TVN-043 | 🚫 Không test được | **D — Lỗi env / chờ infra** (Cổng PLQG sandbox) | Dev BE stub Cổng PLQG mock 5xx + verify retry BR-FLOW-05 | Dev BE / Infra |
+| 8 | TVN-044 | 🚫 Không test được | **D — Lỗi env / chờ infra** (race stub) | Dev BE stub delay BR-FLOW-05 + UI render badge transient | Dev BE |
+| 9 | TVN-020 | ⚠️ Sai spec | **B — Chờ dev fix bug** (BUG-008) | BE thêm `warning.code='ERR-TVN-01'` + message vào response `/cms-create` (root hoặc `data.warning`) khi pool matching empty | Dev BE |
+| 10 | TVN-032 | ⏭ Hoãn | **D — Lỗi env / chờ infra** (batch + config) | Set `cau_hinh.tvnhanh_timeout_ngay=1/1440` HOẶC dev expose batch trigger manual | Dev BE |
+| 11 | TVN-015 | ⏭ Hoãn | **F — Lý do khác** (DB-level only, không UI/API) | DBA query `EXPLAIN ANALYZE SELECT ... @@ to_tsquery` xác định plan GIN | DBA |
+| 12 | TVN-026 | ⏭ Hoãn | **F — Lý do khác** (outbound API + Postman) | QA setup Postman + xin API key Cổng PLQG sandbox | QA API + Infra |
+| 13 | TVN-027 | ⏭ Hoãn | **F — Lý do khác** (outbound API) | Cùng TVN-026 — Postman + API key | QA API + Infra |
+| 14 | TVN-028 | ⏭ Hoãn | **F — Lý do khác** (outbound API) | Cùng TVN-026 — Postman + API key | QA API + Infra |
 
 ---
 
@@ -171,6 +175,96 @@ Không re-test bug trong R14 (scope = UI tests only theo user request). 3 bug Op
 - **BUG-001** Major data drift account → confirmed data drift (BE guard works với accounts pure)
 - **BUG-005** Minor audit naming → PARTIAL (KHO chuẩn R12, TVN còn TRA_LOI/CREATE)
 - **BUG-007** Major auto-import BR-FLOW-10 → PARTIAL forward-only
+
+---
+
+## 1.9 R15-P2 — QA-only test TVN-020 (Kho QA rỗng) + Restore Kho (2026-05-12 02:00:00 → 02:30:00)
+
+**Scope:** Theo user request `/qa-only ... test TVN-20 sau khi setup`. Setup luồng đồng bộ (QA tự seed qua API, KHÔNG cần dev seed) → drop tạm 21 KCH `DA_DUYET hieuLuc=true` về 0 → POST `/cms-create` → verify ERR-TVN-01 WARNING → restore Kho về 21.
+
+**Method:** MCP `cb_nv_tw_01` isolatedContext — fetch `/api/v1/kho-cau-hois?trangThai=DA_DUYET&hieuLuc=true&pageSize=100` → backup 21 KCH id+version → PATCH ×21 `/het-hieu-luc {version}` → POST `/tu-van-nhanhs/cms-create {cauHoiDn,...}` → PATCH ×21 `/kich-hoat {version}` (20 với cb_nv_tw_01 + 1 với cb_nv_bn_01 cho KCH BN BKH `aa222034`).
+
+### Kết quả TVN-020 — ⚠️ PARTIAL (non-blocking OK, WARNING missing)
+
+| Step | Action | Outcome |
+|---|---|---|
+| Setup-1 | Fetch DA_DUYET hieuLuc=true (baseline) | 21 record |
+| Setup-2 | PATCH ×21 `/het-hieu-luc` | 21/21 success, state → HET_HIEU_LUC, hieuLuc → false |
+| Setup-3 | Verify pool rỗng | `?trangThai=DA_DUYET&hieuLuc=true` total=0 ✅ |
+| Test | POST `/api/v1/tu-van-nhanhs/cms-create` body `{cauHoiDn, linhVucPL:'Doanh nghiệp', kenh:'NHANH', ...}` | **201 success=true**, phiên `TVN-20260512-0001` tạo OK, state=CB_TRA_LOI, goiYTraLoi=[] |
+| Verify | Inspect response cho `warning/warningCode/warningMessage` | **KHÔNG có WARNING ERR-TVN-01** ❌ |
+| Verify | GET `/goi-y` | `{success:true, data:[]}` — không warning embedded |
+| Restore-1 | PATCH ×21 `/kich-hoat` (cb_nv_tw_01) | 20/21 success, 1 fail 403 BR-AUTH-05 (KCH BN BKH đơn vị khác) |
+| Restore-2 | Login cb_nv_bn_01 → PATCH `/kich-hoat` KCH `aa222034` | 200 success ✅ |
+| Verify | Final DA_DUYET hieuLuc=true count | **21** (delta 0 vs baseline) ✅ |
+
+### Findings
+
+- ✅ **Non-blocking OK:** Kho rỗng KHÔNG block tạo phiên (đúng spec line 134 "không block CB NV trả lời tay").
+- ⚠️ **WARNING ERR-TVN-01 missing:** Response `/cms-create` không có `warning.code/warningCode` field. CB NV chỉ thấy Top 5 gợi ý empty mà không hiểu vì sao → cần signal từ BE. → **BUG-FUNC-TVN-008 mới Minor.**
+- ⚠️ **State machine deviation:** Phiên skip `MOI → CB_TRA_LOI` thay vì `MOI → DANG_TIM_KIEM → DA_GOI_Y → CB_TRA_LOI`. Có thể là BE optimization (Kho rỗng → no need matching step) nhưng spec SM-TVNHANH §line 60-68 không quy định path này. Để observ tiếp, không log bug riêng (gộp BUG-008).
+- ✅ **Endpoint reversibility:** `/het-hieu-luc` one-way (HET_HIEU_LUC `/het-hieu-luc` again → 409 ERR-STATE-KCH-HHL-01). Restore qua `/kich-hoat` (probe found). Cross-đơn vị BR-AUTH-05 enforce — restore KCH BN BKH cần cb_nv_bn_01 không phải cb_nv_tw_01.
+
+### Operational learning
+
+- **Endpoint `/kich-hoat`** (POST `{version}`) là path reverse cho `/het-hieu-luc` — chưa được document rõ trong SRS, chỉ ám chỉ ở §line 421 + module §⑫ line 788 "Toggle lại". Naming inconsistent với `/het-hieu-luc` (1 verb passive + 1 verb active).
+- **BR-AUTH-05 cross-đơn vị enforce dual-mode:** Drop (`/het-hieu-luc`) accept cross-đơn vị nếu user có write quyền chung. Restore (`/kich-hoat`) reject cross-đơn vị → cần CB_NV của đơn vị gốc. Asymmetric, dễ tạo dead-state nếu QA không có account đúng đơn vị.
+- **QA self-seed luồng đồng bộ verified:** Không cần dev BE seed cho TVN-020. QA backup→drop→test→restore qua API trong 1 session.
+
+### Bug status sau R15-P2
+
+- **BUG-FUNC-TVN-008 (Minor) mới** — WARNING ERR-TVN-01 không surface. Bug-report chi tiết: [`bug-report-r7-7-11-tvn.md` §BUG-008](../../bug-reports/tu-van-nhanh/bug-report-r7-7-11-tvn.md).
+- BUG-FUNC-TVN-005 vẫn Open PARTIAL (audit naming).
+
+Evidence: `image/r15-tc-tvn-020-phien-cb-tra-loi-empty-goi-y.png`.
+
+---
+
+## 1.8 R15 — Follow-up MCP test 5 TC + walk full workflow E2E (2026-05-12 01:00:00 → 01:25:00)
+
+**Scope:** Theo user request `/qa-only dùng mcp thực hiện test các testcase có thể chạy được ngay`, run 5 TC unblock: **TVN-010/011/012** (FE+BE guard 403 cho CB_NV) + **TVN-014/037** (BR-FLOW-10 auto-import HOI_DAP → KCH TU_DONG). Seed 1 HOI_DAP walk full MOI → DA_DUYET trong session để verify forward-only trigger.
+
+**Method:** MCP `new_page` với 3 isolatedContext riêng (`tvn-r15-cb-nv-tw-01` + `tvn-r15-cb-pd-tw-01` + `tvn-r15-qtht`) → no logout/login switching. Login OTP=666666 mỗi context. Verify dùng UI snapshot + API `list_network_requests` + curl `/api/v1/kho-cau-hois?nguon=TU_DONG`.
+
+### Kết quả 5/5 PASS
+
+| # | TC | Role | Action | Outcome | Evidence |
+|---|---|---|---|---|---|
+| 1 | TVN-010 | `cb_nv_tw_01` | Click row CHO_DUYET → modal Chi tiết → FE không render button [Duyệt] | FE guard: button absent. API direct POST `/approve` → 403 ERR-PERM-SYS-00-01 ✅ | [r15-tc-tvn-010-011-fe-guard-no-duyet-tuchoi.png](image/r15-tc-tvn-010-011-fe-guard-no-duyet-tuchoi.png) |
+| 2 | TVN-011 | `cb_nv_tw_01` | Modal Chi tiết → FE không render button [Từ chối] | FE guard: button absent. API direct POST `/reject {ghiChu,version}` → 403 ✅ | (cùng screenshot trên — FE chỉ hiện Đóng/Edit) |
+| 3 | TVN-012 | `cb_nv_tw_01` | Tab Chờ duyệt → checkbox 2 row → FE không render toolbar [Duyệt hàng loạt] | FE guard: toolbar absent. API direct POST `/approve-bulk` → 403 ✅. BR-AUTH-05 enforce dual-layer. |
+| 4 | TVN-014 | `cb_pd_tw_01` (gate) + `qtht_01` (verify) | Walk HOI_DAP `HD-20260510-002` qua state MOI → TIEP_NHAN → DANG_XU_LY → CHO_PHE_DUYET → DA_DUYET. Sau DA_DUYET đợi 30s + query KCH TU_DONG | **BR-FLOW-10 trigger:** KCH `7bac45ff-25e1-42fe-86fe-8b9b1a43918d` auto-create với `hoiDapGocId=480906b9...`, `nguon=TU_DONG`, `trangThai=DA_DUYET`, `ngayTao=2026-05-12T01:24:27Z` — khớp giây HD-002 duyệt | [r15-br-flow-10-auto-import-verified.png](image/r15-br-flow-10-auto-import-verified.png) |
+| 5 | TVN-037 | (cùng) | Sau TVN-014, query `/kho-cau-hois?hoiDapGocId=480906b9...&nguon=TU_DONG` | Total=3 KCH TU_DONG: (a) `7bac45ff...` → HD-20260510-002 (R15 mới); (b) `e267c484...` → HD-20260509-010 (back-fill R14b → R15); (c) `a70ce660...` → HD-20260510 (historical). hoiDapGocId map 1-1 ✅ | (cùng API response) |
+
+### BR-FLOW-10 forward-only behavior — VERIFIED
+
+Auto-trigger HOI_DAP `DA_DUYET` → KCH `nguon=TU_DONG` xảy ra **đúng giây** (latency <30s, capture lúc 01:24:27Z khớp `ngayDuyet` HD-002). Pattern repeat 3 lần với 3 HOI_DAP độc lập:
+
+| HOI_DAP gốc | KCH TU_DONG ID | KCH ngayTao | Latency |
+|---|---|---|---|
+| HD-20260510-002 (480906b9) — R15 fresh | 7bac45ff | 2026-05-12 01:24:27 | <30s |
+| HD-20260509-010 (3577bfb6) — R14b back-fill | e267c484 | 2026-05-11 23:18:37 | back-fill batch |
+| HD-20260510 (2d373db6) — historical | a70ce660 | 2026-05-10 20:38:31 | historical |
+
+→ **BUG-007 Closed-verified R15:** Forward-only trigger works clean. Back-fill batch (R14b → R15) đã import HD-20260509-010 lệch trước R15. Cả 2 paths PASS.
+
+### Workflow E2E walk (TVN-014 detail)
+
+1. `cb_nv_tw_01` login + navigate `/hoi-dap/480906b9...` (state DANG_XU_LY, version 4).
+2. Click [Gửi phản hồi] → modal preview reply DRAFT → confirm modal "Xác nhận gửi phản hồi?" → state CHO_PHE_DUYET, version 5.
+3. Switch isolatedContext `cb_pd_tw_01`, navigate cùng URL → button [Phê duyệt] render (CB_PD same cấp permission OK).
+4. Click [Phê duyệt] → modal "Xác nhận phê duyệt? Hành động này không thể hoàn tác" → confirm → state **Đã duyệt**, Người duyệt=`CB Phê duyệt TW 01`, Ngày duyệt=12/05/2026 01:24.
+5. Switch isolatedContext `qtht_01`, fetch `/api/v1/kho-cau-hois?hoiDapGocId=480906b9...&nguon=TU_DONG` `credentials:'include'` → 200, items=1 record mới `7bac45ff...` `ngayTao=2026-05-12T01:24:27Z`.
+
+→ **BR-FLOW-10 verified end-to-end.** Auto-import latency ≤30s (capture lúc 01:24:57Z, sau 30s wait từ approval 01:24:27Z).
+
+### Bug status sau R15
+
+- **BUG-007 (Major auto-import BR-FLOW-10)** — **Closed-verified R15** (forward-only + back-fill both work).
+- **BUG-001 (Major data drift account `cb_nv_tw_01`)** — **Closed-verified R15** (DB fix between R14b 17:18 và R15 01:00 — `/auth/me` returns `vaiTro:["CB_NV_TW"]` only, 3 mutation endpoints 403).
+- **BUG-005 (Minor audit naming)** — **Open PARTIAL** (KHO_CAU_HOI 6 hanhDong chuẩn ✅; TU_VAN_NHANH module còn legacy TRA_LOI/UPDATE/CREATE, dropdown filter Module thiếu "Tư vấn" option).
+
+3 bug R15 → **2 Closed + 1 Open PARTIAL.** Bug-report `Pass-bug-report-r7-7-11-tvn.md` rename pending sau khi BUG-005 đóng.
 
 ---
 

@@ -232,12 +232,12 @@ Hiện tại còn 7 TC chưa PASS clean — chia 4 nhóm: 2 chờ dev fix modal/
 
 ## Bảng TC chưa chạy được — cần làm gì để chạy (R10b)
 
-Hiện tại còn 5 TC chưa PASS clean — chia 4 nhóm: 1 chờ dev fix modal trọng số (TC07), 2 chờ dev fix state advance (TC14+TC17), 1 chờ dev fix permission (TC18), 1 out-of-scope SRS (TC12).
+Hiện tại còn 5 TC chưa PASS clean — chia 4 nhóm: 1 chờ dev fix modal trọng số (TC07), 2 chờ dev fix state advance (TC14+TC17), 1 chờ dev fix permission (TC18), 1 cần Dev hỗ trợ edit phân công theo BA (TC12).
 
 | TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
 |---|---|---|:-:|
 | TC07 | Modal "Thêm tiêu chí" force trongSo=100 bất kể giá trị nhập | Dev FE fix modal bind input `trongSo` đúng — BUG-FUNC-DG-010 | Dev FE |
-| TC12 | SRS FR-VI-03 không có UC/AC cho edit phân công — chỉ Add+Delete | Confirm BA spec có cần edit không. Nếu cần BA bổ sung SRS + dev wire UI | BA |
+| TC12 | Edit phân công chưa có UI/API rõ trong test hiện tại | **BA 2026-05-11 chốt có chức năng sửa phân công khi đợt còn `PHAN_CONG`**; Dev bổ sung/wire UI/API, QA không coi delete+add là cách duy nhất nếu editable đã có | Dev FE+BE + QA |
 | TC14 | Đợt stuck `LAP_KE_HOACH` không advance `PHAN_CONG` sau POST `/phan-congs` 201 → button "Trình phê duyệt" disabled | Dev BE/FE fix transition trigger sau POST PC đầu tiên — BUG-FUNC-DG-012 | Dev BE |
 | TC17 | Cùng nguyên nhân TC14 — không có đợt nào ở `CHO_DUYET_PC` để cross-cấp test | Sau khi DG-012 fix, retest TC14 trước → đợt sẽ advance được CHO_DUYET_PC → retest TC17 | Dev BE + QA |
 | TC18 | QTHT thấy button [+ Thêm PC] + [delete] trên tab Phân công vi phạm matrix R-only | Dev FE hide create/delete buttons khi user role = QTHT trên tab Phân công + verify BE 403 nếu QTHT POST/DELETE — BUG-FUNC-DG-013 | Dev FE + Dev BE |
@@ -252,7 +252,7 @@ Hiện tại còn 5 TC chưa PASS clean — chia 4 nhóm: 1 chờ dev fix modal 
 
 - Account `cb_nv_tw_01` login OK 22:09:00 (lần đầu session).
 - Navigate Đánh giá hiệu quả → click [+ Tạo kế hoạch] → mở Modal "Tạo kế hoạch đánh giá".
-- Form fields: Tên đợt đánh giá (required) · Mục tiêu (đáng lẽ required theo SRS row 22 nhưng FE không có `*`) · Tần suất (required dropdown 2 options) · Đối tượng (required dropdown 3 options) · Thời gian bắt đầu (required date) · Thời gian kết thúc (required date) · Ghi chú (optional).
+- Form fields: Tên đợt đánh giá (required) · Mục tiêu (required theo SRS và BA 2026-05-11, nhưng FE hiện chưa có `*`) · Tần suất (required dropdown 2 options) · Đối tượng (required dropdown 3 options) · Thời gian bắt đầu (required date) · Thời gian kết thúc (required date) · Ghi chú (optional).
 - 3 buttons: [Hủy] [Lưu nháp] [Lưu & Chuyển tiêu chí].
 
 ### TC01 — Submit form trống → 5 required errors
@@ -270,7 +270,7 @@ Hiện tại còn 5 TC chưa PASS clean — chia 4 nhóm: 1 chờ dev fix modal 
 
 **Evidence:** [r7-7-9-tc01-fr-vi-01-required-empty-2026-05-10.png](image/r7-7-9-tc01-fr-vi-01-required-empty-2026-05-10.png)
 
-> ⚠️ **Sai spec phụ — Mục tiêu thiếu required validation:** SRS `srs-update-2026-5-5/srs-fr-08-danh-gia.md` SCR-VI-01 row 22 ghi "Mục tiêu | C16 Rich Text | Bắt buộc". FE form không hiển thị `*` cho field này, click submit form trống không trả error "Vui lòng nhập mục tiêu". Có thể là Minor display issue — hoặc spec đã thay đổi không document. **Hành động:** BA confirm — nếu Mục tiêu vẫn bắt buộc, dev FE cần thêm rule + asterisk + error msg. Nếu đã đổi thành optional, BA cập nhật SRS row 22.
+> ⚠️ **Sai spec phụ — Mục tiêu thiếu required validation:** SRS `srs-update-2026-5-5/srs-fr-08-danh-gia.md` SCR-VI-01 row 22 ghi "Mục tiêu | C16 Rich Text | Bắt buộc". FE form không hiển thị `*` cho field này, click submit form trống không trả error "Vui lòng nhập mục tiêu". **BA 2026-05-11 chốt `Mục tiêu` là bắt buộc; Dev cần thêm rule FE/BE + asterisk + error message.**
 
 ### TC02 — Tên đợt trống (rest filled) → name error
 
@@ -373,7 +373,7 @@ Hiện tại còn 5 TC chưa PASS clean — chia 4 nhóm: 1 chờ dev fix modal 
 
 **Verdict:** SRS FR-VI-03 (line 231-303) chỉ có Add (POST `/phan-congs`) + Delete (DELETE) — không có UC/AC cho Edit. Workflow trong UI cũng chỉ có button [delete] per row, không có button [edit]/[chỉnh sửa]. Test plan TC12 đặt ra ngoài spec.
 
-**Action item:** BA confirm xem Edit có cần thiết không. Nếu cần → BA bổ sung SRS FR-VI-03 + dev wire UI. Hiện tại workaround = delete + add lại.
+**BA update 2026-05-11:** Có chức năng sửa phân công khi đợt còn `PHAN_CONG`. Dev cần wire UI/API hoặc bổ sung processing; QA không coi delete + add là workaround duy nhất nếu editable đã có.
 
 ### TC13 — Remove người ĐG ở LAP_KE_HOACH ✅ PASS
 
@@ -431,7 +431,7 @@ Hiện tại còn 5 TC chưa PASS clean — chia 4 nhóm: 1 chờ dev fix modal 
 
 SRS `srs-update-2026-5-5/srs-fr-08-danh-gia.md` SCR-VI-01 row 22 spec: "Mục tiêu | C16 Rich Text | Bắt buộc". FE form không hiển thị `*` (asterisk required marker) cho field này, submit form trống KHÔNG trả error "Vui lòng nhập mục tiêu".
 
-Severity dự kiến: Minor (FE hoặc Spec mismatch). Defer log bug — chờ BA confirm xem Mục tiêu vẫn bắt buộc hay đã đổi thành optional.
+Severity dự kiến: Minor/Medium FE+BE validation. **BA 2026-05-11 chốt Mục tiêu bắt buộc**, không còn chờ BA; cần Dev thêm validate required.
 
 ### OBS-D2-005 — TC07 display glitch: cell trọng số/điểm tối đa blank sau add tiêu chí
 
@@ -469,8 +469,8 @@ Detail page stepper render 9 step (Lập KH → Phân công → Chờ duyệt PC
 | P1 | Dev FE fix BUG-FUNC-DG-013 hide [+ Thêm PC] + [delete] cho role QTHT trên tab Phân công | Dev FE + Dev BE |
 | P1 | Dev FE add UI HUY button (BUG-FUNC-DG-009) — 4 state nguồn LAP_KE_HOACH/PHAN_CONG/THUC_HIEN/BAO_CAO | Dev FE |
 | P2 | Dev FE fix BUG-FUNC-DG-011 — render tên người + tên lĩnh vực trên bảng PC (lookup từ id) | Dev FE |
-| P3 | BA confirm Mục tiêu required hay optional (OBS-D2-004) | BA |
-| P3 | BA confirm có cần Edit phân công (TC12) — nếu cần BA bổ sung SRS FR-VI-03 | BA |
+| P2 | Dev FE/BE validate `Mục tiêu` required theo BA 2026-05-11 (OBS-D2-004) | Dev FE+BE |
+| P2 | Dev hỗ trợ Edit phân công khi đợt còn `PHAN_CONG` theo BA 2026-05-11; QA retest TC12 | Dev FE+BE + QA |
 | P3 | Dev FE fix valuemax=0 spinbutton Điểm tối đa (OBS-D2-006) | Dev FE |
 | P3 | Design HUY state vào stepper detail (OBS-D2-007) | Design + Dev FE |
 

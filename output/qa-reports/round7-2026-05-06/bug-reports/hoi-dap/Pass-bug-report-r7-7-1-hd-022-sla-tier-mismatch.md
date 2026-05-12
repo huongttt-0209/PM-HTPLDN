@@ -15,12 +15,16 @@
 
 | BUG-ID | Severity | Component | Title | Status |
 |---|---|---|---|---|
-| BUG-HD-022-SLA-TIER-001 | Major | FE — SLA badge color tier | HD-022c badge xanh "Bình thường" ở ratio ~71.6% còn lại 28% — spec yêu cầu vàng "Sắp hết hạn" (<50% còn lại) | Open |
-| BUG-HD-022-SLA-TIER-002 | Major | FE — SLA badge color tier | HD-022d badge cam "Sắp hết hạn" ở ratio >100% elapsed — spec yêu cầu đỏ "Quá hạn" (>100% đã dùng) | Open |
+| ~~BUG-HD-022-SLA-TIER-001~~ | Major | FE — SLA badge color tier | ~~HD-022c badge xanh "Bình thường" ở ratio ~71.6% còn lại 28% — spec yêu cầu vàng "Sắp hết hạn" (<50% còn lại)~~ | Closed |
+| ~~BUG-HD-022-SLA-TIER-002~~ | Major | FE — SLA badge color tier | ~~HD-022d badge cam "Sắp hết hạn" ở ratio >100% elapsed — spec yêu cầu đỏ "Quá hạn" (>100% đã dùng)~~ | Closed |
+
+> **Re-test (cả 2 bug):** 2026-05-12 00:27:19 R11 — ✅ PASS (Closed-verified). FE đã đổi map color theo `muc_do_canh_bao` từ BE (BINH_THUONG→success, SAP_HET→warning, QUA_HAN→error) thay vì `daysRemaining`. Verify trên 4 record sampled (HD-008/009/HD-20260510-002/HD-20260509-005) — class FE khớp enum BE đúng spec BR-SLA-02. **Caveat:** Tier 4 QUA_HAN_NGHIEM_TRONG (>2x = >10d span 5d) chưa kiểm — không có record đủ ratio, cần seed riêng nếu cần verify tier 4.
 
 ---
 
-## BUG-HD-022-SLA-TIER-001 — HD-022c xanh ở ratio 71.6% elapsed (28% còn lại)
+## ~~BUG-HD-022-SLA-TIER-001~~ [CLOSED] — HD-022c xanh ở ratio 71.6% elapsed (28% còn lại)
+
+> **Re-test:** 2026-05-12 00:27:19 R11 — ✅ PASS (Closed-verified). Account `cb_pd_tw_04` qua MCP UI. Record HD-20260509-008 (8c54715f) state DANG_XU_LY, ratio elapsed ~77.6% (3.88/5d). Badge class `ant-tag-warning` (vàng) "Còn 1 ngày LV" — đúng tier 2 SAP_HET spec BR-SLA-02 (<50% còn lại). BE `GET /api/v1/hoi-daps/8c54715f...` trả `muc_do_canh_bao=SAP_HET` — FE map khớp BE. Evidence: [r7-hd-022c-reverify-r11-sla-warning-yellow-pass.png](image/r7-hd-022c-reverify-r11-sla-warning-yellow-pass.png).
 
 ### Mô tả
 
@@ -76,7 +80,9 @@ DOM info chi tiết:
 
 ---
 
-## BUG-HD-022-SLA-TIER-002 — HD-022d cam ở ratio >100% elapsed (-14h overdue)
+## ~~BUG-HD-022-SLA-TIER-002~~ [CLOSED] — HD-022d cam ở ratio >100% elapsed (-14h overdue)
+
+> **Re-test:** 2026-05-12 00:27:19 R11 — ✅ PASS (Closed-verified). Account `cb_pd_tw_04` qua MCP UI. Record HD-20260509-009 (101f22b6) state DANG_XU_LY, ratio elapsed ~117.6% (5.88/5d). Badge class `ant-tag-error` (đỏ) "Quá hạn 1 ngày LV" — đúng tier 3 QUA_HAN spec BR-SLA-02 (>100% elapsed). BE `GET /api/v1/hoi-daps/101f22b6...` trả `muc_do_canh_bao=QUA_HAN` — FE map khớp BE. Evidence: [r7-hd-022d-reverify-r11-sla-error-red-pass.png](image/r7-hd-022d-reverify-r11-sla-error-red-pass.png).
 
 ### Mô tả
 

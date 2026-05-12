@@ -29,7 +29,7 @@
   - **Kết quả:** ✅ R2 PASS — Excel binary OK xlsx mime, không JSON wrap. [verification-test-report-r7-5-4-bc-export.md](../output/qa-reports/round7-2026-05-06/workflow/bao-cao/verification-test-report-r7-5-4-bc-export.md)
   - **Bug:** [Pass-bug-report-r7-5-4-bc-export.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/Pass-bug-report-r7-5-4-bc-export.md) — 3/3 đóng (BUG-BC-EXPORT-001 + BUG-BC-LEGEND-001 Closed R2; BUG-BC-LEGEND-002 Closed R4)
 
-- ⚠️ **R7.7.13** 🔄 Báo cáo 40 TC `[85% R6 — 34 PASS, 6 FAIL, defer cleared]` <a id="r7-7-13"></a>
+- ⚠️ **R7.7.13** 🔄 Báo cáo 40 TC `[~88% R7-r2 — pattern unchanged, scope group HD+VV OK]` <a id="r7-7-13"></a>
   - **Cần:** ≥1 TVCS (✓12) · ≥1 CT (✓3) · ≥1 HD (✓7) · BC04/05/HD ready · ĐT ✓4 khóa seed sẵn R6
-  - **Kết quả:** ⚠️ R6 40/40 cover — 34 PASS + 6 FAIL chờ dev fix 4 bug. [functional-test-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/functional/bao-cao/functional-test-report-r7-7-13-bao-cao.md)
-  - **Bug:** [bug-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md) — 4/8 đóng (4 Open: DATA-SCOPE-LEAK Critical 4 role + PDF-NOT-SUPPORTED Major + XLSX-PARTIAL Medium + KYBAOCAO-NOT-VALIDATED Medium NEW R6)
+  - **Kết quả:** ⚠️ R7-r2 — pattern không đổi; nhóm HD+VV scope OK, nhóm Chi phí+TVV vẫn leak. [functional-test-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/functional/bao-cao/functional-test-report-r7-7-13-bao-cao.md)
+  - **Bug:** [bug-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md) — 5/8 đóng (3 Open: PDF Major + SCOPE-LEAK Partial + KYBAOCAO Partial Minor)
