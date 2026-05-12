@@ -14,7 +14,7 @@
 
 ## Tổng hợp
 
-Phát hiện **3** lỗi trong functional test R7.7.10 (preview/download MinIO config sai + UI silent reject upload file invalid + 3 trường công khai không ẩn theo Switch). **2/3 đóng tại R8 lần 8 (2026-05-11); BUG-BM-010 mới log từ test 10 CR-01.** Các bug khác từ workflow đã log riêng tại [`Pass-bug-report-flow-bm-r7-4-c1.md`](Pass-bug-report-flow-bm-r7-4-c1.md) (6 bugs BUG-BM-001..006).
+Phát hiện **3** lỗi trong functional test R7.7.10 (preview/download MinIO config sai + UI silent reject upload file invalid + 3 trường công khai không ẩn theo Switch). **Tất cả 3/3 đã đóng tại R8 lần 12 (2026-05-12).** Các bug khác từ workflow đã log riêng tại [`Pass-bug-report-flow-bm-r7-4-c1.md`](Pass-bug-report-flow-bm-r7-4-c1.md) (6 bugs BUG-BM-001..006).
 
 ### Severity breakdown
 
@@ -22,11 +22,11 @@ Phát hiện **3** lỗi trong functional test R7.7.10 (preview/download MinIO c
 |------|----------|-------|--------|-------|---------|
 | 3    | 1        | 0     | 2      | 0     | 0       |
 
-### Status sau R8 lần 11 (2026-05-11)
+### Status sau R8 lần 12 (2026-05-12)
 
 | Đóng | Còn open | % đóng |
 |---|---|---|
-| **2/3** (BUG-BM-007 + BUG-BM-008) | 1/3 (BUG-BM-010 Medium — 3 fields visibility, **VẪN reproduced R8 lần 11**) | **67%** |
+| **3/3** (BUG-BM-007 + BUG-BM-008 + BUG-BM-010 — FE add conditional render Switch ↔ 3 fields) | 0/3 | **100%** ✅ |
 
 ## Bug Summary Table
 
@@ -34,7 +34,7 @@ Phát hiện **3** lỗi trong functional test R7.7.10 (preview/download MinIO c
 |--------|----------|----------|------|--------|-------------------|-------|--------|
 | ~~BUG-BM-007~~ | Critical | P0 | Integration | BM-007 + BM-008 | `FR-VII-04 §Processing — Xem trực tuyến` + `§Processing — Tải về` | Preview + Download BM dùng MinIO presigned URL trỏ `localhost:9000` → user browser không kết nối được (`ERR_CONNECTION_REFUSED`) | **Closed (R8 lần 8 — BE đổi `MINIO_PUBLIC_HOST` sang `103.172.236.130:9000`, fetch status=200, content_length=917, 36ms)** |
 | ~~BUG-BM-008~~ | Medium | P2 | UI/UX | BM-016 | `FR-VII-04 §Error Handling E1` (ERR-BM-01 "Chỉ chấp nhận file doc, docx, xls, xlsx") | Form Thêm BM upload file `.txt` → FE silent rejected (ẩn file khỏi upload list) nhưng KHÔNG hiển thị toast/error message → user không biết file không hợp lệ | **Closed (R8 lần 8 — MCP MutationObserver verified, toast `.ant-message-notice-wrapper` "Định dạng không hỗ trợ: .txt. Chỉ chấp nhận: .doc, .docx, .xls, .xlsx" rendered)** |
-| BUG-BM-010 | Medium | P2 | UI/UX | BM-041 | `7.9-bieu-mau.md` line 122 (BM-041) + line 147 ("Switch OFF... → 3 trường ẩn") | Form Thêm BM — 3 trường công khai (Ảnh đại diện / Mô tả công khai / File đính kèm công khai) VẪN visible khi Switch "Công khai trên Cổng PLQG" OFF, vi phạm spec BM-041 "Switch công khai OFF → 3 trường (ảnh/mô tả/file) ẨN khỏi form" | **Open (R8 lần 11 reproduced — Switch ON/OFF không đổi visibility, same heights 203/128/203px both states)** |
+| ~~BUG-BM-010~~ | Medium | P2 | UI/UX | BM-041 | `7.9-bieu-mau.md` line 122 (BM-041) + line 147 ("Switch OFF... → 3 trường ẩn") | Form Thêm BM — 3 trường công khai (Ảnh đại diện / Mô tả công khai / File đính kèm công khai) VẪN visible khi Switch "Công khai trên Cổng PLQG" OFF, vi phạm spec BM-041 "Switch công khai OFF → 3 trường (ảnh/mô tả/file) ẨN khỏi form" | **Closed (R8 lần 12 — FE add conditional render, Switch OFF default 3 fields NOT in DOM, ON → fields mount, OFF→ON→OFF cycle verified)** |
 
 ---
 
@@ -190,8 +190,32 @@ DOM check sau upload .txt:
 
 ---
 
-## BUG-BM-010 — Form Thêm BM: 3 trường công khai visible khi Switch OFF (vi phạm BM-041)
+## ~~BUG-BM-010~~ — Form Thêm BM: 3 trường công khai visible khi Switch OFF (vi phạm BM-041) [CLOSED]
 
+> **Re-test 2026-05-12 R8 lần 12:** ✅ **CLOSED — FE fixed conditional render**. Account `cb_nv_tw_02` (kill chrome + fresh launch + fresh login + OTP `666666`). Navigate `/bieu-mau/them-moi`. Full toggle cycle test:
+>
+> ```json
+> Switch OFF (default load):
+>   { ariaChecked: "false", hasCheckedClass: false }
+>   "Ảnh đại diện":          { found: false }  ← KHÔNG còn trong DOM
+>   "Mô tả công khai":       { found: false }  ← KHÔNG còn trong DOM
+>   "File đính kèm công khai": { found: false }  ← KHÔNG còn trong DOM
+>
+> Click Switch → ON:
+>   { ariaChecked: "true", hasCheckedClass: true }
+>   "Ảnh đại diện":          { found: true, height: 203px, display: "block" }
+>   "Mô tả công khai":       { found: true, height: 128px, display: "block" }
+>   "File đính kèm công khai": { found: true, height: 203px, display: "block" }
+>
+> Click Switch → OFF again:
+>   { ariaChecked: "false", hasCheckedClass: false }
+>   "Ảnh đại diện":          { found: false }  ← UNMOUNTED
+>   "Mô tả công khai":       { found: false }  ← UNMOUNTED
+>   "File đính kèm công khai": { found: false }  ← UNMOUNTED
+> ```
+>
+> FE đã add conditional render based on Switch state — 3 fields mount/unmount đúng theo spec BM-041 line 147 "tắt → ẩn ... Bật → 3 trường hiện ngay". Snapshot a11y tree cũng confirm: khi Switch OFF, form chỉ có heading "Nội dung công khai trên Cổng PLQG" + Switch + 2 button "Tạo biểu mẫu"/"Hủy" — KHÔNG có 3 Form.Item của các trường công khai. Bug đóng. Evidence: `image/r8l12-2026-05-12-bug-bm-010-fixed-switch-off-3fields-unmounted.png`.
+>
 > **Re-test 2026-05-11 R8 lần 11:** ❌ **VẪN OPEN — reproduce 100%, không có fix giữa R8 lần 8 và R8 lần 11.** Account `cb_nv_tw_02` (kill chrome + fresh launch + fresh login + OTP `666666`). Navigate `/bieu-mau/them-moi`. DOM check Switch + 3 fields:
 > ```json
 > Switch OFF (default):
