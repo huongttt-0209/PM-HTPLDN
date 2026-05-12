@@ -137,7 +137,7 @@
    - Reject field `lyDoTuChoi` (spec) vs `ghiChuPheDuyet` (BE)
    - ĐKT state machine 2-state (NHAP/DA_PHAN_PHOI) — không có CHO_DUYET như spec
    - NHCH state machine `KICH_HOAT/VO_HIEU_HOA` (BE) vs `NHAP/CONG_KHAI/AN` (spec line 783)
-   - HV ↔ TAI_KHOAN field `taiKhoanId` MUST hay OPTIONAL?
+   - **HV ↔ TAI_KHOAN field `taiKhoanId` MUST hay OPTIONAL?** → **REOPEN R12.4 2026-05-12** (withdrawal R12 SAI sau cross-check 5 SRS sources). 4/5 sources confirm `tai_khoan_id` REQUIRED: master entity spec `srs-v3.5.md §3.4.3.53` line 3349-3368 (11 fields, field 11 = `tai_khoan_id` nullable FK TAI_KHOAN); master matrix `srs-v3.5.md:2623`; `_DELTA-MAP-FR03.md:42, 73`. Outlier 1/5: `srs-fr-03:1711` ("Thay đổi 12 OUT" — mâu thuẫn nội tại với `§3.4.3.53` cùng SRS set). **Cần BA chốt spec authority** — master entity spec thắng module file description không? BUG-DT-052 RE-OPEN.
 
 ---
 

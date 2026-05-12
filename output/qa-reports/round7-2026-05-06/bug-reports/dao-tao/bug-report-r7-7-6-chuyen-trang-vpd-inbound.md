@@ -29,8 +29,36 @@ Probe 2026-05-11 verify khả năng E2E "DN/NHT đăng ký Học viên qua chuy�
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-DT-CT-VPD-01 | Major | P1 | Permission | DT-019, DT-052 | `FR-III-04 UC23` + `BR-AUTH-08` (VPD) + `BR-PUBLIC-01` (KH `congKhai=true` accessible) | VPD filter chặn role DN/NHT access KH `congKhai=true` cross-đơn-vị → 403 `ERR-AUTH-VPD-00-02` cả GET detail + POST DKDT — vi phạm spec "DN/NHT đăng ký đào tạo qua chuyên trang" | Open |
-| BUG-DT-CT-INBOUND-01 | Major | P1 | Integration | DT-031b/c/d, DT-052 | `FR-III-04 UC23` + `FR-III-19` Cổng PLQG inbound | BE thiếu endpoint `POST /api/v1/public/dang-ky-dao-taos` + `POST /api/v1/public/hoc-viens` (mTLS inbound từ Cổng PLQG). Pattern `inbound` chỉ tồn tại cho `hoi-daps` + `tu-van-chuyen-saus` + `ho-so-pl-dns` — thiếu cho luồng Đào tạo | Open |
+| ~~BUG-DT-CT-VPD-01~~ | Major | P1 | Permission | DT-019, DT-052 | `FR-III-04 UC23` + `BR-AUTH-08` (VPD) + `BR-PUBLIC-01` (KH `congKhai=true` accessible) | VPD filter chặn role DN/NHT access KH `congKhai=true` cross-đơn-vị → 403 `ERR-AUTH-VPD-00-02` cả GET detail + POST DKDT — vi phạm spec "DN/NHT đăng ký đào tạo qua chuyên trang" | **WITHDRAWN** (R12 18:45 — bug premise sai. Spec FR-III-04 line 395-405 ghi rõ **"Màn hình: (chuyên trang)"** + PRE-01 "DN/NHT đã đăng nhập **trên chuyên trang**". Processing FR-III-04 (line 420-429) **KHÔNG có BR-AUTH-08 VPD check** (khác FR-III-01/02/05/14 đều có). DN/NHT KHÔNG nên access CMS internal `/api/v1/khoa-hocs/*` — đó là route cho CB NV/CB PD. VPD reject DN trên CMS là ĐÚNG SPEC. Bug thực sự cascade từ INBOUND-01 (chuyên trang BE chưa expose POST register). |
+| BUG-DT-CT-INBOUND-01 | Major | P1 | Integration | DT-031b/c/d, DT-052 | `FR-III-04 UC23` + `FR-III-19` Cổng PLQG inbound | BE thiếu endpoint `POST /api/v1/public/dang-ky-dao-taos` + `POST /api/v1/public/hoc-viens` (mTLS inbound từ Cổng PLQG). Pattern `inbound` chỉ tồn tại cho `hoi-daps` + `tu-van-chuyen-saus` + `ho-so-pl-dns` — thiếu cho luồng Đào tạo | **Open** (R12 RE-CONFIRMED 2026-05-12 — Swagger probe `/api/v1/public/*` 30 endpoints, 5 POST routes (oauth + 4 inbound khác), 6 dao-tao routes chỉ GET. KHÔNG có public POST cho register DKDT/HV) |
+
+> **🎯 Re-test R12 final 2026-05-12 18:45 (sau triage spec docs + Swagger):**
+>
+> Áp dụng cùng pattern triage như BUG-DT-031: cite spec line + check route đúng trong Swagger.
+>
+> | Bug | Spec evidence | QA verify R12 | Status mới |
+> |---|---|---|---|
+> | **VPD-01** | `srs-fr-03:395` "Màn hình: (chuyên trang)" + `:405` PRE-01 "DN/NHT đã đăng nhập trên chuyên trang" + `:420-429` Processing **KHÔNG có BR-AUTH-08** (khác FR-III-01/02/05/14). | DN/NHT phải dùng route public, KHÔNG phải CMS internal. CMS internal có VPD guard cho CB NV/CB PD là ĐÚNG SPEC. QA test sai design: probe `/api/v1/khoa-hocs/*` (CMS) thay vì `/api/v1/public/*` (chuyên trang). | **WITHDRAWN** |
+> | **INBOUND-01** | `srs-fr-03:397` "DN/NHT đăng ký qua chuyên trang. 3 cách: chuyên trang, nhập tay, import Excel" | Swagger probe: 30 public endpoints, 5 POST routes (oauth + 4 inbound: hoi-daps/TVCS/HSPL-DN/đánh-giá-TVV) — **KHÔNG có public POST cho `dang-ky-dao-taos` hay `hoc-viens`**. 6 dao-tao public chỉ GET (output). BE thật sự thiếu register endpoint. | **Open VALID** |
+>
+> **Bài học (memory entry):** QA cần map "Màn hình" trong spec ↔ route namespace BE: `(chuyên trang)` → `/api/v1/public/*` (mTLS hoặc oauth), `(CMS)` → `/api/v1/*` (JWT + VPD). Nhầm namespace → log false-positive permission bug.
+>
+> **Net R12 final:** **1/2 WITHDRAWN (VPD-01) + 1 valid Open (INBOUND-01)**. Cần escalate dev BE expose public POST register endpoint cho luồng đào tạo (theo pattern hoi-daps/TVCS/HSPL-DN inbound).
+
+> **Re-test R12 2026-05-12:** Cả 2 bug vẫn Open, không có thay đổi từ R11.
+>
+> **VPD-01:** Login DN `9999999990` (role `DN`, donViId `...8002...0001`, perms `create_dang_ky_dao_tao + read_khoa_hoc`). Probe API:
+> - GET `/khoa-hocs?page=1&pageSize=20` → 200 `total=0` (pool admin scope có 9 KH gồm 4 `congKhai=true`)
+> - GET `/khoa-hocs?congKhai=true` → 200 `total=0`
+> - GET `/khoa-hocs/dd1adee1-...` (KH-006 DA_DUYET congKhai=true) → **403 `ERR-AUTH-VPD-00-02 "Đơn vị không nằm trong phạm vi truy cập của bạn"`**
+> - POST `/khoa-hocs/dd1adee1-.../dang-ky-dao-taos` body NHẬP_TAY → **403 ERR-AUTH-VPD-00-02**
+> - GET `/public/khoa-hocs` → 401 ERR-AUTH-MTLS-01 (mTLS-protected, cần cert Cổng PLQG)
+>
+> **INBOUND-01:** Probe swagger `/api/docs-json` từ qtht_01 — `paths` total 474 (R11: 442, có thêm endpoints khác), 30 public endpoints, 9 inbound paths existing:
+> - hoi-daps/inbound, tu-van-chuyen-saus/inbound, ho-so-pl-dns/inbound (public + non-public variants) + tu-van-vien/danh-gia/inbound + ho-so-phap-ly-dns/inbound + danh-gia-chat-luong-tvs/inbound
+> - **VẪN KHÔNG có** `/public/dang-ky-dao-taos[/inbound]` hay `/public/hoc-viens[/inbound]` cho luồng Đào tạo
+>
+> Screenshot: [r12-dt-ct-vpd-inbound-still-open.png](../../screenshots/r12-dt-ct-vpd-inbound-still-open.png). **Cần escalate BE team lần 2.**
 
 ---
 

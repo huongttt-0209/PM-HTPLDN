@@ -253,7 +253,7 @@
 | 🔵 | BUG-BM-010 | Medium | BM-041 | 3 trường công khai (Ảnh/Mô tả/File) vẫn visible khi Switch "Công khai PLQG" OFF | FE | Fixed 2026-05-11 (commit 452665102) |
 | 🔵 | BUG-DT-038-ASSIGN-01 | Major | DT-038 | Tab "Bài giảng đã gán" thiếu button "Gán BG" + BE thiếu nested route POST/DELETE N-N | FE + BE | Fixed 2026-05-11 (BE+FE+tests) |
 | 🔵 | BUG-DT-053-PUBLIC-MODAL-01 | Minor | DT-053 | Modal "Công khai khóa học" thiếu textarea `mo_ta_cong_khai` + upload `file_dinh_kem_cong_khai` (5 CPF BR-PUBLIC-01) | FE + BE | Fixed 2026-05-11 (BE dto+service+FE modal) |
-| 🟣 | BUG-DT-052-HV-TAIKHOAN-01 | Minor | DT-052 | HV entity thiếu field `taiKhoanId` per FR-III-04 — chờ BA confirm MUST hay OPTIONAL | BA + BE | — |
+| 🟣 | BUG-DT-052-HV-TAIKHOAN-01 | Minor | DT-052 | HV entity thiếu field `taiKhoanId` per FR-III-04 — chờ BA confirm MUST hay OPTIONAL | BA + BE | **REOPEN R12.4 2026-05-12** — withdrawal R12 SAI sau cross-check 5 SRS sources. **4/5 sources confirm `tai_khoan_id` REQUIRED**: master entity spec `srs-v3.5.md §3.4.3.53` (11 fields, field 11 = `tai_khoan_id` nullable FK TAI_KHOAN); master matrix `srs-v3.5.md:2623`; `_DELTA-MAP-FR03.md:42, 73`. Outlier 1/5: `srs-fr-03:1711` (lower authority). **Cần BA chốt spec authority — master `srs-v3.5.md` thắng module file description.** |
 | 🔵 | BUG-DT-011-DD-ENDPOINT-01 | Major | DT-011/011a | DIEM_DANH POST endpoint 404; GET trả mock; `coMat` boolean thay vì enum 3 trị | BE | Fixed 2026-05-11 (enum DTO + back-compat) |
 | 🟢 | BUG-DT-031-KQHT-ENTITY-01 | Major | DT-031b/c/d + DT-054/055 | KET_QUA_HOC_TAP entity chưa deploy (mọi route 404) — block 5 TC | BE | Closed — entity exists as `ket_qua_dao_tao` at `/khoa-hocs/:id/ket-quas` (GET list, POST batch-update / import / export / export-docx / publish / unpublish). Auto-classify BR-KQ-01/02 in `ket-qua-recompute.service.ts`. QA tested wrong paths. |
 | ✅ | BUG-BM-007 | Critical | BM-007/008 | Preview/Download BM dùng MinIO presigned URL `localhost:9000` | — | Closed |
@@ -344,7 +344,7 @@
 - `bug-report-r7-7-16-api-deploy-gap.md` — API deploy gap (2 BUG)
 - `bug-report-r7-7-6-dt038-baigiang-assign-missing.md` — Đào tạo DT-038 (1 BUG)
 - `bug-report-r7-7-6-dt053-public-modal-missing-cpf.md` — Đào tạo DT-053 (1 BUG)
-- `bug-report-r7-7-6-hv-deps.md` — Đào tạo HV deps (3 BUG)
+- `bug-report-r7-7-6-hv-deps.md` — Đào tạo HV deps (R12.4: DT-011 Closed + DT-031 WITHDRAWN + DT-052 RE-OPEN chờ BA chốt spec authority)
 - `Pass-bug-report-r7-dashboard.md` — Dashboard R7 (5 BUG)
 - `bug-report-seed-r7-3-5-kh-nam-r8.md` — KH năm R8 (3 BUG)
 - `bug-report-function-bm-r7-7-10.md` — Bài giảng R7 (3 BUG)
