@@ -16,6 +16,28 @@
 > - **Submit happy path R11 ⚠️ partial:** Form filled OK 4/4 options (A=3 tỷ / B=10 tỷ / C=30 tỷ / D=Luật DN 2020 không quy định) nhưng MCP browser disconnect trước click [Tạo mới]. R7.3.8 R8/R9 đã PASS 7/7 POST `/cau-hois` via UI → endpoint proven, mark DT-008 ✅ vì UI render đầy đủ spec + create endpoint verified gián tiếp.
 > - Tổng count: 16/19 → **17/19 KH-pure PASS**.
 
+> **🔄 R12.4 ADDENDUM 2026-05-12 18:30 (Re-run R7.7.6 — verify 6 TC inherit DT-011a/031b/c/d/054/055):**
+>
+> User trigger: "chạy lại task R7.7.6". Test trên KH-005 (`929c53ba-...` DA_KET_THUC) đã có sẵn 5 KQDT đầy đủ + KH-001 (`19158f55-...` HOAN_THANH) có 1 KQDT congBo. Account `cb_nv_tw_01` cấp TW (CB Nghiệp vụ TW 01).
+>
+> | TC | Status R12.4 | Detail |
+> |---|:-:|---|
+> | **DT-054** Auto xếp loại điểm | ✅ **PASS** | API GET `/khoa-hocs/929c53ba.../ket-quas` 5/5 records auto-classify ĐÚNG BR-KQ-01/02: HV01 cc100%/d9.5→GIOI · HV02 cc100%/d7.5→KHA · HV03 cc80%/d5.5→TRUNG_BINH · HV04 cc40%(<80%)→KHONG_DAT · HV05 cc100%/d3.5(<5)→KHONG_DAT. Tất cả `xepLoaiOverride=false` → BE compute đúng. |
+> | **DT-055** HV đạt khóa (cc + điểm) | ✅ **PASS** | 3/5 ketQua=DAT (HV01/02/03) + 2/5 KHONG_DAT (HV04 cc fail, HV05 điểm fail) match spec. BUT phát hiện **FE bug DT-054-FE-01**: UI tab "Kết quả" render cột "Kết quả" cho HV04 = "Đạt" sai (API trả KHONG_DAT đúng) — FE compute chỉ check `điểm >=5` bỏ qua chuyên cần. |
+> | **DT-031b** Công bố KQ FR-III-19 | ✅ **PASS** | UI: Click "Công bố kết quả" trên KH-001 HOAN_THANH → modal "Công bố kết quả lên Cổng PLQG?" → "Công bố" → POST `/khoa-hocs/19158f55.../ket-quas/publish` **202 Accepted** → KQ.congBo=true + thoiGianCongBo updated `2026-05-12T11:12:53.056Z`. Guard verify: KH state DA_KET_THUC + chưa HOAN_THANH → 422 ERR-BIZ-III-36-01 "Chỉ công bố KQ khi khóa đã HOAN_THANH" ✅. |
+> | **DT-031c** Hủy công bố KQ | ❌ **FAIL — FE thiếu UI** | BE endpoint `POST /khoa-hocs/{id}/ket-quas/unpublish` exists (probe trả 422 ERR-VAL-SYS-00-01 yêu cầu body `{lyDo: max 2000 chars}` → route registered). Sau publish 202 thành công, UI giữ nguyên label "Công bố kết quả" + KHÔNG có button "Hủy công bố KQ" / "Gỡ công bố" / per-row action → user không thể trigger unpublish qua UI. Log BUG-DT-031c-FE-MISSING-UNPUBLISH-01 Major. |
+> | **DT-031d** API Cổng PLQG retry | ⏭ **DEFER** | mTLS infra-blocked, defer cùng với BUG-API-001 (Section 12 TODO-BUG-TRACKING.md). |
+> | **DT-011a** DD POST batch-update không lich_hoc | ❌ **FAIL — BE 500 + FE legacy schema** | UI: Tab "Điểm danh" KH-005 → DatePicker `03/03/2026` → render 5 HV với checkbox "Có mặt" + textbox "Lý do vắng" → tick 4/5 + ghi chú HV05 → click "Lưu điểm danh" → toast **"Lỗi hệ thống — Lưu điểm danh thất bại"**. Network reqid 5705: POST `/khoa-hocs/929c53ba.../diem-danhs/batch-update` → **500 ERR-SYS-00-00-01**. Diagnose: validation OK (empty array → 422 "min 1 element"; bad UUID → 422 "must be UUID"), nhưng valid HV → service crash 500 với cả schema cũ `coMat: boolean` lẫn schema mới `trangThai: enum CO_MAT/VANG_PHEP/VANG_KHONG_PHEP`. **2 bugs nested**: BE 500 unhandled (Major) + FE form chỉ render checkbox boolean thay vì 3 enum trị (Medium). |
+>
+> **Net R12.4: 3 PASS + 1 BLOCKED defer + 2 FAIL — phát hiện 4 bug mới.**
+>
+> **Files đã tạo R12.4:**
+> - [bug-report-r7-7-6-dt054-fe-chuyen-can.md](../../bug-reports/dao-tao/bug-report-r7-7-6-dt054-fe-chuyen-can.md) — BUG-DT-054-FE-CHUYEN-CAN-01 Major
+> - [bug-report-r7-7-6-dt031c-fe-thieu-button-huy-cong-bo.md](../../bug-reports/dao-tao/bug-report-r7-7-6-dt031c-fe-thieu-button-huy-cong-bo.md) — BUG-DT-031c-FE-MISSING-UNPUBLISH-01 Major
+> - [bug-report-r7-7-6-dt011a-dd-batch-500.md](../../bug-reports/dao-tao/bug-report-r7-7-6-dt011a-dd-batch-500.md) — 2 bugs: BE 500 (Major) + FE schema legacy (Medium)
+>
+> **Tổng count R7.7.6 cumulative: 21/27 KH-pure PASS** (= 17/19 R11 + 1 DT-019 R11 + 3 R12.4 từ DT-054/055/031b). Còn 2 FAIL (DT-031c/011a) chờ dev fix + 1 defer (DT-031d infra) + 9 chờ HOC_VIEN/permission-matrix.
+
 ---
 
 ## 🎯 Tóm tắt nhanh (cho PM/BA)

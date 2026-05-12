@@ -12,6 +12,20 @@
 | ~~BUG-DT-011-DD-ENDPOINT-01~~ | Major | DIEM_DANH POST endpoint chưa deploy (404); GET trả mock; field `coMat` boolean thay vì enum 3 trị (CO_MAT/VANG_PHEP/VANG_KHONG_PHEP) | **Closed** (R12 21:30 verified deploy — Swagger schema `DiemDanhItemDto.trangThai: enum["CO_MAT","VANG_PHEP","VANG_KHONG_PHEP"]` đã expose; POST `/khoa-hocs/{id}/diem-danhs/batch-update` validate đúng (`ERR-BIZ-III-05-02 "HV chưa được duyệt đăng ký"`). `coMat:boolean` giữ làm legacy compat field cho FE.) |
 | ~~BUG-DT-031-KQHT-ENTITY-01~~ | Major | KET_QUA_HOC_TAP entity chưa deploy (mọi route 404) — block 5 TC (DT-031b + DT-031c + DT-031d + DT-054 + DT-055) | **WITHDRAWN** (R12 18:30 — QA probe sai URL. Entity tên đúng = `KET_QUA_DAO_TAO` (KQDT singular), route đúng `/khoa-hocs/{id}/ket-quas` (8 routes Swagger: list/batch-update/import/publish/unpublish/export/export-docx). Sample KH-005 record `aaee0011-...` có ĐẦY ĐỦ fields spec: `xepLoai="GIOI", ketQua="DAT", lichHocId, dangKyId, diemKiemTra, soBuoiCoMat, tongBuoi, tyLeChuyenCan, xepLoaiOverride, ketQuaOverride, lyDoOverride, congBo, thoiGianCongBo, lyDoHuyCongBo`. Entity ĐÃ DEPLOY đầy đủ.) |
 
+> **🔁 R12.5 RE-VERIFY 2026-05-12 (user trigger "verify lại file bug R7.7.6 hv-deps"):**
+>
+> Re-probe 3 bug với account `cb_nv_tw_01` sau khi đã chạy R7.7.6 R12.4 (xem [functional report R12.4 ADDENDUM](../../functional/dao-tao/functional-test-report-r7-7-6-khoa-hoc-r10.md)). **Status 3/3 bug KHÔNG đổi** — nhưng có evidence bổ sung:
+>
+> | Bug | R12.5 probe | Status | Note |
+> |---|---|:-:|---|
+> | **DT-052** HV.taiKhoanId | `GET /hoc-viens` → 403 ERR-PERM-SYS-00-01 (cb_nv_tw_01 lacks perm; cần qtht_01). Field check gốc R11/R12.2 với qtht_01 vẫn valid: HV trả 13 fields KHÔNG có `taiKhoanId`. | **RE-OPEN** | Status không đổi từ R12.4 RETRACTION. Spec authority cần BA chốt: master `srs-v3.5.md §3.4.3.53` (11 fields có `tai_khoan_id`) vs module `srs-fr-03:1711` (4 fields). |
+> | **DT-011** DD POST endpoint | POST `/khoa-hocs/{KH-005}/diem-danhs/batch-update` body `{ngayDiemDanh, diemDanhs:[{hocVienId, trangThai:'CO_MAT'}]}` → **500 ERR-SYS-00-00-01** (happy path). Trước R12.3 chỉ verify guard 422 với HV chưa DA_DUYET → đã Closed. R12.4 phát hiện happy path crash 500 → log bug riêng. | **Closed (scope cũ)** | Original bug (404 + GET mock + boolean field) đã verified deploy R12.3. Bug 500 mới đã log riêng [bug-report-r7-7-6-dt011a-dd-batch-500.md](bug-report-r7-7-6-dt011a-dd-batch-500.md) — KHÔNG cần REOPEN bug này. |
+> | **DT-031** KQHT entity 404 | GET `/khoa-hocs/{KH-005}/ket-quas` → 200, 5 records (xepLoai + congBo + thoiGianCongBo + lyDoHuyCongBo OK). POST `/publish` → 422 ERR-BIZ-III-36-01 (guard "Chỉ công bố KQ khi khóa đã HOAN_THANH" work). POST `/unpublish` body `{lyDo:'verify probe R12.5'}` → **202 Accepted** + state thực thay đổi (3 records HV01/02/03 từ congBo=true → false + lyDoHuyCongBo='verify probe R12.5' set). | **WITHDRAWN** | Entity hoàn toàn deploy đúng spec. R12.5 confirm BE endpoint đầy đủ functional. (Side-effect: KH-005 fixture state thay đổi do probe — sẽ note state-snapshot.md.) |
+>
+> **R12.5 Net:** 0/3 bug status đổi. Bug summary table giữ nguyên. Bug R12.4 mới (DT-054 FE / DT-031c FE / DT-011a BE 500 / DT-011a FE schema legacy) log riêng ở 3 file bug-report khác trong cùng folder.
+>
+> **📌 Fixture side-effect ghi nhận:** KH-005 KQDT congBo state đổi 3 records (HV01/02/03 từ true → false) sau POST /unpublish probe R12.5. KH-005 đang DA_KET_THUC + chưa HOAN_THANH → KHÔNG restore congBo=true qua /publish (422 guard). Đã record vào [tasks/state-snapshot.md](../../../../../tasks/state-snapshot.md) dòng "KQDT KH-005 congBo". Task tương lai cần KQDT congBo=true → dùng KH-001 HOAN_THANH (vẫn congBo=true sau publish R12.4 18:13).
+>
 > **🚨 RETRACTION R12.4 2026-05-12 (DT-052 RE-OPENED):**
 >
 > Withdrawal DT-052 ở R12 18:30 cite chỉ 1 source `srs-fr-03:1711` (entity matrix description trong module file) — KHÔNG safely grounded. Cross-check 5 SRS sources phát hiện **4/5 confirm `tai_khoan_id` REQUIRED**:
