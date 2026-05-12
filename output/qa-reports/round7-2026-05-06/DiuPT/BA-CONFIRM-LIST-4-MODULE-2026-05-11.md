@@ -105,9 +105,16 @@
 - **Vấn đề:** `FR-III-09 line 783` ghi `NHAP/CONG_KHAI/AN` (3 state) nhưng `Entity §3.4.3.21 row 9` + BE impl = `KICH_HOAT/VO_HIEU_HOA` (2 state) — line 783 typo copy-paste từ SM-BIEUMAU
 - **Cần BA chốt:** Sync FR-III-09 line 783 với Entity §3.4.3.21 (source-of-truth là Entity)
 
-#### #10 — HV ↔ TAI_KHOAN link `taiKhoanId`
-- **Vấn đề:** Spec FR-III-04 row spec yêu cầu HV link 1:1 TAI_KHOAN qua field `tai_khoan_id`. HV detail GET 13 fields KHÔNG có `taiKhoanId`
-- **Cần BA chốt:** Link MUST hay OPTIONAL? Nếu MUST → BE add field + auto-create TK khi POST HV
+#### #10 — HV ↔ TAI_KHOAN link `taiKhoanId` [REOPEN R12.4 2026-05-12 — withdrawal R12 SAI]
+- **Vấn đề:** HV entity thiếu field `tai_khoan_id` link TAI_KHOAN — BE GET không trả, schema migration chưa add.
+- **Cross-check 5 SRS sources (R12.4):** **4/5 confirm `tai_khoan_id` REQUIRED**:
+  - `input/srs-update-2026-5-5/srs-v3.5.md §3.4.3.53` line 3349-3368 — entity HOC_VIEN có 11 fields, field 11 = `tai_khoan_id` (identifier, nullable, FK → TAI_KHOAN)
+  - `input/srs-update-2026-5-5/srs-v3.5.md:2623` (master entity matrix row 10) — "có `tai_khoan_id` link TK nếu có"
+  - `input/srs-update-2026-5-5/_DELTA-MAP-FR03.md:42` — "1:1 với TAI_KHOAN qua `tai_khoan_id`"
+  - `input/srs-update-2026-5-5/_DELTA-MAP-FR03.md:73` — "khi seed học viên, tạo TK đồng thời"
+  - **Outlier 1/5:** `input/srs-update-2026-5-5/srs-fr-03-dao-tao.md:1711` (description ngắn, lower authority) ghi "Thay đổi 12 OUT" → mâu thuẫn nội tại với `§3.4.3.53` cùng file
+- **Cần BA chốt:** Spec authority — master entity spec `srs-v3.5.md §3.4.3.53` (definitive 11-field schema) thắng module file description `srs-fr-03:1711` (legacy "4 trường") không? Nếu master thắng → BE add `tai_khoan_id` nullable FK. Nếu module description thắng → cập nhật `§3.4.3.53` + DELTA-MAP để xoá field 11 + dòng matrix 2623.
+- **Bug:** BUG-DT-052-HV-TAIKHOAN-01 RE-OPEN (Minor)
 
 #### #11 — HV master entry-point
 - **Vấn đề:** FR-III-04 UC23 quy định "DN/NHT đăng ký qua chuyên trang". Hiện BE expose `POST /hoc-viens` với guard 403 cho CB NV — endpoint này dành cho ai?

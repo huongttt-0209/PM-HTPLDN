@@ -26,11 +26,22 @@ Phát hiện **1** lỗi Minor — UI modal "Công khai" thiếu form input cho 
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-DT-053-PUBLIC-MODAL-01 | Minor | P2 | UI/UX | DT-053 | `BR-PUBLIC-01/02/03` (test plan §140, §213) | Modal "Công khai khóa học?" chỉ confirm Y/N, KHÔNG có textarea `mo_ta_cong_khai` (max 5000) + upload `file_dinh_kem_cong_khai` (PDF/DOC/DOCX/XLS/XLSX max 20MB) theo CR-01 5 CPF | Open |
+| ~~BUG-DT-053-PUBLIC-MODAL-01~~ | Minor | P2 | UI/UX | DT-053 | `BR-PUBLIC-01/02/03` (test plan §140, §213) | Modal "Công khai khóa học?" chỉ confirm Y/N, KHÔNG có textarea `mo_ta_cong_khai` (max 5000) + upload `file_dinh_kem_cong_khai` (PDF/DOC/DOCX/XLS/XLSX max 20MB) theo CR-01 5 CPF | **Closed** (R12 verified 2026-05-12) |
 
 ---
 
-## BUG-DT-053-PUBLIC-MODAL-01 — Modal "Công khai khóa học" thiếu form 5 CPF (mô tả + file đính kèm)
+## ~~BUG-DT-053-PUBLIC-MODAL-01~~ [CLOSED] — Modal "Công khai khóa học" thiếu form 5 CPF (mô tả + file đính kèm)
+
+> **Re-test:** 2026-05-12 R12 — ✅ PASS (Closed-verified). Sau cache clear + login `cb_nv_tw_02`, navigate KH-20260509-006 detail → button đổi từ "Công khai khóa học?" thành **"Công khai khóa học"** (bỏ ?), full form 5 CPF render đầy đủ:
+>
+> - **Title:** "Công khai khóa học" + description hướng dẫn "Hãy bổ sung mô tả công khai và tài liệu giới thiệu (nếu có) trước khi xác nhận"
+> - **Field 1: Mô tả công khai** ✅ — textarea multiline (uid 19_7) + counter "0 / 5000" — match BR-PUBLIC-01 spec
+> - **Field 2: File đính kèm công khai** ✅ — Upload widget "Kéo thả hoặc nhấp để chọn tệp đính kèm. **Tối đa 5 tệp. Định dạng: .pdf, .doc, .docx, .xls, .xlsx. Dung lượng tối đa: 20MB.**" — match spec PDF/DOC/DOCX/XLS/XLSX max 20MB
+> - **Field 3-5 (auto):** thoiGianDangTai server-side ✅ R10 verified, congKhai toggle ✅, người công khai từ JWT ✅
+> - **Button:** Hủy (19_13) + Công khai (19_14) submit
+> - **End-to-end test PASS:** Fill textarea với mô tả 200+ ký tự + click Công khai → reqid=2681 `POST /khoa-hocs/{id}/publish` → 200 OK, KH restored `congKhai=true` với `moTaCongKhai` persisted.
+>
+> Match đầy đủ BR-PUBLIC-01 5 CPF spec. Screenshot: [r12-dt053-modal-public-5cpf-pass.png](../../screenshots/r12-dt053-modal-public-5cpf-pass.png).
 
 ### Mô tả
 

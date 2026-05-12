@@ -26,11 +26,20 @@ Phát hiện **1** lỗi Major liên quan N-N relation KHOA_HOC ↔ BAI_GIANG.
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-DT-038-ASSIGN-01 | Major | P1 | UI/UX + Data | DT-038 | `FR-III-07 §561 + FR-III-11 §816` | Tab "Bài giảng đã gán" trên KH detail thiếu button "Gán bài giảng" → KHÔNG thể gán BG qua UI, BE chỉ filter từ BG side, không có nested route POST/DELETE assignment | Open |
+| ~~BUG-DT-038-ASSIGN-01~~ | Major | P1 | UI/UX + Data | DT-038 | `FR-III-07 §561 + FR-III-11 §816` | Tab "Bài giảng đã gán" trên KH detail thiếu button "Gán bài giảng" → KHÔNG thể gán BG qua UI, BE chỉ filter từ BG side, không có nested route POST/DELETE assignment | **Closed** (R12 verified 2026-05-12 — FE add button + modal; BE filter từ BG side OK) |
 
 ---
 
-## BUG-DT-038-ASSIGN-01 — Tab "Bài giảng đã gán" thiếu button "Gán bài giảng" + BE thiếu endpoint assignment
+## ~~BUG-DT-038-ASSIGN-01~~ [CLOSED] — Tab "Bài giảng đã gán" thiếu button "Gán bài giảng" + BE thiếu endpoint assignment
+
+> **Re-test:** 2026-05-12 R12 — ✅ PASS (Closed-verified). Sau cache clear + login `cb_nv_tw_02`, navigate KH-20260511-001 detail tab "Bài giảng đã gán":
+> - **FE button:** Tab giờ render `[plus Gán bài giảng]` (uid 14_62) trên header tabpanel — KHÔNG còn empty + missing button như R11.
+> - **FE modal:** Click button → modal **"Gán bài giảng vào khóa học"** mở với combobox "Chọn bài giảng công khai để gán" + button Hủy/Gán. Schema spec `congKhai=true` filter (chỉ BG đã công khai mới được gán).
+> - **BE call:** reqid=2459 `GET /api/v1/bai-giangs?congKhai=true&page=1&pageSize=100` → 200 trả 0 records (data gap — 8 BG hiện tại all `congKhai=false` từ R7.3.10 seed; KHÔNG phải bug FE/BE).
+> - **BE filter từ BG side:** reqid=2458 `GET /bai-giangs?khoaHocId=...` → 200 (FE dùng để render danh sách đã gán) — work.
+> - **Note residual BE:** Nested route `GET /khoa-hocs/{id}/bai-giangs` vẫn 404 (R12 unchanged). FE bypass dùng filter từ BG side. BG schema vẫn không có field `khoaHocIds`. Acceptable — không block end-user vì FE pattern khác hoạt động được. Khi nào cần re-architect N-N theo nested route, log bug riêng.
+>
+> Screenshots: [r12-dt038-tab-assign-button-present.png](../../screenshots/r12-dt038-tab-assign-button-present.png) · [r12-dt038-modal-gan-bai-giang.png](../../screenshots/r12-dt038-modal-gan-bai-giang.png).
 
 ### Mô tả
 

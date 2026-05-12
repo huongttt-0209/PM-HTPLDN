@@ -28,7 +28,7 @@
 
 Seed 3 record KH năm trạng thái `Nháp` cho 3 cấp Mô hình A (TW/BN/DP) qua UI SCR-III-00 + Modal "Tạo kế hoạch đào tạo". 3/3 POST `/api/v1/ke-hoach-dao-taos` trả 201 Created.
 
-**Bug:** [bug-report-seed-r7-3-5-kh-nam-r8.md](../../bug-reports/dao-tao/bug-report-seed-r7-3-5-kh-nam-r8.md) — R7 ban đầu 2 bug (`KHNAM-001/002`) đã gộp vào R8 file (rename `KH-001/003` + thêm `KH-002`). R10 status: 2/3 đóng (KH-002+003 Closed; KH-001 cross-tenant Open RE-CONFIRMED). File R7 cũ archived tại [`_archive/`](../../bug-reports/dao-tao/_archive/bug-report-seed-r7-3-5-kh-nam.md).
+**Bug:** [Pass-bug-report-seed-r7-3-5-kh-nam-r8.md](../../bug-reports/dao-tao/Pass-bug-report-seed-r7-3-5-kh-nam-r8.md) — R7 ban đầu 2 bug (`KHNAM-001/002`) đã gộp vào R8 file (rename `KH-001/003` + thêm `KH-002`). **R12 status: 3/3 đóng** (KH-001 Closed R12, KH-002+003 Closed R10). File R7 cũ archived tại [`_archive/`](../../bug-reports/dao-tao/_archive/bug-report-seed-r7-3-5-kh-nam.md).
 
 ---
 

@@ -2,7 +2,7 @@
 
 > **⚠️ ARCHIVED 2026-05-10:** File này là log R7 ban đầu (09:35-09:55 cùng ngày 2026-05-08). **KHÔNG dùng làm source-of-truth nữa.**
 >
-> **Active bug report:** [`../bug-report-seed-r7-3-5-kh-nam-r8.md`](../bug-report-seed-r7-3-5-kh-nam-r8.md) — R8 đã gộp đầy đủ 2 bug R7 + 1 bug mới + diagnosis sâu hơn + Re-test note R10.
+> **Active bug report:** [`../Pass-bug-report-seed-r7-3-5-kh-nam-r8.md`](../Pass-bug-report-seed-r7-3-5-kh-nam-r8.md) — R8 đã gộp đầy đủ 2 bug R7 + 1 bug mới + diagnosis sâu hơn + Re-test note R10/R12 (3/3 closed R12).
 >
 > **Mapping ID R7 → R8:**
 > - `BUG-KHNAM-001` → `BUG-KH-001` (cross-tenant, downgrade Critical→Major sau evidence backend)
