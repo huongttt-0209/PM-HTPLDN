@@ -19,8 +19,8 @@
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
 | **P3** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.3.7](#r7-3-7) |
 | **P4** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.4.C1](#r7-4-c1) |
-| **P7** | 2 | 0 | 0 | 0 | 2 | 0 | 0 | 0 | ⚠️[R7.7.10](#r7-7-10) · ⚠️[R7.7.10b](#r7-7-10b) |
-| **Tổng** | **4** | **0** | **0** | **2** | **2** | **0** | **0** | **0** |  |
+| **P7** | 2 | 0 | 0 | 1 | 1 | 0 | 0 | 0 | ⚠️[R7.7.10](#r7-7-10) · ✅[R7.7.10b](#r7-7-10b) |
+| **Tổng** | **4** | **0** | **0** | **3** | **1** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
@@ -32,12 +32,13 @@
   - **Kết quả:** R8 lần 7 ✅ 8/8 PASS — BUG-BM-005 closed (manual + MCP MutationObserver verified). 6/6 bug đóng. [workflow-r7-4-c1-r8](../output/qa-reports/round7-2026-05-06/workflow/bieu-mau/workflow-test-report-r7-4-c1-bm-r8.md)
   - **Bug:** [Pass-bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/Pass-bug-report-flow-bm-r7-4-c1.md) — 6/6 đóng (BUG-BM-005 closed R8 lần 7 2026-05-10).
 
-- ⚠️ **R7.7.10** ✏️ Biểu mẫu v3.5 — 47 TC (7 cũ + 10 CR-01 + 30 CRUD/workflow) `[~66% — 31/47 PASS, 6 PARTIAL, 5 ⏳ Pending, 5 DEFER]` <a id="r7-7-10"></a>
-  - **Kết quả:** R8 lần 8 (2026-05-11) — chạy 14 TC sau 8 bug closed. **9 PASS + 1 PARTIAL (BM-041 → BUG-BM-010) + 4 ⏳ defer**. Flip FAIL → PASS: BM-007/008/016/026. CR-01 fresh PASS: BM-042/044/046/047/050. Pass% từ 49% → **66%** (PASS only), 62% → **79%** (PASS+PARTIAL). 0 FAIL còn lại. [functional-r7-7-10-r8-lần-8](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10-bm-r8-lan-8.md)
-  - **Bug:** [bug-report-function-bm-r7-7-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/bug-report-function-bm-r7-7-10.md) — 2/3 đóng (BUG-BM-007/008 closed R8 lần 8 · BUG-BM-010 R8 lần 11 verify reproduced — Switch ON/OFF same 3-fields heights 203/128/203px, chưa fix). Bonus observation closed: UI hint Ảnh đại diện 20MB → 5MB match spec. Workflow bugs riêng tại [Pass-bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/Pass-bug-report-flow-bm-r7-4-c1.md) (6/6 đóng R8 lần 7).
+- ⚠️ **R7.7.10** ✏️ Biểu mẫu v3.5 — 47 TC (7 cũ + 10 CR-01 + 30 CRUD/workflow) `[~77% — 36/47 PASS, 6 PARTIAL, 0 ⏳ Pending, 5 DEFER]` <a id="r7-7-10"></a>
+  - **Kết quả:** R8 lần 13 (2026-05-12) — close **5 ⏳ Pending** thành **4 ✅ + 1 ⚠️ PARTIAL**. BM-010 (file replace) + BM-043 (BR-PUBLIC-02 clear timestamp) + BM-048 (3 anhDaiDien scenarios: invalid pdf/6MB/valid jpg) + BM-049 (multi-file fileDinhKemCongKhai) → ✅ PASS. **BM-045 ⚠️ PARTIAL — spec contradiction phát hiện** (BR-PUBLIC-01 nói HUY/TU_CHOI reject, BM-045 test plan nói AN/HUY reject — BE accept AN, cần BA confirm intent). 0 ⏳ Pending, 0 FAIL, 0 bug open. [functional-r7-7-10-r8-lần-13](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10-bm-r8-lan-13.md)
+  - **Bug:** [Pass-bug-report-function-bm-r7-7-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/Pass-bug-report-function-bm-r7-7-10.md) — **3/3 đóng** (BUG-BM-007/008 closed R8 lần 8 · BUG-BM-010 closed R8 lần 12). Workflow bugs riêng tại [Pass-bug-report-flow-bm-r7-4-c1.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/Pass-bug-report-flow-bm-r7-4-c1.md) (6/6 đóng R8 lần 7).
+  - **Cần BA confirm:** (1) BM-045 spec contradiction BR-PUBLIC-01 vs test plan wording; (2) NHT scope permission-matrix line 534 asterisk; (3) BM-028/029 happy-path test data prep.
 
-- ⚠️ **R7.7.10b** ✏️ Defer-unblock multi-account + size + audit `[100% mechanism unblocked — 6 ✅ + 2 ⚠️ PARTIAL bulk happy-path defer R11]` <a id="r7-7-10b"></a>
-  - **Kết quả:** R8 lần 10 (2026-05-11) — full re-run 8 TC. **6 ✅ PASS** (BM-032/033(BKH)/034(AG)/035a NHT/035c CG/040) + **2 ⚠️ PARTIAL mechanism unblocked** (BM-028/029 — MCP upload works trên bulk wizard hidden file input, happy-path defer R11 cần own-đơn-vị TM + template content). BM-015 PASS R8 lần 9 reference. **0 tool block còn lại** (vs 2 DEFER R7.7.10b). Sub-defer: BM-033 BTC reverse (rate limit), BM-034 BG reverse (low marginal), BM-035b TVV pwd. [functional-r7-7-10b-r8-lần-10](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10b-bm-r8-lan-10.md)
-  - **Bug:** [Pass-bug-report-r7-7-10b-bm.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/Pass-bug-report-r7-7-10b-bm.md) — 1/1 đóng (BUG-BM-009 closed R8 lần 9 2026-05-11 — FE pre-check Option B spec FR-VII-04, toast Vietnamese + session preserve, MutationObserver verified).
-  - **Findings:** (1) MCP `upload_file` tool gap closed — bulk wizard hidden `<input type=file multiple>` reachable via dropzone button uid; (2) BE bulk validate enforce BR-AUTH-08 ownership cross-đơn-vị reject 422 + toast tiếng Việt; (3) NHT scope sub-observation persists (perm matrix `R` no asterisk vs impl own-unit — BA confirm needed).
-  - **Output:** 3 TM cross-unit seeded (BKH `6ad5bf52` + BTC `65471c03` + STP-AG `11fe7276`); pool TM grew 7→16.
+- ✅ **R7.7.10b** ✏️ Defer-unblock multi-account + size + audit `[100% — 8/8 PASS clean]` <a id="r7-7-10b"></a>
+  - **Kết quả:** R8 lần 14 (2026-05-12) — close 2 ⚠️ PARTIAL bulk happy-path: **BM-028 PASS** (3 BMs created BM-20260511-002/003/004 trong TM "HĐ Lao động" cùng timestamp atomic) + **BM-029 PASS** (FE pre-check Option B: 3 valid + 1 .txt blocked với toast tiếng Việt). Tổng 8/8 PASS clean. [functional-r7-7-10b-r8-lần-14](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10b-bm-r8-lan-14.md). Round trước: [r8-lần-10](../output/qa-reports/round7-2026-05-06/functional/bieu-mau/functional-test-report-r7-7-10b-bm-r8-lan-10.md).
+  - **Bug:** [Pass-bug-report-r7-7-10b-bm.md](../output/qa-reports/round7-2026-05-06/bug-reports/bm/Pass-bug-report-r7-7-10b-bm.md) — 1/1 đóng (BUG-BM-009 closed R8 lần 9 — FE pre-check Option B + session preserve).
+  - **Sub-defer (non-blocking, test-env dep):** BM-035b TVV pwd fixture · NHT scope BA confirm (perm-matrix line 534 asterisk).
+  - **Output:** TM "HĐ Lao động" pool 7→11 BMs (3 mới từ bulk import). Pool TM total 16.

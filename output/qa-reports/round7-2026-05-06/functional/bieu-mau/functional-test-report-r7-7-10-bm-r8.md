@@ -53,9 +53,9 @@ R8 lần 2 chỉ chạy **regression-light** thay vì full 47 TC re-test do:
 
 | TC ID | UC | Tên | Status R7 | **Status R8 lần 2** | Note |
 |-------|-----|-----|:-:|:-:|------|
-| BM-007 | UC95 | Preview online doc/docx → PDF | ❌ | ❌ | [BUG-BM-007](../../bug-reports/bm/bug-report-function-bm-r7-7-10.md#bug-bm-007--preview--download-biểu-mẫu-trỏ-minio-localhost9000-không-reachable) reproduced R8 lần 2 — `GET /download` 302 → `localhost:9000/...` `ERR_CONNECTION_REFUSED` |
+| BM-007 | UC95 | Preview online doc/docx → PDF | ❌ | ❌ | [BUG-BM-007](../../bug-reports/bm/Pass-bug-report-function-bm-r7-7-10.md#bug-bm-007--preview--download-biểu-mẫu-trỏ-minio-localhost9000-không-reachable) reproduced R8 lần 2 — `GET /download` 302 → `localhost:9000/...` `ERR_CONNECTION_REFUSED` |
 | BM-008 | UC95 | Tải BM về | ❌ | ❌ | BUG-BM-007 cùng root cause — MinIO public host vẫn `localhost:9000` |
-| BM-016 | UC95 | Upload file `.txt` (sai format) | ❌ | ❌ | [BUG-BM-008](../../bug-reports/bm/bug-report-function-bm-r7-7-10.md#bug-bm-008--form-thêm-bm-silent-reject-file-invalid-không-có-toasterror) reproduced R8 lần 2 — upload `test-bm-invalid.txt` → 0 toast/error/file item, silent reject |
+| BM-016 | UC95 | Upload file `.txt` (sai format) | ❌ | ❌ | [BUG-BM-008](../../bug-reports/bm/Pass-bug-report-function-bm-r7-7-10.md#bug-bm-008--form-thêm-bm-silent-reject-file-invalid-không-có-toasterror) reproduced R8 lần 2 — upload `test-bm-invalid.txt` → 0 toast/error/file item, silent reject |
 | BM-001 | UC92 | List TM phân trang + filter trạng thái | ✅ | ✅ | API: total=4, AN:1, NHAP:2, CONG_KHAI:1 — match expected sau R7.4.C1 R8 lần 2 |
 | BM-005 | UC96 | Search BM theo keyword | ✅ | ✅ | `?search=re-seed` → 3 (BM-20260509-001/002/003 R7.3.7 R8). `?search=NotExistsXYZ` → 0 |
 | BM-012 | UC95 | Xem chi tiết BM | ✅ | ✅ | GET BM-20260509-001 trả đầy đủ field, `trangThai=CONG_KHAI`, đúng state post-R7.4.C1 R8 lần 2 SM T3 |

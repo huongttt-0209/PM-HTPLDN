@@ -410,4 +410,4 @@ Response: meta.total = 1   ← BM thực tế = 1
 
 *Bug report generated: 2026-05-07 18:30 | QA Automation via Claude Code MCP*
 
-> **R7.7.10 functional bugs:** Xem file riêng [`bug-report-function-bm-r7-7-10.md`](bug-report-function-bm-r7-7-10.md) (BUG-BM-007 MinIO localhost broken preview+download · BUG-BM-008 silent reject upload).
+> **R7.7.10 functional bugs:** Xem file riêng [`Pass-bug-report-function-bm-r7-7-10.md`](Pass-bug-report-function-bm-r7-7-10.md) (BUG-BM-007/008/010 all closed R8 lần 8/12).
