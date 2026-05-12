@@ -28,9 +28,9 @@ Walk result tổng:
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 5    | 2        | 2     | 0      | 1     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 5    | 2        | 2     | 0      | 1     | 0       | 5      | 0    |
 
 ## Bug Summary Table
 
@@ -86,11 +86,6 @@ URL trong mail TVV `http://103.172.236.130/auth/first-login-password?token=a612b
 
 > **Re-test 2026-05-09 04:25:00 R11 (sau dev fix):** ✅ **CLOSED**. End-to-end re-walk với TVV-BTP-TW-0032 "TVV R11 Verify Mail Fix" (email `tvv.r11.mailfix@test.htpldn.vn`, ID `06748bb5-...`) — `cb_nv_tw_02` tạo mới + Trình duyệt → `cb_pd_tw_02` Phê duyệt. POST `/phe-duyet` 200 OK (reqid=748, server time 2026-05-08T21:19:42.317Z), `taiKhoanId=b7a05555-ebbb-4369-8b60-0354cdf0e100`, `trangThai=CHO_KICH_HOAT`. **MailHog nhận 1 mail** đúng pattern SRS line 589: subject `Hồ sơ TVV đã được phê duyệt — kích hoạt tài khoản`, body `Link kích hoạt: http://103.172.236.130/auth/first-login-password?token=a612b7e5-ca39-4c90-8975-7a2c7c42e860 ... Link kích hoạt có hiệu lực vĩnh viễn và chỉ dùng được một lần`. KHÔNG còn temp pass/URL localhost. Click link (sau khi tự thêm port `:3000` ... xem BUG-005) → trang `Đặt mật khẩu lần đầu` → đặt MK `Tvv@R11Pass!` → toast "Kích hoạt tài khoản thành công" + auto-login vào sidebar role TVV (4 module). Verify state: `GET /tu-van-viens/06748bb5-...` → `trangThai=HOAT_DONG` ✅ FR-VIII-26 dual-state sync. BUG-002 fixed clean. Còn lại minor BUG-005 mail link thiếu port (log riêng).
 >
-> **Re-test 2026-05-09 01:35:00 R10 (end-to-end re-walk fresh data theo yêu cầu user):** ❌ **VẪN OPEN — reproducible với data hoàn toàn mới**. Tester tạo TVV-BTP-TW-0031 "TVV R10 Test BUG-002 Mail" (email `tvv.r10.bug002@test.htpldn.vn`, CCCD `999509100001`) qua UI bằng `cb_nv_tw_02` → walk auto-chain Trình duyệt → `cb_pd_tw_02` Phê duyệt. POST `/api/v1/tu-van-viens/9338c73e-8867-403b-a577-89a4dcf035b1/phe-duyet` 200 OK (reqid=604, server time 2026-05-08T18:32:49.455Z), response: `taiKhoanId="a1e91b13-9212-4fa1-a204-928cc7cc814f"`, `trangThai="CHO_KICH_HOAT"`, `ngayCongNhan="2026-05-08T18:32:49.455Z"` ✅ (TK auto-tạo đầy đủ). Wait 50s+ → MailHog `?kind=to&query=tvv.r10.bug002@test.htpldn.vn` Total **0** mail. Cùng phase 18:00-18:32 mail kích hoạt fire bình thường cho: NHT (`nht_tc001_btp_tw` 16:45), Doanh nghiệp (`phucuong.bn` 18:10 + `vanloc.bg` 18:06), Cán bộ (`cb_pd_dp_08` 15:56) — chỉ trigger mail TVV approval bị tắt riêng. R10 confirm bug do BE trigger mail TVV approval bị tắt — KHÔNG phải data corruption từ TVV-0016 cũ.
->
-> **Re-test 2026-05-09 00:50:19 R9 (server clock lệch ~7h: 2026-05-08T17:38):** ❌ **VẪN OPEN — REGRESSED**. Account `cb_pd_tw_02` phê duyệt TVV-BTP-TW-0016 "PD Batch Test 1 R7-7-2" (email `pd.batch.1@test.htpldn.vn`). POST `/api/v1/tu-van-viens/{id}/phe-duyet` 200 OK, response trả `taiKhoanId="cca7d919-..."` + `trangThai="CHO_KICH_HOAT"` ✅ (TK auto-tạo OK theo FR-VIII-15 bước 1). Tuy nhiên **MailHog KHÔNG nhận được mail nào** tới `pd.batch.1@test.htpldn.vn` sau wait 50s+. Total inbox 81 unchanged. Last TVV approval mail trong MailHog vẫn là `nguyen.tuvan.01` 2026-05-07T10:36 (R7 cũ). So sánh đối chứng: NHT activation mail (subject "Kích hoạt tài khoản Người hỗ trợ pháp lý") + Doanh nghiệp activation mail (subject "Kích hoạt tài khoản doanh nghiệp HTPLDN") VẪN dùng pattern link token đúng SRS — chỉ TVV approval mail bị tắt trigger sau dev rebuild ~2026-05-08. Vẫn vi phạm FR-VIII-15 §Processing Bước 2 — yêu cầu gửi mail link kích hoạt vĩnh viễn 1 lần dùng. Severity cập nhật ngầm từ "format sai" → "không gửi mail" (worse).
->
-> **Re-test 2026-05-08 R8:** ❌ **VẪN OPEN**. MailHog index 0 (mới nhất) → `nguyen.tuvan.01@test.htpldn.vn`, subject "Hồ sơ TVV đã được phê duyệt — thông tin đăng nhập". Body: `Tên đăng nhập: nguyen_tuvan_01` + `Mật khẩu tạm: 4kEmS4N&#R%*3m` + `Trang đăng nhập: http://localhost:3000/auth/login`. BE vẫn dùng credential pattern + URL `localhost:3000`, KHÔNG đổi sang link token theo SRS line 589.
 
 ### Mô tả
 

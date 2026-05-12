@@ -49,12 +49,11 @@
 ```mermaid
 graph LR
     A[DN gửi câu hỏi] --> B{Chọn kênh}
-    B -->|TV Nhanh| C[Keyword search kho Q&A]
+    B -->|TV Nhanh| C[CB NV tra cứu Kho Q&A]
     B -->|TV Thủ công| D[Chuyển Nhóm II UC12]
-    C --> E[Gợi ý TOP 5 câu trả lời]
-    E -->|DN hài lòng| F[Đánh giá + Hoàn thành]
-    E -->|DN chưa hài lòng| G[CB NV trả lời]
-    G --> F
+    C --> E[CB NV chọn Q&A hoặc soạn thủ công]
+    E --> F[Gửi trả lời]
+    F --> G[Đánh giá + Hoàn thành]
     H[CB NV / Import / Auto] --> I[Kho Q&A]
     I --> C
 ```
@@ -62,11 +61,7 @@ graph LR
 **State Machine: SM-TVNHANH**
 
 ```
-[MOI] --(DN gửi câu hỏi)--> [DANG_TIM_KIEM]
-[DANG_TIM_KIEM] --(HT gợi ý TOP 5 từ kho)--> [DA_GOI_Y]
-[DANG_TIM_KIEM] --(kho rỗng / không có kết quả phù hợp)--> [CB_TRA_LOI]
-[DA_GOI_Y] --(DN chưa hài lòng, CB NV trả lời)--> [CB_TRA_LOI]
-[DA_GOI_Y] --(DN hài lòng, đánh giá)--> [HOAN_THANH]
+[MOI] --(DN gửi câu hỏi)--> [CB_TRA_LOI]
 [CB_TRA_LOI] --(DN đánh giá)--> [HOAN_THANH]
 [MOI] --(auto 30 ngày không xử lý)--> [HET_HAN]
 ```
@@ -175,7 +170,7 @@ Quản lý kho câu hỏi/trả lời thường gặp phục vụ tư vấn nhan
 **Màn hình:** SCR-X2-03 — [Quản lý Tư vấn Nhanh](#scr-x2-03-quản-lý-tư-vấn-nhanh)
 
 **Mô tả:**
-Xử lý luồng tư vấn nhanh: DN gửi câu hỏi -> hệ thống tìm kiếm keyword trong kho -> gợi ý TOP 5 -> CB NV xem và chỉnh sửa gợi ý -> gửi trả lời.
+Xử lý luồng tư vấn nhanh: DN gửi câu hỏi -> CB NV mở phiên -> CB NV chủ động tra cứu Kho câu hỏi bằng từ khóa -> chọn Q&A phù hợp hoặc soạn thủ công -> gửi trả lời. Hệ thống không tự động tìm kiếm mặc định và không hiển thị gợi ý tự động.
 
 **Tác nhân:** Cán bộ Nghiệp vụ
 
@@ -183,49 +178,62 @@ Xử lý luồng tư vấn nhanh: DN gửi câu hỏi -> hệ thống tìm kiế
 
 - User đã đăng nhập (BR-AUTH-01)
 - User có quyền "Quản lý tư vấn nhanh"
-- Kho câu hỏi đã có dữ liệu
+- Kho câu hỏi đã có dữ liệu nếu CB NV muốn chọn câu trả lời từ kho; nếu không có dữ liệu phù hợp, CB NV soạn thủ công
 
 **Inputs (Dữ liệu đầu vào):**
 
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
 |---|----------|-----------|----------|-----------|----------|-------|
 | 1 | cau_hoi_dn | text (long) | Y | Câu hỏi từ DN | — | DN gửi |
-| 2 | noi_dung_tra_loi | text (long) | Y | Nội dung trả lời (có thể chỉnh sửa từ gợi ý) | — | CB NV nhập/chọn |
+| 2 | tu_khoa_tim_kiem | text | N | Min 2 ký tự khi tìm kiếm | — | CB NV nhập |
+| 3 | linh_vuc_id | identifier | N | FK -> DANH_MUC | — | CB NV lọc |
+| 4 | noi_dung_tra_loi | text (long) | Y | Nội dung trả lời cuối cùng gửi cho DN (có thể copy từ Kho câu hỏi rồi chỉnh sửa hoặc soạn thủ công) | — | CB NV nhập/chọn |
 
 **Processing (Xử lý):**
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | DN gửi câu hỏi -> hệ thống tìm kiếm keyword trong kho Q&A | — |
-| 2 | Tìm kiếm toàn văn trên câu hỏi + câu trả lời + từ khóa | BR-DATA-08 |
-| 3 | Gợi ý TOP 5 câu trả lời phù hợp nhất (sắp theo điểm relevance giảm dần) | — |
-| 4 | CB NV xem câu hỏi chờ + gợi ý | — |
-| 5 | CB NV chọn gợi ý / chỉnh sửa -> gửi trả lời | — |
-| 6 | Tạo bản ghi tư vấn nhanh (liên kết hỏi đáp nếu có) | — |
+| 1 | DN gửi câu hỏi -> hệ thống tạo phiên tư vấn nhanh và chuyển cho CB NV xử lý | — |
+| 2 | CB NV mở chi tiết phiên; khu vực "Tra cứu Kho câu hỏi" hiển thị ô tìm kiếm rỗng, không tự động tìm kiếm và không prefill từ câu hỏi DN | — |
+| 3 | CB NV nhập từ khóa / nội dung câu hỏi / cụm từ pháp lý và nhấn "Tìm kiếm" | — |
+| 4 | Hệ thống tìm kiếm toàn văn trong `KHO_CAU_HOI.cau_hoi`, `KHO_CAU_HOI.cau_tra_loi`, `KHO_CAU_HOI.tu_khoa`; điều kiện bắt buộc: `trang_thai IN ('DA_DUYET','CONG_KHAI')` và `hieu_luc = true`; áp dụng phân quyền dữ liệu theo `don_vi_id` nếu có | BR-DATA-08 |
+| 5 | Kết quả hiển thị theo điểm relevance giảm dần; CB NV có thể lọc theo lĩnh vực pháp lý | — |
+| 6 | CB NV chọn một Q&A phù hợp -> copy `cau_tra_loi` vào ô soạn; CB NV được chỉnh sửa trước khi gửi. Nếu không chọn Q&A, CB NV soạn thủ công | — |
+| 7 | Gửi trả lời: lưu `noi_dung_tra_loi` cuối cùng, `cb_xu_ly_id = current_user.id`, `ngay_tra_loi = NOW()`, tự tính `thoi_gian_xu_ly_phut` | — |
+| 8 | Tạo/cập nhật bản ghi tư vấn nhanh (liên kết hỏi đáp nếu có) | — |
+| 9 | **Đẩy sang Nhóm II giữa chừng (do CB/TVV chủ động):** Nếu CB NV/TVV phát hiện câu hỏi cần xử lý chính thức (cần phê duyệt + cite văn bản pháp luật + công khai lên Cổng PLQG) → click nút "Đẩy sang Nhóm II" → mở modal xác nhận → tạo bản ghi HOI_DAP với `kenh_tiep_nhan = TVN_BRIDGE` + `tu_van_nhanh_goc_id = TU_VAN_NHANH.id` (giữ liên kết phiên gốc); cập nhật trạng thái phiên TV nhanh sang HOAN_THANH với ghi chú "Đã đẩy sang Nhóm II hỏi đáp #{ma_hoi_dap}"; gửi thông báo cho cán bộ Nhóm II tiếp nhận. | — |
 
 **Outputs (Dữ liệu đầu ra):**
 
 | # | Tên | Kiểu logic | Điều kiện | Format |
 |---|-----|-----------|-----------|--------|
-| 1 | goi_y_tra_loi | structured | luôn | TOP 5 [{ma_qa, cau_hoi, cau_tra_loi, relevance_score}] |
-| 2 | tra_loi_da_gui | text | sau gửi | — |
+| 1 | tra_loi_da_gui | text | sau gửi | Nội dung trả lời cuối cùng |
+| 2 | hoi_dap_id | identifier | khi Đẩy sang Nhóm II | ID bản ghi HOI_DAP vừa tạo |
 
 **Postconditions (Trạng thái sau thực hiện):**
 
 - Bản ghi TU_VAN_NHANH được tạo
-- Trạng thái SM-TVNHANH chuyển sang CB_TRA_LOI
+- Trạng thái SM-TVNHANH chuyển sang CB_TRA_LOI (CB NV xử lý/trả lời) HOẶC HOAN_THANH (khi đã Đẩy sang Nhóm II)
+- Khi gửi trả lời: lưu `noi_dung_tra_loi` cuối cùng, `cb_xu_ly_id`, `ngay_tra_loi`, `thoi_gian_xu_ly_phut`
+- Khi Đẩy sang Nhóm II: bản ghi HOI_DAP mới được tạo với kênh = TVN_BRIDGE + liên kết phiên TV nhanh gốc
 
 **Error Handling (Xử lý lỗi):**
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
-| E1 | Kho Q&A rỗng | ERR-TVN-01 | "Chưa có dữ liệu trong kho câu hỏi" | WARNING |
-| E2 | Nội dung trả lời rỗng | ERR-TVN-02 | "Nội dung trả lời là bắt buộc" | ERROR |
+| E1 | Từ khóa tìm kiếm < 2 ký tự | ERR-TVN-TK-01 | "Từ khóa tìm kiếm phải có ít nhất 2 ký tự" | ERROR |
+| E2 | Không có kết quả tìm kiếm | INF-TVN-TK-01 | "Không tìm thấy câu hỏi phù hợp" | INFO |
+| E3 | Nội dung trả lời rỗng | ERR-TVN-02 | "Nội dung trả lời là bắt buộc" | ERROR |
+| E4 | Đẩy sang Nhóm II khi phiên đã HOAN_THANH | ERR-TVN-03 | "Phiên tư vấn đã kết thúc, không thể đẩy sang Nhóm II" | ERROR |
 
 **Acceptance Criteria:**
 
-- **Given** DN gửi câu hỏi **When** hệ thống nhận **Then** keyword search kho -> gợi ý trả lời
-- **Given** CB NV xem câu hỏi chờ **When** chọn **Then** hiển thị gợi ý + cho phép chỉnh sửa -> gửi
+- **Given** DN gửi câu hỏi **When** hệ thống nhận **Then** tạo phiên tư vấn nhanh và chuyển cho CB NV xử lý, không tự động tìm kiếm kho
+- **Given** CB NV mở chi tiết phiên **When** chưa nhập từ khóa **Then** khu vực Tra cứu Kho câu hỏi hiển thị ô tìm kiếm rỗng và empty state "Nhập từ khóa để tìm trong kho câu hỏi"
+- **Given** CB NV nhập từ khóa hợp lệ **When** nhấn "Tìm kiếm" **Then** hệ thống tìm trong `cau_hoi`, `cau_tra_loi`, `tu_khoa` của các Q&A `DA_DUYET`/`CONG_KHAI` và `hieu_luc = true`, hiển thị kết quả theo relevance giảm dần
+- **Given** CB NV chọn một Q&A **When** click "Chọn" **Then** copy câu trả lời vào ô soạn và cho phép chỉnh sửa trước khi gửi
+- **Given** CB NV gửi trả lời **When** nội dung hợp lệ **Then** chỉ lưu `noi_dung_tra_loi` cuối cùng cùng thông tin CB xử lý/thời điểm trả lời
+- **Given** CB NV/TVV đang trả lời phát hiện câu hỏi cần xử lý chính thức **When** click "Đẩy sang Nhóm II" + xác nhận **Then** tạo HOI_DAP với kênh = TVN_BRIDGE + liên kết phiên TV nhanh gốc; phiên TV nhanh đóng với ghi chú đã đẩy sang Nhóm II
 
 ---
 
@@ -259,10 +267,10 @@ DN nhập câu hỏi trên chuyên trang và chọn kênh tư vấn (nhanh hoặ
 |------|-------------|-----------|
 | 1 | DN nhập câu hỏi trên chuyên trang | — |
 | 2 | DN chọn kênh: "TV nhanh" hoặc "TV thủ công" | — |
-| 3 | Nếu TV nhanh -> chuyển sang luồng FR-X.2-02 (keyword search nội bộ) | — |
-| 4 | Nếu TV thủ công -> chuyển nhóm II (UC12 tiếp nhận) | — |
-| 5 | DN chuyển kênh: "Chuyển sang TV thủ công" -> giữ toàn bộ lịch sử | — |
-| 6 | Ghi nhận qua API inbound từ Cổng PLQG | — |
+| 3 | Nếu TV nhanh -> chuyển sang luồng FR-X.2-02 (CB NV tra cứu Kho câu hỏi và trả lời) | — |
+| 4 | Nếu TV thủ công -> tạo bản ghi HOI_DAP ở Nhóm II (UC12 tiếp nhận) với **kênh tiếp nhận = TVN_BRIDGE** + lưu **liên kết phiên Tư vấn nhanh gốc** (`HOI_DAP.tu_van_nhanh_goc_id = TU_VAN_NHANH.id`) để cán bộ Nhóm II xem được lịch sử trao đổi gốc giữa Doanh nghiệp và Tư vấn viên. | — |
+| 5 | DN chuyển kênh giữa chừng: "Chuyển sang TV thủ công" -> tạo HOI_DAP với kênh = TVN_BRIDGE + liên kết phiên gốc (như bước 4); giữ toàn bộ lịch sử trao đổi để cán bộ Nhóm II có đủ ngữ cảnh. | — |
+| 6 | Ghi nhận qua API inbound từ Cổng Pháp luật Quốc gia | — |
 
 **Outputs (Dữ liệu đầu ra):**
 
@@ -270,11 +278,12 @@ DN nhập câu hỏi trên chuyên trang và chọn kênh tư vấn (nhanh hoặ
 |---|-----|-----------|-----------|--------|
 | 1 | ma_phien | text | luôn | auto-gen |
 | 2 | kenh_hien_tai | text | luôn | TV_NHANH / TV_THU_CONG |
+| 3 | hoi_dap_id | identifier | khi đẩy sang Nhóm II | ID bản ghi HOI_DAP vừa tạo (để DN tra cứu) |
 
 **Postconditions (Trạng thái sau thực hiện):**
 
 - Phiên tư vấn nhanh được tạo (nếu TV nhanh)
-- Hoặc chuyển sang Nhóm II (nếu TV thủ công)
+- Hoặc tạo bản ghi HOI_DAP ở Nhóm II với kênh tiếp nhận = TVN_BRIDGE + liên kết phiên Tư vấn nhanh gốc (nếu TV thủ công)
 
 **Error Handling (Xử lý lỗi):**
 
@@ -284,9 +293,9 @@ DN nhập câu hỏi trên chuyên trang và chọn kênh tư vấn (nhanh hoặ
 
 **Acceptance Criteria:**
 
-- **Given** DN nhập câu hỏi **When** chọn "TV nhanh" **Then** phân luồng keyword search
-- **Given** DN chọn "TV thủ công" **When** xử lý **Then** chuyển nhóm II
-- **Given** DN muốn chuyển kênh **When** nhấn "Chuyển" **Then** giữ toàn bộ lịch sử
+- **Given** DN nhập câu hỏi **When** chọn "TV nhanh" **Then** tạo phiên tư vấn nhanh để CB NV xử lý theo luồng tra cứu Kho câu hỏi
+- **Given** DN chọn "TV thủ công" **When** xử lý **Then** tạo HOI_DAP với kênh = TVN_BRIDGE + liên kết phiên Tư vấn nhanh gốc; cán bộ Nhóm II tiếp nhận thấy badge "Từ Tư vấn nhanh"
+- **Given** DN muốn chuyển kênh giữa chừng **When** nhấn "Chuyển sang TV thủ công" **Then** giữ toàn bộ lịch sử trao đổi + tạo HOI_DAP với liên kết phiên gốc
 
 ---
 
@@ -364,7 +373,7 @@ Hệ thống CMS tiếp nhận đánh giá chất lượng câu trả lời (đi
 |-----------|---------|
 | **Phương thức** | POST |
 | **Đường dẫn** | `/api/v1/inbound/danh-gia-tv-nhanh` |
-| **Headers bắt buộc** | `Content-Type: application/json`, `X-API-Key: {key}` (xác thực Cổng PLQG), `Idempotency-Key: {uuid}` (chống ghi trùng khi Cổng gửi lại) |
+| **Headers bắt buộc** | `Content-Type: application/json`, `Authorization: Bearer {JWT}` (**mTLS + JWT Bearer RS256** — chuẩn hoá theo BR-INTG-02 + FR-XII-19, BA chốt 2026-05-10 C-AUTH-01), `Idempotency-Key: {uuid}` (chống ghi trùng khi Cổng gửi lại) |
 | **Dữ liệu gửi** | `tu_van_nhanh_id` (BB), `doanh_nghiep_id` (BB), `diem` (BB, 1-5), `nhan_xet` (KBB) |
 | **Phản hồi thành công** | `200 OK` — trả về `danh_gia_id` + `diem_tb_cap_nhat` |
 | **Phản hồi lỗi** | `400 Bad Request` (sai dữ liệu) / `409 Conflict` (trùng `Idempotency-Key`, đã xử lý lần trước — trả về kết quả cũ, không tạo bản ghi mới) / `404 Not Found` (`tu_van_nhanh_id` không tồn tại) |
@@ -562,19 +571,19 @@ CB Nghiệp vụ thực hiện công khai hoặc hủy công khai câu hỏi/ph�
 |---|------|-----------|------|---------------------|---------|-------------------|
 | 1 | toolbar | Breadcrumb | breadcrumb | "Trang chu > Tu van > Tu van nhanh" | navigate | luon hien thi |
 | 2 | toolbar | Tieu de | label | "Quan ly Tu van Nhanh" + [Lam moi] | -- | luon hien thi |
-| 3 | filter-bar | Tab phan loai | tab | 4 tab: Tat ca / Cho xu ly (MOI + DANG_TIM_KIEM) / Da goi y (DA_GOI_Y + CB_TRA_LOI) / Hoan thanh (HOAN_THANH + HET_HAN) | click -> filter | luon hien thi |
+| 3 | filter-bar | Tab phan loai | tab | 3 tab: Tat ca / Cho xu ly (MOI + CB_TRA_LOI) / Hoan thanh (HOAN_THANH + HET_HAN) | click -> filter | luon hien thi |
 | 4 | filter-bar | Thanh loc | form | Tu khoa. Trang thai SM-TVNHANH. Khoang ngay | change -> filter | luon hien thi |
-| 5 | content | Bang TV nhanh | table | Ma phien / Cau hoi DN (cat 100 ky tu) / Kenh (TV_NHANH xanh / TV_THU_CONG vang) / So goi y (badge) / Trang thai SM-TVNHANH (C06) / Ngay gui / Ngay cap nhat / Hanh dong (Xem / Tra loi) | click -> action | luon hien thi |
+| 5 | content | Bang TV nhanh | table | Ma phien / Cau hoi DN (cat 100 ky tu) / Kenh (TV_NHANH xanh / TV_THU_CONG vang) / CB xu ly / Trang thai SM-TVNHANH (C06) / Ngay gui / Ngay tra loi / Ngay cap nhat / Hanh dong (Xem / Tra loi) | click -> action | luon hien thi |
 | 6 | footer | Phan trang | pagination | 20 muc/trang | click -> chuyen trang | luon hien thi |
 | 7 | content (tra loi) | Cot trai (40%) | layout | Ma phien + Trang thai (C06/C17). Thong tin DN. Cau hoi DN (card nen nhat). Lich su trao doi (chat bubbles) | -- | mode tra loi |
-| 8 | content (tra loi) | Cot phai (60%) | layout | TOP 5 goi y tu KHO_CAU_HOI (tsvector/tsquery, relevance DESC). Moi goi y: Ma Q&A / Cau hoi (bold) / Cau tra loi / Diem relevance (%) / [Chon]. Click [Chon] -> auto-fill o soan. O soan: C16 Rich Text. [Gui tra loi] -> SET CB_TRA_LOI | click [Chon] -> fill / click [Gui] -> submit | mode tra loi |
-| 9 | content | Phan luong (chuyen trang DN) | logic | TV Nhanh -> luong noi bo FR-X.2-02 (keyword search kho). TV Thu cong -> UC12 (Nhom II Hoi dap). Chuyen kenh: giu lich su trao doi giua 2 kenh. | -- | logic |
+| 8 | content (tra loi) | Cot phai (60%) | layout | Khu vuc "Tra cuu Kho cau hoi": search input rong (placeholder "Nhap tu khoa, noi dung cau hoi hoac cum tu phap ly"), nut [Tim kiem], filter Linh vuc phap ly. Khong tu dong tim kiem, khong prefill cau hoi DN. Tim tren `KHO_CAU_HOI.cau_hoi`, `KHO_CAU_HOI.cau_tra_loi`, `KHO_CAU_HOI.tu_khoa` bang tsvector/tsquery, relevance DESC. Backend chi tra Q&A `trang_thai IN ('DA_DUYET','CONG_KHAI')` va `hieu_luc=true`; khong hien filter Trang thai/Hieu luc/Cong khai tren UI. Moi ket qua: Ma Q&A / Cau hoi (bold) / Cau tra loi rut gon / Linh vuc / Tu khoa / Diem relevance (%) / [Chon]. Click [Chon] -> copy `cau_tra_loi` vao o soan; o soan C16 Rich Text cho phep chinh sua. [Gui tra loi] -> luu `noi_dung_tra_loi` cuoi cung + `cb_xu_ly_id` + `ngay_tra_loi` + `thoi_gian_xu_ly_phut`. **Them nut phu "Day sang Nhom II"** (button warning, ben canh nut Gui tra loi) — click khi can bo phat hien cau hoi can xu ly chinh thuc; click -> mo modal xac nhan; submit -> tao HOI_DAP voi kenh = TVN_BRIDGE + tu_van_nhanh_goc_id; phien TV nhanh chuyen sang HOAN_THANH voi ghi chu "Da day sang Nhom II hoi dap #{ma_hoi_dap}". | click [Tim kiem] -> search / click [Chon] -> copy vao o soan / click [Gui] -> submit / click [Day sang Nhom II] -> modal xac nhan | mode tra loi |
+| 9 | content | Phan luong (chuyen trang DN) | logic | TV Nhanh -> luong noi bo FR-X.2-02 (CB NV tra cuu kho cau hoi va tra loi). TV Thu cong -> UC12 (Nhom II Hoi dap) **với kênh tiếp nhận = TVN_BRIDGE + liên kết phiên Tư vấn nhanh gốc**. Chuyen kenh giua chung: giu lich su trao doi giua 2 kenh. | -- | logic |
 | 10 | content | Danh gia (v2.1 gop tu MH-13.4) | section/column | Diem (1-5 sao) / Nhan xet DN / Ngay danh gia. The tong hop: Tong danh gia (COUNT) / Diem TB (AVG) / Phan bo (bar chart mini). [Xuat Excel] | -- | hien thi trong tab Hoan thanh hoac chi tiet phien |
 
 #### Quy tac tuong tac
 
 - Auto het han: MOI > 30 ngay -> HET_HAN + TB CB NV (batch job)
-- Bang nhan SM-TVNHANH: MOI (xanh duong, `--color-info`) / DANG_TIM_KIEM (vang nhat, `--color-warning-light`) / DA_GOI_Y (vang, `--color-warning`) / CB_TRA_LOI (xanh la nhat, `--color-success-light`) / HOAN_THANH (xanh la, `--color-success`) / HET_HAN (xam, `--color-text-disabled`)
+- Bang nhan SM-TVNHANH: MOI (xanh duong, `--color-info`) / CB_TRA_LOI (xanh la nhat, `--color-success-light`) / HOAN_THANH (xanh la, `--color-success`) / HET_HAN (xam, `--color-text-disabled`)
 - Danh gia TV nhanh (v2.1 -- da gop MH-13.4 vao MH-13.3): DN danh gia chat luong = section/column trong tab "Phien tu van"
 
 ---
@@ -594,7 +603,7 @@ CB Nghiệp vụ thực hiện công khai hoặc hủy công khai câu hỏi/ph�
 | # | Entity | Vai trò | Mô tả |
 |---|--------|---------|-------|
 | 1 | KHO_CAU_HOI | owned | Kho Q&A tư vấn nhanh — entity trung tâm nhóm X.2 |
-| 2 | TU_VAN_NHANH | owned | Phiên tư vấn nhanh — DN gửi câu hỏi, hệ thống tìm kiếm gợi ý, CB NV trả lời |
+| 2 | TU_VAN_NHANH | owned | Phiên tư vấn nhanh — DN gửi câu hỏi, CB NV tra cứu kho câu hỏi hoặc soạn thủ công để trả lời |
 | 3 | DANH_GIA_TV | owned | Đánh giá chất lượng tư vấn nhanh từ DN (điểm 1-5 + nhận xét) |
 | 4 | HOI_DAP | referenced | Hỏi đáp/vướng mắc pháp luật (nguồn tự động cho kho) |
 | 5 | TAI_KHOAN | referenced | Tài khoản người dùng (CB NV, CB PD) |
@@ -645,7 +654,6 @@ erDiagram
         text trang_thai
         identifier cb_xu_ly_id FK
         text noi_dung_tra_loi
-        text nguon_tra_loi
         datetime ngay_tao
         datetime ngay_tra_loi
         number thoi_gian_xu_ly_phut
@@ -676,7 +684,7 @@ erDiagram
 
 ### KHO_CAU_HOI (owned)
 
-**Mô tả:** Kho câu hỏi-đáp cho tính năng tư vấn nhanh (keyword search). Entity trung tâm Nhóm X.2.
+**Mô tả:** Kho câu hỏi-đáp cho tính năng tư vấn nhanh (tra cứu theo từ khóa). Entity trung tâm Nhóm X.2.
 **Tham chiếu FR:** FR-X.2-01 đến FR-X.2-06
 
 | Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
@@ -700,7 +708,7 @@ erDiagram
 
 ### TU_VAN_NHANH (owned)
 
-**Mô tả:** Phiên tư vấn nhanh — DN gửi câu hỏi qua chuyên trang, hệ thống tìm kiếm gợi ý trong kho, CB NV xem và trả lời. Entity lưu trạng thái phiên theo SM-TVNHANH.
+**Mô tả:** Phiên tư vấn nhanh — DN gửi câu hỏi qua chuyên trang, CB NV tra cứu Kho câu hỏi hoặc soạn thủ công để trả lời. Entity lưu trạng thái phiên theo SM-TVNHANH.
 **Tham chiếu FR:** FR-X.2-02, FR-X.2-03
 
 | Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
@@ -708,11 +716,10 @@ erDiagram
 | id | identifier | Y | PK | Auto-gen | ID phiên TV nhanh |
 | doanh_nghiep_id | identifier | Y | FK → DOANH_NGHIEP(id) | | DN gửi câu hỏi |
 | cau_hoi | text (long) | Y | Không rỗng | | Nội dung câu hỏi từ DN |
-| kenh_tu_van | text | Y | CHECK IN ('NHANH','THU_CONG') | 'NHANH' | Kênh DN chọn: TV nhanh (keyword search) hoặc TV thủ công (chuyển Nhóm II) |
-| trang_thai | text | Y | CHECK IN ('MOI','DANG_TIM_KIEM','DA_GOI_Y','CB_TRA_LOI','HOAN_THANH','HET_HAN') | 'MOI' | Trạng thái theo SM-TVNHANH |
+| kenh_tu_van | text | Y | CHECK IN ('NHANH','THU_CONG') | 'NHANH' | Kênh DN chọn: TV nhanh (CB NV tra cứu Kho câu hỏi) hoặc TV thủ công (chuyển Nhóm II) |
+| trang_thai | text | Y | CHECK IN ('MOI','CB_TRA_LOI','HOAN_THANH','HET_HAN') | 'MOI' | Trạng thái theo SM-TVNHANH |
 | cb_xu_ly_id | identifier | N | FK → TAI_KHOAN(id) | | CB NV xử lý phiên (gán khi vào CB_TRA_LOI) |
 | noi_dung_tra_loi | text (long) | N | | | Nội dung CB NV trả lời cho DN |
-| nguon_tra_loi | text | N | CHECK IN ('KHO','THU_CONG') | | Nguồn của câu trả lời: từ gợi ý kho Q&A hoặc CB NV soạn thủ công |
 | ngay_tao | datetime | Y | | NOW() | Thời điểm DN gửi câu hỏi |
 | ngay_tra_loi | datetime | N | | | Thời điểm CB NV gửi trả lời |
 | thoi_gian_xu_ly_phut | number | N | Tự tính | | Số phút từ ngay_tao đến ngay_tra_loi (phục vụ báo cáo SLA) |
@@ -798,11 +805,7 @@ erDiagram
 ```mermaid
 stateDiagram-v2
     [*] --> MOI : DN gửi câu hỏi
-    MOI --> DANG_TIM_KIEM : HT nhận câu hỏi
-    DANG_TIM_KIEM --> DA_GOI_Y : HT gợi ý TOP 5 từ kho
-    DANG_TIM_KIEM --> CB_TRA_LOI : Kho rỗng / không có kết quả phù hợp
-    DA_GOI_Y --> CB_TRA_LOI : DN chưa hài lòng, CB NV trả lời
-    DA_GOI_Y --> HOAN_THANH : DN hài lòng, đánh giá
+    MOI --> CB_TRA_LOI : CB NV tiếp nhận / mở xử lý
     CB_TRA_LOI --> HOAN_THANH : DN đánh giá
     MOI --> HET_HAN : auto 30 ngày không xử lý
 ```
@@ -812,9 +815,7 @@ stateDiagram-v2
 | Trạng thái | Mã | Mô tả | Màu hiển thị |
 |-----------|-----|-------|-------------|
 | Mới | MOI | DN vừa gửi câu hỏi | Xanh dương |
-| Đang tìm kiếm | DANG_TIM_KIEM | Hệ thống keyword search kho Q&A | Vàng nhạt |
-| Đã gợi ý | DA_GOI_Y | HT đã gợi ý TOP 5 câu trả lời | Vàng |
-| CB trả lời | CB_TRA_LOI | CB NV đang soạn trả lời | Xanh lá nhạt |
+| CB trả lời | CB_TRA_LOI | CB NV tra cứu Kho câu hỏi, chọn Q&A hoặc soạn thủ công để trả lời | Xanh lá nhạt |
 | Hoàn thành | HOAN_THANH | DN đánh giá, kết thúc phiên | Xanh lá |
 | Hết hạn | HET_HAN | Quá 30 ngày không xử lý | Xám |
 
@@ -823,11 +824,7 @@ stateDiagram-v2
 | Từ | Đến | Trigger | Guard | Action | FR Ref |
 |----|-----|---------|-------|--------|--------|
 | [*] | MOI | DN gửi câu hỏi qua Cổng | — | Tạo phiên TV nhanh | FR-X.2-03 |
-| MOI | DANG_TIM_KIEM | HT nhận câu hỏi | — | Keyword search kho | FR-X.2-02 |
-| DANG_TIM_KIEM | DA_GOI_Y | Có kết quả tìm kiếm | Kho Q&A có dữ liệu | Gợi ý TOP 5 | FR-X.2-02 |
-| DANG_TIM_KIEM | CB_TRA_LOI | Kho rỗng / không có kết quả phù hợp | Kho Q&A rỗng hoặc không match từ khóa | Chuyển thẳng cho CB NV trả lời thủ công, không gợi ý kho | FR-X.2-02 |
-| DA_GOI_Y | CB_TRA_LOI | DN chưa hài lòng | — | CB NV soạn trả lời | FR-X.2-02 |
-| DA_GOI_Y | HOAN_THANH | DN hài lòng + đánh giá | Điểm 1-5 | Lưu đánh giá | FR-X.2-05 |
+| MOI | CB_TRA_LOI | CB NV tiếp nhận / mở xử lý | — | Hiển thị màn chi tiết với khu vực Tra cứu Kho câu hỏi; không tự động tìm kiếm | FR-X.2-02 |
 | CB_TRA_LOI | HOAN_THANH | DN đánh giá | Điểm 1-5 | Lưu đánh giá | FR-X.2-05 |
 | MOI | HET_HAN | Auto 30 ngày | elapsed > 30 ngày | TB CB NV, batch job | FR-X.2-02 |
 
@@ -874,9 +871,9 @@ stateDiagram-v2
 
 | Thuộc tính | Giá trị |
 |-----------|---------|
-| **Phát biểu** | Hỏi đáp (noi_dung) và Kho câu hỏi (cau_hoi/cau_tra_loi) hỗ trợ tìm kiếm toàn văn toàn văn |
+| **Phát biểu** | Hỏi đáp (noi_dung) và Kho câu hỏi (cau_hoi/cau_tra_loi/tu_khoa) hỗ trợ tìm kiếm toàn văn |
 | **Nguồn** | FR-II-02, FR-X.1-02, FR-X.2-04 |
-| **Applied in (nhóm X.2)** | FR-X.2-01 (lập chỉ mục), FR-X.2-02 (keyword search kho), FR-X.2-04 (DN tìm kiếm phản hồi) |
+| **Applied in (nhóm X.2)** | FR-X.2-01 (lập chỉ mục), FR-X.2-02 (CB NV tra cứu kho), FR-X.2-04 (DN tìm kiếm phản hồi) |
 | **Ngoại lệ** | Các entity khác: search by LIKE/index |
 | **Kiểm chứng** | Verify chỉ mục tìm kiếm toàn văn |
 

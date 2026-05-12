@@ -20,9 +20,9 @@ Phát hiện **1 lỗi Major** trong quá trình seed BAI_GIANG R8: BE thiếu v
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 1    | 0        | 1     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 1     | 0      | 0     | 0       | 1      | 0    |
 
 ## Bug Summary Table
 

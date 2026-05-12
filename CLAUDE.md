@@ -293,6 +293,39 @@ Chi tiết trigger phân loại + phương án chuẩn + workflow re-test + anti
 2. **2-source SRS verify:** query NotebookLM HTPLDN (id `a4ae45bf-cea0-4325-8fee-b1e0be702cf2`) + grep SRS local — mọi log/đóng/đổi severity.
 3. **Workaround = bug candidate.** Gặp 4xx/5xx → log, không skip vì "tự fix được".
 
+## Re-test discipline — OVERWRITE 1 dòng latest, KHÔNG append history (enforced 2026-05-12)
+
+**Áp dụng cho mọi QA / tester làm việc trong folder `output/qa-reports/`.** Mỗi bug trong file `bug-report-*.md` chỉ giữ **DUY NHẤT 1 dòng** blockquote Re-test latest ngay sau heading bug. Mỗi lần retest mới → **OVERWRITE** dòng cũ, KHÔNG append blockquote list / Re-verify #N tích lũy.
+
+**Vì sao:**
+- Field `**Ngày**` ở header phải sync với timestamp dòng Re-test mới — nếu append history, Ngày stale dần (vd HDTV file: header `2026-05-12 02:50:00` vs body latest `2026-05-12 15:55:00` lệch 13h).
+- Multi-line history `Re-verify #6 / #7 / #8` tích lũy hàng trăm dòng/file sau 8-19 round → dev đọc noise + dễ stale.
+- Lịch sử retest cũ đã có ở Bug Summary Table cột Status — KHÔNG cần lặp ở blockquote.
+
+**Format đúng (chỉ 1 dòng):**
+```markdown
+## ~~BUG-XXX-NNN~~ [CLOSED] — {tiêu đề}
+
+> **Re-test:** 2026-05-12 15:55:00 R19 — ✅ PASS (Closed-verified). {1-2 câu why fixed}.
+```
+
+**KHÔNG được:**
+- ❌ Append blockquote list: `> - 2026-04-28 R3 ...` + `> - 2026-04-29 R4 ...`
+- ❌ Append `> **Re-verify #6` + `> **Re-verify #7` + `> **Re-verify #8` cho cùng bug
+- ❌ Để field `**Ngày**` ở header lệch với max timestamp trong body
+
+**Tooling (committed, portable cho mọi QA clone repo):**
+
+| Tool | Vai trò | Lệnh |
+|---|---|---|
+| `.claude/scripts/collapse-retest-history.py` | Migration 1 lần — collapse retest history cũ, giữ latest theo max timestamp | `python3 .claude/scripts/collapse-retest-history.py --dry-run <file>` → review → `--write` (tạo `.bak` backup) |
+| `.claude/hooks/check-retest-no-duplicate.py` | PreToolUse — block edit introduce >1 retest block/bug | Auto-trigger Edit/Write/MultiEdit |
+| `.claude/hooks/auto-bump-bug-report-date.py` | PostToolUse — auto-bump header.Ngày = max body timestamp | Auto-trigger Edit/Write/MultiEdit |
+
+**Evidence ảnh từ retest cũ:** Hook + script KHÔNG tự append ảnh vào latest line (ảnh thuộc state cũ, append sai context). Migration script in stderr list ảnh ref bị mất → tester quyết migrate manual nếu cần.
+
+## Bug-report folder discipline — Pass- prefix + image co-locate (enforced 2026-05-10)
+
 ## Bug-report folder discipline — Pass- prefix + image co-locate (enforced 2026-05-10)
 
 **Layout chuẩn `output/qa-reports/round{N}-*/bug-reports/`:**

@@ -5,9 +5,9 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000 |
 | **Người test** | QA Automation via Claude Code |
-| **Ngày** | 2026-05-09 13:15:00 → 13:30:00 |
+| **Ngày** | 2026-05-12 20:55:00 |
 | **Loại test** | Functional (R7.7.3 — 11 TC chạy: VV-001/002/003/004/022/024/028/031 + C8-1/2/3) |
-| **Round** | R7 |
+| **Round** | R19c |
 | **Tài liệu tham chiếu** | [output/funtion/7.5-vu-viec-htpl.md](../../../../funtion/7.5-vu-viec-htpl.md) · [SRS FR-IV / FR-V.I-NEW-05](../../../../../input/srs-update-2026-5-5/srs-fr-iv-vu-viec.md) |
 
 ---
@@ -18,11 +18,9 @@ Phát hiện **4 lỗi** Critical/Major khi chạy 11 TC functional R7.7.3. Lỗ
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 10   | 3        | 6     | 0      | 1     | 0       |
-| Open | 0        | 2     | 0      | 0     | 0       |
-| Closed | 3      | 4     | 0      | 1     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 11   | 3        | 7     | 0      | 1     | 0       | 8      | 3    |
 
 > **R18 reverify 2026-05-12 00:50:00 (`cb_nv_tw_03` + `tvv_r11_mailfix`, isolatedContext `reverify_r18_2026_05_12` + `reverify_r18_tvv_2026_05_12`) — qa-bugfix-reverify-audit skill:** Re-verify 4 Open bug sau dev claim fix.
 >
@@ -90,8 +88,9 @@ Phát hiện **4 lỗi** Critical/Major khi chạy 11 TC functional R7.7.3. Lỗ
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-VV-FN-LICHSU-01 | Major | P1 | Data | C8-3 | `LICH_SU_VU_VIEC ENUM 18 hành động` · `BR-AUDIT-VV-01` | LICH_SU_VU_VIEC ghi 15/18 enum (R18 +CAP_NHAT_KQ) + alias `TRINH_PD` vs spec `TRINH_PHE_DUYET` + `CREATE/UPDATE/APPROVE` legacy — miss 5 spec (TIEP_NHAN/TU_CHOI/TU_CHOI_DUYET/YEU_CAU_BO_SUNG/MO_LAI) | Open |
-| BUG-VV-FN-TVV-PERMISSION-GAP-01 | Major | P1 | Permission | VV-015/017/033 | `srs-fr-05-vu-viec.md FR-V.I-12 §Inputs "TVV nhập kết quả"` · permission_matrix role TVV | TVV 15 perm (+1 `read_ho_so_vu_viec` R18; nhan-phan-cong + tu-choi-phan-cong + read), thiếu `cap-nhat-ket-qua_ket_qua_vu_viec` + `create_ket_qua_vu_viec` + `trinh-phe-duyet_*` + `hoan-thanh_vu_viec`. Per spec TVV phải update kết quả VV mình xử lý | **Open** |
+| BUG-VV-R19c-001 | Major | P1 | UI/FE | VV-015/016 | `srs-fr-05-vu-viec.md:1054-1103 FR-V.I-15 UC65 "NHT/TVV cập nhật kết quả"` · permission TVV `cap-nhat-ket-qua_ket_qua_vu_viec` đã có | TVV `tvv_r11_mailfix` (đã chấp nhận phân công, VV state `DANG_XU_LY`) **không thấy bất kỳ button hành động nào** trong chi tiết VV — miss `[Cập nhật kết quả]` + `[Trình phê duyệt]` + `[Hoàn thành]`. BE endpoint `/cap-nhat-ket-qua` 201 OK xác nhận perm BE đủ; chỉ FE không render. Blocker UI VV-015 + VV-016 native TVV flow. | **Open** |
+| BUG-VV-FN-LICHSU-01 | Major | P1 | Data | C8-3 | `LICH_SU_VU_VIEC ENUM 18 hành động` · `BR-AUDIT-VV-01` | R19c walk branch YCBS: state DANG_KIEM_TRA→YEU_CAU_BO_SUNG OK ✅ nhưng timeline UI + API `/lich-su` MISS entry `YEU_CAU_BO_SUNG` → user xem VV-YCBS không biết ai/khi nào yêu cầu bổ sung. **Rollback đề xuất reclass R19b — giữ Major P1.** | **Open** |
+| BUG-VV-FN-TVV-PERMISSION-GAP-01 | Major | P1 | Permission | VV-015/017/033 | `srs-fr-05-vu-viec.md FR-V.I-12 §Inputs "TVV nhập kết quả"` · permission_matrix role TVV | R19b UI+API: 4/5 endpoint TVV PASS perm (cap-nhat-kq/hoan-thanh/nhan-pc/tu-choi-pc); CHỈ POST `/trinh-phe-duyet` 403 ERR-PERM-SYS. BE thiếu `trinh-phe-duyet_vu_viec` cho TVV | **Open** |
 | ~~BUG-VV-FN-POOL-CG-MISSING-01~~ | ~~Minor~~ | ~~P2~~ | ~~Filter~~ | ~~VV-013~~ | ~~`srs-fr-05-vu-viec.md:766 FR-V.I-09 §Acceptance "CB NV chọn cá nhân (TVV/CG hoặc NHT)"`~~ | ~~Pool dropdown phân công CÁ NHÂN thiếu loại CG — chỉ hiện [TVV] + [NHT], dù `huongcg` HOAT_DONG khai báo Lao động + Hình sự + Đất đai + Thuế match VV-BTP-TW-20260511-002~~ | **Closed** |
 | ~~BUG-VV-FN-TVV-DETAIL-403-01~~ | ~~Major~~ | ~~P1~~ | ~~Permission/UI~~ | ~~VV-014~~ | ~~`srs-fr-05-vu-viec.md §UC60 TVV xem VV được phân công` · `BR-AUTH-08`~~ | ~~TVV `/vu-viec/{vvId}` 403 dù được phân công VV. List page `/vu-viec/danh-sach` hiển thị link "Xem vụ việc" → click landing 403. Blocker UI cho VV-014/015/017/033 native~~ | **Closed** |
 | ~~BUG-VV-FN-DANHGIA-01~~ | ~~Critical~~ | ~~P0~~ | ~~Missing feature~~ | ~~C5-1/C5-2/C5-3/C5-4/C5-5~~ | ~~`srs-fr-05-vu-viec.md:1164-1227 §FR-V.I-17` · `:1769 row 11 Accordion 8` · `:2141-2155 §DANH_GIA_VU_VIEC` · `:2332 §SM HOAN_THANH→DA_DANH_GIA`~~ | ~~UC67 Đánh giá VV thang 0-10 chưa build~~ | **Closed** |
@@ -118,7 +117,6 @@ Phát hiện **4 lỗi** Critical/Major khi chạy 11 TC functional R7.7.3. Lỗ
 >
 > Bằng chứng: ![r14-vv008-da-danh-gia-accordion-empty-2026-05-10.png](image/r14-vv008-da-danh-gia-accordion-empty-2026-05-10.png) · POST 201 + state DA_DANH_GIA + diemDanhGia 8.3.
 
-> **Re-test:** 2026-05-10 10:50:00 R13 — ❌ FAIL (Open lúc đó). VV-008 state HOAN_THANH, login `cb_nv_tw_05` mở detail. Action bar: vẫn KHÔNG có button [Đánh giá] / [Chấm điểm]. Section "Đánh giá" inline render image "Trống" + "Chưa có thông tin" read-only. Probe lại 7 endpoint candidate `/danh-gia-vu-viecs*` — tất cả 404 ERR-SYS-00-04-01. Schema VU_VIEC field `diem_chat_luong/thoi_gian/thai_do` chưa có. Cluster 5 (5 TC P0) vẫn BLOCKED.
 
 ### Mô tả
 
@@ -453,9 +451,58 @@ Permission list TVV (14 perms): `nhan-phan-cong_vu_viec, tu-choi-phan-cong_vu_vi
 
 ---
 
+## BUG-VV-R19c-001 — TVV không thấy button hành động `[Cập nhật kết quả]` / `[Trình phê duyệt]` / `[Hoàn thành]` trong chi tiết VV được phân công
+
+> **Re-test:** 2026-05-12 20:55:00 R19c UI walk (account `tvv_r11_mailfix`, isolatedContext `vvr19c-tvv-20260512-2040`) — ❌ **Open Major P1.** TVV mở `/vu-viec/aad90001-0000-4000-8000-000000000001` (VV-QA-R9-HTK-001, state `DANG_XU_LY` sau khi TVV Chấp nhận phân công) → page render đầy đủ (header + accordion 9 sections + dòng thời gian 4 entry). Nhưng vùng header action **CHỈ có chuyển trang `back`** — KHÔNG có button `[Cập nhật kết quả]` / `[Trình phê duyệt]` / `[Hoàn thành]`. Section "Kết quả hỗ trợ" placeholder "Tư vấn viên chưa cập nhật kết quả." nhưng KHÔNG có button hành động bên trong. Probe BE: `POST /api/v1/vu-viecs/{id}/cap-nhat-ket-qua` với body `{noiDungKetQua:"R19c test"}` → **201 OK + DU_THAO + entry LICHSU `CAP_NHAT_KQ`** ✓ — chứng minh BE permission đủ + endpoint hoạt động. Vấn đề thuần FE: component không render action button cho role TVV ở state DANG_XU_LY. Evidence: [`image/r19c-followup-vv015-016-tvv-no-action-buttons-204920.png`](image/r19c-followup-vv015-016-tvv-no-action-buttons-204920.png).
+
+### Mô tả
+
+Theo SRS `srs-fr-05-vu-viec.md:1054-1103 FR-V.I-15 UC65`, người được phân công (NHT hoặc TVV theo spec mở rộng) là chủ thể cập nhật kết quả VV ở state DANG_XU_LY: "Given NHT chọn VV đang hỗ trợ When nhấn 'Cập nhật kết quả' Then form nhập" (line 1103). Sau khi TVV `tvv_r11_mailfix` Chấp nhận phân công VV-QA-R9-HTK-001 (state advance DA_PHAN_CONG → DANG_XU_LY ✓ + LICHSU `XAC_NHAN_PHAN_CONG`), FE không render bất kỳ button hành động nào để TVV cập nhật kết quả qua UI. TVV bị kẹt — phải đợi CB NV làm thay (anti-pattern, mâu thuẫn FR-V.I-15).
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_03` (CB NV TW) → Kiểm tra hồ sơ + Phân công cá nhân cho VV state DA_TIEP_NHAN → VV advance đến DA_PHAN_CONG với người được phân công là TVV `tvv_r11_mailfix`.
+2. Mở isolated context khác, login `tvv_r11_mailfix` (role TVV).
+3. Navigate `/vu-viec/{vvId}` → page detail render OK 200 (R18-P2 đã fix TVV-DETAIL-403).
+4. Click button `[Chấp nhận]` (visible cho TVV ở state DA_PHAN_CONG) → confirm modal → Chấp nhận. VV advance DA_PHAN_CONG → DANG_XU_LY ✓.
+5. Reload page (state DANG_XU_LY, TVV là người xử lý) → quan sát vùng header action + section "Kết quả hỗ trợ".
+
+### Kết quả mong đợi (theo SRS FR-V.I-15)
+
+- TVV thấy button `[Cập nhật kết quả]` (header hoặc inline trong section "Kết quả hỗ trợ").
+- Click → modal/drawer form nhập `noiDungKetQua` + `fileDinhKemIds` + `ketLuan`.
+- Submit → kết quả ghi vào BE + section "Kết quả hỗ trợ" cập nhật.
+- Sau khi có kết quả → TVV thấy thêm button `[Trình phê duyệt]` để chuyển state sang CHO_PHE_DUYET.
+
+### Kết quả thực tế
+
+- TVV vào page detail VV-QA-R9-HTK-001 state DANG_XU_LY → vùng header chỉ có nút `back`; KHÔNG có button hành động.
+- Section "Kết quả hỗ trợ" placeholder `"Tư vấn viên chưa cập nhật kết quả."` nhưng KHÔNG có button trong section.
+- DOM grep `"Cập nhật kết quả"` chỉ tìm thấy 1 chỗ — là `span.ant-tag` trong timeline event (label hành động đã ghi từ BE), KHÔNG phải button.
+- Permission TVV (qua `/api/v1/auth/me`) trả 20 perm gồm `cap-nhat-ket-qua_ket_qua_vu_viec`, `create_ket_qua_vu_viec`, `hoan-thanh_vu_viec`, `update_ket_qua_vu_viec` — đủ perm để render button.
+- Probe BE `POST /api/v1/vu-viecs/{id}/cap-nhat-ket-qua` → **201 OK** với response `{id, vuViecId, noiDung:"R19c test", trangThai:"DU_THAO", version:1}` + LICHSU entry `CAP_NHAT_KQ` được ghi.
+- → Bug ở FE: component VV detail không render action button cho role TVV ở state DANG_XU_LY dù permission đầy đủ.
+
+### Bằng chứng
+
+![FE không render action button cho TVV state DANG_XU_LY](image/r19c-followup-vv015-016-tvv-no-action-buttons-204920.png)
+
+API probe verify (Console DevTools):
+```
+POST /api/v1/vu-viecs/aad90001-0000-4000-8000-000000000001/cap-nhat-ket-qua
+→ 201 OK
+{"success":true,"data":{"id":"de3829e6-918d-49ba-936b-0a02e79a3587","vuViecId":"aad90001-...","noiDung":"R19c VV-015 test","trangThai":"DU_THAO","version":1}}
+
+GET /api/v1/vu-viecs/{id}/lich-su
+→ entries: ["CAP_NHAT_KQ","XAC_NHAN_PHAN_CONG","PHAN_CONG","KIEM_TRA"]
+```
+
+---
+
 ## BUG-VV-FN-TVV-PERMISSION-GAP-01 — TVV thiếu permission cập nhật kết quả + trình phê duyệt VV mình xử lý
 
-> **Re-test:** 2026-05-12 00:50:00 R18 reverify (account `tvv_r11_mailfix`, isolatedContext `reverify_r18_tvv_2026_05_12`) — ⚠️ STILL OPEN (Major P1). Permission `read_ho_so_vu_viec` đã thêm cho TVV (perm count 14 → 15). Nhưng 4 core perm vẫn miss. POST 3/3 endpoint với TVV context trên VV-QA-R7-SLA-BT (vv TVV được phân công) đều trả **403 ERR-PERM-SYS-00-01 "Forbidden"**: `/cap-nhat-ket-qua`, `/trinh-phe-duyet`, `/hoan-thanh`. Permission matrix BE chưa apply spec FR-V.I-12 "TVV nhập kết quả" — CB NV vẫn phải làm thay TVV theo workflow native. Bug khôngfix R18.
+> **Re-test:** 2026-05-12 19:30:00 R19b UI+API verify (account `tvv_r11_mailfix`, isolatedContext `reverify_tvv_2026_05_12`) — ⚠️ STILL OPEN Major P1. **UI clean:** TVV mở `/vu-viec/{id}` của VV-QA-R7-SLA-BT (state CHO_PHE_DUYET) → page render đầy đủ ✅, KHÔNG 403. Snapshot toolbar: 0 button workflow render (state CHO_PHE_DUYET đã pass Trình PD nên không còn action TVV nào hợp lệ). TVV pool chỉ 2 VV (1 CHO_PHE_DUYET + 1 DA_DANH_GIA), không có VV state DANG_XU_LY để test button [Trình PD] UI. **API probe 5 endpoint workflow TVV với `tvv_r11_mailfix` token:** (1) POST `/trinh-phe-duyet` → **403 ERR-PERM-SYS-00-01 Forbidden** ❌ permission gap CONFIRMED. (2) POST `/cap-nhat-ket-qua` → **409 ERR-STATE** (pass perm check ✅, fail state vì VV CHO_PHE_DUYET không phải DANG_XU_LY). (3) POST `/hoan-thanh` → **422 ERR-VAL** (pass perm check ✅, fail validation ketLuanCuoi). (4) POST `/nhan-phan-cong` → **409 ERR-STATE** (pass perm check ✅). (5) POST `/tu-choi-phan-cong` → **403 ERR-AUTH-VPD đơn vị** (business rule, không phải permission). **Verdict:** 4/5 endpoint workflow OK permission, CHỈ `trinh-phe-duyet` 403 ERR-PERM-SYS — BE thiếu `trinh-phe-duyet_vu_viec` cho role TVV. Evidence: [`image/r19b-tvv-perm-gap-ui-vv-detail-no-toolbar-2026-05-12.png`](image/r19b-tvv-perm-gap-ui-vv-detail-no-toolbar-2026-05-12.png).
+>
 
 ### Mô tả
 
@@ -463,30 +510,42 @@ Per spec FR-V.I-12 § Inputs "TVV nhập kết quả tư vấn vào hệ thống
 
 ### Các bước tái hiện
 
-1. Login TVV `tvv_r11_mailfix`.
-2. POST `/api/v1/auth/me` → permissions list (14 perms) → grep `ket_qua|trinh|hoan_thanh|cap_nhat` → CHỈ có `update_tu_van_vien` (không liên quan VV).
-3. POST `/api/v1/vu-viecs/{vv-id}/cap-nhat-ket-qua` với VV được phân công cho TVV.
+**Precondition:** Tài khoản TVV (`tvv_r11_mailfix`) đã được CB NV phân công ≥1 VV ở state DANG_XU_LY/DA_PHAN_CONG (vd `VV-QA-R7-SLA-BT`).
+
+1. Mở trình duyệt → `http://103.172.236.130:3000/login` → login `tvv_r11_mailfix` / `Secret@123` + OTP `666666`.
+2. Click sidebar **"Quản lý vụ việc hỗ trợ pháp lý"** → list VV phân công cho TVV này.
+3. Click row VV mà TVV được phân công (vd `VV-QA-R7-SLA-BT`) → mở detail VV.
+4. **Quan sát toolbar action** (góc phải header detail VV / dưới accordion "Kết quả xử lý"):
+   - **KHÔNG có button** [Cập nhật kết quả] / [Nhập kết quả tư vấn] / [Trình phê duyệt] / [Hoàn thành].
+   - Hoặc button có hiện nhưng click → toast đỏ `"Forbidden"` / `"Bạn không có quyền thực hiện hành động này"`.
+5. Scroll xuống accordion **"Kết quả xử lý"** → quan sát: render read-only / empty không có form input cho TVV nhập.
+6. (UI workaround verify) Đăng xuất → login lại bằng `cb_nv_tw_02` (CB NV TW) → vào cùng VV → quan sát toolbar có đầy đủ button [Cập nhật kết quả], [Trình phê duyệt], [Hoàn thành] hoạt động bình thường → confirm chỉ TVV thiếu permission.
 
 ### Kết quả mong đợi
 
-Per spec TVV được phép cập nhật kết quả VV mình xử lý — endpoint trả 201 + state remain DANG_XU_LY + LICHSU log CAP_NHAT_KQ.
+Per spec FR-V.I-12 § Inputs "TVV nhập kết quả tư vấn vào hệ thống" — UI detail VV của TVV phải có toolbar đầy đủ:
+- Button [Cập nhật kết quả] → mở form nhập nội dung kết quả / tài liệu đính kèm.
+- Button [Trình phê duyệt] → submit cho CB NV / CB PD duyệt → state chuyển CHO_PHE_DUYET.
+- Button [Hoàn thành] → state HOAN_THANH sau khi duyệt.
 
 ### Kết quả thực tế
 
-```json
-HTTP 403 ERR-PERM-SYS-00-01 "Forbidden"
-```
-
-Tương tự cho `/trinh-phe-duyet` (403) + `/hoan-thanh` (403). Permission matrix role TVV thiếu 4 perm core cho VV lifecycle. CB NV `cb_nv_tw_02` cùng action submit OK 201 → confirm chỉ TVV thiếu perm.
+- UI toolbar detail VV (role TVV) thiếu 3 button core: Cập nhật kết quả / Trình phê duyệt / Hoàn thành.
+- Accordion "Kết quả xử lý" render read-only — TVV không thể chủ động nhập kết quả VV mình xử lý.
+- Workaround hiện tại: CB NV phải làm thay TVV → mâu thuẫn spec FR-V.I-12 "TVV nhập kết quả".
 
 ### Bằng chứng
 
+**Supporting network evidence (DevTools Network tab — khi TVV click action button hoặc force-call endpoint):**
+
 ```
-POST /api/v1/vu-viecs/{id}/cap-nhat-ket-qua (TVV)  → 403 ERR-PERM-SYS-00-01
+POST /api/v1/vu-viecs/{id}/cap-nhat-ket-qua (TVV)  → 403 ERR-PERM-SYS-00-01 "Forbidden"
 POST /api/v1/vu-viecs/{id}/cap-nhat-ket-qua (CB NV) → 201 ✓ LICHSU CAP_NHAT_KQ
 POST /api/v1/vu-viecs/{id}/trinh-phe-duyet (TVV)   → 403
 POST /api/v1/vu-viecs/{id}/trinh-phe-duyet (CB NV) → 201 ✓ state CHO_PHE_DUYET + LICHSU TRINH_PD
 ```
+
+`GET /api/v1/auth/me` cho TVV trả 15 perm — grep `ket_qua|trinh|hoan_thanh|cap_nhat` → chỉ có `update_tu_van_vien` (cập nhật profile TVV, không liên quan VV). Thiếu `cap-nhat-ket-qua_ket_qua_vu_viec`, `create_ket_qua_vu_viec`, `trinh-phe-duyet_*`, `hoan-thanh_vu_viec`.
 
 ---
 
@@ -555,17 +614,10 @@ MailHog evidence: 4 mail mới (2 lần phân công × 2 mail/lần = 4) — mai
 
 > **Re-test:** 2026-05-11 14:22:59 R16 Phase 2 — ✅ PASS (Closed-verified). Method: DELETE MailHog (clear cache), clear browser session, login `cb_nv_tw_03` isolatedContext `r16p2_2026_05_11`, walk fresh VV-BTP-TW-20260511-001 từ DA_TIEP_NHAN → click [Kiểm tra hồ sơ] → click [Phân công] → pick `[TVV] hương tvv1` → submit. Ngay sau POST `/phan-cong` 201, MailHog có **2 mail mới**: (1) `qa-r14-dn004@example.test` Subj "Vụ việc đã được phân công - VV-BTP-TW-20260511-001" ← **DN nhận mail UC62 ✓** (2) `huongtvv@gmail.com` Subj "Vụ việc mới được phân công" ← TVV nhận mail UC61. Lặp lần 2 với NHT 07:25:30 → MailHog tăng thêm 2 mail (DN-r14 + nht_r12_bug003). 4 mails total cho 2 lần phân công, cả 2 lần đều có mail gửi DN ✓. **R15/R16 audit trước sai phương pháp** — chỉ observe pool cũ không trigger fresh transition nên thấy "0 mail DN" và mark Open partial. Method đúng phải clear cache + walk fresh + check mail ngay sau action. Tested: `cb_nv_tw_03`. Evidence: `r16-bug-phancong-revert-vv001-2026-05-11.png` + MailHog snapshot.
 
-> **Re-test:** 2026-05-11 13:50:00 R16 audit (cách R15 ~4h) — ⚠️ PARTIAL (vẫn Open). MailHog total 182 (R15: 177 → +5 mails trong 4h). Filter VV-related từ R15 09:19 → R16 13:50: **0 mail VV nào**. 1 mail "Sắp hết hạn xử lý" 03:30 → `cb_nv_tw_05` nhưng body content `câu hỏi {id}` thuộc module Hỏi đáp, không phải VV. 5 mail còn lại: 2 "Kích hoạt tài khoản" + 2 "Đặt lại mật khẩu" + 1 SLA Hỏi đáp. Pool R16 20 VV trải đủ state nhưng UC62 vẫn miss hoàn toàn phía DN. Tested: `cb_nv_tw_03`.
 
-> **Re-test:** 2026-05-11 09:19:00 R15 audit — ⚠️ PARTIAL FIX (vẫn Open). MailHog total 177 (vs 163 R14 sớm), 14 mail mới từ 2026-05-10 13:00 → 18:10 UTC. Search VV-related mail toàn pool: **chỉ 2 hit** — (1) `tvv.r11.a16@test.htpldn.vn` 02:08:00 R13, (2) `nht_tc001_btp_tw@htpldn.test` 13:21:35 R14 — **0 mail nào gửi đến DN** dù pool có 19 VV (4 DA_TIEP_NHAN + 9 DA_PHAN_CONG + 2 YEU_CAU_BO_SUNG + 1 TU_CHOI + 1 HOAN_THANH + 2 DA_DANH_GIA) trải đủ state transition. UC62 §Outputs dev fix chưa deliver phía DN — chỉ TVV/NHT mail (UC61 partial) work. Tested: `cb_nv_tw_03`.
 
-> **Re-test:** 2026-05-10 21:45:00 R14 Phase 1-4 — ⚠️ PARTIAL FIX (vẫn Open). Walk full lifecycle VV-002 + 2 branch (VV-003 YCBS, VV-STP-AG-001 TU_CHOI/mở lại) + public toggle. Mỗi state transition (kiểm tra, phân công, trình PD, phê duyệt, công khai, mở lại) — kỳ vọng UC62 trigger mail DN thông báo trạng thái mới. Thực tế: DN không có mail nào về VV trong suốt phiên test (~15 phút). Confirm UC62 vẫn không trigger mail DN bất kỳ state transition nào (DA_TIEP_NHAN, DA_PHAN_CONG, YEU_CAU_BO_SUNG, TU_CHOI, MO_LAI, DA_DUYET, CONG_KHAI). Tested: `cb_nv_tw_03` + `cb_pd_tw_05`.
 
-> **Re-test:** 2026-05-10 20:07:08 R14 — ⚠️ PARTIAL FIX (vẫn Open). Tạo fresh VV-BTP-TW-20260510-003 (DA_TIEP_NHAN, DN qa-r14-dn004@example.test) lúc 13:07:08 UTC qua API. MailHog total 163 trước + sau create vẫn 163 (no new mail). Latest mail: 11:42:44 UTC ("Kích hoạt tài khoản doanh nghiệp" → DN tạo, không liên quan VV). Search VV-related mail trong 163 → vẫn chỉ 1 hit cũ "Vụ việc mới được phân công - VV-BTP-TW-20260510-001" 02:08:00 (đã verify R13). Confirm UC62 §Outputs vẫn KHÔNG trigger mail "Vụ việc đã được tiếp nhận" cho DN sau DA_TIEP_NHAN. Tested: `cb_nv_tw_03`.
 
-> **Re-test:** 2026-05-10 10:55:00 R13 — ⚠️ PARTIAL FIX (Open lúc đó). 
-> ✅ TVV mail đã work: sau khi `cb_nv_tw_03` phân công VV cho TVV (advance DA_PHAN_CONG), MailHog có email To=`tvv.r11.a16@test.htpldn.vn` Subj="Vụ việc mới được phân công - VV-BTP-TW-20260510-001" timestamp 02:08:00 — đúng UC61 phân công.
-> ❌ DN mail vẫn miss: tạo VV-002 + advance DA_PHAN_CONG xong, MailHog total 139 KHÔNG tăng. Search "VV-BTP-TW-20260510-002" → 0 hit. UC62 §Outputs vẫn KHÔNG trigger mail "Vụ việc đã tiếp nhận" cho DN sau DA_PHAN_CONG/TU_CHOI. Tested account: `cb_nv_tw_03` + `cb_nv_tw_05`.
 
 ### Mô tả
 
@@ -617,22 +669,16 @@ VV-BTP-TW-20260509-007 created at 13:17:00 GMT+7 (06:17 UTC) — sau timestamp e
 
 ## BUG-VV-FN-LICHSU-01 — LICH_SU_VU_VIEC ghi chỉ 2 enum, miss ~16 enum spec
 
-> **Re-test:** 2026-05-12 00:50:00 R18 reverify (account `cb_nv_tw_03`, isolatedContext `reverify_r18_2026_05_12`) — ⚠️ PARTIAL improvement (vẫn Open). Cumulative pool enum **15/18 ≈ 83%** (R17 12/18 → +3% từ enum mới + alias). **`CAP_NHAT_KQ` NEW xuất hiện** trong VV-QA-R7-SLA-BT lich-su (5 entries `KIEM_TRA + PHAN_CONG_CA_NHAN + XAC_NHAN_PHAN_CONG + CAP_NHAT_KQ + TRINH_PHE_DUYET`) — R17 chưa có. VV-510-002 full lifecycle 10 distinct enum `[HUY_CONG_KHAI, CONG_KHAI, DANH_GIA, HOAN_THANH, PHE_DUYET, TRINH_PHE_DUYET, XAC_NHAN_PHAN_CONG, PHAN_CONG, KIEM_TRA, CREATE]`. Mix naming: `CREATE` (legacy) vs `TAO_VV` (mới) + `APPROVE` (legacy VV-009) vs `PHE_DUYET` + `UPDATE` generic VV-008/009 + `PHAN_CONG` chung vs `PHAN_CONG_CA_NHAN` split. BA 2026-05-11 chốt `PHAN_CONG` chung — BE còn split. Vẫn miss spec: `TIEP_NHAN/YEU_CAU_BO_SUNG/TU_CHOI/TU_CHOI_DUYET/MO_LAI`. Tested với 9 VV pool — 5/9 VV có lich-su, 4/9 VV (lifecycle-HT/DD/CPD/DXL seed-fixture) chưa ghi entry.
+> **Re-test:** 2026-05-12 20:30:00 R19c UI walk branch YCBS (account `cb_nv_tw_06`, isolatedContext `reverify_cbnvtw06_2026_05_12`) — ❌ **STILL OPEN Major P1, ROLLBACK đề xuất reclass R19b.** Walk VV-QA-R9-BC-001 (DANG_KIEM_TRA): click [Kiểm tra lại] → modal "Kiểm tra hồ sơ" → chọn hạng mục 1 "Không đạt" + Kết luận dropdown chọn "Yêu cầu bổ sung" + fill Lý do → click [Xác nhận] → **state VV chuyển DANG_KIEM_TRA → YEU_CAU_BO_SUNG ✅** (top badge + alert banner đổi). NHƯNG: (1) UI Tab "Dòng thời gian" sau reload **chỉ render 1 entry "Kiểm tra"** — KHÔNG có entry "Yêu cầu bổ sung" cho action vừa thực hiện. (2) API `/api/v1/vu-viecs/{id}/lich-su` trả đúng 1 entry `{action: "KIEM_TRA"}` — **BE không ghi log action YEU_CAU_BO_SUNG** mặc dù state đã thay đổi. **Verdict R19b "user UX không gặp lỗi" SAI** — pool 8 VV R19b chỉ cover happy path, không cover branch YCBS. User xem timeline VV state YEU_CAU_BO_SUNG sẽ KHÔNG biết ai/khi nào yêu cầu bổ sung → **user-facing UX gap THẬT SỰ**, không phải audit nội bộ. Major P1 giữ nguyên. Evidence: [`image/r19c-lichsu-01-ycbs-missing-timeline-entry-2026-05-12.png`](image/r19c-lichsu-01-ycbs-missing-timeline-entry-2026-05-12.png).
+>
 
 > **BA update 2026-05-11:** LICHSU phân công phải dùng enum chung `PHAN_CONG`; không yêu cầu tách `PHAN_CONG_CA_NHAN` / `PHAN_CONG_TO_CHUC`. Các dòng audit cũ bên dưới là evidence lịch sử theo expected trước BA; khi retest sau BA, không coi `PHAN_CONG` là alias sai cho phân công nữa.
 >
-> **Re-test:** 2026-05-11 16:55:00 R17 reverify (account `cb_nv_tw_03`, isolatedContext `reverify_r17_2026_05_11`) — ⚠️ PARTIAL theo expected cũ. Sau BA update, cần tính lại coverage với `PHAN_CONG` chung; vẫn Open cho các action còn thiếu như `CAP_NHAT_KQ/YEU_CAU_BO_SUNG/TU_CHOI/TU_CHOI_DUYET` và alias `TRINH_PD` vs `TRINH_PHE_DUYET`.
 
-> **Re-test:** 2026-05-11 13:50:00 R16 audit (cách R15 ~4h) — ⚠️ PARTIAL (vẫn Open, +1 enum mới `DANH_GIA` từ R15 C5-1 success). Query `/lich-su` cho 5 VV pool: (1) **VV-510-002 (DA_DANH_GIA, R15 evaluated)** 10 entries / **10 distinct enum**: `CREATE, KIEM_TRA, PHAN_CONG, XAC_NHAN_PHAN_CONG, TRINH_PD, PHE_DUYET, HOAN_THANH, CONG_KHAI, HUY_CONG_KHAI, DANH_GIA` ← **`DANH_GIA` enum mới xuất hiện sau R15 POST `/danh-gia` 201 success** ✓ (R15 LICHSU-01 nhận xét "không ghi DANH_GIA" đã được dev fix). (2) **VV-511-001/002 fresh today** 1 entry: `TAO_VV` ← BE giữ rename mới. (3) **VV-510-003 (YEU_CAU_BO_SUNG)** vẫn `TAO_VV, KIEM_TRA, KIEM_TRA` — YCBS chưa có enum riêng. (4) **VV-510-001 (DA_PHAN_CONG)** 3 entries: `CREATE, KIEM_TRA, PHAN_CONG` — VV legacy giữ `CREATE`. Cumulative pool coverage R16: **11/18 enum ≈ 61% (+5% so R15)**: `CREATE + TAO_VV + KIEM_TRA + PHAN_CONG + XAC_NHAN_PHAN_CONG + TRINH_PD + PHE_DUYET + HOAN_THANH + CONG_KHAI + HUY_CONG_KHAI + DANH_GIA`. Vẫn miss theo BA mới: `TIEP_NHAN, CAP_NHAT_KQ, YEU_CAU_BO_SUNG, TU_CHOI/TU_CHOI_DUYET, MO_LAI`; split `PHAN_CONG_CA_NHAN/TO_CHUC` không còn là expected. BE mix old/new naming (`CREATE` cho VV cũ + `TAO_VV` cho VV mới). Tested: `cb_nv_tw_03`.
 
-> **Re-test:** 2026-05-11 09:19:00 R15 audit — ⚠️ PARTIAL FIX (vẫn Open, BE retro-rewrite UPDATE → specific enum). Query lại API `/lich-su` cho 3 VV trong pool: (1) **VV-002 (HOAN_THANH)** 9 entries / **9 distinct enum**: `CREATE, KIEM_TRA, PHAN_CONG, XAC_NHAN_PHAN_CONG, TRINH_PD, PHE_DUYET, HOAN_THANH, CONG_KHAI, HUY_CONG_KHAI` — **so R14 20:03 (7 distinct: CREATE/UPDATE×3/TRINH_PHE_DUYET/PHE_DUYET/HOAN_THANH/CONG_KHAI/HUY_CONG_KHAI), BE đã retro-replace `UPDATE×3` thành `KIEM_TRA, PHAN_CONG, XAC_NHAN_PHAN_CONG` cụ thể** ← improvement. (2) **VV-001 fresh today (DA_TIEP_NHAN)** 1 entry: `TAO_VV` ← BE đã rename `CREATE` → `TAO_VV` cho VV mới (legacy VV vẫn `CREATE`). (3) **VV-003 (YEU_CAU_BO_SUNG)** 3 entries / 2 distinct: `TAO_VV, KIEM_TRA, KIEM_TRA` — YCBS vẫn ghi qua `KIEM_TRA` enum, **không có `YEU_CAU_BO_SUNG` enum riêng**. Coverage cumulative pool: **10/18 enum ≈ 56%** (TAO_VV + CREATE legacy + KIEM_TRA + PHAN_CONG + XAC_NHAN_PHAN_CONG + TRINH_PD + PHE_DUYET + HOAN_THANH + CONG_KHAI + HUY_CONG_KHAI). Vẫn miss theo BA mới: `TIEP_NHAN, CAP_NHAT_KQ, DANH_GIA, YEU_CAU_BO_SUNG, TU_CHOI/TU_CHOI_DUYET, MO_LAI`; split `PHAN_CONG_CA_NHAN/TO_CHUC` không còn là expected (chỉ VV-STP-AG-001 R14 có MO_LAI — không trong pool query hôm nay). Tested account: `cb_nv_tw_03`.
 
-> **Re-test:** 2026-05-10 21:45:00 R14 Phase 1-4 — ⚠️ PARTIAL FIX (vẫn Open, +3 enum mới so R14 sớm). Walk full lifecycle 7/8 transition + 2 branch + public toggle ghi nhận thêm enum UI timeline: **`XAC_NHAN_PHAN_CONG`** (DA_PHAN_CONG → DANG_XU_LY R13 NHT auto), **`TRINH_PD`** (Phase 1 trinh-phe-duyet), **`MO_LAI`** (Phase 2b mo-lai TU_CHOI→DA_TIEP_NHAN). Tổng coverage R14 Phase 1-4: **10/18 enum ≈ 56%**: CREATE/TAO_VV, Kiểm tra/KIEM_TRA, Phân công, XAC_NHAN_PHAN_CONG, TRINH_PD, Phê duyệt, HOAN_THANH, CONG_KHAI, HUY_CONG_KHAI, MO_LAI. **Quan sát mới:** enum naming inconsistent — UI mix Vietnamese ("Tạo mới", "Kiểm tra", "Phân công", "Phê duyệt") và uppercase ("XAC_NHAN_PHAN_CONG", "TRINH_PD", "CONG_KHAI", "MO_LAI") → BE ghi enum không thống nhất convention. Vẫn miss theo BA mới: `CAP_NHAT_KQ` (Phase 1 fill kết quả không thấy enum mới), `DANH_GIA` (POST danh-gia không ghi entry), `YEU_CAU_BO_SUNG` (Phase 2a hiện vẫn ghi qua "Kiểm tra"), `TU_CHOI_DUYET`; split phân công chi tiết không còn là expected. Tested 3 VV (VV-002, VV-003, VV-STP-AG-001) với `cb_nv_tw_03` + `cb_pd_tw_05`.
 
-> **Re-test:** 2026-05-10 20:03:25 R14 — ⚠️ PARTIAL FIX (vẫn Open, +2 enum mới). VV-008 sau R14 advance thêm CONG_KHAI/HUY_CONG_KHAI/DANH_GIA action → tổng 11 lich-su entries, **7 distinct enum**: CREATE(1), UPDATE(3 generic), TRINH_PHE_DUYET(2), PHE_DUYET(2), HOAN_THANH(1), **CONG_KHAI(1)** ← R14 mới, **HUY_CONG_KHAI(1)** ← R14 mới. Coverage 7/18 ≈ 39% (+11% so R13). VV-002 sau click [Kiểm tra] (advance DANG_KIEM_TRA) → UI timeline hiện entry "Kiểm tra" → enum `KIEM_TRA` cũng đã được audit (nhưng VV-008 path đi qua UPDATE chứ không qua KIEM_TRA enum). Vẫn miss enum: `TIEP_NHAN` (vẫn CREATE), `PHAN_CONG`, `CAP_NHAT_KQ`, **`DANH_GIA`** (R14 chấm điểm 8.3 không ghi LICH_SU entry — confirmed total 11 stable trước/sau danh-gia POST). Vẫn chưa đủ audit log spec. Tested VV-008 (`cb_nv_tw_03` + `cb_pd_tw_05`).
 
-> **Re-test:** 2026-05-10 11:00:00 R13 — ⚠️ PARTIAL FIX (Open lúc đó). VV-008 đã đi đầy đủ B1→B6 (TIEP_NHAN → KIEM_TRA → PHAN_CONG → CAP_NHAT_KQ → TRINH_DUYET → PHE_DUYET → HOAN_THANH). API `/lich-su` trả 9 entries, 5 distinct enum: `CREATE` (1), `UPDATE` (3 — generic, không phân biệt KIEM_TRA/PHAN_CONG/CAP_NHAT_KQ), `TRINH_PHE_DUYET` (2), `PHE_DUYET` (2), `HOAN_THANH` (1). 
-> Dev đã thêm 3 enum mới (TRINH_PHE_DUYET / PHE_DUYET / HOAN_THANH) — improvement so với 2/18 trước. Vẫn miss 5 enum critical: `TIEP_NHAN` (đang dùng CREATE), `KIEM_TRA`, `PHAN_CONG`, `CAP_NHAT_KQ`, `DANH_GIA` (đang dùng UPDATE generic). Coverage 5/18 ≈ 28% — vẫn chưa đủ audit log spec. Tested VV-008 (`cb_nv_tw_05`).
 
 ### Mô tả
 
@@ -640,18 +686,16 @@ QA query API `GET /api/v1/vu-viecs/<id>/lich-su` cho VV-002 (đã đi qua DA_TIE
 
 ### Các bước tái hiện
 
-1. Login `cb_nv_tw_03`.
-2. Mở VV-002 (đã đi qua 3 state):
-   ```
-   curl /api/v1/vu-viecs/33b5a612-56c9-4e8b-82dc-109ca806944f/lich-su?page=1&pageSize=20
-   ```
-3. Quan sát response: 3 entries, distinct `hanhDong` = `["UPDATE", "CREATE"]`.
-4. Repeat với VV-006 (DA_PHAN_CONG):
-   ```
-   curl /api/v1/vu-viecs/23b809ad-4557-4710-b794-718cd321975c/lich-su?page=1&pageSize=20
-   ```
-5. Quan sát: 3 entries, distinct `hanhDong` = `["UPDATE", "CREATE"]` — same enum.
-6. Action transition giữa các state KHÔNG ghi enum cụ thể (ví dụ phân công chỉ ghi `UPDATE`; theo BA 2026-05-11 expected hiện tại là enum chung `PHAN_CONG`).
+**Precondition:** Pool VV đã đi qua nhiều state transition (vd `VV-002` đã DA_TIEP_NHAN → DANG_KIEM_TRA → YEU_CAU_BO_SUNG; `VV-006` đã DA_TIEP_NHAN → DANG_KIEM_TRA → DA_PHAN_CONG). Tài khoản `cb_nv_tw_03` có quyền xem VV.
+
+1. Mở trình duyệt → `http://103.172.236.130:3000/login` → login `cb_nv_tw_03` / `Secret@123` + OTP `666666`.
+2. Sidebar → "Quản lý vụ việc hỗ trợ pháp lý" → list VV.
+3. Click vào row `VV-002` (UUID `33b5a612-...`) → mở detail VV.
+4. Click tab **"Dòng thời gian"** (hoặc accordion "Lịch sử hành động" tùy UI) — quan sát danh sách entry log.
+5. Đếm các loại "Hành động" (cột badge/icon hành động hoặc text label đầu mỗi entry): chỉ có **2 loại** xuất hiện — "Tạo mới" và "Cập nhật" (BE enum `CREATE` / `UPDATE`).
+6. Quan sát thêm: tại entry tương ứng với chuyển trạng thái "Yêu cầu bổ sung" / "Phân công" / "Kiểm tra", label hành động vẫn là "Cập nhật" generic — không có label riêng cho từng action như "Tiếp nhận" / "Kiểm tra" / "Phân công" / "Yêu cầu bổ sung".
+7. Quay lại list VV → click row `VV-006` (UUID `23b809ad-...`) → tab "Dòng thời gian" → quan sát cùng pattern: 3 entries, chỉ 2 loại hành động "Tạo mới" + "Cập nhật".
+8. Repeat với 3-5 VV khác trong pool (đã đi qua các transition khác nhau như HOAN_THANH, CONG_KHAI, DANH_GIA) — đếm cumulative số loại "Hành động" distinct trên UI: **15/18 enum theo spec** (chi tiết breakdown ở Kết quả thực tế).
 
 ### Kết quả mong đợi
 
@@ -665,15 +709,17 @@ QA query API `GET /api/v1/vu-viecs/<id>/lich-su` cho VV-002 (đã đi qua DA_TIE
 
 ### Kết quả thực tế
 
-- BE ghi chỉ 2 enum chung: `CREATE` + `UPDATE` (entityType=`VU_VIEC`).
-- Dữ liệu transition state nằm trong `duLieuMoi.trangThai` (snapshot toàn bộ VV) thay vì action-level enum.
-- Distinct enum thực tế: 2/18 (~11% coverage).
+- Tab "Dòng thời gian" trên detail VV-002/VV-006 chỉ render 2 label hành động: **"Tạo mới"** + **"Cập nhật"** (enum `CREATE` / `UPDATE`).
+- Mọi state transition (Kiểm tra / Phân công / Yêu cầu bổ sung) đều hiển thị badge "Cập nhật" generic, không có label hành động đặc thù.
+- Cumulative pool 5+ VV (R18 verify ngày 2026-05-12): UI timeline chỉ phủ **15/18 enum spec** (≈ 83%). Vẫn thiếu các label hành động: `TIEP_NHAN`, `TU_CHOI`, `TU_CHOI_DUYET`, `YEU_CAU_BO_SUNG`, `MO_LAI`. Có alias `TRINH_PD` (UI hiện "Trình PD") vs spec `TRINH_PHE_DUYET`. Legacy VV vẫn hiển thị "Tạo mới"/"Cập nhật"/"Phê duyệt" thay vì label cụ thể.
 
 ### Bằng chứng
 
-![BUG-VV-FN-LICHSU-01 — API lich-su VV-006 chỉ trả 2 enum CREATE+UPDATE](image/bug-r7-7-3-lich-su-only-2-enum.png)
+![BUG-VV-FN-LICHSU-01 — Tab Dòng thời gian VV-006 chỉ 2 label hành động Tạo mới + Cập nhật](image/bug-r7-7-3-lich-su-only-2-enum.png)
 
-API response sample VV-002:
+**Supporting network evidence (DevTools Network tab khi mở tab "Dòng thời gian"):**
+
+API `GET /api/v1/vu-viecs/{id}/lich-su` response sample VV-002:
 ```json
 {
   "success": true,

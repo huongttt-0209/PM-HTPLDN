@@ -18,9 +18,9 @@ Phát hiện **1 bug Major** trong test R7.4.A1-CG advance state happy path. BE 
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 1    | 0        | 1     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 1     | 0      | 0     | 0       | 1      | 0    |
 
 ## Bug Summary Table
 

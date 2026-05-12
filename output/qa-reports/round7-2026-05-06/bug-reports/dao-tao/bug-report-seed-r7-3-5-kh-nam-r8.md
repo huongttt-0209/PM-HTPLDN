@@ -30,9 +30,9 @@ Phát hiện **3 lỗi có SRS reference cụ thể** trong quá trình re-seed 
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 3    | 0        | 2     | 1      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 3    | 0        | 2     | 1      | 0     | 0       | 2      | 1    |
 
 ## Bug Summary Table
 

@@ -5,29 +5,29 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation via Claude Code |
-| **Ngày** | 2026-05-12 00:25:00 - 01:30:00 |
-| **Round** | R7 — R2 task R7.7.12.2 |
+| **Ngày** | 2026-05-12 18:45:00 |
+| **Round** | R19 |
 | **Tài liệu tham chiếu** | [srs-fr-06-chi-tra.md §FR-V.II-14](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md) · [02-thu-tu-module.md §10 SM-CHI-TRA B7](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) · [functional-test-report-r7-7-12-2-fr14-bo-sung.md](../../functional/chi-tra/functional-test-report-r7-7-12-2-fr14-bo-sung.md) |
 
 ---
 
 ## Tổng hợp
 
-Phát hiện **3 lỗi** liên quan FR-V.II-14 sau khi (1) probe đủ 3 path tạo bổ sung HSCT, (2) deep review NotebookLM + grep SRS local để loại bỏ ambiguous spec, (3) verify field-level integrity 6/6 HSCT YCBS qua API.
+Phát hiện **3 lỗi** liên quan FR-V.II-14. Hiện trạng (sau R19 reverify 2026-05-12): **1 Defer · 1 Open · 1 Closed** (CHITRA-009 BA đã update SRS line 841 ✅).
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 3    | 0        | 2     | 0      | 1     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 3    | 0        | 2     | 0      | 1     | 0       | 1      | 2    |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-CHITRA-008 | **Major** | P2 | Backend / LGSP | R7.7.12.2 | `FR-V.II-14 §Processing Bước 3-4` + `Error Handling E1/E2/E3` | LGSP gateway endpoint nhận sync HS bổ sung từ DVC chưa expose — 5/5 path variant trả 404 ERR-SYS-00-04-01 | Open |
+| BUG-CHITRA-008 | **Major** | P2 | Backend / LGSP | R7.7.12.2 | `FR-V.II-14 §Processing Bước 3-4` + `Error Handling E1/E2/E3` | LGSP gateway endpoint nhận sync HS bổ sung từ DVC chưa expose — 5/5 path variant trả 404 ERR-SYS-00-04-01 | 🚫 Defer (chờ phase tích hợp API ngoài) |
 | BUG-CHITRA-010 | **Major** | P1 | Backend / Data | R7.7.12.2 | `FR-V.II-03 §Processing Bước 5` + `BR-CHITRA-BS01` | `ngayYeuCauBoSung = null` 6/6 HSCT YCBS — không ghi timestamp khi DKT → YCBS, vô hiệu hoá deadline tracking 5 ngày LV (ERR-CT-BS-03) | Open |
-| BUG-CHITRA-009 | Minor | P3 | Spec / Wording | R7.7.12.2 | `FR-V.II-14 row 837 + 841` vs `FR-V.II-01 row 31` + `SCR-V.II-02 line 962/1014/1026` + `8+ chỗ DVC-only` | Wording "hoặc CB NV (thủ công)" ở row 841 mâu thuẫn 8+ chỗ khác (DVC-only) — đề xuất BA xoá wording thừa | Open |
+| ~~BUG-CHITRA-009~~ | Minor | P3 | Spec / Wording | R7.7.12.2 | `FR-V.II-14 row 837 + 841` vs `FR-V.II-01 row 31` + `SCR-V.II-02 line 962/1014/1026` + `8+ chỗ DVC-only` | ~~Wording "hoặc CB NV (thủ công)" ở row 841 mâu thuẫn 8+ chỗ khác (DVC-only)~~ | Closed ✅ R19 |
 
 ---
 
@@ -60,6 +60,8 @@ R1 (2026-05-10) raise nghi vấn 2 khả năng intent: (a) chỉ DN qua DVC, (b)
 ---
 
 ## BUG-CHITRA-008 — LGSP gateway endpoint nhận sync HS bổ sung từ DVC chưa expose — 5/5 path POST 404
+
+> **Defer 2026-05-12 — chờ phase tích hợp API ngoài.** Bug phụ thuộc DVC LGSP sandbox staging chưa connect (CT-14-009 ⏭ SKIP). Endpoint receiver chỉ cần expose khi BE bắt đầu integration với DVC/Cổng PLQG. Không fix dev nội bộ ở giai đoạn hiện tại.
 
 ### Mô tả
 
@@ -125,6 +127,8 @@ POST /api/v1/ho-so-chi-tras/.../dinh-kem → 404 (same shape)
 ---
 
 ## BUG-CHITRA-010 — `ngayYeuCauBoSung = null` 6/6 HSCT YCBS — vô hiệu hoá deadline tracking 5 ngày LV
+
+> **Re-test:** 2026-05-12 18:42:00 R19 — ❌ STILL Open. Login `cb_nv_dp_01` (AG) → DevTools console fetch 6/6 HSCT YCBS (`HSCT000004/011/012/013/014/200002`). API response: `ngayYeuCauBoSung = null` cho cả 6 records (soLanBoSung 1-3, lichSu có entry "KIEM_TRA→YEU_CAU_BO_SUNG" cho HSCT000004 + HSCT200002 ngày 2026-05-10 11:17). BE chưa set `ngay_yeu_cau_bo_sung = NOW()` khi transition DKT → YCBS. Deadline tracking 5 ngày LV (ERR-CT-BS-03) vẫn không trigger được. Bug Major giữ Open, cần BE BR-CHITRA-BS01 implement.
 
 ### Mô tả
 
@@ -198,7 +202,9 @@ HSCT200002: YCBS soLan=1 ngayYCBS=null
 
 ---
 
-## BUG-CHITRA-009 — Wording SRS line 841 "hoặc CB NV (thủ công)" mâu thuẫn 8+ chỗ DVC-only
+## ~~BUG-CHITRA-009~~ — Wording SRS line 841 "hoặc CB NV (thủ công)" mâu thuẫn 8+ chỗ DVC-only [CLOSED ✅ R19]
+
+> **Re-test:** 2026-05-12 18:45:00 R19 — ✅ PASS (Closed-verified). Grep `input/srs-update-2026-5-5/srs-fr-06-chi-tra.md` line 841 hiện tại: `"| Tác nhân | Doanh nghiệp (qua DVC/Cổng PLQG) |"` — BA đã xoá phần `"hoặc CB NV (thủ công)"`. Line 837 §Màn hình cũng chỉ còn `"Cổng DVC / Cổng PLQG (giao diện DN)"`. FR-V.II-14 hiện align hoàn toàn FR-V.II-01 line 31 + SCR-V.II-02 component table (12+ chỗ đồng nhất DVC-only). NotebookLM HTPLDN re-query confirm. Đóng bug Minor, đổi Status → Closed.
 
 ### Mô tả
 

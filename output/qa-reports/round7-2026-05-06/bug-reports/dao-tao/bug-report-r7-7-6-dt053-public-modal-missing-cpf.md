@@ -18,9 +18,9 @@ Phát hiện **1** lỗi Minor — UI modal "Công khai" thiếu form input cho 
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 1    | 0        | 0     | 0      | 1     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 0     | 0      | 1     | 0       | 0      | 1    |
 
 ## Bug Summary Table
 

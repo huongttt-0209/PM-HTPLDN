@@ -18,9 +18,9 @@ Phát hiện **5** lỗi có SRS reference cụ thể trong functional test Dash
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 5    | 0        | 3     | 1      | 1     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 5    | 0        | 3     | 1      | 1     | 0       | 5      | 0    |
 
 ## Bug Summary Table
 
@@ -104,8 +104,6 @@ Chart: 2 chart (Đánh giá hiệu quả + Chất lượng đào tạo) đều "
 
 ## ~~BUG-DASH-001~~ [CLOSED] — KPI-02 dashboard count=16 loại trừ TU_CHOI sai spec
 
-> **Re-test:** 2026-05-10 12:30:00 R2 — ❌ FAIL (Open-confirmed). Dev claim đã fix nhưng dashboard vẫn trả `VU_VIEC_TIEP_NHAN.giaTri = 16` (API endpoint cũ). Pool VV vẫn = 17 (gồm 1 TU_CHOI: `VV-BTP-TW-20260507-004`). Drill list vẫn "1-17 / 17 mục". Mismatch dashboard 16 vs list 17 nguyên vẹn. Evidence: [r7-r2-bug01-drill-kpi02-still-17vs16.png](image/r7-r2-bug01-drill-kpi02-still-17vs16.png).
->
 > **Re-test:** 2026-05-10 20:38:00 R3 — ✅ PASS (Closed-verified). Dev fix lần 2 thành công: dashboard KPI-02 = **18** (đã include TU_CHOI). Pool VV evolved 17→18 (+1 record mới). Drill `/vu-viec/danh-sach?tuNgay=2026-01-01&denNgay=2026-05-10` (KHÔNG còn exclude `trangThai!=TU_CHOI`) → list "1-18 / 18 mục" = dashboard 18. Match clean. Evidence: [r7-r3-bug01-CLOSED-kpi02-18match18.png](image/r7-r3-bug01-CLOSED-kpi02-18match18.png).
 
 ### Mô tả
@@ -174,8 +172,6 @@ vs. cross-check `/api/v1/vu-viecs?page=1&size=20` trả `meta.total = 17` với 
 
 ## ~~BUG-DASH-002~~ [CLOSED] — Drill-down KPI-07 thiếu URL param `trang_thai=DANG_HOAT_DONG`
 
-> **Re-test:** 2026-05-10 12:31:00 R2 — ❌ FAIL (Open-confirmed). Dev claim đã fix nhưng drill URL vẫn `/chuyen-gia-tvv/danh-sach?tuNgay=2026-01-01&denNgay=2026-05-10` (vẫn THIẾU `trang_thai`, `don_vi_cap`, `don_vi_id`). Tab "Đang hoạt động" rescue count = 10 ✓ (data đã thay đổi từ 11→10 do TVV pool reset). URL filter brittle nguyên vẹn. Evidence: [r7-r2-bug02-drill-kpi07-url-still-missing.png](image/r7-r2-bug02-drill-kpi07-url-still-missing.png).
->
 > **Re-test:** 2026-05-10 20:39:00 R3 — ✅ PASS (Closed-verified). Dev fix lần 2 thành công: drill URL = `/chuyen-gia-tvv/danh-sach?trangThai=HOAT_DONG&tuNgay=2026-01-01&denNgay=2026-05-10` (đã có `trangThai=HOAT_DONG` explicit). Pagination "1-8 / 8 mục" khớp dashboard KPI-07=8. URL share-able, không phụ thuộc tab default. Note: enum thực tế là `HOAT_DONG` (per BE), spec mermaid ghi `DANG_HOAT_DONG` — accepted theo BE source-of-truth. Evidence: page state confirmed via `evaluate_script` location.href + `.ant-pagination-total-text`.
 
 ### Mô tả

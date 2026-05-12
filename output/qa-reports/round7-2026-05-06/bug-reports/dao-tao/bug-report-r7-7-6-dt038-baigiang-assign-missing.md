@@ -18,9 +18,9 @@ Phát hiện **1** lỗi Major liên quan N-N relation KHOA_HOC ↔ BAI_GIANG.
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 1    | 0        | 1     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 1     | 0      | 0     | 0       | 0      | 1    |
 
 ## Bug Summary Table
 

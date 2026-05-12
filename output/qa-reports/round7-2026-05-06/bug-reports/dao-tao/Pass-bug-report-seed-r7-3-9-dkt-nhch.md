@@ -16,6 +16,18 @@
 
 2-source verify: NotebookLM HTPLDN (id `a4ae45bf-cea0-4325-8fee-b1e0be702cf2`) + grep `srs-update-2026-5-5/` local.
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 0        | 1     | 1      | 0     | 0       | 2      | 0    |
+
+> **Quy tắc đếm:**
+> - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
+> - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
+> - `Closed` + `Open` = `Tổng`. `Open` đếm Status ∈ {Open, Reopen}; `Closed` đếm Status ∈ {Closed, ~~closed~~}.
+> - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
+
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |

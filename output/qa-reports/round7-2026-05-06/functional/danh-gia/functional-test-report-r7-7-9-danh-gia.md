@@ -28,6 +28,29 @@
 
 ---
 
+## R19c-followup — Tiêu chí + Permission (2026-05-12 20:56:00)
+
+**Verdict:** ✅ Đạt 2/2 — TC07 modal Thêm tiêu chí trọng số 30 OK (DG-010 fix confirmed) · TC18 QTHT R-only mọi tab confirmed (DG-013 fix confirmed).
+
+**Accounts:** `cb_nv_tw_05` (isolatedContext `dg-r19c-cbtw`) · `qtht_01` (isolatedContext `dg-r19c-qtht`). Đợt test: `DG-20260510-0001` LAP_KE_HOACH (owner cb_nv_tw_01, cross-CB_NV_TW R+U OK theo matrix).
+
+### Bảng 1 — Trạng thái TC follow-up (snapshot R19c — 2026-05-12 20:56:00)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| TC07 | Thêm tiêu chí trọng số 30 không bắt buộc tổng=100 | ✅ Đạt | R19c | Modal save trọng số = 30, Σ=90%, PUT 200, toast OK |
+| TC18 | QTHT R-only mọi tab | ✅ Đạt | R19c | 0 button create/edit/delete cả Tiêu chí + Phân công |
+
+### Narrative
+
+**TC07 ✅ Đạt** — Login `cb_nv_tw_05` → navigate Đánh giá hiệu quả → click row `DG-20260510-0001` (LAP_KE_HOACH, owner cb_nv_tw_01) → tab Tiêu chí (sẵn 1 row Σ=60%) → click [+ Thêm tiêu chí] → modal mở → fill Tên="TC07-R19c Trọng số 30", Nhóm="Hiệu quả HTPL", Trọng số=`30`, Điểm tối đa=10 → click [Thêm]. Row 2 saved với spinbutton trọng số = **30** (không bị force 100), Σ trọng số header = **90%**. Click [Lưu thay đổi] → PUT `/api/v1/ke-hoach-danh-gias/{id}/tieu-chis` → **200 OK** + toast "Đã lưu tiêu chí đánh giá". KHÔNG có error "Tổng trọng số phải = 100" block save. BUG-DG-010 fix confirmed cross-account (cb_nv_tw_05 độc lập với cb_nv_tw_06 R19 retest). Evidence: [`bug-reports/danh-gia/image/r19c-followup-tc07-modal-filled-204700.png`](../../bug-reports/danh-gia/image/r19c-followup-tc07-modal-filled-204700.png) + [`r19c-followup-tc07-saved-204900.png`](../../bug-reports/danh-gia/image/r19c-followup-tc07-saved-204900.png).
+
+**TC18 ✅ Đạt** — Login `qtht_01` → navigate Đánh giá hiệu quả → list 5 đợt render OK (Read), KHÔNG có button "Tạo kế hoạch" / "Thêm mới" / "Sửa" / "Xóa" / "Duyệt" / "Hủy duyệt" trên list page (chỉ "Tìm kiếm" + "Xóa bộ lọc" + "Làm mới"). Click row `DG-20260510-0001` → detail render OK, header chỉ có "Quay lại danh sách" (0 "Hủy đợt"/"Thêm tiêu chí"/"Lưu thay đổi"/"Nhập từ danh mục"). Tab Tiêu chí: 2 row render fully read-only (0 spinbutton editable, trọng số render text "60%"/"30%", 0 button delete, 0 button Increase/Decrease Value). Tab Phân công: 2 row PC render text-only (0 button "Thêm người đánh giá", 0 button delete). BUG-DG-013 fix confirmed — QTHT đúng R-only matrix line 71 KE_HOACH_DANH_GIA. Evidence: [`r19c-followup-tc18-qtht-list-205200.png`](../../bug-reports/danh-gia/image/r19c-followup-tc18-qtht-list-205200.png) + [`r19c-followup-tc18-qtht-detail-tieuchi-205400.png`](../../bug-reports/danh-gia/image/r19c-followup-tc18-qtht-detail-tieuchi-205400.png) + [`r19c-followup-tc18-qtht-detail-phancong-205600.png`](../../bug-reports/danh-gia/image/r19c-followup-tc18-qtht-detail-phancong-205600.png).
+
+**Test method R19c-followup:** Chrome DevTools MCP UI click-chain qua `evaluate_script` (do MCP shared 3-agent session phải override `select_page` mỗi bước). 2 isolatedContext riêng. PUT `/tieu-chis` 200 confirmed qua `list_network_requests`. KHÔNG có bug mới phát hiện — TC07 và TC18 đều PASS clean cross-confirm dev fix R19.
+
+---
+
 ## Verdict (R10b 2026-05-10 22:55:00 — archived)
 
 **⚠️ FAIL toàn cục — 12/18 TC PASS clean (67%) · 1/18 ⚠️ Sai spec · 1/18 🚫 BLOCKED · 4/18 ❌ FAIL bug**

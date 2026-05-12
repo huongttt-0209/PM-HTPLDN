@@ -8,6 +8,18 @@
 
 ---
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 1     | 0      | 0     | 0       | 1      | 0    |
+
+> **Quy tắc đếm:**
+> - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
+> - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
+> - `Closed` + `Open` = `Tổng`. `Open` đếm Status ∈ {Open, Reopen}; `Closed` đếm Status ∈ {Closed, ~~closed~~}.
+> - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
+
 ## Bug Summary Table
 
 | BUG-ID | Severity | Title | Status |

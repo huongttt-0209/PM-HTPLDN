@@ -24,12 +24,9 @@
 
 ### Severity breakdown
 
-| Round | Tổng | Critical | Major | Medium | Minor | Trivial | Closed |
-|-------|------|----------|-------|--------|-------|---------|--------|
-| R2 2026-05-08 EOD | 4 | 0 | 4 | 0 | 0 | 0 | 1 (B7) |
-| R3 2026-05-09 | 4 | 0 | 1 (B10) | 0 | 2 (DOTBC-UI/API-002 close-candidate) | 0 | 1 (B7) |
-| R4 2026-05-11 sáng | 4 | 0 | 1 (B10) | 0 | 0 | 0 | 3 (B7 + DOTBC-UI-001 + DOTBC-API-002) |
-| **R5 2026-05-11 chiều** | **4** | **0** | **0** | **0** | **0** | **0** | **4** (B7 + B10 + DOTBC-UI-001 + DOTBC-API-002) |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 4    | 0        | 2     | 0      | 2     | 0       | 4      | 0    |
 
 **R5 verdict — full closure:** B10-001 cuối cùng Closed-verified qua full workflow PASS. Khi cả 3 DOT của CT-20260508-0001 ở `DA_TONG_HOP` (DOT-4-1 + DOT-4-2 advance qua sub-resource `/{id}/tong-hop` mới + DOT-4-3 từ R7.6.5 R4 re-run) → POST `/complete` trả **200 OK**, CT advance `DANG_THUC_HIEN → HOAN_THANH` (version 8→9, ngayHoanThanh=2026-05-11T09:40:31.967Z set). Pre-condition BE đúng business logic; bug premise R1-R4 sai do cascade từ DOTBC-API-001 (sub-resource endpoint missing) — giờ giải hết.
 

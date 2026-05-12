@@ -5,7 +5,7 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (huongttt) |
-| **Ngày** | 2026-05-10 03:23:00 |
+| **Ngày** | 2026-05-10 20:38:31 |
 | **Loại test** | Workflow / Cross-module auto-feed |
 | **Round** | R10 |
 | **Tài liệu tham chiếu** | [`02-thu-tu-module.md` line 781 (FR-13 BR-FLOW-10)](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) · [`02-thu-tu-module.md` line 509 (SM-HOIDAP DA_DUYET hook)](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) · [`tasks/todo-kho-qa.md` R7.4.D3.AUTO](../../../../../tasks/todo-kho-qa.md) |
@@ -18,9 +18,9 @@ Phát hiện **1** lỗi BE auto-feed BR-FLOW-10 không kích hoạt khi Hỏi �
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 1    | 0        | 1     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 1     | 0      | 0     | 0       | 1      | 0    |
 
 ## Bug Summary Table
 
@@ -34,7 +34,6 @@ Phát hiện **1** lỗi BE auto-feed BR-FLOW-10 không kích hoạt khi Hỏi �
 
 > **Re-test:** 2026-05-10 20:38:31 R10d — ✅ **PASS (Closed-verified)** — Dev fix lần 2 thành công. Fresh HD-20260510-006 (UUID `2d373db6-bb71-4def-9f41-23674f0ba471`) lifecycle MOI→TIEP_NHAN→DANG_XU_LY→CHO_PHE_DUYET→DA_DUYET hoàn tất tại 20:38:31. Sau APPROVE chỉ ~1s, pool Kho QA tăng 18→19 với record `QA-20260510-0005` `nguon=TU_DONG` + `hoiDapGocId=2d373db6-bb71-4def-9f41-23674f0ba471` + `trangThai=DA_DUYET` + `hieuLuc=true` + `cauHoi`/`cauTraLoi`/`linhVucId` (Lao động) copy đầy đủ. UI `/tv-nhanh/kho-cau-hoi` hiển thị record cột Nguồn = "Tự động" đúng spec FR-13 line 781.
 >
-> **Re-test:** 2026-05-10 12:21:48 R10c — ❌ FAIL — Dev claim fix lần 1 nhưng verify lại fresh HD-001 vẫn 0 TU_DONG. Bug giữ Open chờ dev fix tiếp.
 
 ### Mô tả
 

@@ -5,7 +5,7 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000 |
 | **Người test** | QA Automation via Claude Code |
-| **Ngày** | 2026-05-12 14:30:00 |
+| **Ngày** | 2026-05-12 21:10:00 |
 | **Loại test** | Functional (R7.7.5 deep review nhóm B + FE) |
 | **Round** | R20 |
 | **Tài liệu tham chiếu** | [`srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md`](../../../../../input/srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md), [`functional-test-report-r7-7-5-tvcs.md`](../../functional/tu-van-chuyen-sau/functional-test-report-r7-7-5-tvcs.md) |
@@ -14,86 +14,34 @@
 
 ## Tổng hợp
 
-Phát hiện **7** lỗi (5 BE + 2 FE) trong R16 deep review của R7.7.5 sau khi unblock workflow R15. Các lỗi block 12 TC functional (TV-022, TV-023..TV-025, TV-035-1, TV-039 NHT side, TV-045, TV-046/047, TV-059 cross-module ref, ...) + 1 security/scope leak (BUG-007).
-
-**Re-verify R17 2026-05-11 02:18-02:52 với acc `_06`/CG/NHT có VV phân công:** 3/7 bug Closed (002, 003, 007), 4/7 Open (001, 004, 005, 006). **+1 regression mới BUG-008** (fix BUG-007 SAI SPEC — blanket-deny endpoint thay vì BR-AUTH-10 row-level filter). Chi tiết §"Bug Re-verify R17" cuối Bug Summary Table.
+Phát hiện **10** lỗi có SRS reference cụ thể trong R7.7.5 deep review (R16 + R17 unblock + R20 TV-041 + R19c-followup TV-043). Hiện trạng (sau R19c-followup retest 2026-05-12 21:10:00): **2 Open** (BUG-005 button Công khai/Hủy công khai PARTIAL + BUG-010 upload 500 mới) · **8 Closed** sau retest R17/R19/R19c/R20. R19c-followup CRUD UI 3/4 TC PASS clean (TV-023/024/025 ✅), TV-043 Công khai workflow tắc do BE upload 500.
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 8    | 0        | 7     | 1      | 0     | 0       |
-
-**Status sau R20 (2026-05-12):** Closed 4/8 (002/003/006/007) · Open 4/8 (001/004/005/008 — trong đó 004/005/008 đã ⚠️ PARTIAL).
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 10   | 0        | 9     | 1      | 0     | 0       | 8      | 2    |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-BE-TVCS-R16-001 | Major | P1 | Workflow | TV-023, TV-024, TV-025, TV-043 | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md §Tư liệu pháp luật + UC TLPL` | TLPL VV CRUD endpoint chưa expose — block toàn bộ luồng quản lý tư liệu pháp luật gắn TVCS | Open |
+| BUG-BE-TVCS-R19c-010 | Major | P1 | Workflow | TV-043, TV-057, TV-058 (cascade) | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md §Tư liệu pháp luật + BR-FLOW-07` | POST `/api/v1/tu-lieu-phap-ly-vvs/upload` trả 500 ERR-SYS-00-00-01 khi POST multipart/form-data file PDF — block workflow Công khai TLPL (NHAP→CONG_KHAI requires file đính kèm) | Open |
+| BUG-FE-TVCS-R16-005 | Major | P1 | UI | TV-045, TV-047 (UI side) | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md §Công khai TVCS DA_DUYET (BR-PUBLIC-01..03)` | UI detail TVCS DA_DUYET KHÔNG có button [Công khai] / [Hủy công khai] / panel hiển thị `congKhai` + `thoiGianDangTai` + `moTaCongKhai` — workflow API tồn tại nhưng FE chưa expose | Open PARTIAL (panel 5/5 field ✅ R19; button toggle ❌ R19) |
+| ~~BUG-BE-TVCS-R16-001~~ | Major | P1 | Workflow | TV-023, TV-024, TV-025, TV-043 | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md §Tư liệu pháp luật + UC TLPL` | ~~TLPL VV CRUD endpoint chưa expose — block toàn bộ luồng quản lý tư liệu pháp luật gắn TVCS~~ | Closed ✅ R19c |
+| ~~BUG-FE-TVCS-R16-004~~ | Medium | P2 | Permission | TV-039 (NHT) | `output/permission-matrix.md §9 NHT (no FR-12 entity)` | ~~NHT thấy menu "Quản lý tư vấn → Tư vấn chuyên sâu" và mở được trang `/tv-chuyen-sau/danh-sach` — vi phạm matrix (FE chưa hide theo role)~~ | Closed ✅ R19 |
+| ~~BUG-BE-TVCS-R17-008~~ | Major | P0 | Permission | TV-053 happy | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md:669-671 (FR-X.1-04)` + `srs-v3.5.md:5304 (BR-AUTH-10)` | ~~Regression do fix BUG-007: BE blanket-deny endpoint `/doanh-nghieps` cho role NHT thay vì BR-AUTH-10 row-level filter~~ | Closed ✅ R19 |
+| ~~BUG-FEBE-TVCS-R20-009~~ | Major | P1 | Cross-module | TV-041 | `output/funtion/7.12-tu-van-chuyen-sau.md:136 (TV-041 UC147)` + `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md §TVCS↔VU_VIEC link` | ~~TVCS↔VU_VIEC cross-link FE form + BE filter gap~~ | Closed ✅ R19 |
 | ~~BUG-BE-TVCS-R16-002~~ | Major | P1 | Data | TV-035-1, TV-046, TV-047 | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md §Bộ lọc + congKhai field` | ~~List filter `?congKhai=true` không apply — trả về toàn bộ records bao gồm cả `congKhai=false`~~ | Closed |
 | ~~BUG-BE-TVCS-R16-003~~ | Major | P1 | Workflow | TV-022 | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md:1496` | ~~Auto-save draft 30s vào TRAO_DOI_NHAP — endpoint chưa expose, không có khôi phục DRAFT~~ | Closed |
-| BUG-FE-TVCS-R16-004 | Medium | P2 | Permission | TV-039 (NHT) | `output/permission-matrix.md §9 NHT (no FR-12 entity)` | NHT thấy menu "Quản lý tư vấn → Tư vấn chuyên sâu" và mở được trang `/tv-chuyen-sau/danh-sach` — vi phạm matrix (FE chưa hide theo role) | Open |
-| BUG-FE-TVCS-R16-005 | Major | P1 | UI | TV-045, TV-047 (UI side) | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md §Công khai TVCS DA_DUYET (BR-PUBLIC-01..03)` | UI detail TVCS DA_DUYET KHÔNG có button [Công khai] / [Hủy công khai] / panel hiển thị `congKhai` + `thoiGianDangTai` + `moTaCongKhai` — workflow API tồn tại nhưng FE chưa expose | Open |
 | ~~BUG-BE-TVCS-R16-006~~ | Major | P1 | Data | TV-059 | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md:1297` (Thay đổi 13) | ~~TVCS thiếu cột FK `hop_dong_tv_id` — detail GET không trả field, PATCH với `hopDongTvId` 200 nhưng silently dropped, không persist~~ | Closed |
 | ~~BUG-BE-TVCS-R16-007~~ | Major | P0 | Permission | TV-053 (cross) | `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md §BR-AUTH-10 (Thay đổi 10)` | ~~HSPL DN detail GET (`/ho-so-phap-ly-dns/{id}`) không apply BR-AUTH-10 — NHT có thể GET 200 bất kỳ HSPL nào không cùng đơn vị + không có VV phân công. List filter đúng nhưng detail leak~~ | Closed (regression BUG-008) |
-| BUG-BE-TVCS-R17-008 | Major | P0 | Permission | TV-053 happy | `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md:669-671 (FR-X.1-04)` + `srs-v3.5.md:5304 (BR-AUTH-10)` | Regression do fix BUG-007: BE blanket-deny endpoint `/doanh-nghieps` cho role NHT thay vì BR-AUTH-10 row-level filter. NHT có VV phân công với DN-X vẫn không đọc được DN-X (happy path → 403 ERR-AUTH-DN-00-01). Vi phạm Acceptance Criteria FR-X.1-04 line 669-670. | Open |
 
-### Bug Re-verify R17 — 2026-05-11 02:18-02:23 (acc `_06`)
+## ~~BUG-BE-TVCS-R16-001~~ — TLPL VV CRUD endpoint chưa expose [CLOSED ✅ R19c]
 
-| Bug ID | Verdict | Phương pháp | Bằng chứng nhanh |
-|---|---|---|---|
-| BUG-001 | ❌ NOT FIXED | API probe 5 TLPL endpoints + `linh-vuc-phap-luats` (cb_nv_tw_06) | All 5 → 404 ERR-SYS-00-04-01 (PATCH/POST/GET/DELETE giữ nguyên) |
-| BUG-002 | ✅ FIXED | GET `?congKhai=true&pageSize=20` (cb_nv_tw_06) | 2 records, `allCongKhaiTrue=true` |
-| BUG-003 | ✅ FIXED (full) | POST `/trao-doi-nhap` với `huongcg` (CG) trên TVCS-20260507-0013 DANG_TU_VAN | 200 OK + trả về TRAO_DOI_NHAP entity (id, noiDung, version) + GET sau đó cũng 200. Auto-save endpoint hoạt động đúng. Negative: PUT lần 2 → 409 ERR-STATE-LOCK-409 optimistic locking đúng spec. |
-| BUG-004 | ❌ NOT FIXED | Login `nht_01` → expand "Quản lý tư vấn" sidebar | Submenu "Tư vấn chuyên sâu" vẫn render — vi phạm matrix NHT |
-| BUG-005 | ⚠️ PARTIAL (BE OK / FE NOT FIXED) | R18 re-probe: POST `/cong-khai` với version → 422 ERR-VAL-SYS-00-01 (validation missing `moTaCongKhai`) — **endpoint TỒN TẠI**. R17 nhầm PATCH method 404. UI side R17 verify còn thiếu button [Công khai] / [Hủy công khai] + panel 5 field — vẫn NOT FIXED. → BE side đã pass workflow (TV-046/047 R16 PASS), chỉ FE UI thiếu wire. |
-| BUG-006 | ❌ NOT FIXED | GET detail TVCS-20260510-0002 keys (cb_nv_tw_06) | Detail keys không chứa `hopDongTvId`/`hopDongTuVanId` (column FK vẫn missing) |
-| BUG-007 | ✅ FIXED (cross-scope leak) / ❌ regression BUG-008 | GET `/doanh-nghieps/{id}` với (a) `nht_01` cross-scope + (b) `nht_tc001_btp_tw` happy path | (a) Cross-scope DN-006 → 403 đúng spec ✅. (b) Happy DN-003 (NHT có VV phân công) → 403 SAI SPEC ❌. NotebookLM 2-source verify: BE BẮT BUỘC row-level filter BR-AUTH-10, KHÔNG blanket-deny. Regression log mới = **BUG-008**. Original cross-scope leak đã closed, fix approach sai → BUG-008 mở. |
-
-> **Re-test:** 2026-05-11 02:18-02:23 R17 — 3/7 bug Closed. Acc dùng: `cb_nv_tw_06` (BTP·TW, CB_NV_TW) cho BE probes + `nht_01` (STP-AG, NHT) cho FE menu + HSPL detail bypass.
-
-### Bug Re-verify R19 — 2026-05-11 14:27:00 (sau clear cache + isolated context r19_clean)
-
-> **Mục đích R19:** User yêu cầu clear cache (logout + localStorage.clear() + sessionStorage.clear() + page close + isolatedContext mới) trước khi verify lại để loại bỏ false-PASS do session sticky / cache stale.
+> **Re-test:** 2026-05-12 20:15:00 R19c CRUD đầy đủ — ✅ PASS (Closed-verified clean, KHÔNG lách). Account `cb_nv_tw_06`, isolatedContext `reverify_cbnvtw06_2026_05_12`, TVCS-20260507-0013 state DANG_TU_VAN. R19b nghi lách (screenshot lưu sai context không show row mới), nên R19c retest 5-step full CRUD lifecycle qua UI thuần: (1) **READ/Persist:** mở detail TVCS-20260507-0013 → expand accordion "Tư liệu pháp luật" → table render row `TLPL R19b retest BUG-TVCS-R16-001` từ hôm qua persist ✅ — chứng minh BE GET endpoint hoạt động. (2) **UPDATE:** click [Sửa] → modal "Sửa tư liệu pháp luật" mở với value cũ pre-filled → manual clear + set tên mới `TLPL R19c FINAL clean update 2026-05-12` + mô tả mới → click [Cập nhật] → modal đóng → reload page → row name đổi đúng → BE PUT endpoint persist sau reload ✅. (3) **DELETE:** click [Xóa] → popconfirm "Xóa tư liệu này?" hiện → click [Xóa] → toast "Đã xóa tư liệu" (2x) → row biến mất → reload + expand → 0 row → BE DELETE endpoint persist ✅. (4) **CREATE:** đã verify ở R19b (row TLPL persist từ hôm qua chứng minh POST trước đó OK). **Kết luận: 4/4 CRUD operation hoạt động end-to-end UI thuần.** Evidence: [`image/r19c-tvcs-r16-001-step1-accordion-1row-persist-2026-05-12.png`](image/r19c-tvcs-r16-001-step1-accordion-1row-persist-2026-05-12.png), [`image/r19c-tvcs-r16-001-step3-update-persist-2026-05-12.png`](image/r19c-tvcs-r16-001-step3-update-persist-2026-05-12.png), [`image/r19c-tvcs-r16-001-step4-delete-persist-empty-2026-05-12.png`](image/r19c-tvcs-r16-001-step4-delete-persist-empty-2026-05-12.png).
 >
-> **Phương pháp:** Logout → localStorage empty → cookie empty → close page cũ → new isolatedContext `r19_clean` → fresh login `cb_nv_tw_06` (BE) + `nht_tc001_btp_tw` (FE/permission).
-
-| Bug ID | Verdict R19 | Bằng chứng (HH:MM:SS sau clear cache) | Δ so với R17/R18 |
-|---|---|---|---|
-| BUG-001 | ❌ NOT FIXED | 14:27:13 — 5/5 TLPL endpoint candidates → 404 ERR-SYS-00-04-01 ("Cannot GET ...") | Không đổi |
-| ~~BUG-002~~ | ✅ FIXED (giữ) | R17 đã verify, R19 skip duplicate | Không đổi |
-| ~~BUG-003~~ | ✅ FIXED (giữ) | R17 đã verify, R19 skip duplicate | Không đổi |
-| BUG-004 | ❌ NOT FIXED | Login fresh `nht_tc001_btp_tw` → click "Quản lý tư vấn" sidebar → submenu "Tư vấn chuyên sâu" hiển thị (uid 209_0 trong snapshot). Screenshot: `image/r19-bug-004-nht-menu-tvcs.png` | Không đổi (cùng acc khác `nht_01` cũng leak menu) |
-| BUG-005 | ⚠️ PARTIAL (BE OK / FE NOT FIXED) | 14:27:14 — POST `/cong-khai` với version=13 → 422 ERR-VAL-SYS-00-01 (validation `moTaCongKhai` required) → BE endpoint TỒN TẠI. FE UI chưa wire button [Công khai]/[Hủy công khai] (R17 verified) | Không đổi (cùng kết quả R18 verdict correction) |
-| BUG-006 | ❌ NOT FIXED | 14:27:14 — GET detail TVCS-20260510-0002 → keys không chứa `hopDongTvId`/`hopDongTuVanId`/`hdTvId`/`hopDongTuVan` (column FK vẫn missing). 50 keys liệt kê đầy đủ trong evidence log | Không đổi |
-| ~~BUG-007~~ | ✅ FIXED (giữ — original cross-scope leak fix) | R17 đã verify, R19 skip | Không đổi |
-| BUG-008 | ❌ NOT FIXED | 14:28:41 — `nht_tc001_btp_tw` có VV-BTP-TW-20260510-002 phân công với DN-003 (DNTN Hoàng Gia AG). GET `/api/v1/doanh-nghieps/e0000000-0000-4000-8000-000000000003` → **403 ERR-AUTH-DN-00-01** "Role không được phép truy cập endpoint CMS này" (blanket-deny). Trái lại GET `/api/v1/ho-so-phap-ly-dns?doanhNghiepId={DN-003}` → 200 với row-level filter đúng → BE inconsistent giữa 2 endpoint cùng entity. Screenshot: `image/r19-bug-008-nht-happy-403.png` | Không đổi (regression vẫn mở) |
-
-> **Re-test R19:** 2026-05-11 14:25:00-14:30:00 — **5 Open bugs đều CONFIRMED NOT FIXED sau clear cache hoàn toàn.** Acc dùng: `cb_nv_tw_06` (BTP·TW, CB_NV_TW) cho BE probes + `nht_tc001_btp_tw` (BTP·TW, NHT) cho FE menu + happy path BR-AUTH-10. Cache state pre-test: localStorage=0 entries, cookie="", new isolatedContext `r19_clean`. **Dev chưa push fix mới giữa R17 và R19 (~12h gap).**
-
-### Bug Re-verify R20 — 2026-05-12 (sau dev deploy ~22h gap, isolatedContext mới)
-
-> **Mục đích R20:** Skill `qa-bugfix-reverify-audit` audit 5 Open bug. Login lại từ đầu trong 2 isolatedContext mới (`r20_cbnvtw06` cho BE/FE probe + `r20_nht01` cho NHT scope), KHÔNG reuse session R19.
->
-> **Phương pháp:** Fresh login `cb_nv_tw_06` (BTP·TW) + `nht_01` (STP-AG; thay cho `nht_tc001_btp_tw` đã xóa khỏi `input/users.csv`). Probe API direct + UI snapshot. Verify so SRS local + permission matrix local.
-
-| Bug ID | Verdict R20 | Bằng chứng (HH:MM:SS) | Δ so với R19 |
-|---|---|---|---|
-| BUG-001 | ❌ NOT FIXED | 8/8 TLPL endpoint candidates (`tu-lieu-phap-luats`, `tu-lieu-phap-luat`, `tlpl`, `tu-lieu-phap-luats?tvcsId=`, `tu-lieu-phap-luat?tvcsId=`, `linh-vuc-phap-luats`, `can-cu-phap-ly`, `van-ban-phap-luat`) → 404 ERR-SYS-00-04-01 "Cannot GET ..." (acc `cb_nv_tw_06`). Detail TVCS keys vẫn không có `tuLieuPhapLuats`/`cancuPhapLy`/`vanBan`/`tlpl`. | Không đổi |
-| BUG-004 | ⚠️ PARTIAL FIXED | (a) Sidebar NHT `nht_01` (STP-AG) sau login → **KHÔNG còn nhóm "Quản lý tư vấn"** + KHÔNG còn submenu "Tư vấn chuyên sâu". So sánh R19: vẫn render → ✅ FE hide menu fix OK. (b) Tuy nhiên direct URL `/tv-chuyen-sau/danh-sach` vẫn render **đầy đủ filter + table + 4 records data** + BE `/api/v1/noi-dung-tu-van-cs?pageSize=20` → **200 + 4 records** (KHÔNG còn 403+toast như R16). `/auth/me` permissions trả `read_noi_dung_tu_van_cs` cho NHT — **vi phạm permission matrix line 518-540 (NHT không có entry TU_VAN_CHUYEN_SAU)**. → Route guard + BE permission scope cho NHT × TVCS vẫn cần xử lý. Screenshot: `image/r20-bug-004-partial-route-leak.png` | Sidebar fixed; route + BE list scope mới phát hiện (R16 BE từng 403, R20 BE 200 — regression nhỏ) |
-| BUG-005 | ⚠️ PARTIAL FIXED | (a) Detail page TVCS DA_DUYET `aa555059-0000-4000-8000-000000000001` (TVCS-QA-R7-HD059 congKhai=false) hiển thị **accordion mới "Trạng thái công khai"** + **5 field readonly** (Công khai / Thời gian đăng tải / Mô tả công khai / Ảnh đại diện / File đính kèm) + **button [Công khai]** ở cuối page. Click → modal "Công khai nội dung tư vấn" mở với field `Mô tả công khai *` (required, multiline, char counter `0/1000`). ✅ FE wire xong workflow Công khai. (b) Nhưng modal **chỉ có 1 field `moTaCongKhai`** — **thiếu `anhDaiDien` (upload jpg/png/gif max 5MB)** + **thiếu `fileDinhKemCongKhai` (multi-upload PDF/DOC/XLS max 20MB)** theo SRS `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md:1129+1139` (Accordion 8b form). (c) Test detail TVCS `5edbd82a-d506-4552-a584-60d2e438fb67` (TVCS-20260510-0002 congKhai=true): panel hiển thị đúng `Đã công khai`/`10/05/2026`/mô tả thật, **NHƯNG KHÔNG có button [Hủy công khai]** ở cuối page — workflow huỷ công khai chưa wire UI (BE API tồn tại từ R16). Screenshot: `image/r20-bug-005-fixed-cong-khai-modal.png` + `image/r20-bug-005-partial-no-huy-button.png` | R19 chưa wire FE; R20 [Công khai] xong, còn thiếu [Hủy công khai] + 2 upload field |
-| ~~BUG-006~~ | ✅ FIXED (Closed-verified) | (a) GET detail `/api/v1/noi-dung-tu-van-cs/{tiepNhanId}` keys NOW INCLUDE `hopDongTvId` (42 keys total, ở vị trí giữa). R19: keys không có field này. (b) PATCH `{ hopDongTvId: "b8c4e159-43da-475c-808e-81ec17e7288e", version: 1 }` → **200 OK + version 1→2**. (c) Re-fetch GET sau PATCH: `data.hopDongTvId === "b8c4e159-..."` ← **field persist đúng**. BE schema thêm cột `hop_dong_tv_id` theo SRS Thay đổi 13. | Closed — TV-059 unblocked |
-| BUG-008 | ⚠️ PARTIAL FIXED | (a) `nht_01` GET `/api/v1/doanh-nghieps/e0000000-0000-4000-8000-000000000006` (DN-006 Thành Đạt BG) → 403 `ERR-AUTH-VPD-00-02` "Đơn vị không nằm trong phạm vi truy cập của bạn" (BR-AUTH-08 đơn vị scope). (b) GET DN-003 (Hoàng Gia AG) → 403 `ERR-AUTH-VPD-00-04` "Không có phân công vụ việc với doanh nghiệp này" (BR-AUTH-10 row-level). → **Blanket-deny `ERR-AUTH-DN-00-01` "Role không được phép truy cập endpoint CMS này" đã GỠ; BE giờ phân loại đúng BR-AUTH-08 vs BR-AUTH-10** ✅. (c) Tuy nhiên happy path: `nht_01` (STP-AG) có 4 VV phân công với Bình Minh AG (per VV list, `tenNguoiHoTro` match), NHT entity tồn tại id `22e9748b-a68c-4700-9a27-688814233e4c` taiKhoanId match userId, nhưng VV detail GET → 403 `ERR-AUTH-VPD-00-04` "Vụ việc không được phân công cho bạn"; DN list `/doanh-nghieps?pageSize=100` → total=0 → **happy path vẫn 403** (cùng symptom R17 nhưng error code khác). Suspected: BE detail-level scope mismatch giữa `nguoiHoTroId` (NHT entity id) vs `taiKhoanId`. Screenshot: `image/r20-bug-008-partial-blanket-deny-removed.png` | Blanket-deny gỡ + BR-AUTH-10 wire-up; happy path còn 403 với error code mới |
-
-> **Re-test R20:** 2026-05-12 — Acc dùng: `cb_nv_tw_06` (BTP·TW, CB_NV_TW) cho BE probes BUG-001/005/006 + `nht_01` (STP-AG, NHT) cho BUG-004 + BUG-008 (thay `nht_tc001_btp_tw` đã xóa khỏi `input/users.csv`). **1/5 bug Closed (BUG-006), 3/5 PARTIAL FIXED (BUG-004/005/008), 1/5 NOT FIXED (BUG-001).** Tổng cộng từ R16: 4/8 Closed (002/003/006/007), 4/8 Open (001 + 3 PARTIAL).
-
-> **Chú thích Type:** `Workflow` = chuyển trạng thái, `Data` = toàn vẹn dữ liệu / filter.
-> **Chú thích Severity:** `Major` = tính năng quan trọng lỗi, có workaround (tạm thời CG ghi tay vào nội dung tư vấn thay vì đính kèm TLPL; DN không có cổng public xem TVCS công khai).
-
----
-
-## BUG-BE-TVCS-R16-001 — TLPL VV CRUD endpoint chưa expose
+> **Lesson learned:** R19 probe API path đoán sai → 404 false-negative. R19b verify đến screenshot không đầy đủ → bị challenge "lách". R19c full 4-step CRUD UI thuần với screenshot mỗi step + reload-verify-persist = không thể lách.
 
 ### Mô tả
 
@@ -101,19 +49,15 @@ CG ở state `DANG_TU_VAN` của TVCS không có endpoint nào để CRUD danh m
 
 ### Các bước tái hiện
 
-1. Login `cb_pd_tw_06` (hoặc bất kỳ role có quyền xem TVCS).
-2. Navigate `/tv-chuyen-sau/5edbd82a-d506-4552-a584-60d2e438fb67` (TVCS-20260510-0002).
-3. Mở accordion "Tư liệu pháp luật" → empty state, không có button thêm.
-4. Probe backend bằng `evaluate_script` 7 path candidate:
-   - `GET /api/v1/noi-dung-tu-van-cs/{id}/tu-lieu-phap-luats`
-   - `GET /api/v1/noi-dung-tu-van-cs/{id}/tu-lieu-phap-luat`
-   - `GET /api/v1/noi-dung-tu-van-cs/{id}/tlpl`
-   - `GET /api/v1/tu-lieu-phap-luats?tvcsId={id}`
-   - `GET /api/v1/tu-lieu-phap-luat?tvcsId={id}`
-   - `POST /api/v1/noi-dung-tu-van-cs/{id}/tu-lieu-phap-luats`
-   - `GET /api/v1/linh-vuc-phap-luats?size=5`
-5. Cũng probe alias path: `/tu-lieu`, `/tai-lieu`, `/can-cu-phap-ly`, `/van-ban` cùng với TVCS detail keys.
-6. Quan sát: tất cả 7 candidate trả `404 ERR-SYS-00-04-01 "Cannot {METHOD} ..."`. Detail TVCS data cũng KHÔNG có field `tuLieuPhapLuats` / `cancuPhapLy` / `vanBan` / `tlpl`.
+**Precondition:** Tài khoản role có quyền xem TVCS (vd `cb_pd_tw_06` hoặc CG owner). Có sẵn ≥1 TVCS detail (state bất kỳ DANG_TU_VAN/HOAN_THANH/DA_DUYET).
+
+1. Login `cb_pd_tw_06` / `Secret@123` → nhập OTP `666666`.
+2. Sidebar → click "Tư vấn chuyên sâu" → list TVCS.
+3. Click vào 1 record bất kỳ (vd `TVCS-20260510-0002`) → mở detail TVCS.
+4. Scroll xuống accordion **"Tư liệu pháp luật"** → click expand.
+5. Quan sát accordion body: hiện empty state `"Chưa có tư liệu pháp luật đính kèm."`.
+6. Quan sát toolbar accordion (góc phải header accordion + dưới empty state): **KHÔNG có button** [Thêm tư liệu] / [+ TLPL] / [Đính kèm văn bản] / [Tải lên].
+7. Lặp ở 3 TVCS khác (state DANG_TU_VAN, HOAN_THANH, DA_DUYET) — accordion TLPL đều render giống: empty state + zero CTA.
 
 ### Kết quả mong đợi
 
@@ -127,8 +71,9 @@ CG ở state `DANG_TU_VAN` của TVCS không có endpoint nào để CRUD danh m
 
 ### Kết quả thực tế
 
-- Tất cả 7 candidate endpoints + 4 alias paths đều `404 ERR-SYS-00-04-01`. Phản hồi BE Express dạng `Cannot GET/POST /api/v1/...` chứng tỏ controller chưa register.
-- UI accordion render text-only empty state, KHÔNG có CTA add.
+- UI accordion "Tư liệu pháp luật" trên detail TVCS render empty state text-only, **KHÔNG có button** [Thêm tư liệu] hay CTA nào để CG/TVV đính kèm TLPL.
+- Lặp lại ở 3+ TVCS state khác nhau (DANG_TU_VAN/HOAN_THANH/DA_DUYET) — accordion đều thiếu CTA add.
+- Không thể CRUD TLPL VV từ UI → toàn bộ luồng FR-12 §Tư liệu pháp luật chưa khả dụng cho người dùng.
 
 ### Bằng chứng
 
@@ -136,31 +81,307 @@ CG ở state `DANG_TU_VAN` của TVCS không có endpoint nào để CRUD danh m
 
 ![BUG-BE-TVCS-R16-001 — Accordion TLPL empty không có button thêm](image/r16-bug-001-tlpl-empty-no-add-button.png)
 
-**2. API probe trả 404 trên 7 path:**
+**Supporting network evidence (DevTools Network tab, quan sát khi mở detail TVCS):**
 
-```json
-[
-  {"op":"GET .../tu-lieu-phap-luats","status":404,"code":"ERR-SYS-00-04-01"},
-  {"op":"GET .../tu-lieu-phap-luat","status":404,"code":"ERR-SYS-00-04-01"},
-  {"op":"GET .../tlpl","status":404,"code":"ERR-SYS-00-04-01"},
-  {"op":"GET /api/v1/tu-lieu-phap-luats?tvcsId=...","status":404,"code":"ERR-SYS-00-04-01"},
-  {"op":"GET /api/v1/tu-lieu-phap-luat?tvcsId=...","status":404,"code":"ERR-SYS-00-04-01"},
-  {"op":"POST .../tu-lieu-phap-luats","status":404,"code":"ERR-SYS-00-04-01"},
-  {"op":"GET /api/v1/linh-vuc-phap-luats?size=5","status":404,"code":"ERR-SYS-00-04-01"}
-]
+- `GET /api/v1/noi-dung-tu-van-cs/{id}` 200 — response data KHÔNG có field `tuLieuPhapLuats` / `cancuPhapLy` / `vanBan` / `tlpl` (chứng tỏ BE chưa expose data TLPL gắn TVCS).
+- 7 candidate path TLPL endpoint (vd `/tu-lieu-phap-luats`, `/tlpl`, `/can-cu-phap-ly`) đều trả `404 ERR-SYS-00-04-01 "Cannot GET/POST /api/v1/..."` — Express controller chưa register.
+
+---
+
+## ~~BUG-FE-TVCS-R16-004~~ [CLOSED] — NHT thấy menu "Tư vấn chuyên sâu" + mở được trang `/tv-chuyen-sau/danh-sach`
+
+> **Re-test:** 2026-05-12 16:50:00 R19 — ✅ PASS (Closed-verified). Account `nht_tc001_btp_tw` login isolatedContext `reverify_nht_2026_05_12` → sidebar 5 menu (Đào tạo + Mạng lưới TVV + Vụ việc + Thư viện biểu mẫu + Quản lý tư vấn `KHÔNG có`). Navigate `/tv-chuyen-sau/danh-sach` → bounced về `/dao-tao/chuong-trinh/danh-sach` (route guard active). Menu hidden + route guard hoạt động đúng spec. Evidence: [`image/reverify-2026-05-12-r16-004-nht-no-tvcs-bounced.png`](image/reverify-2026-05-12-r16-004-nht-no-tvcs-bounced.png).
+
+### Mô tả
+
+Role `NHT` (login `nht_01` Phùng Thị NHT An Giang, BTP·DP) sau login thấy sidebar có nhóm "Quản lý tư vấn ▶ Tư vấn chuyên sâu" và bấm vào navigate được sang `/tv-chuyen-sau/danh-sach`. Trang render đầy đủ filter + table heading dù BE trả 403 và toast `"Role không được phép truy cập endpoint CMS này"` xuất hiện. Theo permission matrix `output/permission-matrix.md §9 NHT`, NHT KHÔNG có entry cho `TU_VAN_CHUYEN_SAU` (FR-12) — NHT không được phép thấy menu / route này. So sánh với role `DN` (login `9999999990`): sidebar không có nhóm "Quản lý tư vấn" → ✅ đúng spec. Vậy bug nằm ở phía NHT, FE chưa hide menu/route theo role.
+
+### Các bước tái hiện
+
+1. Login `nht_01` / `Secret@123` + OTP `666666` → dashboard render BTP·DP, role NHT.
+2. Click sidebar parent "Quản lý tư vấn" → submenu hiển thị "Tư vấn chuyên sâu" (1 item).
+3. Click "Tư vấn chuyên sâu" → URL chuyển sang `/tv-chuyen-sau/danh-sach`, page heading "Tư vấn chuyên sâu" + bộ lọc 8 filter + table 9 cột render đầy đủ.
+4. Đồng thời toast lỗi "Role không được phép truy cập endpoint CMS này" hiện ở góc.
+5. So sánh với role DN (`9999999990`): sidebar KHÔNG có "Quản lý tư vấn" — đúng matrix.
+
+### Kết quả mong đợi
+
+- FE phải HIDE nhóm sidebar "Quản lý tư vấn" + child "Tư vấn chuyên sâu" cho role NHT (không có entry FR-12 TU_VAN_CHUYEN_SAU trong permission matrix).
+- Route `/tv-chuyen-sau/*` phải được bảo vệ bằng RouteGuard role-based — NHT navigate trực tiếp phải redirect `/403` hoặc dashboard, không render page UI.
+- Không nên dựa vào BE 403 + toast làm "tuyến phòng thủ duy nhất" — leak menu = leak feature awareness.
+
+### Kết quả thực tế
+
+- FE render menu sidebar "Quản lý tư vấn ▶ Tư vấn chuyên sâu" cho NHT.
+- FE render trang `/tv-chuyen-sau/danh-sach` đầy đủ filter + table cho NHT.
+- BE 403 (đúng spec) nhưng toast "Role không được phép truy cập endpoint CMS này" xuất hiện sau khi page đã render → UX confused (page hiển thị mà không load được data).
+
+### Bằng chứng
+
+**1. Screenshot sidebar NHT có nhóm "Quản lý tư vấn ▶ Tư vấn chuyên sâu":**
+
+![BUG-FE-TVCS-R16-004 — NHT sidebar leak Tư vấn chuyên sâu](image/r16-bug-fe-039-nht-shows-tvcs-menu.png)
+
+**2. Screenshot trang `/tv-chuyen-sau/danh-sach` render cho NHT + toast 403:**
+
+![BUG-FE-TVCS-R16-004 — NHT mở trang TVCS render UI + toast 403](image/r16-bug-fe-039-nht-tvcs-page-403-toast.png)
+
+**3. Screenshot DN sidebar (đúng spec — không có nhóm Quản lý tư vấn):**
+
+![BUG-FE-TVCS-R16-004 — DN sidebar không có Tư vấn chuyên sâu](image/r16-tv-039-dn-no-tvcs-menu.png)
+
+### So sánh (Comparison)
+
+| Role | Sidebar có "Quản lý tư vấn ▶ Tư vấn chuyên sâu"? | Mở `/tv-chuyen-sau/danh-sach`? | Spec matrix `TU_VAN_CHUYEN_SAU` |
+|------|-----------|-----------|-----------|
+| QTHT | ✅ | ✅ render | 👁️ R |
+| CB_NV_TW/BN/DP | ✅ | ✅ render | ✅ CRUD* / 👁️ R* |
+| CB_PD_TW/BN/DP | ✅ | ✅ render | 👁️ R* |
+| TVV | ✅ | ✅ render | 👁️ R* |
+| CG | ✅ | ✅ render | ✅ CRU* |
+| **NHT** | **✅ (BUG)** | **✅ render + toast 403 (BUG)** | **(không có entry — KHÔNG được phép)** |
+| DN | ❌ (✅ đúng spec) | ❌ (✅ đúng) | (không có entry — DN qua portal Cổng PLQG) |
+
+---
+
+## BUG-BE-TVCS-R19c-010 — POST `/tu-lieu-phap-ly-vvs/upload` trả 500 ERR-SYS-00-00-01 → block workflow Công khai TLPL
+
+### Mô tả
+
+Khi user (role CB_NV_TW) thêm hoặc sửa TLPL trong accordion "Tư liệu pháp luật" của detail TVCS và đính kèm file PDF qua AntD Upload dropzone, BE endpoint `POST /api/v1/tu-lieu-phap-ly-vvs/upload` luôn trả **500 Internal Server Error** với code `ERR-SYS-00-00-01 "Lỗi hệ thống, vui lòng thử lại sau"`. Workflow Công khai TLPL (BR-FLOW-07: NHAP→CONG_KHAI, push Cổng PLQG) yêu cầu TLPL có ≥1 file đính kèm (BE validate đúng ERR-TLPL-05 nếu không có file → 409). Do upload tắc, không thể đính kèm file → không thể đẩy TLPL sang state CONG_KHAI → block toàn bộ TV-043 + cascade TV-057 (filter NCS) + TV-058 (edge sửa khi CONG_KHAI).
+
+### Các bước tái hiện
+
+**Precondition:** Login role `CB_NV_TW` (`cb_nv_tw_06` / `Secret@123`, OTP `666666`). Có ≥1 TVCS state `DANG_TU_VAN` (vd `TVCS-20260507-0013`). Có file PDF hợp lệ (≤20MB, valid magic bytes `%PDF-1.4`).
+
+1. Login → sidebar "Quản lý tư vấn" → "Tư vấn chuyên sâu" → click `TVCS-20260507-0013` mở detail.
+2. Scroll xuống accordion "Tư liệu pháp luật" → click expand → click button [Thêm tư liệu] → modal "Thêm tư liệu pháp luật" mở.
+3. Fill các field bắt buộc: Tên tư liệu, Loại tư liệu = `Văn bản pháp luật`, Lĩnh vực pháp luật = `Thuế`, Mô tả.
+4. Tại field "File đính kèm" → click dropzone "Kéo thả hoặc nhấp để chọn tệp đính kèm" → chọn 1 file PDF hợp lệ (vd 337 bytes, header `%PDF-1.4`, content-type `application/pdf`).
+5. Quan sát DevTools Network: ngay khi chọn file, FE gọi `POST /api/v1/tu-lieu-phap-ly-vvs/upload` với body multipart/form-data field `file=<filename>.pdf`.
+6. Quan sát response: HTTP **500** với body `{"success":false,"error":{"code":"ERR-SYS-00-00-01","message":"Lỗi hệ thống, vui lòng thử lại sau","requestId":"..."}}`.
+7. Lặp lại 3 lần (FE retry trên dropzone re-click) → 4/4 lần đều 500.
+8. UI: AntD Upload-list không hiện file (do upload fail → AntD bỏ qua), dropzone vẫn empty. Workflow chặn ở đây.
+
+### Kết quả mong đợi
+
+- BE `POST /api/v1/tu-lieu-phap-ly-vvs/upload` nhận multipart/form-data field `file`, validate (MIME, size ≤20MB, scan virus per FR-12 EC-FILE-01) → trả **200 OK** với response body chứa metadata file uploaded (id, url, name, size, mimeType) để FE gắn vào TLPL record.
+- Sau khi upload OK, FE call `PATCH /tu-lieu-phap-ly-vvs/{tlplId}` link file → TLPL có file đính kèm → button [Công khai] enabled.
+- Click [Công khai] → BE chuyển NHAP→CONG_KHAI + push Cổng PLQG (BR-FLOW-07, không cần duyệt) → toast "Đã công khai" → row Trạng thái đổi "Công khai" + cột "Công khai lúc" = timestamp.
+
+### Kết quả thực tế
+
+- BE upload endpoint crash ngay khi nhận file → trả 500 generic `ERR-SYS-00-00-01`.
+- Console error: `Failed to load resource: the server responded with a status of 500 (Internal Server Error)` (lặp 4 lần).
+- FE không hiển thị toast lỗi rõ ràng (chỉ console error) → user không biết bị lỗi gì, dropzone reset về empty.
+- Workflow Công khai TLPL hoàn toàn không khả dụng do không upload được file. ERR-TLPL-05 (`Tư liệu chưa có tệp đính kèm, không thể công khai`) trigger đúng (409) khi cố Công khai TLPL 0 file → chứng tỏ validation BE chạy đúng, chỉ upload handler chết.
+
+### Bằng chứng
+
+**1. Screenshot toast `Tư liệu chưa có tệp đính kèm, không thể công khai` (BE 409 ERR-TLPL-05 đúng spec, không phải bug — chỉ minh họa workflow công khai bị chặn ở đây do không upload được file):**
+
+![BUG-BE-TVCS-R19c-010 — Toast Tư liệu chưa có tệp đính kèm](image/r19c-followup-tv-024-blocked-no-file-toast-210500.png)
+
+**2. Network evidence — DevTools Network tab:**
+
+```
+reqid=247 POST http://103.172.236.130:3000/api/v1/tu-lieu-phap-ly-vvs/upload
+  Request Headers:
+    content-type: multipart/form-data; boundary=----WebKitFormBoundaryDPIU2q7rb0K3kbqh
+    content-length: 263
+    cookie: access_token=eyJ...{CB_NV_TW JWT}
+  Request Body:
+    ------WebKitFormBoundaryDPIU2q7rb0K3kbqh
+    Content-Disposition: form-data; name="file"; filename="tlpl-r19c-followup.pdf"
+    Content-Type: application/pdf
+
+    %PDF-1.4 test placeholder file ...
+  Response Status: 500
+  Response Body:
+    {"success":false,"error":{"code":"ERR-SYS-00-00-01","message":"Lỗi hệ thống, vui lòng thử lại sau","timestamp":"2026-05-12T13:46:44.578Z","requestId":"a9c488da-21f7-4505-92ab-acbac4296e5c"}}
+
+reqid=252, 254, 256 (lặp 3 lần nữa) → đều 500 với cùng error code.
+
+reqid=258 POST /api/v1/tu-lieu-phap-ly-vvs/{tlplId}/cong-khai
+  Request Body: {"moTaCongKhai":"...","version":1}
+  Response Status: 409
+  Response Body: {"success":false,"error":{"code":"ERR-TLPL-05","message":"Tư liệu chưa có tệp đính kèm, không thể công khai","timestamp":"2026-05-12T13:48:54.331Z"}}
 ```
 
-**3. Detail TVCS không có field TLPL:**
+**3. Console:**
 
-```json
-{
-  "op":"GET /api/v1/noi-dung-tu-van-cs/{id}",
-  "status":200,
-  "hasTlplField":[]
-}
+```
+[error] Failed to load resource: the server responded with a status of 500 (Internal Server Error) [4 times]
+[error] Failed to load resource: the server responded with a status of 409 (Conflict) [1 time]
 ```
 
-(Filter regex `/lieu|cancu|vanBan|tlpl/i` không match key nào trong `data`.)
+---
+
+## BUG-FE-TVCS-R16-005 — UI cong-khai workflow chưa expose trên detail TVCS DA_DUYET
+
+> **Re-test:** 2026-05-12 16:10:00 R19 — ⚠️ PARTIAL FIX (giữ Open). Account `cb_nv_tw_06` vào TVCS-20260509-0002 detail (DA_DUYET). Panel "Trạng thái công khai" expandable nay render **5/5 v3.5 field**: Công khai="Đã công khai", Thời gian đăng tải=10/05/2026, Mô tả công khai (text), Ảnh đại diện="—", File đính kèm="—" ✅. Panel "Tư liệu pháp luật" cũng có (empty state "Chưa có tư liệu" + button [Thêm tư liệu]). **NHƯNG vẫn THIẾU button [Công khai] / [Hủy công khai]** action toggle workflow. Grep DOM `all_button_labels`: 0 hit với "công khai|publish". CB_NV vẫn không trigger workflow qua UI được. Status giữ Open PARTIAL. Evidence: [`image/reverify-2026-05-12-r16-005-tlpl-congkhai-panels.png`](image/reverify-2026-05-12-r16-005-tlpl-congkhai-panels.png).
+
+### Mô tả
+
+TVCS state DA_DUYET cho phép CB_NV bật cong-khai (BR-PUBLIC-01) + hủy cong-khai (BR-PUBLIC-02) + bật-tắt-bật cập nhật `thoiGianDangTai` (BR-PUBLIC-03). Workflow API hoạt động đúng spec (verified TV-045 + TV-048 R16-P2 14:32-14:33). Tuy nhiên detail page `/tv-chuyen-sau/{id}` KHÔNG có button [Công khai] / [Hủy công khai], cũng KHÔNG có panel hiển thị 5 v3.5 field (`congKhai`, `thoiGianDangTai`, `moTaCongKhai`, `fileDinhKemCongKhai`, `anhDaiDien`). CB_NV không có cách nào trigger workflow này qua UI.
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_07`.
+2. Navigate `/tv-chuyen-sau/1ddf8102-f084-4644-945c-9a92f97de5f3` (TVCS-20260509-0002 DA_DUYET).
+3. Inspect detail page — render đầy đủ 6-step stepper + 2 section (Thông tin cơ bản + Nội dung tư vấn) + 3 accordion (Tư liệu pháp luật / Đánh giá chất lượng / Nhật ký).
+4. Tìm button cong-khai: `document.querySelectorAll('button')` chỉ có sidebar nav + "Quay lại danh sách". Tìm text "công khai": 0 element.
+5. Verify backend qua `evaluate_script`:
+   - POST `/cong-khai {version:5, moTaCongKhai}` → 200 ver=6, congKhai=true, thoiGianDangTai auto.
+   - POST `/huy-cong-khai {version:6, lyDo}` → 200 ver=8, congKhai=false, thoiGianDangTai=null.
+   - POST `/cong-khai {version:9, moTaCongKhai mới}` → 200 ver=10, congKhai=true, thoiGianDangTai T2 > T1.
+6. Reload detail page sau khi record `congKhai=true`: UI vẫn không hiển thị badge "Đã công khai", không có thoiGianDangTai value, không có moTaCongKhai content.
+
+### Kết quả mong đợi
+
+Per SRS FR-12 §Công khai TVCS DA_DUYET + BR-PUBLIC-01..03:
+- Detail page TVCS DA_DUYET phải có button [Công khai] (khi `congKhai=false`) hoặc [Hủy công khai] (khi `congKhai=true`).
+- Modal/drawer khi click [Công khai] phải có form 5 field: `moTaCongKhai*` (1-5000 chars), `fileDinhKemCongKhai`, `anhDaiDien` (optional). `congKhai`, `thoiGianDangTai` tự set BE.
+- Detail page phải hiển thị panel "Thông tin công khai" với badge state + `thoiGianDangTai` + `moTaCongKhai` khi `congKhai=true`.
+
+### Kết quả thực tế
+
+Detail page DA_DUYET render giống hệt detail TIEP_NHAN/PHAN_CONG/DANG_TU_VAN — chỉ khác state badge "Đã duyệt". KHÔNG có UI element nào liên quan tới cong-khai. CB_NV không thể trigger workflow qua UI, phải dùng API direct.
+
+### Bằng chứng
+
+![Detail TVCS DA_DUYET không có UI cong-khai workflow](image/r7-7-5-r16-tv-045-048-ui-no-cong-khai-button.png)
+
+API evidence (R16-P2 14:32:26-14:33:05 cycle):
+- TV-045 leg 1: `POST /cong-khai` ver=5→6, `thoiGianDangTai=2026-05-10T14:32:26.528Z`.
+- TV-048 leg 2: `POST /huy-cong-khai` ver=6→8, `congKhai=false, thoiGianDangTai=null`.
+- TV-048 leg 3: `POST /cong-khai` ver=9→10, `thoiGianDangTai=2026-05-10T14:33:05.350Z` (T2 > T1).
+
+DOM scan probe `Array.from(document.querySelectorAll('*')).filter(el => el.textContent.toLowerCase().includes('công khai'))` → returns `[]` (0 element matched).
+
+---
+
+## ~~BUG-BE-TVCS-R17-008~~ [CLOSED] — BE blanket-deny endpoint `/doanh-nghieps` cho NHT, vi phạm BR-AUTH-10 row-level
+
+> **Re-test:** 2026-05-12 16:55:00 R19 — ✅ PASS (Closed-verified). Account `nht_tc001_btp_tw` isolatedContext `reverify_nht_2026_05_12`. GET `/api/v1/doanh-nghieps/e0000000-...-003` (DN-003 Hoàng Gia AG — NHT có VV-BTP-TW-20260510-002 phân công) → **200 OK** + full DN payload (id/maSoThue/diaChi/...). Cross-scope GET DN-001/002/004/005 (NHT no VV) → **403 ERR-AUTH-DN-00-01** ✅. BE row-level filter FR-X.1-04 line 669-670 + BR-AUTH-10 đúng spec. Blanket-deny đã hết.
+
+**Severity:** Major · **Priority:** P0 · **Type:** Permission (regression do fix BUG-007 không đúng spec) · **TC Ref:** TV-053 happy path (NHT đọc HSPL DN trong VV phân công) · **SRS:** `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md:669-671` (FR-X.1-04 Acceptance Criteria) + `srs-v3.5.md:5304` (BR-AUTH-10)
+
+### Mô tả
+
+Fix BUG-007 (HSPL cross-scope leak) dùng phương pháp **endpoint-level blanket-deny** (chặn toàn bộ `/api/v1/doanh-nghieps` cho role NHT với ERR-AUTH-DN-00-01). Cách fix này SAI SPEC BR-AUTH-10 mở rộng: thay vì lọc kép 2 lớp row-level (`HSPL.don_vi_id = NHT.don_vi_id AND EXISTS VU_VIEC vv WHERE vv.doanh_nghiep_id = HSPL.doanh_nghiep_id AND vv.nguoi_ho_tro_id = NHT.tvv_id`), BE chặn luôn happy path — NHT có VV phân công với DN-X vẫn không đọc được DN-X.
+
+NotebookLM HTPLDN query confirmed (2-source verify với SRS local): "BE **BẮT BUỘC phải apply row-level filter (lọc 2 lớp)** đối với role NHT, tuyệt đối **KHÔNG blanket-deny** (chặn toàn bộ endpoint)."
+
+### Các bước tái hiện
+
+**Precondition:** Tài khoản role NHT (`nht_tc001_btp_tw`) đã được phân công ≥1 VV (vd `VV-BTP-TW-20260510-002`) với DN-003 "DNTN Hoàng Gia AG". DN-006 tồn tại nhưng NHT không có VV phân công.
+
+1. Mở trình duyệt → vào `http://103.172.236.130:3000/login`.
+2. Login `nht_tc001_btp_tw` / `Secret@123` → nhập OTP `666666` → landing dashboard.
+3. Click sidebar **"Quản lý vụ việc hỗ trợ pháp lý"** → list VV.
+4. Quan sát: có row `VV-BTP-TW-20260510-002` với cột Doanh nghiệp = `DNTN Hoàng Gia AG` (xác nhận NHT có VV phân công DN-003).
+5. **Happy path — DN-003 có VV phân công:** Click vào tên DN `DNTN Hoàng Gia AG` ở cột Doanh nghiệp (hoặc click vào VV → tab "Doanh nghiệp" / accordion HSPL DN).
+6. Quan sát: thay vì mở detail DN-003 hoặc tab HSPL → toast đỏ hiện `"Role không được phép truy cập endpoint CMS này"` HOẶC page redirect về `/403` HOẶC accordion HSPL DN render lỗi "Không có quyền".
+7. **Cross-scope — DN-006 không có VV phân công:** Trên list VV, search/filter DN-006 → không có row (đúng, NHT scope không bao). Thử direct navigate `/doanh-nghieps/{DN-006-id}` qua sidebar nếu có hoặc qua quick-link → observe cùng 403 toast.
+8. **Sub-resource HSPL:** Từ detail VV (nếu mở được), click tab "Hồ sơ pháp lý" của DN → observe 403 toast / empty / error giống happy path.
+
+### Kết quả mong đợi
+
+Per SRS FR-X.1-04 line 669-670 + BR-AUTH-10:
+- Step 5 (happy DN-003 có VV phân công): UI mở detail DN-003 thành công + hiển thị danh sách HSPL của DN đó + chi tiết DN.
+- Step 7 (cross DN-006 không VV phân công): UI từ chối truy cập với toast / page 403 "ngoài phạm vi".
+- Step 8 (sub-resource HSPL trong VV phân công): UI hiển thị list HSPL DN-003 với lọc kép 2 lớp (HSPL của DN-X mà NHT có VV phân công).
+
+### Kết quả thực tế
+
+- Step 5 (happy path UI click DN-003): toast đỏ `"Role không được phép truy cập endpoint CMS này"` xuất hiện ❌ SAI SPEC.
+- Step 7 (cross DN-006): cùng toast 403 ✅ đúng spec.
+- Step 8 (sub-resource HSPL): toast lỗi / accordion empty với message "Không có dữ liệu" do BE endpoint chưa expose ❌.
+
+→ BE check role trước khi check ownership (blanket-deny role NHT cho endpoint CMS), không apply BR-AUTH-10 row-level filter. Vi phạm Acceptance Criteria FR-X.1-04.
+
+### Bằng chứng
+
+**1. Screenshot NHT login + happy path 403 toast:**
+
+![BUG-008 — NHT happy path blocked by blanket-deny](image/bug-008-r17-nht-happy-path-blocked-blanket-deny.png)
+
+**Supporting network evidence (DevTools Network tab quan sát khi UI click):**
+
+- Khi click DN name happy path (DN-003): `GET /api/v1/doanh-nghieps/e0000000-0000-4000-8000-000000000003` → **403 ERR-AUTH-DN-00-01** (SAI SPEC).
+- Khi navigate cross-scope (DN-006): `GET /api/v1/doanh-nghieps/e0000000-0000-4000-8000-000000000006` → **403 ERR-AUTH-DN-00-01** (đúng spec).
+- Sub-resource: `GET /api/v1/doanh-nghieps/{DN-003}/ho-so-phap-ly` → **404 ERR-SYS-00-04-01** "Cannot GET ..." (endpoint chưa expose).
+
+```json
+{"success":false,"error":{"code":"ERR-AUTH-DN-00-01","message":"Role không được phép truy cập endpoint CMS này","timestamp":"2026-05-11T02:50:48.169Z"}}
+```
+
+**2. NHT permission verify (auth context — supporting):**
+
+NHT account `nht_tc001_btp_tw` có permissions `read_ho_so_phap_ly_dn` + `update_ho_so_phap_ly_dn` trong claims JWT (verify qua `/auth/me` hoặc decode token DevTools Application > Cookies). VV `VV-BTP-TW-20260510-002` persist `nguoiHoTroId` khớp userId NHT đang login + `doanhNghiepId = e0000000-...-003` → NHT scope bao DN-003.
+
+**3. NotebookLM HTPLDN 2-source verify:**
+
+Query: "BR-AUTH-10 lọc kép cho NHT khi truy cập HSPL có VV phân công — BE phải row-level filter hay blanket-deny?"
+Answer: "BE **BẮT BUỘC phải apply row-level filter (lọc 2 lớp)** đối với role NHT, tuyệt đối **KHÔNG blanket-deny**" — citing FR-X.1-04 Acceptance Criteria.
+
+---
+
+## ~~BUG-FEBE-TVCS-R20-009~~ [CLOSED] — TVCS↔VU_VIEC cross-link gap 3 chỗ (FE form + FE detail + BE filter)
+
+> **Re-test:** 2026-05-12 16:25:00 R19 — ✅ PASS (Closed-verified). Account `cb_nv_tw_06` mở form `/tv-chuyen-sau/tao-moi`. (a) Form **CÓ field "Vụ việc liên kết (tùy chọn)"** với tooltip ❓ ✅. Default placeholder "Chọn doanh nghiệp trước..." (disabled). Sau khi chọn DN → placeholder đổi "Chọn vụ việc của doanh nghiệp..." (enabled). (b) GET `/api/v1/vu-viecs?doanhNghiepId={dnId}&pageSize=100` → **200 + filter narrow đúng**: DN-HNI-0015 total=2 (VV-BTP-TW-20260511-001 + VV-BTP-TW-20260510-003), DN-AGG-0003 total=1, DN-HNI-0017 total=0. FE form + BE filter đã work. Evidence: [`image/reverify-2026-05-12-r20-009-vv-link-dropdown-narrow.png`](image/reverify-2026-05-12-r20-009-vv-link-dropdown-narrow.png).
+
+### Mô tả
+
+QA chạy lại TV-041 R20 (sau khi phát hiện block reason "đợi seed VV" trong R8 đã stale — pool VV thực có 14 records DA_TIEP_NHAN:4). BE POST `/noi-dung-tu-van-cs` với payload `{vuViecId}` PASS (201 + persist FK), nhưng 3 chỗ khác broken: (a) UI form `/tv-chuyen-sau/tao-moi` không có dropdown "Vụ việc" để CB NV chọn `vu_viec_id`; (b) UI detail page không hiển thị panel "Vụ việc liên kết" mặc dù DB có FK; (c) BE GET list `?vuViecId=<real-id>` silently ignored, trả full 28 records thay vì 1 (fake UUID lại trả 0 records — chứng tỏ param được parse nhưng query filter sai logic).
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_06` (BTP·TW · CB_NV_TW) MCP isolated context `tv041_cbnvtw06`.
+2. Navigate `/tv-chuyen-sau/danh-sach` → click "Tạo mới" → mở form `/tv-chuyen-sau/tao-moi`.
+3. Quan sát danh sách field trong form: Doanh nghiệp · Lĩnh vực pháp lý · Ngày tư vấn · Chuyên gia · Nội dung tư vấn · Tóm tắt · Ghi chú. **KHÔNG có field "Vụ việc" / `vuViecId`.**
+4. Hủy form. Chạy probe BE: POST `/api/v1/noi-dung-tu-van-cs` body `{doanhNghiepId, linhVucId, ngayBatDau, noiDung, tomTat, vuViecId: "7805bbee-4fb3-4cb0-8f3f-e652838522a1"}` → 201 OK, response echo `vuViecId` đúng.
+5. GET `/api/v1/noi-dung-tu-van-cs/{TVCS-20260512-0001}` → `vuViecId` persist khớp input.
+6. Navigate `/tv-chuyen-sau/{id}` UI → các accordion "Thông tin cơ bản"/"Nội dung tư vấn"/"Tư liệu pháp luật"/"Trạng thái công khai"/"Đánh giá chất lượng"/"Nhật ký" — **KHÔNG có panel hiển thị Vụ việc liên kết** dù FK đã có.
+7. Probe filter list: GET `?vuViecId=<7805bbee-...>&pageSize=50` → 28 records (mọi TVCS trong scope) thay vì 1; thay UUID fake → 0 records (chứng tỏ param có parse).
+8. Probe reverse-link: GET `/vu-viecs/{vvId}/noi-dung-tu-van-cs|tu-van-chuyen-sau|tvcs` đều 404.
+
+### Kết quả mong đợi
+
+- Test plan `output/funtion/7.12-tu-van-chuyen-sau.md:136` TV-041 UC147: "TVCS liên kết VU_VIEC: chọn `vu_viec_id` khi tạo TVCS → verify cross-link (TVCS ↔ VV module 7.4)".
+- Form Tạo mới có Select "Vụ việc" load VV pool (filter theo doanhNghiepId đã chọn) cho CB chọn `vu_viec_id`.
+- Detail page có panel "Vụ việc liên kết" hiển thị `maVuViec`, `tieuDe`, `trangThai` của VV liên kết + link điều hướng sang detail VV.
+- BE list filter `?vuViecId=<id>` phải narrow đúng — trả về N records có `vuViecId = <id>` (N=1 trong test này).
+
+### Kết quả thực tế
+
+- (a) Form không có Select "Vụ việc" (xem screenshot `r20-tv-041-ui-missing-vuviec-field.png`).
+- (b) Detail page không render panel Vụ việc dù `vuViecId="7805bbee-..."` đã persist (screenshot `r20-tv-041-detail-no-vuviec-display.png`).
+- (c) Filter list: `?vuViecId=7805bbee-...&pageSize=50` → returned 28 (full scope) · `actuallyMatch=1` · `fakeFilterTotal=0` (chứng tỏ param parsing OK nhưng WHERE clause chưa bind đúng).
+- BE schema OK: POST 201, GET persist `vuViecId`, response keys có `vuViecId` và `hopDongTvId`.
+
+### Bằng chứng
+
+![UI form Tạo mới thiếu dropdown Vụ việc](image/r20-tv-041-ui-missing-vuviec-field.png)
+
+![UI detail TVCS-20260512-0001 không hiển thị panel Vụ việc liên kết](../../functional/tu-van-chuyen-sau/image/r20-tv-041-detail-no-vuviec-display.png)
+
+API evidence (probe `cb_nv_tw_06` 2026-05-12):
+
+```
+POST /api/v1/noi-dung-tu-van-cs body {doanhNghiepId:"e0000000-...-003", linhVucId:"bbbbbbbb-...-01a", vuViecId:"7805bbee-...-2a1", noiDung:"...", tomTat:"..."}
+→ 201 {id:"d6c39598-c3e0-451a-813f-4d09965561e9", maTuVan:"TVCS-20260512-0001", vuViecId:"7805bbee-...-2a1", version:1, trangThai:"TIEP_NHAN"}
+
+GET /api/v1/noi-dung-tu-van-cs/d6c39598-... → 200 {vuViecId:"7805bbee-...-2a1", ...} (persist khớp input)
+
+GET /api/v1/noi-dung-tu-van-cs?vuViecId=7805bbee-...-2a1&pageSize=50 → 200 total=28 (28 returned, 1 actually match → filter SILENTLY IGNORED)
+GET /api/v1/noi-dung-tu-van-cs?vuViecId=00000000-0000-0000-0000-000000000000&pageSize=5 → 200 total=0 (fake UUID → 0)
+
+GET /api/v1/vu-viecs/7805bbee-.../noi-dung-tu-van-cs → 404 ERR-SYS-00-04-01
+GET /api/v1/vu-viecs/7805bbee-.../tu-van-chuyen-sau → 404 ERR-SYS-00-04-01
+GET /api/v1/vu-viecs/7805bbee-.../tvcs → 404 ERR-SYS-00-04-01
+```
 
 ---
 
@@ -271,102 +492,6 @@ SRS FR-12 line 1496 spec: *"Khi CG soạn trả lời, auto-save mỗi 30s vào 
 **3. Screenshot UI detail page CG view không có textarea/draft hint (kế thừa từ TV-021 evidence trên TVCS-0002 read-only):**
 
 ![BUG-BE-TVCS-R16-003 — Detail TVCS không có textarea + không có hint auto-save](image/r16-tv-021-tvcs-0002-da-duyet-readonly.png)
-
----
-
-## BUG-FE-TVCS-R16-004 — NHT thấy menu "Tư vấn chuyên sâu" + mở được trang `/tv-chuyen-sau/danh-sach`
-
-### Mô tả
-
-Role `NHT` (login `nht_01` Phùng Thị NHT An Giang, BTP·DP) sau login thấy sidebar có nhóm "Quản lý tư vấn ▶ Tư vấn chuyên sâu" và bấm vào navigate được sang `/tv-chuyen-sau/danh-sach`. Trang render đầy đủ filter + table heading dù BE trả 403 và toast `"Role không được phép truy cập endpoint CMS này"` xuất hiện. Theo permission matrix `output/permission-matrix.md §9 NHT`, NHT KHÔNG có entry cho `TU_VAN_CHUYEN_SAU` (FR-12) — NHT không được phép thấy menu / route này. So sánh với role `DN` (login `9999999990`): sidebar không có nhóm "Quản lý tư vấn" → ✅ đúng spec. Vậy bug nằm ở phía NHT, FE chưa hide menu/route theo role.
-
-### Các bước tái hiện
-
-1. Login `nht_01` / `Secret@123` + OTP `666666` → dashboard render BTP·DP, role NHT.
-2. Click sidebar parent "Quản lý tư vấn" → submenu hiển thị "Tư vấn chuyên sâu" (1 item).
-3. Click "Tư vấn chuyên sâu" → URL chuyển sang `/tv-chuyen-sau/danh-sach`, page heading "Tư vấn chuyên sâu" + bộ lọc 8 filter + table 9 cột render đầy đủ.
-4. Đồng thời toast lỗi "Role không được phép truy cập endpoint CMS này" hiện ở góc.
-5. So sánh với role DN (`9999999990`): sidebar KHÔNG có "Quản lý tư vấn" — đúng matrix.
-
-### Kết quả mong đợi
-
-- FE phải HIDE nhóm sidebar "Quản lý tư vấn" + child "Tư vấn chuyên sâu" cho role NHT (không có entry FR-12 TU_VAN_CHUYEN_SAU trong permission matrix).
-- Route `/tv-chuyen-sau/*` phải được bảo vệ bằng RouteGuard role-based — NHT navigate trực tiếp phải redirect `/403` hoặc dashboard, không render page UI.
-- Không nên dựa vào BE 403 + toast làm "tuyến phòng thủ duy nhất" — leak menu = leak feature awareness.
-
-### Kết quả thực tế
-
-- FE render menu sidebar "Quản lý tư vấn ▶ Tư vấn chuyên sâu" cho NHT.
-- FE render trang `/tv-chuyen-sau/danh-sach` đầy đủ filter + table cho NHT.
-- BE 403 (đúng spec) nhưng toast "Role không được phép truy cập endpoint CMS này" xuất hiện sau khi page đã render → UX confused (page hiển thị mà không load được data).
-
-### Bằng chứng
-
-**1. Screenshot sidebar NHT có nhóm "Quản lý tư vấn ▶ Tư vấn chuyên sâu":**
-
-![BUG-FE-TVCS-R16-004 — NHT sidebar leak Tư vấn chuyên sâu](image/r16-bug-fe-039-nht-shows-tvcs-menu.png)
-
-**2. Screenshot trang `/tv-chuyen-sau/danh-sach` render cho NHT + toast 403:**
-
-![BUG-FE-TVCS-R16-004 — NHT mở trang TVCS render UI + toast 403](image/r16-bug-fe-039-nht-tvcs-page-403-toast.png)
-
-**3. Screenshot DN sidebar (đúng spec — không có nhóm Quản lý tư vấn):**
-
-![BUG-FE-TVCS-R16-004 — DN sidebar không có Tư vấn chuyên sâu](image/r16-tv-039-dn-no-tvcs-menu.png)
-
-### So sánh (Comparison)
-
-| Role | Sidebar có "Quản lý tư vấn ▶ Tư vấn chuyên sâu"? | Mở `/tv-chuyen-sau/danh-sach`? | Spec matrix `TU_VAN_CHUYEN_SAU` |
-|------|-----------|-----------|-----------|
-| QTHT | ✅ | ✅ render | 👁️ R |
-| CB_NV_TW/BN/DP | ✅ | ✅ render | ✅ CRUD* / 👁️ R* |
-| CB_PD_TW/BN/DP | ✅ | ✅ render | 👁️ R* |
-| TVV | ✅ | ✅ render | 👁️ R* |
-| CG | ✅ | ✅ render | ✅ CRU* |
-| **NHT** | **✅ (BUG)** | **✅ render + toast 403 (BUG)** | **(không có entry — KHÔNG được phép)** |
-| DN | ❌ (✅ đúng spec) | ❌ (✅ đúng) | (không có entry — DN qua portal Cổng PLQG) |
-
----
-
-## BUG-FE-TVCS-R16-005 — UI cong-khai workflow chưa expose trên detail TVCS DA_DUYET
-
-### Mô tả
-
-TVCS state DA_DUYET cho phép CB_NV bật cong-khai (BR-PUBLIC-01) + hủy cong-khai (BR-PUBLIC-02) + bật-tắt-bật cập nhật `thoiGianDangTai` (BR-PUBLIC-03). Workflow API hoạt động đúng spec (verified TV-045 + TV-048 R16-P2 14:32-14:33). Tuy nhiên detail page `/tv-chuyen-sau/{id}` KHÔNG có button [Công khai] / [Hủy công khai], cũng KHÔNG có panel hiển thị 5 v3.5 field (`congKhai`, `thoiGianDangTai`, `moTaCongKhai`, `fileDinhKemCongKhai`, `anhDaiDien`). CB_NV không có cách nào trigger workflow này qua UI.
-
-### Các bước tái hiện
-
-1. Login `cb_nv_tw_07`.
-2. Navigate `/tv-chuyen-sau/1ddf8102-f084-4644-945c-9a92f97de5f3` (TVCS-20260509-0002 DA_DUYET).
-3. Inspect detail page — render đầy đủ 6-step stepper + 2 section (Thông tin cơ bản + Nội dung tư vấn) + 3 accordion (Tư liệu pháp luật / Đánh giá chất lượng / Nhật ký).
-4. Tìm button cong-khai: `document.querySelectorAll('button')` chỉ có sidebar nav + "Quay lại danh sách". Tìm text "công khai": 0 element.
-5. Verify backend qua `evaluate_script`:
-   - POST `/cong-khai {version:5, moTaCongKhai}` → 200 ver=6, congKhai=true, thoiGianDangTai auto.
-   - POST `/huy-cong-khai {version:6, lyDo}` → 200 ver=8, congKhai=false, thoiGianDangTai=null.
-   - POST `/cong-khai {version:9, moTaCongKhai mới}` → 200 ver=10, congKhai=true, thoiGianDangTai T2 > T1.
-6. Reload detail page sau khi record `congKhai=true`: UI vẫn không hiển thị badge "Đã công khai", không có thoiGianDangTai value, không có moTaCongKhai content.
-
-### Kết quả mong đợi
-
-Per SRS FR-12 §Công khai TVCS DA_DUYET + BR-PUBLIC-01..03:
-- Detail page TVCS DA_DUYET phải có button [Công khai] (khi `congKhai=false`) hoặc [Hủy công khai] (khi `congKhai=true`).
-- Modal/drawer khi click [Công khai] phải có form 5 field: `moTaCongKhai*` (1-5000 chars), `fileDinhKemCongKhai`, `anhDaiDien` (optional). `congKhai`, `thoiGianDangTai` tự set BE.
-- Detail page phải hiển thị panel "Thông tin công khai" với badge state + `thoiGianDangTai` + `moTaCongKhai` khi `congKhai=true`.
-
-### Kết quả thực tế
-
-Detail page DA_DUYET render giống hệt detail TIEP_NHAN/PHAN_CONG/DANG_TU_VAN — chỉ khác state badge "Đã duyệt". KHÔNG có UI element nào liên quan tới cong-khai. CB_NV không thể trigger workflow qua UI, phải dùng API direct.
-
-### Bằng chứng
-
-![Detail TVCS DA_DUYET không có UI cong-khai workflow](../bug-reports/tu-van-chuyen-sau/image/r7-7-5-r16-tv-045-048-ui-no-cong-khai-button.png)
-
-API evidence (R16-P2 14:32:26-14:33:05 cycle):
-- TV-045 leg 1: `POST /cong-khai` ver=5→6, `thoiGianDangTai=2026-05-10T14:32:26.528Z`.
-- TV-048 leg 2: `POST /huy-cong-khai` ver=6→8, `congKhai=false, thoiGianDangTai=null`.
-- TV-048 leg 3: `POST /cong-khai` ver=9→10, `thoiGianDangTai=2026-05-10T14:33:05.350Z` (T2 > T1).
-
-DOM scan probe `Array.from(document.querySelectorAll('*')).filter(el => el.textContent.toLowerCase().includes('công khai'))` → returns `[]` (0 element matched).
 
 ---
 
@@ -526,84 +651,6 @@ SRS v3.5 (line 18) ghi rõ phương án refactor F-FR04-NEW-02 phương án B+: 
 
 ---
 
-## BUG-BE-TVCS-R17-008 — BE blanket-deny endpoint `/doanh-nghieps` cho NHT, vi phạm BR-AUTH-10 row-level
-
-**Severity:** Major · **Priority:** P0 · **Type:** Permission (regression do fix BUG-007 không đúng spec) · **TC Ref:** TV-053 happy path (NHT đọc HSPL DN trong VV phân công) · **SRS:** `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md:669-671` (FR-X.1-04 Acceptance Criteria) + `srs-v3.5.md:5304` (BR-AUTH-10)
-
-### Mô tả
-
-Fix BUG-007 (HSPL cross-scope leak) dùng phương pháp **endpoint-level blanket-deny** (chặn toàn bộ `/api/v1/doanh-nghieps` cho role NHT với ERR-AUTH-DN-00-01). Cách fix này SAI SPEC BR-AUTH-10 mở rộng: thay vì lọc kép 2 lớp row-level (`HSPL.don_vi_id = NHT.don_vi_id AND EXISTS VU_VIEC vv WHERE vv.doanh_nghiep_id = HSPL.doanh_nghiep_id AND vv.nguoi_ho_tro_id = NHT.tvv_id`), BE chặn luôn happy path — NHT có VV phân công với DN-X vẫn không đọc được DN-X.
-
-NotebookLM HTPLDN query confirmed (2-source verify với SRS local): "BE **BẮT BUỘC phải apply row-level filter (lọc 2 lớp)** đối với role NHT, tuyệt đối **KHÔNG blanket-deny** (chặn toàn bộ endpoint)."
-
-### Các bước tái hiện
-
-1. Login `nht_tc001_btp_tw` (NHT @ BTP·TW, taiKhoanId `f7daf0dd-f0a1-4470-9274-27689ce11c44`).
-2. Verify NHT có VV phân công với DN-003: `GET /api/v1/vu-viecs?pageSize=20` → trả về VV-BTP-TW-20260510-002 với `tenDoanhNghiep = "DNTN Hoàng Gia AG"`, `nguoiHoTroId = f7daf0dd-...` (cùng userId NHT đang login), DN `e0000000-0000-4000-8000-000000000003`.
-3. Verify NHT có permission `read_ho_so_phap_ly_dn` + `update_ho_so_phap_ly_dn` qua `GET /api/v1/auth/me` (permissions array).
-4. Probe happy path: `GET /api/v1/doanh-nghieps/e0000000-0000-4000-8000-000000000003` (DN-003 — NHT CÓ VV phân công).
-5. Probe cross-scope: `GET /api/v1/doanh-nghieps/e0000000-0000-4000-8000-000000000006` (DN-006 — NHT KHÔNG VV phân công).
-6. Probe sub-resource: `GET /api/v1/doanh-nghieps/{DN-003}/ho-so-phap-ly` (per spec SCR-V.III-02 tab "Hồ sơ pháp lý DN").
-
-### Kết quả mong đợi
-
-Per SRS FR-X.1-04 line 669-670 + BR-AUTH-10:
-- Step 4 (happy DN-003 có VV phân công): **200 OK** — hiển thị danh sách HSPL của DN đó + chi tiết DN.
-- Step 5 (cross DN-006 không VV phân công): **403** — "ngoài phạm vi → 403".
-- Step 6 (sub-resource HSPL): **200 OK** — list HSPL DN-003 với lọc kép 2 lớp.
-
-### Kết quả thực tế
-
-- Step 4 (happy): **403 ERR-AUTH-DN-00-01** "Role không được phép truy cập endpoint CMS này" ❌ SAI SPEC.
-- Step 5 (cross): **403 ERR-AUTH-DN-00-01** ✅ đúng spec.
-- Step 6 (sub-resource): **404 ERR-SYS-00-04-01** "Cannot GET /api/v1/doanh-nghieps/{id}/ho-so-phap-ly" ❌ endpoint chưa expose.
-
-→ BE check role trước khi check ownership (blanket-deny role NHT cho endpoint CMS), không apply BR-AUTH-10 row-level filter. Vi phạm Acceptance Criteria FR-X.1-04.
-
-### Bằng chứng
-
-**1. Auth/me cho nht_tc001_btp_tw có permissions HSPL DN:**
-
-```json
-{
-  "userId":"f7daf0dd-f0a1-4470-9274-27689ce11c44",
-  "hoTen":"NHT TC001 Test BTP TW",
-  "vaiTro":["NHT"],
-  "donViId":"00000000-0000-4000-8000-000000000001",
-  "capDonVi":"TW",
-  "permissions":["read_ho_so_phap_ly_dn","update_ho_so_phap_ly_dn", ...]
-}
-```
-
-**2. VV phân công cho NHT với DN-003:**
-
-```json
-{"ma":"VV-BTP-TW-20260510-002","donViId":"00000000-0000-4000-8000-000000000001","tenDN":"DNTN Hoàng Gia AG","trangThai":"DA_DANH_GIA","nguoiHoTroId":"f7daf0dd-f0a1-4470-9274-27689ce11c44","doanhNghiepId":"e0000000-0000-4000-8000-000000000003"}
-```
-
-**3. GET DN-003 happy path → 403 SAI SPEC:**
-
-```json
-{"success":false,"error":{"code":"ERR-AUTH-DN-00-01","message":"Role không được phép truy cập endpoint CMS này","timestamp":"2026-05-11T02:50:48.169Z"}}
-```
-
-**4. Sub-resource HSPL endpoint chưa expose:**
-
-```json
-{"success":false,"error":{"code":"ERR-SYS-00-04-01","message":"Cannot GET /api/v1/doanh-nghieps/e0000000-0000-4000-8000-000000000003/ho-so-phap-ly"}}
-```
-
-**5. NotebookLM HTPLDN 2-source verify:**
-
-Query: "BR-AUTH-10 lọc kép cho NHT khi truy cập HSPL có VV phân công — BE phải row-level filter hay blanket-deny?"
-Answer: "BE **BẮT BUỘC phải apply row-level filter (lọc 2 lớp)** đối với role NHT, tuyệt đối **KHÔNG blanket-deny**" — citing FR-X.1-04 Acceptance Criteria.
-
-**6. Screenshot NHT login + happy path 403:**
-
-![BUG-008 — NHT happy path blocked by blanket-deny](image/bug-008-r17-nht-happy-path-blocked-blanket-deny.png)
-
----
-
 ## Phụ lục — Môi trường test
 
 | Thành phần | Giá trị |
@@ -618,4 +665,4 @@ Answer: "BE **BẮT BUỘC phải apply row-level filter (lọc 2 lớp)** đố
 
 ---
 
-*Bug report generated: 2026-05-10 20:30:00 (R16) | Last updated: 2026-05-11 (R19 — clear cache re-verify) | QA Automation via Claude Code*
+*Bug report generated: 2026-05-10 20:30:00 (R16) | Last updated: 2026-05-12 (R20 — TV-041 unblock + BUG-009 log) | QA Automation via Claude Code*

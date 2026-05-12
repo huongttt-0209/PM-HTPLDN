@@ -26,6 +26,18 @@ Phát hiện **3** lỗi BE validation trong functional sweep R7.7.5, đều có
 
 **R14 retest status (2026-05-10 12:30:00):** 3/10 đóng (FN-001/FN-002/FN-003 verify dev fix PASS với bộ acc `_07`). 7 HSPL bug pending dev re-fix.
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 10   | 1        | 6     | 1      | 2     | 0       | 10     | 0    |
+
+> **Quy tắc đếm:**
+> - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
+> - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
+> - `Closed` + `Open` = `Tổng`. `Open` đếm Status ∈ {Open, Reopen}; `Closed` đếm Status ∈ {Closed, ~~closed~~}.
+> - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
+
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |

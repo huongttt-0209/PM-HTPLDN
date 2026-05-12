@@ -22,9 +22,9 @@ Phát hiện **3** lỗi trong task R7.3.14 seed 6 HĐ TV cover 6 LV.
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 3    | 0        | 3     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 3    | 0        | 3     | 0      | 0     | 0       | 3      | 0    |
 
 ## Bug Summary Table
 

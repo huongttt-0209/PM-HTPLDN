@@ -5,6 +5,14 @@
 **Module:** TO_CHUC_TU_VAN (FR-IV-NEW-01..04)
 **Spec ref:** `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md` + `output/permission-matrix.md` v3.5 update 2026-05-09.
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 1        | 0     | 0      | 1     | 0       | 2      | 0    |
+
+> **Quy tắc đếm:** `Closed` + `Open` = `Tổng`. `Closed` đếm Status ∈ {Closed, ~~closed~~}; `Open` đếm phần còn lại (Open, Reopen, Defer, Withdrawn).
+
 ## Bug summary
 
 | ID | Severity | Title | Status |

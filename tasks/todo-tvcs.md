@@ -33,6 +33,6 @@
   - **Kết quả:** R15 9/11 PASS + 2 EXTERNAL = 11/11 covered. BUG-004 closed (commit `f54afbc8` atomic save+complete). [workflow-test-report-r7-4-a5-tvcs.md](../output/qa-reports/round7-2026-05-06/workflow/tu-van-chuyen-sau/workflow-test-report-r7-4-a5-tvcs.md)
   - **Bug:** [Pass-bug-report-r7-4-a5-tvcs-cg-action-block.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/Pass-bug-report-r7-4-a5-tvcs-cg-action-block.md) — 4/4 đóng
 
-- ⚠️ **R7.7.5** 🔄 TVCS functional 61 TC v3.5 `[~92% — 56/61 R20]` <a id="r7-7-5"></a>
-  - **Kết quả:** ⚠️ R20 56/61 PASS · TV-045/053/059 retest PASS. [functional-test-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/functional/tu-van-chuyen-sau/functional-test-report-r7-7-5-tvcs.md)
-  - **Bug:** [Pass-bug-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/Pass-bug-report-r7-7-5-tvcs.md) 10/10 + [bug-report-r7-7-5-tvcs-r16.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs-r16.md) 4/8 đóng (Open: 001/004⚠/005⚠/008⚠ — 3 PARTIAL R20)
+- ⚠️ **R7.7.5** 🔄 TVCS functional 61 TC v3.5 `[~92% — 56/61 R20 +1⚠️ TV-041]` <a id="r7-7-5"></a>
+  - **Kết quả:** ⚠️ R20 56 ✅ + 1 ⚠️ TV-041. TV-041 unblock retest BE PASS / FE+filter Sai spec → BUG-009. [functional-test-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/functional/tu-van-chuyen-sau/functional-test-report-r7-7-5-tvcs.md)
+  - **Bug:** [Pass-bug-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/Pass-bug-report-r7-7-5-tvcs.md) 10/10 + [bug-report-r7-7-5-tvcs-r16.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs-r16.md) 4/9 đóng (Open: 001/004⚠/005⚠/008⚠/009 — 3 PARTIAL + 1 mới R20)

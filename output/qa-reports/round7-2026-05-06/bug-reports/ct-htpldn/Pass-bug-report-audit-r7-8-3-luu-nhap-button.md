@@ -18,9 +18,9 @@ Phát hiện **1 bug Major** + **1 bug Medium** liên quan FE chưa implement sc
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 2    | 0        | 1     | 1      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 0        | 1     | 1      | 0     | 0       | 2      | 0    |
 
 ## Bug Summary Table
 

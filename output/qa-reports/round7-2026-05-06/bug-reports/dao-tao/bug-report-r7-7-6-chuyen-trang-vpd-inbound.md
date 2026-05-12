@@ -21,9 +21,9 @@ Probe 2026-05-11 verify khả năng E2E "DN/NHT đăng ký Học viên qua chuy�
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 2    | 0        | 2     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 0        | 2     | 0      | 0     | 0       | 0      | 2    |
 
 ## Bug Summary Table
 

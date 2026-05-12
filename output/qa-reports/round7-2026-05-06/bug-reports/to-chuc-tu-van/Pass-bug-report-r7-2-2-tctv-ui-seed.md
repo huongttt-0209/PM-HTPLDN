@@ -22,6 +22,18 @@ Bug log 2026-05-08 phát hiện 2 bug (1 Critical + 1 Major). **Re-test 2026-05-
 |------|----------|-------|--------|-------|---------|--------|
 | 2    | 0        | 0     | 0      | 0     | 0       | **2**  |
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 1        | 1     | 0      | 0     | 0       | 2      | 0    |
+
+> **Quy tắc đếm:**
+> - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
+> - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
+> - `Closed` + `Open` = `Tổng`. `Open` đếm Status ∈ {Open, Reopen}; `Closed` đếm Status ∈ {Closed, ~~closed~~}.
+> - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
+
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |

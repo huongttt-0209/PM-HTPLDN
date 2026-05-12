@@ -20,9 +20,9 @@ Phát hiện **1 bug Critical** block toàn bộ QA: BE endpoint `POST /api/v1/a
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 1    | 1        | 0     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 1        | 0     | 0      | 0     | 0       | 1      | 0    |
 
 ## Bug Summary Table
 

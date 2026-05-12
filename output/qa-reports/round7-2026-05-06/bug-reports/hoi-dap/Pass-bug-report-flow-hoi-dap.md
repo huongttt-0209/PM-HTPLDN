@@ -5,6 +5,18 @@
 > **Functional report:** [functional-test-report-r7-7-1-hd-phase4.md](../../functional/hoi-dap/functional-test-report-r7-7-1-hd-phase4.md)
 > **Accounts dùng:** `cb_nv_tw_01/02/04` · `cb_nv_dp_04` (DP-AG)
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 8    | 1        | 1     | 0      | 6     | 0       | 8      | 0    |
+
+> **Quy tắc đếm:**
+> - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
+> - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
+> - `Closed` + `Open` = `Tổng`. `Closed` đếm Status ∈ {Closed, ~~closed~~}; `Open` đếm phần còn lại (Open, Reopen, Defer, Withdrawn — mọi bug chưa đóng).
+> - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
+
 ## Bug Summary Table
 
 | BUG-ID | Severity | Tiêu đề | Status |
@@ -13,7 +25,7 @@
 | ~~BUG-HD-021-TABS-001~~ | ~~Minor~~ | ~~UI render 9 tabs vs spec 7 tabs + filter tab "Hoàn thành" miss HUY records — R10d 2026-05-10 18:55:00 verified fix: tab count = 7, tab Hoàn thành trả 7/7 (3 HOAN_THANH + 4 HUY) đúng spec line 1033~~ | Closed-verified |
 | ~~BUG-HD-022-SLA-THRESHOLD-001~~ | ~~Minor~~ | ~~QTHT Cấu hình SLA default Ngưỡng 2 = 90% lệch spec BR-SLA-02 (QUA_HAN > 100%) — R10d 2026-05-10 19:00:00 verified fix: 4/4 row hiển thị "Sắp hết hạn 50–100% / Quá hạn > 100% (BR-SLA-02)", modal Ngưỡng 2 valuemax=100~~ | Closed-verified |
 | ~~BUG-HD-016-THOIGIAN-NULL-001~~ | ~~Minor~~ | ~~Hủy công khai không reset `thoi_gian_dang_tai` về NULL theo BR-FLOW-09 — R10d 2026-05-10 19:08:00 verified fix: GET trả `thoiGianDangTai=null` sau khi Hủy CK record HD-20260509-010~~ | Closed-verified |
-| ~~BUG-HD-032-WORKLOAD-001~~ | ~~Question~~ | ~~Modal Phân công không hiện badge đỏ "Quá tải" — Phase 5 verify: WRN-PC-01 thực ra implement đúng, threshold N=10. Earlier conclusion sai do workload chỉ đẩy tới 9 (dưới ngưỡng).~~ | Closed-verified |
+| ~~BUG-HD-032-WORKLOAD-001~~ | ~~Minor~~ | ~~Modal Phân công không hiện badge đỏ "Quá tải" — Phase 5 verify: WRN-PC-01 thực ra implement đúng, threshold N=10. Earlier conclusion sai do workload chỉ đẩy tới 9 (dưới ngưỡng).~~ | Closed-verified |
 | ~~BUG-HD-043-OPTGROUP-001~~ | ~~Minor~~ | ~~Dropdown "Chọn mẫu phản hồi" render flat list, thiếu `<optgroup>` 2 nhóm "Mẫu khung quốc gia (TW)" + "Mẫu của đơn vị bạn" + thiếu badge màu theo cấp~~ | Closed-verified |
 | ~~BUG-HD-001~~ | **Critical** | ~~Detail Hỏi đáp state `DA_PHAN_CONG` thiếu button [Phản hồi]/[Bắt đầu xử lý] cho người được phân công — block toàn bộ workflow T3-T9~~ | Closed |
 | ~~BUG-HD-002~~ | Major | ~~Tab "Đang xử lý" trên SCR-II-01 rỗng dù có ≥3 record state `DA_PHAN_CONG` (filter sai vs spec `IN (TIEP_NHAN, DA_PHAN_CONG, DANG_XU_LY)`)~~ | Closed |
@@ -24,7 +36,6 @@
 
 > **Re-test:** 2026-05-10 18:55:00 R10d — ✅ PASS Closed-verified. Tab count = 7 đúng spec (`Tất cả / Mới / Đang xử lý / Chờ phê duyệt / Đã duyệt / Công khai / Hoàn thành`). Click tab "Hoàn thành" → URL `?tab=HOAN_THANH` → table render **7 records: 3 HOAN_THANH (HD-20260510-001, HD-20260509-007, HD-20260509-006) + 4 HUY (HD-20260509-003, HD-20260509-002, HD-20260507-005, HD-20260507-004)** với `totalText=1-7 / 7 mục`. Filter union `trang_thai IN ('HOAN_THANH','HUY')` đã đúng spec line 1033. Bằng chứng: ![r7-hd-021-retest-r10d-tab-hoanthanh-7records-union.png](image/r7-hd-021-retest-r10d-tab-hoanthanh-7records-union.png).
 >
-> **Re-test:** 2026-05-10 12:05:00 R10c — ⚠️ PARTIAL FIX (7 tab đúng, filter HUY miss).
 
 ### Mô tả
 
@@ -74,7 +85,6 @@ UI render 9 tabs tách riêng:
 
 > **Re-test:** 2026-05-10 19:00:00 R10d — ✅ PASS Closed-verified. Login `qtht_01` → `/quan-tri/cau-hinh` Tab "Thời hạn xử lý (SLA)" → 4/4 row (HOI_DAP/HO_SO_HT/HO_SO_TT/VU_VIEC) đều render đúng spec: vùng cảnh báo "Bình thường 0–50%" / "Sắp hết hạn 50–100%" / "Quá hạn > 100% (BR-SLA-02)" + Ngưỡng 2 = **100** + Hệ số = 2. Modal "Chỉnh sửa cấu hình SLA" row HOI_DAP: spinbutton "Ngưỡng cảnh báo 2 (%)" `value=100 valuemax=100 valuemin=1`, button Increase disabled tại 100. Cap structural đã raise lên 100 cho phép user set boundary đúng spec. Khớp BR-SLA-02 line 992-999. Bằng chứng: ![r7-hd-022-retest-r10d-modal-nguong2-100-fixed.png](image/r7-hd-022-retest-r10d-modal-nguong2-100-fixed.png).
 >
-> **Re-test:** 2026-05-10 12:08:00 R10c — ❌ CHƯA FIX (Ngưỡng 2 còn 90, valuemax cap 99).
 
 ### Mô tả
 
@@ -190,7 +200,6 @@ DOM evidence:
 
 > **Re-test:** 2026-05-11 09:13:00 R10e — ✅ PASS (Closed-verified). Login `cb_pd_tw_04` → HD-20260510-001 (DA_DUYET) → click [Công khai lên Cổng PLQG] → modal CR-01 mở. `evaluate_script` inspect dialog: button "Dùng ảnh hệ thống mặc định" hiện ở `uid=251_12` cạnh upload zone; hint accept thêm `.gif` đúng SCR-II-02 line 1149. Click button → preview img `src="/default-avatar-cong-khai.png"` alt="Ảnh hệ thống mặc định" render trong zone, button toggle thành "Đổi ảnh khác". Bằng chứng: ![btn-fixed](image/r7-hd-053-retest-r10e-default-image-btn-fixed.png) + ![preview](image/r7-hd-053-retest-r10e-default-image-preview-after-click.png).
 >
-> **Re-test:** 2026-05-10 19:05:00 R10d — ❌ CHƯA FIX. Login `cb_pd_tw_04` → HD-20260509-010 (DA_DUYET) → click [Công khai lên Cổng PLQG] → modal mở. Inspect dialog DOM (`evaluate_script`): chỉ có 2 button `["Hủy", "Công khai"]` + 1 close icon. Không tìm thấy text "Dùng ảnh", "mặc định", "Default" trong dialog. Section "Ảnh đại diện" vẫn chỉ có upload zone `.jpg/.png ≤5MB`. Spec SCR-II-02 line 1149 yêu cầu nút "Dùng ảnh hệ thống mặc định" cạnh upload zone — vẫn miss. Bug vẫn Open. Bằng chứng: ![r7-hd-053-retest-r10d-modal-still-missing-default-image-btn.png](image/r7-hd-053-retest-r10d-modal-still-missing-default-image-btn.png).
 
 ### Mô tả
 

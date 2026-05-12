@@ -20,9 +20,9 @@ Phát hiện **2** bug cascade chặn việc chạy R7.4.A3-PUBLIC khi cố adva
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial | Closed |
-|------|----------|-------|--------|-------|---------|--------|
-| 2    | 1        | 1     | 0      | 0     | 0       | 2      |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 1        | 1     | 0      | 0     | 0       | 2      | 0    |
 
 ## Bug Summary Table
 

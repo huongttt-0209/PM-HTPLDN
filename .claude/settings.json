@@ -90,6 +90,14 @@
           {
             "type": "command",
             "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-bug-report-date-time.py"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-bug-report-severity-sync.py"
+          },
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/check-retest-no-duplicate.py"
           }
         ]
       }
@@ -98,6 +106,10 @@
       {
         "matcher": "Edit|Write|MultiEdit",
         "hooks": [
+          {
+            "type": "command",
+            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/auto-bump-bug-report-date.py"
+          },
           {
             "type": "command",
             "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/auto-rescan-todo.py"

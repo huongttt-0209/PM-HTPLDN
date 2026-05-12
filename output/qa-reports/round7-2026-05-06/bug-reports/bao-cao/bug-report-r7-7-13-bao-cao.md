@@ -24,9 +24,9 @@ Phát hiện **4** lỗi có SRS/UI reference cụ thể trong phase smoke + fun
 
 ### Severity breakdown (R7 update — 2026-05-11 23:50:00)
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 7    | 1 (Open — Partial fix R7)| 3 (1 Open Major + 2 Closed) | 1 (KYBAOCAO Partial Open — Aggregation, downgrade Minor) + 1 (XLSX Closed R7) | 1 (Closed R4) | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 9    | 2        | 3     | 2      | 2     | 0       | 5      | 4    |
 
 **R7 re-verify (2026-05-11 23:50:00 — bộ acc 08, 5 isolatedContext MCP):** **2/4 bug đóng**:
 - **BUG-BC-XLSX-PARTIAL-SUPPORT → CLOSED-R7**: Dev rename enum (`BC_VV_THEO_LINH_VUC` → `BC_VU_VIEC_THEO_LINH_VUC`, `BC_DANH_GIA_HIEU_QUA_HTPL` → `BC_DANH_GIA_HIEU_QUA`) + thêm Excel template 2 BC analytic. 3/3 test với enum mới = 200 binary. R6 fail là do test dùng enum cũ stale.
@@ -42,6 +42,18 @@ Phát hiện **4** lỗi có SRS/UI reference cụ thể trong phase smoke + fun
 - **BC-006/007/008 KHÔNG còn defer:** Seed Đào tạo đã có (KH-20260509-001 + KH-20260509-005, 4 khóa đã diễn ra, 1 đang diễn ra, 2 chấm điểm 7.5 TB 80% tỷ lệ đạt). 3 BC endpoint trả 200 + data đầy đủ → flip ⏭ → ✅ trong test report.
 - **BC-010 endpoint slug R5 dùng SAI:** Slug đúng là `danh-gia-hieu-qua` (UC132) chứ không phải `danh-gia-hieu-qua-htpl`. Khi gọi đúng slug → 200 + `{tongDotDanhGia:1, tongLuotDanhGia:0, diemTrungBinhChung:0}`. Có 1 đợt seed sẵn nhưng chưa có lượt đánh giá → empty data legit, render OK. Flip ⏭ → ✅.
 - **BC-034 OBS → BUG xác nhận:** Test 12 BC sub-route với `kyBaoCao=INVALID` → 10/12 trả 422 (validate đúng), 2/12 trả 200 silently accept: `/bao-cao/hoi-dap` (BC-001) + `/bao-cao/danh-gia-hieu-qua` (BC-010). Log BUG-BC-KYBAOCAO-NOT-VALIDATED Medium (mới).
+
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 9    | 2        | 3     | 2      | 2     | 0       | 5      | 4    |
+
+> **Quy tắc đếm:**
+> - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
+> - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
+> - `Closed` + `Open` = `Tổng`. `Closed` đếm Status ∈ {Closed, ~~closed~~}; `Open` đếm phần còn lại (Open, Reopen, Defer, Withdrawn — mọi bug chưa đóng).
+> - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
 
 ## Bug Summary Table
 

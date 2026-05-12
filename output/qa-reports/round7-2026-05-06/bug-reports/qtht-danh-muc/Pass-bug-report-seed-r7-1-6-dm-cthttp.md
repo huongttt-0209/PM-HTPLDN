@@ -19,9 +19,9 @@ Phát hiện **2** lỗi khi seed DM Chương trình hỗ trợ qua UI SCR-VIII-
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 2    | 0        | 2     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 0        | 2     | 0      | 0     | 0       | 2      | 0    |
 
 ## Bug Summary Table
 

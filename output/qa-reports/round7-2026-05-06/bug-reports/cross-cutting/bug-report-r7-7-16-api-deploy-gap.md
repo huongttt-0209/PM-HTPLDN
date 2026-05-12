@@ -18,22 +18,24 @@ Phát hiện **2** lỗi có SRS reference cụ thể trong quá trình probe 9 
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 2    | 1        | 1     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 1        | 1     | 0      | 0     | 0       | 0      | 2    |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-API-001 | Major | P0 | Auth | API-001/003/004/006-010/031/033/034/039/040/043 (16 TC) | `srs-fr-16-api §BR-INTG-02 mTLS+JWT 2 lớp` + `7.16 §Ghi chú thực thi line 226` | mTLS test cert missing — block 16 TC trên 1/9 cặp deployed | Open |
-| BUG-API-002 | Critical | P0 | Data | API-013..030, 032, 044 (22 TC) | `srs-fr-16-api FR-XII-03..18` (16 FR — 8/9 cặp endpoint) + CHANGELOG §FR-16 Thay đổi 1+3+5 | 8/9 cặp outbound API endpoint chưa deploy — block 22 TC + v3.5 verify | Open |
+| BUG-API-001 | Major | P0 | Auth | API-001/003/004/006-010/031/033/034/039/040/043 (16 TC) | `srs-fr-16-api §BR-INTG-02 mTLS+JWT 2 lớp` + `7.16 §Ghi chú thực thi line 226` | mTLS test cert missing — block 16 TC trên 1/9 cặp deployed | 🚫 Defer (chờ phase tích hợp API ngoài) |
+| BUG-API-002 | Critical | P0 | Data | API-013..030, 032, 044 (22 TC) | `srs-fr-16-api FR-XII-03..18` (16 FR — 8/9 cặp endpoint) + CHANGELOG §FR-16 Thay đổi 1+3+5 | 8/9 cặp outbound API endpoint chưa deploy — block 22 TC + v3.5 verify | 🚫 Defer (chờ phase tích hợp API ngoài) |
 
 ---
 
 ## BUG-API-001 — mTLS test cert missing trên test env, không verify được mTLS handshake protocol-level
 
-> **Meta:** Severity Major / Priority P0 / Type Auth / Status Open / TC API-001, 003, 004, 006-010, 031, 033, 034, 039, 040, 043 / SRS `srs-fr-16-api.md §BR-INTG-02` + `output/funtion/7.16-API-ket-noi-chia-se.md §Ghi chú thực thi`.
+> **Defer 2026-05-12 — chờ phase tích hợp API ngoài.** Bug phụ thuộc infra outbound mTLS sandbox (FR-XII publish API publish cho external systems consume). Không fix dev nội bộ. Re-test khi infra cấp mTLS client cert + sandbox staging có.
+
+> **Meta:** Severity Major / Priority P0 / Type Auth / Status Defer / TC API-001, 003, 004, 006-010, 031, 033, 034, 039, 040, 043 / SRS `srs-fr-16-api.md §BR-INTG-02` + `output/funtion/7.16-API-ket-noi-chia-se.md §Ghi chú thực thi`.
 
 ### Mô tả
 
@@ -108,6 +110,8 @@ $ curl -s -w "%{http_code}\n" http://103.172.236.130:3000/api/v1/swagger
 ---
 
 ## BUG-API-002 — 8/9 cặp outbound API endpoint trả HTTP 404, module substantially undeployed
+
+> **Defer 2026-05-12 — chờ phase tích hợp API ngoài.** 8/9 cặp outbound API endpoint (FR-XII-01..18) publish ra external systems consume. Bug phụ thuộc external integration deploy. Không fix dev nội bộ giai đoạn hiện tại. Re-test khi BE deploy 8 cặp endpoint còn lại + tích hợp xong.
 
 > **Meta:** Severity Critical / Priority P0 / Type Data / Status Open / TC API-013..030, 032, 044 (22 TC) / SRS `srs-fr-16-api FR-XII-03..18` (16 FR) + CHANGELOG §FR-16 Thay đổi 1+3+5+6+7.
 

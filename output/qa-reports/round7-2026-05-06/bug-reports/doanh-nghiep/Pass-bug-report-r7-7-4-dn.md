@@ -16,11 +16,17 @@
 
 File này gộp toàn bộ bug R7.7.4 Doanh nghiệp từ R7 đến R14 (trước đây tách 4 file rời, R12 consolidate). Tổng **6 bug active** (0 Open + 6 Closed) + **1 Withdrawn** (false positive). R14 dev fix → đóng BUG-DN-022-ME-MISSING-LV-001 (BE serializer /me hydrate `linhVucIds`).
 
-### Severity breakdown (active)
+### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 0    | 0        | 0     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 7    | 0        | 6     | 0      | 1     | 0       | 6      | 1    |
+
+> **Quy tắc đếm:**
+> - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
+> - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
+> - `Closed` + `Open` = `Tổng`. `Closed` đếm Status ∈ {Closed, ~~closed~~}; `Open` đếm phần còn lại (Open, Reopen, Defer, Withdrawn — mọi bug chưa đóng).
+> - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
 
 ## Bug Summary Table
 
@@ -48,7 +54,6 @@ File này gộp toàn bộ bug R7.7.4 Doanh nghiệp từ R7 đến R14 (trướ
 
 > **Re-test:** 2026-05-10 14:30:00 R14 — ✅ PASS (Closed-verified). Login DN `9999999998` (isolated context `dn-r14-022-verify`). `GET /api/v1/doanh-nghieps/me` 200 + **35 keys**, có `linhVucIds: ["2a1e4875-aa00-48d7-aa07-ad6524207dc6"]` đúng schema v3.5 #9. Symmetric serializer fixed: PATCH ↔ GET nhất quán. Form `/doanh-nghiep/me/sua` pre-populate chip Lĩnh vực KD đúng. Evidence: [r14-2026-05-10-dn-022-me-linhvucids-fixed.png](image/r14-2026-05-10-dn-022-me-linhvucids-fixed.png). Dev commit `7e47e92a`.
 >
-> **Re-test:** 2026-05-10 12:05:00 R13 — ❌ STILL OPEN. Login DN `9999999998` re-verify: `GET /api/v1/doanh-nghieps/me` 200 + 34 keys không đổi (vẫn thiếu `linhVucIds`/`linhVucKinhDoanh`/`linhVucs`); form `/doanh-nghiep/me/sua` (giờ navigate được nhờ MENU-ROUTE-001 fix) không pre-populate Lĩnh vực KD chip nào. PATCH /me vẫn accept `linhVucIds` body. Bug khu trú đúng BE serializer `/me` GET.
 
 ### Mô tả
 
@@ -192,7 +197,6 @@ BE accept : GET /api/v1/doanh-nghieps?...&tuNgay=2026-05-08&denNgay=2026-05-09  
 
 > **Re-test:** 2026-05-10 12:05:00 R13 — ✅ PASS (Closed-verified). Login DN `9999999998` re-verify: click sidebar item "Quản lý doanh nghiệp được hỗ trợ" → navigate `/doanh-nghiep/me/sua` với form đầy đủ. DN-016 + DN-019 PASS qua UI: PATCH /me 200, email persisted sau reload, không OTP challenge. FE route guard nhận `update_doanh_nghiep` permission. Evidence: [r13-2026-05-10-dn-menu-route-fixed.png](image/r13-2026-05-10-dn-menu-route-fixed.png).
 >
-> **Re-test R11:** 2026-05-10 03:00:00 — ❌ STILL Open. Login DN `9999999998` → click sidebar item → URL stuck `/dashboard` (programmatic click + MCP click đều không navigate). Direct nav `/doanh-nghiep/<own-id>/sua`, `/doanh-nghiep/me`, `/doanh-nghiep/me/sua`, `/quan-ly-doanh-nghiep/me`, `/me/sua`, `/profile/doanh-nghiep`, `/cap-nhat-doanh-nghiep`, `/tai-khoan/doanh-nghiep` — tất cả 404 hoặc redirect dashboard. `/profile` chỉ render TAI_KHOAN profile (username/email TK/SĐT/họ tên/vai trò), không có DN field. **Control test:** login `cb_nv_tw_03` cùng sidebar item navigate `/doanh-nghiep/danh-sach` OK → confirm bug DN-role-specific. Permission BE OK: `auth/me.permissions` có `update_doanh_nghiep`. Evidence: [r11-2026-05-10-dn-menu-route-still-broken.png](image/r11-2026-05-10-dn-menu-route-still-broken.png).
 
 ### Mô tả
 
@@ -358,8 +362,6 @@ GET /api/v1/doanh-nghieps?page=1&pageSize=5
 ## ~~BUG-FR07-DEPLOY-001~~ [CLOSED] — DM `LINH_VUC_KINH_DOANH` rỗng (0 record) + entity DOANH_NGHIEP_LINH_VUC M-N chưa migrate
 
 > **Re-test:** 2026-05-10 01:35:00 R9 — ✅ PASS (Closed). Account `qtht_01`. `GET /api/v1/danh-muc/tree?loaiDanhMuc=LINH_VUC_KINH_DOANH` 200 + `count=12` (BAN_LE_BAN_BUON, DICH_VU_AN_UONG_LUU_TRU, VAN_TAI_LOGISTICS, CONG_NGHE_THONG_TIN, TAI_CHINH_BAO_HIEM, BAT_DONG_SAN, GIAO_DUC_DAO_TAO, Y_TE_CHAM_SOC_SUC_KHOE, SAN_XUAT_CHE_BIEN, XAY_DUNG, NONG_LAM_THUY_SAN, KHAC). `GET /api/v1/doanh-nghieps/{id}` trả field `linhVucIds: []` (mảng) — đúng schema v3.5 #9. DN mới đăng ký 9999999998 cũng có field này.
-> **Re-test:** 2026-05-09 19:55:00 R8 — ❌ STILL OPEN. `GET /api/v1/danh-muc/tree?loaiDanhMuc=LINH_VUC_KINH_DOANH` 200 + `count=0`, `sample=[]`. `GET /api/v1/doanh-nghieps/{id}` keys vẫn có `linhVucKinhDoanh` (string đơn), KHÔNG có `linhVucIds[]`.
-> **Re-test:** 2026-05-08 R7 — ❌ STILL OPEN. Cùng kết quả R8.
 
 ### Mô tả
 
@@ -388,7 +390,7 @@ Khi pre-flight audit form Sửa DN qua MCP, BE trả `/api/v1/danh-muc/tree?loai
 
 ### Bằng chứng
 
-![BUG-FR07-DEPLOY-001 — Form Sửa DN field Lĩnh vực KD textbox + DN-BCT-001 detail](r7-7-4-edit-form-fields.png)
+![BUG-FR07-DEPLOY-001 — Form Sửa DN field Lĩnh vực KD textbox + DN-BCT-001 detail](image/r7-7-4-edit-form-fields.png)
 
 ```json
 // GET /api/v1/danh-muc/tree?loaiDanhMuc=LINH_VUC_KINH_DOANH
@@ -409,8 +411,6 @@ So sánh: `LOAI_DOANH_NGHIEP` tree trả 5 record. `TINH_THANH` tree trả 63 re
 ## ~~BUG-FR07-DEPLOY-002~~ [CLOSED] — UI Lĩnh vực KD trên form Sửa + filter danh sách vẫn là textbox (chưa multi-select)
 
 > **Re-test:** 2026-05-10 01:35:00 R9 — ✅ PASS (Closed). Account `qtht_01`. Filter `/doanh-nghiep/danh-sach` "Lĩnh vực KD" + form ĐK DN multi-select đều render `ant-select-multiple` với placeholder "Chọn một hoặc nhiều lĩnh vực" + 10 visible options. Filter API `GET /doanh-nghieps?linhVucIds=<lv1>&linhVucIds=<lv2>` 200 + accept array param. Evidence: [r9-2026-05-10-fr07-filter-multiselect-10options.png](image/r9-2026-05-10-fr07-filter-multiselect-10options.png).
-> **Re-test:** 2026-05-09 19:55:00 R8 — ❌ STILL OPEN. Filter `/doanh-nghiep/danh-sach` "Lĩnh vực KD" textbox; form Sửa DN-BCT-001 field "Lĩnh vực kinh doanh" textbox. So sánh cùng form: Loại DN/Quy mô/Ngành nghề (combobox listbox) + Tỉnh/Thành (`select single`) — đều select.
-> **Re-test:** 2026-05-08 R7 — ❌ STILL OPEN. Cùng kết quả R8.
 
 ### Mô tả
 
@@ -438,8 +438,8 @@ UI form Sửa DN field "Lĩnh vực kinh doanh" render là `<input type="text">`
 
 ### Bằng chứng
 
-![BUG-FR07-DEPLOY-002 — Form Sửa DN-BCT-001: Lĩnh vực kinh doanh là textbox](r7-7-4-edit-form-fields.png)
-![BUG-FR07-DEPLOY-002 — Filter danh sách DN: Lĩnh vực KD là textbox](r7-7-4-baseline-list.png)
+![BUG-FR07-DEPLOY-002 — Form Sửa DN-BCT-001: Lĩnh vực kinh doanh là textbox](image/r7-7-4-edit-form-fields.png)
+![BUG-FR07-DEPLOY-002 — Filter danh sách DN: Lĩnh vực KD là textbox](image/r7-7-4-baseline-list.png)
 
 ```text
 // Form Sửa: textbox "Lĩnh vực kinh doanh"

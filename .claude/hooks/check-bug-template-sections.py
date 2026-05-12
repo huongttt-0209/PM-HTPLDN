@@ -24,11 +24,14 @@ FORBIDDEN_HEADINGS = [
     "Đề xuất dev fix",
     "SRS verification",
     "Phân biệt module",
+    "Retest Summary",
+    "Re-test Summary",
 ]
 
 # Match `### Tác động ...` or `**Tác động:**` or `**Đề xuất fix:**`
+# Also blocks `## R{N} Retest Summary` (footer history sections — feedback_bug_report_no_retest_summary.md).
 FORBIDDEN_REGEX = re.compile(
-    r"^(?:### |\*\*)(?:Tác động(?: downstream)?|Đề xuất(?: dev)? fix|SRS verification|Phân biệt module)(?:[:\s]|$|\*\*)",
+    r"^(?:### |##\s*R\d+\s+|\*\*)(?:Tác động(?: downstream)?|Đề xuất(?: dev)? fix|SRS verification|Phân biệt module|Re-?test Summary)(?:[:\s]|$|\*\*)",
     re.MULTILINE,
 )
 

@@ -19,6 +19,18 @@ Sau khi BUG-DKT-FE-REGRESSION-01 (R9) closed (action buttons render đầy đủ
 1. Modal **Cập nhật** ĐKT không pre-fill `cachTao` từ record → form luôn invalid → bước Sửa BLOCKED qua UI.
 2. Modal **Tạo** ĐKT thiếu field UI chọn câu hỏi (`cauHoiIds`) → submit POST 422.
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 0        | 2     | 0      | 0     | 0       | 2      | 0    |
+
+> **Quy tắc đếm:**
+> - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
+> - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
+> - `Closed` + `Open` = `Tổng`. `Open` đếm Status ∈ {Open, Reopen}; `Closed` đếm Status ∈ {Closed, ~~closed~~}.
+> - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
+
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |

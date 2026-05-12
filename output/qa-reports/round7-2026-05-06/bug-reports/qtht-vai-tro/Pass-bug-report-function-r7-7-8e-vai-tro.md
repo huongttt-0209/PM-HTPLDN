@@ -18,9 +18,9 @@ Phát hiện **7** lỗi khi test FR-VIII-14 + SCR-VIII-02 trên 11 TC (TC01-TC1
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 7    | 1        | 2     | 2      | 2     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 6    | 1        | 2     | 1      | 2     | 0       | 6      | 0    |
 
 ## Bug Summary Table
 

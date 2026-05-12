@@ -303,7 +303,12 @@
       "mcp__chrome-devtools__list_pages",
       "mcp__chrome-devtools",
       "mcp__notebooklm-mcp",
-      "Edit(/.claude/skills/task-done/**)"
+      "Edit(/.claude/skills/task-done/**)",
+      "Skill(codex)",
+      "Skill(codex:*)",
+      "Bash(mkdir -p .claude/migration)",
+      "Bash(python3 .claude/scripts/verify-bug-reports.py --queue output/qa-reports/round7-2026-05-06/bug-reports/)",
+      "Bash(python3 .claude/scripts/verify-bug-reports.py --csv output/qa-reports/round7-2026-05-06/bug-reports/)"
     ],
     "deny": [
       "Bash(rm -rf / *)",

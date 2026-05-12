@@ -18,9 +18,9 @@ Phát hiện **6** lỗi vi phạm SRS v3.5 FR-VII (Thay đổi 1 + 3 BR mới) 
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 6    | 2        | 2     | 2      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 6    | 2        | 2     | 2      | 0     | 0       | 6      | 0    |
 
 ### Status sau R8 lần 7 (2026-05-10)
 

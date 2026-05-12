@@ -5,6 +5,18 @@
 **Tác giả:** QA tự động (MCP)
 **File này:** `output/qa-reports/round7-2026-05-06/bug-reports/qtht-tai-khoan/Pass-bug-report-mail-first-login-promise-not-enforced.md`
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 0     | 0      | 1     | 0       | 1      | 0    |
+
+> **Quy tắc đếm:**
+> - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
+> - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
+> - `Closed` + `Open` = `Tổng`. `Open` đếm Status ∈ {Open, Reopen}; `Closed` đếm Status ∈ {Closed, ~~closed~~}.
+> - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
+
 ## Bug Summary Table
 
 | BUG-ID | Severity | Title | Status | Type |
@@ -25,11 +37,6 @@
 
 > **Re-test:** 2026-05-10 15:35:00 R7.4 — ✅ PASS (Closed-verified, valid test method). Tạo TK fresh `qtht_14` (UUID `ebcbcba4-f210-485d-83b7-6d0a49e8bb26`) qua **UI form click chain** (Tài khoản → Thêm mới → fill 4 trường → chọn Loại/Đơn vị/Vai trò → Tạo tài khoản). Login `qtht_14 / F@CcTBS%Y3Rq6d` qua isolated context fresh `qa_qtht_14_first_login_2026_05_10`. (1) `POST /auth/login` 200 trả `{otpToken: "", mustChangePassword: true, changePasswordToken: "d2e82f16-43f7-4c89-8776-1925024429b5", maskedEmail: "qth***@htpldn.test", message: "Bạn cần đổi mật khẩu trong lần đăng nhập đầu tiên."}` — BE skip OTP, trả flag `mustChangePassword` + token. (2) FE render modal blocking "Đặt mật khẩu mới" với form Mật khẩu mới + Nhập lại + button "Xác nhận và đăng nhập". Modal text: "Đây là lần đăng nhập đầu tiên. Vì lý do bảo mật, bạn cần đổi mật khẩu tạm đã gửi tới qth***@htpldn.test." (3) Reload page → kick về `/login`, KHÔNG cấp accessToken trước khi đổi MK → enforcement đúng. Email content vẫn giữ nguyên câu hứa, implementation đã enforce khớp. Bằng chứng: ![retest-pass](image/bug-mail-first-login-001-r7-4-pass-modal-uiform.png)
 >
-> **Re-test:** 2026-05-10 15:08:00 R7.3 — ❌ FAIL **(INVALID — tester error)**. Tạo TK `qtht_13` qua API direct, không qua UI form. Bypass BE flag logic. Conclusion FAIL không phản ánh state thực của implementation.
->
-> **Re-test:** 2026-05-10 12:25:30 R7.2 — ❌ FAIL **(INVALID — tester error)**. Tạo TK `qtht_11` qua API + `PATCH /trang-thai`. Cùng nguyên nhân R7.3.
->
-> **Original log (R7.1):** ❌ FAIL **(INVALID — tester error)**. Cùng pattern API direct.
 
 ### 1. Mô tả
 

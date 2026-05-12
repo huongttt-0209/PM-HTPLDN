@@ -24,12 +24,9 @@ R7.6.5 R1 (2026-05-08) phát hiện **2 bug NEW**, đều Major. UI tab Đợt b
 
 ### Severity breakdown
 
-| Round | Tổng | Critical | Major | Medium | Minor | Trivial | Closed |
-|-------|------|----------|-------|--------|-------|---------|--------|
-| R1 2026-05-08 | 2 | 0 | 2 | 0 | 0 | 0 | 0 |
-| R2 2026-05-09 (sớm) | 2 | 0 | 2 (UI-001 + API-001) | 0 | 0 | 0 | 0 |
-| R3 2026-05-09 (reconcile) | 2 | 0 | 1 (API-001) | 0 | 1 (UI-001 close-candidate) | 0 | 0 |
-| **R4 2026-05-11 (re-verify)** | **2** | **0** | **0** | **0** | **0** | **0** | **2** (cả UI-001 + API-001 Closed-verified) |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 0        | 1     | 0      | 1     | 0       | 2      | 0    |
 
 **R4 verdict:** Cả 2 bug Closed-verified.
 - **BUG-DOTBC-API-001:** Mis-diagnosis fixed — endpoint thực ra TỒN TẠI ở pattern `POST /dot-bao-caos/tong-hop` (resource-level, batch nhận `{baoCaoIds: [...]}`), KHÔNG phải sub-resource `POST /{id}/tong-hop`. R3 probe miss vì chỉ test sub-resource. Evidence R4: 2 TW DOT (DOT-1-1 + DOT-4-1) đều advance `DA_DUYET_KQ → DA_TONG_HOP` qua endpoint này (DOT-1-1 chính tay R4 advance via CT-038 end-to-end PASS; DOT-4-1 đã advance từ 2026-05-10 trước). TW CT path KHÔNG deadlock.

@@ -22,9 +22,9 @@
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 2    | 1        | 1     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 1        | 1     | 0      | 0     | 0       | 2      | 0    |
 
 > **Status hiện tại R10b 2026-05-10 11:00:** 2/2 đóng (BUG-KHOQA-001 + BUG-KHOQA-002). 0 bug Open trong file này.
 
@@ -41,11 +41,8 @@
 
 > **Re-test 2026-05-10 11:00:00 R10b:** ✅ **PASS (Closed-verified — FE deploy fix giữa R10 20:06 → R10b 11:00, delta ~15h).** Account `cb_nv_tw_08` isolated context `qa_only_r10_kho_qa_verify`. Click row `QA-20260508-0002` (Lao động, state `Hết hiệu lực`) → drawer mở, header có button `[play-circle Kích hoạt hiệu lực]` (uid=35_7) ngay cạnh nút Đóng. Click button → confirm dialog `"Câu hỏi sẽ được kích hoạt lại và hiển thị cho người dùng. Tiếp tục?"` → click `[Đồng ý]` → drawer đóng + table refresh: row QA-20260508-0002 chuyển TRẠNG THÁI `Hết hiệu lực`→`Đã duyệt`, HIỆU LỰC `Không`→`Có`. Pool re-verify API `GET /api/v1/kho-cau-hois?pageSize=100` total=14 unchanged, distribution shifted DA_DUYET 9→10 / HET_HIEU_LUC 2→1. T8 transition functional 100% qua UI thuần. Bug Closed-verified, FE drawer footer fix deployed. Bằng chứng: [r7-4-d3-r10b-bug-khoqa-002-button-kich-hoat-present.png](../../workflow/kho-qa/r7-4-d3-r10b-bug-khoqa-002-button-kich-hoat-present.png) + [r7-4-d3-r10b-bug-khoqa-002-t8-transition-pass.png](../../workflow/kho-qa/r7-4-d3-r10b-bug-khoqa-002-t8-transition-pass.png).
 
-> **Re-test 2026-05-09 20:06:36 R10:** ❌ **STILL OPEN — lần 4 reproduce.** Account `cb_nv_tw_08` (slot _08 theo user request, login PASS lần 1 không lock không 429). Click row `QA-20260508-0002` (Lao động, state `Hết hiệu lực`) → drawer mở. DOM `.ant-drawer-open`: `buttonCount=1`, button = `[{text:"", aria:"Đóng", class:"ant-drawer-close"}]`, `.ant-drawer-footer` = NOT EXIST, regex `/k[ií]ch hoạt|kh[ôo]i phục|mở lại|reactivate|restore/i` quét toàn drawer = `0 hits`. Đối chứng cùng round cùng account: drawer DA_DUYET QA-20260508-0005 → `buttonCount=3`, buttons = `[{aria:"Đóng"}, {text:"Công khai"}, {text:"Hết hiệu lực"}]` → T7 button hiện diện đúng spec, drawer template build đúng. Console errors = 0 messages cả 2 drawer interaction. **Bug stable cross-account (cb_nv_tw_02 + cb_nv_tw_08), cross-round (R7+R8+R9+R10), cross-record (QA-20260507-0002 + QA-20260508-0002). Phân loại Rule 9 = APP/FE BUG — không phải selector/account/env/throttle. Ngừng burn round, escalate dev fix FE drawer footer.**
 
-> **Re-test 2026-05-09 17:14:00 R9:** ❌ **STILL OPEN**. Account `cb_nv_tw_08` (session-pinned slot _08, fallback từ Rule 7 sau khi xác minh _08 đã activate ở BE — login API trả OTP token thành công, BUG ban đầu là 429 throttle do probe đa bước). Click row `QA-20260508-0002` (Lao động, state `Hết hiệu lực`) → drawer mở title "Câu hỏi QA-20260508-0002". Verify DOM `.ant-drawer-open`: chỉ 1 button `aria-label="Đóng"` class `ant-drawer-close`, `.ant-drawer-footer` = NO_FOOTER, không có button `Kích hoạt | Hiệu lực | Khôi phục | Mở lại`. So sánh đối chứng cùng round: drawer DA_DUYET QA-20260508-0005 cùng UI có 3 button [Đóng / Công khai / **Hết hiệu lực**] → **T7 (DA_DUYET → HET_HIEU_LUC) vẫn build, T8 (HET_HIEU_LUC → DA_DUYET) MISSING reciprocal button**. Pattern reproduce 3 round liên tiếp (R7 + R8 + R9) với 2 account khác nhau (`cb_nv_tw_02` ở R7/R8 + `cb_nv_tw_08` ở R9).
 
-> **Re-test 2026-05-08 R8:** ❌ **STILL OPEN**. Account `cb_nv_tw_02`. Click row `QA-20260508-0002` (state `Hết hiệu lực`) → modal mở. Verify DOM: `.ant-drawer` chỉ có 1 button (close X), `.ant-modal-footer` không tồn tại, `visibleActionButtons` filter `/Kích hoạt|Hiệu lực|Duyệt|Sửa/i` trả về `[]`. T8 `HET_HIEU_LUC → DA_DUYET` vẫn không thực hiện được qua UI. Câu hỏi `QA-20260507-0002` vẫn kẹt state `Hết hiệu lực` sau 2 round (R7 + R8).
 
 ### Mô tả
 

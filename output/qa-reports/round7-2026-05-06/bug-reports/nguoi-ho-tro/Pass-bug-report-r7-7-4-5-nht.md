@@ -22,6 +22,18 @@ Phát hiện **5** lỗi trong R7.7.4.5 NHT functional. Sau BA chốt 2026-05-09
 |------|----------|-------|--------|-------|---------|--------------|----------------|
 | 0    | 0        | 0     | 0      | 0     | 0       | 3            | 2              |
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 5    | 0        | 3     | 0      | 2     | 0       | 5      | 0    |
+
+> **Quy tắc đếm:**
+> - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
+> - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
+> - `Closed` + `Open` = `Tổng`. `Open` đếm Status ∈ {Open, Reopen}; `Closed` đếm Status ∈ {Closed, ~~closed~~}.
+> - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
+
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
@@ -48,32 +60,6 @@ Phát hiện **5** lỗi trong R7.7.4.5 NHT functional. Sau BA chốt 2026-05-09
 
 ## BUG-NHT-003 history (giữ lịch sử cho audit trail)
 
-> **Re-test 2026-05-09 17:42:** ⚠️ Re-classify Major P0 → P1 sau khi click thử thật qua MCP. BE consume token OK + chuyển HOAT_DONG. Bug nằm ở mail template — host literal `localhost:3000` thay vì lấy từ env config public URL → user thực tế (mail mở trên máy không phải BE server) không kích hoạt được.
->
-> **Re-test 2026-05-09 17:55 (R9 verify dev fix claim):** ⚠️ **Partial fix — KEEP OPEN**. Tạo mới NHT-BTP-TW-0006 `nht_r9_bug003_v2` qua POST `/api/v1/nguoi-ho-tro` 201 → mail mới gửi 10:42:36 UTC. Mail body link mới: `http://103.172.236.130/auth/verify-email?token&#x3D;7dac4bf9-494e-417e-a8fe-17b67d43cc61`.
-> - ✅ Host `localhost` → `103.172.236.130` (FIXED).
-> - ❌ **REGRESSION mới**: mất `:3000` → URL hit port 80 dead (`curl http://103.172.236.130/auth/verify-email` → connection timeout 000; chỉ port 3000 mới có app `200`). User click vẫn fail.
-> - ❌ URL HTML entity `&#x3D;` chưa fix (browser parse được nhưng raw URL share/copy bị break).
-> - ❌ Link vẫn raw text trong `<p>`, không wrap `<a href>`.
->
-> Net result: mục tiêu spec (link click được) vẫn fail. Severity giữ Major P1.
->
-> **Re-test 2026-05-09 19:50 (R10 verify dev fix claim 2):** ⚠️ **Partial fix improved — KEEP OPEN**. Tạo mới NHT-BTP-TW-0007 `nht_r10_bug003` qua UI cb_nv_tw_03 → POST `/api/v1/nguoi-ho-tro` thành công → mail mới gửi 12:50:51 UTC (19:50:51 UTC+7). Mail body link mới: `<a href="http://103.172.236.130/auth/verify-email?token=129ee2df-81b4-44ce-b0da-4cf6d7188501">http://103.172.236.130/auth/verify-email?token=129ee2df-81b4-44ce-b0da-4cf6d7188501</a>`.
-> - ✅ Host `103.172.236.130` (giữ fix R9).
-> - ✅ **NEW FIX**: URL encoding `=` raw thay vì `&#x3D;` (3 token query string sạch).
-> - ✅ **NEW FIX**: Link wrap `<a href="...">` thay vì raw text trong `<p>` — user 1-click được trên mail client.
-> - ❌ **VẪN CÒN**: mất port `:3000` → URL `http://103.172.236.130/auth/verify-email?token=...` hit port 80 dead. Verified: `curl http://103.172.236.130/...` → HTTP 000 (connection refused); browser navigate raw link → `ERR_CONNECTION_REFUSED`. Workaround port 3000 vẫn OK: `curl http://103.172.236.130:3000/...` → HTTP 200, BE consume token → state HOAT_DONG.
->
-> Improvement R9 → R10: 1/4 fix → 3/4 fix (chỉ còn 1 issue port `:3000`). Net result: link click vẫn fail user-facing → severity giữ Major P1. **Recommend dev fix template thêm `:${PORT}` (env config) sau host.**
->
-> **Re-test 2026-05-09 21:15 (R11 verify dev fix claim 3):** ❌ **KHÔNG fix gì thêm — KEEP OPEN**. Tạo mới NHT-BTP-TW-0008 `nht_r11_bug003` qua UI cb_nv_tw_03 → POST `/api/v1/nguoi-ho-tro` thành công → mail mới gửi 14:15:58 UTC (21:15:58 UTC+7). Mail body link mới: `<a href="http://103.172.236.130/auth/verify-email?token=c6078e81-44e5-4bed-b641-0d845fe3621f">http://103.172.236.130/auth/verify-email?token=c6078e81-44e5-4bed-b641-0d845fe3621f</a>`.
-> - ✅ Host `103.172.236.130` (giữ R10).
-> - ✅ URL encoding `=` raw (giữ R10).
-> - ✅ Anchor wrap `<a href="...">` (giữ R10).
-> - ❌ **VẪN MẤT port `:3000`** — IDENTICAL R10. Verified: `curl http://103.172.236.130/auth/verify-email?token=c6078e81-...` → HTTP 000 (ERR_CONNECTION_REFUSED 9.8ms); browser navigate raw link → chrome-error page `chrome-error://chromewebdata/`. Workaround port 3000: `curl http://103.172.236.130:3000/...` → HTTP 200 19ms; navigate qua port 3000 → BE consume token → NHT-BTP-TW-0008 state CHO_KICH_HOAT → HOAT_DONG ✅.
->
-> **Net result R11 = R10 (3/4 fix).** Dev claim fix lần 3 không produce thay đổi mail template — có thể commit chưa deploy hoặc fix không đúng chỗ. Severity giữ Major P1. **Recommend dev:** verify deployment status + grep mail template config tìm `APP_URL`/`FRONTEND_URL` env var, đảm bảo concat `:${PORT}` (hoặc dùng full `APP_URL` đã chứa port).
->
 > **Re-test 2026-05-09 22:03 (R12 verify dev fix claim 4 — account mới `cb_nv_bn_01` BKH + fresh isolated context + clear cache theo yêu cầu user):** ❌ **VẪN KHÔNG fix gì — KEEP OPEN.** Tạo mới NHT-BKH-0002 `nht_r12_bug003_bn` qua UI cb_nv_bn_01 (CB_NV_BN, BKH) → POST `/api/v1/nguoi-ho-tro` reqid=187 → 201 Created → mail mới gửi 15:03:43 UTC (22:03:43 UTC+7). Mail body link mới: `<a href="http://103.172.236.130/auth/verify-email?token=28f13542-e8e3-42be-827e-c1d82433cb6a">http://103.172.236.130/auth/verify-email?token=28f13542-e8e3-42be-827e-c1d82433cb6a</a>`.
 > - ✅ Host `103.172.236.130` (giữ R10/R11).
 > - ✅ URL encoding `=` raw (giữ R10/R11).

@@ -20,10 +20,16 @@ Phát hiện **[N]** lỗi có SRS reference cụ thể trong quá trình test [
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| N    | 0        | 0     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| N    | 0        | 0     | 0      | 0     | 0       | 0      | 0    |
 
+> **Quy tắc đếm:**
+> - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
+> - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
+> - `Closed` + `Open` = `Tổng`. `Closed` đếm Status ∈ {Closed, ~~closed~~}; `Open` đếm phần còn lại (Open, Reopen, Defer, Withdrawn — mọi bug chưa đóng).
+> - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
+>
 > **Lưu ý:** Bảng `Test result breakdown theo Type` (rollup multi-module) đặt trong `functional-test-report` / `workflow-test-report`, KHÔNG trong file bug. File bug chỉ tập trung Severity + Bug Summary Table + Thứ tự fix đề xuất.
 
 ## Bug Summary Table

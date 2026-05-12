@@ -20,7 +20,64 @@ Pool VV: 31 records (R18 stable — 28 BTP-TW + 3 STP-AG/cross-donVi).
 
 ---
 
-## R18 Phase 2 — Reverify audit + unblock TC phân công 3 loại (2026-05-12 01:00 → 01:15) (LATEST)
+## R19c-followup — Phân công + Cập nhật KQ + Hoàn thành + Nhận/Từ chối phân công (2026-05-12 20:40 → 20:55) (LATEST)
+
+Tester: `cb_nv_tw_03` (CB NV cấp TW) + `tvv_r11_mailfix` (TVV) — isolatedContext `vvr19c-cbtw-20260512-2040` + `vvr19c-tvv-20260512-2040`. Tool: Chrome DevTools MCP UI click chain + API verify. Scope: 5 TC follow-up sau dev fix phân công + cập nhật kết quả (audit identified unblocked TC).
+
+### Verdict R19c-followup
+
+✅ **3/5 Đạt · ❌ 1 Lỗi mới (BUG-VV-R19c-001 FE button missing) · 🚫 1 Block do permission gap còn Open + state precondition không reachable**
+
+### Accounts dùng
+
+- `cb_nv_tw_03` (CB NV TW) — VV-013 phân công cá nhân (3 loại: TVV / NHT / Tổ chức tham chiếu R18-P2 đã có).
+- `tvv_r11_mailfix` (TVV) — VV-014/015/016/033 (TVV mở chi tiết VV + Chấp nhận phân công + cập nhật kết quả + hoàn thành).
+
+### Bảng trạng thái TC (snapshot R19c-followup — LATEST 2026-05-12 20:55:00)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| VV-013 | CB NV phân công cá nhân cho VV state DANG_KIEM_TRA | ✅ Đạt | R19c-followup | TVV `hương tvv1` → DA_PHAN_CONG + LICHSU `PHAN_CONG` |
+| VV-014 | TVV mở chi tiết VV được phân công, accordion + timeline render đầy đủ | ✅ Đạt | R19c-followup | tvv_r11_mailfix mở /vu-viec/{id} → 200 OK, 9 accordion section |
+| VV-015 | TVV nhấn `[Cập nhật kết quả]` → form/modal → submit | ❌ Lỗi | R19c-followup | FE thiếu button (BUG-VV-R19c-001); BE `/cap-nhat-ket-qua` 201 OK |
+| VV-016 | TVV (hoặc CB NV) nhấn `[Hoàn thành]` → modal confirm → state HOAN_THANH | 🚫 Không test được | R19c-followup | Block bởi VV-015 + TVV thiếu `trinh-phe-duyet` perm (PERMISSION-GAP-01 Open) |
+| VV-033 | TVV Chấp nhận phân công → DANG_XU_LY | ✅ Đạt | R19c-followup | `tvv_r11_mailfix` click [Chấp nhận] → confirm → DA_PHAN_CONG→DANG_XU_LY + LICHSU `XAC_NHAN_PHAN_CONG` |
+| **Tổng** | **5 TC** | ✅ 3 · ❌ 1 · 🚫 1 | | — |
+
+### Bảng TC chưa chạy được — cần làm gì để chạy (R19c-followup)
+
+Hiện tại còn **2 TC** chưa chạy được — chia **2 nhóm**: 1 chờ dev FE fix (nhóm B) · 1 dependency upstream (nhóm E).
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| VV-015 | FE không render button `[Cập nhật kết quả]` cho TVV ở state DANG_XU_LY dù permission đủ | Dev FE thêm action button vào VV detail header / section "Kết quả hỗ trợ" theo FR-V.I-15 | Dev FE |
+| VV-016 | TVV chưa update được KQ (chặn bởi VV-015) + thiếu `trinh-phe-duyet_vu_viec` perm để chuyển CHO_PHE_DUYET; chưa có VV state DA_DUYET để CB NV hoàn thành | Fix VV-015 + BE add `trinh-phe-duyet_vu_viec` perm cho TVV (đang Open BUG-VV-FN-TVV-PERMISSION-GAP-01) | Dev FE + Dev BE |
+
+### Method R19c-followup
+
+1. **VV-013** — `cb_nv_tw_03` mở VV-BTP-TW-20260512-001 (state DANG_KIEM_TRA, LV Hành chính). Click [Phân công] → modal hiện → radio "Cá nhân" → click dropdown → pool 3 options (1 TVV + 2 NHT, đúng filter LV Hành chính cấp TW). Pick `[TVV] hương tvv1 (TVV-BTP-TW-0029)` → fill ghi chú → Xác nhận. POST 201. GET sau 4s: `trangThai=DA_PHAN_CONG` + `version=3` + `loaiDoiTuong=CA_NHAN` + `nguoiXuLy.hoTen="hương tvv1"` + `ngayPhanCong` set + LICHSU `[PHAN_CONG, KIEM_TRA, TAO_VV]` ✓. Evidence: [`r19c-followup-vv013-pool-dropdown-204215.png`](../../bug-reports/vu-viec/image/r19c-followup-vv013-pool-dropdown-204215.png) + [`r19c-followup-vv013-da-phancong-204430.png`](../../bug-reports/vu-viec/image/r19c-followup-vv013-da-phancong-204430.png).
+
+2. **VV-014** — Seed prep: `cb_nv_tw_03` walk VV-QA-R9-HTK-001 (DA_TIEP_NHAN → DANG_KIEM_TRA via Kiểm tra hồ sơ → DA_PHAN_CONG via Phân công cho `[TVV] TVV R11 Verify Mail Fix`). Switch sang TVV page (isolatedContext `vvr19c-tvv-20260512-2040`). Navigate `/vu-viec/aad90001-0000-4000-8000-000000000001` → **page render 200 OK đầy đủ**: header với state badge "Đã phân công" + breadcrumb + stepper 10 trạng thái + accordion 9 section (Thông tin DN / Nội dung / Tài liệu / Kết quả kiểm tra / Phân công / Kết quả hỗ trợ / Phê duyệt / Đánh giá / HĐ liên kết) + Dòng thời gian 2 entries (Phân công + Kiểm tra). KHÔNG 403. **TVV-DETAIL-403-01 đóng R18-P2 vẫn confirmed.** Evidence: [`r19c-followup-vv014-tvv-detail-view-204800.png`](../../bug-reports/vu-viec/image/r19c-followup-vv014-tvv-detail-view-204800.png).
+
+3. **VV-015** — `tvv_r11_mailfix` reload page sau khi Chấp nhận phân công (state DANG_XU_LY, version 4, TVV là người xử lý). Quan sát header action area + accordion "Kết quả hỗ trợ" (đã auto-expand) → **0 button hành động** nào để TVV cập nhật kết quả. DOM grep "Cập nhật kết quả" chỉ thấy 1 chỗ — `span.ant-tag` trong timeline event (label của action đã ghi từ BE call), không phải button click được. Probe BE: POST `/cap-nhat-ket-qua` body `{noiDungKetQua:"R19c test"}` → **201 OK + DU_THAO + LICHSU `CAP_NHAT_KQ` ghi**. Permission TVV qua `/auth/me` trả 20 perm gồm `cap-nhat-ket-qua_ket_qua_vu_viec` đủ điều kiện. **Verdict: FE thuần — không render button cho role TVV ở state DANG_XU_LY.** Log [BUG-VV-R19c-001](../../bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md#bug-vv-r19c-001--tvv-không-thấy-button-hành-động-cập-nhật-kết-quả--trình-phê-duyệt--hoàn-thành-trong-chi-tiết-vv-được-phân-công). Evidence: [`r19c-followup-vv015-016-tvv-no-action-buttons-204920.png`](../../bug-reports/vu-viec/image/r19c-followup-vv015-016-tvv-no-action-buttons-204920.png).
+
+4. **VV-016** — Không thực hiện được. SRS FR-V.I-16 `srs-fr-05-vu-viec.md:1110` quy định actor là **CB NV** chuyển VV `DA_DUYET → HOAN_THANH`. Precondition cần: TVV cập nhật kết quả + Trình phê duyệt → CB NV duyệt → DA_DUYET. Cascade block: (a) BUG-VV-R19c-001 chặn TVV cập nhật kết quả qua UI; (b) BUG-VV-FN-TVV-PERMISSION-GAP-01 chặn `/trinh-phe-duyet` 403 cho TVV. Không có VV state DA_DUYET fresh để CB NV hoàn thành. Mark 🚫.
+
+5. **VV-033** — `tvv_r11_mailfix` mở VV-QA-R9-HTK-001 state DA_PHAN_CONG → header có 2 button `[Chấp nhận]` + `[Từ chối]`. Click `[Chấp nhận]` → modal confirm "Chấp nhận phân công — Bạn xác nhận tham gia hỗ trợ vụ việc này?" → click Chấp nhận. POST 200. GET sau 4s: `trangThai=DANG_XU_LY` + `version=4` + LICHSU `[XAC_NHAN_PHAN_CONG, PHAN_CONG, KIEM_TRA]` ✓. Happy path Chấp nhận PASS. Branch Từ chối chưa test (cần thêm VV fresh DA_PHAN_CONG, defer). Evidence: [`r19c-followup-vv033-tvv-nhan-phancong-204850.png`](../../bug-reports/vu-viec/image/r19c-followup-vv033-tvv-nhan-phancong-204850.png).
+
+### Pool R19c-followup update (snapshot 20:55:00)
+
+- VV-BTP-TW-20260512-001 → DA_PHAN_CONG cho `hương tvv1` (LV Hành chính, cấp TW) — new.
+- VV-QA-R9-HTK-001 → DANG_XU_LY do TVV `tvv_r11_mailfix` xử lý — new (advance từ DA_TIEP_NHAN R19c).
+- DRAFT result ghi vào VV-QA-R9-HTK-001 (probe BE) — KQ entity tạo qua API, không phải qua UI.
+
+### LICHSU enum coverage cumulative sau R19c-followup
+
+15/18 enum (giữ nguyên R18-P2 ≈ 83%). VV-QA-R9-HTK-001 timeline cumulative: `KIEM_TRA → PHAN_CONG → XAC_NHAN_PHAN_CONG → CAP_NHAT_KQ` (4 enum đầy đủ phần đầu lifecycle). Miss spec: `TIEP_NHAN/YEU_CAU_BO_SUNG/TU_CHOI/TU_CHOI_DUYET/MO_LAI` — chưa cover branch trong R19c-followup.
+
+---
+
+## R18 Phase 2 — Reverify audit + unblock TC phân công 3 loại (2026-05-12 01:00 → 01:15)
 
 Tester: `cb_nv_tw_03` (CB NV cấp TW) + `tvv_r11_mailfix` (TVV) isolatedContext `reverify_r18_2026_05_12` + `reverify_r18_tvv_2026_05_12`. Tool: Chrome DevTools MCP UI click chain + API verify. Scope: chạy 3 TC phân công unblock theo audit `.agents/skills/qa-bugfix-reverify-audit` + reverify 5 Open bug.
 

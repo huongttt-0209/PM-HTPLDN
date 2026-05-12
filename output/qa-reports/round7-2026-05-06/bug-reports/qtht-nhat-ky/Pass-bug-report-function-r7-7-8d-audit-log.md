@@ -18,9 +18,9 @@ Phát hiện **6** lỗi khi test FR-VIII-28 Nhật ký hệ thống.
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 6    | 0        | 2     | 2      | 2     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 6    | 0        | 2     | 2      | 2     | 0       | 6      | 0    |
 
 ## Bug Summary Table
 

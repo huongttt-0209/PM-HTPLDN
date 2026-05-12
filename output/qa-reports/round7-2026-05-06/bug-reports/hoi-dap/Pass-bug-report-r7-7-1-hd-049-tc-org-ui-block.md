@@ -13,6 +13,14 @@
 | **Method** | UI-only via Chrome browser automation, no API calls |
 | **Account** | `cb_nv_tw_04` |
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 1     | 0      | 0     | 0       | 1      | 0    |
+
+> **Quy tắc đếm:** Single-bug file (1 bug Major, Closed-verified). `Closed` đếm Status ∈ {Closed, Closed-verified, ~~closed~~}; `Open` đếm phần còn lại (Open, Reopen, Defer, Withdrawn).
+
 > **Re-test:** 2026-05-10 03:20:00 R10c — ✅ PASS (Closed-verified). Same record HD-20260509-004 (DANG_XU_LY, version=4). Mở modal Phân công → click segment "Tổ chức tư vấn" → section "Tổ chức tư vấn (HOAT_DONG)" render đúng table headers `Mã tổ chức / Tên tổ chức / Lĩnh vực / Người đại diện` với **7 TC TV** (TC-BTP-TW-0001..0005, 0007, 0008) — match BE response. 2 TC cover Doanh nghiệp: TC-0001 Alpha + TC-0002 Beta. Click TC-0001 Alpha → section "Tư vấn viên chịu trách nhiệm" cấp 2 render đúng với 6 TVV của TC (API `GET /api/v1/tu-van-viens?toChucId=beb25e6f-...&trangThai=HOAT_DONG&pageSize=100&page=1` reqid=240). Validation: button [Phân công] disabled khi TC=null TVV=null + TC=selected TVV=null → enabled khi cả 2 selected → đúng spec FR-II-06.
 >
 > **Re-test:** 2026-05-10 01:25:24 R10b — ❌ REPRODUCES (Open). Same record HD-20260509-004 (cấp DANG_XU_LY giờ, version=4). Mở modal Phân công → click segment "Tổ chức tư vấn" → segmented control selected="Tổ chức tư vấn" nhưng table headers vẫn `Họ tên/Email/Workload` (table cá nhân) với 40 rows. API `GET /api/v1/to-chuc-tu-vans?trangThai=HOAT_DONG&pageSize=100&page=1` reqid=232 trả 200 với 7 TC TV active (2 cover linhVuc Doanh nghiệp). FE không bind data API vào UI section "Tổ chức tư vấn". → root cause: FE bug (binding/render), không phải BE. Severity giữ Major P0.

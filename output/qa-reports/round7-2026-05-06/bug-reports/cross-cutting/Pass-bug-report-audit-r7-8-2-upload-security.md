@@ -18,9 +18,9 @@ Phát hiện **1 bug Major (security)** sau khi BE bỏ ClamAV theo SRS update i
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 1    | 0        | 1     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 1     | 0      | 0     | 0       | 1      | 0    |
 
 ## Bug Summary Table
 
@@ -34,7 +34,6 @@ Phát hiện **1 bug Major (security)** sau khi BE bỏ ClamAV theo SRS update i
 
 > **Re-test 2026-05-11 R9 15:40:28:** ✅ **CLOSED (verified)**. Account `qtht_10` (isolatedContext). Replay PE bytes (`4D 5A 90 00...`) claim `application/pdf` qua `POST /api/v1/files/upload` → response **`400 ERR-VAL-FILE-04 "Nội dung file không khớp định dạng. Vui lòng tải lên file gốc đúng loại đã chọn"`** (reqid `07ad89d6-695b-41ef-8124-ac7547b587bd`, timestamp `2026-05-11T08:40:28.713Z`). Magic-byte sniff đã được thêm. Bonus: text bytes claim `.jpg` cũng reject với `ERR-VAL-FILE-04`. Real PDF + ZIP magic vẫn đi qua content layer (đúng — magic match extension), fail tại permission. Whitelist update thêm `.gif`. Commit ref dev-report §11: `c304b8fc`.
 
-> **Re-test 2026-05-08 R8:** ❌ **STILL OPEN**. Account `cb_nv_tw_02`. Replay test PE bytes (`4D 5A 90 00...`) claim `application/pdf` qua `POST /api/v1/files/upload` → response `403 ERR-PERM-FILE-02 "Forbidden"` (reqid `c476692a-...`, timestamp `2026-05-08T00:14:39.421Z`). Vẫn fail tại tầng permission, **không có ERR-VAL-FILE content-mismatch** → BE chưa sniff magic bytes. Layer defense vẫn thiếu sau 1 round.
 
 ### Mô tả
 

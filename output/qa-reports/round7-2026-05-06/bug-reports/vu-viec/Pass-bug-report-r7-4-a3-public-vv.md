@@ -6,6 +6,18 @@
 
 ---
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 1        | 0     | 0      | 0     | 0       | 1      | 0    |
+
+> **Quy tắc đếm:**
+> - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
+> - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
+> - `Closed` + `Open` = `Tổng`. `Open` đếm Status ∈ {Open, Reopen}; `Closed` đếm Status ∈ {Closed, ~~closed~~}.
+> - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
+
 ## Bug Summary Table
 
 | BUG-ID | Title | Severity | Status | Re-test |
@@ -26,7 +38,6 @@
 >
 > Bằng chứng: ![r14-vv008-modal-cong-khai-partial-2026-05-10.png](image/r14-vv008-modal-cong-khai-partial-2026-05-10.png) · API probe 200 OK + lich-su 2 entries thêm.
 
-> **Re-test:** 2026-05-10 12:10:00 R13 round 2 — ❌ FAIL (Open lúc đó). VV-008 schema 49 keys, lọc `cong|public|dang_tai|dai_dien` chỉ match `ngayPhanCong` — 5 cột CR-01 (`congKhai`, `thoiGianDangTai`, `moTaCongKhai`, `fileDinhKemCongKhai`, `anhDaiDien`) đều `undefined`. Probe lại 3 endpoint canonical `POST /vu-viecs/{id}/cong-khai`, `POST /huy-cong-khai`, `POST /publish` — tất cả 404 ERR-SYS-00-04-01. Feature FR-V.I-NEW-05 chưa được implement BE+FE. Tested: `cb_nv_tw_03`.
 
 ### 1. Mô tả
 

@@ -5,7 +5,7 @@
 | **Dự án** | PM-HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ (BE) · http://103.172.236.130:8025 (MailHog) |
 | **Người test** | huongttt + Claude (MCP chrome-devtools) |
-| **Ngày** | 2026-05-09 02:25:00 |
+| **Ngày** | 2026-05-09 23:35:00 |
 | **Loại test** | Functional · luồng kích hoạt email DN (FR-VIII-22 → email → click link) |
 | **Round** | R7 |
 | **Tài liệu tham chiếu** | `srs-v3/srs-fr-10-quan-tri.md` §FR-VIII-22 (UC191) Processing Bước 6 + AC |
@@ -22,9 +22,9 @@ Phát hiện **2** lỗi liên quan email kích hoạt sau self-reg DN (FR-VIII-
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 2    | 0        | 2     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 0        | 2     | 0      | 0     | 0       | 2      | 0    |
 
 ## Bug Summary Table
 

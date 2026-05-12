@@ -20,9 +20,9 @@ Phát hiện **2 lỗi** có SRS reference cụ thể trong quá trình test fun
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 2    | 0        | 2     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 0        | 2     | 0      | 0     | 0       | 2      | 0    |
 
 ## Bug Summary Table
 

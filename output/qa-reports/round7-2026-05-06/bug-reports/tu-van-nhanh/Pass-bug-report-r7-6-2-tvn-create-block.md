@@ -27,11 +27,9 @@ Phát hiện **2** lỗi liên quan workflow R7.6.2 (5 trạng thái SM-TVNHANH)
 
 ### Severity breakdown
 
-| Round | Tổng | Critical | Major | Medium | Minor | Trivial | Closed |
-|-------|------|----------|-------|--------|-------|---------|--------|
-| R8 (initial log) | 2 | 1 | 1 | 0 | 0 | 0 | 0 |
-| R9 (re-classify) | 2 | 0 | 2 | 0 | 0 | 0 | 0 |
-| **R12 (dev fix verify)** | **2** | **0** | **2** | **0** | **0** | **0** | **2** |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 0        | 2     | 0      | 0     | 0       | 2      | 0    |
 
 ## Bug Summary Table
 

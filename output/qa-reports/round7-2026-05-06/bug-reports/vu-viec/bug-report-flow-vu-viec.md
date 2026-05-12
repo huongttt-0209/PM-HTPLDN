@@ -5,35 +5,34 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | Claude Code (Opus 4.7) — QA Automation |
-| **Ngày** | 2026-05-08 (R8 log gốc) · 2026-05-09 09:30 → 09:35 (R9 re-test) · 2026-05-09 12:47 → 13:05 (R9b expand 2 LV) · 2026-05-09 17:30 → 17:50 (R10) · 2026-05-09 17:53 → 18:05 (R11) |
+| **Ngày** | 2026-05-12 18:48:00 |
 | **Loại test** | Workflow (FR-05 v3.5 refactor) |
-| **Round** | R8 + R9 + R9b + R10 + R11 (LATEST) |
+| **Round** | R19 |
 | **Tài liệu tham chiếu** | [`srs-update-2026-5-5/srs-fr-05-vu-viec.md`](../../../../input/srs-update-2026-5-5/srs-fr-05-vu-viec.md) · [`_DELTA-MAP-FR05.md`](../../../../input/srs-update-2026-5-5/_DELTA-MAP-FR05.md) · [`output/funtion/7.5-vu-viec-htpl.md`](../../../funtion/7.5-vu-viec-htpl.md) · [`output/smoke/6.5-sm-vuviec.md`](../../../smoke/6.5-sm-vuviec.md) |
 
 ---
 
 ## Tổng hợp
 
-R8 phát hiện **5** lỗi spec v3.5 (trong đó 4 trên VV-005 advance + 1 modal VV-006). R10 (2026-05-09 17:30→17:50) re-verify modal Phân công 3 LV cross-LV → BUG-VV-PC-MODAL-01 Closed. Login `nht_03` legacy seed (NHT-STP-HP-0001) → phát hiện 2 bug NEW Critical/Major chặn B3 transition root cause refined. R11 (2026-05-09 17:53→18:05) reclassify NHT-SCOPE-01 + AUTH-01 → BE BR-AUTH-VPD donVi-based scope hoạt động ĐÚNG spec; reclass thành seed/permission-design issue (không phải BE bug). B2 mode TO_CHUC submit OK + persist `loaiDoiTuongXuLy=TO_CHUC`. **R13 round 2 retest 2026-05-10 12:05** (`cb_nv_tw_03`): NHT-NOTIF-01 partial fix Closed (mail channel work — TVV nhận mail "Vụ việc mới được phân công - VV-BTP-TW-20260510-001" 02:08 mailhog 1 hit; in-app notification system active 77 unread badge), SLA-01 sync với functional retest hôm nay đã Closed (VV mới VV-002 deadline 16 ngày LV ≈ 15 ngày LV spec). Tổng **7** lỗi (5 Closed R10/R11/R13, 2 Open).
+Phát hiện **7** lỗi spec v3.5 trên workflow Vụ việc HTPL. Hiện trạng: **1 Open** (BUG-VV-PC-WRN-01 — Minor, modal empty state thiếu nút override [Tìm thủ công]) · **6 Closed** sau retest R10/R11/R13/R18.
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial | Closed |
-|------|----------|-------|--------|-------|---------|--------|
-| 7    | 3        | 3     | 0      | 1     | 0       | 5      |
-| Open | 0        | 0     | 0      | 1     | 0       | (PC-WRN-01 Minor) |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 7    | 3        | 3     | 0      | 1     | 0       | 6      | 1    |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| ~~BUG-VV-NHT-SCOPE-01~~ | Critical | P0 | Permission | TP-VV-04, B3 | `srs-fr-05-vu-viec.md` BR-AUTH-08 + BR-AUTH-VPD + FR-V.I-09 step B3 | ~~NHT cross-donVi assignment block 403 ERR-AUTH-VPD-00-02 — BE check scope `vu_viec.don_vi_id` thay vì assignment~~ | **Closed/Reclass** (R11 2026-05-09 18:00:00 — Not a BE bug. BE BR-AUTH-VPD đúng spec; vấn đề thực = seed cross-donVi assignment + spec design assignment-scope vs donVi-scope cần BA confirm) |
-| ~~BUG-VV-NHT-NOTIF-01~~ | ~~Major~~ | ~~P1~~ | ~~Workflow~~ | ~~UC62, B2-B3~~ | ~~`srs-fr-05-vu-viec.md` UC62 + FR-V.I-09 step B2 (notify TVV/CG/NHT phân công)~~ | ~~Phân công VV không trigger notification cho NHT/TVV/CG được phân công~~ | **Closed/Partial** |
-| ~~BUG-VV-SCHEMA-01~~ | Critical | P0 | Data | C3-1 | `srs-fr-05-vu-viec.md:712-715` (FR-V.I-09 Inputs) + `_DELTA-MAP-FR05.md` Thay đổi 8 | ~~Entity VU_VIEC chưa migrate v3.5 — `loaiDoiTuongXuLy/nguoiXuLyId/toChucTuVanId` không tồn tại trong response~~ | **Closed** (R11 2026-05-09 17:58:00 — `GET /api/v1/vu-viecs/{id}` trả về `loaiDoiTuongXuLy: TO_CHUC` + `toChucTuVanId` + `nguoiHoTroId` đầy đủ sau B2 mode TO_CHUC submit) |
-| ~~BUG-VV-AUTH-01~~ | Critical | P0 | Workflow | TP-VV-04, C3-3 | `srs-fr-05-vu-viec.md` BR-AUTH-01 (Tier 2 SSO VNeID cho TVV/CG/NHT) | ~~TVV/CG account local không tồn tại (NHT đã có legacy seed `nht_03` — root cause shifted sang BUG-VV-NHT-SCOPE-01)~~ | **Closed/Reclass** (R11 2026-05-09 18:00:00 — Reclass: seed gap, không phải BE bug. NHT có legacy `nht_01..03..` seed; TVV/CG cần dev/seed team cấp credentials hoặc dùng VNeID T2 sandbox) |
-| ~~BUG-VV-SLA-01~~ | ~~Major~~ | ~~P1~~ | ~~Calculation~~ | ~~VV-006, C6-1~~ | ~~`srs-fr-05-vu-viec.md:43, 334, 1501` (BR-SLA-01) + NĐ55/2019 Đ.8 K.1~~ | ~~Deadline tính 10 ngày LV thay vì 15 ngày LV theo BR-SLA-01 v3.5~~ | **Closed** (sync functional) |
-| ~~BUG-VV-PC-MODAL-01~~ | Major | P0 | UI/UX | C3-1, C3-3, C3-4 | `srs-fr-05-vu-viec.md:773-776` (Acceptance Criteria FR-V.I-09) + `_DELTA-MAP-FR05.md` Thay đổi 8 | ~~Modal Phân công SCR-V.I-03 chỉ có 1 dropdown TVV — thiếu 2 thẻ Cá nhân/Tổ chức~~ | **Closed** (R10 verified 3 LV ĐĐ+LĐ+DN PASS modal v3.5 đầy đủ 2 radios) |
-| BUG-VV-PC-WRN-01 | Minor | P2 | UI/UX | C3-6 | `srs-fr-05-vu-viec.md:768` (Error Handling FR-V.I-09 E3 — WRN-PC-01) | Modal pool empty (LV không match) hiện image "Trống" — KHÔNG có WRN-PC-01 + override tìm thủ công | Open |
+| BUG-VV-PC-WRN-01 | Minor | P2 | UI/UX | C3-6 | `srs-fr-05-vu-viec.md:768, 778` (Error Handling FR-V.I-09 E3 WRN-PC-01 + Acceptance "cho phép tìm thủ công") | Modal Phân công empty state thiếu nút [Tìm thủ công] override | Open |
+| ~~BUG-VV-NHT-SCOPE-01~~ | Critical | P0 | Permission | TP-VV-04, B3 | `srs-fr-05-vu-viec.md` BR-AUTH-08 + BR-AUTH-VPD + FR-V.I-09 step B3 | ~~NHT cross-donVi assignment block 403 ERR-AUTH-VPD-00-02~~ | Closed/Reclass |
+| ~~BUG-VV-NHT-NOTIF-01~~ | Major | P1 | Workflow | UC62, B2-B3 | `srs-fr-05-vu-viec.md` UC62 + FR-V.I-09 step B2 | ~~Phân công VV không trigger notification cho NHT/TVV/CG được phân công~~ | Closed/Partial |
+| ~~BUG-VV-SCHEMA-01~~ | Critical | P0 | Data | C3-1 | `srs-fr-05-vu-viec.md:712-715` + `_DELTA-MAP-FR05.md` Thay đổi 8 | ~~Entity VU_VIEC chưa migrate v3.5 (`loaiDoiTuongXuLy/nguoiXuLyId/toChucTuVanId` missing)~~ | Closed |
+| ~~BUG-VV-AUTH-01~~ | Critical | P0 | Workflow | TP-VV-04, C3-3 | `srs-fr-05-vu-viec.md` BR-AUTH-01 | ~~TVV/CG/NHT account local không thể login Tier 1; workflow B4 BLOCKED~~ | Closed/Reclass |
+| ~~BUG-VV-PC-MODAL-01~~ | Major | P0 | UI/UX | C3-1, C3-3, C3-4 | `srs-fr-05-vu-viec.md:773-776` + `_DELTA-MAP-FR05.md` Thay đổi 8 | ~~Modal Phân công SCR-V.I-03 chỉ có 1 dropdown — thiếu 2 thẻ Cá nhân/Tổ chức~~ | Closed |
+| ~~BUG-VV-SLA-01~~ | Major | P1 | Calculation | VV-006, C6-1 | `srs-fr-05-vu-viec.md:43, 334, 1501` (BR-SLA-01) + NĐ55/2019 Đ.8 K.1 | ~~Deadline tính 10 ngày LV thay vì 15 ngày LV~~ | Closed |
 
 > **Chú thích Type:**
 > - `Happy` — luồng chính thành công
@@ -44,6 +43,63 @@ R8 phát hiện **5** lỗi spec v3.5 (trong đó 4 trên VV-005 advance + 1 mod
 > - `Data` — toàn vẹn dữ liệu / schema migration
 > - `UI/UX` — giao diện
 > - `Calculation` — tính toán / business rule
+
+---
+
+## BUG-VV-PC-WRN-01 — Modal Phân công empty state thiếu nút [Tìm thủ công]
+
+> **Re-test:** 2026-05-12 18:48:00 R19 — ❌ STILL Open (Minor P2). Dev claim 14:30 chưa fix phần nút [Tìm thủ công]. Login `cb_nv_tw_03` → VV-BTP-TW-20260511-001 LV Thuế → modal Phân công → click combobox CÁ NHÂN → focus search input dùng `document.execCommand('insertText', false, 'XXKHONGMATCH99')` → DOM `evaluate_script({itemCount:0, emptyClass:".ant-select-item-empty", buttons:[]})`. Text empty state khớp WRN-PC-01 line 768 ✓. **Vẫn không có button [Tìm thủ công]** (Acceptance line 778). TC mode same behavior. Cần FE add override button.
+>
+
+### Mô tả
+
+Khi pool TVV/CG/NHT cho VV trả empty (LV không có ai HOAT_DONG match, hoặc force search no-match), modal Phân công hiển thị empty state với text đúng spec WRN-PC-01 nhưng **thiếu nút [Tìm thủ công]** override action theo Acceptance FR-V.I-09 line 778 — CB NV không có path "tìm thủ công" để vượt qua empty state.
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_01` (fallback `cb_nv_tw_03`). Vào "Quản lý vụ việc HTPL".
+2. Click VV thuộc LV pool empty (vd LV Hành chính, state DA_TIEP_NHAN) → click [Kiểm tra hồ sơ] → [Xác nhận] → state advance `DANG_KIEM_TRA`.
+3. Click [Phân công] → modal "Phân công tư vấn viên" mở.
+4. Click combobox "Chọn tư vấn viên" → listbox expand. (Nếu pool không thực sự empty, gõ `XXKHONGMATCH99` vào search input để force.)
+5. Quan sát listbox empty state: text WRN-PC-01 hiện, nhưng KHÔNG có nút [Tìm thủ công].
+
+### Kết quả mong đợi
+
+Theo `srs-fr-05-vu-viec.md:768` Error Handling FR-V.I-09 E3 + line 778 Acceptance:
+
+| E3 | Không có đối tượng phù hợp | WRN-PC-01 | "Không tìm thấy đối tượng phù hợp lĩnh vực" | WARNING |
+
+Acceptance line 778: **Given** không có đối tượng phù hợp **When** hiển thị **Then** cảnh báo **+ cho phép tìm thủ công**.
+
+UI phải hiện cả warning text + path tìm thủ công (override button).
+
+### Kết quả thực tế
+
+Modal listbox empty state (DOM capture qua `evaluate_script` sau force search `XXKHONGMATCH99`):
+```javascript
+{
+  itemCount: 0,
+  emptyClass: ".ant-select-item-empty",
+  emptyText: "Trống Không tìm thấy đối tượng phù hợp lĩnh vực Liên hệ QTHT để mở rộng lĩnh vực TVV/NHT, hoặc chọn vụ việc khác."
+}
+```
+
+- Text "Không tìm thấy đối tượng phù hợp lĩnh vực" ✅ đúng spec WRN-PC-01 line 768.
+- **Thiếu nút [Tìm thủ công]** override action (vi phạm Acceptance line 778).
+- TC mode "Tổ chức tư vấn" same behavior.
+
+### Bằng chứng
+
+![BUG-VV-PC-WRN-01 — R18 empty state text match spec WRN-PC-01 (chỉ thiếu button [Tìm thủ công])](image/r18-wrn-pc-01-text-spec-matched-2026-05-12.png)
+
+```bash
+$ curl -s "/api/v1/vu-viecs/ddb6ea07-.../goi-y-tvv?limit=20" -H "Authorization: Bearer $TOKEN"
+{
+  "success": true,
+  "data": [],
+  "meta": { "total": 0, "linhVucId": "bbbbbbbb-0000-4000-8000-000000000012" }
+}
+```
 
 ---
 
@@ -95,7 +151,7 @@ GET /api/v1/vu-viecs/phan-cong-cua-toi → 404 ERR-VAL-VII-02-01 (endpoint khôn
 
 ### Bằng chứng
 
-![BUG-VV-NHT-SCOPE-01 — NHT navigate VV-005 detail "Không tìm thấy vụ việc" + API 403 ERR-AUTH-VPD-00-02](../../workflow/vu-viec/screenshots/r10-nht-403-cross-donvi-vv-005.png)
+![BUG-VV-NHT-SCOPE-01 — NHT navigate VV-005 detail "Không tìm thấy vụ việc" + API 403 ERR-AUTH-VPD-00-02](image/r10-nht-403-cross-donvi-vv-005.png)
 
 ---
 
@@ -135,7 +191,7 @@ Theo SRS UC62 + FR-V.I-09 step B2 (phân công):
 
 ### Bằng chứng
 
-![BUG-VV-NHT-NOTIF-01 — Notification panel NHT chỉ có thông báo "Kích hoạt TK" 3 ngày trước, KHÔNG có notification phân công VV-005](../../workflow/vu-viec/screenshots/r10-nht-403-cross-donvi-vv-005.png)
+![BUG-VV-NHT-NOTIF-01 — Notification panel NHT chỉ có thông báo "Kích hoạt TK" 3 ngày trước, KHÔNG có notification phân công VV-005](image/r10-nht-403-cross-donvi-vv-005.png)
 
 ---
 
@@ -205,7 +261,6 @@ console.log('nguoiHoTroId:', d.data.nguoiHoTroId);            // null (still exi
 
 ## ~~BUG-VV-AUTH-01~~ [CLOSED/RECLASS] — TVV/CG/NHT account không thể login Tier 1; workflow B4 BLOCKED
 
-> **Re-test:** 2026-05-09 09:35:00 R9 — ❌ Reproduce confirmed (status Open). Probe `input/users.csv` xác nhận: CSV chỉ chứa 7 vai trò (CB_NV_BN/DP/TW + CB_PD_BN/DP/TW + QTHT) — KHÔNG có TVV/CG/NHT/DN. Khi B2 phân công VV-001 cho TVV-BTP-TW-0003 (Ngô Thị Mười Lăm) bằng cb_nv_tw_03 thành công, nhưng không có account login để chạy B3 (TVV chấp nhận → DANG_XU_LY). Cascade block toàn bộ B4-B7 + Branch CB PD reject (Thay đổi 11 v3.5). Severity giữ Critical P0.
 
 > **Re-test:** 2026-05-09 18:00:00 R11 — ✅ RECLASS (Not a BE bug). R11 discover: NHT có legacy seed accounts ngoài users.csv: `nht_01` = NHT cấp DP-AG (Phùng Thị NHT An Giang, donVi `00000000-0000-4000-8002-000000000006`), `nht_03` = NHT-STP-HP-0001 (R10), pattern `nht_<NN>` với password `Secret@123` + OTP `666666`. TVV/CG seed có thể tồn tại với pattern khác (chưa probe ra do throttle 429). Đây là **seed/credential gap**, không phải BE bug. **Khuyến nghị:** dev/seed team cấp credentials TVV/CG hoặc setup VNeID Tier 2 sandbox theo BR-AUTH-01. Mark Closed/Reclass.
 
@@ -267,9 +322,6 @@ $ curl -s "/api/v1/tai-khoan?pageSize=50" -H "Authorization: Bearer $QTHT_TOKEN"
 
 > **Re-test:** 2026-05-09 17:35:00 R10 — ✅ PASS (Closed-verified). Re-verify modal "Phân công tư vấn viên" trên 3 LV cross-LV bằng cb_nv_tw_03 + click button "Phân công" trên trang chi tiết VV. **Cả 3 LV PASS** modal v3.5 đầy đủ: (1) **VV-005 Đất đai** — DOM `radios_count:2, names:["Cá nhân","Tổ chức tư vấn"], selects:1 (mode CN) → 2 (mode TC), labels:["Đối tượng xử lý","Cá nhân","Tổ chức tư vấn","Chọn người được phân công","Ghi chú"]`. Switch radio "Tổ chức tư vấn" → render thêm 2 select "Tổ chức tư vấn" (placeholder "Chọn tổ chức tư vấn (HOAT_DONG)") + "Tư vấn viên của tổ chức" (disabled chờ chọn TC trước). Dropdown TC TV: 7 options (TC-BTP-TW-0001..0008 trừ 0006) match pool HOAT_DONG. (2) **VV-001 Lao động** — DOM cùng pattern. (3) **VV-006 Doanh nghiệp** — DOM cùng pattern. Bằng chứng: [`screenshots/r10-vv-005-modal-2-radios-fix.png`](../../workflow/vu-viec/screenshots/r10-vv-005-modal-2-radios-fix.png) · [`screenshots/r10-vv-005-modal-mode-tochuc.png`](../../workflow/vu-viec/screenshots/r10-vv-005-modal-mode-tochuc.png) · [`screenshots/r10-vv-001-lao-dong-modal-fix.png`](../../workflow/vu-viec/screenshots/r10-vv-001-lao-dong-modal-fix.png) · [`screenshots/r10-vv-006-doanh-nghiep-modal-fix.png`](../../workflow/vu-viec/screenshots/r10-vv-006-doanh-nghiep-modal-fix.png). FE đã apply Thay đổi 8 v3.5 đúng spec.
 >
-> **Re-test:** 2026-05-09 09:30:00 R9 — ❌ Reproduce confirmed (status Open). Verify trên 2 LV khác nhau: VV-001 (Lao động) + VV-005 (Đất đai) bằng cb_nv_tw_03. Modal "Phân công tư vấn viên" chỉ render duy nhất 1 dropdown "Chọn tư vấn viên" + 1 textbox "Ghi chú" + 2 button (Hủy/Xác nhận). DOM verify `evaluate_script({tabs:[], radios:[], selects:1, labels:["Chọn tư vấn viên","Ghi chú"]})` — 0 thẻ, 0 radio, không có UI cho mode TO_CHUC. Bằng chứng: [`r9-pc-modal-01-single-dropdown-vv001.png`](image/r9-pc-modal-01-single-dropdown-vv001.png) · [`r9-pc-modal-01-vv005-datdai-no-tochuc-tab.png`](image/r9-pc-modal-01-vv005-datdai-no-tochuc-tab.png). Severity giữ Major P0.
->
-> **Re-test:** 2026-05-09 12:55:00 R9b — ❌ Reproduce confirmed expand cross-LV (status Open). Verify thêm 2 LV: VV-006 (Doanh nghiệp) + VV-004 (Sở hữu trí tuệ) bằng cb_nv_tw_03. DOM verify cả 2 modal `evaluate_script` cho cùng kết quả `{tabs:[], radios:[], selects:1, labels:["Chọn tư vấn viên","Ghi chú"]}`. **Tổng cộng reproduce trên 4 LV** (Lao động + Đất đai + Doanh nghiệp + SHTT) → bug pervasive cross-LV, không phải LV-specific glitch. Bằng chứng R9b: [`r9-pc-modal-01-vv006-doanhnghiep-no-tochuc-tab.png`](image/r9-pc-modal-01-vv006-doanhnghiep-no-tochuc-tab.png) · [`r9-pc-modal-01-vv004-shtt-no-tochuc-tab.png`](image/r9-pc-modal-01-vv004-shtt-no-tochuc-tab.png). Severity giữ Major P0. **Note observation thêm:** dropdown TVV pool inconsistent — VV-006 (DN) hiển thị 5 options general, VV-004 (SHTT) chỉ 1 option (TVV-0005 LV-filtered). FE filter LV không đồng nhất across LV.
 
 ### Mô tả
 
@@ -330,7 +382,6 @@ uid=19_0 dialog "Phân công tư vấn viên" modal
 
 > **Re-test:** 2026-05-10 10:30:00 R13 — ✅ PASS (Closed-verified). Sync với re-test trong [`bug-report-r7-7-3-functional-vu-viec.md` BUG-VV-FN-SLA-01](bug-report-r7-7-3-functional-vu-viec.md#bug-vv-fn-sla-01--cong-bo-cluster-c61). VV mới VV-BTP-TW-20260510-002 (`cb_nv_tw_03` tạo 10/05 02:49) → deadline 01/06/2026 = 16 ngày LV (gần đúng 15 ngày LV BR-SLA-01, lệch 1 ngày inclusive end-date). VV cũ pool giữ data cũ 10 ngày LV — không migrate retroactive (chấp nhận, data created trước fix).
 >
-> **Re-test:** 2026-05-09 09:32:00 R9 — ❌ Reproduce confirmed (status Open lúc đó). Verify trên 6 VV mới seed UI 09:18 (VV-BTP-TW-20260509-001..006): tất cả hiển thị cột "Cảnh báo thời hạn" = "Còn 10 ngày LV" với deadline 23/05/2026 từ ngày tiếp nhận 09/05/2026 (14 calendar = 10 LV). Lặp R8 verdict — chưa fix BE/FE. Severity giữ Major P1.
 
 ### Mô tả
 
@@ -378,70 +429,6 @@ GET /api/v1/vu-viecs/6ac795ea-... → response.data:
 ```
 
 ⚠️ Note BA: Cite BR-SLA-01 v3.5 chưa web-verify NĐ55/2019 Điều 8 Khoản 1 (per `_DELTA-MAP-FR05.md` ghi chú "cite chưa web-verify"). Nếu thực tế NĐ ghi 10 ngày LV → BR-SLA-01 v3.5 SAI; nếu 15 ngày LV → BE SAI. Cần BA confirm cite NĐ trước khi fix.
-
----
-
-## BUG-VV-PC-WRN-01 — Modal pool empty không có WRN-PC-01 + override
-
-> **Re-test:** 2026-05-12 00:50:00 R18 reverify (account `cb_nv_tw_03`, isolatedContext `reverify_r18_2026_05_12`) — ⚠️ MAJOR IMPROVEMENT (vẫn Open Minor P2). Force empty bằng search "XXKHONGMATCH99" trong combobox CÁ NHÂN của modal Phân công VV-BTP-TW-20260511-001 (LV Thuế). Capture DOM: `itemCount=0`, `.ant-select-item-empty` class hiện. **Text empty state NAY ĐÚNG SPEC**: `"Trống Không tìm thấy đối tượng phù hợp lĩnh vực Liên hệ QTHT để mở rộng lĩnh vực TVV/NHT, hoặc chọn vụ việc khác."` — string "Không tìm thấy đối tượng phù hợp lĩnh vực" khớp đúng line 768 WRN-PC-01 spec ✓. Bonus: alt path text "Liên hệ QTHT để mở rộng..." giúp user biết bước tiếp theo. **Vẫn không có nút [Tìm thủ công]** override action theo line 778 Acceptance — TC mode (Tổ chức tư vấn) cũng same behavior. Cải thiện rõ vs R17 (R17 text "Không có tổ chức HOAT_DONG" sai spec). Severity giữ Minor P2 — main bug "thiếu WRN-PC-01 text" đã fix; sub-issue "thiếu override button" vẫn defer. Evidence: `image/r18-wrn-pc-01-text-spec-matched-2026-05-12.png`.
-
-> **Re-test:** 2026-05-11 17:00:00 R17 reverify (account `cb_nv_tw_03`, isolatedContext `reverify_r17_2026_05_11`) — ⚠️ PARTIAL IMPROVEMENT (vẫn Open, severity giữ Minor). Force empty bằng search term không match (`XXKHONGMATCH99`) trong combobox "Tổ chức tư vấn" của modal Phân công VV-BTP-TW-20260511-001. Capture DOM: dropdown listbox `itemCount=0`, **KHÔNG còn image "Trống"** (`hasEmptyContainer=false`, `emptyImg=false`) — bug image "Trống" R14 đã hết ✓. Thay vào đó text **"Không có tổ chức HOAT_DONG"** (plain text, no `.ant-empty`, no `.ant-alert`/`.ant-warning` styling, no warning icon). **So spec WRN-PC-01 line 768:** spec yêu cầu text `"Không tìm thấy đối tượng phù hợp lĩnh vực"` với severity WARNING. Text BE trả khác spec ("Không có tổ chức HOAT_DONG" focus trên trạng thái HOAT_DONG, không phải LV phù hợp), không có warning styling. Vẫn không có nút "Tìm thủ công"/"Override LV". Cải thiện vs R14 (đã có message text thay image) nhưng chưa match spec — giữ Open Minor P2.
-
-> **Re-test:** 2026-05-10 20:08:00 R14 — 🤷 Không reproduce được điều kiện gốc (vẫn Open). Pool TVV/CG/NHT đã được seed thêm so với R8 — LV Hành chính giờ có 3 record (Hương TVV1 + Hương 3 NHT + NHT TC001 Test BTP TW) qua probe `/api/v1/vu-viecs/{vv-006-id}/goi-y-tvv?limit=20` → `total=3`. Modal Phân công cho VV-002 (LV Lao động pool 8) verify đầy đủ structure v3.5 (2 radio thẻ "Cá nhân"/"Tổ chức tư vấn" + dropdown "Chọn người được phân công" + Ghi chú + Hủy/Xác nhận) — non-empty case work OK. Bug logic vẫn tồn tại theo spec FR-V.I-09 line 768 (E3 WRN-PC-01) cho LV chưa có TVV/CG/NHT match — defer R15+ khi seed pool có ít nhất 1 LV trống. Severity giữ Minor P2. Tested: `cb_nv_tw_03`.
-
-### Mô tả
-
-Khi pool TVV/CG/NHT cho VV-006 (LV Hành chính) trả empty (do 9 record HOAT_DONG không có ai LV Hành chính), modal hiển thị 2 lần image "Trống" trong dropdown nhưng KHÔNG hiện warning WRN-PC-01 "Không tìm thấy đối tượng phù hợp lĩnh vực" và KHÔNG có nút/option "Tìm thủ công" / "Override LV". CB NV bị stuck — không phân công được, không có path khắc phục.
-
-### Các bước tái hiện
-
-1. Login `cb_nv_tw_01`. Vào "Quản lý vụ việc HTPL".
-2. Click VV-006 (LV Hành chính, state DA_TIEP_NHAN) → click [Kiểm tra hồ sơ] → [Xác nhận] → DANG_KIEM_TRA.
-3. Click [Phân công] → modal "Phân công tư vấn viên" mở.
-4. Click combobox "Chọn tư vấn viên" — listbox expand.
-5. Quan sát: empty state "Trống" hiện 2 lần trong listbox; KHÔNG có text "Không tìm thấy đối tượng phù hợp lĩnh vực" hay nút "Tìm thủ công".
-
-### Kết quả mong đợi
-
-Theo `srs-fr-05-vu-viec.md:768` (Error Handling FR-V.I-09 E3):
-| E3 | Không có đối tượng phù hợp | WRN-PC-01 | "Không tìm thấy đối tượng phù hợp lĩnh vực" | WARNING |
-
-Theo line 778 Acceptance: **"Given** không có đối tượng phù hợp **When** hiển thị **Then** cảnh báo + cho phép tìm thủ công"
-
-UI phải hiện cả warning text + path tìm thủ công.
-
-### Kết quả thực tế
-
-Modal listbox content (qua `evaluate_script`):
-```javascript
-{ count: 0, options: [], empty: "TrốngTrống" }
-```
-
-Empty state chỉ là 2 image "Trống" stack — không có text WRN-PC-01, không có nút action.
-
-### Bằng chứng
-
-![BUG-VV-PC-WRN-01 — Modal Phân công VV-006 (Hành chính) listbox trống 2 image "Trống" — không có WRN-PC-01 warning + override path](image/bug-vv-pc-wrn-modal-trong-vv006.png)
-
-```bash
-# API call confirm pool empty cho LV Hành chính
-$ curl -s "/api/v1/vu-viecs/ddb6ea07-.../goi-y-tvv?limit=20" -H "Authorization: Bearer $TOKEN"
-{
-  "success": true,
-  "data": [],
-  "meta": {
-    "total": 0,
-    "casePriorityScore": 2,
-    "isHighPriority": false,
-    "linhVucId": "bbbbbbbb-0000-4000-8000-000000000012"   // LV Hành chính
-  }
-}
-# Pool 9 TVV/CG HOAT_DONG breakdown by linhVucText:
-#   "Đất đai" × 2, "Lao động" × 2, "Doanh nghiệp" × 2,
-#   "Sở hữu trí tuệ" × 1, "Thuế" × 1, (trống) × 1
-# → KHÔNG có ai LV Hành chính → BE filter trả empty đúng (data gap pool, không phải bug filter)
-# Bug ở UI: không show WRN-PC-01 + override khi pool empty.
-```
 
 ---
 

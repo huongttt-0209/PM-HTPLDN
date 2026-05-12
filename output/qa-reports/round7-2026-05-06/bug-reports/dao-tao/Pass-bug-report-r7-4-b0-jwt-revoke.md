@@ -18,9 +18,9 @@ Phát hiện **3** lỗi liên quan auth/session — 1 Critical JWT revoke (Clos
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 3    | 1        | 1     | 0      | 1     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 3    | 1        | 1     | 0      | 1     | 0       | 3      | 0    |
 
 ### Status sau R8 lần 2 (2026-05-09)
 

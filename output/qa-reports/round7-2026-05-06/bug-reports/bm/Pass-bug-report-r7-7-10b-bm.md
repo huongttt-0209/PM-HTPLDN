@@ -18,9 +18,9 @@ Phát hiện **1** lỗi mới có SRS reference cụ thể trong R7.7.10b — v
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 1    | 0        | 0     | 1      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 0     | 1      | 0     | 0       | 1      | 0    |
 
 ### Status sau R8 lần 9 (2026-05-11)
 

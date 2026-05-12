@@ -18,9 +18,9 @@ Re-test 2 bug log từ R6.5.4 (BUG-BC-EXPORT-001 + BUG-BC-LEGEND-001). Round 2 �
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 3    | 1        | 0     | 0      | 2     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 3    | 1        | 0     | 0      | 2     | 0       | 3      | 0    |
 
 ## Bug Summary Table
 

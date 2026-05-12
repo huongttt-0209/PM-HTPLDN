@@ -5,98 +5,22 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Claude Code + Chrome DevTools MCP) |
-| **Ngày** | 2026-05-12 02:50:00 (Log BUG-037 + BUG-038 Minor i18n sau 2-source verify SRS + NotebookLM) |
+| **Ngày** | 2026-05-12 15:55:00 |
 | **Loại test** | Functional |
-| **Round** | R7 (post dev fix BUG-HDTV-001/002/003 seed) |
+| **Round** | R19 |
 | **Tài liệu tham chiếu** | [functional-test-report-r7-7-14-hdtv.md](../../functional/hop-dong-tv/functional-test-report-r7-7-14-hdtv.md) · [seed-checklist-r7-3-14-hdtv.md](../../seed/hop-dong-tv/seed-checklist-r7-3-14-hdtv.md) |
 
 ---
 
 ## Tổng hợp
 
-Phát hiện **5** lỗi gốc R7.7.14 (lần đầu) + **1** regression R3 + **4** spec-gap phát hiện R4 UI-only test + **2** bug permission/UX phát hiện R5 UI-only multi-role + **2** bug i18n phát hiện Follow-up #7b 2026-05-12 = **14** lỗi tổng. Sau Follow-up #7b: **11 Closed · 3 Open (BUG-034 + BUG-037 + BUG-038 — đều Minor)**.
+Phát hiện **14** lỗi trong quá trình test functional HĐ Tư vấn (R7.7.14). Hiện trạng: **3 Open** (BUG-034 + BUG-037 + BUG-038 — đều Minor i18n / spec conflict) · **11 Closed** sau retest R3/R6/R7.
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 14   | 1        | 8     | 2      | 3     | 0       |
-
-> **Re-test 2026-05-10 11:05:00:** 5/5 bug VẪN reproducing. **BUG-HDTV-021 escalate Major → Critical** sau retest phát hiện QTHT bypass cả PATCH (200) + DELETE (204) — không chỉ POST 500 như log gốc. QTHT thực tế hard-delete được HDTV-0009 mồ côi.
->
-> **Re-test #2 2026-05-10 12:13:00 → 12:18:00 (bộ acc `_07`, dev claim đã fix):** ❌ **5/5 bug VẪN Open**. Account: `cb_nv_tw_07` (CB_NV_TW + CB_PD_TW) cho luồng CRUD cơ bản, `qtht_07` (QTHT perms=[]) cho permission test BUG-HDTV-021. Findings:
-> - **BUG-HDTV-018** ❌ VẪN broken — POST tạo HDTV-0012 với 3 thanhToans CHUA_THANH_TOAN, PATCH whole HD với `thanhToans[].trangThaiTt='DA_THANH_TOAN'` → 200 nhưng GET sau patch `tienDoTt=0` + 3 statuses unchanged. 5 sub-resource path variants (`/thanh-toans`, `/thanh-toan-hop-dongs`, `/thanh-toan-giai-doans`, `/giai-doan-thanh-toans`) đều 404.
-> - **BUG-HDTV-020** ❌ VẪN broken — 4 sub-resource path 404 + top-level `/audit-logs?entityType=HOP_DONG_TU_VAN` → 403.
-> - **BUG-HDTV-021** ❌ **TỆ HƠN** — POST tạo HD thành công 201 (HDTV-0012) thay vì 500 lúc trước. Dev "fix" có thể đã đổi error path thành success path → QTHT giờ tạo được record nghiệp vụ persisted (verified GET single 200 + list 8/8 chứa record mới). PATCH 200 modify (verified ghiChu update + version 2→3). DELETE 204 hard-delete trên orphan HDTV-0012 (verified GET sau DELETE = 404). DELETE 403 trên HDTV-0011 nhưng do `ERR-HDTV-04 "Không thể xóa hợp đồng đang liên kết với vụ việc"` (BR-GUARD-HDTV-01 business rule) — KHÔNG phải permission gate.
-> - **BUG-HDTV-026** ❌ VẪN broken — PATCH `vuViecIds` thêm VV mới vào HDTV-0008 (1 VV → 2 VV) → 200 nhưng response data không có field `vuViecIds`, GET sau patch `soVuViecLienKet=1` (không tăng).
-> - **BUG-HDTV-029** ❌ VẪN broken — Form `/hop-dong-tv/tao-moi?vuViecId=...` render 12 field giống lần test đầu, KHÔNG có TVV/CG picker.
->
-> **Re-test #3 2026-05-10 21:34:00 → 21:50:00 (bộ acc `_07`, dev claim đã fix lần 2):** ✅ **4/5 bug PASS · 1 PARTIAL · 1 regression mới**. Account: `cb_nv_tw_07` (CB_NV_TW) cho luồng CRUD, `qtht_07` (QTHT) cho permission test. POST seed HDTV-20260510-0001 (id `9054a0a9-3139-42e3-b817-e7d8a0edb4b2`) với `tuVanVienId=978354d7-...` (TVV-BTP-TW-0035 HOAT_DONG). Findings:
-> - **BUG-HDTV-018** ✅ **PASS Closed** — Form Edit có 3 switch toggle "Đã thanh toán" cho từng giai đoạn. Click 2/3 switch + Cập nhật → API GET trả `tienDoTt=50` (đúng công thức 50tr/100tr × 100), `thanhToans[0,1].trangThaiTt='DA_THANH_TOAN'` + `ngayThanhToan` populated. Version bump 1→4.
-> - **BUG-HDTV-020** ⚠️ **PARTIAL** — API endpoint `GET /api/v1/hop-dong-tu-vans/{id}/audit-logs` giờ **200 OK** với 5 events đầy đủ schema (entityType, hanhDong, nguoiThucHienId, thoiGian, endpoint, responseCode). UI HD detail VẪN KHÔNG có tab "Nhật ký" → tester chỉ access được audit log qua API, không qua UI. **Downgrade Major → Medium** (BE đầy đủ, UI tab thiếu).
-> - **BUG-HDTV-021** ✅ **PASS Closed** — qtht_07 GET 200 (đúng quyền R), POST→**403 ERR-PERM-SYS-00-01** "Forbidden", PATCH→**403** "Forbidden", DELETE→**403** "Forbidden". Permission middleware giờ block QTHT đúng spec BR-AUTH-HDTV-01.
-> - **BUG-HDTV-026** ✅ **PASS Closed** — PATCH HDTV-0001 với `{version, tuVanVienId, vuViecIds: [vvId]}` → 200, GET sau patch `soVuViecLienKet=0→1` persist. Version bump 4→5. (4 sub-resource path POST vẫn 404 — chấp nhận vì PATCH whole record là main path đã work).
-> - **BUG-HDTV-029** ✅ **PASS Closed** — Form Tạo HD `/hop-dong-tv/tao-moi` + Form Edit modal đều có **Radio "Loại chủ thể thực hiện"** (Cá nhân TVV/CG vs Tổ chức TCTV) + **Combobox required "Tư vấn viên / Chuyên gia"** với placeholder "Chọn tư vấn viên hoặc chuyên gia". CHECK constraint enforced: POST không có `tuVanVienId`/`toChucTuVanId` → 400 ERR-HDTV-CHU-THE-01.
-> - **BUG-HDTV-030** ❌ **NEW Open Major (regression Re-test #3)** — FE Form Tạo HD truyền `GET /api/v1/tu-van-viens?trangThai=HOAT_DONG&pageSize=200` → BE cap `pageSize ≤ 100` → 422 ERR-VAL-SYS-00-01 "pageSize must not be greater than 100". Cùng pattern cho `/to-chuc-tu-vans?pageSize=200`. Dropdown TVV/CG empty trong UI → user UI thuần KHÔNG chọn được TVV → submit fail. Workaround: API direct.
->
-> **Re-test #4 2026-05-11 14:00:00 → 14:35:00 (UI-only `qtht_07` per user yêu cầu KO test API):** Phát hiện **4 spec-gap bug mới** BUG-031/032/033/034 — UI implementation HDTV thiếu nhiều entry point chính per spec v2.1 (modal/drawer Create/Edit từ VV detail không có, FE/BE contract mismatch param case). Findings:
-> - **BUG-HDTV-031** ❌ **NEW Open Major** — VV detail accordion "HĐ tư vấn liên kết" render empty mặc dù HDTV link tồn tại. Network log reqid=555: `GET /api/v1/hop-dong-tu-vans?vuViecId=9cc24b55-...` (camelCase) trả total=0. Param đúng per BE phải là `vu_viec_id=` (snake_case) → total=1. FE/BE contract mismatch.
-> - **BUG-HDTV-032** ❌ **NEW Open Medium** — TVV detail tab "Lịch sử hỗ trợ" thiếu sub-section HD per spec v3 line 241 ("tab Lich su -> HD"). UI hiện chỉ render table VV, không có HD subsection. (TVV-BTP-TW-0035 chưa có VV nên không confirm 100% được, nhưng spec rõ phải có section).
-> - **BUG-HDTV-033** ❌ **NEW Open Major** — VV detail accordion "HĐ tư vấn liên kết" CHỈ render table read-only + empty state, KHÔNG có button [+ Tạo HĐ TV] hoặc [+ Liên kết HĐ]. Spec v3 line 241: "implement dang modal/drawer khi truy cap tu VV/TVV". HDTV detail standalone (`/hop-dong-tv/{id}`) cũng KHÔNG có button "Sửa"/"Xóa". Route `/sua`, `/new`, `/tao`, `/them-moi` đều redirect/404. **→ KHÔNG có entry point UI để Create/Edit HDTV thuần UI.**
-> - **BUG-HDTV-034** ❌ **NEW Open Minor (Spec conflict)** — Route `/hop-dong-tv/danh-sach` render standalone list page (6 records visible) nhưng spec v3.5 line 660 M-01 nói rõ "KHÔNG có menu riêng. Truy cập qua tab trong Chi tiết VV và TVV". Sidebar đúng spec không hiển menu, nhưng route URL trực tiếp vẫn render → có thể legacy chưa cleanup. **→ BA 2026-05-11 chốt: không public/menu; nếu giữ route kỹ thuật thì phải ẩn, có guard/redirect, không là main flow.**
->
-> **Re-verify thay vì re-test:** BUG-HDTV-026 counter via standalone list `VỤ VIỆC=1` cho HDTV-20260510-0001 (verified PASS UI). BUG-HDTV-018 `Tiến độ TT` block render `50.000.000 / 100.000.000` (50%) trong detail standalone (verified PASS UI). BUG-HDTV-021 qtht_07 access list+detail OK (verified PASS UI). BUG-HDTV-030 + BUG-HDTV-020 **BLOCKED re-verify** do BUG-033/034 (Create form + Edit form + Audit tab không có UI entry point).
->
-> **Re-test #5 2026-05-11 15:25:00 → 15:40:00 (UI-only multi-role — 6 TC + 2 bug mới):** Chạy 6 TC (HDTV-014/017/019/022/023/024 + verify HDTV-028) qua UI thuần với 4 role: `qtht_07` (QTHT), `cb_nv_bn_07` (CB_NV_BN cấp TW), `cb_nv_dp_07` (CB_NV_DP cấp ĐP-AG), `9999999990` (DN). Kết quả 5 PASS + 1 BLOCKED + 2 bug mới.
-> - **HDTV-017** ✅ **PASS** — Search "HDTV-20260511" trả 4 records đúng prefix. Tab filter `Đang thực hiện` trả 6 records, `Hủy` 1 record. Page-size combobox có 4 option [10/20/50/100]. Pagination handle 1-N/N mục đúng.
-> - **HDTV-014** ✅ **PASS (calendar UI)** — Calendar UI Đến ngày disable đúng 19/31 ô khi Từ ngày=20/05/2026 (ô <20 disabled, ô ≥20 enabled). ⚠️ **Edge text input**: typing Từ ngày=31/12/2026 + Đến ngày=01/01/2026 → FE silently drop Đến ngày trên submit (URL chỉ có `tuNgay`, không có `denNgay`), không hiển thị validation error → **BUG-HDTV-035 Minor UX** (xem entry mới).
-> - **HDTV-019** ✅ **PASS** — HDTV-20260511-0002 (ngày kết thúc 01/06/2026, ~21 days remaining) render `<span style="color: rgb(255, 77, 79); font-weight: 600;">01/06/2026</span>` (RED) đúng spec highlight ≤30 ngày. Records khác (>30 ngày) render màu thường rgb(31, 31, 31). HDTV-QA-R7-059 (ngày kết thúc 30/04/2026 trong quá khứ) KHÔNG highlight — edge case có thể defer.
-> - **HDTV-022 (NHT)** 🚫 **BLOCKED** — Không có account `nht_07`. `nht_01` + `nht_02` đều POST /auth/login → 401 (account locked hoặc inactive). KHÔNG verify được sidebar NHT. Đề xuất QA seed account NHT R30 hoặc reset password 2 acc gốc.
-> - **HDTV-023 (DN sidebar)** ✅ **PASS** — DN `9999999990` login OK, sidebar render 4 menu (Tổng quan / Đào tạo / Vụ việc / Doanh nghiệp được hỗ trợ) — **KHÔNG có menu "Hợp đồng tư vấn"** đúng spec. Direct URL access `/hop-dong-tv/danh-sach` → redirect về `/dashboard` (FE guard role).
-> - **HDTV-024 (CB scope filter)** ✅ **PASS** — `cb_nv_bn_07` (BKH cấp TW): standalone list 0 records (BKH không có HDTV nào). `cb_nv_dp_07` (AG cấp ĐP): standalone list 1 record `HDTV-QA-R7-059` (BÊN A="Công ty TNHH Bình Minh AG") đúng scope đơn vị AG. ⚠️ **Phát hiện anomaly**: cả 2 CB role có button **"+ Tạo hợp đồng"** trên standalone list page, trong khi `qtht_07` lại KHÔNG có (chỉ có "Làm mới"). Permission inversion + standalone create route exists → **BUG-HDTV-036 Major** (xem entry mới).
-> - **HDTV-028 (TVV-HD section)** ⚠️ **CONFIRMED BUG-032** — TVV-BTP-TW-0035 detail render 5 tab (Hồ sơ / Thẩm định disabled / Năng lực / Lịch sử hỗ trợ / Đánh giá). Tab "Lịch sử hỗ trợ" content: 3 statistic card (Tổng VV/Đã hoàn thành/Điểm TB) + table VV (empty "Tư vấn viên chưa tham gia hỗ trợ vụ việc nào"). KHÔNG có sub-section HD per spec v3 line 241. Confirm BUG-HDTV-032 vẫn Open.
->
-> **Phát hiện 2 bug mới R5:** BUG-HDTV-035 (Minor UX RangePicker text input silent drop) + BUG-HDTV-036 (Major Permission inversion + standalone create route exists).
->
-> **Re-test #5b 2026-05-11 16:05:00 → 16:15:00 (HDTV-022 + HDTV-028 retest với account/data hợp lệ):**
-> - **HDTV-022** ✅ **PASS** — Account `nht_btp_tw_audit_r30` login OK. Sidebar 5 menu (Đào tạo/MLT/Vụ việc/Biểu mẫu/Tư vấn), KHÔNG có "Hợp đồng tư vấn" standalone menu. Direct URL `/hop-dong-tv/danh-sach` qua pushState → FE guard chặn navigation (URL revert về `/dao-tao/chuong-trinh/danh-sach`). NHT không truy cập được HDTV qua UI thuần.
-> - **HDTV-028** ⚠️ **CONFIRM BUG-032 Open** — Mở TVV-BTP-TW-0006 (`Hồ Văn Mười Tám`, là BÊN B của HDTV-QA-R7-059) detail page. 5 tab giống TVV-BTP-TW-0035 (Hồ sơ / Thẩm định disabled / Năng lực / Lịch sử hỗ trợ / Đánh giá), KHÔNG có tab "HĐ tư vấn" riêng. Click tab "Lịch sử hỗ trợ" → content có 3 stat card + 1 table VV (empty) + KHÔNG có HD section/list. Network log: FE chỉ gọi `GET /tu-van-viens/{id}/lich-su-ho-tro` (VV history), KHÔNG gọi endpoint HDTV nào (vd `/tu-van-viens/{id}/hop-dong-tu-vans`). Root cause: FE chưa implement HD section trong TVV detail per spec v3 line 241. Confirm với 2 TVV records (0006 có HD, 0035 không HD) → UI behavior giống nhau → BUG-032 không phụ thuộc data presence.
->
-> **Re-verify #7 2026-05-12 01:50:00 → 02:15:00 (qa-bugfix-reverify-audit skill — verify 2 Open + spot-check 3 Closed, multi-role qtht_07 + cb_nv_tw_07):**
-> - **BUG-HDTV-032** ✅ **PASS Closed-verified (NEW FIX 2026-05-12).** TVV-BTP-TW-0035 detail tab "Lịch sử hỗ trợ" giờ có sub-section heading "Hợp đồng tư vấn" (level 5) + table 5 columns (Mã HĐ / Tên hợp đồng / Trạng thái / Ngày bắt đầu / Ngày kết thúc) + 1 row HDTV-20260510-0001 (DANG_THUC_HIEN, 09/05/2026, 09/08/2026) với link clickable + pagination "1-1 trên 1 mặt hàng". Network: `GET /api/v1/hop-dong-tu-vans?tuVanVienId=978354d7-...` → 200 (NEW endpoint call). FE giờ implement HD section đúng spec v3 line 241. Evidence: ![BUG-032 PASS](image/r7-reverify-2026-05-12-bug-032-tvv-history-with-hd-section-passed.png)
-> - **BUG-HDTV-034** ❌ **STILL Open Minor (như R6).** Route `/hop-dong-tv/danh-sach` vẫn render standalone list page với 8 records (qtht_07 view), breadcrumb "Trang chủ / Hợp đồng tư vấn / Danh sách" đầy đủ, KHÔNG có guard/redirect. Sidebar 13 menu KHÔNG có HDTV item (đúng spec). BA 2026-05-11 đã chốt route ẩn/guard — chờ dev FE thực hiện. Evidence: ![BUG-034 STILL Open](image/r7-reverify-2026-05-12-bug-034-standalone-list-still-open.png)
-> - **Spot-check 3 Closed (chống regress):**
->   - **BUG-HDTV-018** ✅ **No regress.** HDTV-20260510-0001 detail render Đợt 1 + Đợt 2 = "Đã thanh toán" (= tienDoTt 50%). Form Edit modal có 3 switch toggle (2 checked giai đoạn 1+2, 1 unchecked giai đoạn 3) + combobox TVV-BTP-TW-0035 + radio "Loại chủ thể" + accordion "Vụ việc liên kết" có row VV-BTP-TW-20260510-002. Evidence: ![BUG-018 Form Edit 3 switch](image/r7-reverify-2026-05-12-bug-018-form-edit-3-switch-passed.png)
->   - **BUG-HDTV-021** ✅ **No regress.** qtht_07 probe API: GET `/hop-dong-tu-vans?pageSize=2` → 200 (R quyền); POST tạo HD → 403 ERR-PERM-SYS-00-01 "Forbidden"; PATCH → 403 ERR-PERM-SYS-00-01; DELETE → 403 ERR-PERM-SYS-00-01. Permission gate đúng BR-AUTH-HDTV-01.
->   - **BUG-HDTV-031** ✅ **No regress + clarify.** VV-BTP-TW-20260510-002 (id `dce4c308-...`, là VV mới link HDTV-20260510-0001 R3) accordion render 1 row HDTV-20260510-0001 + 10 columns + button [+ Tạo hợp đồng] + pagination "1-1 / 1 mục". FE call `GET /hop-dong-tu-vans?vuViecId=...` (camelCase) trả đúng filter (vv `dce4c308` → 1, vv khác → 0). VV-BTP-TW-20260510-001 (`9cc24b55`) hiện không còn link HD → accordion empty đúng behavior. Evidence: ![BUG-031 1 row](image/r7-reverify-2026-05-12-bug-031-vv-accordion-1-row-passed.png)
->
-> **Follow-up #7b 2026-05-12 02:20:00 → 02:35:00 (HDTV-028 multi-row pagination — seed 2nd HDTV link TVV-0035 + verify, cb_nv_tw_07):** ✅ **PASS — multi-row rendering OK**. Mục tiêu: confirm BUG-032 fix scale với ≥2 HD/TVV (Re-verify #7 chỉ test 1 row). Bước thực hiện qua UI thuần (KHÔNG API direct):
-> 1. cb_nv_tw_07 mở VV-BTP-TW-20260510-001 (`9cc24b55-...`) detail → accordion "HĐ tư vấn liên kết" expand → empty (đúng vì VV này chưa link HD nào).
-> 2. Click button **[+ Tạo hợp đồng]** → modal "Tạo hợp đồng tư vấn" mở. Fill form: Tên="HDTV-MultiRow-TVV0035-Test-20260512", Bên B="Cty CP Test Multi-Row R7", radio "Cá nhân (TVV/CG)", combobox TVV gõ "TVV-BTP-TW-0035" → dropdown render "TVV-BTP-TW-0035 — TVV R13 A19 Gate Verify (Công ty Luật TNHH Alpha Hà Nội)" → chọn. Giá trị=50.000.000 VNĐ, RangePicker 12/05/2026 → 12/08/2026. VV liên kết auto-fill VV-BTP-TW-20260510-001.
-> 3. Click [Tạo mới] → Network: `POST /api/v1/hop-dong-tu-vans` → **201 Created**. Accordion VV-001 refresh hiện 1 row mới HDTV-20260512-0001 (5 columns Mã/Tên/Bên A/Bên B/Giá trị + 5 cột date/VV/TT/trạng thái).
-> 4. Navigate `/chuyen-gia-tvv/978354d7-feac-4330-a750-6b8c07b46c24` (TVV-BTP-TW-0035 detail) → click tab "Lịch sử hỗ trợ" → section "Hợp đồng tư vấn" (heading level 5) render **table 2 rows** đầy đủ:
->    - Row 1: **HDTV-20260512-0001** — HDTV-MultiRow-TVV0035-Test-20260512 — DANG_THUC_HIEN — 11/05/2026 → 11/08/2026 (link clickable)
->    - Row 2: **HDTV-20260510-0001** — HDTV-Retest3-018-1778423919097 — DANG_THUC_HIEN — 09/05/2026 → 09/08/2026 (link clickable)
->    - Pagination: "1-2 trên 2 mặt hàng" + page-size 20/trang + nút prev/next disabled (chỉ 1 trang).
-> 5. Network: `GET /api/v1/hop-dong-tu-vans?tuVanVienId=978354d7-...&page=1&pageSize=20` → 200, count=2.
->
-> ✅ **HDTV-028 multi-row pagination PASS.** Section "Hợp đồng tư vấn" trong TVV detail handle ≥2 record đúng, pagination control hiển thị đầy đủ (text "X-Y trên Z" + page-size combobox + prev/next button). BUG-032 fix scale đúng với multi-record.
->
-> ⚠️ **2 Minor i18n bug đã log** (2-source verify SRS local + NotebookLM HTPLDN xong, cả 2 nguồn match):
-> - **BUG-HDTV-037 Minor** — Cột "Trạng thái" hiển thị raw enum `DANG_THUC_HIEN` thay vì label "Đang thực hiện". Vi phạm SRS FR-04 §3.0 + FR-06 Quy tắc tương tác ("KHÔNG hiển thị mã enum DB cho người dùng cuối"). 3 chỗ khác cùng entity (HDTV detail + standalone list + VV accordion) đều dùng label tiếng Việt — chỉ TVV detail HD section là leak.
-> - **BUG-HDTV-038 Minor** — Pagination text "1-2 trên 2 mặt hàng". Vi phạm SRS pagination chuẩn ("X-Y / Z kết quả" hoặc "X-Y / Z bản ghi" hoặc "X-Y / Z mục"). NotebookLM quote rõ: "mặt hàng" là lỗi dịch máy của "items" e-commerce, KHÔNG dùng trong phần mềm nghiệp vụ này.
->
-> Evidence: ![HDTV-028 multi-row 2 HD rows](image/r7-2026-05-12-hdtv-028-multi-row-tvv0035-2-rows.png)
->
-> **Re-test #6 2026-05-11 16:55:00 → 17:10:00 (dev claim fix 6 bug — UI-only multi-role qa-bugfix-reverify-audit skill):** ✅ **6/8 Open bug PASS Closed-verified · 2/8 vẫn Open**. 4 isolated context (qtht_07, cb_nv_tw_07, cb_nv_bn_07, cb_nv_dp_07).
-> - **BUG-HDTV-020** ✅ **PASS Closed-verified** — HDTV-20260510-0001 detail page render section "Nhật ký hoạt động" với 6 row audit log (CREATE × 2 + UPDATE × 4). UI columns: Thời gian / Hành động / Người thực hiện / Vai trò / Endpoint / HTTP. Network: `GET /api/v1/hop-dong-tu-vans/{id}/audit-logs?page=1&pageSize=10&sort=thoiGian&order=desc` → 200 OK. UI tab thiếu (BE fix R3) giờ đã có trên UI.
-> - **BUG-HDTV-030** ✅ **PASS Closed-verified** — Mở form Edit HDTV-20260510-0001 với cb_nv_tw_07 → click combobox "Tư vấn viên / Chuyên gia" → Network: `GET /api/v1/tu-van-viens?trangThai=HOAT_DONG&pageSize=100` → **200 OK** (đúng max 100, không còn 422). Tương tự `/to-chuc-tu-vans?pageSize=100` → 200. Dropdown render 8 TVV options đầy đủ. Pageize FE đổi từ 200 → 100 đúng spec.
-> - **BUG-HDTV-031** ✅ **PASS Closed-verified** — VV detail (VV-QA-R7-LIFECYCLE-HT id `aade0000-...-000000000004`) accordion "HĐ tư vấn liên kết" expand → render table với đủ 10 columns (MÃ HỢP ĐỒNG / TÊN / BÊN A / BÊN B / GIÁ TRỊ / NGÀY BẮT ĐẦU / NGÀY KẾT THÚC / VỤ VIỆC / TIẾN ĐỘ TT / TRẠNG THÁI) + heading "Hợp đồng tư vấn liên kết". VV chưa link HD nào → empty state "Vụ việc này chưa có hợp đồng tư vấn liên kết." (đúng behavior). FE/BE contract param case đã thống nhất.
-> - **BUG-HDTV-033** ✅ **PASS Closed-verified** — VV detail accordion có button **[+ Tạo hợp đồng]** ngay cạnh heading. HDTV-20260510-0001 detail page (cb_nv_tw_07 view) hiển thị 2 button **"Chỉnh sửa"** + **"Xóa"** ở cuối page. UI entry point Create/Edit đã đầy đủ qua VV accordion + HDTV detail.
-> - **BUG-HDTV-035** ✅ **PASS Closed-verified** — Standalone list `/hop-dong-tv/danh-sach` filter: type `Từ ngày=01/06/2026` + `Đến ngày=31/12/2026` + Tìm kiếm → Network: `GET /api/v1/hop-dong-tu-vans?tuNgay=2026-06-01&denNgay=2026-12-31&page=1&pageSize=20` → **200 OK với cả `tuNgay` + `denNgay`** (không còn silent drop). FE giờ commit text input đầy đủ.
-> - **BUG-HDTV-036** ✅ **PASS Closed-verified** — 3 CB role test standalone list `/hop-dong-tv/danh-sach`: cb_nv_tw_07 **KHÔNG có** button "+ Tạo hợp đồng" (chỉ "Xuất Excel" + "Làm mới"). cb_nv_bn_07 (BKH cấp TW) **KHÔNG có** button. cb_nv_dp_07 (AG cấp ĐP) **KHÔNG có** button. qtht_07 vẫn KHÔNG có button (giữ nguyên). Permission inversion đã fix: 3 role CB không còn button trái spec v3.5 M-01.
-> - **BUG-HDTV-032** ❌ **STILL Open** — TVV-BTP-TW-0035 detail page vẫn 5 tab (Hồ sơ / Thẩm định disabled / Năng lực / Lịch sử hỗ trợ / Đánh giá), KHÔNG có tab/sub-section "HĐ tư vấn". Tab "Lịch sử hỗ trợ" chỉ render table VV. Network: FE chỉ gọi `/tu-van-viens/{id}/lich-su-ho-tro`, KHÔNG gọi endpoint HD nào. Confirm bug VẪN reproducing.
-> - **BUG-HDTV-034** ❌ **STILL Open** — Route `/hop-dong-tv/danh-sach` vẫn render standalone list page với 7 records cho qtht_07, 0 records cho cb_nv_bn_07 (BKH scope), 1 record cho cb_nv_dp_07 (AG scope). Sidebar 13 menu vẫn không có HDTV (đúng spec) nhưng route URL vẫn live. **BA 2026-05-11 đã chốt: không public/menu; nếu giữ route thì ẩn + guard/redirect.**
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 14   | 1        | 7     | 2      | 4     | 0       | 11     | 3    |
 
 ## Bug Summary Table
 
@@ -119,10 +43,171 @@ Phát hiện **5** lỗi gốc R7.7.14 (lần đầu) + **1** regression R3 + **
 
 ---
 
+## BUG-HDTV-034 — Standalone list page `/hop-dong-tv/danh-sach` tồn tại nhưng spec v2.1 nói "KHÔNG có menu riêng" (spec conflict)
+
+> **Re-verify #8 2026-05-12 15:55:00 R19 — ❌ STILL Open Minor.** Account `cb_nv_tw_06` navigate `/hop-dong-tv/danh-sach` → render UI standalone list 9 rows HDTV với breadcrumb đầy đủ, no route guard / no `/403`. Dev FE chưa add guard/redirect theo BA chốt 2026-05-11. Status giữ Open.
+
+
+### Mô tả
+
+Per spec `srs-update-2026-5-5/srs-v3.5.md line 106 + 440 + 660`: "Quản lý HĐ tư vấn — **KHÔNG có menu riêng** (SRS v2.1). Truy cập qua tab VV/TVV." Sidebar 13 menu items (cấp 1 + cấp 2 dưới "Mạng lưới Tư vấn viên" và "Quản lý tư vấn") đúng spec không hiển menu HDTV. **NHƯNG** route URL trực tiếp `/hop-dong-tv` redirect tới `/hop-dong-tv/danh-sach` **render full standalone list page** (6 HDTV records visible với pagination, search, filter, tab filter trạng thái). Spec conflict — có thể là legacy route từ trước v2.1 chưa cleanup.
+
+### Các bước tái hiện
+
+**Precondition:** Tài khoản role QTHT (`qtht_07` primary). Bug là về **route guard URL** — bản chất chỉ test được bằng cách so sánh "menu/tab không có path → URL standalone vẫn live". Bước 1-4 verify UI click thuần (không có entry HDTV ở menu/tab), bước 5-6 test route guard (so sánh module HDTV với module TVV).
+
+1. **Login UI:** Mở browser → vào `http://103.172.236.130:3000/login` → fill form (username `qtht_07`, password `Secret@123`) → click [Đăng nhập] → nhập OTP `666666` (MailHog) → click [Xác nhận] → vào dashboard.
+2. **Verify sidebar:** Click expand 4 menu group có expandable arrow (Quản lý đào tạo / Mạng lưới Tư vấn viên / Quản lý tư vấn / Quản trị hệ thống) → đếm tổng 30 menu items → **KHÔNG có entry "Hợp đồng tư vấn"** ở bất kỳ cấp nào (đúng spec v3.5 line 660 "KHÔNG có menu riêng").
+3. **Verify VV detail không link ra HDTV danh sách:** Click menu "Quản lý vụ việc hỗ trợ pháp lý" → click 1 row VV bất kỳ → trong VV detail, click expand panel "HĐ tư vấn liên kết" → table render **nested trong VV detail**, KHÔNG có button "Xem danh sách HDTV" hay link nào dẫn ra route standalone.
+4. **Verify TVV detail không có tab HDTV:** Click menu "Mạng lưới Tư vấn viên" → "Tư vấn viên / Chuyên gia" → click 1 row TVV bất kỳ → trong TVV detail, quan sát 5 tab (Hồ sơ / Thẩm định / Năng lực / Lịch sử hỗ trợ / Đánh giá) — **KHÔNG có tab HDTV** (đúng spec).
+5. **Test route guard HDTV (cốt lõi bug):** Mở tab browser mới → gõ URL `http://103.172.236.130:3000/hop-dong-tv/danh-sach` vào address bar → Enter → **page render full** với heading "Hợp đồng tư vấn" + breadcrumb "Trang chủ / Hợp đồng tư vấn / Danh sách" + filter (Từ khóa / TVV / Từ ngày / Đến ngày) + tab 5 trạng thái + table 10 columns + 8 record + pagination → ❌ SAI SPEC.
+6. **So sánh control với module TVV:** Mở tab browser khác → gõ URL `http://103.172.236.130:3000/tu-van-vien/danh-sach` → Enter → page trả **404 "Trang bạn tìm kiếm không tồn tại"** → ✅ TVV module có route guard đúng. Chứng minh chỉ riêng HDTV thiếu guard.
+
+### Kết quả mong đợi
+
+- Per spec v3.5 line 660: HDTV truy cập **CHỈ** qua tab Chi tiết VV + Chi tiết TVV. Standalone list page không nằm trong spec navigation.
+- Route `/hop-dong-tv/danh-sach` không được là màn hình/menu nghiệp vụ public.
+- Nếu xóa route: redirect `/dashboard` hoặc 404.
+- Nếu giữ route kỹ thuật: route ẩn, có guard quyền đầy đủ, tốt nhất redirect về ngữ cảnh VV/TVV hoặc chỉ dùng nội bộ admin/dev.
+- Quyết định BA đã chốt ngày 2026-05-11; còn lại là Dev FE thực hiện.
+
+### Kết quả thực tế
+
+- Standalone list page render đầy đủ, KHÔNG có permission gate riêng (qtht_07 view được, các role khác chưa test multi-role).
+- Page hoạt động đầy đủ chức năng list/filter/search nhưng đa số column row không có nút Action (xem detail OK qua URL `/hop-dong-tv/{id}`, không có button trong row).
+
+### Bằng chứng
+
+![BUG-HDTV-034 — Standalone list /hop-dong-tv/danh-sach render 6 records](image/r7-4-033-standalone-list-exists.png)
+
+Sidebar verify (R4 2026-05-11): 13 menu items, KHÔNG có "Hợp đồng tư vấn" item — match spec line 660 phần "KHÔNG có menu riêng".
+
+Submenu "Quản lý tư vấn" expand: 3 items "Tư vấn chuyên sâu / Kho câu hỏi / Tư vấn nhanh" — KHÔNG có HDTV submenu.
+
+Submenu "Mạng lưới Tư vấn viên" expand: 3 items "Tư vấn viên / Chuyên gia / Tổ chức tư vấn / Người hỗ trợ pháp lý" — KHÔNG có HDTV submenu.
+
+→ Sidebar đúng spec, nhưng route URL `/hop-dong-tv/danh-sach` không match spec. Cần BA quyết định cuối cùng.
+
+---
+
+## BUG-HDTV-037 — TVV detail tab "Lịch sử hỗ trợ" → table "Hợp đồng tư vấn" hiển thị raw enum `DANG_THUC_HIEN` thay vì label "Đang thực hiện" (i18n missing)
+
+### Mô tả
+
+Sau khi BUG-032 fix (TVV detail có sub-section HD trong tab Lịch sử hỗ trợ), cột "Trạng thái" trong table này render **raw enum DB** `DANG_THUC_HIEN` thay vì label tiếng Việt "Đang thực hiện". Cùng entity HD, page detail `/hop-dong-tv/{id}` hiển thị đúng "Đang thực hiện" → inconsistency i18n giữa 2 nơi cùng app. Vi phạm convention i18n nhất quán toàn dự án (SRS FR-04 §3.0 + FR-06 nói "KHÔNG hiển thị mã enum DB cho người dùng cuối").
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_07` (Secret@123, OTP 666666) → dashboard.
+2. Navigate `/chuyen-gia-tvv/978354d7-feac-4330-a750-6b8c07b46c24` (TVV-BTP-TW-0035 đã có ≥1 HD link).
+3. Click tab "Lịch sử hỗ trợ".
+4. Scroll xuống section "Hợp đồng tư vấn" (heading level 5).
+5. Quan sát cột "Trạng thái" của row HD: hiển thị `DANG_THUC_HIEN` (raw uppercase enum).
+6. Đối chiếu: navigate `/hop-dong-tv/{id}` (cùng HD record) → trang detail hiển thị "Đang thực hiện" (label tiếng Việt).
+
+### Kết quả mong đợi
+
+Per `srs-v3/srs-fr-14-hop-dong-tv.md line 369` enum: `'DANG_THUC_HIEN','HOAN_THANH','HUY','TAM_DUNG'` chỉ là giá trị DB.
+
+Per `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md §3.0` (Quy ước UI Nhóm IV — TVV/CG): *"Mọi badge/tag trạng thái trong section này phải hiển thị **label tiếng Việt thuần** theo bảng dưới đây. KHÔNG hiển thị mã enum DB cho người dùng cuối"*.
+
+Per `srs-update-2026-5-5/srs-fr-06-chi-tra.md` Quy tắc tương tác: *"Tất cả label, button, badge, radio, message hiển thị bằng tiếng Việt chuẩn (không viết tắt, không dùng enum/field code như DANG_KIEM_TRA). Enum chỉ dùng làm giá trị nội bộ — khi hiển thị phải map sang nhãn Việt tương ứng"*.
+
+Per `srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md line 1052`: HDTV statuses canonical Vietnamese form là "Đang thực hiện / Hoàn thành / Hủy / Tạm dừng".
+
+NotebookLM HTPLDN xác nhận: "**UI BẮT BUỘC phải render label tiếng Việt chuẩn (ví dụ: 'Đang thực hiện'), tuyệt đối KHÔNG được phép render raw enum DB như `DANG_THUC_HIEN` cho người dùng cuối xem.**" — match SRS local.
+
+→ Map enum → label: `DANG_THUC_HIEN` → "Đang thực hiện", `HOAN_THANH` → "Hoàn thành", `HUY` → "Hủy", `TAM_DUNG` → "Tạm dừng".
+
+### Kết quả thực tế
+
+Table "Hợp đồng tư vấn" trong TVV-BTP-TW-0035 → tab Lịch sử hỗ trợ render 2 row (HDTV-20260512-0001 + HDTV-20260510-0001) — cả 2 row đều có cột "Trạng thái" = `DANG_THUC_HIEN` (raw enum, uppercase, có dấu underscore). KHÔNG có badge color, KHÔNG có label mapping.
+
+Network log: `GET /api/v1/hop-dong-tu-vans?tuVanVienId=978354d7-...&page=1&pageSize=20` → 200 trả `trangThai: "DANG_THUC_HIEN"` (BE trả enum DB đúng — BE không lỗi). FE render thẳng giá trị API không map qua i18n dictionary.
+
+Đối chiếu cùng entity HD ở chỗ khác:
+- `/hop-dong-tv/9054a0a9-...` (HDTV detail) → status hiển thị "Đang thực hiện" ✅ (label tiếng Việt).
+- `/hop-dong-tv/danh-sach` (standalone list, qtht_07) → tab "Đang thực hiện / Hoàn thành / Tạm dừng / Hủy" + cột status badge tiếng Việt ✅.
+- VV detail → accordion HĐ tư vấn liên kết → cột TRẠNG THÁI hiển thị "Đang thực hiện" ✅ (verified Follow-up #7b step 3).
+- TVV detail tab Lịch sử hỗ trợ → section Hợp đồng tư vấn → cột Trạng thái = `DANG_THUC_HIEN` ❌ (chỗ duy nhất render raw enum).
+
+→ FE component cho section HD-in-TVV chưa apply i18n mapping mà các component khác đã apply.
+
+### Bằng chứng
+
+![BUG-HDTV-037 — Raw enum DANG_THUC_HIEN trong TVV detail HD section](image/r7-2026-05-12-hdtv-028-multi-row-tvv0035-2-rows.png)
+
+Screenshot chụp tab Lịch sử hỗ trợ TVV-BTP-TW-0035, focus section "Hợp đồng tư vấn" — 2 row HD đều có cột "Trạng thái" = `DANG_THUC_HIEN` (raw enum).
+
+### So sánh
+
+| Vị trí | Hiển thị Trạng thái | i18n compliance |
+|---|---|---|
+| `/hop-dong-tv/{id}` detail page | "Đang thực hiện" | ✅ Đúng |
+| `/hop-dong-tv/danh-sach` standalone list | Badge "Đang thực hiện" + tab tiếng Việt | ✅ Đúng |
+| VV detail accordion HĐ tư vấn liên kết | "Đang thực hiện" | ✅ Đúng |
+| **TVV detail tab Lịch sử hỗ trợ → section Hợp đồng tư vấn** | **`DANG_THUC_HIEN`** | **❌ Sai** |
+
+---
+
+## BUG-HDTV-038 — TVV detail tab "Lịch sử hỗ trợ" → pagination text dùng từ "mặt hàng" thay vì "kết quả"/"bản ghi"/"mục" (i18n e-commerce template leak)
+
+### Mô tả
+
+Section "Hợp đồng tư vấn" trong TVV detail (tab Lịch sử hỗ trợ) có pagination text `1-2 trên 2 mặt hàng`. Từ "mặt hàng" là thuật ngữ e-commerce (item/product) không phù hợp ngữ cảnh nghiệp vụ pháp lý — hợp đồng tư vấn không phải mặt hàng bán. SRS các module quy định pagination text chuẩn là "kết quả" / "bản ghi" / "mục". Có 2 chỗ khác trong cùng app (VV accordion HD + standalone list HDTV) dùng đúng "mục" → inconsistency.
+
+### Các bước tái hiện
+
+1. Login `cb_nv_tw_07` → dashboard.
+2. Navigate `/chuyen-gia-tvv/978354d7-feac-4330-a750-6b8c07b46c24` (TVV có ≥2 HD link để pagination text hiển thị "X-Y trên Z").
+3. Click tab "Lịch sử hỗ trợ".
+4. Scroll xuống section "Hợp đồng tư vấn" (heading level 5).
+5. Quan sát text pagination dưới table: `1-2 trên 2 mặt hàng`.
+6. Đối chiếu: VV detail accordion HĐ tư vấn liên kết → pagination text `1-1 / 1 mục`. Standalone list HDTV → `Hiển thị X-Y / N kết quả` (theo spec).
+
+### Kết quả mong đợi
+
+Per `srs-v3/srs-fr-14-hop-dong-tv.md line 262` (SCR-X3-01 pagination): *"20 mục/trang"*.
+
+Per `srs-update-2026-5-5/srs-fr-02-hoi-dap.md SCR-II-01 phân trang`: *"20 muc/trang. 'Hien thi 1-20 / {total_count} ket qua'"* — text chuẩn "kết quả".
+
+Per `srs-update-2026-5-5/srs-fr-05-vu-viec.md SCR-V.I-01 phân trang`: *"'Hiển thị 1-20 / N kết quả'. Mặc định 20/trang"* — text chuẩn "kết quả".
+
+Per `srs-update-2026-5-5/srs-fr-03-dao-tao.md SCR-III-01 phân trang`: *"Hiển thị 1–20 trên tổng số {tổng} bản ghi"* — text chuẩn "bản ghi".
+
+NotebookLM HTPLDN xác nhận: *"text pagination chuẩn cho '20 mục/trang' **không sử dụng từ 'mặt hàng' (từ này thường do lỗi dịch máy của từ 'items' và không được dùng trong phần mềm nghiệp vụ này)**. Text hiển thị chuẩn xoay quanh các cụm từ chỉ 'kết quả' hoặc 'bản ghi'."*
+
+→ Pagination text chuẩn: `Hiển thị X-Y / Z kết quả` hoặc `Hiển thị X-Y trên tổng số Z bản ghi`. Có thể chấp nhận `X-Y / Z mục` (đang dùng trong VV accordion). KHÔNG dùng "mặt hàng".
+
+### Kết quả thực tế
+
+Pagination dưới table HD section trong TVV detail hiển thị: `1-2 trên 2 mặt hàng`. Cùng nghiệp vụ HDTV, 3 chỗ khác:
+- VV detail accordion HĐ tư vấn liên kết → `1-1 / 1 mục` ✅
+- Standalone list `/hop-dong-tv/danh-sach` → `Hiển thị 1-N / X kết quả` ✅
+- HDTV detail page Mốc tiến độ + Thanh toán giai đoạn — không có pagination (table inline).
+- **TVV detail tab Lịch sử hỗ trợ → section Hợp đồng tư vấn → `1-2 trên 2 mặt hàng` ❌**
+
+→ FE component pagination cho section HD-in-TVV dùng i18n string khác với các table khác (có thể copy nhầm template e-commerce default của library, vd Ant Design `Pagination` mặc định trong tiếng Anh là "items" → dịch máy "mặt hàng").
+
+### Bằng chứng
+
+![BUG-HDTV-038 — Pagination 'mặt hàng' trong TVV detail HD section](image/r7-2026-05-12-hdtv-028-multi-row-tvv0035-2-rows.png)
+
+Screenshot chụp tab Lịch sử hỗ trợ TVV-BTP-TW-0035 → section "Hợp đồng tư vấn" — text pagination dưới table: `1-2 trên 2 mặt hàng`.
+
+### So sánh
+
+| Vị trí | Pagination text | i18n compliance |
+|---|---|---|
+| `/hop-dong-tv/danh-sach` standalone list | `Hiển thị X-Y / N kết quả` | ✅ Đúng spec |
+| VV detail accordion HĐ tư vấn liên kết | `1-1 / 1 mục` | ✅ Acceptable |
+| Các SRS module khác (Hỏi đáp/Vụ việc/Đào tạo/Chi trả/DN/Đánh giá) | `X-Y / Z kết quả` hoặc `X-Y / Z bản ghi` | ✅ Đúng spec |
+| **TVV detail tab Lịch sử hỗ trợ → section Hợp đồng tư vấn** | **`1-2 trên 2 mặt hàng`** | **❌ Sai (i18n e-commerce leak)** |
+
+---
+
 ## ~~BUG-HDTV-018~~ [CLOSED] — Form Edit HD thiếu toggle "Đã thanh toán" + BE silently drop thanhToans patch → không test được tiến độ TT 50%
 
-> **Re-test 2026-05-10 11:00:00:** ❌ VẪN reproducing. PATCH HDTV-0009 với `thanhToans[].trangThaiTt='DA_THANH_TOAN'` trả 200 nhưng GET sau patch `tienDoTt=0` + 3 statuses vẫn `CHUA_THANH_TOAN`. Status: **Open**.
->
 > **Re-test #3 2026-05-10 21:38:00 — ✅ PASS Closed-verified.** Form Edit modal có 3 switch toggle "Đã thanh toán" cho 3 giai đoạn (uid 121_57/69/81 a11y `switch question-circle`). Click switch giai đoạn 1+2 → fill ngày dự kiến → Cập nhật → toast success → detail render Đợt 1+2 = "Đã thanh toán" với ngày 09/06+09/07. API GET trả `tienDoTt=50` (đúng công thức 50tr/100tr × 100), `thanhToans[0,1].trangThaiTt='DA_THANH_TOAN'` + ngayThanhToan populated. Version 1→4. Account `cb_nv_tw_07`. HDTV-20260510-0001 (id `9054a0a9-...`).
 >
 > Evidence: ![Form Edit có 3 switch toggle](image/r7-3-018-form-edit-with-switch-r3.png) ![Detail render tienDoTt 50%](image/r7-3-018-detail-tiendott-50-r3.png)
@@ -157,7 +242,7 @@ CB Nghiệp vụ TW (`cb_nv_tw_01`) tạo HDTV-20260510-0009 với 3 thanhToans 
 
 ### Bằng chứng
 
-![BUG-HDTV-018 — HD detail render 3 thanhToans tất cả "Chưa thanh toán" + form Edit không có toggle](r7-7-14-hdtv-018-detail-no-paid-toggle.jpeg)
+![BUG-HDTV-018 — HD detail render 3 thanhToans tất cả "Chưa thanh toán" + form Edit không có toggle](image/r7-7-14-hdtv-018-detail-no-paid-toggle.jpeg)
 
 API response sample:
 
@@ -184,10 +269,6 @@ PATCH attempt response:
 
 ## ~~BUG-HDTV-020~~ [CLOSED] — HD detail thiếu tab "Nhật ký" + endpoint audit log không tồn tại (BR-AUD-HDTV-01)
 
-> **Re-test 2026-05-10 11:01:00:** ❌ VẪN reproducing. 4 sub-resource path (`/audit-logs`, `/nhat-ky`, `/lich-su`, `/history`) đều trả 404; top-level `/audit-logs?entityType=HOP_DONG_TU_VAN` trả 403. Status: **Open**.
->
-> **Re-test #3 2026-05-10 21:42:00 — ⚠️ PARTIAL (BE✅/UI❌).** API endpoint `GET /api/v1/hop-dong-tu-vans/{id}/audit-logs` giờ **200 OK** với 5 events. UI HD detail page snapshot VẪN KHÔNG có tab/section "Nhật ký". **Downgrade Major → Medium**. Status: **Open (UI partial)**.
->
 > **Re-test #6 2026-05-11 16:57:00 — ✅ PASS Closed-verified.** HDTV-20260510-0001 detail page (cb_nv_tw_07 view) render section "Nhật ký hoạt động" với 6 audit log row (CREATE × 2 + UPDATE × 4). Columns: Thời gian / Hành động / Người thực hiện / Vai trò / Endpoint / HTTP. Network: `GET /api/v1/hop-dong-tu-vans/{id}/audit-logs?page=1&pageSize=10&sort=thoiGian&order=desc` → 200. UI tab thiếu giờ đã có. Evidence: ![Nhật ký HDTV detail QTHT](image/r7-reverify-hdtv-detail-qtht-nhatky.png)
 
 ### Mô tả
@@ -224,7 +305,7 @@ CB Nghiệp vụ TW navigate `/hop-dong-tv/{id}` quan sát detail page chỉ ren
 
 ### Bằng chứng
 
-![BUG-HDTV-020 — HD detail full page, không có tab "Nhật ký"](r7-7-14-hdtv-018-detail-no-paid-toggle.jpeg)
+![BUG-HDTV-020 — HD detail full page, không có tab "Nhật ký"](image/r7-7-14-hdtv-018-detail-no-paid-toggle.jpeg)
 
 *(Cùng screenshot với BUG-HDTV-018 — vì cả 2 issue đều ở trên cùng detail page)*
 
@@ -244,13 +325,6 @@ API probe response:
 
 ## ~~BUG-HDTV-021~~ [CLOSED] — QTHT bypass cả CUD trên HD TV: POST→500, PATCH→200 (modify), DELETE→204 (hard-delete)
 
-> **Re-test 2026-05-10 11:03:00:** ❌ VẪN reproducing + PHÁT HIỆN MỚI nghiêm trọng hơn:
-> - POST `/hop-dong-tu-vans` → vẫn 500 ERR-SYS-00-00-01
-> - PATCH `/hop-dong-tu-vans/{id}` body `{version, ghiChu:'qtht-retest'}` → **200 OK** (QTHT modify thành công, không 403!)
-> - DELETE `/hop-dong-tu-vans/{HDTV-0009-mồ-côi}` → **204 No Content** (hard-deleted thật sự!) → GET sau DELETE trả 404
->
-> **Severity escalate Major → Critical** vì QTHT (vai trò Quản trị hệ thống — không có permission CUD trên HD TV per BR-AUTH-HDTV-01) thực tế thao tác CUD đầy đủ trên DB nghiệp vụ. Status: **Open**.
->
 > **Re-test #3 2026-05-10 21:44:00 — ✅ PASS Closed-verified.** Login `qtht_07` (vai trò QTHT) trong isolated context `qa_r3_hdtv_qtht_07`. Probe 4 endpoint:
 > - GET `/api/v1/hop-dong-tu-vans?pageSize=2` → 200 (đúng quyền R)
 > - POST `/api/v1/hop-dong-tu-vans` body `{tenHopDong, benA, benB, giaTriHopDong, ngayBatDau, ngayKetThuc, tuVanVienId}` → **403 ERR-PERM-SYS-00-01 "Forbidden"**
@@ -527,7 +601,6 @@ GET /api/v1/hop-dong-tu-vans?vu_viec_id=9cc24b55-7c6b-4faa-8051-9a2b0db86cb5&pag
 
 > **Re-verify #7 2026-05-12 02:00:00 — ✅ PASS Closed-verified.** TVV-BTP-TW-0035 (id `978354d7-...`) detail tab "Lịch sử hỗ trợ" giờ render đủ 2 section: (1) table VV với 9 columns (empty, đúng vì TVV chưa tham gia VV trực tiếp) + (2) heading "Hợp đồng tư vấn" level 5 + table 5 columns (Mã HĐ / Tên hợp đồng / Trạng thái / Ngày bắt đầu / Ngày kết thúc) + 1 row HDTV-20260510-0001 (DANG_THUC_HIEN, 09/05/2026 → 09/08/2026) với link `<a>` clickable mở HDTV detail + pagination "1-1 trên 1 mặt hàng". Network log (qtht_07): reqid 415 `GET /api/v1/hop-dong-tu-vans?tuVanVienId=978354d7-feac-4330-a750-6b8c07b46c24&page=1&pageSize=20` → 200 (NEW endpoint call song song với `/lich-su-ho-tro` cũ). FE giờ implement HD section đúng spec v3 line 241. Evidence: ![BUG-032 PASS](image/r7-reverify-2026-05-12-bug-032-tvv-history-with-hd-section-passed.png)
 >
-> **Re-test #6 2026-05-11 17:08:00 — ❌ STILL Open.** TVV-BTP-TW-0035 detail page (cb_nv_tw_07 view) vẫn 5 tab (Hồ sơ / Thẩm định disabled / Năng lực / Lịch sử hỗ trợ / Đánh giá), KHÔNG có tab/sub-section "HĐ tư vấn". Click tab "Lịch sử hỗ trợ" → render 3 stat card + table VV (empty). Network: chỉ `GET /api/v1/tu-van-viens/{id}/lich-su-ho-tro`, KHÔNG có call endpoint HD nào. FE vẫn chưa implement HD section trong TVV detail. Evidence: ![TVV detail still no HD tab](image/r7-reverify-bug-032-tvv-detail-still-no-hd-tab.png)
 
 ### Mô tả
 
@@ -622,186 +695,6 @@ URL test evidence (Re-test #4 2026-05-11):
 
 ---
 
-## BUG-HDTV-034 — Standalone list page `/hop-dong-tv/danh-sach` tồn tại nhưng spec v2.1 nói "KHÔNG có menu riêng" (spec conflict)
-
-> **Re-verify #7 2026-05-12 01:53:00 — ❌ STILL Open Minor (chờ dev FE).** qtht_07 navigate trực tiếp `/hop-dong-tv/danh-sach` → page render 8 records HDTV (HDTV-20260511-0001..0006 + HDTV-QA-R7-059 + HDTV-20260510-0001) với heading "Hợp đồng tư vấn", breadcrumb "Trang chủ / Hợp đồng tư vấn / Danh sách" đầy đủ, filter Từ khóa + Tư vấn viên + Từ ngày + Đến ngày, tab trạng thái (Tất cả / Đang thực hiện / Hoàn thành / Tạm dừng / Hủy), table 10 columns + pagination. Sidebar 13 menu vẫn KHÔNG có HDTV (đúng spec). KHÔNG có guard/redirect — route URL trực tiếp vẫn live. **BA chốt 2026-05-11 ✅ — chờ dev FE thực hiện ẩn route / add guard / redirect.** Evidence: ![BUG-034 STILL Open](image/r7-reverify-2026-05-12-bug-034-standalone-list-still-open.png)
->
-> **Re-test #6 2026-05-11 17:09:00 — ❌ STILL Open.** Route `/hop-dong-tv/danh-sach` vẫn render standalone list page với 4 role test: qtht_07 thấy 7 records, cb_nv_tw_07 thấy 7 records, cb_nv_bn_07 thấy 0 records (BKH không có HDTV), cb_nv_dp_07 thấy 1 record (AG scope). Sidebar 13 menu vẫn không có HDTV item (đúng spec) nhưng route URL vẫn live. **BA 2026-05-11 chốt hướng xử lý: không public/menu; nếu giữ route kỹ thuật thì ẩn, guard quyền, tốt nhất redirect về ngữ cảnh VV/TVV hoặc chỉ nội bộ admin/dev.**
-
-### Mô tả
-
-Per spec `srs-update-2026-5-5/srs-v3.5.md line 106 + 440 + 660`: "Quản lý HĐ tư vấn — **KHÔNG có menu riêng** (SRS v2.1). Truy cập qua tab VV/TVV." Sidebar 13 menu items (cấp 1 + cấp 2 dưới "Mạng lưới Tư vấn viên" và "Quản lý tư vấn") đúng spec không hiển menu HDTV. **NHƯNG** route URL trực tiếp `/hop-dong-tv` redirect tới `/hop-dong-tv/danh-sach` **render full standalone list page** (6 HDTV records visible với pagination, search, filter, tab filter trạng thái). Spec conflict — có thể là legacy route từ trước v2.1 chưa cleanup.
-
-### Các bước tái hiện
-
-1. Login `qtht_07` (Secret@123, OTP 666666).
-2. Navigate direct URL `http://103.172.236.130:3000/hop-dong-tv`.
-3. URL auto-redirect tới `/hop-dong-tv/danh-sach`.
-4. Page render heading "Hợp đồng tư vấn" + filter (Từ khóa / Từ ngày / Đến ngày / Search / Clear) + tab 5 trạng thái (Tất cả / Đang thực hiện / Hoàn thành / Tạm dừng / Hủy) + table 10 columns + pagination + 6 records.
-5. Kiểm tra sidebar — KHÔNG có menu HDTV ✅ (đúng spec).
-
-### Kết quả mong đợi
-
-- Per spec v3.5 line 660: HDTV truy cập **CHỈ** qua tab Chi tiết VV + Chi tiết TVV. Standalone list page không nằm trong spec navigation.
-- Route `/hop-dong-tv/danh-sach` không được là màn hình/menu nghiệp vụ public.
-- Nếu xóa route: redirect `/dashboard` hoặc 404.
-- Nếu giữ route kỹ thuật: route ẩn, có guard quyền đầy đủ, tốt nhất redirect về ngữ cảnh VV/TVV hoặc chỉ dùng nội bộ admin/dev.
-- Quyết định BA đã chốt ngày 2026-05-11; còn lại là Dev FE thực hiện.
-
-### Kết quả thực tế
-
-- Standalone list page render đầy đủ, KHÔNG có permission gate riêng (qtht_07 view được, các role khác chưa test multi-role).
-- Page hoạt động đầy đủ chức năng list/filter/search nhưng đa số column row không có nút Action (xem detail OK qua URL `/hop-dong-tv/{id}`, không có button trong row).
-
-### Bằng chứng
-
-![BUG-HDTV-034 — Standalone list /hop-dong-tv/danh-sach render 6 records](image/r7-4-033-standalone-list-exists.png)
-
-Sidebar verify (R4 2026-05-11): 13 menu items, KHÔNG có "Hợp đồng tư vấn" item — match spec line 660 phần "KHÔNG có menu riêng".
-
-Submenu "Quản lý tư vấn" expand: 3 items "Tư vấn chuyên sâu / Kho câu hỏi / Tư vấn nhanh" — KHÔNG có HDTV submenu.
-
-Submenu "Mạng lưới Tư vấn viên" expand: 3 items "Tư vấn viên / Chuyên gia / Tổ chức tư vấn / Người hỗ trợ pháp lý" — KHÔNG có HDTV submenu.
-
-→ Sidebar đúng spec, nhưng route URL `/hop-dong-tv/danh-sach` không match spec. Cần BA quyết định cuối cùng.
-
----
-
-## BUG-HDTV-037 — TVV detail tab "Lịch sử hỗ trợ" → table "Hợp đồng tư vấn" hiển thị raw enum `DANG_THUC_HIEN` thay vì label "Đang thực hiện" (i18n missing)
-
-### Mô tả
-
-Sau khi BUG-032 fix (TVV detail có sub-section HD trong tab Lịch sử hỗ trợ), cột "Trạng thái" trong table này render **raw enum DB** `DANG_THUC_HIEN` thay vì label tiếng Việt "Đang thực hiện". Cùng entity HD, page detail `/hop-dong-tv/{id}` hiển thị đúng "Đang thực hiện" → inconsistency i18n giữa 2 nơi cùng app. Vi phạm convention i18n nhất quán toàn dự án (SRS FR-04 §3.0 + FR-06 nói "KHÔNG hiển thị mã enum DB cho người dùng cuối").
-
-### Các bước tái hiện
-
-1. Login `cb_nv_tw_07` (Secret@123, OTP 666666) → dashboard.
-2. Navigate `/chuyen-gia-tvv/978354d7-feac-4330-a750-6b8c07b46c24` (TVV-BTP-TW-0035 đã có ≥1 HD link).
-3. Click tab "Lịch sử hỗ trợ".
-4. Scroll xuống section "Hợp đồng tư vấn" (heading level 5).
-5. Quan sát cột "Trạng thái" của row HD: hiển thị `DANG_THUC_HIEN` (raw uppercase enum).
-6. Đối chiếu: navigate `/hop-dong-tv/{id}` (cùng HD record) → trang detail hiển thị "Đang thực hiện" (label tiếng Việt).
-
-### Kết quả mong đợi
-
-Per `srs-v3/srs-fr-14-hop-dong-tv.md line 369` enum: `'DANG_THUC_HIEN','HOAN_THANH','HUY','TAM_DUNG'` chỉ là giá trị DB.
-
-Per `srs-update-2026-5-5/srs-fr-04-chuyen-gia-tvv.md §3.0` (Quy ước UI Nhóm IV — TVV/CG): *"Mọi badge/tag trạng thái trong section này phải hiển thị **label tiếng Việt thuần** theo bảng dưới đây. KHÔNG hiển thị mã enum DB cho người dùng cuối"*.
-
-Per `srs-update-2026-5-5/srs-fr-06-chi-tra.md` Quy tắc tương tác: *"Tất cả label, button, badge, radio, message hiển thị bằng tiếng Việt chuẩn (không viết tắt, không dùng enum/field code như DANG_KIEM_TRA). Enum chỉ dùng làm giá trị nội bộ — khi hiển thị phải map sang nhãn Việt tương ứng"*.
-
-Per `srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md line 1052`: HDTV statuses canonical Vietnamese form là "Đang thực hiện / Hoàn thành / Hủy / Tạm dừng".
-
-NotebookLM HTPLDN xác nhận: "**UI BẮT BUỘC phải render label tiếng Việt chuẩn (ví dụ: 'Đang thực hiện'), tuyệt đối KHÔNG được phép render raw enum DB như `DANG_THUC_HIEN` cho người dùng cuối xem.**" — match SRS local.
-
-→ Map enum → label: `DANG_THUC_HIEN` → "Đang thực hiện", `HOAN_THANH` → "Hoàn thành", `HUY` → "Hủy", `TAM_DUNG` → "Tạm dừng".
-
-### Kết quả thực tế
-
-Table "Hợp đồng tư vấn" trong TVV-BTP-TW-0035 → tab Lịch sử hỗ trợ render 2 row (HDTV-20260512-0001 + HDTV-20260510-0001) — cả 2 row đều có cột "Trạng thái" = `DANG_THUC_HIEN` (raw enum, uppercase, có dấu underscore). KHÔNG có badge color, KHÔNG có label mapping.
-
-Network log: `GET /api/v1/hop-dong-tu-vans?tuVanVienId=978354d7-...&page=1&pageSize=20` → 200 trả `trangThai: "DANG_THUC_HIEN"` (BE trả enum DB đúng — BE không lỗi). FE render thẳng giá trị API không map qua i18n dictionary.
-
-Đối chiếu cùng entity HD ở chỗ khác:
-- `/hop-dong-tv/9054a0a9-...` (HDTV detail) → status hiển thị "Đang thực hiện" ✅ (label tiếng Việt).
-- `/hop-dong-tv/danh-sach` (standalone list, qtht_07) → tab "Đang thực hiện / Hoàn thành / Tạm dừng / Hủy" + cột status badge tiếng Việt ✅.
-- VV detail → accordion HĐ tư vấn liên kết → cột TRẠNG THÁI hiển thị "Đang thực hiện" ✅ (verified Follow-up #7b step 3).
-- TVV detail tab Lịch sử hỗ trợ → section Hợp đồng tư vấn → cột Trạng thái = `DANG_THUC_HIEN` ❌ (chỗ duy nhất render raw enum).
-
-→ FE component cho section HD-in-TVV chưa apply i18n mapping mà các component khác đã apply.
-
-### Bằng chứng
-
-![BUG-HDTV-037 — Raw enum DANG_THUC_HIEN trong TVV detail HD section](image/r7-2026-05-12-hdtv-028-multi-row-tvv0035-2-rows.png)
-
-Screenshot chụp tab Lịch sử hỗ trợ TVV-BTP-TW-0035, focus section "Hợp đồng tư vấn" — 2 row HD đều có cột "Trạng thái" = `DANG_THUC_HIEN` (raw enum).
-
-### So sánh
-
-| Vị trí | Hiển thị Trạng thái | i18n compliance |
-|---|---|---|
-| `/hop-dong-tv/{id}` detail page | "Đang thực hiện" | ✅ Đúng |
-| `/hop-dong-tv/danh-sach` standalone list | Badge "Đang thực hiện" + tab tiếng Việt | ✅ Đúng |
-| VV detail accordion HĐ tư vấn liên kết | "Đang thực hiện" | ✅ Đúng |
-| **TVV detail tab Lịch sử hỗ trợ → section Hợp đồng tư vấn** | **`DANG_THUC_HIEN`** | **❌ Sai** |
-
----
-
-## BUG-HDTV-038 — TVV detail tab "Lịch sử hỗ trợ" → pagination text dùng từ "mặt hàng" thay vì "kết quả"/"bản ghi"/"mục" (i18n e-commerce template leak)
-
-### Mô tả
-
-Section "Hợp đồng tư vấn" trong TVV detail (tab Lịch sử hỗ trợ) có pagination text `1-2 trên 2 mặt hàng`. Từ "mặt hàng" là thuật ngữ e-commerce (item/product) không phù hợp ngữ cảnh nghiệp vụ pháp lý — hợp đồng tư vấn không phải mặt hàng bán. SRS các module quy định pagination text chuẩn là "kết quả" / "bản ghi" / "mục". Có 2 chỗ khác trong cùng app (VV accordion HD + standalone list HDTV) dùng đúng "mục" → inconsistency.
-
-### Các bước tái hiện
-
-1. Login `cb_nv_tw_07` → dashboard.
-2. Navigate `/chuyen-gia-tvv/978354d7-feac-4330-a750-6b8c07b46c24` (TVV có ≥2 HD link để pagination text hiển thị "X-Y trên Z").
-3. Click tab "Lịch sử hỗ trợ".
-4. Scroll xuống section "Hợp đồng tư vấn" (heading level 5).
-5. Quan sát text pagination dưới table: `1-2 trên 2 mặt hàng`.
-6. Đối chiếu: VV detail accordion HĐ tư vấn liên kết → pagination text `1-1 / 1 mục`. Standalone list HDTV → `Hiển thị X-Y / N kết quả` (theo spec).
-
-### Kết quả mong đợi
-
-Per `srs-v3/srs-fr-14-hop-dong-tv.md line 262` (SCR-X3-01 pagination): *"20 mục/trang"*.
-
-Per `srs-update-2026-5-5/srs-fr-02-hoi-dap.md SCR-II-01 phân trang`: *"20 muc/trang. 'Hien thi 1-20 / {total_count} ket qua'"* — text chuẩn "kết quả".
-
-Per `srs-update-2026-5-5/srs-fr-05-vu-viec.md SCR-V.I-01 phân trang`: *"'Hiển thị 1-20 / N kết quả'. Mặc định 20/trang"* — text chuẩn "kết quả".
-
-Per `srs-update-2026-5-5/srs-fr-03-dao-tao.md SCR-III-01 phân trang`: *"Hiển thị 1–20 trên tổng số {tổng} bản ghi"* — text chuẩn "bản ghi".
-
-NotebookLM HTPLDN xác nhận: *"text pagination chuẩn cho '20 mục/trang' **không sử dụng từ 'mặt hàng' (từ này thường do lỗi dịch máy của từ 'items' và không được dùng trong phần mềm nghiệp vụ này)**. Text hiển thị chuẩn xoay quanh các cụm từ chỉ 'kết quả' hoặc 'bản ghi'."*
-
-→ Pagination text chuẩn: `Hiển thị X-Y / Z kết quả` hoặc `Hiển thị X-Y trên tổng số Z bản ghi`. Có thể chấp nhận `X-Y / Z mục` (đang dùng trong VV accordion). KHÔNG dùng "mặt hàng".
-
-### Kết quả thực tế
-
-Pagination dưới table HD section trong TVV detail hiển thị: `1-2 trên 2 mặt hàng`. Cùng nghiệp vụ HDTV, 3 chỗ khác:
-- VV detail accordion HĐ tư vấn liên kết → `1-1 / 1 mục` ✅
-- Standalone list `/hop-dong-tv/danh-sach` → `Hiển thị 1-N / X kết quả` ✅
-- HDTV detail page Mốc tiến độ + Thanh toán giai đoạn — không có pagination (table inline).
-- **TVV detail tab Lịch sử hỗ trợ → section Hợp đồng tư vấn → `1-2 trên 2 mặt hàng` ❌**
-
-→ FE component pagination cho section HD-in-TVV dùng i18n string khác với các table khác (có thể copy nhầm template e-commerce default của library, vd Ant Design `Pagination` mặc định trong tiếng Anh là "items" → dịch máy "mặt hàng").
-
-### Bằng chứng
-
-![BUG-HDTV-038 — Pagination 'mặt hàng' trong TVV detail HD section](image/r7-2026-05-12-hdtv-028-multi-row-tvv0035-2-rows.png)
-
-Screenshot chụp tab Lịch sử hỗ trợ TVV-BTP-TW-0035 → section "Hợp đồng tư vấn" — text pagination dưới table: `1-2 trên 2 mặt hàng`.
-
-### So sánh
-
-| Vị trí | Pagination text | i18n compliance |
-|---|---|---|
-| `/hop-dong-tv/danh-sach` standalone list | `Hiển thị X-Y / N kết quả` | ✅ Đúng spec |
-| VV detail accordion HĐ tư vấn liên kết | `1-1 / 1 mục` | ✅ Acceptable |
-| Các SRS module khác (Hỏi đáp/Vụ việc/Đào tạo/Chi trả/DN/Đánh giá) | `X-Y / Z kết quả` hoặc `X-Y / Z bản ghi` | ✅ Đúng spec |
-| **TVV detail tab Lịch sử hỗ trợ → section Hợp đồng tư vấn** | **`1-2 trên 2 mặt hàng`** | **❌ Sai (i18n e-commerce leak)** |
-
----
-
-## Phụ lục — Môi trường test
-
-| Thành phần | Giá trị |
-|------------|---------|
-| URL ứng dụng | http://103.172.236.130:3000/ |
-| OTP login | `666666` (bypass tạm) |
-| MailHog (OTP inbox) | http://103.172.236.130:8025 |
-| API base | `/api/v1/` |
-| Frontend | React + Vite + Ant Design + CASL |
-| Backend | NestJS + PostgreSQL + class-validator |
-| Xác thực | JWT + OTP email; session timeout aggressive ~3-5 phút |
-| Tool test | Chrome DevTools MCP (`mcp__chrome-devtools__*`) với 6 isolated context |
-
----
-
-*Bug report generated: 2026-05-10 09:30:00 | QA Automation via Claude Code + Chrome DevTools MCP*
-
----
-
 ## ~~BUG-HDTV-035~~ [CLOSED] — Filter RangePicker text input cho phép reversed range, FE silently drop Đến ngày trên submit (không validation error)
 
 > **Re-test #6 2026-05-11 17:05:00 — ✅ PASS Closed-verified.** Standalone list filter test: type `Từ ngày=01/06/2026` + `Đến ngày=31/12/2026` (cb_nv_tw_07) + click Tìm kiếm → Network: `GET /api/v1/hop-dong-tu-vans?tuNgay=2026-06-01&denNgay=2026-12-31&page=1&pageSize=20` → **200 OK với cả 2 param** (không còn silent drop denNgay). FE commit text input đầy đủ vào query.
@@ -892,3 +785,22 @@ Per spec v3.5 line 660 M-01 + v3 line 241:
 | CB_NV_BN_07 | KHÔNG (đúng spec) | ✅ Render (0 records BKH scope) | ✅ **CÓ** (sai spec) | ✅ Render OK |
 | CB_NV_DP_07 | KHÔNG (đúng spec) | ✅ Render (1 record AG scope) | ✅ **CÓ** (sai spec) | (suy luận có) |
 | DN 9999999990 | KHÔNG (đúng spec) | ❌ Redirect /dashboard (đúng spec) | N/A | N/A |
+
+## Phụ lục — Môi trường test
+
+| Thành phần | Giá trị |
+|------------|---------|
+| URL ứng dụng | http://103.172.236.130:3000/ |
+| OTP login | `666666` (bypass tạm) |
+| MailHog (OTP inbox) | http://103.172.236.130:8025 |
+| API base | `/api/v1/` |
+| Frontend | React + Vite + Ant Design + CASL |
+| Backend | NestJS + PostgreSQL + class-validator |
+| Xác thực | JWT + OTP email; session timeout aggressive ~3-5 phút |
+| Tool test | Chrome DevTools MCP (`mcp__chrome-devtools__*`) với 6 isolated context |
+
+---
+
+*Bug report generated: 2026-05-10 09:30:00 | QA Automation via Claude Code + Chrome DevTools MCP*
+
+---

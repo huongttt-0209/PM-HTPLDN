@@ -18,9 +18,9 @@ Phát hiện **2 lỗi có SRS reference cụ thể** khi run E2E 12 bước DN 
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 3    | 1        | 0     | 1 (closed) | 1     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 3    | 1        | 0     | 1      | 1     | 0       | 1      | 2    |
 
 ## Bug Summary Table
 
@@ -42,18 +42,15 @@ DN account 9999999990 ("Công ty TNHH DN Test 01") login vào portal KHÔNG có 
 
 ### Các bước tái hiện
 
-1. Mở Chrome DevTools MCP `new_page` với `isolatedContext=r787_dn_e2e_2026_05_11`.
-2. Login DN `9999999990` / `Secret@123` qua `/login` → OTP `666666` → landing `/dashboard`.
-3. Click sidebar "Quản lý vụ việc hỗ trợ pháp lý" → URL `/vu-viec/danh-sach` render.
-4. Inspect DOM `document.querySelectorAll('button')` — chỉ thấy: Tổng quan, sidebar items, Tìm kiếm, Xóa bộ lọc, Làm mới. **Không có** "Tạo mới" / "Gửi yêu cầu" / "Tạo VV mới".
-5. Probe API trực tiếp qua DevTools console:
-   ```js
-   const r = await fetch('/api/v1/vu-viecs', {method:'POST', credentials:'include',
-     headers:{'Content-Type':'application/json'}, body:JSON.stringify({})});
-   console.log(r.status, await r.text());
-   ```
-6. Quan sát: 404 `ERR-SYS-00-04-01 "Cannot POST /api/v1/vu-viecs"`.
-7. Switch sang CB_NV_TW (login isolatedContext khác) → vào VV list → click [Thêm mới] → toast hiện `"Tính năng tạo VV qua kênh chính (UC52) sẽ được triển khai trong story tiếp theo"`.
+1. Mở trình duyệt → vào `http://103.172.236.130:3000/login`.
+2. Login DN `9999999990` / `Secret@123` → nhập OTP `666666` → landing `/dashboard`.
+3. Quan sát sidebar trái: chỉ có 4 menu items (Tổng quan, Hồ sơ doanh nghiệp, Quản lý vụ việc hỗ trợ pháp lý, Đăng xuất). **Không có** mục "Gửi yêu cầu hỗ trợ pháp lý".
+4. Click sidebar "Quản lý vụ việc hỗ trợ pháp lý" → URL chuyển `/vu-viec/danh-sach`.
+5. Quan sát toolbar trên cùng + góc phải bảng + dưới empty state: **KHÔNG có button** "Tạo mới" / "Gửi yêu cầu" / "Tạo VV mới" / "+ Thêm yêu cầu". Chỉ thấy: Tìm kiếm, Xóa bộ lọc, Làm mới.
+6. Scroll xuống bảng VV (empty `Chưa có dữ liệu`) — không có CTA empty-state nào.
+7. Đăng xuất → login lại bằng `cb_nv_tw_10` / `Secret@123` + OTP `666666`.
+8. Click sidebar "Quản lý vụ việc hỗ trợ pháp lý" → click button **[Thêm mới]** (góc phải bảng).
+9. Quan sát toast hiện: `"Tính năng tạo VV qua kênh chính (UC52) sẽ được triển khai trong story tiếp theo"` — app FE tự khai báo chưa triển khai UC52.
 
 ### Kết quả mong đợi
 
@@ -65,12 +62,11 @@ Theo `srs-v3.5.md SCR-V.I-04` + `FR-V.I-02 UC52`:
 
 ### Kết quả thực tế
 
-- DN portal KHÔNG có CTA gửi yêu cầu HTPL nào.
-- Backend endpoint `POST /api/v1/vu-viecs` (kênh chính UC52) 404.
-- Endpoint `POST /api/v1/vu-viecs/manual` (kênh phụ CB nhập tay) 201 — đây là workaround của CB, không phải UC52.
-- App **tự khai báo** chưa triển khai qua toast khi CB click [Thêm mới].
+- DN portal KHÔNG có CTA gửi yêu cầu HTPL nào trên UI (sidebar + toolbar list VV + empty state).
+- App **tự khai báo** UC52 chưa triển khai qua toast khi CB_NV_TW click [Thêm mới].
+- DN không thể chủ động gửi yêu cầu HTPL theo SCR-V.I-04 → block golden path E2E.
 
-**Network evidence:**
+**Network evidence (supporting — quan sát DevTools Network khi click [Thêm mới] CB_NV_TW):**
 ```json
 HTTP 404
 {
@@ -84,7 +80,7 @@ HTTP 404
 }
 ```
 
-**Probed variants (tất cả 404):**
+**Probed variants (supporting evidence từ Network tab — tất cả 404):**
 ```
 POST /api/v1/vu-viecs                       → 404
 POST /api/v1/vu-viecs/cb-tao-moi            → 404

@@ -5,7 +5,7 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000 |
 | **Người test** | QA Automation (Claude Code) |
-| **Ngày** | 2026-05-09 23:16:00 |
+| **Ngày** | 2026-05-10 01:30:00 |
 | **Loại test** | Functional / Workflow |
 | **Round** | Round 8 (deep verify R7.7.4 DN) |
 | **Tài liệu tham chiếu** | [functional-test-report-r7-7-4-dn.md](../../functional/doanh-nghiep/functional-test-report-r7-7-4-dn.md) · [srs-fr-10-quan-tri.md](../../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) |
@@ -20,9 +20,9 @@ Phát hiện **1** lỗi BE deploy gap chặn TC-DN-005/016/017/019 ở module D
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 1    | 0        | 1     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 1     | 0      | 0     | 0       | 1      | 0    |
 
 ## Bug Summary Table
 

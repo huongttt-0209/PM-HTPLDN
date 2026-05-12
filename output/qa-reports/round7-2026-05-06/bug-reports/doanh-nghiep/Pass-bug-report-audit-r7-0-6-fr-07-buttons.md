@@ -20,9 +20,9 @@ UI surface audit R7.0.6 phát hiện 2 button trên SCR-V.III-01 (Quản lý DN)
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 2    | 0        | 2     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 0    | 0        | 0     | 0      | 0     | 0       | 0      | 0    |
 
 ## Bug Summary Table
 

@@ -18,9 +18,9 @@ Phát hiện **3** lỗi trong workflow R7.4.A4 11 paths SM-HOIDAP.
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 3    | 1        | 2     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 3    | 1        | 2     | 0      | 0     | 0       | 3      | 0    |
 
 ## Bug Summary Table
 

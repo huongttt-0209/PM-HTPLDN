@@ -24,11 +24,9 @@ Verify 8 deploy gap items từ plan-r7-trigger.md ngày 2026-05-06. Sau khi rete
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 6    | 0        | 3     | 2      | 1     | 0       |
-| Closed R8 | 0 | 3 | 2 | 1 | 0 |
-| Open R8 | 0 | 0 | 0 | 0 | 0 |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 0    | 0        | 0     | 0      | 0     | 0       | 0      | 0    |
 
 ## Bug Summary Table
 

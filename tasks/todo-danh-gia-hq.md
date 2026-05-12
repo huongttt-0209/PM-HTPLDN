@@ -44,6 +44,6 @@
 
 - ⚠️ **R7.7.9** ✏️ Đánh giá Hiệu quả HTPL functional 46 TC v3.5 (10 FR) `[~68% — 15/22 R11 ✅]` <a id="r7-7-9"></a>
   - **Kết quả:** R11 22 TC ✅15 · ⚠️2 · ❌4 · 🚫1. TC12 ✅ out-of-scope. 2 bug mới DG-014/015. [report](../output/qa-reports/round7-2026-05-06/functional/danh-gia/functional-test-report-r7-7-9-danh-gia.md)
-  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md) — 7/15 đóng; 8 còn cần xử lý/disposition (DG-008/009/010/012/013/014/015 Open; DG-011 NOT REPRODUCED nhưng chưa Closed)
+  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md) — 14/15 đóng; 8 còn cần xử lý/disposition (DG-008/009/010/012/013/014/015 Open; DG-011 NOT REPRODUCED nhưng chưa Closed)
   - **Cần:** dev fix DG-012 (đợt không advance state) — block TC14+17 + B7-B11. DG-010/013 Major. DG-014 Medium. DG-015 Minor UX.
   - **Spec:** FR-VI-01..10 (46 TC v3.5)

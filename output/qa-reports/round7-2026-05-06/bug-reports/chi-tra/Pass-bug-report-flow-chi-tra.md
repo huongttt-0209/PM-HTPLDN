@@ -18,15 +18,15 @@ Phát hiện **7** lỗi có SRS reference cụ thể. **R3 2026-05-10 21:00:00 
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 7    | 1        | 1     | 2      | 3     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 7    | 1        | 1     | 2      | 3     | 0       | 7      | 0    |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| ~~BUG-CHITRA-001~~ | **Critical** ↑ | P1 | Data | R7.6.1-B9 + R7.E3-R3 | `BR-CALC-01` (FR-V.II §Business Rules + 02-thu-tu-module.md §10) | ~~Seed data **0/12 CHO_PHE_DUYET BR-OK** + **97/108 (89.8%) sai BR đầy đủ**~~ | Closed |
+| ~~BUG-CHITRA-001~~ | Critical | P1 | Data | R7.6.1-B9 + R7.E3-R3 | `BR-CALC-01` (FR-V.II §Business Rules + 02-thu-tu-module.md §10) | ~~Seed data **0/12 CHO_PHE_DUYET BR-OK** + **97/108 (89.8%) sai BR đầy đủ**~~ | Closed |
 | ~~BUG-CHITRA-002~~ | Medium | P2 | UI/UX | R7.6.1-B3 | `FR-V.II-03 §Inputs row 5` | ~~Form kiểm tra hiển thị 4 checklist mục thay vì checklist 18 trường theo spec~~ | Closed |
 | ~~BUG-CHITRA-003~~ | Medium | P2 | Workflow | R7.6.1-B7 | `FR-V.II-09 §Inputs` | ~~Form thẩm định có 3 outcome (Đạt / Không đạt / Cần bổ sung) thay vì 2 outcome~~ | Closed |
 | ~~BUG-CHITRA-004~~ | Minor | P3 | UI/UX | R7.6.1-B7, B11 | `SCR-V.II-02 §Lịch sử xử lý` | ~~Lịch sử xử lý ghi enum code (`CAP_NHAT_THANH_TOAN`, `TRINH_PHE_DUYET`) thay vì tiếng Việt~~ | Closed |
@@ -40,9 +40,6 @@ Phát hiện **7** lỗi có SRS reference cụ thể. **R3 2026-05-10 21:00:00 
 
 > **Re-test:** 2026-05-10 21:00:00 R3 — ✅ PASS (Closed-verified). Dev re-seeded pool 108 → 40 record. API verify: **40/40 record đúng % + trần** (SIEU_NHO 100%/3M, NHO 30%/5M, VUA 10%/10M). State distribution: DTD 12, DA_DUYET 7, YCBS 5, DTT 4, HUY 3, TU_CHOI 3, DDG 3, CTN 2, CPD 1. Walk B9 unblock được. CMD verify: `GET /api/v1/ho-so-chi-tras?page=1&pageSize=100` + sample 8 detail OK.
 >
-> **Re-test:** 2026-05-09 23:40:00 R7.E3-R3 — ⚠️ vẫn Open, scope deeper. R3 deep BR check (% + `tranHoTroNam`) lộ thêm: 23 record OK-% nhưng SAI-trần (BE lưu `100,000,000` thay vì `3,000,000` cho SIEU_NHO — sai 33×). Tổng cộng **97/108 record (89.8%) sai BR đầy đủ**. **Critical: 0/12 CHO_PHE_DUYET BR-OK** → B9 phê duyệt **BLOCKED toàn pool, không có record nào duyệt được**. 11/108 BR-OK chỉ rải ở DTD (8) + DA_DUYET (1) + DTT (1) + TU_CHOI (1) — đều ngoài CPD.
->
-> **Re-test:** 2026-05-09 23:17:00 R7.E3-R2 — ⚠️ vẫn Open, scope mở rộng từ **4/5 R6 walk** → **74/108 toàn pool (68.5%)**. Severity bump Major → Critical. R2 chỉ check % chiều, miss trần.
 
 ### Mô tả
 

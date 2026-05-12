@@ -18,9 +18,9 @@ Phát hiện **2** lỗi có SRS reference cụ thể trong quá trình seed 15 
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 2    | 0        | 1     | 1      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 0        | 1     | 1      | 0     | 0       | 2      | 0    |
 
 ## Bug Summary Table
 

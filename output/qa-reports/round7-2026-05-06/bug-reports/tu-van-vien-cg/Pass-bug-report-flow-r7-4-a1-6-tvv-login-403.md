@@ -5,7 +5,7 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000 |
 | **Người test** | QA-claude |
-| **Ngày** | 2026-05-09 09:00:00 |
+| **Ngày** | 2026-05-09 09:39:00 |
 | **Loại test** | Workflow / Permission / UI |
 | **Round** | R12 (R7.4.A1.6 fresh TVV walk UI thuần) |
 | **Tài liệu tham chiếu** | [`workflow-test-report-r7-4-a1-6.md`](../../workflow/tu-van-vien-cg/workflow-test-report-r7-4-a1-6.md) · [`srs-update-2026-5-5/srs-fr-10-quan-tri.md`](../../../../input/srs-update-2026-5-5/srs-fr-10-quan-tri.md) FR-VIII-26 + FR-VIII-18 |
@@ -18,9 +18,9 @@ Phát hiện **1** lỗi có SRS reference cụ thể trong R12 walk fresh TVV-B
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 1    | 0        | 1     | 0      | 0     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 1     | 0      | 0     | 0       | 1      | 0    |
 
 ## Bug Summary Table
 

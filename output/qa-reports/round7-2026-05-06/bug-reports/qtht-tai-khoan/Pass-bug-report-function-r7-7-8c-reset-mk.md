@@ -17,9 +17,9 @@ Phát hiện **3** bug khi test FR-VIII-26 — trong đó **2 Critical** liên q
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 3    | 2        | 0     | 0      | 1     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 3    | 2        | 0     | 0      | 1     | 0       | 3      | 0    |
 
 ## Bug Summary Table
 

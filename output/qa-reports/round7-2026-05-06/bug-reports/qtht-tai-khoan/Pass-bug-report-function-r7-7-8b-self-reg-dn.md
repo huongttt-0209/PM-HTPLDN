@@ -17,9 +17,9 @@ Phát hiện **5** bug khi test FR-VIII-22 Self-reg DN. **Re-verify 2026-05-10 �
 
 ### Severity breakdown
 
-| Tổng | Critical | Major | Medium | Minor | Trivial |
-|------|----------|-------|--------|-------|---------|
-| 5    | 0        | 1     | 1      | 3     | 0       |
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 5    | 0        | 1     | 1      | 3     | 0       | 5      | 0    |
 
 ## Bug Summary Table
 
