@@ -8,13 +8,14 @@
 
 | Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
 |------|----------|-------|--------|-------|---------|--------|------|
-| 3    | 0        | 2     | 0      | 1     | 0       | 0      | 3    |
+| 3    | 0        | 2     | 0      | 1     | 0       | 2      | 1    |
 
 > **Quy tắc đếm:**
 > - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
 > - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
-> - `Closed` + `Open` = `Tổng`. `Open` đếm Status ∈ {Open, Reopen}; `Closed` đếm Status ∈ {Closed, ~~closed~~}.
+> - `Closed` + `Open` = `Tổng`. `Open` đếm Status ∈ {Open, Reopen}; `Closed` đếm Status ∈ {Closed, ~~closed~~, WITHDRAWN} (WITHDRAWN = Closed-not-a-bug, đếm vào Closed).
 > - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
+> - Hiện trạng R12.6: DT-011 Closed + DT-031 WITHDRAWN → 2 Closed; DT-052 REOPEN → 1 Open.
 
 ## Bug Summary
 
@@ -24,6 +25,23 @@
 | ~~BUG-DT-011-DD-ENDPOINT-01~~ | Major | DIEM_DANH POST endpoint chưa deploy (404); GET trả mock; field `coMat` boolean thay vì enum 3 trị (CO_MAT/VANG_PHEP/VANG_KHONG_PHEP) | **Closed** (R12 21:30 verified deploy — Swagger schema `DiemDanhItemDto.trangThai: enum["CO_MAT","VANG_PHEP","VANG_KHONG_PHEP"]` đã expose; POST `/khoa-hocs/{id}/diem-danhs/batch-update` validate đúng (`ERR-BIZ-III-05-02 "HV chưa được duyệt đăng ký"`). `coMat:boolean` giữ làm legacy compat field cho FE.) |
 | ~~BUG-DT-031-KQHT-ENTITY-01~~ | Major | KET_QUA_HOC_TAP entity chưa deploy (mọi route 404) — block 5 TC (DT-031b + DT-031c + DT-031d + DT-054 + DT-055) | **WITHDRAWN** (R12 18:30 — QA probe sai URL. Entity tên đúng = `KET_QUA_DAO_TAO` (KQDT singular), route đúng `/khoa-hocs/{id}/ket-quas` (8 routes Swagger: list/batch-update/import/publish/unpublish/export/export-docx). Sample KH-005 record `aaee0011-...` có ĐẦY ĐỦ fields spec: `xepLoai="GIOI", ketQua="DAT", lichHocId, dangKyId, diemKiemTra, soBuoiCoMat, tongBuoi, tyLeChuyenCan, xepLoaiOverride, ketQuaOverride, lyDoOverride, congBo, thoiGianCongBo, lyDoHuyCongBo`. Entity ĐÃ DEPLOY đầy đủ.) |
 
+> **🔁 R12.6 RE-VERIFY 2026-05-12 21:40 (user trigger "dev đã fix bug, verify lại"):**
+>
+> Re-probe 3 bug với account `qtht_01` fresh login (đã có perm `/hoc-viens`). **Status 3/3 bug KHÔNG đổi** — dev fix có tiến bộ ở DT-011 BR validation nhưng chưa fix DT-052 + happy path 500.
+>
+> | Bug | R12.6 probe (qtht_01) | Status | Δ vs R12.5 |
+> |---|---|:-:|---|
+> | **DT-052** HV.taiKhoanId | `GET /hoc-viens` → 200, 9 records, 13 fields = `[id, nguoiTaoId, nguoiCapNhatId, ngayTao, ngayCapNhat, donViId, seqId, version, hoTen, email, soDienThoai, donVi, nguoiHoTroId]`. **`taiKhoanId` VẪN MISSING** (both camelCase + snake_case absent). GET single HV detail cùng schema 13 fields, không có `taiKhoanId` value. | **RE-OPEN** | ❌ Dev CHƯA fix. Spec authority vẫn cần BA chốt. |
+> | **DT-011** DD POST endpoint (scope cũ) | Original bug (404 + GET mock + boolean field) đã Closed R12.3. R12.6 re-probe: schema enum 3 trị + endpoint registered + guard work → scope cũ giữ Closed. **Bonus R12.6:** BE đã ADD new business rule validation `ERR-BIZ-III-05-03 "Ngày điểm danh không khớp lịch học của khoá"` (probe ngày 2026-03-07 không khớp lich_hoc KH-005 → 422 proper thay vì 500 R12.4/R12.5). | **Closed (scope cũ)** | ✅ BE thêm BR validation date↔lich_hoc. Nhưng happy path (date khớp) batch 5 HV vẫn 500 → BUG-DT-011a-BE-DD-500-01 vẫn Open (riêng file khác). |
+> | **DT-031** KQHT entity 404 | GET `/khoa-hocs/{KH-005}/ket-quas` → 200, 5 records, fields đầy đủ `[ketQua, xepLoai, congBo, thoiGianCongBo, lyDoHuyCongBo]` cover spec FR-III-19. Entity vẫn deploy đầy đủ. | **WITHDRAWN** | Không đổi từ R12.5. |
+>
+> **R12.6 Net:** 0/3 bug đổi status. Bug summary table giữ nguyên. **Dev fix delta phát hiện R12.6:**
+> 1. ✅ BE đã add new BR validation date↔lich_hoc (422 ERR-BIZ-III-05-03) — KHÔNG nằm trong scope DT-011 hay BUG-DT-011a, nhưng là improvement chung của module DD.
+> 2. ❌ BUG-DT-011a-BE-DD-500-01 (happy path crash) vẫn reproduce R12.6 với ngày khớp lich_hoc 2026-03-01 (5 HV batch) → 500 ERR-SYS-00-00-01 requestId `b77332b3-0601-4fae-bdd5-bd0f25a3e839`.
+> 3. ❌ DT-052 (HV.taiKhoanId) chưa có bất kỳ thay đổi nào trong HV entity schema.
+>
+> → Nếu dev tự confirm "đã fix", cần dev nói rõ commit/feature nào fix gì — current state hiển thị BR-DD-DATE-LICH validation mới (good) nhưng 2 bug chính (DT-052 + BUG-DT-011a 500) chưa giải.
+>
 > **🔁 R12.5 RE-VERIFY 2026-05-12 (user trigger "verify lại file bug R7.7.6 hv-deps"):**
 >
 > Re-probe 3 bug với account `cb_nv_tw_01` sau khi đã chạy R7.7.6 R12.4 (xem [functional report R12.4 ADDENDUM](../../functional/dao-tao/functional-test-report-r7-7-6-khoa-hoc-r10.md)). **Status 3/3 bug KHÔNG đổi** — nhưng có evidence bổ sung:

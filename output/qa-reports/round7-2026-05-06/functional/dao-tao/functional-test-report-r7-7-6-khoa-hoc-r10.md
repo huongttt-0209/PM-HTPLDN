@@ -32,7 +32,7 @@
 > **Net R12.4: 3 PASS + 1 BLOCKED defer + 2 FAIL — phát hiện 4 bug mới.**
 >
 > **Files đã tạo R12.4:**
-> - [bug-report-r7-7-6-dt054-fe-chuyen-can.md](../../bug-reports/dao-tao/bug-report-r7-7-6-dt054-fe-chuyen-can.md) — BUG-DT-054-FE-CHUYEN-CAN-01 Major
+> - [Pass-bug-report-r7-7-6-dt054-fe-chuyen-can.md](../../bug-reports/dao-tao/Pass-bug-report-r7-7-6-dt054-fe-chuyen-can.md) — BUG-DT-054-FE-CHUYEN-CAN-01 Major Closed R12.5
 > - [bug-report-r7-7-6-dt031c-fe-thieu-button-huy-cong-bo.md](../../bug-reports/dao-tao/bug-report-r7-7-6-dt031c-fe-thieu-button-huy-cong-bo.md) — BUG-DT-031c-FE-MISSING-UNPUBLISH-01 Major
 > - [bug-report-r7-7-6-dt011a-dd-batch-500.md](../../bug-reports/dao-tao/bug-report-r7-7-6-dt011a-dd-batch-500.md) — 2 bugs: BE 500 (Major) + FE schema legacy (Medium)
 >

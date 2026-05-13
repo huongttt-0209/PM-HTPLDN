@@ -4,11 +4,31 @@
 > **Discovered:** 2026-05-12 R12.4 (sau verify DT-054 auto-classify)
 > **Reporter:** QA Automation Claude Code MCP
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 1    | 0        | 1     | 0      | 0     | 0       | 1      | 0    |
+
 ## Bug Summary
 
 | ID | Severity | Title | Status |
 |---|:-:|---|:-:|
-| BUG-DT-054-FE-CHUYEN-CAN-01 | Major | Tab "Kết quả" UI render cột "Kết quả" = "Đạt" khi chuyên cần <80% — không match API `ketQua=KHONG_DAT` + vi phạm BR-KQ-01 | Open |
+| ~~BUG-DT-054-FE-CHUYEN-CAN-01~~ | Major | Tab "Kết quả" UI render cột "Kết quả" = "Đạt" khi chuyên cần <80% — không match API `ketQua=KHONG_DAT` + vi phạm BR-KQ-01 | **Closed** (R12.5 2026-05-12 22:17 verified — UI render HV04 (chuyên cần 40%, điểm 6.5) = "Không đạt" sync 100% với API `ketQua="KHONG_DAT"`) |
+
+> **🔁 Re-test R12.5 (2026-05-12 22:17, user trigger "verify lại file bug DT-054"):**
+>
+> Fresh session re-login `cb_nv_tw_01` + navigate KH-005 tab "Kết quả" (`?tab=ket-qua-kiem-tra`). Đối chiếu UI vs API `GET /khoa-hocs/{id}/ket-quas`:
+>
+> | HV | Chuyên cần | Điểm | API `ketQua` | API `xepLoai` | UI "Kết quả" | Match? |
+> |---|---|---|:-:|:-:|:-:|:-:|
+> | HV 01 | 5/5 (100%) | 9.5 | DAT | GIOI | Đạt | ✅ |
+> | HV 02 | 5/5 (100%) | 7.5 | DAT | KHA | Đạt | ✅ |
+> | HV 03 | 4/5 (80%) | 5.5 | DAT | TRUNG_BINH | Đạt | ✅ (border case 80% PASS) |
+> | **HV 04** | **2/5 (40%)** | **6.5** | **KHONG_DAT** | **KHONG_DAT** | **Không đạt** | **✅ FIXED** |
+> | HV 05 | 5/5 (100%) | 3.5 | KHONG_DAT | KHONG_DAT | Không đạt | ✅ (điểm <5 fail) |
+>
+> → FE đã update logic compute để check cả `tyLeChuyenCan >= 80%` AND `diemKiemTra >= 5` per BR-KQ-01, hoặc đọc trực tiếp `record.ketQua` từ API. Test case quan trọng (HV04 chuyên cần fail) đã render đúng "Không đạt". Border case HV03 (chuyên cần đúng 80%) cũng đúng "Đạt". Screenshot: [r12-5-dt054-fe-chuyen-can-fixed-hv04-khong-dat.png](image/r12-5-dt054-fe-chuyen-can-fixed-hv04-khong-dat.png).
 
 ---
 

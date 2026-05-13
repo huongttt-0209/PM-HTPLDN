@@ -4,12 +4,61 @@
 > **Discovered:** 2026-05-12 R12.4
 > **Reporter:** QA Automation Claude Code MCP
 
+### Severity breakdown
+
+| Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
+|------|----------|-------|--------|-------|---------|--------|------|
+| 2    | 0        | 1     | 1      | 0     | 0       | 1      | 1    |
+
 ## Bug Summary
 
 | ID | Severity | Title | Status |
 |---|:-:|---|:-:|
-| BUG-DT-011a-BE-DD-500-01 | Major | POST `/khoa-hocs/{id}/diem-danhs/batch-update` trả 500 ERR-SYS-00-00-01 với mọi payload có valid HV (cả schema cũ `coMat` lẫn schema mới `trangThai`) | Open |
-| BUG-DT-011a-FE-SCHEMA-LEGACY-01 | Medium | FE form Điểm danh chỉ render checkbox `coMat: boolean` — gửi schema cũ thay vì enum 3 trị `trangThai: CO_MAT/VANG_PHEP/VANG_KHONG_PHEP` per spec FR-III-21 BR-DD-01 | Open |
+| BUG-DT-011a-BE-DD-500-01 | Major | POST `/khoa-hocs/{id}/diem-danhs/batch-update` trả 500 ERR-SYS-00-00-01 với mọi payload có valid HV (cả schema cũ `coMat` lẫn schema mới `trangThai`) | **Open** (R12.5 2026-05-12 14:43 RE-CONFIRMED — happy path với ngày đúng lịch học 01/03/2026 + 1 HV `aacc0011-...001` `trangThai:'CO_MAT'` vẫn 500 ERR-SYS-00-00-01 reqid `cf43d9a3-0200-4039-b26a-b1956792a74c`; isolate 1 HV congBo=false (sau hv-deps unpublish) vẫn 500 → loại hypothesis #3 KQDT conflict; KH state DA_KET_THUC + composite key vẫn là 2 hypothesis chưa loại) |
+| ~~BUG-DT-011a-FE-SCHEMA-LEGACY-01~~ | Medium | FE form Điểm danh chỉ render checkbox `coMat: boolean` — gửi schema cũ thay vì enum 3 trị `trangThai: CO_MAT/VANG_PHEP/VANG_KHONG_PHEP` per spec FR-III-21 BR-DD-01 | **Closed** (R12.5 2026-05-12 14:42 verified — FE đã thay checkbox bằng 3 Radio Group "Có mặt / Vắng có phép / Vắng không phép" + textbox "Lý do vắng..." cho ghi chú per spec FR-III-21 BR-DD-01) |
+
+> **🔁 Re-test R12.5 (2026-05-12 14:42, user trigger "verify lại file bug DT-011a"):**
+>
+> Fresh session: caches.delete + SW unregister + localStorage clear + `POST /auth/logout` → 200 → navigate `/login` ignoreCache → re-login `cb_nv_tw_01` + OTP `666666`. Navigate KH-005 tab `?tab=lich-hoc-diem-danh`, chọn ngày 03/03/2026.
+>
+> **BUG-DT-011a-FE-SCHEMA-LEGACY-01 → CLOSED ✅**
+>
+> A11y snapshot tab Điểm danh row 1 (HV01):
+> ```
+> StaticText "1"  StaticText "QA R7 HV 01"  StaticText "Công ty TNHH QA 01"
+> radio "Có mặt"
+> radio "Vắng có phép"
+> radio "Vắng không phép" checked
+> textbox "Lý do vắng..."
+> ```
+> → Schema enum 3 trị (`CO_MAT`/`VANG_PHEP`/`VANG_KHONG_PHEP`) đã render đúng. Column header = "Trạng thái" (KHÔNG còn "Có mặt" boolean). Default selection = "Vắng không phép" cho ngày chưa có DD record. Screenshot: [r12-5-dt011a-fe-schema-fixed-3-radio-enum.png](image/r12-5-dt011a-fe-schema-fixed-3-radio-enum.png).
+>
+> **BUG-DT-011a-BE-DD-500-01 → STILL OPEN ❌**
+>
+> 6 probe scenarios + verify state:
+>
+> | # | Payload | Status | Code/Message |
+> |---|---|:-:|---|
+> | 1 | SCHEMA MỚI `trangThai` enum × 5 HV ngày 03/03 (KHÔNG có lịch học) | 422 | ERR-BIZ-III-05-03 "Ngày điểm danh không khớp lịch học của khoá" — **business guard mới (R12.5 BE add)** |
+> | 2 | SCHEMA CŨ `coMat` boolean × 5 HV ngày 03/03 | 422 | Same ERR-BIZ-III-05-03 (backward compat) |
+> | 3 | Empty `diemDanhs:[]` | 422 | ERR-VAL-SYS-00-01 "diemDanhs must contain at least 1 elements" |
+> | 4 | Invalid UUID `hocVienId:'INVALID'` | 422 | ERR-VAL-SYS-00-01 "hocVienId must be a UUID" |
+> | 5 | HAPPY PATH — ngày đúng lịch học `2026-03-01` (single LH session 08:30-11:30) × 5 HV mix CO_MAT/VANG_PHEP/VANG_KHONG_PHEP | **500** | ERR-SYS-00-00-01 reqid `9ebaac4c-4bb3-4863-8f99-2ceb126a5a82` |
+> | 6 | ISOLATE — chỉ 1 HV01 (congBo=false sau hv-deps unpublish) ngày 2026-03-01 | **500** | ERR-SYS-00-00-01 reqid `cf43d9a3-0200-4039-b26a-b1956792a74c` |
+> | 7 | ISOLATE — chỉ 1 HV04 (congBo=true → giờ false) ngày 2026-03-01 | **500** | ERR-SYS-00-00-01 reqid `a3520353-a70b-40c3-a259-a43541aeadda` |
+>
+> **State KH-005 R12.5:** `trangThai="DA_KET_THUC"`, `congKhai=true`, 1 LH session ngày 01/03/2026, 5 KQDT tất cả `congBo=false` (sau hv-deps unpublish probe).
+>
+> **Hypothesis update R12.5:**
+> - ✅ Hypothesis #1 (KH state guard expect HOAN_THANH/DANG_DIEN_RA only) — **CHƯA LOẠI**: KH-005 đang DA_KET_THUC + crash 500 → service có thể không support DA_KET_THUC state.
+> - ❌ Hypothesis #3 (Existing KQDT conflict) — **LOẠI**: 5 KQDT all congBo=false vẫn crash với cả HV01 (gốc congBo=false) và HV04 (gốc congBo=true).
+> - ✅ Hypothesis #2 (Composite key conflict / upsert thiếu COALESCE `lich_hoc_id`) — **CHƯA LOẠI**: 1 HV vẫn crash → có thể conflict với KQDT.lichHocId mapping.
+> - ✅ Hypothesis MỚI #4 (Service join KQDT khi compute attendance): có thể service auto-update KQDT.tyLeChuyenCan/soBuoiCoMat khi upsert DD → join KQDT fail.
+>
+> **Recommend dev BE:**
+> 1. Wrap service trong try/catch + log full stack trace cho requestId `9ebaac4c-4bb3-4863-8f99-2ceb126a5a82` + `cf43d9a3-0200-4039-b26a-b1956792a74c` + `a3520353-a70b-40c3-a259-a43541aeadda`.
+> 2. Verify service allow `DA_KET_THUC` state cho DD upsert (cần điểm danh retro trước khi công bố KQ).
+> 3. Check upsert SQL trên composite `(khoa_hoc_id, hoc_vien_id, ngay_diem_danh, lich_hoc_id)` — `lich_hoc_id` có thể NULL nếu service không map từ ngày → tìm LH cùng ngày tự động.
 
 ---
 

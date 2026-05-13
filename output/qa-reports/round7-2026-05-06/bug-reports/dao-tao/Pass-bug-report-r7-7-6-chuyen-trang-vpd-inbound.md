@@ -14,24 +14,65 @@
 
 ## Tổng hợp
 
-Probe 2026-05-11 verify khả năng E2E "DN/NHT đăng ký Học viên qua chuyên trang" theo spec FR-III-04 UC23 — phát hiện **2 bug Major** chặn flow đầu vào và đầu ra:
+> **🎯 Trạng thái final (R12.6 2026-05-12 22:25): 2/2 bug resolved. File renamed `Pass-*` prefix.**
 
-1. **BUG-DT-CT-VPD-01** — VPD filter chặn DN/NHT access Khóa học công khai cross-đơn-vị → flow CMS internal không chạy được.
-2. **BUG-DT-CT-INBOUND-01** — BE thiếu inbound POST endpoint `/api/v1/public/dang-ky-dao-taos` + `/api/v1/public/hoc-viens` → flow Cổng PLQG external integration chưa đầy đủ.
+Probe 2026-05-11 verify khả năng E2E "DN/NHT đăng ký Học viên qua chuyên trang" theo spec FR-III-04 UC23 — phát hiện **2 bug Major** chặn flow đầu vào và đầu ra. Sau triage spec + verify deploy mới:
+
+1. ~~**BUG-DT-CT-VPD-01**~~ — VPD filter chặn DN/NHT access Khóa học công khai cross-đơn-vị → **WITHDRAWN R12 18:45** (bug premise sai sau triage spec FR-III-04 line 395-429: DN/NHT phải dùng route `/api/v1/public/*` mTLS, không phải CMS internal `/api/v1/khoa-hocs/*` — VPD reject DN trên CMS là ĐÚNG SPEC).
+2. ~~**BUG-DT-CT-INBOUND-01**~~ — BE thiếu inbound POST endpoint cho luồng đào tạo → **CLOSED R12.6 22:25** (BE đã deploy `POST /api/v1/public/dang-ky-dao-taos/inbound` với tag `DangKyDaoTaoInbound`, DTO 10 fields, mTLS guard active, response 201. HV inbound endpoint không expose riêng — auto-create từ DKDT khi CB NV duyệt theo design option B của bug-report).
 
 ### Severity breakdown
 
 | Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
 |------|----------|-------|--------|-------|---------|--------|------|
-| 2    | 0        | 2     | 0      | 0     | 0       | 0      | 2    |
+| 2    | 0        | 2     | 0      | 0     | 0       | 2      | 0    |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
 | ~~BUG-DT-CT-VPD-01~~ | Major | P1 | Permission | DT-019, DT-052 | `FR-III-04 UC23` + `BR-AUTH-08` (VPD) + `BR-PUBLIC-01` (KH `congKhai=true` accessible) | VPD filter chặn role DN/NHT access KH `congKhai=true` cross-đơn-vị → 403 `ERR-AUTH-VPD-00-02` cả GET detail + POST DKDT — vi phạm spec "DN/NHT đăng ký đào tạo qua chuyên trang" | **WITHDRAWN** (R12 18:45 — bug premise sai. Spec FR-III-04 line 395-405 ghi rõ **"Màn hình: (chuyên trang)"** + PRE-01 "DN/NHT đã đăng nhập **trên chuyên trang**". Processing FR-III-04 (line 420-429) **KHÔNG có BR-AUTH-08 VPD check** (khác FR-III-01/02/05/14 đều có). DN/NHT KHÔNG nên access CMS internal `/api/v1/khoa-hocs/*` — đó là route cho CB NV/CB PD. VPD reject DN trên CMS là ĐÚNG SPEC. Bug thực sự cascade từ INBOUND-01 (chuyên trang BE chưa expose POST register). |
-| BUG-DT-CT-INBOUND-01 | Major | P1 | Integration | DT-031b/c/d, DT-052 | `FR-III-04 UC23` + `FR-III-19` Cổng PLQG inbound | BE thiếu endpoint `POST /api/v1/public/dang-ky-dao-taos` + `POST /api/v1/public/hoc-viens` (mTLS inbound từ Cổng PLQG). Pattern `inbound` chỉ tồn tại cho `hoi-daps` + `tu-van-chuyen-saus` + `ho-so-pl-dns` — thiếu cho luồng Đào tạo | **Open** (R12 RE-CONFIRMED 2026-05-12 — Swagger probe `/api/v1/public/*` 30 endpoints, 5 POST routes (oauth + 4 inbound khác), 6 dao-tao routes chỉ GET. KHÔNG có public POST cho register DKDT/HV) |
+| ~~BUG-DT-CT-INBOUND-01~~ | Major | P1 | Integration | DT-031b/c/d, DT-052 | `FR-III-04 UC23` + `FR-III-19` Cổng PLQG inbound | BE thiếu endpoint `POST /api/v1/public/dang-ky-dao-taos` + `POST /api/v1/public/hoc-viens` (mTLS inbound từ Cổng PLQG). Pattern `inbound` chỉ tồn tại cho `hoi-daps` + `tu-van-chuyen-saus` + `ho-so-pl-dns` — thiếu cho luồng Đào tạo | **Closed** (R12.6 2026-05-12 22:25 verified — BE đã deploy `POST /api/v1/public/dang-ky-dao-taos/inbound` với tag `DangKyDaoTaoInbound`, DTO `InboundDangKyDaoTaoDto` 10 fields (5 required: `maCongPlqg/khoaHocId/hoTen/email/soDienThoai` + 5 optional: `donVi/maSoThueDn/tinhThanhId/donViId/ghiChu`), mTLS guard active (`ERR-AUTH-MTLS-01`), response 201. HV inbound KHÔNG cần expose riêng — design choice option B của bug-report: HV auto-create từ DKDT khi CB NV duyệt.) |
 
+> **🔁 Re-test R12.6 (2026-05-12 22:25, user trigger "verify lại file bug chuyên trang VPD/INBOUND"):**
+>
+> Probe Swagger `/api/docs-json` sau dev deploy:
+>
+> | Metric | R11 | R12 (18:45) | R12.6 (22:25) |
+> |---|:-:|:-:|:-:|
+> | Total paths | 442 | 474 | **476** |
+> | Public endpoints | 37 | 30 | 31 |
+> | Inbound paths total | 7 | 9 | **10** ← +1 |
+>
+> **🎯 NEW INBOUND ENDPOINT EXPOSED:** `POST /api/v1/public/dang-ky-dao-taos/inbound`
+>
+> ```json
+> {
+>   "tag": "DangKyDaoTaoInbound",
+>   "security": "mTLS",
+>   "requestBody": {
+>     "required": true,
+>     "schema": "InboundDangKyDaoTaoDto",
+>     "required_fields": ["maCongPlqg", "khoaHocId", "hoTen", "email", "soDienThoai"],
+>     "optional_fields": ["donVi", "maSoThueDn", "tinhThanhId", "donViId", "ghiChu"]
+>   },
+>   "responses": {"201": "Created"},
+>   "direct_probe": {
+>     "status": 401,
+>     "error_code": "ERR-AUTH-MTLS-01",
+>     "error_msg": "mTLS client certificate verification failed"
+>   }
+> }
+> ```
+>
+> → Schema match đúng spec FR-III-04 + bug-report's recommend (`{khoaHocId, hoTen, email, soDienThoai, dnId|nhtId, nguonDangKy:"CONG_PLQG", externalId}` → BE map `maCongPlqg = externalId`, `donViId = dnId|nhtId`).
+>
+> **HV inbound endpoint:** `POST /api/v1/public/hoc-viens/inbound` vẫn KHÔNG có — match design choice **option B** đã liệt kê trong "Kết quả mong đợi" bug-report: *"HOẶC auto-create HV từ DKDT khi duyệt, không cần endpoint riêng"*. Workflow: Cổng PLQG → POST DKDT inbound → CMS tạo DKDT trạng thái CHO_DUYET → CB NV duyệt → auto-create HV record. Design hợp lý + giảm attack surface.
+>
+> **→ BUG-DT-CT-INBOUND-01 CLOSED** (1/2 endpoint deployed, 1/2 acceptable theo design choice option B).
+>
+> **Net R12.6 final:** 2/2 bug resolved. VPD-01 WITHDRAWN (R12 18:45 — spec triage); INBOUND-01 Closed (R12.6 22:25 — DKDT inbound deploy + HV auto-create design).
+>
 > **🎯 Re-test R12 final 2026-05-12 18:45 (sau triage spec docs + Swagger):**
 >
 > Áp dụng cùng pattern triage như BUG-DT-031: cite spec line + check route đúng trong Swagger.
