@@ -8,23 +8,57 @@
 
 | Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
 |------|----------|-------|--------|-------|---------|--------|------|
-| 3    | 0        | 2     | 0      | 1     | 0       | 2      | 1    |
+| 3    | 0        | 2     | 0      | 1     | 0       | 3      | 0    |
 
 > **Quy tắc đếm:**
 > - `Tổng` = tổng số dòng bug trong **Bug Summary Table** (kể cả Closed strikethrough).
 > - 5 cột severity (Critical / Major / Medium / Minor / Trivial) tổng = `Tổng`.
 > - `Closed` + `Open` = `Tổng`. `Open` đếm Status ∈ {Open, Reopen}; `Closed` đếm Status ∈ {Closed, ~~closed~~, WITHDRAWN} (WITHDRAWN = Closed-not-a-bug, đếm vào Closed).
 > - Update bảng này **sau MỖI lần đóng/mở bug** (cùng nhịp với rename Pass- prefix).
-> - Hiện trạng R12.6: DT-011 Closed + DT-031 WITHDRAWN → 2 Closed; DT-052 REOPEN → 1 Open.
+> - Hiện trạng R13.2 2026-05-13 08:53: DT-011 Closed + DT-031 WITHDRAWN + DT-052 Closed → 3 Closed; 0 Open. File rename `Pass-*` prefix.
 
 ## Bug Summary
 
 | ID | Severity | Title | Status |
 |---|:-:|---|:-:|
-| BUG-DT-052-HV-TAIKHOAN-01 | Minor | HV entity thiếu field `taiKhoanId` per spec FR-III-04 (HV ↔ TAI_KHOAN 1:1 link) | **REOPEN** (R12.4 2026-05-12 — withdrawal R12 18:30 SAI sau cross-check 5 SRS sources. **4/5 sources confirm `tai_khoan_id` REQUIRED**: master entity spec `srs-v3.5.md §3.4.3.53` line 3349-3368 (11 fields, field 11 = `tai_khoan_id` nullable FK TAI_KHOAN); master entity matrix `srs-v3.5.md:2623` "có `tai_khoan_id` link TK nếu có"; `_DELTA-MAP-FR03.md:42` "1:1 với TAI_KHOAN qua `tai_khoan_id`"; `_DELTA-MAP-FR03.md:73`. Chỉ 1 outlier `srs-fr-03:1711` (description ngắn, lower authority) nói "Thay đổi 12 OUT". **Cần BA confirm spec authority — master `srs-v3.5.md` thắng module file description.**) |
+| ~~BUG-DT-052-HV-TAIKHOAN-01~~ | Minor | HV entity thiếu field `taiKhoanId` per spec FR-III-04 (HV ↔ TAI_KHOAN 1:1 link) | **Closed** (R13.2 2026-05-13 08:53 verified — BE đã migrate schema theo master spec `srs-v3.5.md §3.4.3.53`. 3-layer probe: HV list 14 records `[..., taiKhoanId, version]` 14 fields; HV detail same 14 fields; Swagger `HocVienEntity` 14 required props gồm `taiKhoanId`, `CreateHocVienDto` 5 props với `taiKhoanId`, `UpdateHocVienDto` 6 props với `taiKhoanId`. Value vẫn null cho 14 HV cũ vì chưa có flow auto-create TK khi HV đăng ký qua chuyên trang — defer backfill, không thuộc scope bug schema này.) |
 | ~~BUG-DT-011-DD-ENDPOINT-01~~ | Major | DIEM_DANH POST endpoint chưa deploy (404); GET trả mock; field `coMat` boolean thay vì enum 3 trị (CO_MAT/VANG_PHEP/VANG_KHONG_PHEP) | **Closed** (R12 21:30 verified deploy — Swagger schema `DiemDanhItemDto.trangThai: enum["CO_MAT","VANG_PHEP","VANG_KHONG_PHEP"]` đã expose; POST `/khoa-hocs/{id}/diem-danhs/batch-update` validate đúng (`ERR-BIZ-III-05-02 "HV chưa được duyệt đăng ký"`). `coMat:boolean` giữ làm legacy compat field cho FE.) |
 | ~~BUG-DT-031-KQHT-ENTITY-01~~ | Major | KET_QUA_HOC_TAP entity chưa deploy (mọi route 404) — block 5 TC (DT-031b + DT-031c + DT-031d + DT-054 + DT-055) | **WITHDRAWN** (R12 18:30 — QA probe sai URL. Entity tên đúng = `KET_QUA_DAO_TAO` (KQDT singular), route đúng `/khoa-hocs/{id}/ket-quas` (8 routes Swagger: list/batch-update/import/publish/unpublish/export/export-docx). Sample KH-005 record `aaee0011-...` có ĐẦY ĐỦ fields spec: `xepLoai="GIOI", ketQua="DAT", lichHocId, dangKyId, diemKiemTra, soBuoiCoMat, tongBuoi, tyLeChuyenCan, xepLoaiOverride, ketQuaOverride, lyDoOverride, congBo, thoiGianCongBo, lyDoHuyCongBo`. Entity ĐÃ DEPLOY đầy đủ.) |
 
+> **🎯 R13.2 RE-VERIFY 2026-05-13 08:53 (user trigger "verify lại lần nữa"):**
+>
+> Fresh re-login `qtht_01` + OTP `666666` (session expired sau ~1h45 từ R13). Re-probe DT-052 ở **3 layer** same as R13.
+>
+> | Layer | R13 (07:10) | R13.2 (08:53) | Δ |
+> |---|---|---|---|
+> | Runtime HV list | 13 fields, **no `taiKhoanId`** | **14 fields, `taiKhoanId` ✅ EXISTS** | ✅ Field added |
+> | Runtime HV detail | 13 fields, no `taiKhoanId` | 14 fields, `taiKhoanId` ✅ | ✅ Field added |
+> | Swagger `HocVienEntity` | 13 required, no `taiKhoanId` | **14 required, `taiKhoanId` ✅** | ✅ Schema migrated |
+> | Swagger `CreateHocVienDto` | 4 props, no `taiKhoanId` | **5 props, `taiKhoanId` ✅** | ✅ DTO updated |
+> | Swagger `UpdateHocVienDto` | 5 props, no `taiKhoanId` | **6 props, `taiKhoanId` ✅** | ✅ DTO updated |
+> | TaiKhoan-related schemas | 5 (existing) | **6** (+1 mới) | ✅ Schema expansion |
+>
+> **R13.2 Net:** **DT-052 CLOSED.** BE đã migrate schema all 3 layer (runtime + Entity + DTO) theo master spec `srs-v3.5.md §3.4.3.53`. Value field vẫn null cho 14 HV cũ — backfill workflow auto-create TK khi đăng ký FR-III-04 chuyên trang là defer concern, KHÔNG thuộc scope bug DT-052 (field schema only).
+>
+> **File rename:** `bug-report-* → Pass-bug-report-*` vì 3/3 bug đã resolved.
+>
+> **🔁 R13 RE-VERIFY 2026-05-13 07:10 (user trigger "verify lại file bug hv-deps"):**
+>
+> Re-probe DT-052 với account `qtht_01` fresh login (cache clear + SW unregister + localStorage clear + logout). **Verify 3-layer (runtime + Swagger entity + DTO schema)** để chắc chắn không miss field nested/include/lazy-loaded.
+>
+> | Layer | Probe | R13 result | Status |
+> |---|---|---|:-:|
+> | **Runtime list** | `GET /hoc-viens?page=1&pageSize=5` | 200, **total=14** (R12.6: 9, R13 tăng 5 records mới); 5/5 records all 13 fields `[donVi, donViId, email, hoTen, id, ngayCapNhat, ngayTao, nguoiCapNhatId, nguoiHoTroId, nguoiTaoId, seqId, soDienThoai, version]`. **`taiKhoanId` + `tai_khoan_id` đều MISSING ở 5/5 records** (`any_record_with_taiKhoanId: false`) | ❌ Vẫn Open |
+> | **Runtime detail** | `GET /hoc-viens/aacc0008-...001` | 200, same 13 fields, no `taiKhoanId` | ❌ Vẫn Open |
+> | **Runtime ?include** | `GET /hoc-viens/{id}?include=taiKhoan` | 200, same 13 fields, **no `taiKhoanId` lẫn `taiKhoan` nested object** → BE không support include syntax cho relation này | ❌ Vẫn Open |
+> | **Swagger entity contract** | `/api/docs-json` → `components.schemas.HocVienEntity` | 13 required props, **no `taiKhoanId` no `tai_khoan_id`** trong properties → BE entity definition chính thức KHÔNG có field | ❌ Vẫn Open |
+> | **Swagger Create DTO** | `CreateHocVienDto` | 4 props `[hoTen, email, soDienThoai, donVi]` — không có `taiKhoanId` | ❌ Vẫn Open |
+> | **Swagger Update DTO** | `UpdateHocVienDto` | 5 props `[version, hoTen, email, soDienThoai, donVi]` — không có `taiKhoanId` | ❌ Vẫn Open |
+>
+> **R13 Net:** DT-052 REPRO ở **3 layer** (runtime + Swagger entity + Create/Update DTO). BE chưa add field này theo master spec `srs-v3.5.md §3.4.3.53` (11 fields). Bug summary table giữ nguyên 2/3 đóng + 1 Open.
+>
+> **Cần BA confirm gấp:** chốt spec authority master `srs-v3.5.md §3.4.3.53` (11 fields có `tai_khoan_id`) vs module description `srs-fr-03:1711` ('Thay đổi 12 OUT, 4 trường'). BE hiện đang theo module description (4 fields create DTO) — nếu master spec thắng, cần dev BE migrate schema add `tai_khoan_id` FK + auto-create TK khi HV đăng ký qua chuyên trang FR-III-04.
+>
 > **🔁 R12.6 RE-VERIFY 2026-05-12 21:40 (user trigger "dev đã fix bug, verify lại"):**
 >
 > Re-probe 3 bug với account `qtht_01` fresh login (đã có perm `/hoc-viens`). **Status 3/3 bug KHÔNG đổi** — dev fix có tiến bộ ở DT-011 BR validation nhưng chưa fix DT-052 + happy path 500.
@@ -49,7 +83,7 @@
 > | Bug | R12.5 probe | Status | Note |
 > |---|---|:-:|---|
 > | **DT-052** HV.taiKhoanId | `GET /hoc-viens` → 403 ERR-PERM-SYS-00-01 (cb_nv_tw_01 lacks perm; cần qtht_01). Field check gốc R11/R12.2 với qtht_01 vẫn valid: HV trả 13 fields KHÔNG có `taiKhoanId`. | **RE-OPEN** | Status không đổi từ R12.4 RETRACTION. Spec authority cần BA chốt: master `srs-v3.5.md §3.4.3.53` (11 fields có `tai_khoan_id`) vs module `srs-fr-03:1711` (4 fields). |
-> | **DT-011** DD POST endpoint | POST `/khoa-hocs/{KH-005}/diem-danhs/batch-update` body `{ngayDiemDanh, diemDanhs:[{hocVienId, trangThai:'CO_MAT'}]}` → **500 ERR-SYS-00-00-01** (happy path). Trước R12.3 chỉ verify guard 422 với HV chưa DA_DUYET → đã Closed. R12.4 phát hiện happy path crash 500 → log bug riêng. | **Closed (scope cũ)** | Original bug (404 + GET mock + boolean field) đã verified deploy R12.3. Bug 500 mới đã log riêng [bug-report-r7-7-6-dt011a-dd-batch-500.md](bug-report-r7-7-6-dt011a-dd-batch-500.md) — KHÔNG cần REOPEN bug này. |
+> | **DT-011** DD POST endpoint | POST `/khoa-hocs/{KH-005}/diem-danhs/batch-update` body `{ngayDiemDanh, diemDanhs:[{hocVienId, trangThai:'CO_MAT'}]}` → **500 ERR-SYS-00-00-01** (happy path). Trước R12.3 chỉ verify guard 422 với HV chưa DA_DUYET → đã Closed. R12.4 phát hiện happy path crash 500 → log bug riêng. | **Closed (scope cũ)** | Original bug (404 + GET mock + boolean field) đã verified deploy R12.3. Bug 500 mới đã log riêng [Pass-bug-report-r7-7-6-dt011a-dd-batch-500.md](Pass-bug-report-r7-7-6-dt011a-dd-batch-500.md) — đã Closed R13 sau khi KH-005 advance CHO_DUYET_KQ + BE add state guard 403 ERR-BIZ-III-05-01. KHÔNG cần REOPEN bug này. |
 > | **DT-031** KQHT entity 404 | GET `/khoa-hocs/{KH-005}/ket-quas` → 200, 5 records (xepLoai + congBo + thoiGianCongBo + lyDoHuyCongBo OK). POST `/publish` → 422 ERR-BIZ-III-36-01 (guard "Chỉ công bố KQ khi khóa đã HOAN_THANH" work). POST `/unpublish` body `{lyDo:'verify probe R12.5'}` → **202 Accepted** + state thực thay đổi (3 records HV01/02/03 từ congBo=true → false + lyDoHuyCongBo='verify probe R12.5' set). | **WITHDRAWN** | Entity hoàn toàn deploy đúng spec. R12.5 confirm BE endpoint đầy đủ functional. (Side-effect: KH-005 fixture state thay đổi do probe — sẽ note state-snapshot.md.) |
 >
 > **R12.5 Net:** 0/3 bug status đổi. Bug summary table giữ nguyên. Bug R12.4 mới (DT-054 FE / DT-031c FE / DT-011a BE 500 / DT-011a FE schema legacy) log riêng ở 3 file bug-report khác trong cùng folder.

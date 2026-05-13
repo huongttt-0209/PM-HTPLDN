@@ -344,7 +344,7 @@
 - `bug-report-r7-7-16-api-deploy-gap.md` — API deploy gap (2 BUG)
 - `bug-report-r7-7-6-dt038-baigiang-assign-missing.md` — Đào tạo DT-038 (1 BUG)
 - `bug-report-r7-7-6-dt053-public-modal-missing-cpf.md` — Đào tạo DT-053 (1 BUG)
-- `bug-report-r7-7-6-hv-deps.md` — Đào tạo HV deps (R12.4: DT-011 Closed + DT-031 WITHDRAWN + DT-052 RE-OPEN chờ BA chốt spec authority)
+- `Pass-bug-report-r7-7-6-hv-deps.md` — Đào tạo HV deps (R13.2 13/05: 3/3 Closed — DT-011 Closed + DT-031 WITHDRAWN + DT-052 Closed BE migrate `taiKhoanId` schema)
 - `Pass-bug-report-r7-dashboard.md` — Dashboard R7 (5 BUG)
 - `bug-report-seed-r7-3-5-kh-nam-r8.md` — KH năm R8 (3 BUG)
 - `bug-report-function-bm-r7-7-10.md` — Bài giảng R7 (3 BUG)

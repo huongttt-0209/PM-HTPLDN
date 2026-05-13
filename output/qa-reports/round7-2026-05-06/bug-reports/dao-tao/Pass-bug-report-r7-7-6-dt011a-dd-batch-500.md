@@ -8,15 +8,37 @@
 
 | Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
 |------|----------|-------|--------|-------|---------|--------|------|
-| 2    | 0        | 1     | 1      | 0     | 0       | 1      | 1    |
+| 2    | 0        | 1     | 1      | 0     | 0       | 2      | 0    |
 
 ## Bug Summary
 
 | ID | Severity | Title | Status |
 |---|:-:|---|:-:|
-| BUG-DT-011a-BE-DD-500-01 | Major | POST `/khoa-hocs/{id}/diem-danhs/batch-update` trả 500 ERR-SYS-00-00-01 với mọi payload có valid HV (cả schema cũ `coMat` lẫn schema mới `trangThai`) | **Open** (R12.5 2026-05-12 14:43 RE-CONFIRMED — happy path với ngày đúng lịch học 01/03/2026 + 1 HV `aacc0011-...001` `trangThai:'CO_MAT'` vẫn 500 ERR-SYS-00-00-01 reqid `cf43d9a3-0200-4039-b26a-b1956792a74c`; isolate 1 HV congBo=false (sau hv-deps unpublish) vẫn 500 → loại hypothesis #3 KQDT conflict; KH state DA_KET_THUC + composite key vẫn là 2 hypothesis chưa loại) |
+| ~~BUG-DT-011a-BE-DD-500-01~~ | Major | POST `/khoa-hocs/{id}/diem-danhs/batch-update` trả 500 ERR-SYS-00-00-01 với mọi payload có valid HV (cả schema cũ `coMat` lẫn schema mới `trangThai`) | **Closed** (R13 2026-05-13 07:18 verified — KH-005 advance từ R12.5 `DA_KET_THUC` → R13 `CHO_DUYET_KQ`; 3 probe (happy path 5 HV / isolate 1 HV / explicit lichHocId) all trả **403 `ERR-BIZ-III-05-01 "Không thể cập nhật điểm danh khi kết quả đã nộp duyệt"`** — proper business guard thay vì 500 crash. BE đã wrap try/catch + map state guard cho CHO_DUYET_KQ/HOAN_THANH theo Hypothesis #1.) |
 | ~~BUG-DT-011a-FE-SCHEMA-LEGACY-01~~ | Medium | FE form Điểm danh chỉ render checkbox `coMat: boolean` — gửi schema cũ thay vì enum 3 trị `trangThai: CO_MAT/VANG_PHEP/VANG_KHONG_PHEP` per spec FR-III-21 BR-DD-01 | **Closed** (R12.5 2026-05-12 14:42 verified — FE đã thay checkbox bằng 3 Radio Group "Có mặt / Vắng có phép / Vắng không phép" + textbox "Lý do vắng..." cho ghi chú per spec FR-III-21 BR-DD-01) |
 
+> **🔁 Re-test R13 (2026-05-13 07:18, user trigger "verify lại file bug DT-011a"):**
+>
+> Fresh session re-login `qtht_01` + navigate `/dashboard`. Probe POST batch-update với KH-005 (đã advance state) + alternative KH states.
+>
+> **KH-005 state R13:** `trangThai="CHO_DUYET_KQ"` (R12.5: `DA_KET_THUC`) → workflow đã "Gửi duyệt KQ" ở giữa R12.5 và R13. Vẫn 5 HV + 1 LH session ngày 2026-03-01.
+>
+> | # | Payload | Status | Code/Message |
+> |---|---|:-:|---|
+> | 1 | HAPPY 5 HV ngày 2026-03-01 (mix CO_MAT/VANG_KHONG_PHEP) | **403** | `ERR-BIZ-III-05-01 "Không thể cập nhật điểm danh khi kết quả đã nộp duyệt"` reqid `b0d11845-3fb5-4d28-9e83-abb1a20a1231` |
+> | 2 | ISOLATE 1 HV01 ngày 2026-03-01 | **403** | Same `ERR-BIZ-III-05-01` reqid `d9972274-21e7-4e4b-bf92-4c19f19ddead` |
+> | 3 | EXPLICIT `lichHocId: aabb0011-...001` (test composite key hypothesis #2) | **403** | Same `ERR-BIZ-III-05-01` reqid `ddbc9744-bba0-4ed7-a964-2df182096757` |
+>
+> → **KHÔNG còn 500 crash unhandled.** BE đã wrap try/catch + map sang proper 403 business error với reason rõ ràng. Match Hypothesis #1 từ R12.5 (KH state guard CHO_DUYET_KQ → block DD update vì KQ đã submitted, cần unsubmit trước).
+>
+> **Positive path (KH state OK):** Không probe được trên KH state khác vì 11/12 KH còn lại đều không có HV+LH combo (KH-002 DANG_DIEN_RA có 3 LH nhưng 0 HV; KH-001/003/004/006/007 không có LH; KH-HDSD-AG-001/002/003 không có LH). KH-005 là single sample → đã advance qua CHO_DUYET_KQ. Bug claim "500 với mọi payload có valid HV" KHÔNG còn reproduce trên KH-005 → original symptom resolved.
+>
+> **Hypothesis update R13:**
+> - ✅ Hypothesis #1 (KH state guard) — **CONFIRMED + FIXED**: BE đã code guard cho CHO_DUYET_KQ → block 403 proper. Trước R13 service crash 500 vì thiếu state check (state DA_KET_THUC chưa có handler).
+> - ⏸️ Hypothesis #2/#4 (composite key + KQDT join): không còn cần triage vì service đã không crash. Nếu KH state DA_KET_THUC (chưa CHO_DUYET_KQ) vẫn có khả năng crash → cần test rounds tiếp.
+>
+> → **BUG-DT-011a-BE-DD-500-01 CLOSED.** Bug original symptom (500 crash với valid payload) đã giải bằng proper business guard. Both bugs in file resolved → file rename `Pass-*` prefix.
+>
 > **🔁 Re-test R12.5 (2026-05-12 14:42, user trigger "verify lại file bug DT-011a"):**
 >
 > Fresh session: caches.delete + SW unregister + localStorage clear + `POST /auth/logout` → 200 → navigate `/login` ignoreCache → re-login `cb_nv_tw_01` + OTP `666666`. Navigate KH-005 tab `?tab=lich-hoc-diem-danh`, chọn ngày 03/03/2026.
