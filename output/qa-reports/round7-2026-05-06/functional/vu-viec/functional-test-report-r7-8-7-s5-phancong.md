@@ -11,8 +11,8 @@
 | **OTP Bypass** | `666666` |
 | **Test Method** | UI-based qua Chrome DevTools MCP + isolatedContext `r787_s5_cb_nv_tw_10` + API trace qua `list_network_requests` |
 | **Primary Account** | `cb_nv_tw_10` / `Secret@123` — CB Nghiệp vụ TW, đơn vị BTP-TW |
-| **Round** | Round 7 — R7.8.7 (E2E 12 bước DN, sub-step S5 Phân công) |
-| **Tài liệu tham chiếu** | [`bug-report-r7-8-7-e2e-seam-gaps.md`](../../bug-reports/cross-cutting/bug-report-r7-8-7-e2e-seam-gaps.md) · [`workflow-test-report-r7-8-7-e2e-dn.md`](../../workflow/cross-cutting/workflow-test-report-r7-8-7-e2e-dn.md) · [`srs-fr-05-vu-viec.md`](../../../../input/srs-update-2026-5-5/srs-fr-05-vu-viec.md) |
+| **Round** | R20 (2026-05-13 11:50:00 — retest BUG-E2E-S5 closed) |
+| **Tài liệu tham chiếu** | [`Pass-bug-report-r7-8-7-e2e-seam-gaps.md`](../../bug-reports/cross-cutting/Pass-bug-report-r7-8-7-e2e-seam-gaps.md) · [`workflow-test-report-r7-8-7-e2e-dn.md`](../../workflow/cross-cutting/workflow-test-report-r7-8-7-e2e-dn.md) · [`srs-fr-05-vu-viec.md`](../../../../input/srs-update-2026-5-5/srs-fr-05-vu-viec.md) |
 
 ---
 
@@ -48,7 +48,11 @@
 
 → **Happy-path Pass Rate = 2/2** — state machine `DANG_KIEM_TRA → DA_PHAN_CONG` chạy OK qua UI.
 
-### Verdict: **CONDITIONAL PASS**
+### Verdict R20 (LATEST · 2026-05-13 11:50:00): **✅ FULL PASS** — 5/5
+
+R20 retest BUG-E2E-S5: account `cb_nv_tw_05` mở 3 VV mẫu (VV-BTP-TW-20260511-003 DA_PHAN_CONG, VV-BTP-TW-20260512-001 DA_PHAN_CONG, VV-HDSD-002 DA_PHAN_CONG) → Accordion 5 "Phân công Người hỗ trợ / Tư vấn viên" expanded → label hiển thị đúng **"Đơn vị quản lý"** (KHÔNG còn "Địa bàn") + value "Cục Bổ trợ tư pháp - Bộ Tư pháp" cho 2/3 VV (3rd VV value = "—" vì chưa resolve donVi quản lý, KHÔNG ảnh hưởng label fix). BUG-E2E-S5 đóng. Bằng chứng: [`r20-e2e-s5-accordion5-donvi-quan-ly-label-pass.png`](image/r20-e2e-s5-accordion5-donvi-quan-ly-label-pass.png), [`r20-e2e-s5-vv2-donvi-quan-ly-consistent.png`](image/r20-e2e-s5-vv2-donvi-quan-ly-consistent.png).
+
+### Verdict R7.8.7 (archive · 2026-05-12): **CONDITIONAL PASS**
 
 Functional core (modal 2 thẻ + dropdown cascade + state advance + workload sort + empty guard) đã apply đúng spec v3.5 UC59 refactor. Tuy nhiên Outputs SCR-V.I-03 Accordion 5 chưa rename label "Địa bàn" → "Đơn vị quản lý" theo v3.5 rev. 2 G2+G4 (NĐ 77/2008 Đ.19) → log Minor `BUG-E2E-S5`. KHÔNG block release vì label rename chỉ ảnh hưởng UI hiển thị, không sai data logic.
 
@@ -62,18 +66,16 @@ Functional core (modal 2 thẻ + dropdown cascade + state advance + workload sor
 | R7.8.7-S5.2 | Phân công Cá nhân — sort workload ASC + state advance | ✅ Đạt | R7.8.7 | 4 record, sort 0→2 OK, state DA_PHAN_CONG |
 | R7.8.7-S5.3 | Phân công Tổ chức — cascade 2 dropdown TC TV → TVV | ✅ Đạt | R7.8.7 | TC-BTP-TW-0001 → 4 TVV active list |
 | R7.8.7-S5.4 | TC TV 0 TVV active → guard empty + alert | ✅ Đạt | R7.8.7 | TC-BTP-TW-0008 hiện alert + dropdown empty |
-| R7.8.7-S5.5 | Outputs Accordion 5 hiển thị "Đơn vị quản lý" | ❌ Lỗi | R7.8.7 | Vẫn label "Địa bàn" + address — BUG-E2E-S5 |
-| **Tổng** | **5 TC** | ✅4 · ❌1 · ⚠️0 · 🚫0 · ⏭0 · 🤷0 | | |
+| R7.8.7-S5.5 | Outputs Accordion 5 hiển thị "Đơn vị quản lý" | ✅ Đạt | R20 | R20 verify 3 VV — label "Đơn vị quản lý" correct, BUG-E2E-S5 Closed |
+| **Tổng** | **5 TC** | ✅5 · ❌0 · ⚠️0 · 🚫0 · ⏭0 · 🤷0 | | |
 
-## Bảng TC chưa chạy được — cần làm gì để chạy (R7.8.7-S5)
+## Bảng TC chưa chạy được — cần làm gì để chạy (R20)
 
-> Hiện tại còn 1 TC fail — 1 TC chờ FE rename label theo v3.5 rev. 2 G2+G4.
+> Tất cả 5 TC ✅ PASS — không còn TC bị chặn.
 
 | TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
 |---|---|---|:-:|
-| R7.8.7-S5.5 | Label Outputs vẫn "Địa bàn" thay vì "Đơn vị quản lý" — BUG-E2E-S5 | FE rename label + BE expose `don_vi_quan_ly` (Sở TP/Bộ ngành) trong response `goi-y-tvv` | Dev FE + Dev BE |
-
-> **Phân loại nhóm**: B (chờ dev fix bug đã log).
+| (không có) | — | — | — |
 
 ---
 
@@ -85,7 +87,7 @@ Functional core (modal 2 thẻ + dropdown cascade + state advance + workload sor
 | R7.8.7-S5.2 | FR-V.I-09 + BR-CALC-04 + SM transition DANG_KIEM_TRA→DA_PHAN_CONG | Phân công Cá nhân — sort workload ASC + state advance | Happy | P0 | **PASS** | — | 4 record sort 0,0,0,2 (workload ASC), POST `/phan-cong` 201, timeline ghi đúng |
 | R7.8.7-S5.3 | FR-V.I-09 §Inputs row 4-5 (cascade TC TV → TVV thuộc TC) | Phân công Tổ chức — cascade dropdown TC TV → TVV | Happy | P0 | **PASS** | — | Pick TC-BTP-TW-0001 → dropdown TVV liệt kê 4 active records của TC |
 | R7.8.7-S5.4 | FR-V.I-09 §Error Handling EN-09 (TC không có TVV active → alert) | TC TV 0 TVV active → guard empty + alert | Guard | P1 | **PASS** | — | Pick TC-BTP-TW-0008 → alert hiện "Không có TVV active", dropdown TVV empty |
-| R7.8.7-S5.5 | `srs-fr-05-vu-viec.md` line 18 (v3.5 rev. 2 G2+G4) + FR-V.I-09 Outputs.6 `don_vi_quan_ly` | Outputs Accordion 5 hiển thị "Đơn vị quản lý" + Sở TP/Bộ ngành | UI/UX | P2 | **FAIL** | BUG-E2E-S5 | App vẫn render label `Địa bàn` + value address của TVV (chưa apply rev. 2 rename) |
+| R7.8.7-S5.5 | `srs-fr-05-vu-viec.md` line 18 (v3.5 rev. 2 G2+G4) + FR-V.I-09 Outputs.6 `don_vi_quan_ly` | Outputs Accordion 5 hiển thị "Đơn vị quản lý" + Sở TP/Bộ ngành | UI/UX | P2 | **✅ PASS (R20)** | ~~BUG-E2E-S5~~ Closed | R20 verify 3 VV: label "Đơn vị quản lý" + value "Cục Bổ trợ tư pháp - Bộ Tư pháp" |
 
 ---
 
@@ -111,7 +113,7 @@ Functional core (modal 2 thẻ + dropdown cascade + state advance + workload sor
 
 **Root Cause (Suggested):** Response BE `GET /goi-y-tvv` chỉ trả `maTvv/hoTen/loaiTvv/diemDanhGiaTb/activeWorkload` — KHÔNG có field `don_vi_quan_ly`. FE fallback render `dia_chi` của TVV thay vì query Sở TP/Bộ ngành. Cần BE expose `don_vi_quan_ly` (Sở TP công nhận) + FE rename label + dùng field mới.
 
-> Chi tiết Steps/Evidence đầy đủ: [bug-report-r7-8-7-e2e-seam-gaps.md §BUG-E2E-S5](../../bug-reports/cross-cutting/bug-report-r7-8-7-e2e-seam-gaps.md).
+> Chi tiết Steps/Evidence đầy đủ: [Pass-bug-report-r7-8-7-e2e-seam-gaps.md §BUG-E2E-S5](../../bug-reports/cross-cutting/Pass-bug-report-r7-8-7-e2e-seam-gaps.md).
 
 ---
 

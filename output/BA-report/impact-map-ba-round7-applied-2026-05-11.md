@@ -17,11 +17,11 @@ File này trace nhanh các quyết định BA đã được áp dụng vào trac
 | FR-05.6 Actor chấp nhận phân công | Người được phân công gồm NHT/TVV/CG hoặc TVV tổ chức cử | `workflow/vu-viec/workflow-test-report-r7-4-a3-vu-viec.md` |
 | FR-06.1 Bổ sung lần 4 | `bo_sung_count=3` thì backend chặn yêu cầu bổ sung tiếp; không auto `TU_CHOI` | `functional/chi-tra/functional-test-report-ChiTra-v3.5.md` |
 | FR-06.2 SLA 4 mức | warning 70-<85%, urgent 85-<100%, critical >=100% chưa hoàn thành, overdue quá deadline; cần SRS/UC108 ghi chính thức | `functional/chi-tra/functional-test-report-ChiTra-v3.5.md` |
-| FR-08.1 Quyền QTHT tiêu chí | QTHT CRUD master criteria; không sửa tiêu chí đã gắn vào từng đợt | `bug-reports/danh-gia/bug-report-flow-danhgia.md` |
+| FR-08.1 Quyền QTHT tiêu chí | QTHT CRUD master criteria; không sửa tiêu chí đã gắn vào từng đợt | `bug-reports/danh-gia/Pass-bug-report-flow-danhgia.md` |
 | FR-08.2 Eligible VV | `HOAN_THANH` + trong kỳ + đúng phạm vi đơn vị; không lọc lĩnh vực người đánh giá | `workflow/danh-gia/workflow-test-report-DanhGiaHQ.md`, `workflow/danh-gia/workflow-test-report-r7-4-d2-danhgiahq-bo03-2026-05-09.md` |
 | FR-08.3 State sau duyệt PC | `THUC_HIEN`, label "Thực hiện đánh giá" | `workflow/danh-gia/workflow-test-report-DanhGiaHQ.md`, `workflow/danh-gia/workflow-test-report-r7-4-d2-danhgiahq-bo03-2026-05-09.md` |
 | FR-08.4 State machine chuẩn | 8 state nghiệp vụ + `HUY`, Section 5 là source of truth | `workflow/danh-gia/workflow-test-report-DanhGiaHQ.md` |
-| FR-08.5 KPI VV hoàn thành | Đếm `HOAN_THANH` + `DA_DANH_GIA`, theo `ngay_hoan_thanh` và scope đơn vị | `bug-reports/danh-gia/bug-report-flow-danhgia.md` |
+| FR-08.5 KPI VV hoàn thành | Đếm `HOAN_THANH` + `DA_DANH_GIA`, theo `ngay_hoan_thanh` và scope đơn vị | `bug-reports/danh-gia/Pass-bug-report-flow-danhgia.md` |
 | FR-08.6 Sửa phân công | Có, khi đợt còn `PHAN_CONG` | `functional/danh-gia/functional-test-report-r7-7-9-danh-gia.md` |
 | FR-08.7 Mục tiêu | Bắt buộc ở FE/BE | `functional/danh-gia/functional-test-report-r7-7-9-danh-gia.md` |
 | FR-12.1 Cron 2 ngày | QA không chờ thật; Dev cung cấp mock/trigger/test command | `tasks/tmp/todo-tvcs.md`, `functional/tu-van-chuyen-sau/functional-test-report-r7-7-5-tvcs.md` |

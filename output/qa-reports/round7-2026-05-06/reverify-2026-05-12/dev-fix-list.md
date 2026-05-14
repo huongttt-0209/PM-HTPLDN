@@ -1,190 +1,75 @@
-# Danh sách bug cần dev fix — Cập nhật sau R19 reverify 2026-05-12 17:50:00
+# Danh sách bug cần dev fix — Sau R23-verify3 seed walk 2026-05-14 13:45:00 (UI-first + fresh seed)
 
-**Phạm vi:** Tổng hợp bug còn Open / Partial sau R19 reverify (audit file: [`reverify-audit-2026-05-12.md`](reverify-audit-2026-05-12.md)). Bug đã Fixed R19 đã loại khỏi danh sách (xem section "Bug đã đóng R19" cuối file).
+**Tổng cộng: 3 bug Open** (R23-reverify đóng thêm 1: BUG-E2E-S4-011 đã FIX — FE đổi sang gọi `loaiDanhMuc=LOAI_HINH_HO_TRO`, dropdown render 6 options). **R23-verify3 13:45:00** — verify lại 3 bug bằng UI-first + **fresh seed VV LV Đất đai** (per user feedback "seed dữ liệu để test"): seed 2 VV mới qua form Nhập thủ công UI walk → walk state machine YEU_CAU_BO_SUNG (VV1) + Đạt → DA_PHAN_CONG (VV2) → test modal Phân công với meaningful keyword. Bug 1 (DG-013) — Minor P3 wording residual `ERR-AUTH-VPD-00-02` cross-cơ quan thay vì spec `ERR-DG-10`; verify đã thực hiện R23-verify3 12:30:00 trước seed walk, kết quả không đổi. Bug 2 (VV-PC-WRN-01) — **fresh seed VV2 LV Đất đai** state DANG_KIEM_TRA → modal Phân công DOM probe: 6 control (radio Cá nhân/Tổ chức + dropdown gợi ý + textarea ghi chú) + 2 button [Hủy]/[Xác nhận], **KHÔNG có override mechanism**; gõ keyword `hương tvv1` (TVV-BTP-TW-0029 HOAT_DONG, LV "Dân sự/Hành chính/Lao động/Thuế" — KHÔNG Đất đai, verified qua `/api/v1/tu-van-viens` global) → listbox empty với message **"Trống — Không tìm thấy đối tượng phù hợp lĩnh vực — Liên hệ QTHT để mở rộng lĩnh vực TVV/NHT, hoặc chọn vụ khác"** → BE LV-locked enforced, FE hint user 2 path (contact QTHT / đổi vụ), KHÔNG có "tìm thủ công" per `srs-fr-05-vu-viec.md:781`. Bug structural confirmed real với fresh data + active TVV pool. Bug 3 (VV-FN-LICHSU-01) — **fresh seed VV1 LV Đất đai** Kết luận "Yêu cầu bổ sung" → state YEU_CAU_BO_SUNG; API `/lich-su` trả `[YEU_CAU_BO_SUNG, TAO_VV]` 2 entries — **BE EMIT entry đúng ✓** (R23 finding cũ "BE silent" RESOLVED). Tuy nhiên timeline UI render raw enum `YEU_CAU_BO_SUNG` thay vì label "Yêu cầu bổ sung" — FE thiếu label mapping. **Fresh seed VV2** Phân công → API `/lich-su` `[PHAN_CONG, KIEM_TRA, TAO_VV]` canonical enum mới (không còn legacy `CREATE/UPDATE/APPROVE/PHAN_CONG_CA_NHAN`); UI render đúng label "Phân công"/"Kiểm tra"/"Tạo vụ việc". **Bug 3 downgrade Major P1 → Minor P3**: residual chỉ là FE label i18n mapping cho 1 enum (YEU_CAU_BO_SUNG), không phải BE emit gap.
 
-**LOẠI TRỪ:** 4 bug Defer chờ phase tích hợp API ngoài (DVC LGSP / mTLS / Cổng PLQG) — không thuộc phạm vi dev fix nội bộ.
-
-**Tổng số bug còn cần xử lý: 9** (giảm từ 14 sau R19)
-- 5 bug ❌ Still Open
-- 3 bug ⚠️ Partial (dev đã chạm, chưa xong hết surface)
-- 1 bug ❌ Open kèm regression nặng (TVCS-R16-001: 5 → 11 path 404)
-
-Tỉ lệ R19: **6 ✅ Fixed · 3 ⚠️ Partial · 5 ❌ Open** trong 14 bug verify.
-
----
-
-## Bảng tổng hợp 9 bug còn cần fix
-
-| # | Bug ID | Module | Sev | P | Status R19 | Ai làm | Phân loại fix | File bug report |
-|:-:|---|---|:-:|:-:|:-:|:-:|---|---|
-| 1 | BUG-CHITRA-010 | Chi trả | Medium | P2 | ❌ Open | **Dev BE** | Persist column data | [bug-report-r7-7-12-2-fr14-bo-sung.md](../bug-reports/chi-tra/bug-report-r7-7-12-2-fr14-bo-sung.md) |
-| 2 | BUG-FUNC-DG-014 | Đánh giá | Minor | P3 | ❌ Open | **Dev FE + BA** | Dropdown filter null name | [bug-report-flow-danhgia.md](../bug-reports/danh-gia/bug-report-flow-danhgia.md) |
-| 3 | BUG-HDTV-034 | HĐ tư vấn | Major | P1 | ❌ Open | **Dev FE + BE** | Route guard + BE 403 | [bug-report-r7-7-14-hdtv.md](../bug-reports/hop-dong-tv/bug-report-r7-7-14-hdtv.md) |
-| 4 | BUG-FE-TVCS-R16-005 | TVCS | Major | P1 | ⚠️ Partial | **Dev FE** | Add button [Công khai]/[Hủy công khai] | [bug-report-r7-7-5-tvcs-r16.md](../bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs-r16.md) |
-| 5 | BUG-BE-TVCS-R16-001 | TVCS | Major | P1 | ❌ Open ⚠️ REGRESSION | **Dev BE** | Deploy TLPL CRUD endpoint | [bug-report-r7-7-5-tvcs-r16.md](../bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs-r16.md) |
-| 6 | BUG-FUNC-TVN-005 | Tư vấn nhanh | Minor | P3 | ❌ Open | **Dev FE + BE** | Add enum module "Tư vấn" | [bug-report-r7-7-11-tvn.md](../bug-reports/tu-van-nhanh/bug-report-r7-7-11-tvn.md) |
-| 7 | BUG-VV-PC-WRN-01 | Vụ việc | Minor | P2 | ❌ Open | **Dev FE** | Add button [Tìm thủ công] | [bug-report-flow-vu-viec.md](../bug-reports/vu-viec/bug-report-flow-vu-viec.md) |
-| 8 | BUG-VV-FN-LICHSU-01 | Vụ việc | Minor | P3 | ⚠️ Partial (16/18) | **Dev BE** | Bổ sung 2 enum còn thiếu | [bug-report-r7-7-3-functional-vu-viec.md](../bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md) |
-| 9 | BUG-VV-FN-TVV-PERMISSION-GAP-01 | Vụ việc | Major | P1 | ⚠️ Partial (2/3) | **Dev BE** | Thêm perm `trinh-phe-duyet_vu_viec` | [bug-report-r7-7-3-functional-vu-viec.md](../bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md) |
-
----
-
-## Chi tiết yêu cầu fix theo từng nhóm
-
-### Nhóm Dev BE — 5 bug
-
-#### 1. BUG-CHITRA-010 (Medium · P2 · ❌ Open) — `ngayYeuCauBoSung` không persist khi YCBS
-
-- **SRS:** `srs-fr-06-chi-tra.md` §HSCT FR-V.II-14
-- **Trạng thái R19:** HSCT000066 (state YEU_CAU_BO_SUNG, soLanBoSung=1) `ngayYeuCauBoSung = null`. Dev chưa đụng BE logic transition DKT→YCBS.
-- **Acceptance:** Khi HSCT chuyển state sang `YEU_CAU_BO_SUNG`, BE BẮT BUỘC ghi `ngayYeuCauBoSung = NOW()` trước khi commit transaction. Deadline tracking 5 ngày LV phụ thuộc field này.
-- **Verify (UI):** Login CB NV → list HSCT YEU_CAU_BO_SUNG → click record → check field "Hạn bổ sung" / "Ngày yêu cầu bổ sung" trên UI khác null + API `GET /api/v1/ho-so-chi-tras?trangThai=YEU_CAU_BO_SUNG` mỗi record có `ngayYeuCauBoSung` khác null.
-
-#### 2. BUG-BE-TVCS-R16-001 (Major · P1 · ❌ Open · ⚠️ REGRESSION NẶNG) — TLPL CRUD endpoint chưa deploy + tăng số path 404
-
-- **SRS:** `srs-fr-12-tv-chuyen-sau.md` §Tư liệu pháp luật + UC TLPL
-- **Trạng thái R19:** R16 báo 5 path 404 → R19 **tăng lên 11 path 404** (regression). Dev có thể đã add endpoint mới vào spec nhưng chưa wire BE → 6 path mới thêm 404.
-- **11 path 404 R19:**
-
-| Path | Status |
+| Phân loại | Số lượng |
 |---|:-:|
-| GET `/api/v1/tu-lieu-phap-luats?tuVanChuyenSauId=...` | 404 |
-| POST `/api/v1/tu-lieu-phap-luats` | 404 |
-| GET/PATCH/DELETE `/api/v1/tu-lieu-phap-luats/{id}` | 404 |
-| POST `/api/v1/tu-lieu-phap-luats/{id}/cong-khai` | 404 |
-| `/api/v1/tu-lieu-phap-luat` (singular) | 404 |
-| `/api/v1/tu-lieu-phap-luats/tu-van-chuyen-sau/{id}` (nested) | 404 |
-| `/api/v1/tu-van-chuyen-saus/{id}/tu-lieu-phap-luats` (owner-nested) | 404 |
-| `/api/v1/tlpl` · `/api/v1/legal-documents` · `/api/v1/tu-lieu` | 404 |
-
-- **Acceptance:** BE deploy đầy đủ REST controller TLPL VV (5 method):
-  - `GET /api/v1/tu-lieu-phap-luats?tuVanChuyenSauId={id}` — list
-  - `POST /api/v1/tu-lieu-phap-luats` — create
-  - `PATCH /api/v1/tu-lieu-phap-luats/{tlplId}` — update
-  - `DELETE /api/v1/tu-lieu-phap-luats/{tlplId}` — delete
-  - `POST /api/v1/tu-lieu-phap-luats/{tlplId}/cong-khai` — chuyển NHAP→CONG_KHAI
-- **Verify (UI):** Click button [Đang thực hiện]/[Tạm dừng]/[Kết thúc] trong UI TVCS detail → quan sát toast/redirect (không 404).
-
-#### 3. BUG-VV-FN-LICHSU-01 (Minor · P3 · ⚠️ Partial 16/18) — LICH_SU_VU_VIEC miss 2 enum spec
-
-- **SRS:** `LICH_SU_VU_VIEC ENUM 18 hành động` · `BR-AUDIT-VV-01`
-- **Trạng thái R19:** Pool 17 enum (R19 +1 `MO_LAI` so R18). Còn miss 4: `TIEP_NHAN`, `TU_CHOI`, `TU_CHOI_DUYET`, `YEU_CAU_BO_SUNG`.
-- **Pool đã có (17):** `APPROVE, CAP_NHAT_KQ, CONG_KHAI, CREATE, DANH_GIA, HOAN_THANH, HUY_CONG_KHAI, KIEM_TRA, MO_LAI, PHAN_CONG, PHAN_CONG_CA_NHAN, PHAN_CONG_TO_CHUC, PHE_DUYET, TAO_VV, TRINH_PHE_DUYET, UPDATE, XAC_NHAN_PHAN_CONG`.
-- **Acceptance:** BE bổ sung 4 enum còn thiếu (`TIEP_NHAN`, `TU_CHOI`, `TU_CHOI_DUYET`, `YEU_CAU_BO_SUNG`) cho audit log khi state machine advance đúng transition.
-- **Verify (UI):** Walk full lifecycle 1 VV qua tất cả transition → mở Tab "Dòng thời gian"/"Lịch sử" UI → cover 18/18 enum.
-
-#### 4. BUG-VV-FN-TVV-PERMISSION-GAP-01 (Major · P1 · ⚠️ Partial 2/3) — TVV thiếu perm `trinh-phe-duyet_vu_viec`
-
-- **SRS:** `srs-fr-05-vu-viec.md` FR-V.I-12 §Inputs "TVV nhập kết quả"
-- **Trạng thái R19:** Perm count 14 → 20 (+6 trong đó `cap-nhat-ket-qua_ket_qua_vu_viec`, `create_ket_qua_vu_viec`, `read_ket_qua_vu_viec`, `update_ket_qua_vu_viec`, `hoan-thanh_vu_viec`, `read_ho_so_vu_viec`). API probe 3 endpoint:
-  - POST `/cap-nhat-ket-qua` → 422 ✅ Perm OK (validation body)
-  - POST `/trinh-phe-duyet` → **403 ❌ STILL Forbidden**
-  - POST `/hoan-thanh` → 422 ✅ Perm OK (validation body)
-- **Acceptance:** BE thêm perm `trinh-phe-duyet_vu_viec` (hoặc `trinh-phe-duyet_ket_qua_vu_viec` theo convention) vào role TVV.
-- **Verify (UI):** TVV login → mở VV phân công → toolbar có button [Trình PD] hiện + click thật → 201/200 (không 403). KHÔNG dùng API direct probe — phải kiểm UI thao tác user.
-
-#### 5. BUG-HDTV-034 (Major · P1 · ❌ Open) — Route `/hop-dong-tv/danh-sach` thiếu guard (FE) + BE chưa 403
-
-- **SRS:** BA chốt 2026-05-11 — route HDTV chỉ truy cập từ accordion VV, không standalone. Sev nâng Major vì RBAC bypass.
-- **Trạng thái R19:** Login `cb_nv_tw_06` → navigate `/hop-dong-tv/danh-sach` → render 9 records, no `/403`, no route guard. Vi phạm permission matrix.
-- **Acceptance — 2 surface phải fix cả 2:**
-  - **FE:** Add route guard — user navigate trực tiếp `/hop-dong-tv/danh-sach` không qua context VV → redirect dashboard hoặc 404 page.
-  - **BE:** Middleware role check `/api/v1/hop-dong-tu-vans` — role không có perm `read_hdtv` thì 403 ERR-PERM-SYS-00-01.
-- **Verify (UI):** `cb_nv_tw_06` gõ URL trực tiếp → /403 hoặc redirect; mở VV detail → accordion HDTV vẫn render đúng (positive path).
-
-### Nhóm Dev FE — 3 bug
-
-#### 6. BUG-FUNC-DG-014 (Minor · P3 · ❌ Open) — Dropdown Lĩnh vực render UUID raw
-
-- **SRS:** `srs-fr-08-danh-gia.md` SCR-VI-01 Tab 2 §Phân công row 36
-- **Trạng thái R19:** Modal "Thêm người đánh giá" dropdown LV có 13 options, gồm 2 raw UUID: `e5d17437-e267-42ce-9dbe-aa2eebc1e477` + `bbbbbbbb-0000-4000-8000-000000000018`. FE chưa filter LV không có tên.
-- **Acceptance:**
-  - **FE:** Filter dropdown chỉ render LV có `tenDanhMuc` không null.
-  - **BA confirm:** LV `bbbbbbbb-...-0018` UUID không tên — BA quyết giữ hay xóa, nếu giữ thì set tên Vietnamese.
-- **Verify (UI):** Mở modal Thêm người đánh giá → dropdown LV không còn UUID raw.
-
-#### 7. BUG-FE-TVCS-R16-005 (Major · P1 · ⚠️ Partial) — Thiếu button [Công khai]/[Hủy công khai]
-
-- **SRS:** `srs-fr-12-tv-chuyen-sau.md` §Công khai TVCS DA_DUYET (BR-PUBLIC-01..03)
-- **Trạng thái R19:** Panel 5/5 v3.5 field đã render OK (`Công khai`, `Thời gian đăng tải`, `Mô tả công khai`, `Ảnh đại diện`, `File đính kèm`). **Vẫn missing button action** [Công khai]/[Hủy công khai] để toggle workflow → user chỉ thấy read-only panel.
-- **Acceptance — FE add button:**
-  - Button [Công khai] khi TVCS `DA_DUYET` + `congKhai=false` → POST `/api/v1/tu-van-chuyen-saus/{id}/cong-khai`.
-  - Button [Hủy công khai] khi `congKhai=true` → POST `/api/v1/tu-van-chuyen-saus/{id}/huy-cong-khai`.
-- **Verify (UI):** TVCS-20260509-0002 (DA_DUYET) → button [Công khai]/[Hủy công khai] hiện + click toggle state thành công.
-
-#### 8. BUG-VV-PC-WRN-01 (Minor · P2 · ❌ Open) — Modal Phân công thiếu button [Tìm thủ công]
-
-- **SRS:** `srs-fr-05-vu-viec.md` SCR-V.II-01 §Phân công empty state + WRN-PC-01 line 768 + Acceptance line 778
-- **Trạng thái R19:** R18 dev đã sửa text empty state khớp WRN-PC-01 ✅ nhưng **vẫn KHÔNG có nút [Tìm thủ công]** override action. Grep DOM `*` containing "tìm thủ công" → 0 hit.
-- **Acceptance:** FE add button "Tìm thủ công" trong modal Phân công empty state, cho phép CB NV override search NHT/TVV ngoài LV phù hợp (theo Acceptance line 778).
-- **Verify (UI):** Mở modal Phân công VV empty state → button [Tìm thủ công] hiện + click mở mode tìm override.
-
-### Nhóm Dev FE + BE — 1 bug
-
-#### 9. BUG-FUNC-TVN-005 (Minor · P3 · ❌ Open) — Dropdown Module audit-log thiếu option "Tư vấn"
-
-- **SRS:** Audit log module list — phải có "Tư vấn" mapping `TU_VAN`
-- **Trạng thái R19:** Dropdown Module trong Tư vấn nhanh có 12 enum (Tổng quan / HTQA / Đào tạo / Mạng lưới TVV / Vụ việc / Chi trả / DN / Đánh giá / Thư viện / Hỗ trợ DN / Báo cáo / QTHT). **KHÔNG có "Tư vấn"**.
-- **Acceptance:**
-  - **FE + BE:** Thêm enum `TU_VAN` (label "Tư vấn") vào danh mục module dropdown filter.
-- **Verify (UI):** QTHT vào `/quan-tri/audit-log` (hoặc Tư vấn nhanh module filter) → dropdown có option "Tư vấn".
+| P0 Critical | 0 |
+| P1 Major | 0 |
+| P2 Medium | 1 (BUG-VV-PC-WRN-01 — modal override mechanism, dev FE+BE) |
+| P3 Minor | 2 (BUG-FUNC-DG-013 wording mismatch · BUG-VV-FN-LICHSU-01 FE label mapping i18n) |
 
 ---
 
-## Tóm lược ưu tiên (9 bug)
+## 1. Bảng 3 bug Open cần dev fix
 
-| Priority | Số bug | Bug ID |
-|:-:|:-:|---|
-| **P1 Major** | 4 | BUG-HDTV-034 · BUG-FE-TVCS-R16-005 · BUG-BE-TVCS-R16-001 · BUG-VV-FN-TVV-PERMISSION-GAP-01 |
-| **P2 Medium** | 2 | BUG-CHITRA-010 · BUG-VV-PC-WRN-01 |
-| **P3 Minor** | 3 | BUG-FUNC-DG-014 · BUG-FUNC-TVN-005 · BUG-VV-FN-LICHSU-01 |
-
-**Lưu ý:** 0 bug P0 sau R19 (2 bug P0 cũ DG-013 + R17-008 đều ✅ Fixed).
+| # | Bug ID | Module | Sev | P | Ai làm | Tóm tắt fix | File bug report |
+|:-:|---|---|:-:|:-:|:-:|---|---|
+| 1 | BUG-FUNC-DG-013 | Đánh giá HQ | Minor | P3 | Dev BE + FE | **R23 deep-verify — VPD gate đã FIX** ✓ (CB NV match cơ quan xem được KQ HOAN_THANH). **Wording mismatch ở 2 lớp**: (a) BE code 403 cross-cơ quan trả `ERR-AUTH-VPD-00-02`, spec `srs-fr-08-danh-gia.md:786` yêu cầu `ERR-DG-10`; (b) UI: FE auto-redirect `/403` page render text generic "Bạn không có quyền truy cập trang này" thay vì spec text "Bạn không có quyền xem kết quả đánh giá này". Dev: đổi mapping BE + thêm domain-specific 403 page cho Đánh giá HQ. | [bug-report-r22-fr-vi-10.md](../bug-reports/danh-gia/bug-report-r22-fr-vi-10.md) |
+| 2 | BUG-VV-PC-WRN-01 | Vụ việc | Minor | P2 | Dev FE + BE | **R23-verify3 fresh seed — confirmed real với active TVV pool.** Seed VV2 LV Đất đai → state DANG_KIEM_TRA → modal Phân công DOM probe: 6 control (radio Cá nhân/Tổ chức + dropdown gợi ý + textarea ghi chú) + 2 button [Hủy]/[Xác nhận], không có override mechanism. Gõ keyword `hương tvv1` (TVV-BTP-TW-0029 HOAT_DONG, LV ngoài Đất đai, verified API global) → listbox empty với message **"Trống — Không tìm thấy đối tượng phù hợp lĩnh vực — Liên hệ QTHT để mở rộng lĩnh vực TVV/NHT, hoặc chọn vụ khác"**. BE LV-locked enforced, FE hint 2 path (QTHT / đổi vụ), KHÔNG có "tìm thủ công" per `srs-fr-05-vu-viec.md:781`. Dev FE+BE bổ sung mechanism (button/toggle/clear-LV/dropdown unfiltered). | [bug-report-flow-vu-viec.md](../bug-reports/vu-viec/bug-report-flow-vu-viec.md) |
+| 3 | BUG-VV-FN-LICHSU-01 | Vụ việc | Minor | P3 | Dev FE | **R23-verify3 fresh seed — BE emit gap RESOLVED ✓, residual FE label i18n.** Seed VV1 LV Đất đai → Kết luận "Yêu cầu bổ sung" → API `/lich-su` trả `[YEU_CAU_BO_SUNG, TAO_VV]` — BE emit entry ĐÚNG. Seed VV2 → Phân công → API `[PHAN_CONG, KIEM_TRA, TAO_VV]` canonical enum (không còn legacy `CREATE/UPDATE/APPROVE/PHAN_CONG_CA_NHAN`). Tuy nhiên timeline UI render raw enum `YEU_CAU_BO_SUNG` thay vì label "Yêu cầu bổ sung" — FE thiếu i18n mapping. Dev FE bổ sung label cho enum YEU_CAU_BO_SUNG (và 4 enum còn lại nếu chưa map) trong component Dòng thời gian. **Downgrade Major P1 → Minor P3** (data layer OK, chỉ presentation gap). | [bug-report-r7-7-3-functional-vu-viec.md](../bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md) |
 
 ---
 
-## Bug đã đóng R19 — Đã loại khỏi danh sách (6 bug ✅ Fixed)
+## 2. Bug đã Closed R20+R22+R22-verify2+R23-reverify (10 bug)
 
-| Bug ID | Module | Sev | Verify R19 |
-|---|---|:-:|---|
-| BUG-FUNC-DG-013 | Đánh giá | Critical | QTHT vào DG detail: spinbutton=0, Hủy/Thêm/Xóa hidden cả Tab Tiêu chí + Tab Phân công — permission OK |
-| BUG-FUNC-DG-010 | Đánh giá | Major | Thêm tiêu chí trọng số=30 → FE honor đúng (row=30, total=90) — KHÔNG force =100 nữa |
-| BUG-FEBE-TVCS-R20-009 | TVCS | Major | Form `/tv-chuyen-sau/tao-moi` có dropdown "Vụ việc liên kết" + filter narrow `?doanhNghiepId` — DN-HNI-0015 total=2 OK |
-| BUG-FE-TVCS-R16-004 | TVCS | Medium | NHT sidebar không còn "Quản lý tư vấn"; route `/tv-chuyen-sau/*` bounced về `/dao-tao/chuong-trinh/danh-sach` |
-| BUG-BE-TVCS-R17-008 | TVCS | Major | NHT GET DN-003 happy=200 + DN cross-scope (001/002/004/005)=403 — row-level filter đúng FR-X.1-04 |
-| BUG-CHITRA-009 | Chi trả | Minor | SRS `srs-fr-06-chi-tra.md` line 841 đã có "Tác nhân: Doanh nghiệp (qua DVC/Cổng PLQG) hoặc CB NV (thủ công)" |
-
----
-
-## 4 bug đã loại trừ khỏi danh sách này (chờ phase tích hợp API ngoài)
-
-Để dev tham khảo, KHÔNG fix nội bộ — chờ infra/external sandbox staging:
-
-| Bug ID | Module | External dependency |
+| Bug ID | Module | Verify evidence |
 |---|---|---|
-| BUG-CHITRA-008 | Chi trả | DVC LGSP gateway sandbox (FR-V.II-14 receiver sync HS bổ sung) |
-| BUG-API-001 | Cross-cutting | mTLS cert client + sandbox staging (BR-INTG-02) |
-| BUG-API-002 | Cross-cutting | 8/9 cặp outbound API publish cho external systems (FR-XII-01..18) |
-| BUG-FUNC-TVN-008 | Tư vấn nhanh | Cổng PLQG CMS proxy `/cms-create` external integration |
+| ~~BUG-BC-PDF-NOT-SUPPORTED~~ | Báo cáo | R20 — 10/10 enum hợp lệ trả 200 + binary PDF |
+| ~~BUG-VV-R19c-001~~ | Vụ việc | R20 — TVV header có button [Cập nhật KQ] + [Trình PD] state DANG_XU_LY |
+| ~~BUG-BE-TVCS-R19c-010~~ | TVCS | R20 — Upload PDF 201 + `trangThaiQuet=SACH` |
+| ~~BUG-HDTV-037 + 038~~ | HĐ tư vấn | R20 — "Đang thực hiện" + pagination "mục" |
+| ~~BUG-E2E-S4~~ | Cross-cutting | R20 — DN portal có button "Gửi yêu cầu HTPL" |
+| ~~BUG-E2E-S5~~ | Cross-cutting | R20 — Accordion label "Đơn vị quản lý" |
+| ~~BUG-CHITRA-010~~ | Chi trả | R22 — Fresh DKT→YCBS HSCT-HDSD-001 16:41 → `ngayYeuCauBoSung` set NOW khớp lichSu YCBS timestamp. |
+| ~~BUG-BC-DATA-SCOPE-LEAK~~ | Báo cáo | **R22-verify2 17:10** — Fresh probe 3 isolatedContext TW/BN/DP: 4/4 endpoint scope đúng (TW=34/5/209M/9 vs BN BTC=0/0/12.6M/0 vs DP Sở BG=1/0/103.4M/0). BE đã wire dataScopeMiddleware. |
+| ~~BUG-VV-FN-PC-INACTIVE-01~~ | Vụ việc | **R22-verify2 17:13** — POST /phan-cong TVV inactive → 422 + message "ERR-PC-02: Đối tượng được chọn đã bị vô hiệu hóa". State VV giữ DANG_KIEM_TRA, không advance. |
+| ~~BUG-E2E-S4-011~~ | Cross-cutting | **R23-reverify 2026-05-14 01:05** — Fresh probe MCP DN `9999999990`: modal "Gửi yêu cầu hỗ trợ pháp lý" → dropdown "Loại hình hỗ trợ" render 6 options đúng spec (Tư vấn pháp luật / Tham gia tố tụng / Đại diện ngoài tố tụng / Hòa giải / Đào tạo/bồi dưỡng / Trợ giúp khác). Network: FE gọi `GET /api/v1/danh-muc/tree?loaiDanhMuc=LOAI_HINH_HO_TRO` → 200 (reqid=211), KHÔNG còn gọi `LOAI_HINH_HT`. FE đã align với FR-10 source-of-truth. R22-verify trước verify sai method — probe API direct 2 key thay vì capture FE request thực tế. |
+
+**File đã rename `Pass-` prefix:** TVCS-R16 / HDTV-7-14 / E2E-seam-gaps / E2E-S4-loai-hinh-empty.
 
 ---
 
-## Lưu ý cho dev khi fix tiếp
+## 3. Bug loại trừ — chờ phase tích hợp API ngoài (4 bug)
 
-1. **R16-001 regression cảnh báo:** từ 5 → 11 path 404 sau R16. Dev cần attach regression checklist endpoint touched + endpoint not-yet-implemented sau mỗi fix BE TVCS.
-2. **3 bug "Nửa fix" cần done definition rõ:** HDTV-034 (FE route + BE 403), R16-005 (panel + button), VV-PC-WRN-01 (text + button). Đã list rõ "Acceptance — 2 surface phải fix cả 2".
-3. **TVV-PERM-GAP-01 — sau khi BE thêm perm:** QA R20 sẽ test bằng UI thao tác (mở VV detail → click toolbar button) chứ không probe API direct, để bắt FE button missing nếu có.
-4. **LICHSU-01 — verify 18 enum đầy đủ:** không nhận đóng partial, BE phải log đủ 4 enum còn miss (`TIEP_NHAN`/`TU_CHOI`/`TU_CHOI_DUYET`/`YEU_CAU_BO_SUNG`).
+| Bug ID | Module | Sev | External dependency |
+|---|---|:-:|---|
+| BUG-CHITRA-008 | Chi trả | Medium | DVC LGSP gateway sandbox |
+| BUG-API-001 | Cross-cutting | Major | mTLS cert client + sandbox staging |
+| BUG-API-002 | Cross-cutting | Critical | 8/9 cặp outbound API publish |
+| BUG-FUNC-TVN-008 | Tư vấn nhanh | Minor | Cổng PLQG CMS proxy |
 
 ---
 
-## Cách verify khi fix xong
+## 4. Codex second-opinion review (2026-05-13 17:25:00 — kept for historical context, R23-reverify update)
 
-Mỗi bug entry trong file bug-report tương ứng (link cột "File bug report") đã có:
-- **Mô tả** (1-3 câu)
-- **Các bước tái hiện** (đã rewrite UI thuần 2026-05-12 cho 6 bug Mixed)
-- **Kết quả mong đợi** (theo SRS)
-- **Kết quả thực tế** + Supporting network evidence
-- **Bằng chứng** (screenshot inline)
+| # | Bug | Codex verdict R22 | R23 actual outcome | Recommended fix path |
+|:-:|---|---|---|---|
+| 1 | ~~BUG-E2E-S4-011~~ | Partial — gốc SRS mâu thuẫn | **CLOSED R23** — FE đã align FR-10 `LOAI_HINH_HO_TRO`, BA decision bypass (FE chọn theo NotebookLM khuyến nghị). | — |
+| 2 | BUG-FUNC-DG-013 | Real bug — SRS không mơ hồ | **Partial CLOSED R23** — VPD gate fix đúng (`donViId = coQuanDuocDanhGiaId` exception đã wire); còn Minor wording error code. | Dev BE đổi response 403 cross-cơ quan mapping → `ERR-DG-10` |
+| 3 | BUG-VV-PC-WRN-01 | Real bug Minor | **Vẫn Open R23** | **Khuyến nghị BE thêm endpoint search TVV active không lọc LV** (path b) — contract rõ hơn path (a) FE toggle re-fetch dễ lặp 422 |
+| 4 | BUG-VV-FN-LICHSU-01 | Real bug — không phải wording-only | **Partial progress R23** — alias `TRINH_PD` đã sửa (12→13/18 enum) | BE emit service `vu-viec`: gom 5 enum missing vào **1 PR**; backfill 4 legacy tách PR riêng |
 
-Dev sau khi fix → QA chạy lại đúng bước tái hiện trên UI → so sánh với "Kết quả mong đợi" → đóng bug nếu khớp. R20 retest sẽ ưu tiên UI thao tác cho 4 bug Nhóm 2 (CHITRA-010 UI deadline column, LICHSU-01 Tab Dòng thời gian UI, TVV-PERM-GAP UI toolbar button, R16-001 UI button click).
+**Tóm tắt R23-reverify:** 1 bug đóng thực (BUG-E2E-S4-011), 1 Partial CLOSED severity-downgrade (BUG-FUNC-DG-013 Major P1 → Minor P3), 2 bug vẫn Open chờ dev.
+
+---
+
+## 5. R23-verify3 seed walk update (2026-05-14 13:45:00)
+
+| # | Bug | R23-verify3 pre-seed | R23-verify3 fresh seed (13:45) | Action dev |
+|:-:|---|---|---|---|
+| 1 | BUG-FUNC-DG-013 | Minor P3 wording residual (verified 12:30) | Không thay đổi — không cần seed | Dev BE đổi error code mapping cross-cơ quan FR-VI-10 → ERR-DG-10 + FE add domain-specific 403 page |
+| 2 | BUG-VV-PC-WRN-01 | Minor P2 (verified 12:45 cb_nv_dp_01 LV Doanh nghiệp) | **Replicate trên fresh VV2 LV Đất đai** với meaningful keyword `hương tvv1` (TVV HOAT_DONG ngoài LV) — empty + message hint chỉ 2 path (QTHT/đổi vụ), không có "tìm thủ công" | Dev FE+BE bổ sung override mechanism per `srs-fr-05-vu-viec.md:781` |
+| 3 | BUG-VV-FN-LICHSU-01 | Major P1 BE emit gap (verified 13:00 VV-QA-R9-BC-001 legacy) | **Downgrade Major P1 → Minor P3.** Seed VV1 YEU_CAU_BO_SUNG → BE emit entry ĐÚNG. Seed VV2 PHAN_CONG → canonical enum mới. R23 finding cũ là **legacy data**, không phải BE bug thực. Residual: FE thiếu i18n cho enum YEU_CAU_BO_SUNG → render raw string | Dev FE add label mapping i18n cho enum YEU_CAU_BO_SUNG (và 4 enum chưa map nếu cần) trong component Dòng thời gian |
+
+**Kết luận seed walk:** 0 bug đóng mới, 1 bug downgrade severity (LICHSU Major→Minor), 2 bug giữ severity nhưng evidence chắc hơn (DG-013 + PC-WRN-01). Bug Major P1 list → 0; bug Open list → 3 (1×P2 Medium + 2×P3 Minor).

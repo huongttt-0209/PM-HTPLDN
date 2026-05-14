@@ -61,5 +61,5 @@
 
 - ⚠️ **R7.8.7** 🆕 E2E DN full luồng đăng ký → đánh giá → chi trả `[~45% — 5 PASS + 4/5 S5 PASS + 1 FAIL + 1 Critical Open]` <a id="r7-8-7"></a>
   - **Kết quả:** ⚠️ Bước 4 UC52 vẫn Open Critical. Seam 5 functional 4/5 PASS (modal v3.5 + cascade + sort + guard OK). [workflow-test-report-r7-8-7-e2e-dn.md](../output/qa-reports/round7-2026-05-06/workflow/cross-cutting/workflow-test-report-r7-8-7-e2e-dn.md) · [functional-test-report-r7-8-7-s5-phancong.md](../output/qa-reports/round7-2026-05-06/functional/vu-viec/functional-test-report-r7-8-7-s5-phancong.md)
-  - **Bug:** [bug-report-r7-8-7-e2e-seam-gaps.md](../output/qa-reports/round7-2026-05-06/bug-reports/cross-cutting/bug-report-r7-8-7-e2e-seam-gaps.md) — 1/3 đóng (1 Critical Open, 1 Minor Open, 1 Medium Closed)
+  - **Bug:** [Pass-bug-report-r7-8-7-e2e-seam-gaps.md](../output/qa-reports/round7-2026-05-06/bug-reports/cross-cutting/Pass-bug-report-r7-8-7-e2e-seam-gaps.md) — 3/3 đóng (1 Critical Open, 1 Minor Open, 1 Medium Closed)
   - **Cần:** Dev triển khai SCR-V.I-04 UC52 + POST `/vu-viecs` · FE rename label "Địa bàn" → "Đơn vị quản lý" + BE expose `don_vi_quan_ly` field

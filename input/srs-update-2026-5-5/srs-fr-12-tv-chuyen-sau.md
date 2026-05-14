@@ -31,7 +31,12 @@
 - Phân quyền đa đơn vị áp dụng cho tất cả UC loại B (BR-AUTH-08)
 - Tư liệu pháp lý là đối tượng quản lý riêng, phục vụ công khai lên Cổng
 
-**Tác nhân chính:** Cán bộ Nghiệp vụ (TW/BN/ĐP), Người hỗ trợ, Cổng Pháp luật quốc gia (API inbound)
+**Tác nhân chính:** Cán bộ Nghiệp vụ (TW/BN/ĐP) — UC147/148/150/152; Người hỗ trợ — chỉ UC148 (tìm kiếm TVCS, R-only, scope đơn vị) và UC150 (HSPL DN, scope theo VV được phân công, BR-AUTH-10); Cổng Pháp luật quốc gia (API inbound) — UC149/151/153
+
+> **Lưu ý phân quyền NHT (CSV `Danh sách transaction_v1.1_2026-03-27.csv` STT 147, 148, 150, 152):**
+> - **TVCS (UC148):** NHT chỉ Read; scope theo đơn vị (BR-AUTH-08) — NHT thấy mọi TVCS trong Sở TP của mình giống CB NV cùng Sở. KHÔNG áp lọc kép BR-AUTH-10 vì TVCS là tài liệu kiến thức nghiệp vụ chia sẻ trong đơn vị, không phải task gán đích danh. NHT KHÔNG có CRUD (UC147 actor = chỉ CB NV).
+> - **HSPL DN (UC150):** NHT có Read+Update; scope lọc kép BR-AUTH-10 (chỉ DN trong VV được phân công) vì HSPL gắn trực tiếp với hồ sơ pháp lý của DN cụ thể.
+> - **UC152 (Tư liệu PL VV):** NHT KHÔNG tham gia.
 
 **UC Coverage:**
 
@@ -188,14 +193,14 @@ Quản lý toàn bộ vòng đời nội dung tư vấn chuyên sâu: ghi nhận
 | 2 | Kiểm tra trạng thái hiện tại = DANG_TU_VAN | SM-TVCS |
 | 3 | Kiểm tra đã có văn bản tư vấn pháp luật (ket_qua không rỗng) | — |
 | 4 | Cập nhật trạng thái → HOAN_THANH, ghi ngay_hoan_thanh = NOW() | — |
-| 5 | Auto chuyển → CHO_PHE_DUYET, gửi thông báo CB Phê duyệt cùng cấp | BR-FLOW-01 |
+| 5 | Auto chuyển → CHO_PHE_DUYET, gửi thông báo CB Phê duyệt cùng đơn vị | BR-FLOW-01 |
 | 6 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Processing — Phê duyệt** (CHO_PHE_DUYET → DA_DUYET) `[GAP-X.1-01]`
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra user là CB Phê duyệt cùng cấp đơn vị | BR-AUTH-01, BR-AUTH-05 |
+| 1 | Kiểm tra user là CB Phê duyệt cùng đơn vị đơn vị | BR-AUTH-01, BR-AUTH-05 |
 | 2 | Kiểm tra trạng thái hiện tại = CHO_PHE_DUYET | SM-TVCS |
 | 3 | Ghi nguoi_phe_duyet_id = user hiện tại, ghi chú phê duyệt (optional) | — |
 | 4 | Cập nhật trạng thái → DA_DUYET | — |
@@ -207,7 +212,7 @@ Quản lý toàn bộ vòng đời nội dung tư vấn chuyên sâu: ghi nhận
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra user là CB Phê duyệt cùng cấp đơn vị | BR-AUTH-01, BR-AUTH-05 |
+| 1 | Kiểm tra user là CB Phê duyệt cùng đơn vị đơn vị | BR-AUTH-01, BR-AUTH-05 |
 | 2 | Kiểm tra trạng thái hiện tại = CHO_PHE_DUYET | SM-TVCS |
 | 3 | Yêu cầu lý do từ chối (bắt buộc, min 10 ký tự) | BR-FLOW-04 |
 | 4 | Cập nhật trạng thái → DANG_TU_VAN | — |
@@ -258,7 +263,7 @@ Quản lý toàn bộ vòng đời nội dung tư vấn chuyên sâu: ghi nhận
 
 **Business Rules áp dụng:**
 - **BR-AUTH-01**: Xác thực người dùng -> Xem Phụ lục B (file chính)
-- **BR-AUTH-05**: Phê duyệt cùng cấp -> Xem Phụ lục B (file chính) `[GAP-X.1-01]`
+- **BR-AUTH-05**: Phê duyệt cùng đơn vị -> Xem Phụ lục B (file chính) `[GAP-X.1-01]`
 - **BR-AUTH-08**: Multi-tenant phân quyền theo đơn vị -> Xem Phụ lục B (file chính)
 - **BR-DATA-01**: Soft delete -> Xem Phụ lục B (file chính)
 - **BR-DATA-03**: Tạo/cập nhật bản ghi -> Xem Phụ lục B (file chính)
@@ -351,7 +356,7 @@ Tìm kiếm nội dung tư vấn chuyên sâu theo nhiều tiêu chí: từ khó
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra quyền và phạm vi đơn vị | BR-AUTH-01, BR-AUTH-08 |
+| 1 | Kiểm tra quyền và phạm vi đơn vị (áp dụng cho cả CB NV, CB PD và NHT — cùng scope đơn vị) | BR-AUTH-01, BR-AUTH-08 |
 | 2 | Lọc bản ghi chưa xóa | BR-DATA-01 |
 | 3 | Nếu có từ khóa: tìm kiếm toàn văn trên nội dung tư vấn, hoặc tìm gần đúng trên mã nội dung, tên DN | BR-DATA-08 |
 | 4 | Nếu có khoảng ngày: lọc theo ngày tư vấn trong khoảng | — |
@@ -362,7 +367,7 @@ Tìm kiếm nội dung tư vấn chuyên sâu theo nhiều tiêu chí: từ khó
 | 9 | Phân trang và trả về kết quả | BR-DATA-07 |
 
 **Business Rules áp dụng:**
-- **BR-AUTH-08**: Multi-tenant phân quyền theo đơn vị -> Xem Phụ lục B (file chính)
+- **BR-AUTH-08**: Multi-tenant phân quyền theo đơn vị (áp cho mọi tác nhân của UC148, gồm cả NHT) -> Xem Phụ lục B (file chính)
 - **BR-DATA-08**: Tìm kiếm toàn văn -> Xem Phụ lục B (file chính)
 
 **Outputs (Dữ liệu đầu ra):**
@@ -396,6 +401,10 @@ Tìm kiếm nội dung tư vấn chuyên sâu theo nhiều tiêu chí: từ khó
 - **Given** CB NV lọc theo thời gian **When** chọn khoảng ngày **Then** kết quả trong khoảng thời gian
 - **Given** CB NV lọc theo chuyên gia **When** chọn chuyên gia **Then** kết quả chỉ của chuyên gia đó
 - **Given** CB NV kết hợp nhiều điều kiện **When** tìm kiếm **Then** áp dụng AND logic tất cả điều kiện
+- **Given** NHT đăng nhập **When** truy cập danh sách "Tư vấn chuyên sâu" **Then** hệ thống hiển thị mọi TVCS thuộc đơn vị (Sở TP) của NHT — cùng scope với CB NV cùng đơn vị (BR-AUTH-08, không áp lọc kép BR-AUTH-10 cho TVCS)
+- **Given** NHT chọn ô lọc "Doanh nghiệp" trên thanh lọc TVCS **When** mở dropdown **Then** danh sách DN trả về là toàn bộ DN trong cùng đơn vị NHT (không lọc theo VV được phân công, không trả 403)
+- **Given** NHT mở chi tiết một TVCS thuộc đơn vị mình **Then** hiển thị đầy đủ thông tin (chế độ Read-only)
+- **Given** NHT chỉ có quyền R trên TVCS (CSV STT 148) **When** thử thao tác Create/Update/Delete **Then** hệ thống từ chối (NHT KHÔNG phải tác nhân UC147)
 
 ---
 
@@ -410,17 +419,17 @@ Tìm kiếm nội dung tư vấn chuyên sâu theo nhiều tiêu chí: từ khó
 **Mô tả:**
 Tiếp nhận nội dung tư vấn chuyên sâu từ Cổng Pháp luật quốc gia qua API inbound (kết nối REST trực tiếp, HTTPS TLS 1.2+). Hệ thống validate, tạo hồ sơ, và thông báo CB NV.
 
-**API Endpoint:** `[GAP-X.1-04]`
+**API Endpoint:**
 - **Method:** POST
 - **Path:** `/api/v1/inbound/tu-van-chuyen-sau`
-- **Headers:** `Content-Type: application/json`, `X-API-Key: {key}`
-- **Authentication:** API Key (kết nối REST trực tiếp, HTTPS TLS 1.2+)
+- **Headers:** `Content-Type: application/json`, `Authorization: Bearer {JWT}`, `Idempotency-Key: {uuid}`
+- **Authentication:** **mTLS + JWT Bearer RS256** (chuẩn hoá theo BR-INTG-02 — đồng bộ với FR-XII-19, BA chốt 2026-05-10 conflict C-AUTH-01)
 
 **Tác nhân:** Cổng Pháp luật quốc gia (API inbound)
 
 **Preconditions (Điều kiện tiên quyết):**
 
-- Cổng PLQG đã đăng ký API key hợp lệ (kết nối REST trực tiếp, HTTPS TLS 1.2+)
+- Cổng PLQG có cert mTLS hợp lệ + JWT bearer token với scope `htpldn:inbound:tvcs:write` do CMS HTPLDN cấp
 - API endpoint hoạt động, rate limit chưa vượt ngưỡng
 
 **Inputs (Dữ liệu đầu vào):**
@@ -683,11 +692,11 @@ CRUD hồ sơ pháp lý doanh nghiệp: xem danh sách, xem chi tiết, thêm m�
 **Mô tả:**
 Tiếp nhận hồ sơ pháp lý DN từ Cổng PLQG qua API inbound. Hệ thống validate, tạo hồ sơ, thông báo CB NV, đưa vào danh sách chờ xử lý.
 
-**API Endpoint:** `[GAP-X.1-04]`
+**API Endpoint:**
 - **Method:** POST
 - **Path:** `/api/v1/inbound/ho-so-phap-ly-dn`
-- **Headers:** `Content-Type: application/json`, `X-API-Key: {key}`
-- **Authentication:** API Key (kết nối REST trực tiếp, HTTPS TLS 1.2+)
+- **Headers:** `Content-Type: application/json`, `Authorization: Bearer {JWT}`, `Idempotency-Key: {uuid}`
+- **Authentication:** **mTLS + JWT Bearer RS256** (chuẩn hoá theo BR-INTG-02 — đồng bộ FR-XII-19, BA chốt 2026-05-10 C-AUTH-01)
 
 **Tác nhân:** Cổng Pháp luật quốc gia (API inbound)
 
@@ -963,11 +972,11 @@ CRUD tư liệu pháp lý gắn với vụ việc tư vấn chuyên sâu. Hỗ t
 **Mô tả:**
 Tiếp nhận đánh giá chất lượng tư vấn từ Cổng PLQG qua API inbound. Hỗ trợ tạo mới, cập nhật, và gửi lại (idempotency). Cập nhật điểm trung bình chuyên gia.
 
-**API Endpoint:** `[GAP-X.1-04]`
+**API Endpoint:**
 - **Method:** POST
 - **Path:** `/api/v1/inbound/danh-gia-chat-luong-tv`
-- **Headers:** `Content-Type: application/json`, `X-API-Key: {key}`
-- **Authentication:** API Key (kết nối REST trực tiếp, HTTPS TLS 1.2+)
+- **Headers:** `Content-Type: application/json`, `Authorization: Bearer {JWT}`, `Idempotency-Key: {uuid}`
+- **Authentication:** **mTLS + JWT Bearer RS256** (chuẩn hoá theo BR-INTG-02 — đồng bộ FR-XII-19, BA chốt 2026-05-10 C-AUTH-01)
 
 **Tác nhân:** Cổng Pháp luật quốc gia (API inbound)
 
@@ -1127,14 +1136,14 @@ Breadcrumb > Tiêu đề + nhãn trạng thái > Thanh tiến trình SM-TVCS (st
 | 7 | content | Accordion: Đánh giá chất lượng (UC153) | table (read-only) | Bảng: Mã đánh giá / Điểm (1-5 sao) / Nhận xét DN / Ngày. Tổng hợp: Điểm TB + Số lượng. API inbound Cổng PLQG | — | mode chi tiết |
 | 8 | content | Accordion: Nhật ký thao tác | timeline | Lịch sử chuyển trạng thái + CUD. "dd/mm/yyyy HH:mm -- {User} -- {Hành động}" | — | mode chi tiết |
 | 8b | content | Accordion: Công khai chuyên trang | form | Switch [Công khai/Hủy công khai] (chỉ enable khi DA_DUYET — BR-PUBLIC-01) / Mô tả công khai (textarea, hiện thị trên chuyên trang) / Ảnh đại diện (upload jpg/png/gif, max 5MB, default ảnh HT) / File đính kèm công khai (multi-upload PDF/DOC/DOCX/XLS/XLSX, max 20MB/file) / Thời gian đăng tải (read-only, auto fill khi cong_khai=1, clear khi 0) | input -> validate; click switch -> mở MD-CONG-KHAI xác nhận | mode chi tiết, chỉ hiển thị khi trạng thái = DA_DUYET |
-| 9 | action-bar | Thanh hành động cố định | button-group | TIEP_NHAN: [Hủy] [Lưu] [Phân công CG ->] / PHAN_CONG: [Hủy yêu cầu] + (CG được phân công: [Chấp nhận] [Từ chối]) / DANG_TU_VAN: [Hủy] [Lưu] / HOAN_THANH: [Trình phê duyệt] / CHO_PHE_DUYET: [Phê duyệt] [Từ chối] (CB Phê duyệt cùng cấp) / DA_DUYET: Read-only + [Công khai chuyên trang] / [Hủy công khai] (theo trạng thái cong_khai) | click -> action | theo trạng thái + vai trò |
+| 9 | action-bar | Thanh hành động cố định | button-group | TIEP_NHAN: [Hủy] [Lưu] [Phân công CG ->] / PHAN_CONG: [Hủy yêu cầu] + (CG được phân công: [Chấp nhận] [Từ chối]) / DANG_TU_VAN: [Hủy] [Lưu] / HOAN_THANH: [Trình phê duyệt] / CHO_PHE_DUYET: [Phê duyệt] [Từ chối] (CB Phê duyệt cùng đơn vị) / DA_DUYET: Read-only + [Công khai chuyên trang] / [Hủy công khai] (theo trạng thái cong_khai) | click -> action | theo trạng thái + vai trò |
 
 #### Quy tắc tương tác
 
 - Mode sửa chỉ khi trạng thái IN (TIEP_NHAN, DANG_TU_VAN)
 - Phân công CG (gộp từ MH-12.4): modal overlay với gợi ý TOP 5 CG (lĩnh vực khớp, điểm TB DESC, workload ASC) + tìm kiếm CG thủ công + ghi chú + info SLA (2 ngày LV xác nhận)
 - Xác nhận CG (gộp từ MH-12.5): khi user là CG được phân công, hiện [Chấp nhận] / [Từ chối] trên thanh hành động. Timeout 2 ngày LV -> banner cảnh báo
-- Phê duyệt TVCS (gộp từ MH-12.6): khi user là CB Phê duyệt cùng cấp, hiện [Phê duyệt] (modal xác nhận + ghi chú optional, SET DA_DUYET) / [Từ chối] (modal lý do bắt buộc BR-FLOW-04, SET DANG_TU_VAN)
+- Phê duyệt TVCS (gộp từ MH-12.6): khi user là CB Phê duyệt cùng đơn vị, hiện [Phê duyệt] (modal xác nhận + ghi chú optional, SET DA_DUYET) / [Từ chối] (modal lý do bắt buộc BR-FLOW-04, SET DANG_TU_VAN)
 - Tư liệu PL (gộp từ MH-12.7): tab "Tư liệu PL" trong accordion. CRUD tư liệu inline. Nút [Công khai lên Cổng PLQG] khi NHAP + >= 1 file
 - Công khai chuyên trang (CR-01): Accordion "Công khai chuyên trang" chỉ hiển thị khi `trang_thai = DA_DUYET` (BR-PUBLIC-01). Switch [Công khai] mở modal yêu cầu nhập `mo_ta_cong_khai` (bắt buộc) + `anh_dai_dien` (optional, default ảnh HT) + `file_dinh_kem_cong_khai` (optional). Khi xác nhận: set `cong_khai = 1`, auto fill `thoi_gian_dang_tai = NOW()` (BR-PUBLIC-03), gọi API push Cổng PLQG. Switch [Hủy công khai] xác nhận → set `cong_khai = 0`, clear `thoi_gian_dang_tai`, gọi API gỡ Cổng PLQG (BR-PUBLIC-02)
 
@@ -1160,7 +1169,7 @@ Breadcrumb > Tiêu đề + nhãn trạng thái > Thanh tiến trình SM-TVCS (st
 
 ### ~~SCR-X1-06: Phê duyệt TVCS~~ (DEPRECATED v2.1)
 
-> **Gộp vào:** Action buttons trong SCR-X1-02 khi user là CB Phê duyệt cùng cấp.
+> **Gộp vào:** Action buttons trong SCR-X1-02 khi user là CB Phê duyệt cùng đơn vị.
 
 ---
 
@@ -1353,7 +1362,7 @@ erDiagram
 
 **Volume:** ~20,000 records/năm | **Growth:** 20%/năm
 
-### 3.4.3.46 HO_SO_PHAP_LY_DN (owned) `[GAP-X.1-03]`
+### 3.4.3.55 HO_SO_PHAP_LY_DN (owned) `[GAP-X.1-03]`
 
 **Mô tả:** Hồ sơ pháp lý doanh nghiệp (giấy phép, hợp đồng, giấy chứng nhận, quyết định).
 **Module:** Nhóm X.1 — Quản lý Tư vấn pháp luật chuyên sâu (UC150-151)
@@ -1383,7 +1392,7 @@ erDiagram
 
 **Volume:** ~3,000 records/năm | **Growth:** 20%/năm
 
-### 3.4.3.47 TU_LIEU_PHAP_LY_VV (owned) `[GAP-X.1-03]`
+### 3.4.3.56 TU_LIEU_PHAP_LY_VV (owned) `[GAP-X.1-03]`
 
 **Mô tả:** Tư liệu pháp lý gắn với vụ việc tư vấn chuyên sâu. Hỗ trợ công khai lên Cổng PLQG.
 **Module:** Nhóm X.1 — Quản lý Tư vấn pháp luật chuyên sâu (UC152)
@@ -1412,7 +1421,7 @@ erDiagram
 
 **Volume:** ~5,000 records/năm | **Growth:** 25%/năm
 
-### 3.4.3.48 DANH_GIA_CHAT_LUONG_TV (owned) `[GAP-X.1-03]`
+### 3.4.3.57 DANH_GIA_CHAT_LUONG_TV (owned) `[GAP-X.1-03]`
 
 **Mô tả:** Đánh giá chất lượng tư vấn từ doanh nghiệp, tiếp nhận qua API inbound từ Cổng PLQG.
 **Module:** Nhóm X.1 — Quản lý Tư vấn pháp luật chuyên sâu (UC153)
@@ -1486,7 +1495,7 @@ stateDiagram-v2
 | PHAN_CONG | TIEP_NHAN | CG từ chối | Có lý do | Quay lại chọn CG khác | FR-X.1-01 | — |
 | DANG_TU_VAN | HOAN_THANH | CG tích "Hoàn thành" | Có VB TVPL | — | FR-X.1-01 | — |
 | HOAN_THANH | CHO_PHE_DUYET | Auto | — | TB CB PD | FR-X.1-01 | BR-FLOW-01 |
-| CHO_PHE_DUYET | DA_DUYET | CB PD duyệt | Cùng cấp | Gửi KQ cho DN, TB đánh giá | FR-X.1-01 | BR-AUTH-05 |
+| CHO_PHE_DUYET | DA_DUYET | CB PD duyệt | Cùng đơn vị | Gửi KQ cho DN, TB đánh giá | FR-X.1-01 | BR-AUTH-05 |
 | CHO_PHE_DUYET | DANG_TU_VAN | CB PD từ chối | Có lý do | TB CG bổ sung | FR-X.1-01 | BR-FLOW-04 |
 | PHAN_CONG | HUY | CB NV hủy | CG chưa xác nhận | Ghi audit, TB CG | — | — |
 | DANG_TU_VAN | HUY | CB NV hủy | DN yêu cầu hủy + CB PD duyệt | Ghi audit, TB CG + DN | — | — |

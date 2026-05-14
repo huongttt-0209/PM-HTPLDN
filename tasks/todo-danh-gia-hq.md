@@ -17,33 +17,30 @@
 
 | Phase | Tổng | 🟢 | 🔵 | ✅ | ⚠️ | 🚫 | ⏳ | ❌ | Task IDs |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|---|
-| **P4** | 4 | 0 | 0 | 1 | 2 | 1 | 0 | 0 | ✅[R7.4.D1](#r7-4-d1) · ⚠️[R7.4.D2](#r7-4-d2) · ⚠️[R7.4.D2a](#r7-4-d2a) · 🚫[R7.4.D2b](#r7-4-d2b) |
-| **P7** | 1 | 0 | 0 | 0 | 1 | 0 | 0 | 0 | ⚠️[R7.7.9](#r7-7-9) |
-| **Tổng** | **5** | **0** | **0** | **1** | **3** | **1** | **0** | **0** |  |
+| **P4** | 4 | 0 | 0 | 3 | 1 | 0 | 0 | 0 | ✅[R7.4.D1](#r7-4-d1) · ✅[R7.4.D2](#r7-4-d2) · ✅[R7.4.D2a](#r7-4-d2a) · ⚠️[R7.4.D2b](#r7-4-d2b) |
+| **P7** | 1 | 0 | 0 | 1 | 0 | 0 | 0 | 0 | ✅[R7.7.9](#r7-7-9) |
+| **Tổng** | **5** | **0** | **0** | **4** | **1** | **0** | **0** | **0** |  |
 <!-- END: module-summary -->
 
 ## Tasks
 
 - ✅ **R7.4.D1** ✏️ Tạo kỳ Đánh giá Hiệu quả HTPL `LAP_KE_HOACH` (v3.5: +2 field) <a id="r7-4-d1"></a>
-  - **Kết quả:** PASS 1/1 — DG-20260506-0001 LAP_KE_HOACH. R6 DG-001/002 ✅ FIXED. [seed-checklist](../output/qa-reports/round7-2026-05-06/seed/danh-gia/seed-checklist-r7-4-d1-danhgiahq.md)
+  - **Kết quả:** PASS 1/1 — DG-20260506-0001 LAP_KE_HOACH. [seed-checklist](../output/qa-reports/round7-2026-05-06/seed/danh-gia/seed-checklist-r7-4-d1-danhgiahq.md)
 
-- ⚠️ **R7.4.D2** ✏️ Workflow 9 bước v3.5 (8 state + HUY) `[~73% — 8/11 R10b]` <a id="r7-4-d2"></a>
-  - **Kết quả:** ⚠️ 8/11. R10b 20:29 re-test dev fix BUG-008 ❌ REPRODUCED. [report](../output/qa-reports/round7-2026-05-06/workflow/danh-gia/workflow-test-report-DanhGiaHQ.md)
-  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md) — workflow subset 7/9 đóng; DG-008 + DG-009 Major còn Open. Functional bugs mới theo R7.7.9 bên dưới.
-  - **Cần:** dev fix BUG-FUNC-DG-008 (PUT `/ket-quas` persist) — block B10+B11
+- ✅ **R7.4.D2** ✏️ Workflow 9 bước v3.5 (8 state + HUY) <a id="r7-4-d2"></a>
+  - **Kết quả:** PASS 11/11. R21 verify pool 9 đợt full state distribution. [report](../output/qa-reports/round7-2026-05-06/workflow/danh-gia/workflow-test-report-DanhGiaHQ.md)
+  - **Bug:** [Pass-bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/Pass-bug-report-flow-danhgia.md) — 15/15 đóng
 
-- ⚠️ **R7.4.D2a** 🆕 State HUY transition 4 state nguồn (LAP_KE_HOACH/PHAN_CONG/THUC_HIEN/BAO_CAO → HUY) `[~25% — UI 0/4 state có HUY button]` <a id="r7-4-d2a"></a>
-  - **Kết quả:** ⚠️ FAIL UI. R10b 20:42 BUG-DG-009 UI thiếu HUY button. [bug-report](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md)
-  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md) — BUG-FUNC-DG-009 Major Open
-  - **Cần:** dev wire HUY button 4 state nguồn — sau đó retest positive transition
+- ✅ **R7.4.D2a** 🆕 State HUY transition 4 state nguồn <a id="r7-4-d2a"></a>
+  - **Kết quả:** PASS 3/4 R21 + 1/4 R12 historical. HUY button visible LKH/TH/DDG. [bug-report](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/Pass-bug-report-flow-danhgia.md)
+  - **Bug:** [Pass-bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/Pass-bug-report-flow-danhgia.md) — DG-009 Closed R12
 
-- 🚫 **R7.4.D2b** 🆕 FR-VI-10 read-only cross-co-quan (CB NV `co_quan_duoc_danh_gia_id` xem KQ HOAN_THANH) `[block: BUG-DG-008 — đợt không advance HOAN_THANH]` <a id="r7-4-d2b"></a>
-  - **Kết quả:** 🚫 BLOCKED bởi BUG-DG-008 — đợt không advance HOAN_THANH.
-  - **Cần:** dev fix BUG-FUNC-DG-008 → seed đợt HOAN_THANH → retest
-  - **Spec:** FR-VI-10 line 741
+- ⚠️ **R7.4.D2b** 🆕 FR-VI-10 read-only cross-co-quan (CB NV `co_quan_duoc_danh_gia_id` xem KQ HOAN_THANH) `[~50% — TC1 FAIL bug BE VPD, TC2 PASS deny]` <a id="r7-4-d2b"></a>
+  - **Kết quả:** ⚠️ R22 16:18 seed DG-20260513-0001 HOAN_THANH coQuanId=STP-AG. TC1 FAIL: cb_nv_dp_01 STP-AG bị 403 ERR-AUTH-VPD-00-02 sai SRS BR-AUTH-01. TC2 PASS: cb_nv_dp_02 STP-BG deny đúng.
+  - **Bug:** [bug-report-r22-fr-vi-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-r22-fr-vi-10.md) — 0/1 đóng (BUG-FUNC-DG-013 Major Open)
+  - **Spec:** FR-VI-10 line 755-791 (BR-AUTH-01 line 777, ERR-DG-10 line 786)
 
-- ⚠️ **R7.7.9** ✏️ Đánh giá Hiệu quả HTPL functional 46 TC v3.5 (10 FR) `[~68% — 15/22 R11 ✅]` <a id="r7-7-9"></a>
-  - **Kết quả:** R11 22 TC ✅15 · ⚠️2 · ❌4 · 🚫1. TC12 ✅ out-of-scope. 2 bug mới DG-014/015. [report](../output/qa-reports/round7-2026-05-06/functional/danh-gia/functional-test-report-r7-7-9-danh-gia.md)
-  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-flow-danhgia.md) — 14/15 đóng; 8 còn cần xử lý/disposition (DG-008/009/010/012/013/014/015 Open; DG-011 NOT REPRODUCED nhưng chưa Closed)
-  - **Cần:** dev fix DG-012 (đợt không advance state) — block TC14+17 + B7-B11. DG-010/013 Major. DG-014 Medium. DG-015 Minor UX.
-  - **Spec:** FR-VI-01..10 (46 TC v3.5)
+- ✅ **R7.7.9** ✏️ Đánh giá Hiệu quả HTPL functional 22 TC v3.5 <a id="r7-7-9"></a>
+  - **Kết quả:** PASS 22/22 sau R20+R21. Mọi bug Closed. [report](../output/qa-reports/round7-2026-05-06/functional/danh-gia/functional-test-report-r7-7-9-danh-gia.md)
+  - **Bug:** [Pass-bug-report-flow-danhgia.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/Pass-bug-report-flow-danhgia.md) — 15/15 đóng
+  - **Spec:** FR-VI-01..10 (22 TC v3.5)

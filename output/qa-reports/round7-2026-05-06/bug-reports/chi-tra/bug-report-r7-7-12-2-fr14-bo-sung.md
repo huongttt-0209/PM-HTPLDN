@@ -5,28 +5,28 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation via Claude Code |
-| **Ngày** | 2026-05-12 18:45:00 |
-| **Round** | R19 |
+| **Ngày** | 2026-05-13 16:41:13 |
+| **Round** | R22 |
 | **Tài liệu tham chiếu** | [srs-fr-06-chi-tra.md §FR-V.II-14](../../../../input/srs-update-2026-5-5/srs-fr-06-chi-tra.md) · [02-thu-tu-module.md §10 SM-CHI-TRA B7](../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) · [functional-test-report-r7-7-12-2-fr14-bo-sung.md](../../functional/chi-tra/functional-test-report-r7-7-12-2-fr14-bo-sung.md) |
 
 ---
 
 ## Tổng hợp
 
-Phát hiện **3 lỗi** liên quan FR-V.II-14. Hiện trạng (sau R19 reverify 2026-05-12): **1 Defer · 1 Open · 1 Closed** (CHITRA-009 BA đã update SRS line 841 ✅).
+Phát hiện **3 lỗi** liên quan FR-V.II-14. Hiện trạng (sau R22 retest 2026-05-13 16:41): **1 Defer · 0 Open · 2 Closed** (CHITRA-009 BA update SRS line 841 ✅ R19; CHITRA-010 BE fix new transition behavior ✅ R22 — pool legacy 6 records null là cold-data trước fix).
 
 ### Severity breakdown
 
 | Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
 |------|----------|-------|--------|-------|---------|--------|------|
-| 3    | 0        | 2     | 0      | 1     | 0       | 1      | 2    |
+| 3    | 0        | 2     | 0      | 1     | 0       | 2      | 1    |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
 | BUG-CHITRA-008 | **Major** | P2 | Backend / LGSP | R7.7.12.2 | `FR-V.II-14 §Processing Bước 3-4` + `Error Handling E1/E2/E3` | LGSP gateway endpoint nhận sync HS bổ sung từ DVC chưa expose — 5/5 path variant trả 404 ERR-SYS-00-04-01 | 🚫 Defer (chờ phase tích hợp API ngoài) |
-| BUG-CHITRA-010 | **Major** | P1 | Backend / Data | R7.7.12.2 | `FR-V.II-03 §Processing Bước 5` + `BR-CHITRA-BS01` | `ngayYeuCauBoSung = null` 6/6 HSCT YCBS — không ghi timestamp khi DKT → YCBS, vô hiệu hoá deadline tracking 5 ngày LV (ERR-CT-BS-03) | Open |
+| ~~BUG-CHITRA-010~~ | **Major** | P1 | Backend / Data | R7.7.12.2 | `FR-V.II-03 §Processing Bước 5` + `BR-CHITRA-BS01` | ~~`ngayYeuCauBoSung = null` 6/6 HSCT YCBS — không ghi timestamp khi DKT → YCBS, vô hiệu hoá deadline tracking 5 ngày LV (ERR-CT-BS-03)~~ | Closed ✅ R22 |
 | ~~BUG-CHITRA-009~~ | Minor | P3 | Spec / Wording | R7.7.12.2 | `FR-V.II-14 row 837 + 841` vs `FR-V.II-01 row 31` + `SCR-V.II-02 line 962/1014/1026` + `8+ chỗ DVC-only` | ~~Wording "hoặc CB NV (thủ công)" ở row 841 mâu thuẫn 8+ chỗ khác (DVC-only)~~ | Closed ✅ R19 |
 
 ---
@@ -126,9 +126,9 @@ POST /api/v1/ho-so-chi-tras/.../dinh-kem → 404 (same shape)
 
 ---
 
-## BUG-CHITRA-010 — `ngayYeuCauBoSung = null` 6/6 HSCT YCBS — vô hiệu hoá deadline tracking 5 ngày LV
+## ~~BUG-CHITRA-010~~ [CLOSED] — `ngayYeuCauBoSung = null` 6/6 HSCT YCBS — vô hiệu hoá deadline tracking 5 ngày LV
 
-> **Re-test:** 2026-05-12 18:42:00 R19 — ❌ STILL Open. Login `cb_nv_dp_01` (AG) → DevTools console fetch 6/6 HSCT YCBS (`HSCT000004/011/012/013/014/200002`). API response: `ngayYeuCauBoSung = null` cho cả 6 records (soLanBoSung 1-3, lichSu có entry "KIEM_TRA→YEU_CAU_BO_SUNG" cho HSCT000004 + HSCT200002 ngày 2026-05-10 11:17). BE chưa set `ngay_yeu_cau_bo_sung = NOW()` khi transition DKT → YCBS. Deadline tracking 5 ngày LV (ERR-CT-BS-03) vẫn không trigger được. Bug Major giữ Open, cần BE BR-CHITRA-BS01 implement.
+> **Re-test:** 2026-05-13 16:41:13 R22 — ✅ PASS (Closed-verified behavior mới). Fresh DKT→YCBS transition HSCT-HDSD-001 qua UI (CB NV DP 01 click radio "Yêu cầu bổ sung" + lý do + "Xác nhận kiểm tra") → BE auto-set `ngayYeuCauBoSung = "2026-05-13T09:41:13.204Z"` (= NOW khớp lichSu YCBS timestamp). BE đã implement đúng FR-V.II-03 Bước 5. Pool legacy 6/6 (HSCT000004/011/012/013/014/200002) vẫn null vì transition trước fix — **không phải bug regression mới, cần dev BE migration/reseed pool YCBS legacy hoặc accept "cold data" trước fix**. Evidence: `image/r22-bug010-fresh-ycbs-hsct-hdsd-001-set.png`.
 
 ### Mô tả
 
@@ -156,6 +156,14 @@ Toàn bộ 6 HSCT state YEU_CAU_BO_SUNG (HSCT000004/011/012/013/014/200002) đ�
 
 ### Kết quả mong đợi
 
+Theo SRS `input/srs-update-2026-5-5/srs-fr-06-chi-tra.md:275` (FR-V.II-03 Processing Bước 5):
+> "Nếu CAN_BO_SUNG → chuyển trạng thái YEU_CAU_BO_SUNG, cập nhật `ngay_yeu_cau_bo_sung = NOW()`, tăng `bo_sung_count += 1`"
+
+Theo SRS dòng 1325 (SM-CHITRA):
+> "DANG_KIEM_TRA → YEU_CAU_BO_SUNG | Action: Ghi ngay_yeu_cau_bo_sung, tăng bo_sung_count, TB DN qua DVC"
+
+Field này gate deadline 5 ngày LV (PRE-02 FR-V.II-14 dòng 856) + auto-reject job BR-EC-16.
+
 Theo FR-V.II-03 §Processing Bước 5 (srs-fr-06-chi-tra.md line ~267): "Khi CB NV chuyển HSCT từ DANG_KIEM_TRA sang YEU_CAU_BO_SUNG, BE phải set `ngay_yeu_cau_bo_sung = NOW()` để khởi tạo countdown 5 ngày LV cho DN bổ sung. Sau 5 ngày LV không bổ sung, BE auto trả ERR-CT-BS-03 + hệ thống cảnh báo SLA quá hạn."
 
 Theo BR-CHITRA-BS01 (Business Rule "Bổ sung hồ sơ chi trả"):
@@ -175,7 +183,13 @@ Expected API response cho 6 HSCT YCBS:
 
 ### Kết quả thực tế
 
-6/6 HSCT trả `ngayYeuCauBoSung = null` dù state = YEU_CAU_BO_SUNG + soLanBoSung ≥ 1:
+**R20 (2026-05-12 22:35:00, account `cb_nv_tw_01` TW scope):** Pool YCBS đã reset chỉ còn 1 record. HSCT000066 vẫn ghi nhận lỗi `ngayYeuCauBoSung = null`:
+
+| HSCT | trangThai | soLanBoSung | ngayYeuCauBoSung | lichSu |
+|---|---|:-:|:-:|---|
+| HSCT000066 | YEU_CAU_BO_SUNG | 1 | **null** | TIEP_NHAN 09/05 18:04 + KIEM_TRA 09/05 18:05 (transition DKT→YCBS) |
+
+**R19 (2026-05-12 18:42:00, archive):** Pool cũ 6 record YCBS — toàn bộ `ngayYeuCauBoSung = null`:
 
 | HSCT | trangThai | soLanBoSung | ngayYeuCauBoSung | lichSu count |
 |---|---|:-:|:-:|:-:|
@@ -188,7 +202,14 @@ Expected API response cho 6 HSCT YCBS:
 
 ### Bằng chứng
 
-API response JSON (6/6 null):
+**R20 API response** (HSCT000066, account `cb_nv_tw_01`):
+```
+HSCT000066: YCBS soLan=1 ngayYCBS=null
+  ngayTao=2026-04-05, ngayTiepNhan=2026-05-09 11:04, deadlineSla=2026-04-15
+  lichSu=[TIEP_NHAN 2026-05-09T11:04:41Z, KIEM_TRA 2026-05-09T11:05:43Z]
+```
+
+**R19 API response** (archive, 6/6 null):
 ```
 HSCT000004: YCBS soLan=1 ngayYCBS=null
 HSCT000011: YCBS soLan=3 ngayYCBS=null
@@ -198,7 +219,9 @@ HSCT000014: YCBS soLan=3 ngayYCBS=null
 HSCT200002: YCBS soLan=1 ngayYCBS=null
 ```
 
-![BUG-010 HSCT000004 detail có lichSu R3 đầy đủ nhưng API trả ngayYeuCauBoSung null](image/r2-fr14-hsct000004-detail-no-bosung-section-r2.png)
+![BUG-010 R20 HSCT000066 detail — Trạng thái Yêu cầu bổ sung + lichSu Kiểm tra→YCBS 09/05 18:05, API ngayYeuCauBoSung null](image/r20-bug010-hsct000066-ycbs-ngay-null.png)
+
+![BUG-010 R19 HSCT000004 detail có lichSu R3 đầy đủ nhưng API trả ngayYeuCauBoSung null](image/r2-fr14-hsct000004-detail-no-bosung-section-r2.png)
 
 ---
 

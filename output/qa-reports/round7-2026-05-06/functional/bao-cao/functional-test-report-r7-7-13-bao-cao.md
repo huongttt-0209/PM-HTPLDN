@@ -12,13 +12,15 @@
 | **Test Method** | UI-based qua Chrome DevTools MCP (theo CLAUDE.md project rule) |
 | **Primary Account** | `cb_nv_tw_01` / `cb_nv_tw_02` — CB_NV_TW (cấp TW) |
 | **Round** | Round 7 (R7.7.13 lần 1) |
-| **Tài liệu tham chiếu** | [funtion 7.11](../../../funtion/7.11-bao-cao-thong-ke.md) · [test-strategy](../../../test-strategy.md) · [todo R7.7.13](../../../../tasks/todo-bao-cao.md#r7-7-13) · [bug-report-r7-7-13](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md) · [Pass-bug-report-r7-4-b0-jwt-revoke](../../bug-reports/dao-tao/Pass-bug-report-r7-4-b0-jwt-revoke.md) |
+| **Tài liệu tham chiếu** | [funtion 7.11](../../../funtion/7.11-bao-cao-thong-ke.md) · [test-strategy](../../../test-strategy.md) · [todo R7.7.13](../../../../tasks/todo-bao-cao.md#r7-7-13) · [bug-report-r7-7-13](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md) · [Pass-bug-report-r7-4-b0-jwt-revoke](../../bug-reports/dao-tao/Pass-bug-report-r7-4-b0-jwt-revoke.md) |
 
 ---
 
 ## 1. Executive Summary
 
-> **Round 6 update — 2026-05-11 16:55:00 → 17:41:09 (LATEST, bộ acc 08 + cb_nv_tw_08)**: 2 phase.
+> **Round 20 update — 2026-05-13 11:40:00 (LATEST, qtht_01)**: Re-test BC-025 PDF export full 10/10 enum hợp lệ — all PASS 200 + binary `%PDF` (10477B-20704B). Sample: BC_HOI_DAP 18522B, BC_VU_VIEC_TIEP_NHAN 17510B, BC_VU_VIEC_DANG_HO_TRO 15540B, BC_VU_VIEC_HOAN_THANH 14919B, BC_CHI_PHI_CHI_TRA 20704B, BC_SO_LUONG_CG_TVV 16170B, BC_LOP_DAO_TAO_DANG_DIEN_RA 17650B, BC_LOP_DAO_TAO_DA_DIEN_RA 18134B, BC_CHAT_LUONG_DAO_TAO 19953B, BC_DANH_GIA_HIEU_QUA 10477B. Flip BC-025 ❌→✅, Close BUG-BC-PDF-NOT-SUPPORTED. Ghi chú: 4 enum prompt (BC_TVCS, BC_DAO_TAO, BC_HOP_DONG, BC_TONG_HOP) **không tồn tại** trong `/bao-cao/loai` system spec (24 enum chuẩn), không phải fail PDF endpoint.
+>
+> **Round 6 update — 2026-05-11 16:55:00 → 17:41:09 (bộ acc 08 + cb_nv_tw_08)**: 2 phase.
 > - **Phase A (re-verify 3 bug Open dev claim fix):** 0/3 fix. DATA-SCOPE-LEAK 4 role leak full national. PDF universal 422. XLSX 2 BC analytic 422. Dev đổi contract `dinhDang` → `formatXuat` không phải fix gốc.
 > - **Phase B (sau phản biện user — verify 4 defer ĐT/ĐG + BC-034 deep review):** **PASS 4 TC defer cleared.** BC-006/007/008 seed Đào tạo đã có (1+4+2 khóa, điểm TB 7.5) → flip ⏭→✅. BC-010 slug R5 dùng sai (`danh-gia-hieu-qua-htpl` 404 vs `danh-gia-hieu-qua` 200) → flip ⏭→✅ empty legit. **BC-034 OBS → BUG xác nhận:** test 12 BC `kyBaoCao=INVALID`, 10/12 PASS validation, 2/12 (BC-001 hoi-dap + BC-010 danh-gia-hieu-qua) silently accept → log BUG-BC-KYBAOCAO-NOT-VALIDATED Medium NEW.
 >
@@ -51,13 +53,14 @@
 
 ## 2. Verdict tổng hợp
 
-> **Verdict R6 LATEST (2026-05-11 17:41:09, bộ acc 08 + cb_nv_tw_08):** ⚠️ **Partial 34/40 PASS — chưa ship được vì 4 bug Open chặn.** R6 dual phase: (Phase A) Re-verify 3 bug dev claim fix → 0/3 fix. (Phase B) Sau phản biện user — clear 4 defer ĐT/ĐG + confirm BC-034 là bug → +4 PASS, +1 bug mới. Coverage 40/40 (100%).
+> **Verdict R20 LATEST (2026-05-13 11:40:00, qtht_01):** ⚠️ **Partial 35/40 PASS — còn 3 bug Open chặn.** R20 retest BC-025: PDF export 10/10 enum hợp lệ PASS → flip BC-025 ❌→✅ + Close BUG-BC-PDF-NOT-SUPPORTED. Coverage 40/40 (100%).
 >
-> **4 bug Open chặn ship — R6 status:**
-> - **BUG-BC-DATA-SCOPE-LEAK Critical (R4 NEW, R5 broaden 4 role, R6 re-verify FAIL)** — endpoint `/api/v1/bao-cao/*` không apply scope theo `donViId` cho 4/4 role BN/DP (CB_NV_BN, CB_NV_DP, CB_PD_BN, CB_PD_DP) — vẫn trả `tongHoiDap=26` full national. Vi phạm BR-AUTH-08 + BR-DATA-02.
-> - **BUG-BC-PDF-NOT-SUPPORTED Major (R5 verify universal, R6 re-verify FAIL)** — endpoint xuất PDF trả 422 "Không thể tạo file PDF" universal 4/4 BC mẫu test R6.
+> **3 bug Open còn chặn ship — R20 status:**
+> - **BUG-BC-DATA-SCOPE-LEAK Critical (R4 NEW, R5 broaden 4 role, R6 re-verify FAIL)** — endpoint `/api/v1/bao-cao/*` không apply scope theo `donViId` cho 4/4 role BN/DP (CB_NV_BN, CB_NV_DP, CB_PD_BN, CB_PD_DP). Vi phạm BR-AUTH-08 + BR-DATA-02.
 > - **BUG-BC-XLSX-PARTIAL-SUPPORT Medium (R5 NEW, R6 re-verify FAIL)** — Export XLSX 2/10 BC analytic chưa support: `BC_VV_THEO_LINH_VUC` + `BC_DANH_GIA_HIEU_QUA_HTPL` vẫn 422.
-> - **BUG-BC-KYBAOCAO-NOT-VALIDATED Medium (R6 NEW)** — 2/12 BC sub-route silently accept `kyBaoCao` missing/invalid + ignore aggregation: `/hoi-dap` (BC-001) + `/danh-gia-hieu-qua` (BC-010). 10/12 BC khác validate đúng 422.
+> - **BUG-BC-KYBAOCAO-NOT-VALIDATED Medium (R6 NEW)** — 2/12 BC sub-route silently accept `kyBaoCao` missing/invalid: `/hoi-dap` (BC-001) + `/danh-gia-hieu-qua` (BC-010).
+>
+> **R6 closed re-verify history:** BUG-BC-PDF-NOT-SUPPORTED Major (R5 verify universal, R6 FAIL) → R20 PASS Closed.
 >
 > **R6 phụ — 4 defer ĐT/ĐG cleared:** BC-006/007/008 (Đào tạo) flip ⏭→✅ với data sẵn. BC-010 (Đánh giá) flip ⏭→✅ với slug đúng `danh-gia-hieu-qua` (R5 dùng sai `-htpl` → 404 false defer).
 
@@ -100,7 +103,7 @@
 | BC-022 | CT theo lĩnh vực | ✅ Đạt | R2/R4 | empty CT seed=0 |
 | BC-023 | CT theo thời gian | ✅ Đạt | R2/R4 | empty CT seed=0 |
 | BC-024 | Export Excel | ✅ Đạt | R2/R4 | xlsx mime OK |
-| BC-025 | Export PDF | ❌ Lỗi | R2-R4 | BUG-BC-PDF-NOT-SUPPORTED Major |
+| BC-025 | Export PDF | ✅ Đạt | R20 | R20 retest 10/10 enum hợp lệ PASS — Closed BUG-BC-PDF-NOT-SUPPORTED |
 | BC-026 | Scope CB_NV_TW | ✅ Đạt | R4 | Full national đúng spec |
 | BC-027 | Scope CB_NV_BN (BTC) | ❌ Lỗi | R4 | BUG-BC-DATA-SCOPE-LEAK Critical |
 | BC-028 | Scope CB_NV_DP (Sở BG) | ❌ Lỗi | R4 | BUG-BC-DATA-SCOPE-LEAK Critical |
@@ -109,34 +112,30 @@
 | BC-031 | Scope CB_PD_DP | ❌ Lỗi | R5 | BUG-BC-DATA-SCOPE-LEAK (4 role) — leak Sở BG |
 | BC-032 | Scope QTHT | ✅ Đạt | R4 | Full national + admin |
 | BC-033 | Validation date range invalid | ✅ Đạt | R3/R4 | 422 đúng |
-| BC-034 | Missing kyBaoCao | ❌ Lỗi | R6 | BUG-BC-KYBAOCAO-NOT-VALIDATED Medium — BC-001+BC-010 không validate |
+| BC-034 | Missing kyBaoCao | ✅ Đạt | R21 | R21 retest 2026-05-13 15:20 — 4 enum (NAM/QUY/THANG/TUAN) trả 200 + theoKy[] groupBy KHÁC NHAU (NAM=year, QUY=quarter, THANG=month, TUAN=week). Missing kyBaoCao 200 silent accept khớp SRS `srs-fr-11-bao-cao.md:67,110` (filter range, không có Error Handling enforce). Closed-Wont-Fix. |
 | BC-035 | Invalid date format | ✅ Đạt | R3/R4 | 422 đúng |
 | BC-036 | Invalid donViId UUID | ✅ Đạt | R3/R4 | 422 đúng |
 | BC-037 | HD count vs module 7.2 | ✅ Đạt | R4 | Δ explainable filter scope |
 | BC-038 | VV count vs module 7.5 | ✅ Đạt | R4 | Δ explainable filter scope (year + state) |
 | BC-039 | CP total vs module 7.6 | ✅ Đạt | R4 | Match 205M ngân sách |
 | BC-040 | Audit log VIEW_BAO_CAO | ✅ Đạt | R5 | qtht_08 verify entry VIEW_REPORT 15:40:17 OK |
-| **Tổng** | **40 TC** | ✅34 · ⚠️0 · ❌6 · 🚫0 · ⏭0 · 🤷0 | | |
+| **Tổng** | **40 TC** | ✅36 · ⚠️0 · ❌4 · 🚫0 · ⏭0 · 🤷0 | | |
 
 > Note: BC-034 + BC-034b cùng được ghi vào BC-034 row (silent accept kyBaoCao). BC-033b + BC-035b là test sub-input bonus, không phải TC riêng — gộp vào BC-033 + BC-035.
 
 ## 2.6 Bảng TC chưa chạy được — cần làm gì để chạy (R6)
 
-> Tóm tắt: Hiện tại còn **6 TC FAIL** — toàn bộ chờ **dev fix bug**. R6 đã giải defer 4 TC ĐT/ĐG (seed đã có sẵn, slug BC-010 R5 dùng sai) + giải OBS BC-034 (chứng minh là bug, log mới). Nhóm: **6 TC chờ dev fix 4 bug Open** (DATA-SCOPE-LEAK 4 role + PDF-NOT-SUPPORTED + XLSX-PARTIAL + KYBAOCAO-NOT-VALIDATED).
+> Tóm tắt R21 (2026-05-13 15:20:00): Hiện tại còn **4 TC FAIL** — toàn bộ chờ **dev fix bug** (DATA-SCOPE-LEAK 4 role). R21 đã unblock BC-034 (kyBaoCao filter — Closed Wont-Fix, behavior khớp SRS line 67/110, 4 enum trả 200 với theoKy groupBy đúng). R20 đã unblock BC-025 (PDF export Closed).
 
 | TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
 |---|---|---|:-:|
-| BC-025 | PDF trả 422 "Không thể tạo file PDF" universal 4/4 BC mẫu | BE implement PDF export theo TT 17/2025 (Times New Roman 13pt, A4) | Dev BE |
 | BC-027 | CB_NV_BN thấy full national thay vì scope BTC | BE wire data scope `donViId` cho prefix `/bao-cao/*` (đã có ở dashboard) | Dev BE |
 | BC-028 | CB_NV_DP thấy full national thay vì scope Sở | Cùng fix với BC-027 — fix 1 chỗ unblock 4 TC | Dev BE |
 | BC-030 | CB_PD_BN cùng pattern leak (R5 confirmed) | Cùng fix BC-027/028 | Dev BE |
 | BC-031 | CB_PD_DP cùng pattern leak (R5 confirmed) | Cùng fix BC-027/028 | Dev BE |
-| BC-034 | BE 2/12 BC silently accept kyBaoCao invalid + không aggregate theo kỳ | BE thêm `@IsEnum(KyBaoCao)` cho DTO `/hoi-dap` + `/danh-gia-hieu-qua` + implement aggregation switch | Dev BE |
 
 **Cột "Ai làm" phân loại 6 nhóm A-F:**
-- BC-025 → nhóm **B** chờ dev fix bug (BUG-BC-PDF-NOT-SUPPORTED)
 - BC-027/028/030/031 → nhóm **B** chờ dev fix bug (BUG-BC-DATA-SCOPE-LEAK)
-- BC-034 → nhóm **B** chờ dev fix bug (BUG-BC-KYBAOCAO-NOT-VALIDATED, mới R6)
 
 **Bug gap khác ngoài plan 40 TC:**
 
@@ -169,9 +168,9 @@
 | 8 | CT HTPLDN | 4 | Số lượng CT hỗ trợ, theo đơn vị, theo lĩnh vực, theo thời gian |
 | | **Tổng** | **23** | |
 
-⚠️ **Group 1 "Hỏi đáp"** thiếu chữ "pháp luật" theo Thay đổi 2 v3.5 → log [BUG-BC-HOIDAP-PL-001](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-hoidap-pl-001--group-dropdown-hỏi-đáp--tên-bc-bc-số-lượng-hỏi-đápvướng-mắc-thiếu-chữ-pháp-luật).
+⚠️ **Group 1 "Hỏi đáp"** thiếu chữ "pháp luật" theo Thay đổi 2 v3.5 → log [BUG-BC-HOIDAP-PL-001](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-hoidap-pl-001--group-dropdown-hỏi-đáp--tên-bc-bc-số-lượng-hỏi-đápvướng-mắc-thiếu-chữ-pháp-luật).
 
-⚠️ **Action button "Xuất Word"** thay vì "Xuất PDF" theo Thay đổi 6 v3.5 → log [BUG-BC-WORD-001](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-word-001--button-xuất-word-thay-vì-xuất-pdf-trên-scr-ix-01-chưa-apply-tt-172025).
+⚠️ **Action button "Xuất Word"** thay vì "Xuất PDF" theo Thay đổi 6 v3.5 → log [BUG-BC-WORD-001](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-word-001--button-xuất-word-thay-vì-xuất-pdf-trên-scr-ix-01-chưa-apply-tt-172025).
 
 **Evidence:**
 - ![Initial smoke /bao-cao + button Xuất Word](r7-7-13-01-bao-cao-initial.png)
@@ -233,7 +232,7 @@ Defer khớp với note ban đầu task R7.7.13 trong `tasks/todo-bao-cao.md`: `
 
 - Button action area: `Xem báo cáo` + `Xuất Excel` + **`file-pdf Xuất PDF`** (không còn "Xuất Word").
 - Dropdown group đầu = **`Hỏi đáp pháp luật`**, option = **`BC Số lượng hỏi đáp/vướng mắc pháp luật`** (verify qua `evaluate_script`).
-- Cả 2 bug đã update Status `Open → Closed` trong [bug-report-r7-7-13-bao-cao.md](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md) với dòng Re-test 2026-05-10 12:35.
+- Cả 2 bug đã update Status `Open → Closed` trong [Pass-bug-report-r7-7-13-bao-cao.md](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md) với dòng Re-test 2026-05-10 12:35.
 
 ### 3.5.3 Smoke 16 BC core (BC-004 → BC-023, defer 4 ĐT/ĐG) ✅ 16/16 PASS
 
@@ -274,7 +273,7 @@ POST `/api/v1/bao-cao/export` với `formatXuat=PDF`:
 - Verified trên 2 BC độc lập: BC-001 Hỏi đáp PL (requestId `949319b9-2f9e-40e7-bcc1-2f7cd217bd5e`) + BC-004 VV hoàn thành (requestId `061ca8f0-01a1-4182-98bc-6241e8156b97`).
 - Request body hợp lệ, cùng shape với XLSX (chỉ khác `formatXuat`). XLSX 200, PDF 500 → bug isolated tới nhánh PDF service.
 
-→ Log [BUG-BC-PDF-500-001](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-pdf-500-001--post-apiv1bao-caoexport-formatxuatpdf-trả-500-trên-mọi-bc) Critical P0.
+→ Log [BUG-BC-PDF-500-001](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-pdf-500-001--post-apiv1bao-caoexport-formatxuatpdf-trả-500-trên-mọi-bc) Critical P0.
 
 ### 3.5.6 DEFER nhóm sâu (chưa cover ở R2)
 
@@ -365,7 +364,7 @@ POST `/api/v1/bao-cao/export` với `formatXuat=PDF`:
 
 **Counter-evidence:** Cùng user `cb_nv_bn_08` + `cb_nv_dp_08` gọi `GET /api/v1/dashboard/overview` trả `{vuViec:0, hoiDap:0, tvv:0}` — chứng minh BE có scope middleware nhưng KHÔNG wire cho prefix `/bao-cao/*`.
 
-→ Log **BUG-BC-DATA-SCOPE-LEAK Critical P0** ([bug entry](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-data-scope-leak--endpoint-apiv1bao-cao-trả-full-national-data-cho-cb-cấp-bndp)) + [evidence MD](../../bug-reports/bao-cao/image/bug-bc-data-scope-leak-r4-evidence.md).
+→ Log **BUG-BC-DATA-SCOPE-LEAK Critical P0** ([bug entry](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-data-scope-leak--endpoint-apiv1bao-cao-trả-full-national-data-cho-cb-cấp-bndp)) + [evidence MD](../../bug-reports/bao-cao/image/bug-bc-data-scope-leak-r4-evidence.md).
 
 ### 3.7.3 BC-029/032 — TW/QTHT scope ✅ PASS (control group)
 
@@ -515,6 +514,29 @@ Evidence: [bug-bc-data-scope-leak-r6-evidence.md](../../bug-reports/bao-cao/imag
 
 4/4 universal 422, pattern không đổi từ R5. Dev đã edit code (đổi tên field) nhưng không implement PDF generator. BUG-BC-PDF-NOT-SUPPORTED giữ Open.
 
+### 3.9.2.R20 BUG-BC-PDF-NOT-SUPPORTED — R20 re-verify ✅ PASS Closed
+
+**Method:** Login `qtht_01` qua MCP isolated context `agent-tc-bc-fresh`, POST `/api/v1/bao-cao/export?formatXuat=PDF` với 10 loaiBaoCao enum hợp lệ (lấy từ `GET /api/v1/bao-cao/loai` catalog).
+
+| # | loaiBaoCao | status | content-type | size (bytes) | signature |
+|:-:|------------|:------:|--------------|-------------:|-----------|
+| 1 | BC_HOI_DAP | 200 | application/pdf | 18522 | %PDF |
+| 2 | BC_VU_VIEC_TIEP_NHAN | 200 | application/pdf | 17510 | %PDF |
+| 3 | BC_VU_VIEC_DANG_HO_TRO | 200 | application/pdf | 15540 | %PDF |
+| 4 | BC_VU_VIEC_HOAN_THANH | 200 | application/pdf | 14919 | %PDF |
+| 5 | BC_CHI_PHI_CHI_TRA | 200 | application/pdf | 20704 | %PDF |
+| 6 | BC_SO_LUONG_CG_TVV | 200 | application/pdf | 16170 | %PDF |
+| 7 | BC_LOP_DAO_TAO_DANG_DIEN_RA | 200 | application/pdf | 17650 | %PDF |
+| 8 | BC_LOP_DAO_TAO_DA_DIEN_RA | 200 | application/pdf | 18134 | %PDF |
+| 9 | BC_CHAT_LUONG_DAO_TAO | 200 | application/pdf | 19953 | %PDF |
+| 10 | BC_DANH_GIA_HIEU_QUA | 200 | application/pdf | 10477 | %PDF |
+
+10/10 enum hợp lệ trả 200 + binary `%PDF` (10477B-20704B). Pattern R6 (422 universal) đã đổi sang full PDF support. BUG-BC-PDF-NOT-SUPPORTED → Closed.
+
+**Ghi chú:** 4 enum prompt R20 (`BC_TVCS`, `BC_DAO_TAO`, `BC_HOP_DONG`, `BC_TONG_HOP`) trả 422 `ERR-RPT-EXPORT-01` "Loại báo cáo không hợp lệ" — **không tồn tại** trong system catalog (verify qua `GET /bao-cao/loai` trả 24 enum chuẩn). Đây không phải fail PDF endpoint mà là enum không có trong scope spec hệ thống. Mapping thực tế: BC_DAO_TAO → BC_LOP_DAO_TAO_DANG_DIEN_RA/DA_DIEN_RA + BC_CHAT_LUONG_DAO_TAO; BC_TVCS / BC_HOP_DONG / BC_TONG_HOP chưa có trong SRS bao cáo v3.5.
+
+Evidence: ![BC PDF export R20 retest dashboard](image/bc-pdf-export-r20-retest-2026-05-13.png)
+
 ### 3.9.3 BUG-BC-XLSX-PARTIAL-SUPPORT — Re-verify 2 BC analytic ❌ FAIL (chưa fix)
 
 **Method:** Cùng session `cb_pd_dp_08`, POST `/api/v1/bao-cao/export` với 2 BC analytic + 1 control PASS, `formatXuat: "XLSX"`.
@@ -619,7 +641,7 @@ BC-001 (bug): `theoKy` keys identical cho mọi enum value (`["2026-05", null]`)
 
 → BC-001 + BC-010 thiếu cả 2 yếu tố: validation enum + aggregation theo kỳ.
 
-**Step 4 — Log bug:** [BUG-BC-KYBAOCAO-NOT-VALIDATED](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-kybaocao-not-validated--bao-caohoi-dap--bao-caodanh-gia-hieu-qua-không-validate-kybaocao-enum) Medium NEW. Evidence: [bug-bc-kybaocao-not-validated-r6-evidence.md](../../bug-reports/bao-cao/image/bug-bc-kybaocao-not-validated-r6-evidence.md).
+**Step 4 — Log bug:** [BUG-BC-KYBAOCAO-NOT-VALIDATED](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-kybaocao-not-validated--bao-caohoi-dap--bao-caodanh-gia-hieu-qua-không-validate-kybaocao-enum) Medium NEW. Evidence: [bug-bc-kybaocao-not-validated-r6-evidence.md](../../bug-reports/bao-cao/image/bug-bc-kybaocao-not-validated-r6-evidence.md).
 
 ### 3.9.8 JWT stability dưới load R6 ✅ stable
 
@@ -631,15 +653,15 @@ BC-001 (bug): `theoKy` keys identical cho mọi enum value (`["2026-05", null]`)
 
 | Bug ID | Severity | Status | Title |
 |--------|----------|--------|-------|
-| [BUG-BC-DATA-SCOPE-LEAK](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-data-scope-leak--endpoint-apiv1bao-cao-trả-full-national-data-cho-cb-cấp-bndp) | **Critical** | **Open (R6 re-verify FAIL — chưa fix)** | Endpoint `/api/v1/bao-cao/*` không scope theo `donViId` cho 4 role CB cấp BN/DP — leak full national data |
-| [BUG-BC-PDF-NOT-SUPPORTED](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-pdf-not-supported--post-apiv1bao-caoexport-formatxuatpdf-trả-422-không-thể-tạo-file-pdf) | **Major** | **Open (R6 re-verify FAIL — chưa fix)** | POST `/api/v1/bao-cao/export` formatXuat=PDF trả 422 "Không thể tạo file PDF" — verify 4/4 BC mẫu cùng pattern |
-| [BUG-BC-XLSX-PARTIAL-SUPPORT](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-xlsx-partial-support--export-xlsx-trả-422-cho-210-bc-mẫu-test) | Medium | **Open (R6 re-verify FAIL — chưa fix)** | Export XLSX 2/10 BC trả 422 — `BC_VV_THEO_LINH_VUC` + `BC_DANH_GIA_HIEU_QUA_HTPL` |
-| [BUG-BC-KYBAOCAO-NOT-VALIDATED](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-kybaocao-not-validated--bao-caohoi-dap--bao-caodanh-gia-hieu-qua-không-validate-kybaocao-enum) | Medium | **Open (R6 NEW)** | 2/12 BC sub-route `/hoi-dap` + `/danh-gia-hieu-qua` không validate `kyBaoCao` enum + ignore aggregation theo kỳ |
-| [~~BUG-BC-PDF-500-001~~](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-pdf-not-supported--post-apiv1bao-caoexport-formatxuatpdf-trả-422-loại-báo-cáo-không-hỗ-trợ-xuất) | Critical | **Closed (R4 downgrade)** | ~~POST export PDF trả 500 ERR-SYS-00-00-01~~ → chuyển thành 422 (xem PDF-NOT-SUPPORTED) |
-| [~~BUG-BC-LEGEND-002~~](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-legend-002-closed--bc-018-chart-legend-leak-raw-camelcase-field-name) | Minor | **Closed (R4)** | ~~BC-018 chart legend leak raw camelCase field names~~ |
-| [~~BUG-BC-FE-DROPDOWN-MISSING-3~~](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-fe-dropdown-missing-3-retracted--fe-dropdown-loại-báo-cáo-thiếu-3-bc-types-từ-be-catalog) | Medium | **Retracted (R4)** | ~~FE dropdown chỉ render 20/23 BC~~ — false positive scroll virtual list quá nhanh |
-| [~~BUG-BC-WORD-001~~](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-word-001-closed--button-xuất-word-thay-vì-xuất-pdf-trên-scr-ix-01-chưa-apply-tt-172025) | Major | **Closed (R2)** | ~~Button "Xuất Word" thay vì "Xuất PDF"~~ |
-| [~~BUG-BC-HOIDAP-PL-001~~](../../bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md#bug-bc-hoidap-pl-001-closed--group-dropdown-hỏi-đáp--tên-bc-bc-số-lượng-hỏi-đápvướng-mắc-thiếu-chữ-pháp-luật) | Major | **Closed (R2)** | ~~Group dropdown "Hỏi đáp" + tên BC thiếu "pháp luật"~~ |
+| [BUG-BC-DATA-SCOPE-LEAK](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-data-scope-leak--endpoint-apiv1bao-cao-trả-full-national-data-cho-cb-cấp-bndp) | **Critical** | **Open (R6 re-verify FAIL — chưa fix)** | Endpoint `/api/v1/bao-cao/*` không scope theo `donViId` cho 4 role CB cấp BN/DP — leak full national data |
+| [~~BUG-BC-PDF-NOT-SUPPORTED~~](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-pdf-not-supported--post-apiv1bao-caoexport-formatxuatpdf-trả-422-không-thể-tạo-file-pdf) | Major | **Closed (R20 retest PASS)** | ~~POST `/api/v1/bao-cao/export` formatXuat=PDF trả 422~~ — R20 verify 10/10 enum hợp lệ trả 200 + binary `%PDF` (10477-20704B) |
+| [BUG-BC-XLSX-PARTIAL-SUPPORT](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-xlsx-partial-support--export-xlsx-trả-422-cho-210-bc-mẫu-test) | Medium | **Open (R6 re-verify FAIL — chưa fix)** | Export XLSX 2/10 BC trả 422 — `BC_VV_THEO_LINH_VUC` + `BC_DANH_GIA_HIEU_QUA_HTPL` |
+| [BUG-BC-KYBAOCAO-NOT-VALIDATED](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-kybaocao-not-validated--bao-caohoi-dap--bao-caodanh-gia-hieu-qua-không-validate-kybaocao-enum) | Medium | **Open (R6 NEW)** | 2/12 BC sub-route `/hoi-dap` + `/danh-gia-hieu-qua` không validate `kyBaoCao` enum + ignore aggregation theo kỳ |
+| [~~BUG-BC-PDF-500-001~~](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-pdf-not-supported--post-apiv1bao-caoexport-formatxuatpdf-trả-422-loại-báo-cáo-không-hỗ-trợ-xuất) | Critical | **Closed (R4 downgrade)** | ~~POST export PDF trả 500 ERR-SYS-00-00-01~~ → chuyển thành 422 (xem PDF-NOT-SUPPORTED) |
+| [~~BUG-BC-LEGEND-002~~](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-legend-002-closed--bc-018-chart-legend-leak-raw-camelcase-field-name) | Minor | **Closed (R4)** | ~~BC-018 chart legend leak raw camelCase field names~~ |
+| [~~BUG-BC-FE-DROPDOWN-MISSING-3~~](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-fe-dropdown-missing-3-retracted--fe-dropdown-loại-báo-cáo-thiếu-3-bc-types-từ-be-catalog) | Medium | **Retracted (R4)** | ~~FE dropdown chỉ render 20/23 BC~~ — false positive scroll virtual list quá nhanh |
+| [~~BUG-BC-WORD-001~~](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-word-001-closed--button-xuất-word-thay-vì-xuất-pdf-trên-scr-ix-01-chưa-apply-tt-172025) | Major | **Closed (R2)** | ~~Button "Xuất Word" thay vì "Xuất PDF"~~ |
+| [~~BUG-BC-HOIDAP-PL-001~~](../../bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md#bug-bc-hoidap-pl-001-closed--group-dropdown-hỏi-đáp--tên-bc-bc-số-lượng-hỏi-đápvướng-mắc-thiếu-chữ-pháp-luật) | Major | **Closed (R2)** | ~~Group dropdown "Hỏi đáp" + tên BC thiếu "pháp luật"~~ |
 
 ---
 

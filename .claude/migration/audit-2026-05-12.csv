@@ -1,6 +1,6 @@
 filepath,module,classification,severity_table_format,severity_table_rows,bst_schema,total,critical,major,medium,minor,trivial,closed,open,defer,withdrawn,status_unknown,severity_unknown,sev_sum_match,closed_open_match,sev_table_match_bst
 output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/Pass-bug-report-r7-5-4-bc-export.md,bao-cao,A,6-col,1,8-col-full,3,1,0,0,2,0,3,0,0,0,0,0,True,True,True
-output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md,bao-cao,B,absent,0,8-col-full,9,2,3,2,2,0,5,2,0,1,1,0,True,False,
+output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md,bao-cao,B,absent,0,8-col-full,9,2,3,2,2,0,5,2,0,1,1,0,True,False,
 output/qa-reports/round7-2026-05-06/bug-reports/bm/Pass-bug-report-flow-bm-r7-4-c1.md,bm,A,6-col,1,8-col-full,6,2,2,2,0,0,6,0,0,0,0,0,True,True,True
 output/qa-reports/round7-2026-05-06/bug-reports/bm/Pass-bug-report-function-bm-r7-7-10.md,bm,A,6-col,1,8-col-full,3,1,0,2,0,0,3,0,0,0,0,0,True,True,True
 output/qa-reports/round7-2026-05-06/bug-reports/bm/Pass-bug-report-r7-7-10b-bm.md,bm,A,6-col,1,8-col-full,1,0,0,1,0,0,1,0,0,0,0,0,True,True,True

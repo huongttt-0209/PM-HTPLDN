@@ -33,7 +33,7 @@
 
 - ⚠️ **R7.7.14** 🔄 HĐ tư vấn (UC163 sub-resource v2.1) `[need: ≥1 HĐ TV DANG_THUC_HIEN (✓ 1); ≥1 VV HOAN_THANH (✓ 1)]` <a id="r7-7-14"></a>
   - **Kết quả:** ⚠️ R6 10 Closed + 2 Open (Medium:1 Minor:1). UI hoàn thiện entry point + permission đúng. [functional-test-report-r7-7-14-hdtv.md](../output/qa-reports/round7-2026-05-06/functional/hop-dong-tv/functional-test-report-r7-7-14-hdtv.md)
-  - **Bug:** [bug-report-r7-7-14-hdtv.md](../output/qa-reports/round7-2026-05-06/bug-reports/hop-dong-tv/bug-report-r7-7-14-hdtv.md) — 11/12 đóng (Closed R6: BUG-018/020/021/026/029/030/031/033/035/036 · Open: 032 missing TVV-HD section, 034 stale standalone route chờ BA)
+  - **Bug:** [Pass-bug-report-r7-7-14-hdtv.md](../output/qa-reports/round7-2026-05-06/bug-reports/hop-dong-tv/Pass-bug-report-r7-7-14-hdtv.md) — 14/14 đóng (Closed R6: BUG-018/020/021/026/029/030/031/033/035/036 · Open: 032 missing TVV-HD section, 034 stale standalone route chờ BA)
   - **Cần:** ≥1 HĐ TV `DANG_THUC_HIEN` (✓ 1) · ≥1 VV `HOAN_THANH` (✓ 1) — 14 TC defer out-of-scope per SRS v2.1
   - **Note:** 2026-05-11 17:10:00 — Re-test #6 (qa-bugfix-reverify-audit skill) — 6/8 Open bug PASS Closed-verified (BUG-020 UI Nhật ký tab có 6 row + BUG-030 pageSize=100 + BUG-031 accordion 10 columns + BUG-033 entry point đầy đủ + BUG-035 RangePicker commit + BUG-036 CB không còn Create btn). Còn 2 Open: BUG-032 TVV detail vẫn thiếu HD section (FE chưa implement); BUG-034 standalone list `/hop-dong-tv/danh-sach` vẫn render — chờ BA quyết định xóa hay giữ ẩn.
 

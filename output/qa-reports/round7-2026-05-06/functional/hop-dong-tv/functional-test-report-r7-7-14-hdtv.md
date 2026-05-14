@@ -13,7 +13,7 @@
 | **Primary Account** | `cb_nv_tw_07` (CB_NV_TW Cục BTTP) |
 | **Multi-role accounts** | `qtht_07` · `nht_btp_tw_audit_r30` · `cb_nv_bn_07` (BKH) · `cb_nv_dp_07` (AG) · `9999999990` (DN) |
 | **Round** | R7 (gồm R1 → R6 — chi tiết lifecycle ở cuối file) |
-| **Tài liệu tham chiếu** | [seed-checklist-r7-3-14-hdtv.md](../../seed/hop-dong-tv/seed-checklist-r7-3-14-hdtv.md) · [bug-report-r7-7-14-hdtv.md](../../bug-reports/hop-dong-tv/bug-report-r7-7-14-hdtv.md) |
+| **Tài liệu tham chiếu** | [seed-checklist-r7-3-14-hdtv.md](../../seed/hop-dong-tv/seed-checklist-r7-3-14-hdtv.md) · [Pass-bug-report-r7-7-14-hdtv.md](../../bug-reports/hop-dong-tv/Pass-bug-report-r7-7-14-hdtv.md) |
 
 ---
 
@@ -108,7 +108,7 @@ Hiện tại còn **3 TC chưa Đạt clean** (1 ❌ Lỗi + 2 ⚠️ Sai spec) 
 
 ## 3. Bug Report (chỉ liệt kê bug còn Open)
 
-> **Lưu ý:** Chi tiết Steps/Evidence của tất cả 12 bug (10 Closed + 2 Open) xem file [bug-report-r7-7-14-hdtv.md](../../bug-reports/hop-dong-tv/bug-report-r7-7-14-hdtv.md). Section này chỉ tóm tắt 2 bug còn Open.
+> **Lưu ý:** Chi tiết Steps/Evidence của tất cả 12 bug (10 Closed + 2 Open) xem file [Pass-bug-report-r7-7-14-hdtv.md](../../bug-reports/hop-dong-tv/Pass-bug-report-r7-7-14-hdtv.md). Section này chỉ tóm tắt 2 bug còn Open.
 
 ### BUG-HDTV-032 — [Medium] TVV detail thiếu section "Hợp đồng tư vấn"
 

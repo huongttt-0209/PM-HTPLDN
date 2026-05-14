@@ -15,6 +15,7 @@
 |------|---------|-----------------|
 | 2026-04-03 | SRS Agent (Claude) | Tạo mới từ `srs-v3.md` theo Template v3.0 (bản v3 baseline) |
 | 2026-05-06 | BA + SRS Agent | **Cập nhật v3 → v3.5** — apply 13 thay đổi nghiệp vụ theo `v3.5-delta-reports/v3.5-delta-fr-01.md` (tất cả mark IN). Phân loại: B1 = 12 thay đổi (sửa lỗi nội bộ SRS), B2d = 1 thay đổi (KPI-03 mở rộng 5 trạng thái sống cho khớp UC3 CSV "đang hỗ trợ"). Không có thay đổi loại A — Yêu cầu thay đổi của đối tác TT CNTT trong CR 16/04/2026 không liệt kê FR-01. Nhóm thay đổi chính: tái cấu trúc bộ lọc thời gian (Năm + Tháng) + bộ lọc đơn vị 2 cấp; phân biệt KPI ảnh chụp vs phát sinh trong kỳ; UC8 thiết kế lại 2 biểu đồ cột song song + thang điểm 0-100; UC9 thiết kế lại biểu đồ vành; tách KPI-S-01/S-02; mở rộng đặc tả tự làm mới với cơ chế chống fail toàn cục per widget; BR-AUTH-01 chuyển 3 lớp xác thực → 2 lớp (bỏ VNPT eKYC); BR-AUTH-04 chốt mô hình BN/ĐP ngang cấp song song; BR-SLA-05 sửa công thức tránh tỷ lệ ảo; xóa entity tham chiếu sai; bổ sung QTHT vào Tác nhân + ma trận phân quyền + 5 sơ đồ luồng nghiệp vụ; drill-down URL kèm filter + sửa naming `KET_THUC` → `DA_KET_THUC`. Chi tiết bằng chứng & lý do từng thay đổi xem `CHANGELOG-v3-to-v3.5.md` mục `srs-fr-01`. |
+| 2026-05-11 | BA + Codex | **Round 7 BA decision:** KPI-04 "Vụ việc đã hoàn thành" đếm cả `HOAN_THANH` và `DA_DANH_GIA`, lọc thời gian theo `ngay_hoan_thanh` và phạm vi đơn vị theo Dashboard. |
 
 ---
 
@@ -94,7 +95,7 @@ flowchart LR
     B -- KPI-01 Hỏi đáp --> C1["/hoi-dap/danh-sach<br/>?trang_thai=MOI<br/>&time+don_vi"]
     B -- KPI-02 --> C2["/vu-viec/danh-sach<br/>?ngay_tiep_nhan_tu+den<br/>&don_vi_cap&don_vi_id"]
     B -- KPI-03 --> C3["/vu-viec/danh-sach<br/>?trang_thai=5-states-sống<br/>&don_vi_cap&don_vi_id"]
-    B -- KPI-04 --> C4["/vu-viec/danh-sach<br/>?trang_thai=HOAN_THANH<br/>&time+don_vi"]
+    B -- KPI-04 --> C4["/vu-viec/danh-sach<br/>?trang_thai=HOAN_THANH,DA_DANH_GIA<br/>&time+don_vi"]
     B -- KPI-05 --> C5["/dao-tao/khoa-hoc<br/>?trang_thai=DANG_DIEN_RA<br/>&don_vi_cap&don_vi_id"]
     B -- KPI-06 --> C6["/dao-tao/khoa-hoc<br/>?trang_thai=DA_KET_THUC<br/>&time+don_vi"]
     B -- KPI-07 --> C7["/chuyen-gia-tvv/danh-sach<br/>?trang_thai=DANG_HOAT_DONG<br/>&don_vi_cap&don_vi_id"]
@@ -317,12 +318,12 @@ sequenceDiagram
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 4 | Đếm số vụ việc chưa xóa, trong phạm vi đơn vị, trạng thái "Hoàn thành" (`HOAN_THANH`), ngày hoàn thành nằm trong khoảng đầu kỳ–cuối kỳ | — |
+| 4 | Đếm số vụ việc chưa xóa, trong phạm vi đơn vị, trạng thái thuộc tập "đã hoàn thành" gồm `HOAN_THANH` và `DA_DANH_GIA`, ngày hoàn thành (`ngay_hoan_thanh`) nằm trong khoảng đầu kỳ–cuối kỳ | — |
 
-**Drill-down:** Click → chuyển đến Nhóm V.I danh sách vụ việc hoàn thành, giữ filter Năm + Tháng + đơn vị từ Dashboard (`/vu-viec/danh-sach?trang_thai=HOAN_THANH&date_field=ngay_hoan_thanh&nam={nam}&thang={thang}&don_vi_cap={don_vi_cap}&don_vi_id={don_vi_id}`). Module target tự suy ra boundary thời gian từ `nam` + `thang` áp lên `ngay_hoan_thanh`. Filter bắt buộc kèm để số click xuống khớp số đếm Dashboard.
+**Drill-down:** Click → chuyển đến Nhóm V.I danh sách vụ việc hoàn thành, giữ filter Năm + Tháng + đơn vị từ Dashboard (`/vu-viec/danh-sach?trang_thai=HOAN_THANH,DA_DANH_GIA&date_field=ngay_hoan_thanh&nam={nam}&thang={thang}&don_vi_cap={don_vi_cap}&don_vi_id={don_vi_id}`). Module target tự suy ra boundary thời gian từ `nam` + `thang` áp lên `ngay_hoan_thanh`. Filter bắt buộc kèm để số click xuống khớp số đếm Dashboard.
 
 **Acceptance Criteria:**
-- **Given** CB đăng nhập **When** xem Dashboard **Then** hiển thị tổng vụ việc trạng thái "Hoàn thành"
+- **Given** CB đăng nhập **When** xem Dashboard **Then** hiển thị tổng vụ việc đã hoàn thành gồm trạng thái `HOAN_THANH` và `DA_DANH_GIA`
 - **Given** CB lọc theo thời gian **When** áp dụng **Then** chỉ tính vụ việc hoàn thành trong khoảng thời gian
 
 ---
@@ -1021,7 +1022,7 @@ erDiagram
 | ngay_hoan_thanh | datetime | N | | | Ngày hoàn thành xử lý |
 | don_vi_id | identifier | Y | FK → DON_VI(id) | | Đơn vị sở hữu theo đơn vị |
 
-**Dashboard sử dụng:** Đếm vụ việc theo nhóm trạng thái → KPI-02 / KPI-03 / KPI-04; trung bình số ngày làm việc giữa ngày tiếp nhận và ngày hoàn thành → KPI-S-02 (thời gian xử lý trung bình).
+**Dashboard sử dụng:** Đếm vụ việc theo nhóm trạng thái → KPI-02 / KPI-03 / KPI-04. Riêng KPI-04 "Vụ việc đã hoàn thành" đếm `HOAN_THANH` + `DA_DANH_GIA` theo `ngay_hoan_thanh` và phạm vi đơn vị. KPI-S-02 tính trung bình số ngày làm việc giữa ngày tiếp nhận và ngày hoàn thành.
 
 **Volume & Growth:** ~5,000 records/năm.
 

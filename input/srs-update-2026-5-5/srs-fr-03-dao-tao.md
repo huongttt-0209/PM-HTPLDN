@@ -44,7 +44,7 @@ Kế hoạch đào tạo năm (KE_HOACH_DAO_TAO) — quy trình phê duyệt SM-
 
 **2 hình thức:** Trực tuyến và Trực tiếp — tương đương nhau về quy trình.
 
-**Luồng phê duyệt:** CB NV cùng cấp tạo → CB PD cùng cấp duyệt (BR-FLOW-03 + BR-FLOW-04). Áp dụng cho cả 3 cấp (Kế hoạch năm, CTDT, Khóa học).
+**Luồng phê duyệt:** CB NV cùng đơn vị tạo → CB PD cùng đơn vị duyệt (BR-FLOW-03 + BR-FLOW-04). Áp dụng cho cả 3 cấp (Kế hoạch năm, CTDT, Khóa học).
 
 **State Machine — SM-KHOAHOC:**
 
@@ -52,8 +52,7 @@ Kế hoạch đào tạo năm (KE_HOACH_DAO_TAO) — quy trình phê duyệt SM-
 graph LR
     A[DU_THAO] --> B[CHO_DUYET]
     B --> C[DA_DUYET]
-    B --> D[TU_CHOI]
-    D --> B
+    B --> A
     C --> E[DA_CONG_KHAI]
     E --> F[DANG_DIEN_RA]
     F --> G[DA_KET_THUC]
@@ -61,6 +60,8 @@ graph LR
     H --> I[HOAN_THANH]
     E --> J[DA_HUY]
 ```
+
+> **Lưu ý:** Cạnh `B --> A` thể hiện khi CB PD từ chối → khóa quay về DU_THAO (gộp, KHÔNG tách trạng thái TU_CHOI riêng — Thay đổi 3 OUT cổng duyệt 2026-05-06). 9 trạng thái chuẩn: DU_THAO, CHO_DUYET, DA_DUYET, DA_CONG_KHAI, DANG_DIEN_RA, DA_KET_THUC, CHO_DUYET_KQ, HOAN_THANH, DA_HUY (đồng bộ master `srs-v3.5.md` Section 3.4.3.6).
 
 **Auto-transition:**
 - AT-01: CB NV nhấn "Gửi phê duyệt" → DU_THAO → CHO_DUYET
@@ -181,15 +182,15 @@ graph LR
 | 1 | Kiểm tra quyền CB NV + CTDT thuộc đơn vị mình quản lý | BR-AUTH-01, BR-AUTH-08 |
 | 2 | Kiểm tra trạng thái CTDT IN ('DU_THAO', 'TU_CHOI') — refinement Cách 2 cho phép trình lại sau từ chối | SM-CTDT |
 | 3 | Validate đủ trường bắt buộc: ten_chuong_trinh, ke_hoach_id, linh_vuc_id; kiểm tra kế hoạch năm cha DA_DUYET hoặc DA_CONG_KHAI | — |
-| 4 | Cập nhật trạng thái CTDT = CHO_DUYET; nếu chuyển từ TU_CHOI → clear ly_do_tu_choi + thoi_gian_tu_choi | SM-CTDT |
-| 5 | Gửi thông báo CB PD cùng cấp | BR-NOTIF-01 |
+| 4 | Cập nhật trạng thái CTDT = CHO_DUYET; nếu chuyển từ TU_CHOI → clear ly_do_tu_choi + thoi_gian_tu_choi + nguoi_tu_choi (làm sạch lịch sử reject — quyết định BA Q2 chốt 2026-05-08) | SM-CTDT |
+| 5 | Gửi thông báo CB PD cùng đơn vị | BR-NOTIF-01 |
 | 6 | Ghi nhật ký (DU_THAO|TU_CHOI → CHO_DUYET) | BR-DATA-05 |
 
 **Processing — Phê duyệt CTDT (CB PD):**
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra quyền CB PD + cùng cấp với CB NV tạo CTDT | BR-AUTH-01, BR-AUTH-05 |
+| 1 | Kiểm tra quyền CB PD + cùng đơn vị với CB NV tạo CTDT | BR-AUTH-01, BR-AUTH-05 |
 | 2 | Kiểm tra trạng thái CTDT = CHO_DUYET | SM-CTDT |
 | 3 | Cập nhật trạng thái CTDT = DA_DUYET; ghi thoi_gian_duyet + nguoi_duyet | BR-FLOW-03 |
 | 4 | Gửi thông báo CB NV (người tạo CTDT) | BR-NOTIF-01 |
@@ -199,12 +200,44 @@ graph LR
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra quyền CB PD + cùng cấp | BR-AUTH-01, BR-AUTH-05 |
+| 1 | Kiểm tra quyền CB PD + cùng đơn vị | BR-AUTH-01, BR-AUTH-05 |
 | 2 | Kiểm tra trạng thái CTDT = CHO_DUYET | SM-CTDT |
 | 3 | Validate ly_do_tu_choi ≥ 10 ký tự | BR-FLOW-04 |
 | 4 | Cập nhật trạng thái CTDT = TU_CHOI (refinement Cách 2 — KHÔNG quay DU_THAO); ghi ly_do_tu_choi + thoi_gian_tu_choi + nguoi_tu_choi | BR-FLOW-04 |
 | 5 | Gửi thông báo CB NV (người tạo CTDT) | BR-NOTIF-01 |
 | 6 | Ghi nhật ký (CHO_DUYET → TU_CHOI) | BR-DATA-05 |
+
+**Processing — Gửi phê duyệt Khóa học `[v3.5 — bổ sung CR-2 chốt 2026-05-08]`:**
+
+| Bước | Mô tả xử lý | BR áp dụng |
+|------|-------------|-----------|
+| 1 | Kiểm tra quyền CB NV + Khóa học thuộc đơn vị mình quản lý | BR-AUTH-01, BR-AUTH-08 |
+| 2 | Kiểm tra trạng thái Khóa học = DU_THAO (Khóa học áp Thay đổi 3 OUT — từ chối quay về DU_THAO, không tách TU_CHOI) | SM-KHOAHOC |
+| 3 | Validate đủ trường bắt buộc Khóa học (ten_khoa_hoc, ctdt_id, hinh_thuc, ngay_bat_dau, ngay_ket_thuc, ty_le_chuyen_can_toi_thieu, giang_vien_ids); kiểm tra CTDT cha = DA_DUYET | — |
+| 4 | Cập nhật trạng thái Khóa học = CHO_DUYET; auto fill `ngay_tiep_nhan = NOW()` (master `srs-v3.5.md` dòng 1930); clear ly_do_tu_choi + thoi_gian_tu_choi + nguoi_tu_choi (làm sạch lịch sử reject lần trước nếu có) | SM-KHOAHOC |
+| 5 | Gửi thông báo CB PD cùng đơn vị | BR-NOTIF-01 |
+| 6 | Ghi nhật ký (DU_THAO → CHO_DUYET) | BR-DATA-05 |
+
+**Processing — Phê duyệt Khóa học (CB PD) `[v3.5 — bổ sung CR-2 chốt 2026-05-08]`:**
+
+| Bước | Mô tả xử lý | BR áp dụng |
+|------|-------------|-----------|
+| 1 | Kiểm tra quyền CB PD + cùng đơn vị với CB NV tạo Khóa học | BR-AUTH-01, BR-AUTH-05 |
+| 2 | Kiểm tra trạng thái Khóa học = CHO_DUYET | SM-KHOAHOC |
+| 3 | Cập nhật trạng thái Khóa học = DA_DUYET; ghi `thoi_gian_duyet` + `nguoi_duyet` + `nguoi_tiep_nhan = nguoi_duyet` (master dòng 1931) | BR-FLOW-03 |
+| 4 | Gửi thông báo CB NV (người tạo Khóa học) | BR-NOTIF-01 |
+| 5 | Ghi nhật ký (CHO_DUYET → DA_DUYET) | BR-DATA-05 |
+
+**Processing — Từ chối Khóa học (CB PD) `[v3.5 — bổ sung CR-2 chốt 2026-05-08]`:**
+
+| Bước | Mô tả xử lý | BR áp dụng |
+|------|-------------|-----------|
+| 1 | Kiểm tra quyền CB PD + cùng đơn vị | BR-AUTH-01, BR-AUTH-05 |
+| 2 | Kiểm tra trạng thái Khóa học = CHO_DUYET | SM-KHOAHOC |
+| 3 | Validate ly_do_tu_choi ≥ 10 ký tự | BR-FLOW-04 |
+| 4 | Cập nhật trạng thái Khóa học = DU_THAO (Thay đổi 3 OUT — gộp với DU_THAO, không tách TU_CHOI); ghi ly_do_tu_choi + thoi_gian_tu_choi + nguoi_tu_choi | BR-FLOW-04 |
+| 5 | Gửi thông báo CB NV (người tạo Khóa học) | BR-NOTIF-01 |
+| 6 | Ghi nhật ký (CHO_DUYET → DU_THAO + lý do từ chối) | BR-DATA-05 |
 
 **Outputs — Danh sách:**
 
@@ -234,10 +267,15 @@ graph LR
 | E3 | Xóa CTDT có khóa học | ERR-CTDT-03 | "Không thể xóa chương trình đã có khóa học" | ERROR |
 | E4 | Sửa CTDT đã duyệt | ERR-CTDT-04 | "Không thể sửa chương trình đã được duyệt" | ERROR |
 | E5 | Tạo CTDT khi kế hoạch năm cha chưa duyệt | ERR-CTDT-05 | "Kế hoạch năm cha phải ở trạng thái Đã duyệt hoặc Đã công khai mới được tạo CTDT" | ERROR |
-| E6 | CB PD phê duyệt CTDT khác cấp | ERR-CTDT-PD-01 | "Không có quyền phê duyệt CTDT của đơn vị khác" | ERROR |
+| E6 | CB PD phê duyệt CTDT khác đơn vị | ERR-CTDT-PD-01 | "Không có quyền phê duyệt CTDT của đơn vị khác" | ERROR |
 | E7 | CTDT không ở trạng thái Chờ duyệt | ERR-CTDT-PD-02 | "Chương trình đào tạo không ở trạng thái chờ phê duyệt" | ERROR |
 | E8 | Từ chối không nhập lý do hoặc lý do < 10 ký tự | ERR-CTDT-PD-03 | "Lý do từ chối là bắt buộc và tối thiểu 10 ký tự" | ERROR |
 | E9 | CB NV gửi phê duyệt khi CTDT không ở trạng thái Bản nháp / Bị từ chối | ERR-CTDT-PD-04 | "Chỉ gửi phê duyệt được CTDT ở trạng thái Bản nháp hoặc Bị từ chối" | ERROR |
+| E10 | CB NV gửi phê duyệt Khóa học khi không ở trạng thái Bản nháp | ERR-KH-PD-01 | "Chỉ gửi phê duyệt được Khóa học ở trạng thái Bản nháp" | ERROR |
+| E11 | CB NV tạo Khóa học khi CTDT cha chưa duyệt | ERR-KH-PD-02 | "Chương trình đào tạo cha phải ở trạng thái Đã duyệt mới được tạo Khóa học" | ERROR |
+| E12 | CB PD phê duyệt Khóa học khác đơn vị | ERR-KH-PD-03 | "Không có quyền phê duyệt Khóa học của đơn vị khác" | ERROR |
+| E13 | Khóa học không ở trạng thái Chờ duyệt khi CB PD thao tác | ERR-KH-PD-04 | "Khóa học không ở trạng thái chờ phê duyệt" | ERROR |
+| E14 | Từ chối Khóa học không nhập lý do hoặc lý do < 10 ký tự | ERR-KH-PD-05 | "Lý do từ chối là bắt buộc và tối thiểu 10 ký tự" | ERROR |
 
 **Acceptance Criteria `[v3.5 — Thay đổi 2 cổng duyệt 2026-05-06: thêm 4 AC cho phê duyệt CTDT]`:**
 - **Given** CB NV truy cập CTDT **When** hiển thị **Then** danh sách CTDT thuộc đơn vị, phân trang
@@ -245,13 +283,17 @@ graph LR
 - **Given** CB NV chọn kế hoạch năm cha chưa duyệt **When** lưu CTDT **Then** hệ thống từ chối với ERR-CTDT-05
 - **Given** CB NV TW **When** xem danh sách **Then** chỉ thấy CTDT thuộc TW
 - **Given** CB NV xóa CTDT có khóa học **When** xác nhận **Then** từ chối + cảnh báo
-- **Given** CB NV gửi phê duyệt CTDT đầy đủ **When** xác nhận **Then** CTDT → Chờ duyệt + CB PD cùng cấp nhận thông báo
-- **Given** CB PD cùng cấp phê duyệt CTDT **When** xác nhận **Then** CTDT → Đã duyệt, ghi `thoi_gian_duyet` + `nguoi_duyet`; CB NV tạo nhận thông báo
+- **Given** CB NV gửi phê duyệt CTDT đầy đủ **When** xác nhận **Then** CTDT → Chờ duyệt + CB PD cùng đơn vị nhận thông báo
+- **Given** CB PD cùng đơn vị phê duyệt CTDT **When** xác nhận **Then** CTDT → Đã duyệt, ghi `thoi_gian_duyet` + `nguoi_duyet`; CB NV tạo nhận thông báo
 - **Given** CB PD từ chối CTDT **When** nhập lý do ≥10 ký tự **Then** CTDT → Bị từ chối, ghi `ly_do_tu_choi` + `thoi_gian_tu_choi` + `nguoi_tu_choi`; CB NV tạo nhận thông báo
 - **Given** CB NV sửa CTDT ở Bị từ chối rồi gửi phê duyệt lại **When** xác nhận **Then** CTDT → Chờ duyệt trực tiếp (KHÔNG qua Bản nháp — refinement Cách 2)
-- **Given** CB PD khác cấp cố phê duyệt **Then** hệ thống từ chối với ERR-CTDT-PD-01
+- **Given** CB PD khác đơn vị cố phê duyệt **Then** hệ thống từ chối với ERR-CTDT-PD-01
+- **Given** CB NV gửi phê duyệt Khóa học đầy đủ **When** xác nhận **Then** Khóa học → Chờ duyệt + CB PD cùng đơn vị nhận thông báo
+- **Given** CB PD cùng đơn vị phê duyệt Khóa học **When** xác nhận **Then** Khóa học → Đã duyệt, ghi `thoi_gian_duyet` + `nguoi_duyet`; CB NV tạo nhận thông báo
+- **Given** CB PD từ chối Khóa học **When** nhập lý do ≥10 ký tự **Then** Khóa học → Bản nháp (gộp theo Thay đổi 3 OUT), ghi `ly_do_tu_choi` + `thoi_gian_tu_choi` + `nguoi_tu_choi`; CB NV tạo nhận thông báo
+- **Given** CB NV sửa Khóa học bị từ chối rồi gửi phê duyệt lại **When** xác nhận **Then** Khóa học → Chờ duyệt; clear 3 trường reject metadata
 
-**Cross-ref:** BR-DATA-01 đến BR-DATA-08, BR-AUTH-05 (cùng cấp), BR-FLOW-03/04 (mở rộng cho CTDT), BR-NOTIF-01, Entity CHUONG_TRINH_DAO_TAO, KE_HOACH_DAO_TAO (cha), KHOA_HOC (con), SM-CTDT §5
+**Cross-ref:** BR-DATA-01 đến BR-DATA-08, BR-AUTH-05 (cùng đơn vị), BR-FLOW-03/04 (mở rộng cho CTDT + Khóa học), BR-NOTIF-01, Entity CHUONG_TRINH_DAO_TAO, KE_HOACH_DAO_TAO (cha), KHOA_HOC (con), SM-CTDT §5, SM-KHOAHOC §5
 
 ---
 
@@ -463,7 +505,6 @@ graph LR
 | EC-01 | Đăng ký vượt sức chứa lớp học | Kiểm tra số đăng ký (trừ từ chối) < số lượng tối đa. Nếu đầy → ERR-DK-DT-03 |
 | EC-02 | Hủy khóa học không thông báo học viên | Khi hủy khóa học, bắt buộc gửi thông báo cho tất cả học viên đã duyệt |
 | EC-03 | Import kết quả đào tạo đồng thời bởi 2 CB NV | Sử dụng khóa hàng trên KHOA_HOC. CB thứ 2 nhận ERR-DK-DT-04 "Khóa học đang được cập nhật bởi người khác" |
-| EC-04 | CTDT bị từ chối nhưng không cho sửa lại | Khi từ chối → cho phép CB NV chỉnh sửa và gửi lại phê duyệt |
 
 **Cross-ref:** SM-KHOAHOC, Entity DANG_KY_DAO_TAO, KHOA_HOC
 
@@ -523,8 +564,9 @@ graph LR
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Lấy KET_QUA_HOC_TAP theo khóa học | — |
-| 2 | Tạo file Excel (.xlsx) + download | — |
+| 1 | Kiểm tra quyền | BR-AUTH-01 |
+| 2 | Lấy KET_QUA_HOC_TAP theo khóa học, **tối đa 10.000 dòng** (BR-DATA-06) | BR-DATA-06 |
+| 3 | Tạo file Excel (.xlsx) + download | — |
 
 **Outputs `[v3.5 — Thay đổi 7+11 cổng duyệt 2026-05-06]`:**
 
@@ -556,6 +598,7 @@ graph LR
 | E2 | File format lỗi | ERR-KQ-02 | "File không đúng định dạng mẫu" | ERROR |
 | E3 | Mã HV không tồn tại | ERR-KQ-03 | "Mã học viên dòng {N} không tồn tại" | ERROR |
 | E4 | diem_danh không thuộc enum (CO_MAT / VANG_PHEP / VANG_KHONG_PHEP) | ERR-KQ-04 | "Giá trị điểm danh không hợp lệ" | ERROR |
+| E5 | Xuất Excel vượt 10.000 dòng | ERR-KQ-05 | "Vượt giới hạn 10.000 dòng, vui lòng lọc nhỏ hơn" (BR-DATA-06) | ERROR |
 
 **Acceptance Criteria:**
 - **Given** CB NV truy cập "Kết quả" **When** chọn khóa học **Then** hiển thị danh sách học viên + kết quả
@@ -590,13 +633,21 @@ graph LR
 | 2 | khoa_hoc_id | identifier | N | Khóa học |
 | 3 | ket_qua | text | N | DAT / KHONG_DAT |
 
-**Processing:**
+**Processing — Tìm kiếm:**
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền | BR-AUTH-01, BR-AUTH-08 |
 | 2 | Lấy KET_QUA_HOC_TAP kết hợp HOC_VIEN, KHOA_HOC theo điều kiện | — |
 | 3 | Phân trang | BR-DATA-07 |
+
+**Processing — Xuất Excel `[v3.5 — bổ sung CR-7 chốt 2026-05-09]`:**
+
+| Bước | Mô tả xử lý | BR áp dụng |
+|------|-------------|-----------|
+| 1 | Kiểm tra quyền | BR-AUTH-01, BR-AUTH-08 |
+| 2 | Lấy KET_QUA_HOC_TAP theo bộ lọc tìm kiếm hiện tại, **tối đa 10.000 dòng** (BR-DATA-06); nếu vượt → trả ERR-KQ-TK-01 | BR-DATA-06 |
+| 3 | Tạo file Excel (.xlsx) + trả download | — |
 
 **Outputs — Danh sách phân trang:**
 
@@ -614,10 +665,18 @@ graph LR
 
 **Postconditions:** Không thay đổi dữ liệu (read-only).
 
+**Error Handling `[v3.5 — bổ sung CR-7 chốt 2026-05-09]`:**
+
+| # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
+|---|--------------|--------|-------------------|----------|
+| E1 | Xuất Excel vượt 10.000 dòng | ERR-KQ-TK-01 | "Vượt giới hạn 10.000 dòng, vui lòng lọc nhỏ hơn" (BR-DATA-06) | ERROR |
+
 **Acceptance Criteria:**
 - **Given** CB NV nhập từ khóa **When** tìm kiếm **Then** hiển thị kết quả phù hợp, phân trang
 - **Given** CB NV lọc theo học viên **When** chọn **Then** hiển thị tất cả kết quả của học viên
 - **Given** CB NV lọc theo khóa học **When** chọn **Then** hiển thị kết quả khóa đó
+- **Given** CB NV nhấn "Xuất Excel" với bộ lọc trả ≤ 10.000 dòng **When** xác nhận **Then** tải file Excel
+- **Given** CB NV nhấn "Xuất Excel" với bộ lọc trả > 10.000 dòng **When** xác nhận **Then** hệ thống từ chối với ERR-KQ-TK-01 + gợi ý lọc nhỏ hơn
 
 **Cross-ref:** Entity KET_QUA_HOC_TAP, HOC_VIEN, KHOA_HOC
 
@@ -780,7 +839,7 @@ graph LR
 | 4 | loai_cau_hoi | text | Y | TRAC_NGHIEM_MOT / TRAC_NGHIEM_NHIEU / TU_LUAN |
 | 5 | cac_lua_chon | structured | Cond | ≥ 2 lựa chọn (nếu trắc nghiệm) |
 | 6 | dap_an_dung | text | Cond | 1 giá trị (SINGLE) hoặc array ≥ 2 (MULTI) |
-| 7 | trang_thai | text | Y | NHAP / CONG_KHAI / AN |
+| 7 | trang_thai | text | Y | KICH_HOAT / VO_HIEU_HOA `[v3.5 sync 2026-05-07 — BA chốt 2-state là canonical, bỏ NHAP/CONG_KHAI/AN cũ; khớp Entity §3.4.3.21 srs-v3.md; trigger migration BE backfill (NHAP|CONG_KHAI → KICH_HOAT, AN → VO_HIEU_HOA)]` |
 
 **Processing:**
 
@@ -1059,8 +1118,8 @@ graph LR
 | 1 | Kiểm tra quyền | BR-AUTH-01 |
 | 2 | Kiểm tra trạng thái IN ('NHAP', 'TU_CHOI') | SM-KH-DAO-TAO |
 | 3 | Validate đủ trường bắt buộc | — |
-| 4 | Cập nhật trạng thái = CHO_DUYET; nếu từ TU_CHOI → clear ly_do_tu_choi + thoi_gian_tu_choi | SM-KH-DAO-TAO |
-| 5 | Gửi thông báo CB PD cùng cấp | BR-NOTIF-01 |
+| 4 | Cập nhật trạng thái = CHO_DUYET; nếu từ TU_CHOI → clear ly_do_tu_choi + thoi_gian_tu_choi + nguoi_tu_choi (làm sạch lịch sử reject — đồng bộ Q2 chốt 2026-05-08) | SM-KH-DAO-TAO |
+| 5 | Gửi thông báo CB PD cùng đơn vị | BR-NOTIF-01 |
 | 6 | Ghi nhật ký (NHAP|TU_CHOI → CHO_DUYET) | BR-DATA-05 |
 
 **Outputs — Danh sách:**
@@ -1112,13 +1171,13 @@ graph LR
 
 **Mô tả:** CB PD phê duyệt hoặc từ chối kế hoạch đào tạo.
 
-**Tác nhân:** CB PD (cùng cấp, BR-FLOW-03)
+**Tác nhân:** CB PD (cùng đơn vị, BR-FLOW-03)
 
-**Preconditions:** CB PD đã đăng nhập, KH ở CHO_DUYET, CB PD cùng cấp.
+**Preconditions:** CB PD đã đăng nhập, KH ở CHO_DUYET, CB PD cùng đơn vị.
 
 **Inputs:** ke_hoach_id (identifier, Y), quyet_dinh (text, Y: PHE_DUYET/TU_CHOI), ly_do (text, Cond: bắt buộc nếu TU_CHOI).
 
-**Processing:** Kiểm tra quyền + cùng cấp → Duyệt/Từ chối → Thông báo CB NV → Ghi nhật ký.
+**Processing:** Kiểm tra quyền + cùng đơn vị → Duyệt/Từ chối → Thông báo CB NV → Ghi nhật ký.
 
 **Outputs:** ke_hoach_id, trang_thai (DA_DUYET/TU_CHOI), ly_do.
 
@@ -1186,13 +1245,13 @@ graph LR
 
 **Mô tả:** CB PD phê duyệt kết quả đào tạo. Nếu từ chối → khóa học quay lại DA_KET_THUC.
 
-**Tác nhân:** CB PD (cùng cấp, BR-FLOW-03)
+**Tác nhân:** CB PD (cùng đơn vị, BR-FLOW-03)
 
-**Preconditions:** CB PD đã đăng nhập. Khóa học ở CHO_DUYET_KQ. CB PD cùng cấp.
+**Preconditions:** CB PD đã đăng nhập. Khóa học ở CHO_DUYET_KQ. CB PD cùng đơn vị.
 
 **Inputs:** khoa_hoc_id (identifier, Y), quyet_dinh (text, Y: PHE_DUYET/TU_CHOI), ly_do (text, Cond).
 
-**Processing:** Kiểm tra quyền + cùng cấp → Duyệt: HOAN_THANH / Từ chối: DA_KET_THUC → Thông báo CB NV → Ghi nhật ký.
+**Processing:** Kiểm tra quyền + cùng đơn vị → Duyệt: HOAN_THANH / Từ chối: DA_KET_THUC → Thông báo CB NV → Ghi nhật ký.
 
 **Outputs:** khoa_hoc_id, trang_thai (HOAN_THANH/DA_KET_THUC), ly_do.
 
@@ -1565,7 +1624,7 @@ graph LR
 | Nút "Hủy" (mờ) | Đóng hộp thoại |
 
 **Thông báo:**
-- Khi gửi phê duyệt: CB PD cùng cấp nhận thông báo in-app + email
+- Khi gửi phê duyệt: CB PD cùng đơn vị nhận thông báo in-app + email
 - Khi phê duyệt / từ chối: CB NV tạo nhận thông báo (kèm lý do nếu từ chối)
 - Khi gửi phê duyệt lại sau từ chối: CB PD nhận thông báo
 
@@ -1630,14 +1689,14 @@ graph LR
 | File đính kèm | Tải tệp | Tùy chọn, multi-file PDF/DOC/DOCX/XLS/XLSX, ≤ 20MB/file |
 | Ghi chú | Vùng nhập văn bản dài | Tùy chọn |
 | **Trường công khai chuyên trang (5 CPF)** | nhóm trường | Theo Thay đổi 5 — bật/tắt cong_khai + ảnh đại diện + thời gian đăng tải (auto) + mô tả công khai + file đính kèm công khai |
-| Thanh hành động | Nhóm nút | **[Hủy]** (xác nhận nếu có thay đổi) **[Lưu nháp]** (lưu vào Bản nháp) **[Lưu và Gửi phê duyệt]** (lưu xong chuyển sang Chờ duyệt + thông báo CB PD cùng cấp) |
+| Thanh hành động | Nhóm nút | **[Hủy]** (xác nhận nếu có thay đổi) **[Lưu nháp]** (lưu vào Bản nháp) **[Lưu và Gửi phê duyệt]** (lưu xong chuyển sang Chờ duyệt + thông báo CB PD cùng đơn vị) |
 
 **Thành phần 7 — Banner Bị từ chối:** Khi CTDT ở trạng thái "Bị từ chối", form hiển thị banner đỏ ở đầu — `"Đã bị từ chối lúc dd/mm/yyyy bởi {tên CB PD}. Lý do: {lý do}"` + nút "Gửi phê duyệt lại" → CTDT quay về Chờ duyệt trực tiếp (refinement Cách 2, không cần đưa về Bản nháp).
 
 **Thành phần 8 — Tab "Đề xuất đào tạo":** Tab phụ tiếp nhận đề xuất từ DN/NHT. Bảng cột Lĩnh vực · Nội dung (cắt 150 ký tự) · Người đề xuất · Trạng thái (3 nhãn v3 — giữ nguyên do BA OUT Thay đổi 15) · Ngày tạo · Hành động (Xem · Tiếp nhận · Đánh dấu thực hiện).
 
 **Thông báo:**
-- Khi CB NV gửi phê duyệt: CB PD cùng cấp nhận thông báo in-app + email
+- Khi CB NV gửi phê duyệt: CB PD cùng đơn vị nhận thông báo in-app + email
 - Khi CB PD phê duyệt / từ chối: CB NV tạo nhận thông báo (kèm lý do nếu từ chối)
 - Khi CB NV gửi phê duyệt lại sau từ chối: CB PD nhận thông báo
 
@@ -1814,17 +1873,20 @@ stateDiagram-v2
     DU_THAO --> CHO_DUYET : CB NV trình phê duyệt
     CHO_DUYET --> DA_DUYET : CB PD phê duyệt
     CHO_DUYET --> DU_THAO : CB PD từ chối
-    DA_DUYET --> DANG_DIEN_RA : Đến ngày bắt đầu / CB NV kích hoạt
+    DA_DUYET --> DA_CONG_KHAI : CB NV công khai (mở đăng ký HV)
+    DA_CONG_KHAI --> DA_DUYET : CB NV hủy công khai
+    DA_CONG_KHAI --> DANG_DIEN_RA : Đến ngày bắt đầu / CB NV kích hoạt
     DANG_DIEN_RA --> DA_KET_THUC : Auto khi hết thời gian / CB NV kết thúc
     DA_KET_THUC --> CHO_DUYET_KQ : CB NV ghi nhận kết quả
     CHO_DUYET_KQ --> HOAN_THANH : CB PD duyệt kết quả
     CHO_DUYET_KQ --> DA_KET_THUC : CB PD từ chối
-    DU_THAO --> HUY : CB NV hủy
-    CHO_DUYET --> HUY : CB NV rút trình
-    DA_DUYET --> HUY : CB PD hủy (chưa có đăng ký)
+    DU_THAO --> DA_HUY : CB NV hủy
+    CHO_DUYET --> DA_HUY : CB NV rút trình
+    DA_DUYET --> DA_HUY : CB PD hủy (chưa công khai)
+    DA_CONG_KHAI --> DA_HUY : CB PD hủy (lý do bắt buộc nếu đã có đăng ký)
 ```
 
-> **Lưu ý hệ quả Thay đổi 3 OUT:** Máy trạng thái KHÔNG có trạng thái Bị từ chối / Kết quả bị từ chối tách riêng — gộp với DU_THAO / DA_KET_THUC; cán bộ nhìn vào "DU_THAO" không phân biệt được khóa chưa từng trình với khóa đã bị từ chối. KHÔNG có FR riêng cover transition CHO_DUYET → DA_DUYET cho Khóa học (gộp pattern với FR-III-15 phê duyệt KH năm hoặc dev tự xử lý).
+> **Lưu ý hệ quả Thay đổi 3 OUT cổng duyệt 2026-05-06:** Máy trạng thái KHÔNG có trạng thái Bị từ chối / Kết quả bị từ chối tách riêng — gộp với DU_THAO / DA_KET_THUC; cán bộ nhìn vào DU_THAO không phân biệt được khóa chưa từng trình với khóa đã bị từ chối. 9 trạng thái đồng bộ với master `srs-v3.5.md` Section 3.4.3.6 (DU_THAO, CHO_DUYET, DA_DUYET, DA_CONG_KHAI, DANG_DIEN_RA, DA_KET_THUC, CHO_DUYET_KQ, HOAN_THANH, DA_HUY). Transition CHO_DUYET → DA_DUYET cho Khóa học được mô tả qua Processing block trong FR-III-01 (chốt 2026-05-08 — bổ sung Processing 'Gửi phê duyệt / Phê duyệt / Từ chối' cho Khóa học, pattern tương tự CTDT).
 
 ### SM-KH-DAO-TAO: Kế hoạch đào tạo năm `[v3.5 — Thay đổi 1 — máy trạng thái mới]`
 
@@ -1866,7 +1928,7 @@ stateDiagram-v2
     [*] --> DU_THAO : CB NV tạo (trong KH năm đã duyệt — Mô hình A)
     DU_THAO --> CHO_DUYET : CB NV gửi phê duyệt
     CHO_DUYET --> DA_DUYET : CB PD phê duyệt
-    CHO_DUYET --> TU_CHOI : CB PD từ chối + lý do
+    CHO_DUYET --> TU_CHOI : CB PD từ chối + lý do ≥10 ký tự
     TU_CHOI --> CHO_DUYET : CB NV sửa rồi gửi duyệt lại
     DA_DUYET --> DANG_THUC_HIEN : Có ≥1 KHOA_HOC con DA_CONG_KHAI / DANG_DIEN_RA
     DANG_THUC_HIEN --> HOAN_THANH : Tất cả KHOA_HOC con HOAN_THANH / DA_HUY
@@ -1881,7 +1943,7 @@ stateDiagram-v2
 |----|-----|---------|-------|--------|
 | [*] | DU_THAO | CB NV tạo CTDT | KH năm cha (`ke_hoach_id`) DA_DUYET / DA_CONG_KHAI | FR-III-01 |
 | DU_THAO | CHO_DUYET | CB NV gửi phê duyệt | Đủ trường | FR-III-01 |
-| CHO_DUYET | DA_DUYET | CB PD phê duyệt | Cùng cấp (BR-AUTH-05) | FR-III-01 |
+| CHO_DUYET | DA_DUYET | CB PD phê duyệt | Cùng đơn vị (BR-AUTH-05) | FR-III-01 |
 | CHO_DUYET | TU_CHOI | CB PD từ chối | Có lý do ≥10 ký tự | FR-III-01 |
 | TU_CHOI | CHO_DUYET | CB NV gửi duyệt lại | Đã sửa | FR-III-01 |
 | DA_DUYET | DANG_THUC_HIEN | Auto khi có ≥1 KHOA_HOC con DA_CONG_KHAI / DANG_DIEN_RA | — | (auto) |
@@ -1899,14 +1961,14 @@ stateDiagram-v2
 | BR ID | Tên | FR áp dụng (trong nhóm này) |
 |-------|-----|---------------------------|
 | BR-AUTH-01 | Xác thực bắt buộc | Toàn bộ FR nhóm III |
-| BR-AUTH-05 | Phê duyệt cùng cấp | FR-III-01 (CTDT phê duyệt — Thay đổi 2), FR-III-15, FR-III-18 |
+| BR-AUTH-05 | Phê duyệt cùng đơn vị | FR-III-01 (CTDT phê duyệt — Thay đổi 2), FR-III-15, FR-III-18 |
 | BR-AUTH-08 | Phân quyền dữ liệu theo đơn vị | FR-III-01, FR-III-02, FR-III-06, FR-III-14, FR-III-22 |
 | BR-DATA-01 | Soft delete | FR-III-01, FR-III-09, FR-III-14, FR-III-22, FR-III-NEW-02 |
 | BR-DATA-02 | Multi-tenant scoping | FR-III-01, FR-III-14 |
 | BR-DATA-03 | Common fields | FR-III-01, FR-III-07, FR-III-09, FR-III-14, FR-III-22 |
 | BR-DATA-04 | Auto-gen mã | FR-III-01, FR-III-14, FR-III-19 |
 | BR-DATA-05 | Audit trail | Toàn bộ FR nhóm III (CUD) |
-| BR-DATA-06 | Export Excel | FR-III-01, FR-III-14 |
+| BR-DATA-06 | Export Excel | FR-III-01, FR-III-05, FR-III-06, FR-III-14 |
 | BR-DATA-07 | Pagination | FR-III-01, FR-III-02, FR-III-06, FR-III-14 |
 | BR-FLOW-03 | Không sửa / xóa sau phê duyệt | FR-III-01 (CTDT — Thay đổi 2), FR-III-14, FR-III-15, FR-III-18 |
 | BR-FLOW-04 | Từ chối yêu cầu lý do (refinement Cách 2) | FR-III-01 (CTDT — Thay đổi 2), FR-III-15, FR-III-18, FR-III-19 (hủy công bố KQ) |

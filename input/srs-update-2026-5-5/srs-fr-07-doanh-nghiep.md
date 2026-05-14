@@ -15,6 +15,7 @@
 |------|---------|-----------------|
 | 2026-04-03 | SRS Agent | Tạo nhóm V.III từ `srs-v3.md` theo Template v3.0 |
 | 2026-05-06 | BA + SRS Agent | **Phiên bản 3.5** — Cherry-pick 10 thay đổi từ srs-v4 lượt 2026-05-06 lần 2 vào v3.5 theo `v3.5-delta-reports/v3.5-delta-fr-07.md`. Bao gồm: bỏ Import DN từ Excel (B2b — UC ngoài CSV), bỏ chế độ "Thêm mới" CMS — chuyển sang DN tự đăng ký FR-VIII-22 (B1), đồng bộ `tinh_thanh_id` FK → DANH_MUC loai='TINH_THANH' mã GSO 01-63 theo QĐ 124/2004/QĐ-TTg (B1), mô tả semantics email DN không UNIQUE + sync TK-first BR-AUTH-EMAIL-01 (B1), sửa DON_VI "3 tầng" → "2 tầng TW → {BN, ĐP} ngang cấp" (B1), thêm Mô tả + URL + Quyền truy cập SCR-01/02 (B1), đồng bộ tên trường Inputs/SCR theo Đối tượng dữ liệu DOANH_NGHIEP — 4 cặp (B1), bổ sung `tong_nguon_von` vào DOANH_NGHIEP + CHECK ≥ 0 (B1), tách Đối tượng dữ liệu DOANH_NGHIEP_LINH_VUC M-N + UI Lĩnh vực KD multi-select (B1), sync nốt vị trí thứ 4 `tinh_thanh_id` ở SCR-V.III-02 dòng 11 (B1). Quyết định CĐT/BA — BỎ chức năng Xuất Excel khỏi FR-V.III-01 (Thay đổi 5 cũ trong delta — đã OUT, không apply vào v3.5). |
+| 2026-05-09 | BA + SRS Agent | Đóng câu hỏi BA mở "nguồn `LINH_VUC_KINH_DOANH`" — chốt **VSIC 2025 cấp 4 theo QĐ 36/2025/QĐ-TTg**, đồng bộ chuẩn ĐKKD NĐ 168/2025/NĐ-CP Đ.7. Bổ sung cite VSIC ở 3 vị trí: Inputs FR-V.III-01 row 17, Inputs FR-V.III-02 row 4, Đối tượng dữ liệu DOANH_NGHIEP_LINH_VUC field `linh_vuc_id`. CRUD danh mục ở FR-VIII-31 (srs-fr-10), seed 517 records (22 cấp 1 + 495 cấp 4). |
 
 ---
 
@@ -110,7 +111,7 @@ Quản lý hồ sơ doanh nghiệp nhỏ và vừa đã/đang được hỗ tr�
 | 14 | chuc_vu_dai_dien | text | N | — | — | Người dùng |
 | 15 | email | text | N | Format email hợp lệ | — | Người dùng |
 | 16 | dien_thoai | text | N | — | — | Người dùng |
-| 17 | linh_vuc_ids | structured | N | Multi-select FK → DANH_MUC (loai='LINH_VUC_KINH_DOANH'); lưu thành DOANH_NGHIEP_LINH_VUC (M-N) | — | Người dùng |
+| 17 | linh_vuc_ids | structured | N | Multi-select FK → DANH_MUC (loai='LINH_VUC_KINH_DOANH', mã VSIC cấp 4 theo QĐ 36/2025/QĐ-TTg, quản lý ở FR-VIII-31); lưu thành DOANH_NGHIEP_LINH_VUC (M-N) | — | Người dùng |
 | 18 | ghi_chu | text (long) | N | — | — | Người dùng |
 | 19 | file_dinh_kem | structured | N | Upload nhiều file | — | Người dùng |
 
@@ -219,7 +220,7 @@ Tìm kiếm doanh nghiệp theo nhiều tiêu chí: từ khóa (tên/MST), quy m
 | 1 | tu_khoa | text | N | Tìm theo tên/MST | — | Người dùng |
 | 2 | quy_mo | text | N | SIEU_NHO / NHO / VUA | — | Người dùng |
 | 3 | tinh_thanh_id | identifier | N | FK → DANH_MUC (loai='TINH_THANH', mã GSO 01-63) | — | Người dùng |
-| 4 | linh_vuc_ids | structured | N | Multi-select FK → DANH_MUC (loai='LINH_VUC_KINH_DOANH') | — | Người dùng |
+| 4 | linh_vuc_ids | structured | N | Multi-select FK → DANH_MUC (loai='LINH_VUC_KINH_DOANH', mã VSIC cấp 4 theo QĐ 36/2025/QĐ-TTg, quản lý ở FR-VIII-31) | — | Người dùng |
 | 5 | tu_ngay | date | N | Thời gian hỗ trợ từ | — | Người dùng |
 | 6 | den_ngay | date | N | Thời gian hỗ trợ đến | — | Người dùng |
 
@@ -286,7 +287,7 @@ Tìm kiếm doanh nghiệp theo nhiều tiêu chí: từ khóa (tên/MST), quy m
 | 7 | filter-bar | Từ khóa | search-box | Tìm theo tên DN / MST | change → filter | Luôn hiển thị |
 | 8 | filter-bar | Quy mô | select | SIEU_NHO / NHO / VUA | change → filter | Luôn hiển thị |
 | 9 | filter-bar | Tỉnh thành | select | Danh mục tỉnh/TP | change → filter | Luôn hiển thị |
-| 10 | filter-bar | Lĩnh vực KD | multi-select | Lĩnh vực kinh doanh (chọn 1 hoặc nhiều) | change → filter | Luôn hiển thị |
+| 10 | filter-bar | Lĩnh vực KD | multi-select có search | `linh_vuc_ids` — chọn 1 hoặc nhiều ngành VSIC cấp 4 (FK → DANH_MUC `loai='LINH_VUC_KINH_DOANH'`, quản lý ở FR-VIII-31). Dropdown chỉ cho chọn bản ghi cấp 4 đang `KICH_HOAT`; bản ghi cấp 1 A–V chỉ dùng làm group header, không chọn được. Option cấp 4 hiển thị dạng "mã cấp 4 — tên cấp 4"; header cấp 1 hiển thị dạng "mã cấp 1 — tên cấp 1" theo `danh_muc_cha_id`. Search không phân biệt hoa/thường, hỗ trợ có dấu/không dấu, match theo mã/tên cấp 4 và mã/tên cấp 1 cha; nếu query match cấp 1 cha thì hiển thị toàn bộ cấp 4 con đang `KICH_HOAT` thuộc nhóm đó | change → filter | Luôn hiển thị |
 | 11 | filter-bar | Từ ngày | date-picker | Thời gian hỗ trợ từ | change → filter | Luôn hiển thị |
 | 12 | filter-bar | Đến ngày | date-picker | Thời gian hỗ trợ đến | change → filter | Luôn hiển thị |
 | 13 | filter-bar | Nút Tìm kiếm | button | "Tìm kiếm" | click → query | Luôn hiển thị |
@@ -347,7 +348,7 @@ Tìm kiếm doanh nghiệp theo nhiều tiêu chí: từ khóa (tên/MST), quy m
 | 23 | content | Phụ nữ làm chủ | checkbox | la_nu_lam_chu (NĐ55 Điều 4) | — | Luôn hiển thị |
 | 24 | content | Số LĐ nữ | text-input | so_lao_dong_nu | — | Luôn hiển thị |
 | 25 | content | Số LĐ khuyết tật | text-input | so_lao_dong_khuyet_tat | — | Luôn hiển thị |
-| 26 | content | Lĩnh vực KD | multi-select | linh_vuc_ids — chọn 1 hoặc nhiều lĩnh vực (DOANH_NGHIEP_LINH_VUC M-N) | — | Luôn hiển thị |
+| 26 | content | Lĩnh vực KD | multi-select có search | `linh_vuc_ids` — chọn 1 hoặc nhiều ngành VSIC cấp 4 (DOANH_NGHIEP_LINH_VUC M-N, FK → DANH_MUC `loai='LINH_VUC_KINH_DOANH'`, quản lý ở FR-VIII-31). Dropdown chỉ cho chọn bản ghi cấp 4 đang `KICH_HOAT`; bản ghi cấp 1 A–V chỉ dùng làm group header, không chọn được. Option cấp 4 hiển thị dạng "mã cấp 4 — tên cấp 4" (vd "2610 — Sản xuất linh kiện điện tử"). Header cấp 1 hiển thị dạng "mã cấp 1 — tên cấp 1" (vd "C — Công nghiệp chế biến, chế tạo") theo `danh_muc_cha_id`. Search không phân biệt hoa/thường, hỗ trợ có dấu/không dấu, match theo mã/tên cấp 4 và mã/tên cấp 1 cha; nếu query match cấp 1 cha thì hiển thị toàn bộ cấp 4 con đang `KICH_HOAT` thuộc nhóm đó | — | Luôn hiển thị |
 | 27 | content | Ghi chú | textarea | ghi_chu | — | Luôn hiển thị |
 | 28 | content | File đính kèm | file-upload | file_dinh_kem | upload nhiều file | Luôn hiển thị |
 | 29 | action-bar | Hủy | button | — | click → quay lại | Luôn hiển thị |
@@ -479,7 +480,13 @@ erDiagram
 | Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
 |-----------|-----------|----------|------------|---------|-------|
 | doanh_nghiep_id | identifier | Y | FK → DOANH_NGHIEP(id) | | DN |
-| linh_vuc_id | identifier | Y | FK → DANH_MUC(id), loai='LINH_VUC_KINH_DOANH' | | Mã lĩnh vực kinh doanh |
+| linh_vuc_id | identifier | Y | FK → DANH_MUC(id), loai='LINH_VUC_KINH_DOANH' (mã VSIC cấp 4 theo QĐ 36/2025/QĐ-TTg, 517 records seed khi deploy DDL — 22 cấp 1 + 495 cấp 4 — và UI CRUD ở FR-VIII-31) | | Mã lĩnh vực kinh doanh |
+| created_at | datetime | Y | DEFAULT NOW() | NOW() | **Common Field** — Thời điểm tạo bản ghi gán lĩnh vực |
+| updated_at | datetime | Y | DEFAULT NOW(), auto-update khi sửa | NOW() | **Common Field** — Thời điểm cập nhật gần nhất |
+| created_by | identifier | N | FK → TAI_KHOAN(id), NULL khi import bulk / DN tự đăng ký | | **Common Field** — Người tạo (NULL khi auto từ FR-VIII-22 hoặc job import) |
+| updated_by | identifier | N | FK → TAI_KHOAN(id), NULL khi auto-update | | **Common Field** — Người cập nhật gần nhất (NULL khi auto-update không qua user) |
+| is_deleted | boolean | Y | | 0 | **Common Field** — Soft delete flag (BR-DATA-01) |
+| deleted_at | datetime | N | Chỉ set khi is_deleted=1 | | **Common Field** — Thời điểm xóa mềm |
 
 **CHECK constraints bổ sung:**
 - UNIQUE constraint trên cặp (doanh_nghiep_id, linh_vuc_id) — không trùng lặp lĩnh vực cho cùng 1 DN

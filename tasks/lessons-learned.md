@@ -453,3 +453,67 @@ File ghi lại vấn đề thực tế gặp khi chạy QA + bài học áp dụ
 - Audit kết quả 2026-05-10: scan 22 bug-report R7 → CHỈ BUG-MAIL-FL-001 có pattern này. Các bug API-direct khác (RESET MK, NHT, JWT revoke, TVCS, chi-tra) đều correct context (UI broken / data verification / BE behavior bug).
 
 ---
+
+## 2026-05-13 — R20 deep-verify finding: 5/9 bug Open có vấn đề do dùng SRS cũ + quote sai mã
+
+**Vấn đề:**
+Sau R20 reverify 9 bug Open, deep-verify SRS v3.5 + NotebookLM phát hiện **5/9 bug có vấn đề** (~56%):
+
+| Bug | Vấn đề | Verdict |
+|---|---|---|
+| BUG-FUNC-DG-016 | Dùng state machine v3 cũ (6 states gồm `DA_DANH_GIA`). v3.5 đã đổi 8 states không có state này. | INVALID — đóng |
+| BUG-VV-FN-PC-CROSS-CAP-01 | Hiểu sai ERR-PC-05 = chặn user khác đơn vị, không chặn cross-cấp TVV. NĐ 77/2008 cho TVV toàn quốc. | INVALID — đóng |
+| BUG-BC-KYBAOCAO-NOT-VALIDATED | Giả định BE phải groupBy theo enum theoKy. SRS chỉ định là filter range. | WONT-FIX — đóng |
+| BUG-VV-FN-PC-INACTIVE-01 | Đúng concept BE phải chặn inactive, NHƯNG expect mã `ERR-PC-06` (sai). Đúng là `ERR-PC-02`. | Rewrite mã ERR |
+| BUG-VV-PC-WRN-01 | Prescribe button text "[Tìm thủ công]". SRS chỉ yêu cầu mechanism (có thể button / toggle / clear filter). | Rewrite mechanism |
+
+Talk-past-each-other 8+ round vì:
+- QA log bug expect 1 thứ
+- Dev hiểu khác hoặc fix theo cách ad-hoc (vd dùng mã `ERR-VAL-VI-PC-09` thay vì `ERR-PC-02`)
+- Re-test fail → log lại → cycle lặp.
+
+**Root cause 5 pattern:**
+
+1. **QA dùng SRS v3 cũ thay vì v3.5** — DG-016 (state machine), một phần BC-KYBAOCAO.
+2. **QA quote sai mã ERR** — VV-PC-INACTIVE (expect PC-06 → đúng PC-02), BC-DATA-SCOPE-LEAK (ref FR-XIII → đúng FR-IX).
+3. **QA hiểu sai context spec** — VV-PC-CROSS-CAP (hiểu ERR-PC-05 là cross-cấp, đúng là khác đơn vị).
+4. **Bug viết prescriptive** — VV-PC-WRN-01 (button) thay vì describe requirement (mechanism).
+5. **SRS tự mâu thuẫn** — E2E-S4-011 (FR-05 dùng `LOAI_HINH_HT` vs FR-10 dùng `LOAI_HINH_HO_TRO`).
+
+**Quyết định xử lý — 6 hành động cứng (đã viết vào dev-fix-list.md):**
+
+1. **Quy trình 3-step verify TRƯỚC khi log bug:**
+   - Step A: Check SRS version. Cấm reference `srs-v3/` nếu module có `srs-update-2026-5-5/`.
+   - Step B: Grep nguyên văn mã ERR / FR ID / state / enum. Quote `<file_path>:<line>` vào bug.
+   - Step C: NotebookLM cross-check 1 query cho mã ERR / state machine có nguy cơ hiểu sai.
+
+2. **Bug template strict thêm field "Theo SRS quote nguyên văn":**
+   ```
+   Theo SRS `<file_path>:<line>`:
+   > "<text>"
+   ```
+   Thiếu file:line + quote → bug không hợp lệ.
+
+3. **State machine + enum reference card** — tạo `input/data/state-machines-v3.5.md` với 14 module × state v3.5 + bảng chuyển đổi v3→v3.5.
+
+4. **SRS contradiction tracking** — tạo `tasks/srs-contradictions.md`, mỗi tuần escalate BA chốt.
+
+5. **Bug wording rule** — describe requirement, KHÔNG prescribe implementation.
+   - ❌ "FE thiếu button [Tìm thủ công]"
+   - ✅ "FE thiếu mechanism cho phép tìm/override LV"
+
+6. **Hook enforcement (deferred)** — `check-bug-srs-version.py`, `check-bug-err-code-quoted.py`, `check-bug-state-machine-quoted.py`. Sau khi rule stabilize 2-3 round.
+
+**Bài học áp dụng:**
+
+1. **Mỗi round QA đầu tiên: list spec v3.5 hiện có.** Update CLAUDE.md note nếu module nào chỉ còn v3.
+2. **Khi log bug: BẮT BUỘC grep `<mã ERR / state / enum>` SRS v3.5 + quote.** Không có quote = bug entry không hợp lệ.
+3. **Khi spec ambiguous / contradict: STOP log bug, escalate BA trước.** Đừng force interpretation.
+4. **Re-test bug lần 2+: BẮT BUỘC deep-review SRS lại.** Có thể bug viết sai từ đầu, không phải dev không fix.
+5. **Bug viết theo "describe what's broken (per spec)" — KHÔNG "prescribe implementation"**. Implementation là việc dev quyết.
+
+**Reference:**
+- Verdict R20 deep-verify: [`output/qa-reports/round7-2026-05-06/reverify-2026-05-12/dev-fix-list.md`](../output/qa-reports/round7-2026-05-06/reverify-2026-05-12/dev-fix-list.md) — section "Phương án xử lý triệt để".
+- Memory rule liên quan: `feedback_deep_review_before_ba_defer.md` (2026-05-07) — extend rule này: trigger deep-review không chỉ cho "BA defer" mà cho **mọi bug Open >2 round + bug có mã ERR/state machine specific**.
+
+---

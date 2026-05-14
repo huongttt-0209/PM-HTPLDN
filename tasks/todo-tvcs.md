@@ -35,4 +35,4 @@
 
 - ⚠️ **R7.7.5** 🔄 TVCS functional 61 TC v3.5 `[~92% — 56/61 R20 +1⚠️ TV-041]` <a id="r7-7-5"></a>
   - **Kết quả:** ⚠️ R20 56 ✅ + 1 ⚠️ TV-041. TV-041 unblock retest BE PASS / FE+filter Sai spec → BUG-009. [functional-test-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/functional/tu-van-chuyen-sau/functional-test-report-r7-7-5-tvcs.md)
-  - **Bug:** [Pass-bug-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/Pass-bug-report-r7-7-5-tvcs.md) 10/10 + [bug-report-r7-7-5-tvcs-r16.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs-r16.md) 4/9 đóng (Open: 001/004⚠/005⚠/008⚠/009 — 3 PARTIAL + 1 mới R20)
+  - **Bug:** [Pass-bug-report-r7-7-5-tvcs.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/Pass-bug-report-r7-7-5-tvcs.md) 10/10 + [Pass-Pass-bug-report-r7-7-5-tvcs-r16.md](../output/qa-reports/round7-2026-05-06/bug-reports/tu-van-chuyen-sau/Pass-Pass-bug-report-r7-7-5-tvcs-r16.md) 10/10 đóng (Open: 001/004⚠/005⚠/008⚠/009 — 3 PARTIAL + 1 mới R20)

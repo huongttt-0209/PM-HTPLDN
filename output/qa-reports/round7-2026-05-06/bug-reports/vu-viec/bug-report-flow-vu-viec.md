@@ -5,16 +5,16 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | Claude Code (Opus 4.7) — QA Automation |
-| **Ngày** | 2026-05-12 18:48:00 |
-| **Loại test** | Workflow (FR-05 v3.5 refactor) |
-| **Round** | R19 |
+| **Ngày** | 2026-05-14 13:30:00 |
+| **Loại test** | Workflow (FR-05 v3.5 refactor) + R20 deep-verify SRS reclassify |
+| **Round** | R23 |
 | **Tài liệu tham chiếu** | [`srs-update-2026-5-5/srs-fr-05-vu-viec.md`](../../../../input/srs-update-2026-5-5/srs-fr-05-vu-viec.md) · [`_DELTA-MAP-FR05.md`](../../../../input/srs-update-2026-5-5/_DELTA-MAP-FR05.md) · [`output/funtion/7.5-vu-viec-htpl.md`](../../../funtion/7.5-vu-viec-htpl.md) · [`output/smoke/6.5-sm-vuviec.md`](../../../smoke/6.5-sm-vuviec.md) |
 
 ---
 
 ## Tổng hợp
 
-Phát hiện **7** lỗi spec v3.5 trên workflow Vụ việc HTPL. Hiện trạng: **1 Open** (BUG-VV-PC-WRN-01 — Minor, modal empty state thiếu nút override [Tìm thủ công]) · **6 Closed** sau retest R10/R11/R13/R18.
+Phát hiện **7** lỗi spec v3.5 trên workflow Vụ việc HTPL. Hiện trạng: **1 Open** (BUG-VV-PC-WRN-01 — Minor, modal empty state thiếu nút override [Tìm thủ công] — R20 2026-05-13 still missing) · **6 Closed** sau retest R10/R11/R13/R18.
 
 ### Severity breakdown
 
@@ -26,7 +26,7 @@ Phát hiện **7** lỗi spec v3.5 trên workflow Vụ việc HTPL. Hiện trạ
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
-| BUG-VV-PC-WRN-01 | Minor | P2 | UI/UX | C3-6 | `srs-fr-05-vu-viec.md:768, 778` (Error Handling FR-V.I-09 E3 WRN-PC-01 + Acceptance "cho phép tìm thủ công") | Modal Phân công empty state thiếu nút [Tìm thủ công] override | Open |
+| BUG-VV-PC-WRN-01 | Minor | P2 | UI/UX | C3-6 | `input/srs-update-2026-5-5/srs-fr-05-vu-viec.md:781` (Acceptance FR-V.I-09 "cho phép tìm thủ công" — mechanism, không prescribe button text) | Modal Phân công empty state thiếu mechanism cho phép CB NV tìm/override TVV ngoài LV phù hợp | Open |
 | ~~BUG-VV-NHT-SCOPE-01~~ | Critical | P0 | Permission | TP-VV-04, B3 | `srs-fr-05-vu-viec.md` BR-AUTH-08 + BR-AUTH-VPD + FR-V.I-09 step B3 | ~~NHT cross-donVi assignment block 403 ERR-AUTH-VPD-00-02~~ | Closed/Reclass |
 | ~~BUG-VV-NHT-NOTIF-01~~ | Major | P1 | Workflow | UC62, B2-B3 | `srs-fr-05-vu-viec.md` UC62 + FR-V.I-09 step B2 | ~~Phân công VV không trigger notification cho NHT/TVV/CG được phân công~~ | Closed/Partial |
 | ~~BUG-VV-SCHEMA-01~~ | Critical | P0 | Data | C3-1 | `srs-fr-05-vu-viec.md:712-715` + `_DELTA-MAP-FR05.md` Thay đổi 8 | ~~Entity VU_VIEC chưa migrate v3.5 (`loaiDoiTuongXuLy/nguoiXuLyId/toChucTuVanId` missing)~~ | Closed |
@@ -46,14 +46,16 @@ Phát hiện **7** lỗi spec v3.5 trên workflow Vụ việc HTPL. Hiện trạ
 
 ---
 
-## BUG-VV-PC-WRN-01 — Modal Phân công empty state thiếu nút [Tìm thủ công]
+## BUG-VV-PC-WRN-01 — Modal Phân công empty state thiếu mechanism cho phép CB NV tìm/override TVV ngoài LV phù hợp
 
-> **Re-test:** 2026-05-12 18:48:00 R19 — ❌ STILL Open (Minor P2). Dev claim 14:30 chưa fix phần nút [Tìm thủ công]. Login `cb_nv_tw_03` → VV-BTP-TW-20260511-001 LV Thuế → modal Phân công → click combobox CÁ NHÂN → focus search input dùng `document.execCommand('insertText', false, 'XXKHONGMATCH99')` → DOM `evaluate_script({itemCount:0, emptyClass:".ant-select-item-empty", buttons:[]})`. Text empty state khớp WRN-PC-01 line 768 ✓. **Vẫn không có button [Tìm thủ công]** (Acceptance line 778). TC mode same behavior. Cần FE add override button.
->
+> **Re-test:** 2026-05-14 13:30:00 R23-verify3 (fresh seed VV + UI-first) — ❌ CONFIRMED OPEN Minor P2 (replicate finding R23 trên fresh data LV Đất đai + meaningful search keyword). UI walk `cb_nv_tw_03` BTP-TW: tạo VV2 VV-BTP-TW-20260514-002 LV Đất đai (form Nhập thủ công) → Kiểm tra hồ sơ Kết luận "Đạt — chuyển sang phân công" → state DANG_KIEM_TRA → click button [Phân công] header → modal `Phân công tư vấn viên` mở → DOM probe: dialog 6 control (1 radio Cá nhân/Tổ chức + 1 dropdown gợi ý + 1 textarea ghi chú) + 2 button (Hủy/Xác nhận) — **KHÔNG có button [Tìm thủ công]/[Mở rộng LV]/toggle [Bỏ filter LV]/dropdown thứ 2 unfiltered**. Dropdown render 5 TVV/NHT LV-Đất-đai matched (default). Gõ keyword `hương tvv1` (TVV-BTP-TW-0029, state HOAT_DONG, LV "Dân sự/Hành chính/Lao động/Thuế" — KHÔNG Đất đai, đã verify qua `/api/v1/tu-van-viens` API global) → listbox empty với message **"Trống — Không tìm thấy đối tượng phù hợp lĩnh vực — Liên hệ QTHT để mở rộng lĩnh vực TVV/NHT, hoặc chọn vụ khác"**. BE LV-locked enforced, FE message hint user về 2 path duy nhất (contact QTHT hoặc đổi vụ), KHÔNG có "tìm thủ công" path per `srs-fr-05-vu-viec.md:781` AC. **Kết luận:** bug structural confirmed real với fresh data + active TVV pool (không phải false positive do TVV inactive). Dev FE+BE bổ sung mechanism (button/toggle/clear-LV/dropdown unfiltered — implementation tùy dev). Evidence: [image/r23v3-seed-bug-vv-pc-wrn-01-vv2-search-huong-tvv1-empty-2026-05-14.png](image/r23v3-seed-bug-vv-pc-wrn-01-vv2-search-huong-tvv1-empty-2026-05-14.png) · [image/r23v3-seed-bug-vv-pc-wrn-01-vv2-datdai-modal-no-override-2026-05-14.png](image/r23v3-seed-bug-vv-pc-wrn-01-vv2-datdai-modal-no-override-2026-05-14.png).
+
+![BUG-VV-PC-WRN-01 — R20 modal empty state vẫn thiếu button [Tìm thủ công]](image/r20-bug-pc-wrn-01-no-tim-thu-cong-2026-05-13.png)
+
 
 ### Mô tả
 
-Khi pool TVV/CG/NHT cho VV trả empty (LV không có ai HOAT_DONG match, hoặc force search no-match), modal Phân công hiển thị empty state với text đúng spec WRN-PC-01 nhưng **thiếu nút [Tìm thủ công]** override action theo Acceptance FR-V.I-09 line 778 — CB NV không có path "tìm thủ công" để vượt qua empty state.
+Khi pool TVV/CG/NHT cho VV trả empty (LV không có ai HOAT_DONG match, hoặc force search no-match), modal Phân công hiển thị empty state với text đúng spec WRN-PC-01 nhưng **thiếu mechanism cho phép CB NV tìm/override TVV ngoài LV phù hợp** theo Acceptance FR-V.I-09 line 781 — CB NV không có path "tìm thủ công" để vượt qua empty state. Mechanism có thể là button, toggle filter, clear LV filter, hoặc dropdown unfiltered — implementation chi tiết dev quyết.
 
 ### Các bước tái hiện
 
@@ -65,13 +67,10 @@ Khi pool TVV/CG/NHT cho VV trả empty (LV không có ai HOAT_DONG match, hoặc
 
 ### Kết quả mong đợi
 
-Theo `srs-fr-05-vu-viec.md:768` Error Handling FR-V.I-09 E3 + line 778 Acceptance:
+Theo SRS `input/srs-update-2026-5-5/srs-fr-05-vu-viec.md:781` (Acceptance Criteria FR-V.I-09):
+> "Given không có đối tượng phù hợp When hiển thị Then cảnh báo + cho phép tìm thủ công"
 
-| E3 | Không có đối tượng phù hợp | WRN-PC-01 | "Không tìm thấy đối tượng phù hợp lĩnh vực" | WARNING |
-
-Acceptance line 778: **Given** không có đối tượng phù hợp **When** hiển thị **Then** cảnh báo **+ cho phép tìm thủ công**.
-
-UI phải hiện cả warning text + path tìm thủ công (override button).
+Mechanism có thể là button, toggle filter, clear LV filter, hoặc dropdown unfiltered. Implementation chi tiết dev quyết. UI phải hiện cả warning text WRN-PC-01 + một mechanism cho phép CB NV vượt qua empty state để tìm/override TVV ngoài LV match.
 
 ### Kết quả thực tế
 

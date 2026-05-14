@@ -9,6 +9,14 @@
 
 ---
 
+## Lịch sử thay đổi
+
+| Ngày | Tác giả | Mô tả thay đổi |
+|------|---------|-----------------|
+| 2026-05-11 | BA + Codex | **Round 7 BA decision:** Bổ sung định nghĩa ngưỡng SLA 4 mức cho hồ sơ chi trả: `warning`, `urgent`, `critical`, `overdue`; cập nhật UI C07 và BR-CALC-03 để Dev/QA có expected thống nhất. |
+
+---
+
 ## Mục lục file này
 
 - [1. Tổng quan nhóm](#1-tổng-quan-nhóm)
@@ -682,7 +690,7 @@ graph LR
 | 1 | Kiểm tra quyền | BR-AUTH-01 |
 | 2 | Xác nhận HS ở DANG_THAM_DINH VÀ `ket_qua_tham_dinh = DAT` | SM-CHITRA |
 | 3 | Chuyển trạng thái CHO_PHE_DUYET | SM-CHITRA |
-| 4 | Gửi thông báo CB PD cùng cấp | BR-AUTH-05 |
+| 4 | Gửi thông báo CB PD cùng đơn vị | BR-AUTH-05 |
 | 5 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Outputs:**
@@ -703,7 +711,7 @@ graph LR
 | E1 | HS chưa thẩm định xong hoặc `ket_qua_tham_dinh ≠ DAT` | ERR-CT-TRINH-01 | "Hồ sơ chưa đủ điều kiện trình phê duyệt" | ERROR |
 
 **Acceptance Criteria:**
-- **Given** CB NV chọn HS ở DANG_THAM_DINH với KQ thẩm định Đạt **When** nhấn "Trình phê duyệt" **Then** HS → CHO_PHE_DUYET, CB PD cùng cấp nhận thông báo
+- **Given** CB NV chọn HS ở DANG_THAM_DINH với KQ thẩm định Đạt **When** nhấn "Trình phê duyệt" **Then** HS → CHO_PHE_DUYET, CB PD cùng đơn vị nhận thông báo
 - **Given** HS ở DANG_THAM_DINH nhưng chưa có KQ thẩm định **When** nhấn "Trình phê duyệt" **Then** hệ thống từ chối với ERR-CT-TRINH-01
 
 ---
@@ -731,7 +739,7 @@ graph LR
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra quyền CB PD cùng cấp (`user.don_vi_id = hs.don_vi_id`) | BR-AUTH-01, BR-AUTH-05 |
+| 1 | Kiểm tra quyền CB PD cùng đơn vị (`user.don_vi_id = hs.don_vi_id`) | BR-AUTH-01, BR-AUTH-05 |
 | 2 | Xác nhận HS ở CHO_PHE_DUYET | SM-CHITRA |
 | 3 | Nếu DUYET → chuyển trạng thái DA_DUYET, ghi `nguoi_phe_duyet_id`, `ngay_phe_duyet = NOW()` | SM-CHITRA |
 | 4 | Nếu TU_CHOI → **chuyển trạng thái DANG_THAM_DINH (trả về để CB NV điều chỉnh)**, ghi `ly_do_tu_choi` vào HO_SO_CHI_TRA (KHÔNG ghi `thoi_gian_tu_choi` vì đây là trả về, không phải từ chối cuối) | SM-CHITRA, BR-FLOW-04 |
@@ -923,7 +931,7 @@ graph LR
 | 13 | table | Số tiền đề nghị | number | Giá trị `so_tien_de_nghi` (định dạng VNĐ, dấu chấm hàng nghìn, hậu tố "đ") (130px) | — | Luôn |
 | 14 | table | Số tiền được duyệt | number | Giá trị `so_tien_duoc_duyet` (VNĐ). "—" nếu chưa duyệt (130px) | — | Luôn |
 | 15 | table | Trạng thái | C06 badge | 10 trạng thái SM-CHITRA với màu tương ứng (140px) | — | Luôn |
-| 16 | table | SLA | C07 | 4 mức cảnh báo (80px) | — | Luôn |
+| 16 | table | SLA | C07 | 4 mức cảnh báo theo BR-CALC-03: warning / urgent / critical / overdue (80px) | — | Luôn |
 | 17 | table | Ngày nộp | date | dd/mm/yyyy (110px) | — | Luôn |
 | 18 | table | Hành động | buttons | Tùy theo trạng thái: [Kiểm tra] / [Đánh giá] / [Thẩm định] / [Trình PD] / [Phê duyệt] / [Cập nhật TT] (100px) | click → SCR-V.II-02 tại section tương ứng | Luôn |
 | 19 | pagination | Phân trang | C05 | 20 mục/trang | click → chuyển trang | Luôn |
@@ -959,7 +967,7 @@ graph LR
 **UX-Spec ref:** dac-ta-man-hinh-chuc-nang-v2.md — MH-06.1a
 **Gộp từ:** MH-06.2 (Kiểm tra) + MH-06.3 (Đánh giá tiêu chí) + MH-06.4 (Thẩm định) + MH-06.5 (Phê duyệt) + MH-06.6 (Cập nhật KQ TT)
 **URL pattern:** /chi-tra/:id
-**Quyền truy cập:** CB NV cùng cấp đơn vị quản lý hồ sơ (kiểm tra, đánh giá, thẩm định, trình phê duyệt, cập nhật thanh toán); CB PD cùng cấp (phê duyệt/từ chối — trả về). Nguồn dữ liệu duy nhất là DVC qua LGSP — CB NV KHÔNG nhập tay hồ sơ chi trả.
+**Quyền truy cập:** CB NV cùng đơn vị đơn vị quản lý hồ sơ (kiểm tra, đánh giá, thẩm định, trình phê duyệt, cập nhật thanh toán); CB PD cùng đơn vị (phê duyệt/từ chối — trả về). Nguồn dữ liệu duy nhất là DVC qua LGSP — CB NV KHÔNG nhập tay hồ sơ chi trả.
 
 #### Thành phần màn hình
 
@@ -967,7 +975,7 @@ graph LR
 |---|------|-----------|------|---------------------|---------|-------------------|
 | 1 | header | Breadcrumb | C01 | "Trang chủ > Chi trả chi phí > Chi tiết #{ma_ho_so}" | navigate | Luôn |
 | 2 | header | Nút quay lại | C08 Ghost | "← Quay lại danh sách" → /chi-tra/danh-sach | click → navigate | Luôn |
-| 3 | header | Header info | Card | "Mã hồ sơ": CT-{YYYYMMDD}-{SEQ}, "Tên doanh nghiệp", "Quy mô doanh nghiệp" (badge: "Siêu nhỏ" / "Nhỏ" / "Vừa"), "Trạng thái" (C06 badge lớn với nhãn Việt theo bảng dưới), "SLA" (C07 — 4 mức cảnh báo) | — | Luôn |
+| 3 | header | Header info | Card | "Mã hồ sơ": CT-{YYYYMMDD}-{SEQ}, "Tên doanh nghiệp", "Quy mô doanh nghiệp" (badge: "Siêu nhỏ" / "Nhỏ" / "Vừa"), "Trạng thái" (C06 badge lớn với nhãn Việt theo bảng dưới), "SLA" (C07 — 4 mức cảnh báo theo BR-CALC-03) | — | Luôn |
 | 4 | header | Stepper | C17 | 6 bước hiển thị nhãn tiếng Việt: [Tiếp nhận] → [Kiểm tra] → [Đánh giá] → [Thẩm định] → [Phê duyệt] → [Thanh toán]. Bước hiện tại nổi bật | — | Luôn |
 | 5 | section-1 | Accordion I — Thông tin doanh nghiệp (chỉ đọc) | C23 | Các trường hiển thị với nhãn tiếng Việt: "Tên doanh nghiệp", "Địa chỉ", "Số điện thoại / Fax / Email", "Mã số doanh nghiệp", "Giấy chứng nhận đăng ký kinh doanh", "Ngành nghề", "Người đại diện", "Loại hình doanh nghiệp", "Quy mô doanh nghiệp" (badge: "Siêu nhỏ" / "Nhỏ" / "Vừa" — quyết định mức hỗ trợ). Tất cả tự động lấy từ DVC | — | Luôn |
 | 6 | section-2 | Accordion II — Thông tin tư vấn (chỉ đọc) | C23 | Các trường hiển thị với nhãn tiếng Việt: "Vụ việc vướng mắc", "Thời điểm phát sinh", "Tên tư vấn viên", "Tổ chức hành nghề", "Địa chỉ tư vấn viên", "Số điện thoại tư vấn viên", "Số ngày hợp đồng tư vấn pháp luật", **"Phí tư vấn"** (VNĐ, > 0), **"Số tiền đề nghị hỗ trợ"** (VNĐ, > 0). Tự động lấy từ DVC | — | Luôn |
@@ -988,10 +996,10 @@ graph LR
 | 21 | section-5 | Đối chiếu | Checklist | Nhãn: "Đối chiếu thẩm định". Các mục: ☐ "Số liệu khớp Mẫu 01", ☐ "Phí tư vấn hợp lý", ☐ "Quy mô doanh nghiệp đúng", ☐ "Chưa vượt trần năm" | tick | Khi trạng thái = "Đang thẩm định" |
 | 22 | section-5 | Kết quả thẩm định | Radio | Nhãn 2 lựa chọn: "Đạt" / "Không đạt" | — | Khi trạng thái = "Đang thẩm định" |
 | 23 | section-5 | Lý do không đạt | C09 Textarea | Nhãn: "Lý do không đạt". Bắt buộc khi kết quả = "Không đạt" | — | Khi kết quả = "Không đạt" |
-| 24 | section-5 | Nút "Trình phê duyệt" | C08 Primary | Nhãn: "Trình phê duyệt" → chuyển sang trạng thái "Chờ phê duyệt" + gửi thông báo CB PD cùng cấp. Chỉ hiện khi kết quả thẩm định = "Đạt" | click → chuyển trạng thái | Khi trạng thái = "Đang thẩm định" và KQ = "Đạt" |
+| 24 | section-5 | Nút "Trình phê duyệt" | C08 Primary | Nhãn: "Trình phê duyệt" → chuyển sang trạng thái "Chờ phê duyệt" + gửi thông báo CB PD cùng đơn vị. Chỉ hiện khi kết quả thẩm định = "Đạt" | click → chuyển trạng thái | Khi trạng thái = "Đang thẩm định" và KQ = "Đạt" |
 | 25 | section-6 | Section Phê duyệt | info + actions | — | — | Khi trạng thái = "Chờ phê duyệt" |
 | 26 | section-6 | Thông tin tóm tắt | Info card | Hiển thị nhãn tiếng Việt: "Doanh nghiệp", "Quy mô doanh nghiệp", "Phí tư vấn", "Số tiền đề nghị", "Số tiền được duyệt" (tự động tính), "Mức hỗ trợ (%)" | — | Khi trạng thái = "Chờ phê duyệt" |
-| 27 | section-6 | Nút "Phê duyệt" | C08 Primary | **Quyền: CB PD cùng cấp** (BR-AUTH-05). Nhãn: "Phê duyệt" → hộp thoại xác nhận (C12) → chuyển "Đã duyệt" + tự động ghi `ngay_phe_duyet`, `nguoi_phe_duyet_id` | click → phê duyệt | Khi trạng thái = "Chờ phê duyệt", vai trò CB PD |
+| 27 | section-6 | Nút "Phê duyệt" | C08 Primary | **Quyền: CB PD cùng đơn vị** (BR-AUTH-05). Nhãn: "Phê duyệt" → hộp thoại xác nhận (C12) → chuyển "Đã duyệt" + tự động ghi `ngay_phe_duyet`, `nguoi_phe_duyet_id` | click → phê duyệt | Khi trạng thái = "Chờ phê duyệt", vai trò CB PD |
 | 28 | section-6 | Nút "Từ chối — trả về thẩm định" | C08 Danger | Nhãn hiển thị: "Từ chối — trả về thẩm định". Nhấn → modal nhập lý do ≥ 10 ký tự → chuyển hồ sơ về trạng thái "Đang thẩm định" để CB NV điều chỉnh (KHÔNG phải từ chối cuối) | click → trả về | Khi trạng thái = "Chờ phê duyệt", vai trò CB PD |
 | 29 | section-7 | Section Cập nhật Thanh toán (gộp MH-06.6) | form | — | — | Khi trạng thái = "Đã duyệt" |
 | 30 | section-7 | Số tiền thực trả | C09 Number | Nhãn: "Số tiền thực trả". **Bắt buộc.** Đơn vị VNĐ. Validate: > 0 AND ≤ `so_tien_duoc_duyet` | — | Khi trạng thái = "Đã duyệt" |
@@ -1239,7 +1247,7 @@ erDiagram
 | 6 | ghi_chu_duyet | text (long) | N | | — | Ghi chú kèm theo (tuỳ chọn) |
 | 7 | nguoi_phe_duyet_id | identifier | Y | FK → TAI_KHOAN(id) | — | CB PD ra quyết định |
 | 8 | ngay_phe_duyet | datetime | Y | DEFAULT NOW() | NOW() | Thời điểm phê duyệt |
-| 9 | don_vi_id | identifier | Y | FK → DON_VI(id); phải bằng `HO_SO_CHI_TRA.don_vi_id` (BR-AUTH-05) | — | Đơn vị CB PD (cùng cấp với hồ sơ) |
+| 9 | don_vi_id | identifier | Y | FK → DON_VI(id); phải bằng `HO_SO_CHI_TRA.don_vi_id` (BR-AUTH-05) | — | Đơn vị CB PD (cùng đơn vị với hồ sơ) |
 
 **Volume:** ~3,500 records/năm (bao gồm các lần trả về) | **Growth:** 10%/năm
 
@@ -1318,9 +1326,9 @@ stateDiagram-v2
 | DANG_KIEM_TRA | TU_CHOI | CB NV kiểm tra không đạt | Có lý do | Ghi `ly_do_tu_choi`, `thoi_gian_tu_choi`, `nguoi_tu_choi_id` | FR-V.II-03 | — |
 | YEU_CAU_BO_SUNG | DANG_KIEM_TRA | DN bổ sung hồ sơ qua DVC | File hợp lệ, chưa quá 5 ngày LV | Lưu file, TB CB NV, audit | FR-V.II-14 [GAP-V.II-01] | — |
 | DANG_DANH_GIA | DANG_THAM_DINH | Đánh giá xong | Tính mức HT theo quy mô DN | Áp dụng BR-CALC-01/02 | FR-V.II-05 | BR-CALC-01, BR-CALC-02 |
-| DANG_THAM_DINH | CHO_PHE_DUYET | CB NV trình | KQ thẩm định Đạt | TB CB PD cùng cấp | FR-V.II-11 | BR-AUTH-05 |
+| DANG_THAM_DINH | CHO_PHE_DUYET | CB NV trình | KQ thẩm định Đạt | TB CB PD cùng đơn vị | FR-V.II-11 | BR-AUTH-05 |
 | DANG_THAM_DINH | TU_CHOI | CB NV thẩm định không đạt | Có nhận xét | Ghi `ly_do_tu_choi = "THAM_DINH: " + nhan_xet`, `thoi_gian_tu_choi`, `nguoi_tu_choi_id` | FR-V.II-09 | — |
-| CHO_PHE_DUYET | DA_DUYET | CB PD duyệt | Cùng cấp | Ghi `nguoi_phe_duyet_id`, `ngay_phe_duyet`, tạo PHE_DUYET_CHI_TRA | FR-V.II-12 | BR-AUTH-05 |
+| CHO_PHE_DUYET | DA_DUYET | CB PD duyệt | Cùng đơn vị | Ghi `nguoi_phe_duyet_id`, `ngay_phe_duyet`, tạo PHE_DUYET_CHI_TRA | FR-V.II-12 | BR-AUTH-05 |
 | CHO_PHE_DUYET | DANG_THAM_DINH | CB PD từ chối (trả về CB NV sửa) | Có lý do ≥ 10 ký tự | Ghi `ly_do_tu_choi`, tạo PHE_DUYET_CHI_TRA, TB CB NV | FR-V.II-12 | BR-FLOW-04 |
 | DA_DUYET | DA_THANH_TOAN | CB NV cập nhật TT | — | Ghi `so_tien_thuc_tra`, `ngay_thanh_toan` | FR-V.II-13 | — |
 | DA_DUYET | TU_CHOI | CB NV từ chối thanh toán | Có lý do | Ghi `ly_do_tu_choi = "THANH_TOAN: " + ly_do`, `thoi_gian_tu_choi`, `nguoi_tu_choi_id` | FR-V.II-13 | — |
@@ -1337,7 +1345,7 @@ stateDiagram-v2
 | BR ID | Tên | FR áp dụng (trong nhóm này) |
 |-------|-----|----------------------------|
 | BR-AUTH-01 | Xác thực truy cập | FR-V.II-02, 03, 05, 08, 09, 11, 12, 13 |
-| BR-AUTH-05 | Phê duyệt cùng cấp | FR-V.II-11, 12 |
+| BR-AUTH-05 | Phê duyệt cùng đơn vị | FR-V.II-11, 12 |
 | BR-AUTH-08 | Phân quyền theo đơn vị | FR-V.II-02 |
 | BR-AUTH-09 | Xác thực LGSP inbound | FR-V.II-01 |
 | BR-CALC-01 | Mức hỗ trợ chi phí NĐ18/2026 | FR-V.II-05 |
@@ -1371,6 +1379,17 @@ Số tiền được duyệt = MIN(so_tien_de_nghi, phi_tu_van * muc_ho_tro_%, t
 
 N lấy từ CAU_HINH_SLA. Ngày làm việc: Thứ 2-6, trừ ngày lễ (cấu hình).
 
+**Ngưỡng cảnh báo SLA 4 mức cho hồ sơ chi trả:**
+
+| Mức | Điều kiện | Ý nghĩa hiển thị |
+|-----|-----------|------------------|
+| `warning` | Đã dùng từ 70% đến dưới 85% thời lượng SLA, chưa rơi vào `critical`/`overdue` | Sắp đến hạn |
+| `urgent` | Đã dùng từ 85% đến dưới 100% thời lượng SLA, chưa rơi vào `critical`/`overdue` | Cần xử lý gấp |
+| `critical` | Chưa quá hạn nhưng thời gian còn lại <= 1 ngày làm việc | Sát hạn |
+| `overdue` | Thời điểm hiện tại > deadline SLA và hồ sơ chưa ở trạng thái kết thúc | Quá hạn |
+
+**Quy tắc ưu tiên mức:** `overdue` > `critical` > `urgent` > `warning`. Nếu không thỏa điều kiện nào thì không hiển thị cảnh báo SLA.
+
 **Applied in (nhóm V.II):** FR-V.II-01
 
 ### BR-AUTH-01: Xác thực truy cập
@@ -1379,9 +1398,9 @@ Mọi user phải xác thực trước khi truy cập hệ thống.
 
 **Applied in (nhóm V.II):** FR-V.II-02, FR-V.II-03, FR-V.II-05, FR-V.II-08, FR-V.II-09, FR-V.II-11, FR-V.II-12, FR-V.II-13
 
-### BR-AUTH-05: Phê duyệt cùng cấp
+### BR-AUTH-05: Phê duyệt cùng đơn vị
 
-CB NV cấp nào tạo → CB PD cùng cấp duyệt. KHÔNG xuyên cấp phê duyệt.
+CB NV cấp nào tạo → CB PD cùng đơn vị duyệt. KHÔNG xuyên cấp phê duyệt.
 
 **Applied in (nhóm V.II):** FR-V.II-11, FR-V.II-12
 

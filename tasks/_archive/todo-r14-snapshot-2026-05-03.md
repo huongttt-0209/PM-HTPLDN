@@ -144,7 +144,7 @@
   - **Kết quả:** PASS 1/1. `DG-20260502-0001` state Lập kế hoạch. Tần suất Sơ bộ 6 tháng × Tổng hợp. Unblock D2. [seed-checklist-DanhGiaHQ.md](../../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-DanhGiaHQ.md)
 - 🚫 **R6.4.D2** D2 Workflow Đánh giá HQ (11 bước) `[block: 5 bug FE chặn từ B1 — form Tạo thiếu trường tiêu chí + tab Tiêu chí không có nút thêm + 3 dropdown phân công 404/empty]`
   - **Kết quả:** R14 BLOCKED 1/11 PASS B1. Back-fill tiêu chí FAIL + B2-B11 cascade. Tạo `DG-20260502-0002` test seed. [workflow-test-report-DanhGiaHQ.md](../../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-DanhGiaHQ.md)
-  - **Bug:** [bug-report-flow-danhgia.md](../../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-danhgia.md) — 0/5 đóng (3 Critical + 2 Major)
+  - **Bug:** [Pass-bug-report-flow-danhgia.md](../../output/qa-reports/round6-2026-05-01-postreset/bug-reports/Pass-bug-report-flow-danhgia.md) — 0/5 đóng (3 Critical + 2 Major)
 - ⚠️ **R6.4.D3** D3 Tạo Kho QA + verify auto-feed `Tự động` `[~50% — re-verify R14 không đổi: THU_CONG OK, auto-feed TU_DONG=0, UI route thiếu]`
   - **Kết quả:** PARTIAL R14 re-verify cùng status: THU_CONG `QA-20260502-0001` còn, TU_DONG total=0, UI route vẫn thiếu submenu. [seed-checklist-KhoQA.md](../../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-KhoQA.md)
 

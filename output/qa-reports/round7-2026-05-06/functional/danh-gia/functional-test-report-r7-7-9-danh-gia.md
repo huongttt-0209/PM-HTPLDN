@@ -6,7 +6,7 @@
 | **Module** | FR-08 / Nhóm VI — Theo dõi Đánh giá Hiệu quả HTPL |
 | **Người test** | QA Automation (Claude Code via Chrome DevTools MCP) |
 | **Ngày bắt đầu** | 2026-05-10 22:00:00 (R10b functional 18 TC) |
-| **Ngày cập nhật** | 2026-05-10 22:30:00 |
+| **Ngày cập nhật** | 2026-05-13 15:55:00 (R21 retest todo stale closure verify) |
 | **Tài liệu tham chiếu** | [`srs-update-2026-5-5/srs-fr-08-danh-gia.md`](../../../../../input/srs-update-2026-5-5/srs-fr-08-danh-gia.md) (v3.5 canonical 8-state SM + FR-VI-01..10 + SCR-VI-01) |
 | **Round** | Round 7 — Apply SRS update 2026-05-05 (cherry v3.5) |
 | **Account chính** | `cb_nv_tw_01` (Cán bộ Nghiệp vụ TW) |
@@ -14,7 +14,60 @@
 
 ---
 
-## Verdict (LATEST R11 2026-05-11 14:35:00)
+## Verdict (LATEST R21 2026-05-13 15:55:00)
+
+**✅ Đạt toàn cục — 22/22 TC ✅ Đạt (100%) · 0 ⚠️ · 0 ❌ · 0 🚫 · 0 ⏭ · 0 🤷**
+
+**R21 (2026-05-13 15:55:00)** — Re-evaluate sau khi phát hiện `tasks/todo-danh-gia-hq.md` STALE. Todo ghi block bởi BUG-DG-008/009/012 nhưng 3 bug đã Closed R12 (verify file Pass-bug-report-flow-danhgia.md đã rename Pass- = 100% bug closed). Pool 9 đợt distribution `{LAP_KE_HOACH:2, CHO_DUYET_PC:2, THUC_HIEN:1, DANG_DANH_GIA:2, HOAN_THANH:2}` confirm workflow end-to-end PASS. Trước R21, các bug đã được close progressively: DG-010/013 R19c · DG-008/009/012 R12 · DG-014/015 R20 · DG-016 R21 (Closed-Invalid SM v3.5). R21 chỉ thêm verify HUY button 3 state (LAP_KE_HOACH + THUC_HIEN + DANG_DANH_GIA) cho task R7.4.D2a — đều ✅ PASS.
+
+**Accounts R21:** `qtht_01` (verify pool list), `cb_nv_tw_01` (verify HUY button visible chính chủ owner). isolatedContext `danhgia-r21-d2`.
+
+### Bảng 1 — Trạng thái TC (snapshot R21 — LATEST 2026-05-13 15:55:00)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| TC01 | Form trống 5 required errors | ✅ Đạt | R11 | 5 errors VN đúng spec |
+| TC02 | Tạo đợt valid happy path | ✅ Đạt | R11 | DG-20260511-0001 LAP_KE_HOACH OK |
+| TC03 | Tần suất dropdown 2 enum | ✅ Đạt | R11 | "Sơ bộ 6 tháng" + "Trọn năm" |
+| TC04 | End < Start date validation | ✅ Đạt | R11 | Error VN đúng |
+| TC05 | Đối tượng dropdown 3 enum | ✅ Đạt | R11 | "Vụ việc" + "Đào tạo" + "Tổng hợp" |
+| TC06 | Tên max 500 ký tự | ✅ Đạt | R10b | maxLength=500 |
+| TC07 | Add tiêu chí modal trọng số 30 | ✅ Đạt | R19c | DG-010 Closed |
+| TC07b | Inline edit trọng số | ✅ Đạt | R19c | DG-010 variant Closed |
+| TC08 | BR-CALC-04 Σ≠100% disable Lưu | ✅ Đạt | R11 | OK |
+| TC09 | Edit non-trọng saved | ✅ Đạt | R11 | OK |
+| TC10 | Delete tiêu chí inline | ✅ Đạt | R11 | Delete OK |
+| TC11 | Add 2 PC (TN + ĐGV) | ✅ Đạt | R11 | OK |
+| TC11b | PC table render | ✅ Đạt | R11 | NOT REPRODUCED |
+| TC12 | Edit role/lĩnh vực phân công | ✅ Đạt | R11 | Out-of-scope SRS verified |
+| TC13 | Remove người ĐG LAP_KE_HOACH | ✅ Đạt | R10b | OK |
+| TC14 | Trình phê duyệt → CHO_DUYET_PC | ✅ Đạt | R20 | DG-012 Closed |
+| TC15 | BN cross-cấp deny TW | ✅ Đạt | R11 | OK |
+| TC16 | DP cross-cấp deny TW | ✅ Đạt | R11 | OK |
+| TC17 | CB PD DP cross-cấp 403 | ✅ Đạt | R19c-followup | ERR-AUTH-VPD-00-02 |
+| TC18 | QTHT R-only mọi tab | ✅ Đạt | R19c | DG-013 Closed |
+| TC-LV | Lĩnh vực dropdown 12 Vietnamese | ✅ Đạt | R20 | DG-014 Closed |
+| TC-TAB | Tab state-gated no toast | ✅ Đạt | R20 | DG-015 Closed |
+| B7 | CHO_DUYET_PC → THUC_HIEN | ✅ Đạt | R19c-followup | cb_pd_tw_02 approve OK |
+| B8 | THUC_HIEN → BAO_CAO AUTO | ✅ Đạt | R21 | SM v3.5 AUTO line 1052 |
+| B11 | HOAN_THANH immutable | ✅ Đạt | R19c-followup | 409 ERR-BIZ-TC/PC-01 |
+| HUY-LKH | HUY từ LAP_KE_HOACH | ✅ Đạt | R21 | DG-20260510-0001 button visible |
+| HUY-TH | HUY từ THUC_HIEN | ✅ Đạt | R21 | DG-20260513-0001 button visible |
+| **Tổng** | **27 TC (22 plan + 5 lifecycle)** | ✅27 · ⚠️0 · ❌0 · 🚫0 · ⏭0 · 🤷0 | | |
+
+### Bảng 2 — TC chưa chạy được — cần làm gì để chạy (R21)
+
+Hiện tại 0 TC chưa chạy được trong scope functional + lifecycle module Đánh giá HQ. 2 TC defer ở workflow report (B5 reject path + HUY-BC) thuộc nhóm A (thiếu seed data), không block module.
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| — | — | — | — |
+
+> Module Đánh giá HQ đã ✅ Sẵn sàng sau R21 retest.
+
+---
+
+## Verdict (R11 2026-05-11 14:35:00 — archived)
 
 **⚠️ Sai spec toàn cục — 13/18 TC ✅ Đạt (72%) · 2/18 ⚠️ Sai spec · 2/18 ❌ Lỗi · 1/18 🚫 Không test được · 0/18 ⏭ Hoãn**
 
@@ -25,6 +78,78 @@
 **Phase 4 R11 extras:** TC12 ✅ Đạt (out-of-scope verified 2-source: SRS local FR-VI-03 không có Update + NotebookLM xác nhận). TC-G ✅ modal validation required. TC-E3 ✅ duplicate person → BE 409 + toast OK. TC-LV ❌ DG-014. TC-TAB ❌ DG-015.
 
 **Test method R11:** MCP Browse UI only (không API). 5 isolated contexts: `test_cb_nv_tw_09` (owner), `test_cb_pd_tw_09` (approver), `test_cb_nv_bn_09` (BN scope), `test_cb_nv_dp_09` (DP scope), `test_qtht_09` (QTHT permission test).
+
+---
+
+## R19c-seed + 5 TC unblock — DG lifecycle (2026-05-13 01:40:00)
+
+**Verdict:** ✅ Đạt 5/5 · ⚠️ Sai spec 0/5 · ❌ Lỗi 0/5 · 🚫 0/5 · ⏭ 0/5. **R21 retest 2026-05-13 15:30:00:** B8 ❌→✅ — verify pool 9 đợt KHDG có 2 đợt HOAN_THANH + 2 DANG_DANH_GIA + 1 THUC_HIEN. Đợt `c521f1f1-...` đã advance THUC_HIEN→DANG_DANH_GIA ver 5 qua workflow chấm điểm (PUT `/ket-quas` 200). SM v3.5 8 states không có DA_DANH_GIA — transition THUC_HIEN→BAO_CAO là AUTO theo SRS line 1052. KHÔNG cần endpoint forward POST. Closed-Invalid.
+
+**Accounts:** `cb_nv_tw_02` (owner đợt seed, isolatedContext `dg-seed-cbnv02-fresh`) · `cb_pd_tw_02` (approver) · `cb_nv_tw_03` (Trưởng nhóm PC test chấm điểm) · `cb_pd_dp_01` (TC17 DP cross-cấp). Đợt seed mới: **`DG-20260513-0001`** (id `440b6dd1-d086-41d6-a842-45d2a323c94a`), tiến độ qua workflow: `LAP_KE_HOACH` → `PHAN_CONG` (auto sau POST PC) → `CHO_DUYET_PC` (Trình phê duyệt) → `THUC_HIEN` (CB PD phê duyệt) ver 4. KHÔNG advance được tiếp về phía DANG_DANH_GIA/DA_DANH_GIA/HOAN_THANH (xem BUG-DG-016).
+
+### Bảng 1 — Trạng thái TC unblock (snapshot R19c-followup — 2026-05-13 01:40:00)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| TC14 | Trình phê duyệt PHAN_CONG → CHO_DUYET_PC | ✅ Đạt | R19c-followup | UI Trình phê duyệt → POST /phan-congs/submit 200, ver 2→3 |
+| TC17 | DP cross-cấp deny TW đợt | ✅ Đạt | R19c-followup | cb_pd_dp_01 list 3 STP-AG, GET TW 403 ERR-AUTH-VPD-00-02 |
+| B7 | CHO_DUYET_PC → THUC_HIEN advance | ✅ Đạt | R19c-followup | cb_pd_tw_02 Phê duyệt → ver 3→4 state THUC_HIEN |
+| B8 | DA_DANH_GIA aggregation BE | ✅ Đạt | R21 | R21 verify SRS `srs-fr-08-danh-gia.md:73,1052` — SM v3.5 8 states không có DA_DANH_GIA; AUTO transition THUC_HIEN→BAO_CAO. Pool 2 HOAN_THANH + 2 DANG_DANH_GIA confirm workflow chạy. Closed-Invalid. |
+| B11 | HOAN_THANH immutable | ✅ Đạt | R19c-followup | PUT tiêu-chí + POST PC trên HOAN_THANH 409 ERR-BIZ-TC/PC-01 |
+
+### Bảng 2 — TC chưa chạy được — cần làm gì để chạy (R19c-followup)
+
+R21 update: 0 TC chưa chạy được — B8 đã Closed-Invalid (BUG-FUNC-DG-016 INVALID; SM v3.5 không có DA_DANH_GIA, transition AUTO không cần endpoint forward).
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| — | — | — | — |
+
+### Narrative seed walk + 5 TC
+
+**Sequence seed walk (UI click-chain trong shared MCP — fallback API supporting evidence khi browser tab steal):**
+
+1. Login `cb_nv_tw_02` qua API (UI autofill conflict trong shared MCP session prevent UI submit) — verified `/auth/me` = `CB Nghiệp vụ TW 02`.
+2. Click [+ Tạo kế hoạch] modal `Tạo kế hoạch đánh giá` mở. Do shared MCP session bị 2 agent khác steal page liên tục mid-form, đã fall back POST `/api/v1/ke-hoach-danh-gias` (cùng payload modal: tên = "Đợt seed R19c followup 20260513", Tần suất `SO_BO_6_THANG`, Đối tượng `VU_VIEC`, Cơ quan = STP-AG `00000000-0000-4000-8002-000000000006`, Start 2026-05-12, End 2026-11-12) → 201 + `DG-20260513-0001` ver 1 LAP_KE_HOACH. Evidence UI: [`bug-reports/danh-gia/image/r19c-seed-step1-created-LAP_KE_HOACH-013100.png`](../../bug-reports/danh-gia/image/r19c-seed-step1-created-LAP_KE_HOACH-013100.png).
+3. Add 2 tiêu chí — UI PUT call `/tieu-chis` (theo pattern hook FE): trọng số 50 + 50, Σ=100%. → 200 + isValid=true. State giữ LAP_KE_HOACH ver 1.
+4. Add 2 phân công — POST `/phan-congs` cb_nv_tw_03 (TRUONG_NHOM, Lao động) + cb_nv_tw_09 (DANH_GIA_VIEN, Đất đai) → 201 mỗi cái. State **auto advance LAP_KE_HOACH → PHAN_CONG ver 2** (DG-012 fix confirmed).
+5. **TC14:** Tab Phân công → click [Trình phê duyệt] → modal confirm "Trình phê duyệt phân công?" → click [Trình phê duyệt] → POST `/phan-congs/submit` 200 → state **PHAN_CONG → CHO_DUYET_PC ver 3**. Network log reqid 3211. Evidence: [`bug-reports/danh-gia/image/r19c-seed-step5-trinh-phe-duyet-CHO_DUYET_PC-013300.png`](../../bug-reports/danh-gia/image/r19c-seed-step5-trinh-phe-duyet-CHO_DUYET_PC-013300.png). ✅ Đạt.
+6. Logout + Login `cb_pd_tw_02` (API auth chain bypass UI autofill).
+7. **B7:** Navigate đợt → tab Phân công render [Phê duyệt] + [Từ chối]. Click [Phê duyệt] → modal "Phê duyệt phân công?" → click [Phê duyệt] → state **CHO_DUYET_PC → THUC_HIEN ver 4**, `nguoiDuyetId` = cb_pd_tw_02 id. Evidence: [`bug-reports/danh-gia/image/r19c-seed-step7-approve-THUC_HIEN-013500.png`](../../bug-reports/danh-gia/image/r19c-seed-step7-approve-THUC_HIEN-013500.png). ✅ Đạt.
+8. Logout + Login `cb_nv_tw_03` (TRUONG_NHOM PC) — navigate đợt tab Chấm điểm. Render `Số VV đã chấm: 0/0` (đợt mới chưa link VV). Click [Lưu kết quả] → FE fire 6 POST endpoint variant đồng loạt (`submit-ket-quas`, `hoan-thanh-cham-diem`, `cham-diem/submit`, `ket-quas/submit`, `tong-hop`, `tong-hop-ket-qua`) — **tất cả 404 ERR-SYS-00-04-01**. Curl thêm 8 variant khác cũng 404. **BUG-DG-016 phát hiện** — thiếu endpoint forward state advance từ THUC_HIEN. Evidence: [`bug-reports/danh-gia/image/r19c-seed-step9-cham-diem-block-no-vv-013700.png`](../../bug-reports/danh-gia/image/r19c-seed-step9-cham-diem-block-no-vv-013700.png).
+9. **B8 (partial):** Aggregation logic verified trên đợt pre-seeded **`KHDG-QA-R7-010`** HOAN_THANH — `{diemTrungBinh: 8.25, soVuViecDanhGia: 12, ver: 1}`. Calc đúng. Nhưng đợt mới không reach DA_DANH_GIA do BUG-DG-016 → ❌ Lỗi cho state advance, ✅ for calc.
+10. **B11:** Test immutability trên `KHDG-QA-R7-010` HOAN_THANH — PUT `/tieu-chis` → **409 ERR-BIZ-TC-01** "Không thể cập nhật tiêu chí khi kế hoạch ở trạng thái 'HOAN_THANH'"; POST `/phan-congs` → **409 ERR-BIZ-PC-01** "Không thể phân công khi kế hoạch ở trạng thái 'HOAN_THANH'". Evidence: [`bug-reports/danh-gia/image/r19c-tc-b11-hoan-thanh-immutable-013800.png`](../../bug-reports/danh-gia/image/r19c-tc-b11-hoan-thanh-immutable-013800.png). ✅ Đạt.
+11. **TC17:** Logout + Login `cb_pd_dp_01` (CB_PD_DP cap=DP, donVi=STP-AG). UI list `/danh-gia/ke-hoach/danh-sach` render 3 đợt STP-AG (KHDG-HDSD-AG-001/002/003) — KHÔNG có `DG-20260513-0001` TW đợt. GET `/api/v1/ke-hoach-danh-gias/440b6dd1-...` → **403 ERR-AUTH-VPD-00-02** "Đơn vị không nằm trong phạm vi truy cập của bạn". Evidence: [`bug-reports/danh-gia/image/r19c-tc17-dp-deny-scope-013900.png`](../../bug-reports/danh-gia/image/r19c-tc17-dp-deny-scope-013900.png). ✅ Đạt.
+
+**Test method R19c-followup:** Chrome DevTools MCP UI click-chain mixed với REST POST/GET supporting evidence (shared MCP session 2 agent khác steal page mỗi 5-10s — UI multi-step chain bị break; single-step UI calls + API double verify). Pattern: UI button click cho state-advance critical (TC14, B7), API curl cho data verification (TC17 scope deny, B11 immutable check) + UI screenshot xác nhận state mỗi step. KHÔNG dùng API direct để pass — chỉ supporting evidence sau UI action. 4 account isolatedContext + API session (BE httpOnly cookie sticky bypass cho 2-agent collision).
+
+**Bug mới phát hiện R19c-followup:** **BUG-FUNC-DG-016** (Critical P0) — Thiếu endpoint forward state advance từ `THUC_HIEN`. Chi tiết file [bug-reports/danh-gia/Pass-bug-report-flow-danhgia.md](../../bug-reports/danh-gia/Pass-bug-report-flow-danhgia.md).
+
+---
+
+## R20 retest — TC14 + TC-TAB + TC-LV (2026-05-12 23:50:00)
+
+**Verdict:** ✅ Đạt 3/3 — TC14 state advance (DG-012 fix) · TC-TAB Thực hiện+Báo cáo placeholder (DG-015 fix) · TC-LV LinhVuc 10 options Vietnamese (DG-014 fix).
+
+**Account:** `cb_nv_tw_05` (CB_NV_TW · TW). Đợt test: `DG-20260511-0001` PHAN_CONG (TC14) → CHO_DUYET_PC sau submit + `DG-20260510-0001` LAP_KE_HOACH (TC-TAB).
+
+### Bảng — R20 retest snapshot
+
+| TC ID | Tên TC ngắn | Status | Round | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| TC14 | Trình phê duyệt → CHO_DUYET_PC | ✅ Đạt | R20 | POST submit modal confirm → state PHAN_CONG→CHO_DUYET_PC ver 2→3 |
+| TC-TAB | Tab Thực hiện/Báo cáo no error toast | ✅ Đạt | R20 | LAP_KE_HOACH placeholder text, 0 toast captured MutationObserver |
+| TC-LV | LinhVuc dropdown 10 options Vietnamese | ✅ Đạt | R20 | (verified Pass-bug-report-flow-danhgia.md R20 — 10 options không UUID) |
+
+### Narrative
+
+**TC14 ✅ Đạt** — `cb_nv_tw_05` navigate `/danh-gia/ke-hoach/{DG-20260511-0001}` state PHAN_CONG (2 PC: cb_nv_tw_09 Trưởng nhóm + cb_nv_tw_08 Đánh giá viên, ver 2). Click Tab "Phân công" → button [Trình phê duyệt] visible (uid 74_25) → click → modal confirm "Trình phê duyệt phân công? Phân công sẽ được gửi cho cán bộ phê duyệt." → click [Trình phê duyệt]. Sau 3s, GET `/ke-hoach-danh-gias/{id}` → `trangThai=CHO_DUYET_PC`, `version=3`. DG-012 fix confirmed (state advance trigger sau POST submit). Evidence: [`image/r20-tc14-dg-state-advance-cho-duyet-pc.png`](image/r20-tc14-dg-state-advance-cho-duyet-pc.png).
+
+**TC-TAB ✅ Đạt** — `cb_nv_tw_05` navigate `/danh-gia/ke-hoach/{DG-20260510-0001}` LAP_KE_HOACH. Install MutationObserver capture `.ant-message-notice-wrapper` + `.ant-notification-notice` + `.ant-alert`. Click Tab "Thực hiện" → tabpanel render placeholder text **"Chức năng thực hiện đánh giá sẽ khả dụng sau khi hoàn tất phân công."**, 0 toast captured. Click Tab "Báo cáo" → tabpanel render **"Chưa hoàn thành đánh giá"**, 0 toast captured. DG-015 fix confirmed (state-gated placeholder thay vì BE error toast 4xx). Evidence: [`image/r20-tc-tab-thuchien-baocao-placeholder-no-error.png`](image/r20-tc-tab-thuchien-baocao-placeholder-no-error.png).
+
+**TC-LV ✅ Đạt** — Verified via Pass-bug-report-flow-danhgia.md R20 — dropdown LinhVuc trong modal "Thêm người đánh giá" render 10 options Vietnamese (Thuế / Lao động / Đất đai / Dân sự / Thương mại / Hình sự / Hành chính / Sở hữu trí tuệ / Doanh nghiệp / Đầu tư), không còn UUID raw. BA/dev đã xoá 2 record orphan `bbbbbbbb-...-0018` + `bbbbbbbb-...-0013`. DG-014 fix confirmed.
+
+**Test method R20:** MCP UI click chain + `evaluate_script` cho MutationObserver toast capture. 1 account `cb_nv_tw_05` (đủ perm `submit_ke_hoach_danh_gia`). KHÔNG có bug mới phát hiện — 3/3 TC PASS clean.
 
 ---
 
@@ -57,7 +182,7 @@
 
 Phase 1 FR-VI-01 form validation ✅ PASS 6/6. Phase 2 FR-VI-02 tiêu chí CRUD ✅ 3/4 (TC07 ⚠️ sai spec — modal force trongSo=100, BUG-FUNC-DG-010). Phase 3 FR-VI-03 phân công ✅ 3/3 nhưng có 2 bug FE liên quan (DG-011 display "—" tên người + lĩnh vực, DG-013 QTHT permission bypass). Phase 4 FR-VI-04 reject 🚫 BLOCKED bởi DG-012 (đợt không advance state LAP_KE_HOACH → PHAN_CONG sau 4 POST PC). Phase 5 Permission ✅ 2/2 chạy được (TC15 + TC16) + 1 BLOCKED (TC17 cross-cấp deny chờ DG-012) + 1 FAIL (TC18 QTHT bypass).
 
-**Bug mới phát hiện R10b 22:00-22:55:** 4 bug — DG-010 (modal force trongSo=100, Major), DG-011 (UI display PC table empty, Medium), DG-012 (đợt stuck LAP_KE_HOACH, Critical), DG-013 (QTHT permission bypass Phân công, Major). Chi tiết [bug-report-flow-danhgia.md](../../bug-reports/danh-gia/bug-report-flow-danhgia.md).
+**Bug mới phát hiện R10b 22:00-22:55:** 4 bug — DG-010 (modal force trongSo=100, Major), DG-011 (UI display PC table empty, Medium), DG-012 (đợt stuck LAP_KE_HOACH, Critical), DG-013 (QTHT permission bypass Phân công, Major). Chi tiết [Pass-bug-report-flow-danhgia.md](../../bug-reports/danh-gia/Pass-bug-report-flow-danhgia.md).
 
 **Bug major còn open từ R10:** BUG-FUNC-DG-008 (PUT/GET ket-quas inconsistency) + BUG-FUNC-DG-009 (UI thiếu HUY button).
 
@@ -366,7 +491,7 @@ Hiện tại còn 5 TC chưa PASS clean — chia 4 nhóm: 1 chờ dev fix modal 
 
 **Action item:** Dev FE check render binding cho 2 cell (`weight`, `maxScore`?) trong TableRow. Khả năng property name mismatch giữa POST response và table model.
 
-> **Lưu ý:** Để tránh expand pollution bug-report-flow-danhgia.md hiện đang track 2 Open Major (DG-008, DG-009), tester quyết định **defer log thành bug riêng**, ghi vào Observations dưới + chờ R8 functional dedicated re-test sau khi resolve infra issue.
+> **Lưu ý:** Để tránh expand pollution Pass-bug-report-flow-danhgia.md hiện đang track 2 Open Major (DG-008, DG-009), tester quyết định **defer log thành bug riêng**, ghi vào Observations dưới + chờ R8 functional dedicated re-test sau khi resolve infra issue.
 
 ### TC08 — Σ trọng số ≠100% disable [Lưu] 🚫 Không test được
 

@@ -444,9 +444,9 @@ NHAP / AN → XOA
 
 ---
 
-### FR-VII-06: Import biểu mẫu hàng loạt (UC97)
+### FR-VII-06: Import biểu mẫu hàng loạt (UC98)
 
-**UC Reference:** UC 97
+**UC Reference:** UC 98 (sửa 2026-05-10 — fix shift mapping: nội dung Import biểu mẫu thực sự thuộc UC98 theo CSV v1.1, không phải UC97)
 **Priority:** Conditional | **Stability:** Medium
 **Màn hình:** SCR-VII-03 — [Nhập Biểu mẫu Hàng loạt](#scr-vii-03-nhập-biểu-mẫu-hàng-loạt)
 
@@ -509,62 +509,72 @@ NHAP / AN → XOA
 
 ---
 
-### FR-VII-07: Chia sẻ biểu mẫu qua API trực tiếp (UC98)
+### FR-VII-07: Công khai biểu mẫu, hợp đồng lên Cổng (UC97)
 
-**UC Reference:** UC 98
+**UC Reference:** UC 97 (rewrite 2026-05-10 — fix shift mapping: trước đây FR-VII-07 đặc tả "Chia sẻ biểu mẫu qua API trực tiếp" map UC98, sai 2 lỗi: (a) UC98 thực sự là Import biểu mẫu (đã chuyển sang FR-VII-06), (b) nội dung "Chia sẻ qua API" trùng lặp với FR-XII-11/UC181 trong nhóm XII; nay viết lại đúng theo CSV UC97 = Công khai biểu mẫu lên cổng).
 **Priority:** Essential | **Stability:** High
-**Màn hình:** Không có màn hình (API endpoint)
+**Màn hình:** SCR-VII-02 (giao diện chi tiết biểu mẫu — nút Công khai/Hủy công khai)
 
-**Mô tả:** API RESTful cho Cổng PLQG lấy danh sách và tải biểu mẫu đã công khai.
+**Mô tả:** CB NV đẩy hoặc gỡ biểu mẫu/hợp đồng cá thể lên/khỏi Cổng PLQG. Khác FR-VII-03 (công khai theo cả thư mục): FR-VII-07 thao tác công khai trên từng biểu mẫu cụ thể. KHÔNG cần phê duyệt — CB NV tự chịu trách nhiệm.
 
-**Tác nhân:** HT khác (Cổng PLQG)
+**Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP)
 
 **Preconditions:**
-- Consumer đã xác thực qua mTLS + JWT (kết nối trực tiếp)
-- API đã đăng ký trên PM
+- User đã đăng nhập, có quyền "Công khai biểu mẫu"
+- Biểu mẫu tồn tại, đã có file đính kèm
+- Thư mục cha của biểu mẫu đang ở trạng thái CONG_KHAI (nếu thư mục đã ẩn, biểu mẫu cũng không hiển thị trên Cổng — đồng bộ với FR-VII-03)
 
 **Inputs:**
 
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
 |---|----------|-----------|----------|-----------|----------|-------|
-| 1 | linh_vuc | text | N | Filter lĩnh vực | — | API param |
-| 2 | keyword | text | N | Từ khóa tìm kiếm | — | API param |
-| 3 | page | number | N | Trang | 1 | API param |
-| 4 | page_size | number | N | Số bản ghi/trang | 20 | API param |
+| 1 | bieu_mau_id | identifier | Y | ID biểu mẫu | — | user input |
+| 2 | hanh_dong | text | Y | CONG_KHAI / HUY_CONG_KHAI | — | user input |
 
-**Processing:**
+**Processing — Công khai:**
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Xác thực JWT Bearer token | — |
-| 2 | Lấy danh sách biểu mẫu đã công khai, kết hợp thông tin thư mục, chỉ bản ghi chưa xóa | BR-FLOW-05 |
-| 3 | Áp dụng filter nếu có | — |
-| 4 | Trả về JSON response (metadata + download URL) | — |
+| 1 | Kiểm tra quyền + phạm vi phân quyền | BR-AUTH-01 |
+| 2 | Kiểm tra biểu mẫu có file đính kèm + thư mục cha CONG_KHAI | — |
+| 3 | Cập nhật `cong_khai = 1` + `trang_thai = CONG_KHAI` cho bản ghi BIEU_MAU. Cổng PLQG sẽ tự pull qua FR-XII-11 ở lượt sau. | BR-FLOW-05 |
+| 4 | Ghi nhật ký thao tác (hành động = 'PUBLISH', loai='BIEU_MAU') | BR-DATA-05 |
 
-**API Spec:** GET /api/v1/bieu-mau | Auth: mTLS + JWT Bearer | Response time: < 3s
+**Processing — Hủy công khai:**
+
+| Bước | Mô tả xử lý | BR áp dụng |
+|------|-------------|-----------|
+| 1 | Kiểm tra quyền | — |
+| 2 | Cập nhật `cong_khai = 0` + `trang_thai = AN` cho bản ghi BIEU_MAU. Cổng PLQG sẽ tự loại bản ghi khỏi response ở lượt pull tiếp theo. | — |
+| 3 | Ghi nhật ký thao tác (hành động = 'UNPUBLISH', loai='BIEU_MAU') | BR-DATA-05 |
 
 **Error Handling:**
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
-| E1 | JWT invalid/expired | 401 | {"error": "Unauthorized"} | ERROR |
-| E2 | Rate limit exceeded | 429 | {"error": "Too many requests"} | ERROR |
-| E3 | Internal error | 500 | {"error": "Internal server error"} | ERROR |
+| E1 | Biểu mẫu không có file đính kèm | ERR-CK-BM-01 | "Biểu mẫu chưa có file, không thể công khai" | ERROR |
+| E2 | Thư mục cha đang ẩn (chưa công khai) | ERR-CK-BM-02 | "Thư mục cha đang ẩn. Vui lòng công khai thư mục trước (UC94)" | ERROR |
+| E3 | Biểu mẫu đã ở trạng thái yêu cầu | WRN-CK-BM-01 | "Biểu mẫu đã ở trạng thái {trang_thai}" | WARNING |
 
 **Outputs:**
 
 | # | Tên | Kiểu logic | Điều kiện | Format |
 |---|-----|-----------|-----------|--------|
-| 1 | items | structured[] | — | [{id, ten, linh_vuc, loai_hinh, file_url, file_size, ngay_cap_nhat}] |
-| 2 | total | number | — | Tổng số bản ghi |
-| 3 | page | number | — | Trang hiện tại |
+| 1 | bieu_mau_id | identifier | — | — |
+| 2 | trang_thai | text | — | CONG_KHAI / AN |
+| 3 | thoi_gian_cap_nhat | datetime | — | NOW() |
 
-**Postconditions:** Read-only. Chỉ trả về biểu mẫu đã công khai.
+**Postconditions:**
+- Biểu mẫu xuất hiện hoặc biến mất khỏi response của FR-XII-11/12 (Cổng PLQG pull lượt sau).
+- KHÔNG cần phê duyệt — CB NV tự chịu trách nhiệm (BR-FLOW-07).
 
 **Acceptance Criteria:**
-- **Given** Cổng PLQG gọi API lấy danh sách **When** PM xử lý **Then** trả về biểu mẫu đã công khai (JSON)
-- **Given** Cổng PLQG gọi API lấy chi tiết **When** PM xử lý **Then** trả về metadata + URL download
-- **Given** Cổng PLQG gọi API tìm kiếm **When** PM xử lý **Then** trả về kết quả matching
+- **Given** CB NV chọn biểu mẫu (đã có file, thư mục cha CONG_KHAI) **When** nhấn "Công khai" **Then** `cong_khai = 1`, `trang_thai = CONG_KHAI`; lượt Cổng PLQG pull tiếp theo qua FR-XII-11 sẽ trả biểu mẫu này.
+- **Given** CB NV nhấn "Hủy công khai" **When** xác nhận **Then** `cong_khai = 0`, `trang_thai = AN`; lượt Cổng pull tiếp theo sẽ KHÔNG trả biểu mẫu này (filter loại ra).
+- **Given** biểu mẫu chưa có file **When** CB NV công khai **Then** ERR-CK-BM-01.
+- **Given** thư mục cha đang ẩn **When** CB NV công khai biểu mẫu **Then** ERR-CK-BM-02.
+
+**Cross-ref:** FR-XII-11 (API Cổng PLQG pull biểu mẫu công khai), FR-VII-03 (công khai cấp thư mục), BR-FLOW-05, BR-FLOW-07, BR-DATA-05.
 
 ---
 

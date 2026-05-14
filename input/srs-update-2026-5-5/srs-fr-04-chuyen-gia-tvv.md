@@ -19,6 +19,8 @@
 | 2026-05-03 | BA + Claude | Apply deep review screen description (Section 3 Màn hình chức năng): 5 Critical + 9 High + 5 Medium fix — thêm 3 SCR-IV-NHT-01/02/03 + 3 FR-IV-NHT cho NGUOI_HO_TRO entity (C-01); tách mã ref SRS khỏi cell UI hiển thị (C-02); thêm § 3.0 bảng ánh xạ enum→label tiếng Việt cho SM-TVV/SM-TCTV/SM-NHT/loai_tvv/loai_hinh (C-03); tách tab "Đang thẩm định" và "Yêu cầu bổ sung" SCR-IV-01 (C-04); đổi menu "Cá nhân tư vấn" → "Tư vấn viên / Chuyên gia" + thêm sub-menu NHT (C-05); bỏ note v2.1 + 9 vị trí "(gộp MH-04.X)" (H-01+H-02); thêm § 3.0b bảng mẫu hộp thoại xác nhận MD-* cho 11 trường hợp (H-03); tách 4 nút action SCR-IV-03 tab Thẩm định (H-04); SCR-IV-NEW-01 tách 4 filter + thêm filter Trạng thái (H-05+H-06); SCR-IV-NEW-03 thêm 3 nút Trình duyệt/Phê duyệt/Từ chối (H-07); SCR-IV-NEW-02 spec dropdown loại hình labels (H-08); SCR-IV-03 tab Lịch sử spec filter trạng thái (H-09); polish UX (button text ngắn, empty state, dropdown "..." cho >3 actions, icon spec) (M-01→M-05) |
 | 2026-05-03 | BA + Claude | Tinh chỉnh phạm vi tiếng Việt sau review v3: phân biệt rõ "**technical spec cho dev**" (giữ tiếng Anh chuẩn UI: breadcrumb, dropdown, radio, checkbox, pagination, toggle, tab, accordion + technical attribute names: Placeholder:, tooltip:, on-blur, hover, Click) vs "**text hiển thị user-facing**" (tiếng Việt thuần: tab title, button label, badge text, modal title/body, placeholder text trong ngoặc kép, tooltip text). Cột "Thành phần" = label tiếng Việt cho user-facing meaning (VD "Đường dẫn điều hướng"); cột "Loại UI" = technical type cho dev (VD `breadcrumb`). Mã enum DB chỉ trong § 3.0 bảng ánh xạ; cell Hành vi luôn dùng label tiếng Việt cho enum. Mã reference SRS (BR-XX, ERR-XX, MD-XX) chỉ trong "Quy tắc tương tác → Tham chiếu nội bộ" cho dev tra cứu, KHÔNG hiển thị UI |
 | 2026-05-03 | BA + Claude | Deep review v4 — fix 3 vấn đề còn sót: (a) 3 user-facing message/empty state đổi "NHT" → "Người hỗ trợ pháp lý" đầy đủ (line 1817 error message vô hiệu hóa, line 1845 error message vượt quyền, line 1894 empty state); (b) thống nhất 32+ vị trí "CB Nghiệp vụ" → "Cán bộ Nghiệp vụ", 13+ vị trí "CB Phê duyệt" → "Cán bộ Phê duyệt", "CB PD/CB NV" → đầy đủ — Section 3 hiện 100% dùng "Cán bộ Nghiệp vụ" / "Cán bộ Phê duyệt" thống nhất với header; (c) đổi entity raw "TAI_KHOAN" trong cell label hiển thị → "tài khoản" (cell 2.5 SCR-IV-NHT-02). NHT còn lại 2 vị trí là internal reference cho dev: SCR-IV-NHT-* (mã SCR), VAI_TRO 'NHT' (mã database role) — KHÔNG hiển thị user-facing |
+| 2026-05-07 | BA + Claude | Deep review SM-TVV — Q1 lối thoát TVV ở Chờ kích hoạt: (Finding 1) bổ sung transition khẩn cấp **CHO_KICH_HOAT → VO_HIEU_HOA** vào SM-TVV (mermaid + bảng chuyển trạng thái) + cập nhật FR-IV-12 (mô tả + Processing thêm bước invalidate token kích hoạt + tự gỡ Cổng PLQG nếu đã công khai + Acceptance Criteria mới) + mở rộng điều kiện hiển thị nút "Cập nhật trạng thái" SCR-IV-03 cho trạng thái Chờ kích hoạt tài khoản (chỉ cho phép Vô hiệu hóa, KHÔNG cho Tạm dừng vì TVV chưa từng hoạt động). Lý do: TVV ở CHO_KICH_HOAT đã được công khai trên Cổng pháp luật quốc gia ngay sau Cán bộ Phê duyệt duyệt → cần lối thoát cho 3 kịch bản: phát hiện gian lận sau duyệt, TVV mất khả năng nhận (bệnh / đổi ý), email nhập sai không thể cứu. (Finding 3) đồng bộ mô tả FR-IV-12 với SM-TVV — bổ sung transition TAM_DUNG → VO_HIEU_HOA trước đây bị thiếu trong câu mô tả. **(Finding 2 — note ver sau)** chức năng "Gửi lại mail kích hoạt" + "Sửa email + gửi lại" cho CB Nghiệp vụ / CB Phê duyệt: workflow regenerate token (sinh `token_reset_mk` + `token_het_han` mới + invalidate token cũ + gửi mail mới), KHÔNG show mật khẩu trên UI vì kiến trúc hiện tại dùng bcrypt hash + activation link 1 lần dùng (không có "mật khẩu tạm thời"). |
+| 2026-05-10 | Codex | Đồng bộ sau review UAT: (1) BR-PUBLIC-01 cho phép TVV cá nhân công khai ở cả `CHO_KICH_HOAT` và `HOAT_DONG`, TC TV vẫn chỉ `HOAT_DONG`; (2) FR-IV-07 làm rõ lỗi gửi mail kích hoạt không rollback quyết định phê duyệt — vẫn duyệt thành công, TVV/TK ở `CHO_KICH_HOAT`, ghi `WRN-PD-01`, TVV dùng FR-VIII-26 hoặc cán bộ gửi lại mail kích hoạt. |
 
 ---
 
@@ -75,7 +77,7 @@ graph LR
 → Phân công VV → Đánh giá định kỳ → Cập nhật trạng thái
 ```
 
-**Luồng phê duyệt:** CB NV cùng cấp thẩm định → CB PD cùng cấp phê duyệt (BR-FLOW-03 — KHÔNG xuyên cấp)
+**Luồng phê duyệt:** CB NV cùng đơn vị thẩm định → CB PD cùng đơn vị phê duyệt (BR-FLOW-03 — KHÔNG xuyên cấp)
 
 **UC Coverage:**
 
@@ -513,7 +515,7 @@ graph LR
 | 1 | Chuyển trạng thái TVV sang DANG_THAM_DINH (nếu chưa) | SM-TVV |
 | 2 | Xác nhận dữ liệu 4 nhóm tiêu chí | — |
 | 3 | Kiểm tra: DAT chỉ khi nhóm Pháp lý = Đạt | — |
-| 4 | **Nếu DAT + Trình duyệt:** chuyển trạng thái CHO_PHE_DUYET, gửi thông báo CB_PD **cùng cấp với CB NV thẩm định** (theo phân cấp pháp lý: NĐ 121/2025 Điều 39-40 phân cấp UBND cấp tỉnh công bố mạng lưới ở địa phương; NĐ 55/2019 Điều 9 quy định mỗi bộ/cơ quan ngang bộ tự công bố mạng lưới ngành mình; Bộ TP công bố mạng lưới quốc gia). KHÔNG có ESCALATE bắt buộc — mỗi cấp tự công bố theo phạm vi phân cấp | SM-TVV, BR-AUTH-05 |
+| 4 | **Nếu DAT + Trình duyệt:** chuyển trạng thái CHO_PHE_DUYET, gửi thông báo CB_PD **cùng đơn vị với CB NV thẩm định** (theo phân cấp pháp lý: NĐ 121/2025 Điều 39-40 phân cấp UBND cấp tỉnh công bố mạng lưới ở địa phương; NĐ 55/2019 Điều 9 quy định mỗi bộ/cơ quan ngang bộ tự công bố mạng lưới ngành mình; Bộ TP công bố mạng lưới quốc gia). KHÔNG có ESCALATE bắt buộc — mỗi cấp tự công bố theo phạm vi phân cấp | SM-TVV, BR-AUTH-05 |
 | 5 | Nếu YEU_CAU_BO_SUNG: chuyển trạng thái, gửi thông báo TVV/CG (chủ hồ sơ) | SM-TVV |
 | 6 | Nếu KHONG_DAT: chuyển trạng thái TU_CHOI, gửi thông báo TVV/CG (chủ hồ sơ) | SM-TVV |
 | 7 | Tạo/cập nhật bản ghi HO_SO_TU_VAN_VIEN (kết quả thẩm định) `[GAP-IV-05]` | — |
@@ -559,12 +561,12 @@ graph LR
 
 **Mô tả:** CB PD công bố TVV vào mạng lưới TVV PL theo phạm vi phân cấp: **NĐ 121/2025 Điều 39-40** phân cấp UBND cấp tỉnh (Sở TP) công bố mạng lưới ở địa phương; **NĐ 55/2019 Điều 9** quy định mỗi bộ/cơ quan ngang bộ (cấp BN) tự công bố mạng lưới ngành mình; Bộ Tư pháp (cấp TW) công bố mạng lưới quốc gia.
 
-**Tác nhân:** Cán bộ Phê duyệt **cùng cấp với CB NV đã thẩm định** (BR-AUTH-05) — CB PD cấp ĐP, BN, hoặc TW đều có thẩm quyền công bố trong phạm vi phân cấp tương ứng.
+**Tác nhân:** Cán bộ Phê duyệt **cùng đơn vị với CB NV đã thẩm định** (BR-AUTH-05) — CB PD cấp ĐP, BN, hoặc TW đều có thẩm quyền công bố trong phạm vi phân cấp tương ứng.
 
 **Preconditions:**
 - TVV ở CHO_PHE_DUYET
 - `current_user.role = 'CB_PD'`
-- CB PD cùng cấp với CB NV thẩm định (BR-AUTH-05):
+- CB PD cùng đơn vị với CB NV thẩm định (BR-AUTH-05):
   - CB_PD_ĐP duyệt hồ sơ do CB_NV_ĐP thẩm định (mạng lưới địa phương — NĐ 121/2025 Đ.39-40)
   - CB_PD_BN duyệt hồ sơ do CB_NV_BN cùng Bộ ngành thẩm định (mạng lưới ngành — NĐ 55/2019 Đ.9)
   - CB_PD_TW duyệt hồ sơ do CB_NV_TW thẩm định (mạng lưới quốc gia)
@@ -585,8 +587,8 @@ graph LR
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 0 | **Optimistic lock**: kiểm tra `TU_VAN_VIEN.version` khớp input. Nếu lệch → reject ERR-PD-04 "Tư vấn viên đã được duyệt bởi {nguoi_duyet} lúc {time}, vui lòng tải lại trang" | — |
-| 1 | Kiểm tra quyền + cùng cấp thẩm định (BR-AUTH-05): CB PD cùng cấp với CB NV đã thẩm định | BR-AUTH-01, BR-AUTH-05, BR-FLOW-03 |
-| 2 | Nếu PHE_DUYET: chuyển trạng thái **CHO_KICH_HOAT** (chờ TVV bấm link kích hoạt + đặt mật khẩu), set `ngay_cong_nhan = NOW()`, `thoi_gian_duyet = NOW()`, `nguoi_duyet = current_user.id`, `so_quyet_dinh`, tăng `version`. **Đồng thời, hệ thống tự động cấp tài khoản cho TVV (gọi quy trình tạo tài khoản FR-VIII-15 với hệ thống là tác nhân thay Quản trị HT):** sinh tên đăng nhập từ email TVV, tạo TAI_KHOAN ở trạng thái CHO_KICH_HOAT, copy vai trò TVV/CG (từ `loai_tvv` của hồ sơ) + đơn vị (từ `don_vi_id` của hồ sơ), liên kết TAI_KHOAN ↔ TU_VAN_VIEN, gửi mail link kích hoạt vĩnh viễn (1 lần dùng). Tất cả gộp vào hành động duyệt — nếu lỗi 1 bước thì không duyệt, hồ sơ giữ nguyên CHO_PHE_DUYET | SM-TVV, FR-VIII-15 |
+| 1 | Kiểm tra quyền + cùng đơn vị thẩm định (BR-AUTH-05): CB PD cùng đơn vị với CB NV đã thẩm định | BR-AUTH-01, BR-AUTH-05, BR-FLOW-03 |
+| 2 | Nếu PHE_DUYET: chuyển trạng thái **CHO_KICH_HOAT** (chờ TVV bấm link kích hoạt + đặt mật khẩu), set `ngay_cong_nhan = NOW()`, `thoi_gian_duyet = NOW()`, `nguoi_duyet = current_user.id`, `so_quyet_dinh`, tăng `version`. **Đồng thời, hệ thống tự động cấp tài khoản cho TVV (gọi quy trình tạo tài khoản FR-VIII-15 với hệ thống là tác nhân thay Quản trị HT):** sinh tên đăng nhập từ email TVV, tạo TAI_KHOAN ở trạng thái CHO_KICH_HOAT, copy vai trò TVV/CG (từ `loai_tvv` của hồ sơ) + đơn vị (từ `don_vi_id` của hồ sơ), liên kết TAI_KHOAN ↔ TU_VAN_VIEN, gửi mail link kích hoạt vĩnh viễn (1 lần dùng). Các lỗi trước bước gửi mail kích hoạt (validate nghiệp vụ, optimistic lock, tạo tài khoản, gán vai trò, liên kết TAI_KHOAN ↔ TU_VAN_VIEN) thì rollback và hồ sơ giữ nguyên CHO_PHE_DUYET. **Riêng lỗi gửi mail kích hoạt KHÔNG rollback quyết định phê duyệt:** vẫn duyệt thành công, TVV và TAI_KHOAN ở CHO_KICH_HOAT, ghi warning WRN-PD-01; TVV có thể dùng FR-VIII-26 hoặc cán bộ dùng chức năng gửi lại mail kích hoạt để nhận link mới. | SM-TVV, FR-VIII-15, FR-VIII-26 |
 | 3 | Nếu TU_CHOI: chuyển trạng thái TU_CHOI, set `thoi_gian_tu_choi`, `nguoi_tu_choi`, `ly_do_tu_choi`, tăng `version` | SM-TVV |
 | 4 | Gửi thông báo TVV/CG (chủ hồ sơ) qua email đã khai | — |
 | 5 | Ghi nhật ký thao tác | BR-DATA-05 |
@@ -606,7 +608,7 @@ graph LR
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
-| E1 | CB PD khác cấp | ERR-PD-02 | "Chỉ phê duyệt hồ sơ cùng cấp" | ERROR |
+| E1 | CB PD khác đơn vị | ERR-PD-02 | "Chỉ phê duyệt hồ sơ cùng đơn vị" | ERROR |
 | E2 | Từ chối không có lý do | ERR-PD-03 | "Lý do từ chối là bắt buộc (≥10 ký tự)" | ERROR |
 | E3 | Optimistic lock conflict | ERR-PD-04 | "Tư vấn viên đã được duyệt bởi {nguoi_duyet} lúc {time}, vui lòng tải lại trang để xem trạng thái mới" | ERROR |
 | E4 | Phê duyệt thiếu số QĐ | ERR-PD-05 | "Số quyết định công nhận là bắt buộc khi phê duyệt" | ERROR |
@@ -868,7 +870,12 @@ graph LR
 **Priority:** Essential | **Stability:** High
 **Màn hình:** SCR-IV-03 (nút header "Cập nhật trạng thái" — mở hộp thoại)
 
-**Mô tả:** CB NV chuyển trạng thái hoạt động TVV: HOAT_DONG ⟷ TAM_DUNG, HOAT_DONG → VO_HIEU_HOA, VO_HIEU_HOA → HOAT_DONG.
+**Mô tả:** Cán bộ Nghiệp vụ chuyển trạng thái hoạt động TVV theo SM-TVV. Bao gồm 6 transition hợp lệ:
+- HOAT_DONG ⟷ TAM_DUNG (tạm dừng / kích hoạt lại)
+- HOAT_DONG → VO_HIEU_HOA (vô hiệu hóa từ trạng thái hoạt động)
+- TAM_DUNG → VO_HIEU_HOA (vô hiệu hóa từ trạng thái tạm dừng)
+- VO_HIEU_HOA → HOAT_DONG (khôi phục)
+- **CHO_KICH_HOAT → VO_HIEU_HOA** `[v3.5+]` lối thoát khẩn cấp cho TVV chưa kích hoạt tài khoản (gian lận sau duyệt / TVV mất khả năng nhận / email sai không thể cứu)
 
 **Tác nhân:** CB NV
 
@@ -884,10 +891,12 @@ graph LR
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 1 | Kiểm tra transition hợp lệ theo SM-TVV | SM-TVV |
-| 2 | Nếu VO_HIEU_HOA: kiểm tra **KHÔNG có VU_VIEC VÀ HOI_DAP đang xử lý** (trang_thai IN ('DANG_XU_LY','CHO_PHE_DUYET')) | — |
+| 2 | Nếu VO_HIEU_HOA **và trạng thái cũ ∈ {HOAT_DONG, TAM_DUNG}**: kiểm tra **KHÔNG có VU_VIEC VÀ HOI_DAP đang xử lý** (trang_thai IN ('DANG_XU_LY','CHO_PHE_DUYET')) | — |
+| 2b | Nếu VO_HIEU_HOA **và trạng thái cũ = CHO_KICH_HOAT** `[v3.5+]`: bỏ qua kiểm vụ việc/hỏi đáp (TVV chưa kích hoạt tài khoản — chưa từng được phân công); chỉ yêu cầu lý do ≥ 10 ký tự để ghi nhận căn cứ vô hiệu hóa khẩn cấp | — |
 | 3 | Cập nhật trạng thái TVV, tăng `version` | — |
-| 4 | Nếu VO_HIEU_HOA và đã công khai: tự động gỡ khỏi Cổng PLQG | — |
-| 5 | Gửi thông báo TVV/CG (chủ hồ sơ — push realtime nếu TVV/CG đang có session mở form FR-IV-11 trên chuyên trang) | — |
+| 3b | Nếu VO_HIEU_HOA **và trạng thái cũ = CHO_KICH_HOAT** `[v3.5+]`: invalidate token kích hoạt (`token_reset_mk = NULL`, `token_het_han = NOW()`), khóa tài khoản TVV (`TAI_KHOAN.trang_thai = VO_HIEU_HOA`), liên kết audit log với mã hành động `EMERGENCY_DEACTIVATE_BEFORE_ACTIVATION` | — |
+| 4 | Nếu VO_HIEU_HOA và đã công khai (`cong_khai = 1`): tự động gỡ khỏi Cổng pháp luật quốc gia (kể cả TVV ở CHO_KICH_HOAT đã được công khai theo FR-IV-08) | — |
+| 5 | Gửi thông báo: (a) cho TVV/CG (chủ hồ sơ — push realtime nếu đang có session); (b) `[v3.5+]` nếu transition CHO_KICH_HOAT → VO_HIEU_HOA: thêm thông báo cho Cán bộ Phê duyệt cùng đơn vị đã duyệt hồ sơ (vì hành động này đảo ngược phần nào kết quả phê duyệt) | — |
 | 6 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Outputs:** `[GAP-IV-01]`
@@ -911,12 +920,15 @@ graph LR
 - Trạng thái TVV được cập nhật theo SM-TVV
 - TVV bị vô hiệu hóa không thể được phân công vụ việc mới
 - Tự động gỡ Cổng PLQG nếu vô hiệu hóa
+- `[v3.5+]` Nếu vô hiệu hóa từ CHO_KICH_HOAT: token kích hoạt bị invalidate (link mail cũ không dùng được nữa) + tài khoản TVV bị khóa
 
 **Acceptance Criteria:**
-- **Given** CB NV chọn cập nhật trạng thái **When** chọn TAM_DUNG + lý do **Then** TVV → TAM_DUNG
-- **Given** CB NV chọn VO_HIEU_HOA **When** TVV có VV đang xử lý **Then** từ chối + cảnh báo
-- **Given** TVV đã công khai bị vô hiệu hóa **When** xác nhận **Then** tự động gỡ Cổng PLQG
-- **Given** CB NV cập nhật thành công **When** hệ thống xử lý xong **Then** hiển thị trạng thái mới (badge + timestamp)
+- **Given** Cán bộ Nghiệp vụ chọn cập nhật trạng thái **When** chọn Tạm dừng + lý do **Then** TVV → Tạm dừng
+- **Given** Cán bộ Nghiệp vụ chọn Vô hiệu hóa **When** TVV có vụ việc đang xử lý **Then** từ chối + cảnh báo (ERR-TT-02)
+- **Given** TVV đã công khai bị vô hiệu hóa **When** xác nhận **Then** tự động gỡ Cổng pháp luật quốc gia
+- **Given** Cán bộ Nghiệp vụ cập nhật thành công **When** hệ thống xử lý xong **Then** hiển thị trạng thái mới (badge + timestamp)
+- **Given** TVV ở Chờ kích hoạt tài khoản (đã được Cán bộ Phê duyệt duyệt nhưng chưa bấm link kích hoạt) **When** Cán bộ Nghiệp vụ phát hiện gian lận hồ sơ + chọn Vô hiệu hóa + nhập lý do ≥ 10 ký tự **Then** TVV → Vô hiệu hóa, token kích hoạt bị huỷ (link mail cũ vô tác dụng), tài khoản TVV bị khóa, tự gỡ khỏi Cổng pháp luật quốc gia nếu đã công khai, gửi thông báo cho Cán bộ Phê duyệt đã duyệt hồ sơ
+- **Given** TVV ở Chờ kích hoạt mà email nhập sai không thể cứu **When** Cán bộ Nghiệp vụ chọn Vô hiệu hóa với lý do "Email nhập sai, không liên lạc được TVV" **Then** transition thành công (KHÔNG bị chặn bởi guard vụ việc/hỏi đáp vì TVV chưa từng hoạt động)
 
 ---
 
@@ -1126,12 +1138,12 @@ graph LR
 
 **Mô tả:** CB PD công bố Tổ chức tư vấn vào mạng lưới TVV PL theo phạm vi phân cấp (đồng nhất pattern với FR-IV-07 cho TVV cá nhân). TC TV phải qua luồng phê duyệt này theo NĐ 55/2019 Đ.9 — không được tạo trực tiếp HOAT_DONG.
 
-**Tác nhân:** Cán bộ Phê duyệt **cùng cấp với CB NV đã tạo/tiếp nhận TC TV** (BR-AUTH-05) — CB PD cấp ĐP, BN, hoặc TW đều có thẩm quyền công bố trong phạm vi phân cấp tương ứng.
+**Tác nhân:** Cán bộ Phê duyệt **cùng đơn vị với CB NV đã tạo/tiếp nhận TC TV** (BR-AUTH-05) — CB PD cấp ĐP, BN, hoặc TW đều có thẩm quyền công bố trong phạm vi phân cấp tương ứng.
 
 **Preconditions:**
 - TC TV ở trạng thái CHO_PHE_DUYET
 - `current_user.role = 'CB_PD'`
-- CB PD cùng cấp với CB NV đã tạo (BR-AUTH-05)
+- CB PD cùng đơn vị với CB NV đã tạo (BR-AUTH-05)
 
 **Inputs:**
 
@@ -1149,7 +1161,7 @@ graph LR
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 0 | **Optimistic lock**: kiểm tra `TO_CHUC_TU_VAN.version` khớp input. Nếu lệch → reject ERR-PD-TC-04 | — |
-| 1 | Kiểm tra quyền + cùng cấp tạo TC TV (BR-AUTH-05) | BR-AUTH-01, BR-AUTH-05, BR-FLOW-03 |
+| 1 | Kiểm tra quyền + cùng đơn vị tạo TC TV (BR-AUTH-05) | BR-AUTH-01, BR-AUTH-05, BR-FLOW-03 |
 | 2 | Nếu PHE_DUYET: chuyển trạng thái HOAT_DONG, set `ngay_cong_nhan = NOW()`, `thoi_gian_duyet = NOW()`, `nguoi_duyet = current_user.id`, `so_quyet_dinh`, tăng `version` | SM-TCTV |
 | 3 | Nếu TU_CHOI: chuyển trạng thái TU_CHOI, set `thoi_gian_tu_choi`, `nguoi_tu_choi`, `ly_do_tu_choi`, tăng `version` | SM-TCTV |
 | 4 | Gửi thông báo CB NV đã tạo (để thông báo lại TC TV qua kênh ngoài hệ thống) | — |
@@ -1170,7 +1182,7 @@ graph LR
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
-| E1 | CB PD khác cấp | ERR-PD-TC-02 | "Chỉ phê duyệt Tổ chức tư vấn cùng cấp" | ERROR |
+| E1 | CB PD khác đơn vị | ERR-PD-TC-02 | "Chỉ phê duyệt Tổ chức tư vấn cùng đơn vị" | ERROR |
 | E2 | Từ chối không có lý do | ERR-PD-TC-03 | "Lý do từ chối là bắt buộc (≥10 ký tự)" | ERROR |
 | E3 | Optimistic lock conflict | ERR-PD-TC-04 | "Tổ chức tư vấn đã được duyệt bởi {nguoi_duyet} lúc {time}, vui lòng tải lại trang" | ERROR |
 | E4 | Phê duyệt thiếu số QĐ | ERR-PD-TC-05 | "Số quyết định công bố là bắt buộc khi phê duyệt" | ERROR |
@@ -1391,6 +1403,7 @@ Menu: Quản lý mạng lưới tư vấn viên
 | MD-HUY-CONG-KHAI | Xác nhận hủy công khai? | Thông tin **{tên}** sẽ bị gỡ khỏi Cổng pháp luật quốc gia. Bạn có thể công khai lại bất kỳ lúc nào. | Hủy công khai |
 | MD-TAM-DUNG | Xác nhận tạm dừng? | **{tên}** sẽ bị tạm dừng và không thể nhận phân công vụ việc mới. Bạn có thể kích hoạt lại bất kỳ lúc nào. Vui lòng nhập lý do (tối thiểu 10 ký tự). | Tạm dừng |
 | MD-VO-HIEU-HOA | Xác nhận vô hiệu hóa? | **{tên}** sẽ bị vô hiệu hóa và tự động gỡ khỏi Cổng pháp luật quốc gia. Hành động này có thể khôi phục sau. Vui lòng nhập lý do (tối thiểu 10 ký tự). | Vô hiệu hóa |
+| MD-VO-HIEU-HOA-KICH-HOAT `[v3.5+]` | Xác nhận vô hiệu hóa khẩn cấp? | **{tên}** đang ở trạng thái Chờ kích hoạt tài khoản (đã được Cán bộ Phê duyệt duyệt nhưng chưa bấm link kích hoạt). Vô hiệu hóa khẩn cấp sẽ: (1) huỷ link kích hoạt đã gửi qua mail; (2) khóa tài khoản tư vấn viên; (3) tự động gỡ khỏi Cổng pháp luật quốc gia nếu đã công khai; (4) gửi thông báo cho Cán bộ Phê duyệt đã duyệt hồ sơ. Hành động này có thể khôi phục sau. Vui lòng nhập lý do (tối thiểu 10 ký tự — ví dụ: phát hiện gian lận hồ sơ, tư vấn viên mất khả năng nhận, email nhập sai không thể cứu). | Vô hiệu hóa khẩn cấp |
 | MD-XOA | Xác nhận xóa? | **{tên}** sẽ bị xóa khỏi danh sách. Dữ liệu vẫn được lưu trữ phục vụ tra cứu (xóa mềm). | Xóa |
 | MD-PHE-DUYET-HANG-LOAT | Xác nhận phê duyệt hàng loạt? | Bạn đang phê duyệt **{N}** hồ sơ. Vui lòng nhập Số quyết định cho từng hồ sơ trong bảng dưới đây. | Phê duyệt {N} hồ sơ |
 | MD-CONG-KHAI-PARTIAL-FAIL | Báo cáo kết quả công khai | Đã công khai thành công **{N-K}/{N}** hồ sơ. **{K}** hồ sơ thất bại do lỗi kết nối Cổng pháp luật quốc gia. | Thử lại {K} hồ sơ |
@@ -1518,7 +1531,7 @@ Menu: Quản lý mạng lưới tư vấn viên
 **Đường dẫn:** `/chuyen-gia-tvv/:id`
 **Quyền truy cập:**
 - Cán bộ Nghiệp vụ: xem + thẩm định + cập nhật trạng thái + công khai (TVV cùng đơn vị)
-- Cán bộ Phê duyệt cùng cấp: xem + phê duyệt / từ chối (theo phân cấp NĐ 121/2025 Đ.39-40 + NĐ 55/2019 Đ.9)
+- Cán bộ Phê duyệt cùng đơn vị: xem + phê duyệt / từ chối (theo phân cấp NĐ 121/2025 Đ.39-40 + NĐ 55/2019 Đ.9)
 - Tư vấn viên / Chuyên gia (chủ hồ sơ): xem hồ sơ + năng lực + lịch sử + đánh giá của mình; **tab Thẩm định ẩn hoàn toàn** để bảo mật nhận xét nội bộ
 
 **Mô tả:** Hồ sơ chi tiết tư vấn viên hợp nhất toàn bộ quy trình trên 1 trang: xem hồ sơ → thẩm định 4 nhóm tiêu chí → trình duyệt → phê duyệt / từ chối → công khai → cập nhật trạng thái.
@@ -1532,9 +1545,9 @@ Menu: Quản lý mạng lưới tư vấn viên
 | 3 | header | Thẻ thông tin chính | thẻ hiển thị | Ảnh chân dung 80x100 + Họ tên (đậm 20px) + Mã tư vấn viên + Trạng thái (badge lớn theo § 3.0) + Điểm đánh giá trung bình (sao) + Ngày công nhận | — | Luôn |
 | 4 | header | Nút **Sửa hồ sơ** | nút phụ | "Sửa hồ sơ" | Click → SCR-IV-02 | Vai trò = Cán bộ Nghiệp vụ HOẶC chủ hồ sơ; trạng thái khác Vô hiệu hóa |
 | 6 | header | Nút **Bắt đầu thẩm định** | nút chính | "Bắt đầu thẩm định" | Click → ngầm chuyển trạng thái Mới đăng ký/Chờ thẩm định → Đang thẩm định + chuyển sang tab Thẩm định | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái ∈ {Mới đăng ký, Chờ thẩm định} |
-| 7 | header | Nút **Cập nhật trạng thái** | nút phụ | "Cập nhật trạng thái" | Click → mở hộp thoại chọn trạng thái mới (Tạm dừng / Khôi phục / Vô hiệu hóa) + lý do (≥ 10 ký tự) → áp dụng MD-TAM-DUNG hoặc MD-VO-HIEU-HOA. Khi vô hiệu hóa: tự động gỡ khỏi Cổng pháp luật quốc gia | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái ∈ {Đang hoạt động, Tạm dừng, Vô hiệu hóa} |
-| 8 | header | Nút **Phê duyệt** | nút chính | "Phê duyệt" | Click → mở MD-PHE-DUYET (form: Số quyết định * + Ý kiến phê duyệt) → đặt trạng thái Đang hoạt động + ghi ngày công nhận, người duyệt. Có khóa lạc quan chống 2 người duyệt cùng lúc | Vai trò = Cán bộ Phê duyệt cùng cấp với Cán bộ Nghiệp vụ thẩm định; trạng thái = Chờ phê duyệt |
-| 9 | header | Nút **Từ chối** | nút nguy hiểm (đỏ) | "Từ chối" | Click → mở MD-TU-CHOI (lý do bắt buộc ≥ 10 ký tự) → đặt trạng thái Đã từ chối + ghi người từ chối, lý do | Vai trò = Cán bộ Phê duyệt cùng cấp; trạng thái = Chờ phê duyệt |
+| 7 | header | Nút **Cập nhật trạng thái** | nút phụ | "Cập nhật trạng thái" | Click → mở hộp thoại chọn trạng thái mới + lý do (≥ 10 ký tự) → áp dụng MD-TAM-DUNG / MD-VO-HIEU-HOA / MD-VO-HIEU-HOA-KICH-HOAT tương ứng. **Tùy chọn trạng thái mới hiển thị theo trạng thái hiện tại:** (a) Đang hoạt động → hiển thị "Tạm dừng" + "Vô hiệu hóa"; (b) Tạm dừng → hiển thị "Kích hoạt lại (Đang hoạt động)" + "Vô hiệu hóa"; (c) Vô hiệu hóa → hiển thị "Khôi phục (Đang hoạt động)"; (d) **Chờ kích hoạt tài khoản `[v3.5+]` → CHỈ hiển thị "Vô hiệu hóa khẩn cấp"** (KHÔNG có Tạm dừng vì TVV chưa từng hoạt động). Khi vô hiệu hóa: tự động gỡ khỏi Cổng pháp luật quốc gia nếu đã công khai; nếu trạng thái cũ là Chờ kích hoạt → đồng thời huỷ token kích hoạt + khóa tài khoản | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái ∈ {**Chờ kích hoạt tài khoản** `[v3.5+]`, Đang hoạt động, Tạm dừng, Vô hiệu hóa} |
+| 8 | header | Nút **Phê duyệt** | nút chính | "Phê duyệt" | Click → mở MD-PHE-DUYET (form: Số quyết định * + Ý kiến phê duyệt) → đặt trạng thái Đang hoạt động + ghi ngày công nhận, người duyệt. Có khóa lạc quan chống 2 người duyệt cùng lúc | Vai trò = Cán bộ Phê duyệt cùng đơn vị với Cán bộ Nghiệp vụ thẩm định; trạng thái = Chờ phê duyệt |
+| 9 | header | Nút **Từ chối** | nút nguy hiểm (đỏ) | "Từ chối" | Click → mở MD-TU-CHOI (lý do bắt buộc ≥ 10 ký tự) → đặt trạng thái Đã từ chối + ghi người từ chối, lý do | Vai trò = Cán bộ Phê duyệt cùng đơn vị; trạng thái = Chờ phê duyệt |
 | 10 | header | Nút **Công khai lên Cổng pháp luật quốc gia** | nút chính | "Công khai" (tooltip: "Đẩy thông tin lên Cổng pháp luật quốc gia") | Click → MD-CONG-KHAI (form nhập mô tả + file đính kèm) → lưu mo_ta_cong_khai + file_dinh_kem_cong_khai → gọi API Cổng pháp luật quốc gia → đặt cong_khai = 1, ghi thời gian đăng tải | Vai trò = Cán bộ Nghiệp vụ có quyền công khai; trạng thái = Chờ kích hoạt tài khoản HOẶC Đang hoạt động (TVV được công khai ngay sau khi Cán bộ Phê duyệt duyệt — không cần đợi kích hoạt TK) AND chưa công khai |
 | 11 | header | Nút **Hủy công khai** | nút phụ (cảnh báo) | "Hủy công khai" | Click → MD-HUY-CONG-KHAI → gọi API gỡ khỏi Cổng pháp luật quốc gia | Vai trò = Cán bộ Nghiệp vụ có quyền công khai; đã công khai (cong_khai = 1) |
 
@@ -1553,7 +1566,7 @@ Menu: Quản lý mạng lưới tư vấn viên
 | 20a | tab 2 | Nút **Hủy** | nút phụ | "Hủy" | Nếu có thay đổi chưa lưu → MD-XOA xác nhận; click "Đồng ý" → bỏ thay đổi | Tab Thẩm định |
 | 20b | tab 2 | Nút **Lưu nháp** | nút phụ | "Lưu nháp" | Lưu kết quả thẩm định tạm, không chuyển trạng thái | Tab Thẩm định |
 | 20c | tab 2 | Nút **Gửi kết quả thẩm định** | nút chính | "Gửi kết quả" | Áp dụng kết quả: nếu "Yêu cầu bổ sung" → đặt trạng thái Yêu cầu bổ sung + thông báo chủ hồ sơ; nếu "Không đạt" → đặt trạng thái Đã từ chối + thông báo chủ hồ sơ | Tab Thẩm định, kết luận đã chọn |
-| 20d | tab 2 | Nút **Trình phê duyệt** | nút chính | "Trình phê duyệt" | Click → MD-TRINH-DUYET → đặt trạng thái Chờ phê duyệt + thông báo Cán bộ Phê duyệt cùng cấp | Tab Thẩm định, kết luận = "Đạt" |
+| 20d | tab 2 | Nút **Trình phê duyệt** | nút chính | "Trình phê duyệt" | Click → MD-TRINH-DUYET → đặt trạng thái Chờ phê duyệt + thông báo Cán bộ Phê duyệt cùng đơn vị | Tab Thẩm định, kết luận = "Đạt" |
 | 21 | tab 3 | Tab "Năng lực" | tab + nội dung | Bằng cấp chi tiết, Chứng chỉ chi tiết, Kinh nghiệm chi tiết. Nút "Cập nhật năng lực" → form sửa nhanh | Click "Cập nhật năng lực" → mở form chỉnh sửa | Vai trò = chủ hồ sơ HOẶC Cán bộ Nghiệp vụ |
 | 22 | tab 4 | Tab "Lịch sử hỗ trợ" | tab + nội dung | (a) Bộ lọc: Khoảng ngày + Trạng thái vụ việc (chọn nhiều: "Tất cả" / "Đang xử lý" / "Hoàn thành" / "Đã hủy"); (b) Bảng: Mã vụ việc (đường liên kết) + Tên vụ việc + Doanh nghiệp + Lĩnh vực + Vai trò ("Người hỗ trợ" / "Tư vấn viên") + Ngày phân công + Ngày hoàn thành + Kết quả + Đánh giá (sao); (c) Thống kê tóm tắt: "Tổng vụ việc: {N}", "Hoàn thành: {M}", "Điểm trung bình: {X}/5" | — | Luôn |
 | 22b | tab 4 | Phân trang | pagination | 20 vụ việc/trang | — | Luôn |
@@ -1570,15 +1583,16 @@ Menu: Quản lý mạng lưới tư vấn viên
 - **Thẩm định** (Chờ thẩm định → Đang thẩm định): Cán bộ Nghiệp vụ click "Bắt đầu thẩm định" → hiển thị form 4 nhóm tiêu chí. Khi gửi kết quả: nếu "Yêu cầu bổ sung" → trạng thái Yêu cầu bổ sung; nếu "Không đạt" → Đã từ chối; nếu "Đạt" → bật nút "Trình phê duyệt".
 - **Bổ sung hồ sơ** (Yêu cầu bổ sung → Đang thẩm định): tự động kích hoạt khi chủ hồ sơ lưu thông tin năng lực mới qua chuyên trang.
 - **Nộp lại sau từ chối** (Đã từ chối → Chờ thẩm định): chủ hồ sơ tự nộp lại, không yêu cầu thời gian chờ; hệ thống xóa kết quả thẩm định cũ.
-- **Phê duyệt** (Chờ phê duyệt → Đang hoạt động): Cán bộ Phê duyệt cùng cấp với Cán bộ Nghiệp vụ đã thẩm định. Bắt buộc nhập Số quyết định khi phê duyệt. Khóa lạc quan chống 2 người cùng duyệt.
+- **Phê duyệt** (Chờ phê duyệt → Đang hoạt động): Cán bộ Phê duyệt cùng đơn vị với Cán bộ Nghiệp vụ đã thẩm định. Bắt buộc nhập Số quyết định khi phê duyệt. Khóa lạc quan chống 2 người cùng duyệt.
 - **Cập nhật trạng thái** (sau khi đã Hoạt động): chuyển Tạm dừng / Khôi phục / Vô hiệu hóa. Vô hiệu hóa: kiểm tra không có vụ việc và hỏi đáp đang xử lý; nếu có → từ chối với cảnh báo.
+- **Vô hiệu hóa khẩn cấp khi Chờ kích hoạt tài khoản** `[v3.5+]`: Cán bộ Nghiệp vụ click "Cập nhật trạng thái" trên TVV ở trạng thái Chờ kích hoạt → hộp thoại MD-VO-HIEU-HOA-KICH-HOAT chỉ hiển thị 1 tùy chọn duy nhất "Vô hiệu hóa khẩn cấp" + ô lý do bắt buộc ≥ 10 ký tự. Áp dụng cho 3 kịch bản đời thường: (1) phát hiện gian lận hồ sơ sau khi Cán bộ Phê duyệt đã duyệt; (2) tư vấn viên mất khả năng nhận tài khoản (bệnh, tai nạn, đổi ý); (3) email tư vấn viên nhập sai không thể liên lạc lại. Khi xác nhận: hệ thống huỷ token kích hoạt (link mail cũ vô tác dụng) + khóa tài khoản + tự gỡ Cổng pháp luật quốc gia nếu đã công khai + gửi thông báo cho Cán bộ Phê duyệt đã duyệt hồ sơ. KHÔNG kiểm guard vụ việc/hỏi đáp vì TVV chưa từng hoạt động. Nếu sau này muốn khôi phục → dùng transition Vô hiệu hóa → Đang hoạt động (TVV phải đặt lại mật khẩu qua chức năng "Quên mật khẩu").
 - **Bảo mật tab Thẩm định:** ẩn hoàn toàn với chủ hồ sơ — chống lộ nhận xét nội bộ cán bộ.
 - **Sau khi Hoạt động:** tư vấn viên có thể tham gia hỗ trợ vụ việc + được công khai lên Cổng pháp luật quốc gia.
 - **An toàn file:** mọi file tải lên đều quét virus (timeout 30 giây), từ chối nếu phát hiện mã độc.
 - **An toàn nhận xét:** lọc HTML / mã độc trước khi lưu và hiển thị.
 
 **Tham chiếu nội bộ:**
-- Quy tắc nghiệp vụ: BR-AUTH-05 (phê duyệt cùng cấp), BR-AUTH-08 (phân quyền theo đơn vị), BR-FLOW-04 (từ chối yêu cầu lý do).
+- Quy tắc nghiệp vụ: BR-AUTH-05 (phê duyệt cùng đơn vị), BR-AUTH-08 (phân quyền theo đơn vị), BR-FLOW-04 (từ chối yêu cầu lý do).
 - Mã lỗi: ERR-PD-03 (thiếu lý do từ chối), ERR-PD-04 (xung đột khóa lạc quan), ERR-PD-05 (thiếu số quyết định khi phê duyệt), ERR-TD-02/03/04 (thẩm định), ERR-TT-02 (vô hiệu hóa khi có vụ việc đang xử lý).
 - Cross-FR: FR-IV-CROSS-01 (tự cập nhật điểm đánh giá trung bình sau khi nhận đánh giá mới).
 
@@ -1591,7 +1605,7 @@ Menu: Quản lý mạng lưới tư vấn viên
 **Đường dẫn:** `/chuyen-gia-tvv/to-chuc`
 **Quyền truy cập:**
 - Cán bộ Nghiệp vụ: thêm/sửa/xóa, xuất Excel, công khai, cập nhật trạng thái (Tổ chức tư vấn thuộc đơn vị)
-- Cán bộ Phê duyệt cùng cấp: xem + phê duyệt/từ chối tab "Chờ phê duyệt"
+- Cán bộ Phê duyệt cùng đơn vị: xem + phê duyệt/từ chối tab "Chờ phê duyệt"
 
 **Mô tả:** Danh sách quản lý Tổ chức tư vấn pháp luật tham gia mạng lưới HTPL DNNVV (theo NĐ 77/2008 + NĐ 55/2019 Đ.10, mẫu Phụ lục 2 — QĐ 1322/QĐ-BTP). Hiển thị 6 tab phân loại theo trạng thái lifecycle. Tổ chức tư vấn phải qua luồng phê duyệt theo NĐ 55/2019 Đ.9 trước khi vào mạng lưới.
 
@@ -1622,9 +1636,9 @@ Menu: Quản lý mạng lưới tư vấn viên
 | 21 | bảng | Lĩnh vực | tags | Tối đa 3 thẻ + "+N" nếu nhiều hơn | — |
 | 22 | bảng | Trạng thái | badge | Theo bảng ánh xạ § 3.0 | — |
 | 23 | bảng | Công khai | toggle | "Đã công khai" (xanh) / "Chưa công khai" (xám) | Click → mở MD-CONG-KHAI hoặc MD-HUY-CONG-KHAI; chỉ bật được khi trạng thái = Đang hoạt động |
-| 24 | bảng | Hành động | nhóm icon + dropdown "..." | 2 icon thường: Xem (mắt) → SCR-IV-NEW-03; Sửa (bút chì) → SCR-IV-NEW-02 (ẩn nếu trạng thái Vô hiệu hóa). Dropdown "..." chứa: **"Trình phê duyệt"** (chỉ khi Mới đăng ký hoặc Đã từ chối, có Giấy ĐKHĐ); **"Phê duyệt"** (vai trò Cán bộ Phê duyệt cùng cấp, trạng thái Chờ phê duyệt); **"Từ chối"** (vai trò Cán bộ Phê duyệt cùng cấp, trạng thái Chờ phê duyệt); **"Cập nhật trạng thái"** (Cán bộ Nghiệp vụ cùng đơn vị, trạng thái Đang hoạt động/Tạm dừng/Vô hiệu hóa); **"Xóa"** (chỉ khi không có tư vấn viên liên kết) | Click → tương ứng (mỗi mục mở modal MD-* tương ứng) |
+| 24 | bảng | Hành động | nhóm icon + dropdown "..." | 2 icon thường: Xem (mắt) → SCR-IV-NEW-03; Sửa (bút chì) → SCR-IV-NEW-02 (ẩn nếu trạng thái Vô hiệu hóa). Dropdown "..." chứa: **"Trình phê duyệt"** (chỉ khi Mới đăng ký hoặc Đã từ chối, có Giấy ĐKHĐ); **"Phê duyệt"** (vai trò Cán bộ Phê duyệt cùng đơn vị, trạng thái Chờ phê duyệt); **"Từ chối"** (vai trò Cán bộ Phê duyệt cùng đơn vị, trạng thái Chờ phê duyệt); **"Cập nhật trạng thái"** (Cán bộ Nghiệp vụ cùng đơn vị, trạng thái Đang hoạt động/Tạm dừng/Vô hiệu hóa); **"Xóa"** (chỉ khi không có tư vấn viên liên kết) | Click → tương ứng (mỗi mục mở modal MD-* tương ứng) |
 | 25 | thao tác hàng loạt | Nút **Công khai** / **Hủy công khai** (tab "Đang hoạt động") | nhóm nút | Hiển thị khi chọn ≥ 1 dòng | Mở MD-CONG-KHAI hoặc MD-HUY-CONG-KHAI; gọi API Cổng pháp luật quốc gia với cơ chế thử lại |
-| 26 | thao tác hàng loạt | Nút **Phê duyệt hàng loạt** (tab "Chờ phê duyệt") | nút | Vai trò Cán bộ Phê duyệt cùng cấp | Mở MD-PHE-DUYET-HANG-LOAT (bảng nhập Số quyết định cho từng Tổ chức tư vấn); Từ chối phải từng dòng theo BR-FLOW-02 |
+| 26 | thao tác hàng loạt | Nút **Phê duyệt hàng loạt** (tab "Chờ phê duyệt") | nút | Vai trò Cán bộ Phê duyệt cùng đơn vị | Mở MD-PHE-DUYET-HANG-LOAT (bảng nhập Số quyết định cho từng Tổ chức tư vấn); Từ chối phải từng dòng theo BR-FLOW-02 |
 | 27 | trạng thái rỗng | Empty state | minh họa + label | Khi tab không có bản ghi: hình ảnh + "Chưa có tổ chức tư vấn nào trong mục này" + nút "+ Thêm tổ chức tư vấn" (chỉ ở tab Mới đăng ký) | Click → SCR-IV-NEW-02 |
 | 28 | phân trang | Phân trang | pagination | 20 mục/trang; hiển thị tổng mỗi tab | — |
 
@@ -1634,7 +1648,7 @@ Menu: Quản lý mạng lưới tư vấn viên
 - **Xóa mềm:** chỉ xóa khi không có tư vấn viên đang liên kết hoạt động.
 - **Phê duyệt hàng loạt** (tab "Chờ phê duyệt"): mở MD-PHE-DUYET-HANG-LOAT (bảng nhập Số quyết định cho từng dòng) → áp dụng tất cả.
 - **Từ chối từng dòng** (KHÔNG có hàng loạt): nút "Từ chối" chỉ ở dropdown Hành động từng dòng — mỗi tổ chức nhập lý do riêng qua MD-TU-CHOI.
-- **Tham chiếu nội bộ:** quy tắc BR-AUTH-08 (phân quyền theo đơn vị), BR-AUTH-05 (Cán bộ Phê duyệt cùng cấp), BR-FLOW-02 (phê duyệt hàng loạt / từ chối từng dòng), BR-PUBLIC-01/02/03 (công khai); mã lỗi WRN-TCTV-04 (lỗi API Cổng).
+- **Tham chiếu nội bộ:** quy tắc BR-AUTH-08 (phân quyền theo đơn vị), BR-AUTH-05 (Cán bộ Phê duyệt cùng đơn vị), BR-FLOW-02 (phê duyệt hàng loạt / từ chối từng dòng), BR-PUBLIC-01/02/03 (công khai); mã lỗi WRN-TCTV-04 (lỗi API Cổng).
 
 ---
 
@@ -1683,7 +1697,7 @@ Menu: Quản lý mạng lưới tư vấn viên
 **Đường dẫn:** `/chuyen-gia-tvv/to-chuc/:id`
 **Quyền truy cập:**
 - Cán bộ Nghiệp vụ: xem + sửa + trình phê duyệt + cập nhật trạng thái + công khai (Tổ chức tư vấn thuộc đơn vị)
-- Cán bộ Phê duyệt cùng cấp: xem + phê duyệt / từ chối
+- Cán bộ Phê duyệt cùng đơn vị: xem + phê duyệt / từ chối
 
 **Mô tả:** Hồ sơ chi tiết Tổ chức tư vấn hợp nhất quy trình trên 1 trang: xem thông tin → trình phê duyệt → phê duyệt / từ chối → công khai → cập nhật trạng thái. Khi vô hiệu hóa, hệ thống tự động gỡ khỏi Cổng pháp luật quốc gia nếu đã công khai.
 
@@ -1695,9 +1709,9 @@ Menu: Quản lý mạng lưới tư vấn viên
 | 2 | thanh điều hướng | Nút Quay lại | nút phụ | "← Quay lại danh sách" | Click → SCR-IV-NEW-01 | Luôn |
 | 3 | header | Thẻ thông tin chính | thẻ | Tên tổ chức (đậm 20px) + Mã tổ chức + Loại hình + Trạng thái (badge lớn theo § 3.0) + Ngày công nhận (nếu đã hoạt động) | — | Luôn |
 | 4 | header | Nút **Sửa** | nút phụ | "Sửa" | Click → SCR-IV-NEW-02 | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái khác Vô hiệu hóa |
-| 5 | header | Nút **Trình phê duyệt** | nút chính | "Trình phê duyệt" | Click → mở MD-TRINH-DUYET → kiểm điều kiện (đủ field + có Giấy ĐKHĐ Sở TP) → đặt trạng thái Chờ phê duyệt + thông báo Cán bộ Phê duyệt cùng cấp | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái ∈ {Mới đăng ký, Đã từ chối} |
-| 6 | header | Nút **Phê duyệt** | nút chính | "Phê duyệt" | Click → mở MD-PHE-DUYET (form: Số quyết định * + Ý kiến phê duyệt) → đặt trạng thái Đang hoạt động + ghi ngày công nhận, người duyệt. Có khóa lạc quan chống 2 người duyệt cùng lúc | Vai trò = Cán bộ Phê duyệt cùng cấp với Cán bộ Nghiệp vụ tạo; trạng thái = Chờ phê duyệt |
-| 7 | header | Nút **Từ chối** | nút nguy hiểm (đỏ) | "Từ chối" | Click → mở MD-TU-CHOI (lý do bắt buộc ≥ 10 ký tự) → đặt trạng thái Đã từ chối + ghi người từ chối, lý do + thông báo Cán bộ Nghiệp vụ | Vai trò = Cán bộ Phê duyệt cùng cấp; trạng thái = Chờ phê duyệt |
+| 5 | header | Nút **Trình phê duyệt** | nút chính | "Trình phê duyệt" | Click → mở MD-TRINH-DUYET → kiểm điều kiện (đủ field + có Giấy ĐKHĐ Sở TP) → đặt trạng thái Chờ phê duyệt + thông báo Cán bộ Phê duyệt cùng đơn vị | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái ∈ {Mới đăng ký, Đã từ chối} |
+| 6 | header | Nút **Phê duyệt** | nút chính | "Phê duyệt" | Click → mở MD-PHE-DUYET (form: Số quyết định * + Ý kiến phê duyệt) → đặt trạng thái Đang hoạt động + ghi ngày công nhận, người duyệt. Có khóa lạc quan chống 2 người duyệt cùng lúc | Vai trò = Cán bộ Phê duyệt cùng đơn vị với Cán bộ Nghiệp vụ tạo; trạng thái = Chờ phê duyệt |
+| 7 | header | Nút **Từ chối** | nút nguy hiểm (đỏ) | "Từ chối" | Click → mở MD-TU-CHOI (lý do bắt buộc ≥ 10 ký tự) → đặt trạng thái Đã từ chối + ghi người từ chối, lý do + thông báo Cán bộ Nghiệp vụ | Vai trò = Cán bộ Phê duyệt cùng đơn vị; trạng thái = Chờ phê duyệt |
 | 8 | header | Nút **Cập nhật trạng thái** | nút phụ | "Cập nhật trạng thái" | Click → mở hộp thoại chọn trạng thái mới (Tạm dừng / Khôi phục / Vô hiệu hóa) + lý do (≥ 10 ký tự) → áp dụng MD-TAM-DUNG hoặc MD-VO-HIEU-HOA. Vô hiệu hóa: kiểm không có tư vấn viên đang liên kết hoạt động; nếu có → từ chối với cảnh báo "Tổ chức đang có {N} tư vấn viên đang hoạt động liên kết, không thể vô hiệu hóa" | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái ∈ {Đang hoạt động, Tạm dừng, Vô hiệu hóa} |
 | 9 | header | Nút **Công khai** / **Hủy công khai** | nút chính / phụ | "Công khai" hoặc "Hủy công khai" tùy trạng thái cong_khai | Click → MD-CONG-KHAI hoặc MD-HUY-CONG-KHAI → gọi API Cổng pháp luật quốc gia (thử lại 3 lần nếu lỗi); thất bại → MD-CONG-KHAI-PARTIAL-FAIL | Vai trò = Cán bộ Nghiệp vụ có quyền công khai; trạng thái = Đang hoạt động |
 
@@ -1716,14 +1730,14 @@ Menu: Quản lý mạng lưới tư vấn viên
 **Quy trình trên 1 trang:** xem thông tin → trình phê duyệt → phê duyệt / từ chối → công khai → cập nhật trạng thái.
 
 - **Trình phê duyệt** (Mới đăng ký / Đã từ chối → Chờ phê duyệt): Cán bộ Nghiệp vụ click "Trình phê duyệt" sau khi đảm bảo đủ field bắt buộc + Giấy đăng ký hành nghề Sở Tư pháp.
-- **Phê duyệt** (Chờ phê duyệt → Đang hoạt động): Cán bộ Phê duyệt cùng cấp với Cán bộ Nghiệp vụ tạo. Bắt buộc nhập Số quyết định công bố. Khóa lạc quan chống 2 người cùng duyệt.
+- **Phê duyệt** (Chờ phê duyệt → Đang hoạt động): Cán bộ Phê duyệt cùng đơn vị với Cán bộ Nghiệp vụ tạo. Bắt buộc nhập Số quyết định công bố. Khóa lạc quan chống 2 người cùng duyệt.
 - **Từ chối** (Chờ phê duyệt → Đã từ chối): bắt buộc lý do tối thiểu 10 ký tự. Sau từ chối, Cán bộ Nghiệp vụ có thể sửa và trình lại.
 - **Cập nhật trạng thái** (sau khi đã Hoạt động): chuyển Tạm dừng / Khôi phục / Vô hiệu hóa. Vô hiệu hóa: kiểm không có tư vấn viên đang liên kết hoạt động.
 - **Khi vô hiệu hóa:** tự động gỡ khỏi Cổng pháp luật quốc gia nếu đã công khai.
 - **Công khai / Hủy công khai:** gọi API với cơ chế thử lại 3 lần; nếu vẫn thất bại → đưa vào hàng đợi thử lại 5 phút, tối đa 10 lần.
 
 **Tham chiếu nội bộ:**
-- Quy tắc nghiệp vụ: BR-AUTH-05 (Cán bộ Phê duyệt cùng cấp), BR-AUTH-08 (phân quyền theo đơn vị), BR-PUBLIC-01/02/03 (công khai và hủy công khai).
+- Quy tắc nghiệp vụ: BR-AUTH-05 (Cán bộ Phê duyệt cùng đơn vị), BR-AUTH-08 (phân quyền theo đơn vị), BR-PUBLIC-01/02/03 (công khai và hủy công khai).
 - Mã lỗi: ERR-TT-TC-02 (vô hiệu hóa khi có TVV liên kết), ERR-PD-TC-04 (xung đột khóa lạc quan), WRN-TCTV-04 (lỗi API Cổng).
 
 ---
@@ -2014,6 +2028,8 @@ erDiagram
 | so_vu_viec_da_xu_ly | number | N | | 0 | Counter: số VV đã xử lý |
 | so_quyet_dinh_cong_nhan | text | N | Format QĐ-{số}/QĐ-{đơn_vị} | | Số QĐ công nhận (FR-IV-07) |
 | ngay_cong_nhan | datetime | N | | | Ngày được công nhận vào mạng lưới |
+| ngay_tiep_nhan | datetime | N | NOT NULL khi trạng thái vào CHO_THAM_DINH; mặc định NOW() khi cán bộ tiếp nhận hồ sơ | | **Common Approval Field** — Thời điểm Cán bộ Nghiệp vụ tiếp nhận hồ sơ (FR-IV-05) |
+| nguoi_tiep_nhan | identifier | N | FK → TAI_KHOAN(id), NOT NULL khi trạng thái vào CHO_THAM_DINH | | **Common Approval Field** — Cán bộ Nghiệp vụ tiếp nhận hồ sơ (FR-IV-05) |
 | thoi_gian_duyet | datetime | N | | | **Common Approval Field** — Thời điểm Cán bộ Phê duyệt duyệt (FR-IV-07) |
 | nguoi_duyet | identifier | N | FK → TAI_KHOAN(id) | | **Common Approval Field** — Cán bộ Phê duyệt duyệt |
 | thoi_gian_tu_choi | datetime | N | | | **Common Approval Field** — Thời điểm từ chối (FR-IV-06 KHONG_DAT / FR-IV-07 TU_CHOI) |
@@ -2274,6 +2290,7 @@ stateDiagram-v2
     CHO_PHE_DUYET --> CHO_KICH_HOAT : Cán bộ Phê duyệt phê duyệt → hệ thống tự cấp tài khoản, gửi mail kích hoạt
     CHO_PHE_DUYET --> TU_CHOI : Cán bộ Phê duyệt từ chối
     CHO_KICH_HOAT --> HOAT_DONG : TVV bấm link kích hoạt + đặt mật khẩu lần đầu
+    CHO_KICH_HOAT --> VO_HIEU_HOA : Cán bộ Nghiệp vụ vô hiệu hóa khẩn cấp (gian lận sau duyệt / TVV mất khả năng nhận / email sai không thể cứu)
     TU_CHOI --> CHO_THAM_DINH : Nộp lại hồ sơ
     HOAT_DONG --> TAM_DUNG : Cán bộ Nghiệp vụ tạm dừng
     TAM_DUNG --> HOAT_DONG : Cán bộ Nghiệp vụ kích hoạt lại
@@ -2308,8 +2325,9 @@ stateDiagram-v2
 | YEU_CAU_BO_SUNG | DANG_THAM_DINH | TVV/CG (chủ hồ sơ) bổ sung xong | Có tài liệu bổ sung (từ FR-IV-04) | Chuyển trạng thái khi FR-IV-04 lưu thành công, thông báo Cán bộ Nghiệp vụ | FR-IV-04 | — |
 | DANG_THAM_DINH | CHO_PHE_DUYET | Thẩm định đạt | ket_luan = DAT AND nhom1_ket_qua = true | Ghi kết quả thẩm định, thông báo Cán bộ Phê duyệt | FR-IV-06 | BR-LEGAL-04 |
 | DANG_THAM_DINH | TU_CHOI | Cán bộ Nghiệp vụ kết luận KHÔNG ĐẠT | ket_luan = KHONG_DAT, có `ly_do` | Thông báo TVV/CG (chủ hồ sơ) + ghi lý do | FR-IV-06 | BR-FLOW-04 |
-| CHO_PHE_DUYET | CHO_KICH_HOAT | Cán bộ Phê duyệt duyệt | Cùng cấp (BR-AUTH-05), có `so_quyet_dinh` | Audit, ngay_cong_nhan, thoi_gian_duyet, nguoi_duyet, **hệ thống tự cấp tài khoản cho TVV (qua FR-VIII-15) + gửi mail kích hoạt** | FR-IV-07 | BR-AUTH-05 |
-| CHO_KICH_HOAT | HOAT_DONG | TVV bấm link kích hoạt + đặt mật khẩu lần đầu | Token kích hoạt hợp lệ | Tài khoản chuyển HOAT_DONG, TVV chuyển HOAT_DONG (đồng thời) | FR-VIII-XX (Quên mật khẩu / Kích hoạt lần đầu) | — |
+| CHO_PHE_DUYET | CHO_KICH_HOAT | Cán bộ Phê duyệt duyệt | Cùng đơn vị (BR-AUTH-05), có `so_quyet_dinh` | Audit, ngay_cong_nhan, thoi_gian_duyet, nguoi_duyet, **hệ thống tự cấp tài khoản cho TVV (qua FR-VIII-15) + gửi mail kích hoạt** | FR-IV-07 | BR-AUTH-05 |
+| CHO_KICH_HOAT | HOAT_DONG | TVV bấm link kích hoạt + đặt mật khẩu lần đầu | Token kích hoạt hợp lệ | Tài khoản chuyển HOAT_DONG, TVV chuyển HOAT_DONG (đồng thời) | FR-VIII-26 (Quên mật khẩu / Kích hoạt tài khoản lần đầu) | — |
+| CHO_KICH_HOAT | VO_HIEU_HOA | Cán bộ Nghiệp vụ vô hiệu hóa khẩn cấp | Có lý do ≥ 10 ký tự (3 kịch bản: phát hiện gian lận hồ sơ sau khi Cán bộ Phê duyệt duyệt; TVV mất khả năng nhận tài khoản — bệnh, tai nạn, đổi ý; email TVV nhập sai không thể cứu vãn) | Invalidate token kích hoạt (`token_reset_mk` = NULL), khóa tài khoản TVV (TAI_KHOAN.trang_thai = VO_HIEU_HOA), tự động gỡ khỏi Cổng pháp luật quốc gia nếu đã công khai (`cong_khai = 1`), ghi nhật ký thao tác | FR-IV-12 | — |
 | CHO_PHE_DUYET | TU_CHOI | Cán bộ Phê duyệt từ chối | Có lý do ≥ 10 ký | thoi_gian_tu_choi, nguoi_tu_choi, ly_do_tu_choi, thông báo Cán bộ Nghiệp vụ + TVV/CG (chủ hồ sơ) | FR-IV-07 | BR-FLOW-04 |
 | TU_CHOI | CHO_THAM_DINH | TVV/CG (chủ hồ sơ) nộp lại hồ sơ | KHÔNG có cooldown (BA chốt 2026-05-03) | Reset kết quả thẩm định cũ, thông báo Cán bộ Nghiệp vụ | FR-IV-03 | — |
 | HOAT_DONG | TAM_DUNG | Cán bộ Nghiệp vụ quyết định | Không theo điều kiện tự động | Audit log | FR-IV-12 | — |
@@ -2319,6 +2337,8 @@ stateDiagram-v2
 | VO_HIEU_HOA | HOAT_DONG | Cán bộ Nghiệp vụ khôi phục | Quyết định từng trường hợp | Audit log | FR-IV-12 | — |
 
 > **Guard TAM_DUNG/HOAT_DONG → VO_HIEU_HOA:** Kiểm tra KHÔNG có VU_VIEC **và** HOI_DAP đang xử lý (trang_thai IN ('DANG_XU_LY','CHO_PHE_DUYET')).
+>
+> **Guard CHO_KICH_HOAT → VO_HIEU_HOA:** KHÔNG cần kiểm vụ việc/hỏi đáp vì TVV chưa kích hoạt tài khoản — chưa từng được phân công. Chỉ yêu cầu lý do ≥ 10 ký tự để buộc Cán bộ Nghiệp vụ ghi nhận căn cứ (NĐ 55/2019 Đ.9 yêu cầu công bố/rút công bố mạng lưới phải có lý do bằng văn bản).
 
 ### SM-TCTV: Tổ chức Tư vấn `[BA chốt 2026-05-03 — F-FR04-05 phương án A]`
 
@@ -2357,8 +2377,8 @@ stateDiagram-v2
 | Từ | Đến | Trigger | Guard | Action | FR Ref |
 |----|-----|---------|-------|--------|--------|
 | [*] | MOI_DANG_KY | Cán bộ Nghiệp vụ tạo TC TV | Có Giấy ĐKHĐ Sở TP (NĐ 77/2008 Đ.13) | Tạo bản ghi TO_CHUC_TU_VAN | FR-IV-NEW-01 |
-| MOI_DANG_KY | CHO_PHE_DUYET | Cán bộ Nghiệp vụ trình duyệt | Đủ field bắt buộc | Thông báo Cán bộ Phê duyệt cùng cấp | FR-IV-NEW-01 |
-| CHO_PHE_DUYET | HOAT_DONG | Cán bộ Phê duyệt công bố | Cùng cấp (BR-AUTH-05), có `so_quyet_dinh` | Set ngay_cong_nhan, thoi_gian_duyet, nguoi_duyet, audit | FR-IV-NEW-04 |
+| MOI_DANG_KY | CHO_PHE_DUYET | Cán bộ Nghiệp vụ trình duyệt | Đủ field bắt buộc | Thông báo Cán bộ Phê duyệt cùng đơn vị | FR-IV-NEW-01 |
+| CHO_PHE_DUYET | HOAT_DONG | Cán bộ Phê duyệt công bố | Cùng đơn vị (BR-AUTH-05), có `so_quyet_dinh` | Set ngay_cong_nhan, thoi_gian_duyet, nguoi_duyet, audit | FR-IV-NEW-04 |
 | CHO_PHE_DUYET | TU_CHOI | Cán bộ Phê duyệt từ chối | Có lý do ≥ 10 ký | thoi_gian_tu_choi, nguoi_tu_choi, ly_do_tu_choi, thông báo Cán bộ Nghiệp vụ | FR-IV-NEW-04 |
 | TU_CHOI | CHO_PHE_DUYET | Cán bộ Nghiệp vụ sửa rồi trình lại | Đã sửa (updated_at > thoi_gian_tu_choi) | Thông báo Cán bộ Phê duyệt | FR-IV-NEW-01 |
 | HOAT_DONG | TAM_DUNG | Cán bộ Nghiệp vụ tạm dừng | Có lý do ≥ 10 ký | Audit log | FR-IV-NEW-02 |
@@ -2421,7 +2441,7 @@ stateDiagram-v2
 | BR ID | Tên | FR áp dụng (trong nhóm này) |
 |-------|-----|---------------------------|
 | BR-AUTH-01 | Xác thực bắt buộc | Toàn bộ FR nhóm IV |
-| BR-AUTH-05 | Phê duyệt cùng cấp | FR-IV-07, FR-IV-NEW-04 |
+| BR-AUTH-05 | Phê duyệt cùng đơn vị | FR-IV-07, FR-IV-NEW-04 |
 | BR-AUTH-08 | Phân quyền dữ liệu theo đơn vị | FR-IV-01, FR-IV-02, FR-IV-06, FR-IV-11, FR-IV-12, FR-IV-NEW-01, FR-IV-NEW-02, FR-IV-NEW-04 |
 | BR-DATA-01 | Soft delete | FR-IV-01, FR-IV-NEW-01 |
 | BR-DATA-03 | Common fields | FR-IV-01, FR-IV-NEW-01 |
@@ -2441,11 +2461,11 @@ stateDiagram-v2
 |----|-------------------|-------|---------------------|---------|------------|
 | BR-AUTH-01 | Mọi user phải xác thực trước khi truy cập hệ thống. Tier 1 (MVP): Username/password + TOTP 2FA qua email. | PRD A6, FR-VIII-20 | Toàn bộ FR nhóm IV | API outbound không yêu cầu session | Test đăng nhập Tier 1 + TOTP |
 
-### BR-AUTH-05: Phê duyệt cùng cấp
+### BR-AUTH-05: Phê duyệt cùng đơn vị
 
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm IV) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|---------------------|---------|------------|
-| BR-AUTH-05 | **Nguyên tắc chung:** Cán bộ Nghiệp vụ cấp nào tạo → Cán bộ Phê duyệt cùng cấp duyệt. KHÔNG xuyên cấp phê duyệt. **Áp dụng cho FR-IV-07 (công bố TVV):** mỗi cấp tự công bố mạng lưới TVV theo phạm vi phân cấp pháp lý — **NĐ 121/2025 Điều 39-40** phân cấp UBND cấp tỉnh (Sở TP/CB_PD_ĐP) công bố mạng lưới ở địa phương; **NĐ 55/2019 Điều 9** quy định mỗi bộ/cơ quan ngang bộ (CB_PD_BN) tự công bố mạng lưới ngành mình; Bộ Tư pháp (CB_PD_TW) công bố mạng lưới quốc gia. KHÔNG có ESCALATE bắt buộc — mỗi cấp tự công bố trong phạm vi phân cấp. | PRD A4 + NĐ 55/2019 Điều 9 + NĐ 121/2025 Điều 39-40 | FR-IV-07 | — | Test CB_PD_TW không duyệt được bản ghi BN; CB_PD_ĐP duyệt được hồ sơ do CB_NV_ĐP thẩm định |
+| BR-AUTH-05 | **Nguyên tắc chung:** Cán bộ Nghiệp vụ cấp nào tạo → Cán bộ Phê duyệt cùng đơn vị duyệt. KHÔNG xuyên cấp phê duyệt. **Áp dụng cho FR-IV-07 (công bố TVV):** mỗi cấp tự công bố mạng lưới TVV theo phạm vi phân cấp pháp lý — **NĐ 121/2025 Điều 39-40** phân cấp UBND cấp tỉnh (Sở TP/CB_PD_ĐP) công bố mạng lưới ở địa phương; **NĐ 55/2019 Điều 9** quy định mỗi bộ/cơ quan ngang bộ (CB_PD_BN) tự công bố mạng lưới ngành mình; Bộ Tư pháp (CB_PD_TW) công bố mạng lưới quốc gia. KHÔNG có ESCALATE bắt buộc — mỗi cấp tự công bố trong phạm vi phân cấp. | PRD A4 + NĐ 55/2019 Điều 9 + NĐ 121/2025 Điều 39-40 | FR-IV-07 | — | Test CB_PD_TW không duyệt được bản ghi BN; CB_PD_ĐP duyệt được hồ sơ do CB_NV_ĐP thẩm định |
 
 ### BR-AUTH-08: Phân quyền dữ liệu theo đơn vị
 
@@ -2469,7 +2489,7 @@ stateDiagram-v2
 
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm IV) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|---------------------|---------|------------|
-| BR-PUBLIC-01 | Chỉ đối tượng ở trạng thái HOAT_DONG mới được công khai (áp dụng đồng nhất cho cả TVV cá nhân và Tổ chức TV) | PRD | FR-IV-08, FR-IV-NEW-01 | — | Test TVV TAM_DUNG không công khai được |
+| BR-PUBLIC-01 | TVV cá nhân được công khai khi trạng thái thuộc {CHO_KICH_HOAT, HOAT_DONG}; Tổ chức TV chỉ được công khai khi trạng thái HOAT_DONG. Không cho công khai khi TVV ở MOI_DANG_KY, CHO_THAM_DINH, DANG_THAM_DINH, YEU_CAU_BO_SUNG, CHO_PHE_DUYET, TU_CHOI, TAM_DUNG, VO_HIEU_HOA. | PRD + BA chốt v3.5 | FR-IV-08, FR-IV-NEW-01 | TVV ở CHO_KICH_HOAT đã được công nhận pháp lý nhưng chưa kích hoạt tài khoản lần đầu; vẫn được công khai theo FR-IV-08 | Test TVV CHO_KICH_HOAT/HOAT_DONG công khai được; TVV TAM_DUNG không công khai được; TC TV chỉ HOAT_DONG công khai được |
 | BR-PUBLIC-02 | Khi hủy công khai hoặc vô hiệu hóa: tự động gỡ khỏi Cổng PLQG qua API outbound | PRD | FR-IV-08, FR-IV-12, FR-IV-NEW-02 | — | Test VO_HIEU_HOA → API gọi gỡ Cổng |
 | BR-PUBLIC-03 | API outbound retry 3 lần (backoff 1s/2s/4s), timeout 30s/request. Fail → queue retry 5 phút, max 10 lần, email admin | PRD | FR-IV-08 | — | Test API fail 3 lần → queue |
 

@@ -92,7 +92,7 @@ QTHT không còn thao tác ở tab Phân công, nhưng vẫn có thể chỉnh t
 
 **Cần BA xác nhận:** QTHT được CRUD tiêu chí ở cấp danh mục dùng chung thôi, hay được sửa cả tiêu chí đã gắn riêng vào từng đợt đánh giá?
 
-**Nguồn:** `danh-gia/bug-report-flow-danhgia.md`
+**Nguồn:** `danh-gia/Pass-bug-report-flow-danhgia.md`
 
 ### 2. Điều kiện chọn vụ việc vào đợt đánh giá
 
@@ -100,7 +100,7 @@ API lấy danh sách vụ việc eligible trả rỗng dù có vụ việc `HOAN
 
 **Cần BA xác nhận:** Khi chọn vụ việc vào đợt đánh giá, hệ thống cần lọc theo những điều kiện nào: chỉ theo thời gian, theo lĩnh vực người đánh giá, theo đơn vị/phạm vi dữ liệu, hay kết hợp các điều kiện này?
 
-**Nguồn:** `danh-gia/bug-report-flow-danhgia.md`
+**Nguồn:** `danh-gia/Pass-bug-report-flow-danhgia.md`
 
 ### 3. Tên trạng thái sau khi phê duyệt phân công
 
@@ -108,7 +108,7 @@ Sau khi CB_PD đã phê duyệt phân công, app vẫn hiển thị `CHO_DUYET_P
 
 **Cần BA xác nhận:** State sau khi phê duyệt phân công nên là trạng thái nào và label tiếng Việt chính thức là gì?
 
-**Nguồn:** `danh-gia/bug-report-flow-danhgia.md`, `workflow/danh-gia/workflow-test-report-DanhGiaHQ.md`
+**Nguồn:** `danh-gia/Pass-bug-report-flow-danhgia.md`, `workflow/danh-gia/workflow-test-report-DanhGiaHQ.md`
 
 ### 4. Chuẩn state machine của module Đánh giá
 
@@ -124,7 +124,7 @@ Có note cần xác nhận rule filter cho KPI `Vụ việc hoàn thành`, đặ
 
 **Cần BA xác nhận:** KPI “Vụ việc hoàn thành” phải đếm những trạng thái nào và theo filter thời gian/đơn vị nào?
 
-**Nguồn:** `danh-gia/bug-report-flow-danhgia.md`
+**Nguồn:** `danh-gia/Pass-bug-report-flow-danhgia.md`
 
 ### 6. Có cần chức năng sửa phân công không?
 

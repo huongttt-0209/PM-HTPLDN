@@ -14,8 +14,11 @@
 | Ngày | Tác giả | Mô tả thay đổi |
 |------|---------|-----------------|
 | 2026-04-03 | SRS Agent | Tạo v3.0 từ `srs-v3.md` Template v3.0 |
-| 2026-05-06 | SRS Agent | **v3.5 — apply 14 Thay đổi từ delta `v3.5-delta-fr-05.md`:** (1) SLA 10→15 ngày + cite NĐ55 Đ.8 K.1; (2) Công khai VU_VIEC: 5 cột CR-01 + FR-V.I-NEW-05 + 2 self-loop SM + Badge "Đã công khai" + whitelist BR-PUBLIC-04 (Q-NEW-02); (3) Field `file_dinh_kem` (CR-07) cho VU_VIEC; (4) FR-V.I-NEW-02 DN bổ sung HS; (8) Refactor mô hình phân công 2 thẻ Cá nhân/Tổ chức (cover CSV UC59); (9) Tách NGUOI_HO_TRO + TO_CHUC_TU_VAN reference + bỏ ENUM 'NHT'; (11) CB PD từ chối → DANG_XU_LY; (12) UC67 ENUM CB_NV/DN + duplicate guard + tách thang VV (0-10) vs TVV (1-5); (13) Bỏ TVV địa bàn (NĐ 77/2008 Đ.19) + thang TVV 1-5; (14) BR-AUTH-01 bỏ VNPT eKYC + 2-tier (Tier 1 nội bộ + Tier 2 VNeID); (15) DON_VI 2 tầng; (16) FR-V.I-02/04 auth VNeID + lookup DN + check BR-CALC-04; (17) Spec đầy đủ 3 entity owned (PHAN_CONG_VU_VIEC, DANH_GIA_VU_VIEC, LICH_SU_VU_VIEC) + 8 BR mới; (19) SCR-V.I-03 cleanup + chế độ DN + 2 SCR DN mới (SCR-V.I-04/05). Plus V4-CHƯA-SỬA #1: sửa BR-AUTH-08 thiếu exception TW. **OUT:** Thay đổi 5 (Mở lại HS), 6 (auto 3 lần), 7 (auto-return), 10 (đổi tên FR-V.I-15 + BR-AUTH-10), 18 (SCR-V.I-01 7 tab), 20 (FR-V.I-12 thủ công). Cite NĐ55 Đ.8 K.1 + Đ.4 + NĐ69/2024 PENDING verify lượt sau. |
+| 2026-05-06 | SRS Agent | **v3.5 — apply 14 Thay đổi từ delta `v3.5-delta-fr-05.md`:** (1) SLA 10→15 ngày + cite NĐ55 Đ.8 K.1; (2) Công khai VU_VIEC: 5 cột CR-01 + FR-V.I-NEW-05 + 2 self-loop SM + Badge "Đã công khai" + whitelist BR-PUBLIC-04 (Q-NEW-02); (3) Field `file_dinh_kem` (CR-07) cho VU_VIEC; (4) FR-V.I-NEW-02 DN bổ sung HS; (8) Refactor mô hình phân công 2 thẻ Cá nhân/Tổ chức (cover CSV UC59); (9) Tách NGUOI_HO_TRO + TO_CHUC_TU_VAN reference + bỏ ENUM 'NHT'; (11) CB PD từ chối → DANG_XU_LY; (12) UC67 ENUM CB_NV/DN + duplicate guard + tách thang VV (0-10) vs TVV (1-5); (13) Bỏ TVV địa bàn (NĐ 77/2008 Đ.19) + thang TVV 1-5; (14) BR-AUTH-01 bỏ VNPT eKYC + 2-tier (Tier 1 nội bộ + Tier 2 VNeID); (15) DON_VI 2 tầng; (16) FR-V.I-02/04 auth VNeID + lookup DN + check BR-CALC-07; (17) Spec đầy đủ 3 entity owned (PHAN_CONG_VU_VIEC, DANH_GIA_VU_VIEC, LICH_SU_VU_VIEC) + 8 BR mới; (19) SCR-V.I-03 cleanup + chế độ DN + 2 SCR DN mới (SCR-V.I-04/05). Plus V4-CHƯA-SỬA #1: sửa BR-AUTH-08 thiếu exception TW. **OUT:** Thay đổi 5 (Mở lại HS), 6 (auto 3 lần), 7 (auto-return), 10 (đổi tên FR-V.I-15 + BR-AUTH-10), 18 (SCR-V.I-01 7 tab), 20 (FR-V.I-12 thủ công). Cite NĐ55 Đ.8 K.1 + Đ.4 + NĐ69/2024 PENDING verify lượt sau. |
 | 2026-05-06 | SRS Agent | **v3.5 rev. 2 — fix 10 gap UI sau deep review:** (G1) SCR-V.I-03 bảng nút Phân công thành 2 thẻ Cá nhân/Tổ chức; (G2 + G4) SCR-V.I-03 Accordion 5 thêm "Khi loai='TO_CHUC' → hiển thị tên tổ chức" + đổi label "địa bàn" → "đơn vị quản lý" (NĐ 77/2008 Đ.19); (G3) SCR-V.I-01 cột 17 đổi "NHT/TVV" → "Người xử lý / Tổ chức"; (G5) FR-V.I-02 Mô tả thêm "qua PM (auth Tier 2 VNeID)"; (G6) Thêm Mục 3.A-G quy ước UI chung trước SCR-V.I-01 (7 sub-section: Cách đọc bảng / Ánh xạ DB→UI / Cắt nội dung / Trạng thái dữ liệu / Thông báo chung / Responsive / Quy ước viết description); (G7) SCR-V.I-03 Stepper thêm 2 badge phụ "Yêu cầu bổ sung" + "Từ chối"; (G8) Thêm Quy ước hiển thị nút sau bảng nút thao tác; (G9) Thêm sub-section "Thông báo riêng SCR-V.I-03" 11 message; (G10) Cập nhật lịch sử thay đổi này. |
+| 2026-05-06 | SRS Agent | **v3.5 rev. 3 — Pha 3 cross-file fix:** Đổi mã `BR-CALC-04` → `BR-CALC-07` trên toàn file để giải quyết ID collision với srs-fr-08/srs-fr-10 (cả 2 file đó dùng `BR-CALC-04` cho ngữ cảnh "Tổng trọng số tiêu chí đánh giá = 100%" — khác hẳn ngữ cảnh "Ưu tiên phân công vụ việc theo NĐ55 Điều 4" của srs-fr-05). Phát hiện qua cross-file consistency check Pha 3 (`v3.5-delta-reports/cross-file-check-pha3-refs.md` mục B.3.3). Cập nhật toàn bộ refs trong file: Inputs/Processing/Errors/SCR Quy tắc tương tác/Cross-ref/Bảng tổng quan BR + tiêu đề BR. |
+| 2026-05-07 | BA + SRS Agent | **Hướng A — Bỏ FR-V.I-NEW-01 + entity CAU_HINH_QUY_TRINH**: BA chốt workflow VV theo NĐ 55/2019 + NĐ 18/2026 ổn định, không cần cấu hình động qua UI. Spec FR cũ (5 trường: ten_buoc/thu_tu/sla_ngay/dieu_kien_chuyen/mo_ta) không đủ định nghĩa workflow engine thực thi. Thay thế: dùng SM-VUVIEC cứng trong code. FR-V.I-NEW-01 chuyển thành stub "[ĐÃ BỎ]"; row CAU_HINH_QUY_TRINH ở entity tổng quan strikethrough. Đồng bộ bỏ Tab 4 Quy trình hỗ trợ ở SCR-VIII-06 (srs-fr-10). |
+| 2026-05-11 | BA + Codex | **Round 7 BA decision:** FR-V.I-10 không hard-code "NHT xác nhận"; actor chính thức là **người được phân công xử lý vụ việc** (`PHAN_CONG_VU_VIEC.nguoi_xu_ly_id`), bao gồm NHT/TVV/CG cá nhân hoặc TVV do tổ chức tư vấn cử. Cập nhật wording FR, precondition, processing, lỗi và acceptance criteria. |
 
 ---
 
@@ -62,7 +65,7 @@ graph TD
     J --> K[DA_DANH_GIA]
 ```
 
-**Tiêu chí phân công NHT/TVV (BR-CALC-04 — NĐ55 Điều 4):**
+**Tiêu chí phân công NHT/TVV (BR-CALC-07 — NĐ55 Điều 4):**
 1. Ưu tiên DN do phụ nữ làm chủ (+3 điểm)
 2. Ưu tiên DN sử dụng nhiều lao động nữ (+2 điểm)
 3. Ưu tiên DN sử dụng ≥30% lao động khuyết tật (+2 điểm)
@@ -176,16 +179,16 @@ graph TD
 | 6 | vu_viec_vuong_mac | text (long) | N | Mô tả chi tiết vướng mắc, max 10.000 ký tự |
 | 7 | file_dinh_kem | FILE[] | N | PDF/DOC/DOCX/XLS/XLSX, max 20MB/file, tổng 100MB, max 10 file (quét virus) |
 
-> **Ghi chú Inputs DN:** Thông tin DN (ten_doanh_nghiep, ma_so_thue, dia_chi, nguoi_dai_dien, tinh_thanh_id, loai_dn_id, quy_mo, nganh_nghe, so_lao_dong, doanh_thu_nam, chuc_vu_dd, email, so_dien_thoai, **la_nu_lam_chu, so_lao_dong_nu, so_lao_dong_khuyet_tat**) được đọc từ DOANH_NGHIEP theo `doanh_nghiep_id`. Các field đậm là **input bắt buộc của BR-CALC-04** (ưu tiên phân công). Nếu DN thiếu các field này, Processing bước 2 sẽ trả lỗi yêu cầu DN cập nhật thông tin DN trước khi tạo VV.
+> **Ghi chú Inputs DN:** Thông tin DN (ten_doanh_nghiep, ma_so_thue, dia_chi, nguoi_dai_dien, tinh_thanh_id, loai_dn_id, quy_mo, nganh_nghe, so_lao_dong, doanh_thu_nam, chuc_vu_dd, email, so_dien_thoai, **la_nu_lam_chu, so_lao_dong_nu, so_lao_dong_khuyet_tat**) được đọc từ DOANH_NGHIEP theo `doanh_nghiep_id`. Các field đậm là **input bắt buộc của BR-CALC-07** (ưu tiên phân công). Nếu DN thiếu các field này, Processing bước 2 sẽ trả lỗi yêu cầu DN cập nhật thông tin DN trước khi tạo VV.
 
 **Processing:**
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 1 | Xác nhận dữ liệu đầu vào | — |
-| 2 | Lookup DOANH_NGHIEP theo `doanh_nghiep_id` từ session; nếu thiếu field BR-CALC-04 (la_nu_lam_chu, so_lao_dong_nu, so_lao_dong_khuyet_tat, quy_mo, nganh_nghe, so_lao_dong, doanh_thu_nam) → trả lỗi `ERR-GHS-03`, yêu cầu DN cập nhật DN trước | BR-CALC-04 |
+| 2 | Lookup DOANH_NGHIEP theo `doanh_nghiep_id` từ session; nếu thiếu field BR-CALC-07 (la_nu_lam_chu, so_lao_dong_nu, so_lao_dong_khuyet_tat, quy_mo, nganh_nghe, so_lao_dong, doanh_thu_nam) → trả lỗi `ERR-GHS-03`, yêu cầu DN cập nhật DN trước | BR-CALC-07 |
 | 3 | Tự động sinh mã: VV-{TINH}-{YYYYMMDD}-{SEQ} | BR-DATA-04 |
-| 4 | Auto-calc `uu_tien` theo BR-CALC-04 (điểm ưu tiên DN) | BR-CALC-04 |
+| 4 | Auto-calc `uu_tien` theo BR-CALC-07 (điểm ưu tiên DN) | BR-CALC-07 |
 | 5 | Tạo bản ghi VU_VIEC, trạng thái = MOI_TAO | SM-VUVIEC |
 | 6 | Lưu tài liệu đính kèm | — |
 | 7 | Ghi LICH_SU_VU_VIEC: hanh_dong='TAO_VV', vai_tro='DN' | BR-DATA-05 |
@@ -203,7 +206,7 @@ graph TD
 |---|--------------|--------|-------------------|----------|
 | E1 | Nội dung yêu cầu trống | ERR-GHS-01 | "Nội dung yêu cầu là bắt buộc" | ERROR |
 | E2 | MST không hợp lệ | ERR-GHS-02 | "Mã số thuế không hợp lệ" | ERROR |
-| E3 | DN thiếu thông tin BR-CALC-04 | ERR-GHS-03 | "Vui lòng cập nhật thông tin DN (lao động, doanh thu, ngành nghề, quy mô) trước khi gửi yêu cầu" | ERROR |
+| E3 | DN thiếu thông tin BR-CALC-07 | ERR-GHS-03 | "Vui lòng cập nhật thông tin DN (lao động, doanh thu, ngành nghề, quy mô) trước khi gửi yêu cầu" | ERROR |
 | E4 | File vi phạm constraint | ERR-GHS-04 | "File vượt quá dung lượng/số lượng cho phép hoặc sai định dạng" | ERROR |
 
 **Acceptance Criteria:**
@@ -306,7 +309,7 @@ graph TD
 
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc |
 |---|----------|-----------|----------|-----------|
-| 1 | ma_so_thue | text | Y | Lookup DOANH_NGHIEP; nếu chưa có → mở modal tạo DN mới với đủ field BR-CALC-04 |
+| 1 | ma_so_thue | text | Y | Lookup DOANH_NGHIEP; nếu chưa có → mở modal tạo DN mới với đủ field BR-CALC-07 |
 | 2 | doanh_nghiep_id | identifier | Y | FK → DOANH_NGHIEP(id); set sau khi lookup/tạo ở field 1 |
 | 3 | tieu_de | text | Y | max 500 ký tự — tiêu đề/tóm tắt VV |
 | 4 | loai_hinh_ht_id | identifier | Y | FK → DANH_MUC (loai='LOAI_HINH_HT') |
@@ -315,10 +318,10 @@ graph TD
 | 7 | vu_viec_vuong_mac | text (long) | N | max 10.000 ký tự, mô tả chi tiết vướng mắc |
 | 8 | kenh_tiep_nhan | text | Y | CHECK IN ('TRUC_TIEP','DIEN_THOAI','BUU_CHINH') |
 | 9 | file_scan | FILE[] | N | PDF/DOC/DOCX/JPG/PNG, max 20MB/file, tổng 100MB, max 10 file (quét virus) |
-| 10 | uu_tien | number | N | BETWEEN 1 AND 5; mặc định auto-calc BR-CALC-04, CB NV có thể override |
-| 11 | ly_do_uu_tien | text | N | Bắt buộc khi `uu_tien` được override khác giá trị BR-CALC-04; max 500 ký tự |
+| 10 | uu_tien | number | N | BETWEEN 1 AND 5; mặc định auto-calc BR-CALC-07, CB NV có thể override |
+| 11 | ly_do_uu_tien | text | N | Bắt buộc khi `uu_tien` được override khác giá trị BR-CALC-07; max 500 ký tự |
 
-> **Ghi chú Inputs DN:** Các field DN (tinh_thanh_id, loai_dn_id, quy_mo, nganh_nghe, so_lao_dong, doanh_thu_nam, chuc_vu_dd, email, so_dien_thoai, **la_nu_lam_chu, so_lao_dong_nu, so_lao_dong_khuyet_tat**) quản lý bởi DOANH_NGHIEP (Nhóm V.III). Modal tạo DN mới (khi MST chưa có) BẮT BUỘC nhập đủ các field đậm để BR-CALC-04 hoạt động.
+> **Ghi chú Inputs DN:** Các field DN (tinh_thanh_id, loai_dn_id, quy_mo, nganh_nghe, so_lao_dong, doanh_thu_nam, chuc_vu_dd, email, so_dien_thoai, **la_nu_lam_chu, so_lao_dong_nu, so_lao_dong_khuyet_tat**) quản lý bởi DOANH_NGHIEP (Nhóm V.III). Modal tạo DN mới (khi MST chưa có) BẮT BUỘC nhập đủ các field đậm để BR-CALC-07 hoạt động.
 
 **Processing:**
 
@@ -326,10 +329,10 @@ graph TD
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền | BR-AUTH-01 |
 | 2 | Xác nhận dữ liệu đầu vào | — |
-| 3 | Lookup DOANH_NGHIEP theo `ma_so_thue`; nếu chưa có → mở modal tạo DN mới (cross-ref Nhóm V.III) với đủ field BR-CALC-04 | — |
-| 4 | Verify DOANH_NGHIEP đủ field BR-CALC-04 (la_nu_lam_chu, so_lao_dong_nu, so_lao_dong_khuyet_tat, quy_mo, nganh_nghe, so_lao_dong, doanh_thu_nam); nếu thiếu → ERR-NH-04 | BR-CALC-04 |
+| 3 | Lookup DOANH_NGHIEP theo `ma_so_thue`; nếu chưa có → mở modal tạo DN mới (cross-ref Nhóm V.III) với đủ field BR-CALC-07 | — |
+| 4 | Verify DOANH_NGHIEP đủ field BR-CALC-07 (la_nu_lam_chu, so_lao_dong_nu, so_lao_dong_khuyet_tat, quy_mo, nganh_nghe, so_lao_dong, doanh_thu_nam); nếu thiếu → ERR-NH-04 | BR-CALC-07 |
 | 5 | Tự động sinh mã vụ việc | BR-DATA-04 |
-| 6 | Auto-calc `uu_tien` theo BR-CALC-04; nếu CB NV override phải có `ly_do_uu_tien` | BR-CALC-04 |
+| 6 | Auto-calc `uu_tien` theo BR-CALC-07; nếu CB NV override phải có `ly_do_uu_tien` | BR-CALC-07 |
 | 7 | Tạo VU_VIEC, trạng thái = DA_TIEP_NHAN | SM-VUVIEC |
 | 8 | Tính deadline SLA: ngày tiếp nhận + 15 ngày làm việc (NĐ55/2019 Điều 8 Khoản 1) | BR-SLA-01 |
 | 9 | Lưu tài liệu đính kèm | — |
@@ -349,7 +352,7 @@ graph TD
 | E1 | Nội dung trống | ERR-NH-01 | "Nội dung yêu cầu là bắt buộc" | ERROR |
 | E2 | MST format lỗi | ERR-NH-02 | "Mã số thuế không hợp lệ" | ERROR |
 | E3 | File vi phạm constraint | ERR-NH-03 | "File vượt quá dung lượng/số lượng cho phép hoặc sai định dạng" | ERROR |
-| E4 | DN thiếu thông tin BR-CALC-04 | ERR-NH-04 | "DN thiếu thông tin bắt buộc (lao động/doanh thu/ngành nghề/quy mô). Cập nhật DN trước" | ERROR |
+| E4 | DN thiếu thông tin BR-CALC-07 | ERR-NH-04 | "DN thiếu thông tin bắt buộc (lao động/doanh thu/ngành nghề/quy mô). Cập nhật DN trước" | ERROR |
 | E5 | `uu_tien` override thiếu `ly_do_uu_tien` | ERR-NH-05 | "Phải nhập lý do ưu tiên khi override giá trị hệ thống" | ERROR |
 
 **Acceptance Criteria:**
@@ -702,7 +705,7 @@ graph TD
 | # | Điều kiện |
 |---|----------|
 | PRE-01 | User đã đăng nhập, role='CB_NV', có quyền "Phân công VV" |
-| PRE-02 | VV ở trạng thái DANG_KIEM_TRA (đạt) hoặc DA_TIEP_NHAN (sau khi NHT từ chối phân công cũ) |
+| PRE-02 | VV ở trạng thái DANG_KIEM_TRA (đạt) hoặc DA_TIEP_NHAN (sau khi người được phân công từ chối phân công cũ) |
 | PRE-03 | User.don_vi_id = VU_VIEC.don_vi_id (BR-AUTH-03/04) |
 
 **Inputs:**
@@ -715,13 +718,13 @@ graph TD
 | 4 | to_chuc_tu_van_id | identifier | Y nếu `loai='TO_CHUC'` | FK → TO_CHUC_TU_VAN(id) |
 | 5 | ghi_chu_phan_cong | text | N | max 1000 ký tự, lưu vào PHAN_CONG_VU_VIEC.ghi_chu |
 
-**Processing (Gợi ý người xử lý — BR-CALC-04):**
+**Processing (Gợi ý người xử lý — BR-CALC-07):**
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 1 | **Nhánh `'CA_NHAN'`:** lấy TAI_KHOAN có vai trò TVV/CG (qua `TU_VAN_VIEN.tai_khoan_id`, trạng thái HOAT_DONG, đã công khai) HOẶC vai trò Người hỗ trợ (qua `NGUOI_HO_TRO.tai_khoan_id`, trạng thái HOAT_DONG). **Nhánh `'TO_CHUC'`:** lấy TO_CHUC_TU_VAN trạng thái HOAT_DONG; sau khi user chọn tổ chức → load danh sách TVV thuộc tổ chức đó để chọn người cụ thể | SM-TVV |
 | 2 | Lọc theo lĩnh vực phù hợp với VV: TVV/CG dùng `TU_VAN_VIEN.linh_vuc_chuyen_mon`; Người hỗ trợ dùng `NGUOI_HO_TRO.linh_vuc_ids[]`; Tổ chức TV dùng lĩnh vực đăng ký của tổ chức | — |
-| 3 | Tính điểm ưu tiên DN: +3 phụ nữ làm chủ, +2 nhiều LĐ nữ, +2 ≥30% LĐ KT, +1 FIFO | BR-CALC-04 |
+| 3 | Tính điểm ưu tiên DN: +3 phụ nữ làm chủ, +2 nhiều LĐ nữ, +2 ≥30% LĐ KT, +1 FIFO | BR-CALC-07 |
 | 4 | Tính workload: số VV/HOI_DAP đang xử lý của cá nhân (đối với TO_CHUC: workload của TVV được cử) | — |
 | 5 | Sắp xếp: ưu tiên DN giảm dần, workload tăng dần, điểm ĐG giảm dần | — |
 | 6 | Hiển thị danh sách gợi ý theo nhánh đã chọn | — |
@@ -777,7 +780,7 @@ graph TD
 - **Given** `loai='TO_CHUC'` nhưng TVV được chọn KHÔNG thuộc TC được chọn **When** server validate **Then** trả ERR-PC-06
 - **Given** không có đối tượng phù hợp **When** hiển thị **Then** cảnh báo + cho phép tìm thủ công
 
-**Cross-ref:** SM-VUVIEC, BR-CALC-04, NĐ55/2019 Điều 4, Entity VU_VIEC, TU_VAN_VIEN, NGUOI_HO_TRO, TO_CHUC_TU_VAN, TAI_KHOAN, PHAN_CONG_VU_VIEC
+**Cross-ref:** SM-VUVIEC, BR-CALC-07, NĐ55/2019 Điều 4, Entity VU_VIEC, TU_VAN_VIEN, NGUOI_HO_TRO, TO_CHUC_TU_VAN, TAI_KHOAN, PHAN_CONG_VU_VIEC
 
 ---
 
@@ -786,14 +789,14 @@ graph TD
 **UC Reference:** UC 60 | **Priority:** Essential | **Stability:** High
 **Màn hình:** SCR-V.I-03 (Action Xác nhận tham gia)
 
-**Mô tả:** NHT xác nhận hoặc từ chối tham gia hỗ trợ VV.
+**Mô tả:** Người được phân công xử lý vụ việc xác nhận hoặc từ chối tham gia hỗ trợ VV. Người được phân công là tài khoản trong `PHAN_CONG_VU_VIEC.nguoi_xu_ly_id`, bao gồm NHT/TVV/CG cá nhân hoặc TVV do tổ chức tư vấn cử.
 
 **Preconditions:**
 
 | # | Điều kiện |
 |---|----------|
-| PRE-01 | NHT đã đăng nhập |
-| PRE-02 | VV ở trạng thái DA_PHAN_CONG, NHT được phân công |
+| PRE-01 | Người được phân công đã đăng nhập |
+| PRE-02 | VV ở trạng thái DA_PHAN_CONG, tài khoản hiện tại là `PHAN_CONG_VU_VIEC.nguoi_xu_ly_id` của phân công đang chờ xác nhận |
 
 **Inputs:**
 
@@ -807,7 +810,7 @@ graph TD
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra NHT là người được phân công | BR-AUTH-01 |
+| 1 | Kiểm tra tài khoản hiện tại là người được phân công trong `PHAN_CONG_VU_VIEC.nguoi_xu_ly_id` | BR-AUTH-01 |
 | 2 | Nếu CHAP_NHAN: chuyển VV → DANG_XU_LY | SM-VUVIEC |
 | 3 | Nếu TU_CHOI: chuyển VV → DA_TIEP_NHAN (phân công lại) | SM-VUVIEC |
 | 4 | Cập nhật PHAN_CONG_VU_VIEC | — |
@@ -819,20 +822,20 @@ graph TD
 
 **Postconditions:**
 - Nếu chấp nhận: VV chuyển sang DANG_XU_LY
-- Nếu từ chối: VV quay lại DA_TIEP_NHAN để chọn NHT khác
+- Nếu từ chối: VV quay lại DA_TIEP_NHAN để chọn người/tổ chức xử lý khác
 - CB NV nhận thông báo
 
 **Error Handling:**
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
-| E1 | NHT không phải người được phân công | ERR-XN-01 | "Bạn không được phân công cho vụ việc này" | ERROR |
+| E1 | Tài khoản hiện tại không phải người được phân công | ERR-XN-01 | "Bạn không được phân công cho vụ việc này" | ERROR |
 | E2 | VV không ở trạng thái DA_PHAN_CONG | ERR-XN-02 | "Vụ việc không ở trạng thái chờ xác nhận" | ERROR |
 
 **Acceptance Criteria:**
-- **Given** NHT nhận thông báo phân công **When** xem chi tiết **Then** hiển thị thông tin VV + DN
-- **Given** NHT xác nhận **When** chấp nhận **Then** VV → DANG_XU_LY
-- **Given** NHT từ chối **When** nhập lý do **Then** VV quay lại DA_TIEP_NHAN để chọn NHT khác
+- **Given** người được phân công nhận thông báo phân công **When** xem chi tiết **Then** hiển thị thông tin VV + DN
+- **Given** người được phân công xác nhận **When** chấp nhận **Then** VV → DANG_XU_LY
+- **Given** người được phân công từ chối **When** nhập lý do **Then** VV quay lại DA_TIEP_NHAN để chọn người/tổ chức xử lý khác
 
 **Cross-ref:** SM-VUVIEC, Entity VU_VIEC, PHAN_CONG_VU_VIEC
 
@@ -972,7 +975,7 @@ graph TD
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền + cùng cấp | BR-AUTH-01, BR-AUTH-05, BR-FLOW-03 |
 | 2 | Nếu PHE_DUYET: chuyển trạng thái DA_DUYET, set `nguoi_phe_duyet_id`, `ngay_phe_duyet` | SM-VUVIEC |
-| 3 | Nếu TU_CHOI: chuyển trạng thái DANG_XU_LY (quay lại NHT sửa kết quả theo BR-FLOW-04); ghi `ly_do` vào LICH_SU_VU_VIEC | SM-VUVIEC, BR-FLOW-04 |
+| 3 | Nếu TU_CHOI: chuyển trạng thái DANG_XU_LY (quay lại người được phân công sửa kết quả theo BR-FLOW-04); ghi `ly_do` vào LICH_SU_VU_VIEC | SM-VUVIEC, BR-FLOW-04 |
 | 4 | Gửi thông báo CB NV phụ trách + NHT (nếu từ chối) | BR-NOTIF-01 |
 | 5 | Ghi lịch sử | — |
 | 6 | Ghi nhật ký thao tác | BR-DATA-05 |
@@ -981,7 +984,7 @@ graph TD
 
 **Postconditions:**
 - Nếu phê duyệt: VV chuyển DA_DUYET
-- Nếu từ chối: VV chuyển DANG_XU_LY (quay về NHT sửa kết quả theo BR-FLOW-04)
+- Nếu từ chối: VV chuyển DANG_XU_LY (quay về người được phân công sửa kết quả theo BR-FLOW-04)
 - CB NV phụ trách + NHT (nếu từ chối) nhận thông báo kết quả
 
 **Error Handling:**
@@ -995,7 +998,7 @@ graph TD
 **Acceptance Criteria:**
 - **Given** CB PD xem HS chờ duyệt **When** xem chi tiết **Then** hiển thị đầy đủ + kết quả kiểm tra + NHT
 - **Given** CB PD phê duyệt **When** xác nhận **Then** trạng thái → DA_DUYET, ghi audit log
-- **Given** CB PD từ chối **When** nhập lý do (≥ 10 ký tự) **Then** trạng thái → DANG_XU_LY (quay về NHT sửa kết quả theo BR-FLOW-04), thông báo CB NV + NHT
+- **Given** CB PD từ chối **When** nhập lý do (≥ 10 ký tự) **Then** trạng thái → DANG_XU_LY (quay về người được phân công sửa kết quả theo BR-FLOW-04), thông báo CB NV + người được phân công
 
 **Cross-ref:** SM-VUVIEC, BR-FLOW-03, Entity VU_VIEC
 
@@ -1051,19 +1054,19 @@ graph TD
 
 ---
 
-### FR-V.I-15: NHT cập nhật kết quả hỗ trợ (UC65)
+### FR-V.I-15: Người được phân công cập nhật kết quả hỗ trợ (UC65)
 
 **UC Reference:** UC 65 | **Priority:** Essential | **Stability:** High
-**Màn hình:** SCR-V.I-03 (Accordion 6 — Kết quả Hỗ trợ, phần NHT)
+**Màn hình:** SCR-V.I-03 (Accordion 6 — Kết quả Hỗ trợ, phần người được phân công)
 
-**Mô tả:** NHT cập nhật kết quả hỗ trợ: nội dung kết quả, file văn bản tư vấn, báo cáo.
+**Mô tả:** Người được phân công xử lý vụ việc cập nhật kết quả hỗ trợ: nội dung kết quả, file văn bản tư vấn, báo cáo.
 
 **Preconditions:**
 
 | # | Điều kiện |
 |---|----------|
-| PRE-01 | NHT đã đăng nhập |
-| PRE-02 | VV ở trạng thái DANG_XU_LY, NHT được phân công |
+| PRE-01 | Người được phân công đã đăng nhập |
+| PRE-02 | VV ở trạng thái DANG_XU_LY, tài khoản hiện tại là `PHAN_CONG_VU_VIEC.nguoi_xu_ly_id` của phân công đã chấp nhận |
 
 **Inputs:**
 
@@ -1078,7 +1081,7 @@ graph TD
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra NHT là người được phân công | BR-AUTH-01 |
+| 1 | Kiểm tra tài khoản hiện tại là người được phân công trong `PHAN_CONG_VU_VIEC.nguoi_xu_ly_id` | BR-AUTH-01 |
 | 2 | Xác nhận dữ liệu đầu vào | — |
 | 3 | Tạo/cập nhật KET_QUA_VU_VIEC | — |
 | 4 | Lưu tài liệu kết quả | — |
@@ -1096,12 +1099,12 @@ graph TD
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
-| E1 | NHT không phải người được phân công | ERR-KQ-01 | "Bạn không được phân công cho vụ việc này" | ERROR |
+| E1 | Tài khoản hiện tại không phải người được phân công | ERR-KQ-01 | "Bạn không được phân công cho vụ việc này" | ERROR |
 | E2 | VV không ở trạng thái DANG_XU_LY | ERR-KQ-02 | "Vụ việc không ở trạng thái đang xử lý" | ERROR |
 
 **Acceptance Criteria:**
-- **Given** NHT chọn VV đang hỗ trợ **When** nhấn "Cập nhật kết quả" **Then** form nhập
-- **Given** NHT nhập nội dung + upload tài liệu **When** lưu **Then** cập nhật, thông báo CB NV
+- **Given** người được phân công chọn VV đang hỗ trợ **When** nhấn "Cập nhật kết quả" **Then** form nhập
+- **Given** người được phân công nhập nội dung + upload tài liệu **When** lưu **Then** cập nhật, thông báo CB NV
 
 **Cross-ref:** SM-VUVIEC, Entity KET_QUA_VU_VIEC, TAI_LIEU_VU_VIEC
 
@@ -1228,60 +1231,9 @@ graph TD
 
 ---
 
-### FR-V.I-NEW-01: Thiết lập quy trình hỗ trợ TVPLDN (UC mới)
+### FR-V.I-NEW-01: ĐÃ BỎ — Thiết lập quy trình hỗ trợ TVPLDN
 
-**UC Reference:** UC mới | **Priority:** Essential | **Stability:** High
-
-**Mô tả:** QTHT cấu hình các bước quy trình hỗ trợ TVPLDN. HS mới áp dụng quy trình mới, HS cũ giữ quy trình cũ (versioning).
-
-**Tác nhân:** Quản trị hệ thống (QTHT)
-
-**Preconditions:**
-
-| # | Điều kiện |
-|---|----------|
-| PRE-01 | QTHT đã đăng nhập |
-| PRE-02 | User có quyền QTHT |
-
-**Inputs:**
-
-| # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc |
-|---|----------|-----------|----------|-----------|
-| 1 | ten_buoc | text | Y | Tên bước quy trình |
-| 2 | thu_tu | number | Y | Thứ tự bước |
-| 3 | sla_ngay | number | N | SLA (ngày làm việc) |
-| 4 | dieu_kien_chuyen | text (long) | N | Điều kiện chuyển trạng thái |
-| 5 | mo_ta | text (long) | N | Mô tả bước |
-
-**Processing:**
-
-| Bước | Mô tả xử lý | BR áp dụng |
-|------|-------------|-----------|
-| 1 | Kiểm tra quyền QTHT | BR-AUTH-01 |
-| 2 | CRUD bước quy trình: tên, thứ tự, SLA, điều kiện chuyển | — |
-| 3 | Hồ sơ mới: áp dụng quy trình mới | — |
-| 4 | Hồ sơ cũ: giữ quy trình cũ (versioning) | — |
-| 5 | Ghi nhật ký thao tác | BR-DATA-05 |
-
-**Outputs:** Không có output riêng (cấu hình quy trình được cập nhật).
-
-**Postconditions:**
-- Quy trình mới được lưu
-- HS mới áp dụng quy trình mới, HS cũ giữ nguyên
-
-**Error Handling:**
-
-| # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
-|---|--------------|--------|-------------------|----------|
-| E1 | Thứ tự trùng lặp | ERR-QT-01 | "Thứ tự bước đã tồn tại" | ERROR |
-| E2 | Tên bước trống | ERR-QT-02 | "Tên bước quy trình là bắt buộc" | ERROR |
-
-**Acceptance Criteria:**
-- **Given** QTHT truy cập "Cấu hình quy trình" **When** hiển thị **Then** danh sách bước quy trình hiện tại
-- **Given** QTHT thêm/sửa bước **When** nhập thông tin **Then** validate + lưu
-- **Given** quy trình thay đổi **When** áp dụng **Then** HS mới theo quy trình mới, HS cũ giữ quy trình cũ
-
-**Cross-ref:** SM-VUVIEC, Entity CAU_HINH_QUY_TRINH
+> **[ĐÃ BỎ — BA chốt 2026-05-07 Hướng A]** Workflow xử lý vụ việc HTPL DN tuân theo NĐ 55/2019 + NĐ 18/2026 (ổn định, không đổi thường xuyên). Hệ thống dùng SM-VUVIEC cứng trong code thay vì cấu hình động. Khi luật đổi → sửa SM trong code + deploy lại. Lý do bỏ: spec FR cũ (5 trường) không đủ định nghĩa workflow engine thực thi (thiếu vai_tro_thuc_hien, man_hinh_id, hanh_dong, transition state) — sửa cho đầy đủ là over-engineering không cần thiết. Thay thế: SM-VUVIEC trong srs-v3.md + SLA tổng tại Tab 1 SCR-VIII-06 + Phân công auto tại Tab 2 SCR-VIII-06.
 
 ---
 
@@ -1764,7 +1716,7 @@ Mỗi SCR chứa các phần sau (theo thứ tự):
 | 6 | content | Accordion 3 — Tài liệu Đính kèm | C23 | Danh sách file: tên file, loại, kích thước, ngày upload, nút [Xem] [Tải]. Nút [+ Thêm tài liệu] | — | Luôn. [+ Thêm] chỉ khi trạng thái cho phép sửa |
 | 7 | content | Accordion 4 — Kết quả Kiểm tra (gộp MH-05.4) | C23 | Checklist 6 hạng mục (ĐẠT/KHÔNG_ĐẠT) từ UC106 + kết luận + lý do + người kiểm tra + ngày. "Lần bổ sung: {n}/3" (highlight đỏ khi n>=2) | CB NV nhập trực tiếp khi kiểm tra | Khi VV đã qua DANG_KIEM_TRA |
 | 8 | content | Accordion 5 — Phân công xử lý (gộp MH-05.5) | C23 | Họ tên cá nhân được phân công (TVV/CG/Người hỗ trợ), lĩnh vực chuyên môn, **đơn vị quản lý** (Sở TP/Bộ ngành công nhận — KHÔNG dùng "địa bàn" do Thẻ TVV PL có hiệu lực toàn quốc theo NĐ 77/2008 Điều 19), ngày phân công, trạng thái xác nhận. **Khi `loai_doi_tuong_xu_ly='TO_CHUC'` → hiển thị thêm tên tổ chức tư vấn (TO_CHUC_TU_VAN.ten_to_chuc).** Cảnh báo "Sắp hết hạn xác nhận" khi gần hết hạn 3 ngày làm việc | — | Khi VV đã qua DA_PHAN_CONG |
-| 9 | content | Accordion 6 — Kết quả Hỗ trợ (gộp MH-05.7) | C23 | noi_dung_ket_qua (NHT), file_ket_qua, ket_luan_cuoi (CB NV), ngay_hoan_thanh | NHT/CB NV cập nhật trực tiếp | Khi VV đã qua DANG_XU_LY |
+| 9 | content | Accordion 6 — Kết quả Hỗ trợ (gộp MH-05.7) | C23 | noi_dung_ket_qua (người được phân công), file_ket_qua, ket_luan_cuoi (CB NV), ngay_hoan_thanh | Người được phân công/CB NV cập nhật trực tiếp | Khi VV đã qua DANG_XU_LY |
 | 10 | content | Accordion 7 — Phê duyệt (gộp MH-05.8) | C23 | Common Approval Fields: thoi_gian_duyet, nguoi_duyet, quyết định (PHE_DUYET/TU_CHOI), ly_do_tu_choi | — | Khi VV đã qua CHO_PHE_DUYET |
 | 11 | content | Accordion 8 — Đánh giá (gộp MH-05.9) | C23 | diem_chat_luong (0-10), diem_thoi_gian (0-10), diem_thai_do (0-10), diem_tong (AVG auto), nhan_xet | CB NV/DN nhập trực tiếp | Khi VV ở HOAN_THANH hoặc DA_DANH_GIA |
 | 12 | sidebar | Dòng thời gian (Timeline) | C18 | Lịch sử xử lý từ LICH_SU_VU_VIEC: "dd/mm HH:mm — {ho_ten} {hanh_dong}". Tự động cuộn đến mục mới nhất | — | Luôn |
@@ -1778,10 +1730,10 @@ Mỗi SCR chứa các phần sau (theo thứ tự):
 | DA_TIEP_NHAN | [Kiểm tra Hồ sơ] | CB NV | → DANG_KIEM_TRA. Mở Accordion 4 |
 | DANG_KIEM_TRA | [Hoàn tất Kiểm tra] | CB NV | Kết luận: Đạt → DA_PHAN_CONG / YCBS → YEU_CAU_BO_SUNG (counter++) / Không đạt → TU_CHOI |
 | DA_PHAN_CONG | [Phân công] (modal 2 thẻ, gộp MH-05.5) | CB NV | Mở hộp thoại phân công với 2 thẻ: "Cá nhân" (TVV/CG cá nhân ngoài hoặc Người hỗ trợ) hoặc "Tổ chức tư vấn" (Cty Luật / VP Luật sư / Trung tâm TVPL — sau khi chọn tổ chức → load danh sách TVV thuộc tổ chức để chọn người cụ thể). Hệ thống tự gợi ý theo tiêu chí ưu tiên NĐ55 Điều 4 + lĩnh vực + khối lượng. Khi xác nhận: gửi thông báo cá nhân được phân công + nếu `loai='TO_CHUC'` kèm CC email tổ chức |
-| DA_PHAN_CONG | [Chấp nhận] [Từ chối] (gộp MH-05.6) | NHT | Chấp nhận → DANG_XU_LY / Từ chối → DA_TIEP_NHAN (phân công lại) |
-| DANG_XU_LY | [Cập nhật Kết quả] | NHT/CB NV | Mở Accordion 6 để cập nhật |
+| DA_PHAN_CONG | [Chấp nhận] [Từ chối] (gộp MH-05.6) | Người được phân công | Chấp nhận → DANG_XU_LY / Từ chối → DA_TIEP_NHAN (phân công lại) |
+| DANG_XU_LY | [Cập nhật Kết quả] | Người được phân công/CB NV | Mở Accordion 6 để cập nhật |
 | DANG_XU_LY | [Trình Phê duyệt] | CB NV | → CHO_PHE_DUYET (AT-03 auto-transition) |
-| CHO_PHE_DUYET | [Phê duyệt] [Từ chối] (gộp MH-05.8) | CB PD | Phê duyệt → DA_DUYET. Từ chối → DANG_XU_LY (quay về NHT sửa kết quả theo BR-FLOW-04 — KHÔNG đóng VV; modal lý do bắt buộc ≥ 10 ký tự) |
+| CHO_PHE_DUYET | [Phê duyệt] [Từ chối] (gộp MH-05.8) | CB PD | Phê duyệt → DA_DUYET. Từ chối → DANG_XU_LY (quay về người được phân công sửa kết quả theo BR-FLOW-04 — KHÔNG đóng VV; modal lý do bắt buộc ≥ 10 ký tự) |
 | DA_DUYET | [Cập nhật KQ cuối] | CB NV | → HOAN_THANH + ngay_hoan_thanh |
 | HOAN_THANH | [Đánh giá] (gộp MH-05.9) | CB NV/DN | Mở Accordion 8. Gửi → DA_DANH_GIA |
 | DA_DUYET / HOAN_THANH (cong_khai=0) | [Công khai] | CB Phê duyệt cùng cấp | Mở modal Công khai (form ảnh đại diện + mô tả công khai + file đính kèm). Khi xác nhận: hệ thống đẩy vụ việc lên Cổng Pháp luật Quốc gia (FR-V.I-NEW-05). Nếu API OK → SET cong_khai=1, thoi_gian_dang_tai=NOW() |
@@ -1940,7 +1892,7 @@ Mỗi SCR chứa các phần sau (theo thứ tự):
 | 13 | DANH_MUC | referenced | Danh mục dùng chung (lĩnh vực PL, loại hình HT...) |
 | 14 | FILE_DINH_KEM | referenced | File đính kèm dùng chung (polymorphic) |
 | 15 | CAU_HINH_SLA | referenced | Cấu hình SLA per entity (deadline xử lý, timeout xác nhận, timeout bổ sung). QTHT điều chỉnh qua UC108. Tham chiếu trong FR-V.I-CROSS-01 |
-| 16 | CAU_HINH_QUY_TRINH | referenced | Cấu hình bước quy trình hỗ trợ TVPLDN. Tham chiếu trong FR-V.I-NEW-01 |
+| ~~16~~ | ~~CAU_HINH_QUY_TRINH~~ | **ĐÃ BỎ** | ~~Cấu hình bước quy trình hỗ trợ TVPLDN~~ — BA chốt 2026-05-07 Hướng A: gỡ entity (workflow VV cứng theo SM-VUVIEC + NĐ 55/2019). Xem CHANGELOG. |
 | 17 | THONG_BAO | referenced | Thông báo trong hệ thống cho người dùng (DN/CB NV/CB PD/người được phân công). Polymorphic qua `ref_entity` + `ref_id`. Tham chiếu trong FR-V.I-12, FR-V.I-14 |
 
 ### ERD nhóm (subset)
@@ -2320,12 +2272,12 @@ stateDiagram-v2
 | [*] | CHO_TIEP_NHAN | DVC/HT khác/Trực tiếp | — | Tạo VV, sinh mã, tính deadline | FR-V.I-03/04/05 | BR-SLA-01 |
 | CHO_TIEP_NHAN | DA_TIEP_NHAN | CB NV tiếp nhận | CB NV cùng đơn vị | Audit, gửi TB DN (nếu DVC) | FR-V.I-01 | — |
 | DA_TIEP_NHAN | DANG_KIEM_TRA | CB NV kiểm tra | — | Đối chiếu checklist UC106 | FR-V.I-06 | BR-LEGAL-02 |
-| DANG_KIEM_TRA | DA_PHAN_CONG | Đạt + chọn NHT | NHT đang hoạt động | Gửi TB NHT | FR-V.I-09 | BR-CALC-05 |
+| DANG_KIEM_TRA | DA_PHAN_CONG | Đạt + chọn người/tổ chức xử lý | Đối tượng xử lý hợp lệ, đang hoạt động | Gửi TB người được phân công | FR-V.I-09 | BR-CALC-05 |
 | DANG_KIEM_TRA | YEU_CAU_BO_SUNG | Thiếu HS | — | TB DN bổ sung | FR-V.I-06 | — |
 | DANG_KIEM_TRA | TU_CHOI | Không đạt | — | TB DN kết quả | FR-V.I-12 | — |
-| DA_PHAN_CONG | DANG_XU_LY | NHT xác nhận | — | Audit | FR-V.I-10 | — |
-| DA_PHAN_CONG | DA_TIEP_NHAN | NHT từ chối | Có lý do | Quay lại chọn NHT khác | FR-V.I-10 | — |
-| DANG_XU_LY | CHO_PHE_DUYET | CB NV trình | NHT đã cập nhật KQ | TB CB PD | FR-V.I-11 | BR-AUTH-05 |
+| DA_PHAN_CONG | DANG_XU_LY | Người được phân công xác nhận | — | Audit | FR-V.I-10 | — |
+| DA_PHAN_CONG | DA_TIEP_NHAN | Người được phân công từ chối | Có lý do | Quay lại chọn người/tổ chức xử lý khác | FR-V.I-10 | — |
+| DANG_XU_LY | CHO_PHE_DUYET | CB NV trình | Người được phân công đã cập nhật KQ | TB CB PD | FR-V.I-11 | BR-AUTH-05 |
 | CHO_PHE_DUYET | DA_DUYET | CB PD duyệt | Cùng cấp | Audit | FR-V.I-13 | BR-AUTH-05 |
 | CHO_PHE_DUYET | DANG_XU_LY | CB PD từ chối | Có lý do | TB CB NV | FR-V.I-13 | BR-FLOW-04 |
 | DA_DUYET | HOAN_THANH | CB NV cập nhật KQ cuối | — | Audit, TB DN | FR-V.I-16 | — |
@@ -2362,7 +2314,7 @@ stateDiagram-v2
 | BR-FLOW-03 | Không sửa/xóa sau PD | FR-V.I-11, 15 |
 | BR-FLOW-04 | Từ chối yêu cầu lý do | FR-V.I-13 |
 | BR-CALC-03 | Tính % thời gian SLA | FR-V.I-CROSS-01 |
-| BR-CALC-04 | Ưu tiên phân công NĐ55 Điều 4 | FR-V.I-02, 04, 09 |
+| BR-CALC-07 | Ưu tiên phân công NĐ55 Điều 4 | FR-V.I-02, 04, 09 |
 | BR-CALC-06 | Cập nhật điểm TVV TB | FR-V.I-17 (tham chiếu sang FR-IV-CROSS-01) |
 | BR-EC-15 | YCBS tối đa 3 lần | FR-V.I-06 |
 | BR-EC-16 | Quá hạn bổ sung auto-reject | FR-V.I-NEW-02, CROSS-01 |
@@ -2442,7 +2394,7 @@ Mọi hành động "Từ chối" phải nhập lý do. Lý do hiển thị cho 
 
 **Applied in (nhóm V.I):** FR-V.I-13
 
-### BR-CALC-04: Ưu tiên phân công (NĐ55 Điều 4)
+### BR-CALC-07: Ưu tiên phân công (NĐ55 Điều 4)
 
 (1) DN phụ nữ làm chủ +3, (2) DN nhiều LĐ nữ +2, (3) DN ≥30% LĐ khuyết tật +2, (4) FIFO +1. CB NV có quyền override gợi ý.
 

@@ -8,7 +8,7 @@
 - [cross-cutting] Pass-bug-report-audit-r7-8-2-upload-security.md  — counts: total=1 closed=1 open=0 (C0/M1/m0/n0/t0)
 - [cross-cutting] bug-report-r7-8-7-e2e-seam-gaps.md  — counts: total=3 closed=1 open=2 (C1/M0/m1/n1/t0)
 - [ct-htpldn] Pass-bug-report-audit-r7-8-3-luu-nhap-button.md  — counts: total=2 closed=2 open=0 (C0/M1/m1/n0/t0)
-- [danh-gia] bug-report-flow-danhgia.md  — counts: total=15 closed=12 open=3 (C3/M7/m4/n1/t0)
+- [danh-gia] Pass-bug-report-flow-danhgia.md  — counts: total=15 closed=12 open=3 (C3/M7/m4/n1/t0)
 - [dao-tao] Pass-bug-report-bai-giang-r7-3-10.md  — counts: total=1 closed=1 open=0 (C0/M1/m0/n0/t0)
 - [dao-tao] Pass-bug-report-r7-4-b0-jwt-revoke.md  — counts: total=3 closed=3 open=0 (C1/M1/m0/n1/t0)
 - [dao-tao] bug-report-r7-7-6-chuyen-trang-vpd-inbound.md  — counts: total=2 closed=0 open=2 (C0/M2/m0/n0/t0)
@@ -52,7 +52,7 @@
 
 ## Nhóm B — MANUAL: add Severity table (BST present, no table) (21 files)
 
-- [bao-cao] bug-report-r7-7-13-bao-cao.md  — bst=8-col-full total=9 closed=5 open=2
+- [bao-cao] Pass-bug-report-r7-7-13-bao-cao.md  — bst=8-col-full total=9 closed=5 open=2
 - [dao-tao] Pass-bug-report-r7-3-12-hoc-vien-deploy-partial.md  — bst=unknown total=3 closed=1 open=0
 - [dao-tao] Pass-bug-report-r7-4-b10-dkt-fe-regression.md  — bst=8-col-full total=1 closed=1 open=0
 - [dao-tao] Pass-bug-report-r7-4-b10-dkt-form-modal.md  — bst=8-col-full total=2 closed=2 open=0

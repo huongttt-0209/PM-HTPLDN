@@ -41,8 +41,11 @@ Project này chứa tài liệu QA cho Phần mềm Hỗ trợ Pháp lý Doanh n
 - **Test strategy:** [output/test-strategy.md](output/test-strategy.md)
 - **Permission matrix:** [output/permission-matrix.md](output/permission-matrix.md) (49 entity × 11 role)
 - **Test accounts:** [input/users.csv](input/users.csv) · **Permission test usage guide:** [input/test-accounts-isolation.csv](input/test-accounts-isolation.csv)
-- **SRS docs:** [input/srs-v3/](input/srs-v3/)
+- **SRS docs (v3.5 latest):** [input/srs-update-2026-5-5/](input/srs-update-2026-5-5/) · [v3 legacy](input/srs-v3/) · [CHANGELOG v3→v3.5](input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md)
 - **Báo cáo QA:** [output/qa-reports/](output/qa-reports/)
+- **🔴 QA SOP (8 quy trình chính):** [output/qa-sop.md](output/qa-sop.md) — đọc TRƯỚC khi bắt đầu round mới
+- **State machines v3.5 ref card:** [input/data/state-machines-v3.5.md](input/data/state-machines-v3.5.md) — bảng tra cứu state machine 14 module
+- **SRS contradictions tracker:** [tasks/srs-contradictions.md](tasks/srs-contradictions.md) — mâu thuẫn spec cần BA chốt
 
 ### Seed data references (new 2026-04-23)
 - **Flow + hub tier + troubleshooting:** [input/flow-module.md](input/flow-module.md) — state machine 14 module + Hub Tier + Seed Presets (Phụ lục 2) + Troubleshooting (Phụ lục 3)
@@ -293,6 +296,25 @@ Chi tiết trigger phân loại + phương án chuẩn + workflow re-test + anti
 2. **2-source SRS verify:** query NotebookLM HTPLDN (id `a4ae45bf-cea0-4325-8fee-b1e0be702cf2`) + grep SRS local — mọi log/đóng/đổi severity.
 3. **Workaround = bug candidate.** Gặp 4xx/5xx → log, không skip vì "tự fix được".
 
+### 3-Step Verify TRƯỚC khi log bug (enforced 2026-05-13 — chi tiết: [output/qa-sop.md §4.4](output/qa-sop.md))
+
+Sau khi deep-verify R20 phát hiện 5/9 bug Open có vấn đề (3 false bug + 2 wrong wording quote sai mã/state), enforce 3 step:
+
+1. **Kiểm tra SRS version.** Default mở `input/srs-update-2026-5-5/` (v3.5). Nếu module chưa cover trong v3.5 → đọc [CHANGELOG-v3-to-v3.5.md](input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) xem có deprecate → fallback v3 + ghi rõ trong bug entry. **Quote sai version = bug invalid.**
+2. **Quote nguyên văn SRS line số.** Mở file SRS, tìm line cụ thể, format `srs-update-2026-5-5/srs-fr-NN-X.md:LINE` + nội dung. KHÔNG dùng số dòng từ trí nhớ — luôn mở file verify.
+3. **Verify lại bằng method khác.** UI fail → curl API direct cùng action so sánh. API fail → reload UI fresh re-test. Mâu thuẫn UI vs API → ghi cả 2 trong bug entry, đề xuất BA confirm.
+
+### Wording rule — describe requirement, NOT prescribe implementation
+
+- ❌ Sai (prescribe): "Phải hiện button **Đồng ý/Hủy**", "Phải gọi `POST /api/v1/X` trả 200", "Phải có mã `ERR-PC-06`"
+- ✅ Đúng (describe): "Theo SRS line N, khi role X bấm duyệt không hợp lệ, hệ thống phải hiển thị thông báo từ chối + giữ state cũ"
+
+**Lý do:** Dev có nhiều cách implement. Bug describe yêu cầu nghiệp vụ, dev tự chọn implementation. Prescribe → talk past 8+ round (BUG-PC-INACTIVE pattern).
+
+### Pre-log: tra SRS contradictions tracker
+
+Trước log bug, search [tasks/srs-contradictions.md](tasks/srs-contradictions.md). Nếu module/topic đã có entry Open → không log như spec normal, ghi note "depends on SRS-C-NNN BA decision" trong bug entry.
+
 ## Re-test discipline — OVERWRITE 1 dòng latest, KHÔNG append history (enforced 2026-05-12)
 
 **Áp dụng cho mọi QA / tester làm việc trong folder `output/qa-reports/`.** Mỗi bug trong file `bug-report-*.md` chỉ giữ **DUY NHẤT 1 dòng** blockquote Re-test latest ngay sau heading bug. Mỗi lần retest mới → **OVERWRITE** dòng cũ, KHÔNG append blockquote list / Re-verify #N tích lũy.
@@ -313,6 +335,7 @@ Chi tiết trigger phân loại + phương án chuẩn + workflow re-test + anti
 - ❌ Append blockquote list: `> - 2026-04-28 R3 ...` + `> - 2026-04-29 R4 ...`
 - ❌ Append `> **Re-verify #6` + `> **Re-verify #7` + `> **Re-verify #8` cho cùng bug
 - ❌ Để field `**Ngày**` ở header lệch với max timestamp trong body
+- ❌ **Section `## Tổng hợp` đầu file dồn round-narrative blockquote** `> **R{N} retest ...` / `> **R{N} run ...` — section này SNAPSHOT LATEST, OVERWRITE 1 đoạn ngắn (≤5 dòng) tóm tắt round mới nhất + breakdown Open/Closed. Round history cũ đã có ở cột Status Bug Summary Table + Re-test bug-level → KHÔNG lặp. Hook `check-retest-no-duplicate.py` BLOCK khi edit introduce >2 round-narrative blockquote mới trong section Tổng hợp; legacy file >2 → stderr INFO warn migration manual (collapse về 1 snapshot LATEST).
 
 **Tooling (committed, portable cho mọi QA clone repo):**
 
@@ -326,21 +349,19 @@ Chi tiết trigger phân loại + phương án chuẩn + workflow re-test + anti
 
 ## Bug-report folder discipline — Pass- prefix + image co-locate (enforced 2026-05-10)
 
-## Bug-report folder discipline — Pass- prefix + image co-locate (enforced 2026-05-10)
-
 **Layout chuẩn `output/qa-reports/round{N}-*/bug-reports/`:**
 ```
 bug-reports/
 └── <module>/                          ← chỉ chứa *.md + image/ subfolder
     ├── bug-report-<X>.md              ← file còn ≥1 bug Open
-    ├── Pass-bug-report-<Y>.md         ← file 100% bug Closed (auto-renamed)
+    ├── Pass-bug-report-<Y>.md         ← file 100% bug Closed (tester rename manual khi hook warn)
     └── image/
         └── *.png / *.jpg / *.jpeg / *.b64.txt
 ```
 
 **3 rule cứng (mỗi khi update file bug-report):**
 
-1. **Pass- prefix khi 100% bug Closed.** File `bug-report-*.md` có Bug Summary Table mà mọi row Status = Closed → **bắt buộc rename** thành `Pass-bug-report-*.md` + update mọi inbound link (todo*.md, workflow/functional/seed reports). **Auto-handled by hook** [`auto-rename-pass-prefix.py`](.claude/hooks/auto-rename-pass-prefix.py) — PostToolUse Edit/Write/MultiEdit, đã register settings.json. Tester KHÔNG cần manual rename.
+1. **Pass- prefix khi 100% bug Closed.** File `bug-report-*.md` có Bug Summary Table mà mọi row Status = Closed → **bắt buộc rename** thành `Pass-bug-report-*.md` + update mọi inbound link (todo*.md, workflow/functional/seed reports). **Hook `auto-rename-pass-prefix.py` là WARN-ONLY** (xem §Hook contract dưới) — stderr nhắc rename khi điều kiện đủ, **KHÔNG auto-rename** vì rename phá link cross-file → tester quyết + dùng MultiEdit batch update inbound link.
 
 2. **Ảnh phải nằm trong `<module>/image/`.** CẤM:
    - Ảnh rời cùng cấp với MD (vd `<module>/screenshot.png`).

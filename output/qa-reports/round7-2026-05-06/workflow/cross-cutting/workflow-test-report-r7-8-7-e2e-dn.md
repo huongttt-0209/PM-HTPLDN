@@ -1,7 +1,7 @@
 # Workflow Test Report — R7.8.7 E2E DN full luồng đăng ký → đánh giá → chi trả
 
 > **Module:** Cross-cutting · E2E 12 bước cross-module · 5 seam handoff (FR-VIII-22/26 + FR-V.I-02/06/09/13/14/15/16/17 + FR-V.II) · **SRS:** [`02-thu-tu-module.md`](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) + [`srs-v3.5.md`](../../../../../input/srs-update-2026-5-5/srs-v3.5.md) · **Round:** R7 · **Date:** 2026-05-11 20:30:00 · **Tester:** QA huongttt via Claude Code (Chrome DevTools MCP)
-> **Bug:** [`bug-report-r7-8-7-e2e-seam-gaps.md`](../../bug-reports/cross-cutting/bug-report-r7-8-7-e2e-seam-gaps.md)
+> **Bug:** [`Pass-bug-report-r7-8-7-e2e-seam-gaps.md`](../../bug-reports/cross-cutting/Pass-bug-report-r7-8-7-e2e-seam-gaps.md)
 
 ---
 

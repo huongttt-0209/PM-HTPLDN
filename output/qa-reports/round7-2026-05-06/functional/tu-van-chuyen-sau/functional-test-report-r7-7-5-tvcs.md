@@ -5,15 +5,19 @@
 | **Module** | Tư vấn chuyên sâu (FR-12 · Nhóm X.1) |
 | **Spec** | [`output/funtion/7.12-tu-van-chuyen-sau.md`](../../../../funtion/7.12-tu-van-chuyen-sau.md) v3.5 (61 TC = 44 base + 17 mới v3.5) |
 | **SRS** | [`srs-fr-12-tv-chuyen-sau.md`](../../../../../input/srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md) v3.5 |
-| **Round** | R8 (2026-05-07) → R14 (2026-05-10 12:30:00) → R15 (2026-05-10 14:30:00) → R16 Phase 1/2 (2026-05-10 20:25:00/20:35:00) → R17 (2026-05-11 02:55:00) → R20 (2026-05-12 — bugfix re-verify + 3 TC unblock retest) → **R19c-followup (2026-05-12 21:10:00 — TLPL CRUD batch sau BUG-001 fix)** |
+| **Round** | R20 (2026-05-13 11:55:00 — retest TV-043/057/058 sau BUG-010 closed) |
 | **Tester** | QA Automation (Chrome DevTools MCP) |
 | **Pre-req** | R7.2.6 ✅ 8 CG `HOAT_DONG` + R7.4.A5 R15 ✅ 9/11 PASS workflow unblock (BUG-FE-A5-004 closed commit `f54afbc8`) + DN 23 records. R16 pool: 17 TVCS (5 TIEP_NHAN + 4 PHAN_CONG + 3 DANG_TU_VAN + 2 DA_DUYET + 3 HUY) |
 | **Workflow đi kèm** | [workflow-test-report-r7-4-a5-tvcs.md](../../workflow/tu-van-chuyen-sau/workflow-test-report-r7-4-a5-tvcs.md) (R15: 9/11 PASS + 2 EXTERNAL = 11/11 covered) |
-| **Bug report** | [Pass-bug-report-r7-7-5-tvcs.md](../../bug-reports/tu-van-chuyen-sau/Pass-bug-report-r7-7-5-tvcs.md) — **10/10 đóng R15** + [bug-report-r7-7-5-tvcs-r16.md](../../bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs-r16.md) — **4 bug mới R16 Phase 2** (TLPL endpoint, congKhai filter, auto-save 30s, NHT FE menu leak) |
+| **Bug report** | [Pass-bug-report-r7-7-5-tvcs.md](../../bug-reports/tu-van-chuyen-sau/Pass-bug-report-r7-7-5-tvcs.md) — **10/10 đóng R15** + [Pass-Pass-bug-report-r7-7-5-tvcs-r16.md](../../bug-reports/tu-van-chuyen-sau/Pass-Pass-bug-report-r7-7-5-tvcs-r16.md) — **4 bug mới R16 Phase 2** (TLPL endpoint, congKhai filter, auto-save 30s, NHT FE menu leak) |
 
 ---
 
-## Verdict R20 (LATEST · 2026-05-12) — Bugfix re-verify 5 bug Open + 3 TC retest
+## Verdict R20-followup (LATEST · 2026-05-13 11:55:00) — TV-043/057/058 retest sau BUG-010 closed
+
+✅ **R20-followup delta:** BUG-BE-TVCS-R19c-010 (TLPL upload 500) closed-verified (POST `/api/v1/tu-lieu-phap-ly-vvs/upload` PDF → **201** + trangThaiQuet=SACH; POST `/api/v1/tu-lieu-phap-ly-vvs` tạo TLPL → **201** trangThai=NHAP). **TV-057 ✅ PASS** — CRUD GET list / POST upload / POST create đạt schema spec. **TV-043 ⚠️ PARTIAL** — upload + tạo record OK, PATCH/DELETE/POST cong-khai trả 403 với cb_nv_tw_06 (role thực `CB_PD_DP` per auth/me, cross-scope ownership với DN owner TVCS-QA-R7-HD059) — không reproduce được lỗi BE, chỉ là BR-AUTH expected (cần CB_NV TW có scope DN này hoặc QTHT root). **TV-058 🚫** — cascade TV-043 (chưa transition NHAP→CONG_KHAI để verify cross-DN visibility).
+
+## Verdict R20 (archive · 2026-05-12) — Bugfix re-verify 5 bug Open + 3 TC retest
 
 ✅ **R20 delta:** BUG-006 closed (FK schema `hopDongTvId` deployed) → TV-059 unblock PASS. BUG-005 PARTIAL (FE button [Công khai] + modal hoạt động đầy đủ, missing [Hủy công khai] action). BUG-004 PARTIAL (FE hide sidebar menu cho NHT, route direct vẫn render). BUG-008 PARTIAL (BE bỏ blanket-deny, NHT có VV phân công có thể GET HSPL của DN-003 happy path). BUG-001 NOT FIXED (TLPL endpoint vẫn 404).
 
@@ -37,7 +41,7 @@
 
 **R20 accounts used:** `cb_nv_tw_06` (BTP·TW CB_NV — TV-041 + TV-059 PATCH-link), `nht_01` (STP-AG NHT — TV-053 cross-scope), `cb_nv_dp_01` (STP-AG CB_NV_DP — TV-045 UI Công khai).
 
-**Verdict tổng R20:** Module TVCS từ ⚠️ Sai spec → **gần PASS** (56/61). Còn 5 TC chưa chạy được — 4 chờ dev fix BUG-001 (TLPL endpoint) + 1 cron TV-011 chờ Dev test hook. BUG-004/005/008 PARTIAL nhưng không block thêm TC; UI gap residual log riêng workflow follow-up. Bug-report mới cho R20: [`bug-report-r7-7-5-tvcs-r16.md`](../../bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs-r16.md) — 4/8 đóng (Open: 001/004⚠/005⚠/008⚠ — 3 PARTIAL R20).
+**Verdict tổng R20:** Module TVCS từ ⚠️ Sai spec → **gần PASS** (56/61). Còn 5 TC chưa chạy được — 4 chờ dev fix BUG-001 (TLPL endpoint) + 1 cron TV-011 chờ Dev test hook. BUG-004/005/008 PARTIAL nhưng không block thêm TC; UI gap residual log riêng workflow follow-up. Bug-report mới cho R20: [`Pass-Pass-bug-report-r7-7-5-tvcs-r16.md`](../../bug-reports/tu-van-chuyen-sau/Pass-Pass-bug-report-r7-7-5-tvcs-r16.md) — 4/8 đóng (Open: 001/004⚠/005⚠/008⚠ — 3 PARTIAL R20).
 
 **Verdict R19c-followup overlay (2026-05-12 21:10:00):** 3 TC ✅ Đạt (TV-023/024/025 CRUD UI thuần PASS sau BUG-001 closed) + 1 TC ❌ Lỗi mới (TV-043 BE upload 500 — BUG-010 Major). Coverage update: 59/61 ✅ + 1 ⚠️ + 1 ❌ + 2 🚫 cascade + 8 ⏭.
 
@@ -74,7 +78,7 @@
 | TV-040 | DA_DUYET → CG điểm DGCL | 🚫 Không test được | R16-P2 | Cross-module DGCL out-of-MCP |
 | TV-041 | Cross-module VV link | ⚠️ Sai spec | R20 | BE PASS persist `vuViecId`. FE thiếu dropdown form + panel detail + filter list — BUG-009 |
 | TV-042 | API inbound DN | ⏭ Hoãn | R8 | Defer Postman |
-| TV-043 | API outbound Cổng PLQG (Công khai TLPL) | ❌ Lỗi | R19c-followup | BE upload 500 BUG-010 → không reach CONG_KHAI |
+| TV-043 | API outbound Cổng PLQG (Công khai TLPL) | ⚠️ Sai spec | R20-followup | Upload + tạo TLPL ✅; transition NHAP→CONG_KHAI 403 (BR-AUTH cross-scope) |
 | TV-044 | Search TVCS happy | ✅ Đạt | R8 | OK |
 | TV-045 | UI cong-khai mô tả-only | ✅ Đạt | R20 | Modal Công khai PASS R20 |
 | TV-046 | POST /cong-khai | ✅ Đạt | R16-P1 | TVCS-0002 ver+1 |
@@ -86,23 +90,22 @@
 | TV-054 | NHT no C/D HSPL | ✅ Đạt | R15 | BUG-HSPL-001 closed |
 | TV-055 | HSPL detail render | ✅ Đạt | R15 | 24-field |
 | TV-056 | HSPL multi-search | ✅ Đạt | R16-P1 | search alias |
-| TV-057 | TLPL filter NCS | 🚫 Không test được | R19c-followup | Cascade BUG-010 — chưa có CONG_KHAI để filter |
-| TV-058 | TLPL CRUD edge (sửa khi CONG_KHAI) | 🚫 Không test được | R19c-followup | Cascade BUG-010 — không vào CONG_KHAI state |
+| TV-057 | TLPL CRUD workflow | ✅ Đạt | R20-followup | GET 200 + POST upload 201 + POST tạo TLPL 201 trangThai=NHAP |
+| TV-058 | TLPL công khai workflow | 🚫 Không test được | R20-followup | Cascade TV-043 — cần account cùng scope TVCS để transition |
 | TV-059 | TVCS↔HDTV PATCH-link | ✅ Đạt | R20 | FK hopDongTvId deployed BUG-006 closed |
 | TV-060..TV-061 | API outbound Cổng PLQG | ⏭ Hoãn | R8 | Defer Postman |
-| **Tổng** | **61 TC** | ✅59 · ⚠️1 (TV-041) · ❌1 (TV-043) · 🚫2 (TV-057/058 cascade) · ⏭8 · 🤷0 | | |
+| **Tổng** | **61 TC** | ✅60 (+TV-057) · ⚠️2 (TV-041 + TV-043) · ❌0 (-TV-043) · 🚫1 (TV-058 cascade) · ⏭8 · 🤷0 | | |
 
 ---
 
 ## Bảng TC chưa chạy được — cần làm gì để chạy (R20)
 
-**Hiện tại còn 4 TC chính chưa chạy được (+ 1 ⚠️ TV-041 + 8 TC ⏭ defer Postman/scope) — chia 4 nhóm:** B chờ dev fix BUG-010 TLPL upload 500 (3 TC: TV-043 lỗi + TV-057/058 cascade) + BUG-009 TV-041 FE+filter · C chờ Dev mock time/test hook cron TV-011.
+**Hiện tại còn 2 TC chính chưa chạy được (+ 2 ⚠️ TV-041/TV-043 + 8 TC ⏭ defer Postman/scope) — chia 3 nhóm:** B chờ dev fix BUG-009 TV-041 FE+filter · E cần account cùng scope TVCS owner để verify công khai workflow · C chờ Dev mock time/test hook cron TV-011.
 
 | TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
 |---|---|---|:-:|
-| TV-043 | BE endpoint `/tu-lieu-phap-ly-vvs/upload` trả 500 → không upload được file, không reach state CONG_KHAI để verify push Cổng PLQG | BE fix upload handler — BUG-010 | Dev BE |
-| TV-057 | Cascade BUG-010 — chưa có TLPL state CONG_KHAI để filter NCS | Sau BUG-010 closed → QA retest | QA |
-| TV-058 | Cascade BUG-010 — không vào CONG_KHAI để verify "sửa khi đã công khai → ERR-TLPL" | Sau BUG-010 closed → QA retest | QA |
+| TV-058 | Cần account cùng donVi với TVCS-QA-R7-HD059 để transition NHAP→CONG_KHAI (cb_nv_tw_06 cross-scope 403) | QA tìm account `cb_nv_*` cùng donVi với TVCS DA_DUYET hoặc tạo TVCS mới với owner cb_nv_tw_06 | QA seed |
+| TV-043 | PATCH/DELETE/cong-khai 403 với cb_nv_tw_06 (role thực CB_PD_DP) — BR-AUTH cross-scope expected | Tìm account đúng scope owner TVCS hoặc test với QTHT root cấp đầy đủ | QA seed |
 | TV-011 | Cron 2 ngày không chờ thật trong regression | Dev BE cung cấp mock time/trigger job theo BA 2026-05-11 | Dev BE |
 | TV-041 | UI form thiếu dropdown "Vụ việc" + detail không hiển thị + filter list `?vuViecId` bị silently ignored | FE thêm Select Vụ việc trong form + panel link trên detail; BE bật lại filter `?vuViecId=` — BUG-009 | Dev FE+BE |
 | TV-040 | Cross-module DGCL out-of-MCP | Round Postman riêng | QA API |
@@ -145,7 +148,7 @@
 
 - **TV-043 (Công khai TLPL nội bộ → công khai) ❌ Lỗi** — User mapping: TV-043 là Công khai TLPL (NHAP→CONG_KHAI) theo SRS FR-12 §TLPL + BR-FLOW-07. Pre-req: TLPL phải có ≥1 file đính kèm (ERR-TLPL-05 nếu không). Khi cố upload file PDF (337 bytes valid header `%PDF-1.4`) qua AntD Upload dropzone → BE `POST /api/v1/tu-lieu-phap-ly-vvs/upload` trả **500 Internal Server Error** với body `{"success":false,"error":{"code":"ERR-SYS-00-00-01","message":"Lỗi hệ thống, vui lòng thử lại sau"}}` (lặp 4 lần, reqid 247/252/254/256). Lock workflow công khai. Verify Bộ phận validation đúng: click [Công khai] với 0 file → BE trả 409 `ERR-TLPL-05 "Tư liệu chưa có tệp đính kèm, không thể công khai"` (reqid 258) — đúng spec, không phải bug. **Bug nằm ở upload handler.** Logged **BUG-BE-TVCS-R19c-010 (Major)**. Evidence: [`r19c-followup-tv-024-blocked-no-file-toast-210500.png`](../../bug-reports/tu-van-chuyen-sau/image/r19c-followup-tv-024-blocked-no-file-toast-210500.png).
 
-**Bug mới:** [BUG-BE-TVCS-R19c-010](../../bug-reports/tu-van-chuyen-sau/bug-report-r7-7-5-tvcs-r16.md) — Major — POST `/api/v1/tu-lieu-phap-ly-vvs/upload` trả 500 → block TV-043 + TV-057/058 cascade.
+**Bug mới:** [BUG-BE-TVCS-R19c-010](../../bug-reports/tu-van-chuyen-sau/Pass-Pass-bug-report-r7-7-5-tvcs-r16.md) — Major — POST `/api/v1/tu-lieu-phap-ly-vvs/upload` trả 500 → block TV-043 + TV-057/058 cascade.
 
 ---
 

@@ -14,6 +14,8 @@
 | Ngày | Tác giả | Mô tả thay đổi |
 |------|---------|-----------------|
 | 2026-05-06 | BA | Tạo v3.5 cherry-pick từ `srs-v3/srs-fr-08-danh-gia.md`. Apply 8 thay đổi nghiệp vụ: đổi tên module (A-ITEM-08), bổ sung trường `co_quan_duoc_danh_gia_id` (A-ITEM-08, Q-07), bổ sung FR-VI-10 nhận kết quả đánh giá (A-ITEM-08, Q-06, GAP-VI-04), bổ sung trường `file_dinh_kem` (A-ITEM-07), thống nhất 8 trạng thái + thêm HUY (B1, GAP-VI-01), đổi FK `dot_danh_gia_id` → `ke_hoach_danh_gia_id` (B1), mở rộng phạm vi BR-NOTIF-01 (B1, GAP-VI-03), đồng bộ tên SM-DANHGIA + footer (B1). Pending: 5 trường công khai chuyên trang (chờ BA xác nhận FR-08 thuộc 12 DS công khai theo CR-01). KHÔNG apply: bổ sung CB Phê duyệt vào FR-VI-02/06 (v4 sai vs CSV), mâu thuẫn Mẫu 21a/21b (BA chốt giữ nguyên hiện trạng v4). Chi tiết tham chiếu `v3.5-delta-reports/v3.5-delta-fr-08.md` và `srs-v3.5/CHANGELOG-v3-to-v3.5.md`. |
+| 2026-05-11 | BA + Codex | Chốt xử lý bug DG-012 / vướng mắc quy trình: (1) CB PD chỉ phê duyệt/từ chối phân công người đánh giá; sau khi duyệt, đợt chuyển `CHO_DUYET_PC` → `THUC_HIEN`, CB NV mới chọn vụ việc vào đợt tại Tab Thực hiện. CB PD không chọn vụ việc. (2) Bắt đúng thứ tự: tiêu chí phải đủ tổng trọng số 100% trước khi CB NV thêm người đánh giá; nút thêm người đánh giá bị disabled nếu SUM != 100%, backend validate lại với lỗi rõ ràng. |
+| 2026-05-11 | BA + Codex | **Round 7 BA decision:** QTHT chỉ CRUD danh mục tiêu chí dùng chung ở Nhóm VIII, không sửa tiêu chí đã gắn riêng vào từng đợt FR-08; CB NV quản lý đợt thao tác tiêu chí trong đợt. Đồng bộ `muc_tieu` là bắt buộc ở entity. Đồng bộ chọn VV đánh giá chỉ lấy `HOAN_THANH` theo FR-VI-05. |
 
 ---
 
@@ -40,10 +42,10 @@
 
 ```mermaid
 graph LR
-    A[Lập KH đánh giá] --> B[Thiết lập tiêu chí]
-    B --> C[Phân công người ĐG]
-    C --> D[Phê duyệt phân công]
-    D -->|Duyệt| E[Chọn vụ việc]
+    A[Lập KH đánh giá] --> B[Thiết lập tiêu chí 100%]
+    B --> C[CB NV phân công người ĐG]
+    C --> D[CB PD phê duyệt phân công]
+    D -->|Duyệt| E[CB NV chọn vụ việc]
     D -->|Từ chối| C
     E --> F[Thực hiện đánh giá]
     F --> G[Lập báo cáo ĐG]
@@ -167,14 +169,16 @@ Tạo đợt đánh giá hiệu quả HTPLDN với thông tin kỳ đánh giá, 
 **Màn hình:** SCR-VI-01 (Tab 1 — Tiêu chí)
 
 **Mô tả:**
-Quản lý (thêm/sửa/xóa) tiêu chí đánh giá cho từng đợt. Tổng trọng số phải bằng 100% trước khi chuyển trạng thái.
+CB NV quản lý (thêm/sửa/xóa) tiêu chí đánh giá cho từng đợt. Tổng trọng số phải bằng 100% trước khi chuyển trạng thái.
+
+**Phân định quyền với QTHT:** QTHT chỉ CRUD **danh mục tiêu chí dùng chung** tại Nhóm VIII (UC109). QTHT không trực tiếp sửa tiêu chí đã gắn riêng vào từng đợt đánh giá trong FR-08, trừ khi đồng thời có vai trò/quyền CB NV quản lý đợt theo phạm vi đơn vị.
 
 **Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP)
 
 **Preconditions (Điều kiện tiên quyết):**
 
 - Đợt đánh giá đã tạo
-- User có quyền "Quản lý đánh giá"
+- User có quyền "Quản lý đánh giá" với vai trò CB NV trong phạm vi đơn vị của đợt
 
 **Inputs (Dữ liệu đầu vào):**
 
@@ -192,7 +196,7 @@ Quản lý (thêm/sửa/xóa) tiêu chí đánh giá cho từng đợt. Tổng t
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 1 | Xác nhận dữ liệu đầu vào theo ràng buộc bảng Inputs | — |
-| 2 | Kiểm tra quyền truy cập | BR-AUTH-01 |
+| 2 | Kiểm tra quyền truy cập: chỉ CB NV quản lý đợt trong phạm vi đơn vị được thêm/sửa/xóa tiêu chí của đợt; QTHT chỉ quản lý danh mục tiêu chí dùng chung ở Nhóm VIII | BR-AUTH-01 |
 | 3 | Thêm/sửa/xóa tiêu chí cho đợt đánh giá | — |
 | 4 | Kiểm tra tổng trọng số = 100% cho toàn đợt (cảnh báo nếu khác, cho phép lưu) | BR-CALC-04 |
 | 5 | Tham chiếu danh mục tiêu chí đánh giá chất lượng (UC109) nếu chọn từ DM | — |
@@ -245,6 +249,7 @@ Phân công cán bộ/chuyên gia thực hiện đánh giá cho đợt, gán vai
 
 - Đợt đánh giá ở trạng thái PHAN_CONG
 - Đã có tiêu chí (SUM trọng số = 100%)
+- Chỉ cho thêm/lưu người đánh giá khi tổng trọng số tiêu chí của đợt = 100%; nếu SUM != 100% thì UI disable nút thêm người đánh giá và backend từ chối thao tác
 
 **Inputs (Dữ liệu đầu vào):**
 
@@ -263,11 +268,12 @@ Phân công cán bộ/chuyên gia thực hiện đánh giá cho đợt, gán vai
 | 1 | Xác nhận dữ liệu đầu vào theo ràng buộc bảng Inputs | — |
 | 2 | Kiểm tra quyền và phạm vi đơn vị | BR-AUTH-01 |
 | 3 | Kiểm tra đợt ở trạng thái PHAN_CONG | SM-DANHGIA |
-| 4 | Hiển thị danh sách CB/CG đủ điều kiện tham gia (cùng đơn vị) | — |
-| 5 | Lưu bản ghi phân công | — |
-| 6 | Gửi thông báo người được phân công | — |
-| 7 | Khi CB NV trình: chuyển đợt sang trạng thái CHO_DUYET_PC | SM-DANHGIA |
-| 8 | Ghi nhật ký thao tác | BR-DATA-05 |
+| 4 | Kiểm tra tổng trọng số tiêu chí của đợt = 100%; nếu != 100% thì từ chối thêm/lưu phân công | BR-CALC-04 |
+| 5 | Hiển thị danh sách CB/CG đủ điều kiện tham gia (cùng đơn vị) | — |
+| 6 | Lưu bản ghi phân công | — |
+| 7 | Gửi thông báo người được phân công | — |
+| 8 | Khi CB NV trình: chuyển đợt sang trạng thái CHO_DUYET_PC | SM-DANHGIA |
+| 9 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Business Rules áp dụng:**
 - **SM-DANHGIA**: Transition PHAN_CONG → CHO_DUYET_PC → Xem Phụ lục C (file chính)
@@ -293,12 +299,14 @@ Phân công cán bộ/chuyên gia thực hiện đánh giá cho đợt, gán vai
 | E2 | Không có TRƯỞNG NHÓM | ERR-DG-PC-02 | "Cần ít nhất 1 người vai trò Trưởng nhóm" | ERROR |
 | E3 | Người trùng lặp | ERR-DG-PC-03 | "Người đánh giá đã được phân công" | ERROR |
 | E4 | Đợt không ở PHAN_CONG | ERR-DG-PC-04 | "Đợt không ở trạng thái phù hợp để phân công" | ERROR |
+| E5 | Tổng trọng số tiêu chí != 100% khi thêm/lưu phân công | ERR-DG-PC-05 | "Vui lòng thiết lập tiêu chí đánh giá với tổng trọng số bằng 100% trước khi phân công người đánh giá." | ERROR |
 
 **Acceptance Criteria:**
 
 - **Given** CB NV chọn đợt đánh giá **When** nhấn "Phân công" **Then** hiển thị DS CB/CG đủ điều kiện tham gia
 - **Given** CB NV chọn người **When** xác nhận **Then** lưu phân công, gửi thông báo
 - **Given** CB NV hoàn tất **When** trình duyệt **Then** chuyển CHO_DUYET_PC
+- **Given** tổng trọng số tiêu chí chưa bằng 100% **When** CB NV mở Tab Phân công **Then** nút "[+ Thêm người đánh giá]" bị disabled và hiển thị thông báo cần hoàn tất tiêu chí 100%
 
 ---
 
@@ -336,7 +344,7 @@ Cán bộ Phê duyệt xem danh sách phân công chờ duyệt, quyết định
 | 2 | Kiểm tra quyền Cán bộ Phê duyệt | BR-AUTH-01 |
 | 3 | Kiểm tra đợt ở trạng thái CHO_DUYET_PC | SM-DANHGIA |
 | 4 | Hiển thị thông tin đợt + danh sách người phân công | — |
-| 5 | Nếu DUYỆT: chuyển trạng thái sang THUC_HIEN. Ghi người duyệt, thời gian | SM-DANHGIA |
+| 5 | Nếu DUYỆT: chuyển trạng thái sang THUC_HIEN. Ghi người duyệt, thời gian. CB PD không chọn vụ việc tại bước này; hệ thống chỉ mở bước chọn vụ việc cho CB NV ở Tab Thực hiện sau khi trạng thái = THUC_HIEN | SM-DANHGIA |
 | 6 | Nếu TỪ CHỐI: chuyển trạng thái sang PHAN_CONG + ghi lý do. Ghi người từ chối, thời gian | SM-DANHGIA |
 | 7 | Gửi thông báo CB NV trình | — |
 | 8 | Ghi nhật ký thao tác | BR-DATA-05 |
@@ -356,6 +364,7 @@ Cán bộ Phê duyệt xem danh sách phân công chờ duyệt, quyết định
 - Nếu duyệt: đợt → THUC_HIEN
 - Nếu từ chối: đợt → PHAN_CONG, CB NV điều chỉnh
 - Thông báo gửi CB NV
+- CB PD không chọn vụ việc; việc chọn vụ việc là trách nhiệm của CB NV tại FR-VI-05 sau khi đợt đã ở THUC_HIEN
 
 **Error Handling (Xử lý lỗi):**
 
@@ -388,6 +397,8 @@ Chọn các vụ việc đã hoàn thành trong kỳ đánh giá để đưa và
 **Preconditions (Điều kiện tiên quyết):**
 
 - Đợt đánh giá ở trạng thái THUC_HIEN
+- Phân công người đánh giá đã được CB PD phê duyệt
+- User là CB NV có quyền quản lý đánh giá trong phạm vi đơn vị của đợt
 
 **Inputs (Dữ liệu đầu vào):**
 
@@ -400,13 +411,14 @@ Chọn các vụ việc đã hoàn thành trong kỳ đánh giá để đưa và
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra quyền truy cập | BR-AUTH-01 |
+| 1 | Kiểm tra quyền truy cập: chỉ CB NV có quyền quản lý đánh giá trong phạm vi đơn vị được chọn/bỏ chọn vụ việc | BR-AUTH-01 |
+| 1a | Kiểm tra đợt ở trạng thái THUC_HIEN; nếu chưa ở THUC_HIEN thì từ chối thao tác chọn vụ việc | SM-DANHGIA |
 | 2 | Lọc vụ việc đã hoàn thành trong kỳ đánh giá (từ ngày đến ngày) thuộc phạm vi đơn vị | — |
 | 3 | Hiển thị danh sách VV hoàn thành trong kỳ | — |
 | 4 | CB NV chọn/bỏ chọn VV | — |
 | 5 | Cảnh báo nếu VV đã thuộc đợt khác (cho phép đánh giá lại) | — |
 | 6 | Lưu danh sách VV đánh giá | — |
-| 7 | Chuyển đợt sang trạng thái THUC_HIEN (nếu chưa ở THUC_HIEN) | SM-DANHGIA |
+| 7 | Giữ đợt ở trạng thái THUC_HIEN | SM-DANHGIA |
 | 8 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Business Rules áp dụng:**
@@ -435,6 +447,8 @@ Chọn các vụ việc đã hoàn thành trong kỳ đánh giá để đưa và
 - **Given** CB NV chọn đợt đã duyệt PC **When** nhấn "Chọn vụ việc" **Then** DS VV hoàn thành trong kỳ
 - **Given** CB NV chọn/bỏ chọn **When** xác nhận **Then** lưu DS VV đánh giá
 - **Given** VV đã thuộc đợt khác **When** chọn lại **Then** cảnh báo (vẫn cho phép)
+- **Given** đợt chưa được CB PD duyệt phân công **When** user bấm/chạy API chọn vụ việc **Then** hệ thống từ chối với ERR-DG-VV-01
+- **Given** CB PD đang xem đợt ở trạng thái CHO_DUYET_PC **When** duyệt phân công **Then** hệ thống chỉ chuyển sang THUC_HIEN và không yêu cầu/không cho CB PD chọn vụ việc
 
 ---
 
@@ -836,9 +850,9 @@ CB PD xem nội dung BC đánh giá, quyết định phê duyệt hoặc từ ch
 | 29 | table | Bảng tiêu chí (Editable) | Inline table | Cột: STT / Tên tiêu chí (C09 inline, bắt buộc, max 500) / Mô tả (C09 inline) / Trọng số % (C09 number 1-100, highlight đỏ nếu SUM != 100%) / Điểm tối đa (C09 number > 0) / Thứ tự (drag & drop) / Hành động (Sửa/Xóa C12) | inline edit | Luôn |
 | 30 | summary | Tổng trọng số | Label realtime | "Tổng trọng số: {X}%" — 🟢 Xanh lá nếu = 100%, 🔴 Đỏ nếu != 100% | auto-update | Luôn |
 | 31 | summary | Cảnh báo trọng số | Alert banner | WRN-TC-01 "Tổng trọng số hiện tại: {X}%. Cần đảm bảo = 100%" | — | Khi SUM != 100% |
-| 32 | summary | Tham chiếu DM | Link | "Tham chiếu từ Danh mục tiêu chí hệ thống (UC109)" → popup chọn | click → popup | Luôn |
-| 33 | action-bar | Nút [+ Thêm tiêu chí] / [Nhập từ danh mục] | C08 | Thêm dòng mới / mở popup multi-select từ DM UC109 | click → add | Luôn |
-| 34 | action-bar | Thanh hành động | C22 | [Hủy] [Lưu] [Lưu & Quay lại KH] | click → save | Luôn |
+| 32 | summary | Tham chiếu DM | Link | "Tham chiếu từ Danh mục tiêu chí hệ thống (UC109)" → popup chọn | click → popup | Khi TT cho phép sửa, vai trò CB NV |
+| 33 | action-bar | Nút [+ Thêm tiêu chí] / [Nhập từ danh mục] | C08 | Thêm dòng mới / mở popup multi-select từ DM UC109 | click → add | Khi TT cho phép sửa, vai trò CB NV |
+| 34 | action-bar | Thanh hành động | C22 | [Hủy] [Lưu] [Lưu & Quay lại KH] | click → save | Khi TT cho phép sửa, vai trò CB NV |
 
 **Tab 2 — Phân công (gộp MH-08.2 + MH-08.3):**
 
@@ -846,16 +860,16 @@ CB PD xem nội dung BC đánh giá, quyết định phê duyệt hoặc từ ch
 |---|------|-----------|------|---------------------|---------|-------------------|
 | 35 | header | Thông tin đợt | Info card | Mã đợt, Tên đợt, Kỳ đánh giá, Số tiêu chí, Tổng trọng số 100% (read-only) | — | Luôn |
 | 36 | table | Bảng phân công (Editable) | Inline table | Cột: Người ĐG (C10 searchable, CB cùng đơn vị) / Vai trò (DANH_GIA_VIEN / TRUONG_NHOM, bắt buộc) / Lĩnh vực phụ trách (C10 multi-select từ UC99) / Ghi chú (C09 inline max 500) / Hành động (Xóa C12) | inline edit | Luôn |
-| 37 | action-bar | Nút [+ Thêm người đánh giá] | C08 | Thêm dòng mới | click → add | Luôn |
-| 38 | action-bar | Thanh hành động | C22 | [Hủy] [Lưu nháp] [Trình phê duyệt] (→ SET CHO_DUYET_PC + gửi TB CB PD) | click → action | Luôn |
-| 39 | action-bar | Nút [Phê duyệt PC] | C08 Primary | **Quyền: CB PD.** → C12 confirm → SET THUC_HIEN. Auto-fill Common Approval Fields | click → approve | Khi TT = CHO_DUYET_PC, vai trò CB PD |
+| 37 | action-bar | Nút [+ Thêm người đánh giá] | C08 | Thêm dòng mới. Disabled nếu tổng trọng số tiêu chí != 100%; tooltip/error: "Vui lòng thiết lập tiêu chí đánh giá với tổng trọng số bằng 100% trước khi phân công người đánh giá." | click → add | Khi TT = PHAN_CONG, vai trò CB NV |
+| 38 | action-bar | Thanh hành động | C22 | [Hủy] [Lưu nháp] [Trình phê duyệt] (→ SET CHO_DUYET_PC + gửi TB CB PD). Backend chỉ cho trình khi có ≥1 người, ≥1 TRUONG_NHOM, không trùng lặp và tổng trọng số tiêu chí = 100% | click → action | Khi TT = PHAN_CONG, vai trò CB NV |
+| 39 | action-bar | Nút [Phê duyệt PC] | C08 Primary | **Quyền: CB PD.** → C12 confirm → SET THUC_HIEN. Auto-fill Common Approval Fields. Không chọn vụ việc tại bước này | click → approve | Khi TT = CHO_DUYET_PC, vai trò CB PD |
 | 40 | action-bar | Nút [Từ chối PC] | C08 Danger | **Quyền: CB PD.** → modal lý do bắt buộc >=10 ký tự → SET PHAN_CONG | click → reject | Khi TT = CHO_DUYET_PC, vai trò CB PD |
 
 **Tab 3 — Thực hiện chấm điểm (gộp MH-08.4 + MH-08.5):**
 
 | # | Vùng | Thành phần | Loại | Dữ liệu / Nội dung | Hành vi | Điều kiện hiển thị |
 |---|------|-----------|------|---------------------|---------|-------------------|
-| 41 | content | Chọn VV đánh giá | C10 Multi-select | Chọn VV hoàn thành trong kỳ. Lọc: vụ việc có trạng thái Hoàn thành hoặc Đã đánh giá, trong kỳ đợt ĐG | search + multi-select | Luôn |
+| 41 | content | Chọn VV đánh giá | C10 Multi-select | **Quyền: CB NV.** Chọn VV hoàn thành trong kỳ sau khi CB PD đã duyệt phân công. Lọc: vụ việc có trạng thái `HOAN_THANH`, trong kỳ đợt ĐG, thuộc phạm vi đơn vị của đợt/người dùng | search + multi-select | Khi TT = THUC_HIEN, vai trò CB NV |
 | 42 | table | Bảng chấm điểm | Editable table | Hàng: mỗi VV được chọn. Cột: Mã VV / Tên DN / Lĩnh vực / + 1 cột per tiêu chí (input number 0-diem_toi_da, editable inline) / Điểm tổng (tự tính = tổng điểm x trọng số / 100) / Nhận xét (textarea inline) | inline edit | Luôn |
 | 43 | summary | KPI cards | C20 | Số VV đã chấm: {n}/{total}. Điểm TB: {avg}. Xếp loại: >=90% Xuất sắc / >=70% Tốt / >=50% Đạt / <50% Chưa đạt | auto-update | Luôn |
 | 44 | action-bar | Nút [Lưu kết quả] | C08 Secondary | MERGE KET_QUA_DANH_GIA | click → save | Luôn |
@@ -878,8 +892,10 @@ CB PD xem nội dung BC đánh giá, quyết định phê duyệt hoặc từ ch
 
 - Sắp xếp mặc định: ngày tạo giảm dần. Phân trang 20 mục/trang
 - Toast thông báo khi lưu thành công
-- Tab Tiêu chí: tổng trọng số kiểm tra realtime. Cho lưu nếu != 100% nhưng WARNING. Bắt buộc tổng = 100% khi chuyển CHO_DUYET_PC
-- Tab Phân công: ít nhất 1 người, ít nhất 1 TRUONG_NHOM, không trùng lặp. Gợi ý ưu tiên theo lĩnh vực + số đợt đã tham gia
+- Tab Tiêu chí: tổng trọng số kiểm tra realtime. Cho lưu nếu != 100% nhưng WARNING. Bắt buộc tổng = 100% trước khi thêm/lưu phân công người đánh giá và khi chuyển CHO_DUYET_PC
+- Tab Tiêu chí: QTHT chỉ quản lý danh mục tiêu chí dùng chung ở Nhóm VIII; trong FR-08, tiêu chí đã gắn vào từng đợt do CB NV quản lý đợt thao tác và bị khóa khi đợt đang chấm điểm.
+- Tab Phân công: chỉ mở thêm/lưu người đánh giá khi tổng trọng số tiêu chí = 100%; ít nhất 1 người, ít nhất 1 TRUONG_NHOM, không trùng lặp. Gợi ý ưu tiên theo lĩnh vực + số đợt đã tham gia. CB PD chỉ duyệt/từ chối phân công, không chọn vụ việc
+- Tab Thực hiện — Chọn VV: chỉ CB NV chọn/bỏ chọn vụ việc sau khi CB PD duyệt phân công và đợt ở trạng thái THUC_HIEN
 - Tab Thực hiện: lưu nháp cho chấm một phần (is_draft = 1). Khi tất cả VV hoàn thành → auto SET BAO_CAO. 0 VV hoàn thành → Empty State
 - Tab Báo cáo: trình PD → gửi TB CB PD. Xuất Excel/Word theo template TT17/2025
 - Phê duyệt/Từ chối (cả PC và BC) → gửi thông báo cho CB NV trình. Từ chối bắt buộc lý do >= 10 ký tự
@@ -1002,7 +1018,7 @@ erDiagram
 | 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
 | 2 | ma_ke_hoach | text | Y | UNIQUE | Auto-gen | Mã kế hoạch |
 | 3 | ten_dot | text | Y | | — | Tên đợt đánh giá |
-| 4 | muc_tieu | text (long) | N | | — | Mục tiêu |
+| 4 | muc_tieu | text (long) | Y | | — | Mục tiêu |
 | 5 | tan_suat | text | N | CHECK IN ('SO_BO_6_THANG','TRON_NAM','DOT_XUAT') | — | Tần suất |
 | 6 | thoi_gian_bat_dau | datetime | N | | — | Thời gian bắt đầu |
 | 7 | thoi_gian_ket_thuc | datetime | N | | — | Thời gian kết thúc |
@@ -1145,7 +1161,7 @@ stateDiagram-v2
 | Lập kế hoạch | LAP_KE_HOACH | CB NV đang lập kế hoạch đợt đánh giá | Xám |
 | Phân công | PHAN_CONG | CB NV đang phân công người đánh giá | Xanh dương |
 | Chờ duyệt phân công | CHO_DUYET_PC | CB NV trình, chờ CB PD duyệt phân công | Cam |
-| Thực hiện | THUC_HIEN | CB PD đã duyệt, đang chấm điểm vụ việc | Vàng |
+| Thực hiện | THUC_HIEN | CB PD đã duyệt phân công; CB NV chọn vụ việc và người được phân công chấm điểm | Vàng |
 | Báo cáo | BAO_CAO | CB NV nhập điểm xong, đang lập báo cáo | Xanh dương đậm |
 | Chờ phê duyệt | CHO_PHE_DUYET | CB NV trình báo cáo, chờ CB PD duyệt | Cam đậm |
 | Hoàn thành | HOAN_THANH | CB PD đã duyệt báo cáo, đóng đợt đánh giá | Xanh lá |
@@ -1158,11 +1174,11 @@ stateDiagram-v2
 | [*] | LAP_KE_HOACH | CB NV tạo đợt | Tần suất: 6 tháng/năm | Tạo KH | FR-VI-01 | BR-LEGAL-08 |
 | LAP_KE_HOACH | PHAN_CONG | CB NV phân công | Có KH | Gán CB/CG | FR-VI-03 | — |
 | PHAN_CONG | CHO_DUYET_PC | CB NV trình | Có danh sách PC | TB CB PD | FR-VI-03 | BR-AUTH-05 |
-| CHO_DUYET_PC | THUC_HIEN | CB PD duyệt | Cùng cấp | Audit, chọn VV | FR-VI-04/05 | — |
+| CHO_DUYET_PC | THUC_HIEN | CB PD duyệt phân công | Cùng đơn vị | Audit; mở bước chọn vụ việc cho CB NV tại Tab Thực hiện | FR-VI-04/05 | — |
 | CHO_DUYET_PC | PHAN_CONG | CB PD từ chối | Có lý do | TB CB NV | FR-VI-04 | BR-FLOW-04 |
 | THUC_HIEN | BAO_CAO | Nhập điểm xong | Tất cả VV đã ĐG | Sinh BC TT17 | FR-VI-06/07 | BR-CALC-04 |
 | BAO_CAO | CHO_PHE_DUYET | CB NV trình | BC đủ dữ liệu | TB CB PD | FR-VI-08 | — |
-| CHO_PHE_DUYET | HOAN_THANH | CB PD duyệt | Cùng cấp | Audit | FR-VI-09 | BR-AUTH-05 |
+| CHO_PHE_DUYET | HOAN_THANH | CB PD duyệt | Cùng đơn vị | Audit | FR-VI-09 | BR-AUTH-05 |
 | CHO_PHE_DUYET | BAO_CAO | CB PD từ chối | Có lý do | TB CB NV | FR-VI-09 | BR-FLOW-04 |
 | LAP_KE_HOACH/PHAN_CONG/THUC_HIEN/BAO_CAO | HUY | CB NV/PD hủy đợt | Có lý do, chưa HOAN_THANH | Audit, soft-delete | — | — |
 
@@ -1179,7 +1195,7 @@ stateDiagram-v2
 | BR ID | Tên | FR áp dụng (trong nhóm này) |
 |-------|-----|----------------------------|
 | BR-AUTH-01 | Xác thực truy cập | FR-VI-01, 02, 03, 04, 05, 06, 07, 08, 09, 10 |
-| BR-AUTH-05 | Phê duyệt cùng cấp | FR-VI-04, 09 |
+| BR-AUTH-05 | Phê duyệt cùng đơn vị | FR-VI-04, 09 |
 | BR-DATA-03 | Common fields | FR-VI-01 |
 | BR-DATA-04 | Auto-gen mã | FR-VI-01 |
 | BR-DATA-05 | Audit trail | FR-VI-01, 02, 03, 04, 05, 06, 07, 08, 09, 10 |
@@ -1194,9 +1210,9 @@ Mọi user phải xác thực trước khi truy cập hệ thống.
 
 **Applied in (nhóm VI):** FR-VI-01, FR-VI-02, FR-VI-03, FR-VI-04, FR-VI-05, FR-VI-06, FR-VI-07, FR-VI-08, FR-VI-09, FR-VI-10
 
-### BR-AUTH-05: Phê duyệt cùng cấp
+### BR-AUTH-05: Phê duyệt cùng đơn vị
 
-CB NV cấp nào tạo → CB PD cùng cấp duyệt. KHÔNG xuyên cấp phê duyệt.
+CB NV cấp nào tạo → CB PD cùng đơn vị duyệt. KHÔNG xuyên cấp phê duyệt.
 
 **Applied in (nhóm VI):** FR-VI-04, FR-VI-09
 

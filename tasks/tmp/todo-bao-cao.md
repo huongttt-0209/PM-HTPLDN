@@ -32,4 +32,4 @@
 - ⚠️ **R7.7.13** 🔄 Báo cáo 40 TC `[~88% R7-r2 — pattern unchanged, scope group HD+VV OK]` <a id="r7-7-13"></a>
   - **Cần:** ≥1 TVCS (✓12) · ≥1 CT (✓3) · ≥1 HD (✓7) · BC04/05/HD ready · ĐT ✓4 khóa seed sẵn R6
   - **Kết quả:** ⚠️ R7-r2 — pattern không đổi; nhóm HD+VV scope OK, nhóm Chi phí+TVV vẫn leak. [functional-test-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/functional/bao-cao/functional-test-report-r7-7-13-bao-cao.md)
-  - **Bug:** [bug-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/bug-report-r7-7-13-bao-cao.md) — 5/8 đóng (3 Open: PDF Major + SCOPE-LEAK Partial + KYBAOCAO Partial Minor)
+  - **Bug:** [Pass-bug-report-r7-7-13-bao-cao.md](../output/qa-reports/round7-2026-05-06/bug-reports/bao-cao/Pass-bug-report-r7-7-13-bao-cao.md) — 9/9 đóng (3 Open: PDF Major + SCOPE-LEAK Partial + KYBAOCAO Partial Minor)

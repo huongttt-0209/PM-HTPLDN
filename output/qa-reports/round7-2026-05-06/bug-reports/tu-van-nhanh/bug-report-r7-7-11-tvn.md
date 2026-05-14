@@ -5,8 +5,8 @@
 | **Dự án** | PM-HTPLDN — Phần mềm Hỗ trợ Pháp lý Doanh nghiệp |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | QA Automation (Chrome DevTools MCP) |
-| **Ngày** | 2026-05-12 15:30:00 |
-| **Round** | R19 |
+| **Ngày** | 2026-05-12 23:00:00 |
+| **Round** | R20 |
 | **Loại test** | Functional |
 | **Tài liệu tham chiếu** | [functional-test-report-r7-7-11-tvn.md](../../functional/tu-van-nhanh/functional-test-report-r7-7-11-tvn.md) · [srs-fr-13-tv-nhanh.md](../../../../../input/srs-v3/srs-fr-13-tv-nhanh.md) · [02-thu-tu-module.md §⑫ FR-13](../../../../../input/quy-trinh-nghiep-vu/02-thu-tu-module.md) |
 
@@ -14,20 +14,20 @@
 
 ## Tổng hợp
 
-Phát hiện **8** lỗi có SRS reference cụ thể trong quá trình test R7.7.11 (Tư vấn nhanh). Hiện trạng: **2 Open** (BUG-TVN-005 Minor audit-log naming · BUG-TVN-008 Minor WARNING ERR-TVN-01 không surface) · **6 Closed** sau retest R10/R12/R15/R15-P2.
+Phát hiện **8** lỗi có SRS reference cụ thể trong quá trình test R7.7.11 (Tư vấn nhanh). Hiện trạng (sau R20 reverify 2026-05-12 23:00:00): **1 Defer** (BUG-TVN-008 Minor WARNING ERR-TVN-01 chờ phase tích hợp Cổng PLQG) · **7 Closed** sau retest R10/R12/R15/R15-P2/R20.
 
 ### Severity breakdown
 
 | Tổng | Critical | Major | Medium | Minor | Trivial | Closed | Open |
 |------|----------|-------|--------|-------|---------|--------|------|
-| 8    | 0        | 4     | 0      | 4     | 0       | 6      | 2    |
+| 8    | 0        | 4     | 0      | 4     | 0       | 7      | 1    |
 
 ## Bug Summary Table
 
 | Bug ID | Severity | Priority | Type | TC Ref | **SRS Reference** | Title | Status |
 |--------|----------|----------|------|--------|-------------------|-------|--------|
 | **BUG-FUNC-TVN-008 (R15 mới)** | Minor | P2 | BE | TVN-020 | `srs-fr-13 §Errors line 215 (E1 ERR-TVN-01 Kho Q&A rỗng WARNING)` + `7.13-tu-van-nhanh.md line 134` | WARNING `ERR-TVN-01` không surface — Kho QA rỗng + DN gửi câu hỏi qua `/cms-create` → 201 success, phiên TVN-20260512-0001 tạo OK + state CB_TRA_LOI + goiYTraLoi=[]; nhưng response KHÔNG có `warningCode`/`warningMessage`. CB NV không nhận được signal "Kho câu hỏi rỗng" → khó hiểu vì sao Top 5 gợi ý empty | 🚫 Defer (chờ phase tích hợp API ngoài) |
-| **BUG-FUNC-TVN-005 (R9)** | Minor | P2 | Data | TVN-039 | `srs-fr-13 FR-X.2-01 §Postconditions` + `BR-DATA-05` | Audit log action naming inconsistent — TU_VAN_NHANH module còn 3 legacy action (TRA_LOI/UPDATE/CREATE) + dropdown filter Module thiếu "Tư vấn" → user không filter được TVN/KHO_CAU_HOI entries | Open PARTIAL (R15 KHO_CAU_HOI 6 action chuẩn ✅, Entity KHO_CAU_HOI ✅; TU_VAN_NHANH 3 legacy ⚠️; dropdown thiếu Tư vấn ❌) |
+| ~~**BUG-FUNC-TVN-005 (R9)**~~ | Minor | P2 | Data | TVN-039 | `srs-fr-13 FR-X.2-01 §Postconditions` + `BR-DATA-05` | ~~Audit log action naming inconsistent — TU_VAN_NHANH module còn 3 legacy action (TRA_LOI/UPDATE/CREATE) + dropdown filter Module thiếu "Tư vấn" → user không filter được TVN/KHO_CAU_HOI entries~~ | Closed ✅ R20 |
 | ~~BUG-FUNC-TVN-001~~ | **Major** (R11 reclassify) | **P1** | **Data setup** | TVN-010, 011, 012 | `input/users.csv` schema vai trò + `02-thu-tu-module.md §⑫ FR-13 line 784-786` | ~~Account `cb_nv_tw_01` DB gán 3 vai trò → bypass guard~~ | **Closed** (R15 verify cb_nv_tw_01 single role + approve/reject/bulk 403) |
 | ~~BUG-FUNC-TVN-007~~ (R11) | **Major** | **P1** | **Cross-module** | **TVN-014, 037** | `srs-fr-13 BR-FLOW-10` + `7.13-tu-van-nhanh.md line 105+128+151` | ~~Auto-import HOI_DAP DA_DUYET → KHO_CAU_HOI nguồn TU_DONG không trigger. HD-20260509-010 DA_DUYET → 0 record TU_DONG~~ | **Closed** (R15 HD-20260509-010 back-filled QA-20260510-0011) |
 | ~~BUG-FUNC-TVN-002~~ | Major | P1 | Workflow | TVN-040, 041, 042, 043, 044 | `srs-fr-13 v3.5 FR-X.2-06 §Inputs/Processing line 411-457` + `BR-PUBLIC-01/02/03` + `BR-FLOW-05` | ~~FR-X.2-06 (Công khai/Hủy công khai) chưa deploy — schema thiếu 4 field, endpoint 404~~ | **Closed** (R12) |
@@ -37,9 +37,9 @@ Phát hiện **8** lỗi có SRS reference cụ thể trong quá trình test R7.
 
 ---
 
-## BUG-FUNC-TVN-005 (R9) — Audit log action naming inconsistent
+## ~~BUG-FUNC-TVN-005 (R9)~~ [CLOSED] — Audit log action naming inconsistent
 
-> **Re-test:** 2026-05-12 15:30:00 R19 — ❌ STILL Open. Account `qtht_01` mở `/quan-tri/audit-log` → dropdown filter Module có 12 option: Tổng quan / HTQA / Đào tạo / Mạng lưới TVV / Vụ việc / Chi trả / Doanh nghiệp / Đánh giá / Thư viện / Hỗ trợ DN / Báo cáo / QTHT. **KHÔNG có "Tư vấn"**. Evidence: [`image/reverify-2026-05-12-tvn005-module-dropdown-no-tuvan.png`](image/reverify-2026-05-12-tvn005-module-dropdown-no-tuvan.png).
+> **Re-test:** 2026-05-12 23:00:00 R20 — ✅ PASS (Closed-verified). Account `qtht_04` mở `/quan-tri/audit-log` → click dropdown filter Module → scroll virtual-list collect 9 option: **Biểu mẫu / Báo cáo / CT HTPLDN / Chi trả / Doanh nghiệp / Quản trị / Tư vấn / Vụ việc / Đánh giá**. **"Tư vấn" có mặt ✅** (verify qua `evaluate_script` scroll-collect, `contains_tu_van=true`). Cross-evidence: rows TU_LIEU_PHAP_LY_VV cùng giờ render cột MODULE = "Tư vấn" — BE đã ghi đúng enum + FE đã expose. Evidence: [`image/r20-bug-tvn-005-module-dropdown-tu-van.png`](image/r20-bug-tvn-005-module-dropdown-tu-van.png).
 
 
 

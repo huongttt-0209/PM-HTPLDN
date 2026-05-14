@@ -149,7 +149,7 @@
   - **Kết quả:** PASS 1/1. `DG-20260502-0001` state Lập kế hoạch. Tần suất Sơ bộ 6 tháng × Tổng hợp. Unblock D2. [seed-checklist-DanhGiaHQ.md](../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-DanhGiaHQ.md)
 - 🚫 **R6.4.D2** D2 Workflow Đánh giá HQ (11 bước) `[block: 5 bug FE chặn từ B1 — form Tạo thiếu trường tiêu chí + tab Tiêu chí không có nút thêm + 3 dropdown phân công 404/empty]`
   - **Kết quả:** R14 BLOCKED 1/11 PASS B1. Back-fill tiêu chí FAIL + B2-B11 cascade. Tạo `DG-20260502-0002` test seed. [workflow-test-report-DanhGiaHQ.md](../output/qa-reports/round6-2026-05-01-postreset/workflow/workflow-test-report-DanhGiaHQ.md)
-  - **Bug:** [bug-report-flow-danhgia.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-danhgia.md) — 0/5 đóng (3 Critical + 2 Major)
+  - **Bug:** [Pass-bug-report-flow-danhgia.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/Pass-bug-report-flow-danhgia.md) — 0/5 đóng (3 Critical + 2 Major)
 - ⚠️ **R6.4.D3** D3 Tạo Kho QA — module riêng FR-X.2-01, KHÔNG thuộc Đánh giá HQ `[~50% — UI route Kho QA bị block FE, không seed thêm THU_CONG qua UI; auto-feed TU_DONG BE chưa trigger BR-FLOW-10. Block thật cho UI-only QA]`
   - **Kết quả:** Lỗi R14 re-verify cùng status: THU_CONG 1 record `QA-20260502-0001` (BE OK qua API), TU_DONG total=0, UI route vẫn thiếu submenu. [seed-checklist-KhoQA.md](../output/qa-reports/round6-2026-05-01-postreset/seed/seed-checklist-KhoQA.md)
   - **Bug:** [bug-report-flow-kho-qa.md](../output/qa-reports/round6-2026-05-01-postreset/bug-reports/bug-report-flow-kho-qa.md) — 0/1 đóng (BUG-KHOQA-001 Critical P0 UI SCR-X2-01 chưa build)

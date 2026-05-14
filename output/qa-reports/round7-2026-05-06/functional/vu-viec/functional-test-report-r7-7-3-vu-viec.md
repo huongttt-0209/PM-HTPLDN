@@ -5,7 +5,7 @@
 | **Dự án** | PM HTPLDN |
 | **Module** | Vụ việc HTPL (FR-IV) |
 | **Round** | R7 (R7.7.3) |
-| **Ngày test** | 2026-05-09 13:15:00 → 13:30:00 |
+| **Ngày test** | 2026-05-09 13:15:00 → 2026-05-13 11:40:00 |
 | **Account chính** | `cb_nv_tw_03` (primary) · `cb_nv_dp_01 (AG)` · `cb_nv_bn_01 (BKH)` · `qtht_01` |
 | **Tool** | Chrome DevTools MCP (UI click chain + API verify song song) |
 | **Spec ref** | [output/funtion/7.5-vu-viec-htpl.md](../../../funtion/7.5-vu-viec-htpl.md) v3.5 (72 TC) · [SRS FR-IV](../../../../input/srs-update-2026-5-5/srs-fr-iv-vu-viec.md) |
@@ -14,13 +14,230 @@
 
 ## Verdict
 
-⚠️ **PARTIAL PASS — 43/72 TC chạy (60%) — 36 PASS, 1 FAIL Major, 2 Partial, 1 Sai spec.** (R7+R8+R14+R15+R16-P2..P5+R17+R18-P1+**R18-P2 reverify-audit**) · **POOL-CG-MISSING-01 + TVV-DETAIL-403-01 đóng R18-P2** · **PHANCONG-REVERT-01 không reproduce R18-P2** · **Open: TVV-PERMISSION-GAP-01 + LICHSU-01 partial + WRN-PC-01 minor**.
+⚠️ **PARTIAL PASS — 46/72 TC chạy (64%) — 39 PASS, 1 BLOCKED CG-perm gap, 2 Partial, 1 Sai spec.** (R7→R20 retest 2026-05-13) · **BUG-VV-R19c-001 + BUG-VV-FN-TVV-PERMISSION-GAP-01 đóng R20** · TVV native VV-015/016/017 lifecycle PASS end-to-end · **Open: LICHSU-01 partial + CG-VV-PERM-GAP minor**.
 
 Pool VV: 31 records (R18 stable — 28 BTP-TW + 3 STP-AG/cross-donVi).
 
 ---
 
-## R19c-followup — Phân công + Cập nhật KQ + Hoàn thành + Nhận/Từ chối phân công (2026-05-12 20:40 → 20:55) (LATEST)
+## R20 retest — TVV native VV-015/016/017/033 sau BUG-VV-R19c-001 Closed (2026-05-13 11:40:00) (LATEST)
+
+Tester: `tvv_r11_mailfix` (TVV) + `cb_pd_dp_01` (CB PD ĐP STP-AG) — isolatedContext `agent-tc-vv-tvv-r20-retest` + `tvcs-e2e-r20-fresh-cbnvtw06`. Tool: Chrome DevTools MCP `evaluate_script` BE API (Bearer header pattern do JWT 2-min revoke + cookie context mất giữa nav) + UI snapshot verify FE button render. Scope: 4 TC unblock sau khi BUG-VV-R19c-001 Closed R20 (FE render button cho TVV) + BUG-VV-FN-TVV-PERMISSION-GAP-01 Closed (TVV +1 perm `trinh-phe-duyet_vu_viec`).
+
+### Verdict R20 retest
+
+✅ **3/4 Đạt (VV-015 + VV-016 + VV-017) · 🚫 1 BLOCKED (VV-033 CG thiếu VV perm)**. FE render 2 button `[Cập nhật kết quả]` + `[Trình phê duyệt]` cho TVV ở state DANG_XU_LY (confirm BUG-VV-R19c-001 Closed UI). BE 3/3 endpoint chấp nhận TVV: `/cap-nhat-ket-qua` 201, `/trinh-phe-duyet` 201, `/hoan-thanh` 201. Full lifecycle CHO_PHE_DUYET → DA_DUYET (CB PD ĐP duyệt) → HOAN_THANH (TVV) walk PASS end-to-end.
+
+### Bảng trạng thái 4 TC (snapshot R20 retest)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| VV-015 | TVV cập nhật kết quả VV mình xử lý (DANG_XU_LY) | ✅ Đạt | R20 retest | FE button render + BE 201 + state giữ DANG_XU_LY + LICHSU CAP_NHAT_KQ |
+| VV-016 | TVV hoàn thành VV (DA_DUYET → HOAN_THANH) | ✅ Đạt | R20 retest | BE 201 + state ver 6→7 HOAN_THANH + LICHSU HOAN_THANH (field `ketLuanCuoi`+`ketQuaXuLy` required) |
+| VV-017 | TVV trình phê duyệt (DANG_XU_LY → CHO_PHE_DUYET) | ✅ Đạt | R20 retest | FE button render + BE 201 + state ver 4→5 + LICHSU TRINH_PHE_DUYET + nguoiGuiDuyetId set |
+| VV-033 | CG trình phê duyệt | 🚫 Không test được | R20 retest | CG `huongcg` 0 `*_vu_viec` perm — BE chưa wire VV perms cho role CG |
+
+### Bảng TC chưa chạy được — cần làm gì để chạy (R20 retest)
+
+Hiện tại còn **1 TC** chưa chạy được — chia **1 nhóm**: 1 chờ dev BE add VV perm cho role CG (nhóm B).
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| VV-033 | CG `huongcg` chỉ có 13 perm (tư vấn nhanh + bài giảng) — 0 perm `*_vu_viec` nên không list VV được giao | BE wire perm `read_vu_viec` + `nhan-phan-cong_vu_viec` + `trinh-phe-duyet_vu_viec` + `cap-nhat-ket-qua_ket_qua_vu_viec` + `hoan-thanh_vu_viec` cho role CG theo FR-V.I-09 line 766 "TVV/CG hoặc NHT" | Dev BE |
+
+### Method R20 retest
+
+**VV-015 + VV-017 — TVV-HDSD-003 (state DANG_XU_LY ver=4, nguoiXuLyId=b7a05555 TVV):**
+
+1. UI navigate `/vu-viec/aaffaa04-...-003` với TVV `tvv_r11_mailfix` (isolatedContext `tvcs-e2e-r20-fresh-cbnvtw06`). Snapshot header render: `[file-text Cập nhật kết quả]` (uid=275_45) + `[send Trình phê duyệt]` (uid=275_46). ✅ **BUG-VV-R19c-001 Closed FE verified** — TVV thấy button.
+2. POST `/api/v1/vu-viecs/{id}/cap-nhat-ket-qua` body `{noiDungKetQua: "R20 retest VV-015 ..."}` → **201**. State giữ DANG_XU_LY ver=4 (đúng spec — update KQ không advance state). LICHSU mới `CAP_NHAT_KQ` (2026-05-13T04:37:02Z). ✅ **VV-015 PASS**.
+3. POST `/api/v1/vu-viecs/{id}/trinh-phe-duyet` body `{version: 4}` → **201**. State DANG_XU_LY→CHO_PHE_DUYET ver 4→5 + nguoiGuiDuyetId=b7a05555 TVV. LICHSU mới `TRINH_PHE_DUYET` (2026-05-13T04:37:13Z). ✅ **VV-017 PASS**.
+
+**Setup VV-016 — CB PD ĐP `cb_pd_dp_01` duyệt VV-HDSD-003 (donVi STP-AG match):**
+
+4. CB PD TW `cb_pd_tw_01` thử `/phe-duyet` body `{quyetDinh:'PHE_DUYET', version:5}` → **403 "Đơn vị của người phê duyệt khác đơn vị của bản ghi"** (VV donVi `8002-...-006` = STP-AG ĐP, CB PD TW không match).
+5. Switch `cb_pd_dp_01` (STP-AG ĐP) → `/phe-duyet` body `{quyetDinh:'PHE_DUYET', ghiChu, version:5}` → **201**. State CHO_PHE_DUYET → **DA_DUYET** ver=6.
+
+**VV-016 — TVV hoàn thành VV state DA_DUYET:**
+
+6. Login lại TVV `tvv_r11_mailfix` → POST `/api/v1/vu-viecs/{id}/hoan-thanh` body `{ketLuanCuoi: "R20 ...", ketQuaXuLy: "THANH_CONG", version: 6}` → **201**. State DA_DUYET → **HOAN_THANH** ver 6→7. LICHSU `HOAN_THANH` (2026-05-13T04:41:21Z). ✅ **VV-016 PASS**.
+   - Note: BE field name `ketLuanCuoi` (10000 char max) + `ketQuaXuLy` enum (`THANH_CONG`/`KHONG_THANH_CONG`) — không phải `ghiChu` như guess ban đầu.
+
+**VV-033 — CG `huongcg` trình phê duyệt:**
+
+7. Login CG `huongcg` → `/auth/me` trả 13 perm gồm `answer_tu_van_nhanh` + `read_bai_giang` + tư vấn — **0 perm `*_vu_viec`**. GET `/vu-viecs` trả 0 VV (CG không scope VV). 🚫 **BLOCKED nhóm B** — BE chưa wire VV perm cho role CG (mặc dù spec FR-V.I-09 line 766 cho phép CG trong pool TVV/CG).
+
+### LICHSU enum coverage cumulative sau R20 retest
+
+VV-HDSD-003 timeline cumulative: `KIEM_TRA → PHAN_CONG → XAC_NHAN_PHAN_CONG → CAP_NHAT_KQ → TRINH_PHE_DUYET → PHE_DUYET → HOAN_THANH` = 7 enum lifecycle TVV native walk-through PASS đầy đủ. Cumulative pool: 16/18 enum khớp spec. Miss: `TIEP_NHAN`, `YEU_CAU_BO_SUNG`, `TU_CHOI`, `TU_CHOI_DUYET`, `MO_LAI` (LICHSU-01 partial vẫn Open).
+
+### Evidence R20 retest
+
+| Screenshot | TC ref |
+|---|---|
+| [r20-retest-vv015-016-017-buttons-present-114000.png](../../bug-reports/vu-viec/image/r20-retest-vv015-016-017-buttons-present-114000.png) | VV-015/017 FE render `[Cập nhật kết quả]` + `[Trình phê duyệt]` |
+
+### Test method R20 retest
+
+API probe qua MCP `evaluate_script({fetch})` với `Authorization: Bearer <token>` header pattern do `--isolated` context cookies + JWT 2-min revoke chặn cookie-based call sau 2 phút. Re-login + new token mỗi request. UI snapshot verify FE button presence. Multi-role workflow: TVV → CB PD ĐP (duyệt) → TVV (hoàn thành) end-to-end.
+
+---
+
+## R19c-seed + 5 TC unblock + 3 negative — VV lifecycle CB NV-led (2026-05-13 00:35:00)
+
+Tester: `cb_nv_tw_03` → fallback `cb_nv_tw_02` (browser auto-resolved cùng vai trò + cấp do JWT race), `cb_pd_tw_01`. Tool: Chrome DevTools MCP `evaluate_script` BE API direct + UI click chain CB PD view.
+
+### Verdict R19c-seed
+
+⚠️ **3/8 Đạt + 3 Sai spec (NEW BUG) + 2 Hoãn.** Phát hiện **2 BUG MỚI Critical:** (1) BE BỎ enforcement ERR-PC-05 cross-cấp phân công; (2) BE BỎ enforcement ERR-PC-06 inactive TVV. Permission view CB PD vs CB NV ở CHO_PHE_DUYET tách đúng (PASS). Immutability HOAN_THANH PASS (409 ERR-STATE-VI-01-05). LICH_SU 18 enum: chỉ capture được 5/18 trong scope test này — block C8-3.
+
+### Accounts
+
+| Account | Vai trò | Use case |
+|---|---|---|
+| `cb_nv_tw_03` (fallback `cb_nv_tw_02`) | CB_NV_TW | View CHO_PHE_DUYET (no action); probe phân công API 3 negative cases |
+| `cb_pd_tw_01` | CB_PD_TW | View CHO_PHE_DUYET (sees [Phê duyệt] + [Từ chối] buttons) |
+
+### Bảng 1 — Trạng thái 8 TC (snapshot R19c-seed)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| VV-017 | CB NV-led Trình phê duyệt (UI button visibility) | ✅ Đạt | R19c-seed | CB NV ở CHO_PHE_DUYET không có button (đúng spec) |
+| VV-019 | CB PD approve (UI [Phê duyệt]+[Từ chối] visibility) | ✅ Đạt | R19c-seed | CB PD ở CHO_PHE_DUYET thấy 2 button đúng spec |
+| VV-020 | CB NV Hoàn thành (state DA_DUYET visible) | ⏭ Hoãn | R19c-seed | UI click test bị JWT 2-min revoke; click action button block |
+| VV-021 | Immutability sau HOAN_THANH (PATCH/phan-cong) | ✅ Đạt | R19c-seed | PATCH→409 ERR-STATE-VI-01-05; phan-cong→409 ERR-STATE-VI-PC-01 |
+| C8-3 | LICH_SU 18 enum coverage | 🚫 Không test được | R19c-seed | Lifecycle seed cluster 0 (CPD/DD/HT) có 0 LICH_SU; UI walk 18-enum block |
+| C3-4 | ERR-PC-05 cross-cấp phân công (VV ĐP + TVV TW) | ✅ Đạt | R21 | R21 retest 2026-05-13 15:25 — Verify SRS `srs-fr-05-vu-viec.md:772` ERR-PC-05 chỉ chặn user thao tác VV khác đơn vị, KHÔNG chặn cross-cấp TVV. NĐ 77/2008 Đ.19 TVV hoạt động toàn quốc. BE 201 đúng spec. Closed-Invalid. |
+| C3-5 | ERR-PC-06 inactive TVV phân công | ❌ Lỗi | R19c-seed | BE trả **201 SUCCESS** với TVV TU_CHOI — BUG-VV-FN-PC-INACTIVE-01 |
+| C3-6 | ERR-PC-07 TVV không match LV | ⏭ Hoãn | R19c-seed | Cần fresh DANG_KIEM_TRA VV mới + hangMucId UUID (KT walk block) |
+| **Tổng** | **8 TC** | ✅4 · ❌1 · 🚫1 · ⏭2 | | |
+
+### Bảng 2 — TC chưa chạy được — cần làm gì để chạy
+
+Hiện tại còn 4 TC chưa chạy clean (R21 unblock C3-4 Closed-Invalid) — chia 3 nhóm: 1 chờ BE fix · 1 chờ seed lifecycle UI walk · 2 chờ env stability (JWT 2-min revoke + KT hangMucId catalog endpoint).
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| C3-5 | BE bỏ enforcement ERR-PC-06 inactive TVV | BE thêm check `tvv.trangThai == HOAT_DONG` trước insert | Dev BE |
+| C3-6 | Endpoint `/danh-muc?loaiDanhMuc=HANG_MUC_KIEM_TRA` 404 — không lấy được hangMucId | BE expose endpoint hoặc seed fixture cung cấp 6 UUID | Dev BE |
+| VV-020 | JWT 2-min revoke chặn UI click chain dài → CB NV Hoàn thành | Dev BE relax JWT TTL hoặc seed VV state DA_DUYET fresh | Dev BE |
+| C8-3 | Lifecycle seed (CPD/DD/HT) tạo direct DB, LICH_SU empty — không capture 18 enum | Walk full lifecycle 1 VV qua UI từ TAO_VV → DA_DANH_GIA | QA seed |
+
+### Narrative — Phase 1 (seed lifecycle CB NV-led)
+
+**Plan ban đầu:** Walk fresh 1 VV qua 9 step lifecycle. **Thực tế:** JWT 2-min revoke + cross-tab session contamination + UI auto-redirect làm UI walk dài (>3 step) fail. Pivot sang **mix approach**: (a) UI click chain ngắn 1-2 step để verify button visibility, (b) BE `evaluate_script` `fetch()` direct cho state mutation + assertion.
+
+**Step 1-5: Account login + view CHO_PHE_DUYET seed `VV-QA-R7-LIFECYCLE-CPD` (`aade0000-0000-4000-8000-000000000002`)**
+
+- Login `cb_nv_tw_03` MCP isolatedContext `vv-seed-cbnv03` → OTP 666666 → dashboard render ✓.
+- Navigate VV detail → state badge "Chờ phê duyệt" + Section "Phê duyệt" expanded với text "Đang chờ phê duyệt." + **0 action button**. ✅ **VV-017 PASS** — CB NV không thấy approve button (đúng spec: chỉ CB PD approve).
+- Logout + login `cb_pd_tw_01` MCP isolatedContext `vv-seed-cbpd01` → OTP 666666 → dashboard "CB Phê duyệt TW 01" ✓.
+- Navigate cùng VV CPD → CB PD thấy **`[check-circle Phê duyệt]` + `[close-circle Từ chối]` buttons**. ✅ **VV-019 PASS** — CB PD đầy đủ approve permission UI.
+- Evidence: `image/r19c-seed-cbnv-cpd-view-002800.png` (CB NV view, no button) + `image/r19c-seed-cbpd-cpd-view-003200.png` (CB PD view, 2 buttons).
+
+**Step 6: VV-021 Immutability HOAN_THANH (`VV-QA-R7-LIFECYCLE-HT` aade...0004)**
+
+API probe 3 mutate endpoint trên state HOAN_THANH (cb_nv_tw_02 context — browser auto-resolved fallback):
+- `POST /vu-viecs/{id}/phan-cong` `{tvvId, loaiDoiTuongXuLy:CA_NHAN}` → **409** `ERR-STATE-SYS-00-01: ERR-STATE-VI-PC-01: Vụ việc không ở trạng thái cho phép phân công`. ✅
+- `PATCH /vu-viecs/{id}` `{tieuDe:...}` → **409** `ERR-STATE-SYS-00-01: ERR-STATE-VI-01-05: Không thể sửa vụ việc ở trạng thái hiện tại`. ✅
+- Test confirm BE enforce state guard cho mọi mutate khi VV ở HOAN_THANH. **VV-021 PASS**.
+
+**Step 7: C8-3 LICH_SU 18 enum coverage**
+
+Probe `GET /vu-viecs/{id}/lich-su` cho 5 lifecycle seed VV (CPD/DD/HT/PRIVACY/HTK-002):
+- CPD/DD/HT/PRIVACY/HTK-002 → tất cả `count=0` ⚠️ Seed cluster 0 lifecycle tạo direct DB không backfill LICH_SU event.
+- Probe 4 VV-được-walk-qua-UI (TW-12-001/TW-11-003/HDSD-002/TVV-001):
+  - VV-BTP-TW-20260512-001: 3 enum `[TAO_VV, KIEM_TRA, PHAN_CONG]`.
+  - VV-BTP-TW-20260511-003: 3 enum `[TAO_VV, KIEM_TRA, PHAN_CONG_CA_NHAN]`.
+  - VV-HDSD-002 (before C3-5): 2 enum `[TIEP_NHAN, KIEM_TRA]` (sau C3-5 + 1 PHAN_CONG = 3).
+  - VV-HDSD-TVV-001: count=0.
+- **Cumulative enum trong scope R19c-seed**: 5 distinct `{TAO_VV, KIEM_TRA, PHAN_CONG, PHAN_CONG_CA_NHAN, TIEP_NHAN}` = 5/18 ≈ 28%.
+- **C8-3 BLOCKED** vì lifecycle seed không cover; cần walk 1 VV qua đủ 18 transition mới verify được (hoãn).
+
+### Narrative — Phase 2 (3 TC negative phân công C3-4/5/6)
+
+**Plan ban đầu:** Negative case kiểm tra BE từ chối phân công khi (a) cross-cấp, (b) TVV inactive, (c) LV mismatch.
+
+**C3-4 ERR-PC-05 cross-cấp — VV `VV-QA-R9-DN-001` (cấp ĐP STP-AG donVi `8002-000000000006`, DANG_KIEM_TRA, LV `bbbbbbbb-...001b`) + TVV `hương tvv1` (cấp TW donVi `8000-000000000001`, HOAT_DONG):**
+
+```
+POST /api/v1/vu-viecs/aad90004-0000-4000-8000-000000000001/phan-cong
+Body: {"tvvId":"e4403bbf-7754-4ecf-a25f-59d6e4a39d4f","loaiDoiTuongXuLy":"CA_NHAN"}
+→ 201 SUCCESS — trangThai: DA_PHAN_CONG, version 3, nguoiCapNhatId: cb_nv_tw_02
+```
+
+❌ **FAIL — BE chấp nhận cross-cấp phân công.** Expected: 422 với `ERR-PC-05` "Người được phân công không cùng cấp với vụ việc". Actual: 201 OK, state advance DANG_KIEM_TRA → DA_PHAN_CONG.
+
+**LICH_SU evidence:** VV-QA-R9-DN-001 lich-su sau C3-4 có 3 entries `PHAN_CONG` 17:31:36 by `CB Nghiệp vụ TW 02` — confirm event persisted.
+
+→ **NEW BUG-VV-FN-PC-CROSS-CAP-01 Critical** (log dưới đây).
+
+**C3-5 ERR-PC-06 inactive TVV — VV `VV-HDSD-002` (DANG_KIEM_TRA, donVi AG) + TVV `aa999023-...` (loaiTvv TVV, trangThai `TU_CHOI`):**
+
+```
+POST /api/v1/vu-viecs/aaffaa04-0000-4000-8000-000000000002/phan-cong
+Body: {"tvvId":"aa999023-0000-4000-8000-000000000001","loaiDoiTuongXuLy":"CA_NHAN"}
+→ 201 SUCCESS — trangThai: DA_PHAN_CONG, version 4
+```
+
+❌ **FAIL — BE chấp nhận phân công cho TVV state `TU_CHOI` (inactive).** Expected: 422 `ERR-PC-06` "Người được phân công không hoạt động". Actual: 201 OK.
+
+→ **NEW BUG-VV-FN-PC-INACTIVE-01 Critical** (log dưới đây).
+
+**C3-6 ERR-PC-07 TVV không match LV:** Cần fresh DANG_KIEM_TRA VV (sau C3-4 + C3-5 đã dùng hết 2 VV còn lại). Tentative walk VV-BTP-TW-20260509-007 DA_TIEP_NHAN → kiem-tra block do thiếu hangMucId UUID (endpoint `/danh-muc?loaiDanhMuc=HANG_MUC_KIEM_TRA` 404 ERR-VAL-SYS-00-01 + variants 404). Hoãn → cần dev BE expose endpoint catalog hoặc seed fixture cung cấp 6 hangMucId.
+
+### Bug mới — log file `bug-report-r7-7-3-functional-vu-viec.md`
+
+1. **BUG-VV-FN-PC-CROSS-CAP-01** — Critical — BE bỏ enforcement ERR-PC-05 phân công cross-cấp đơn vị
+2. **BUG-VV-FN-PC-INACTIVE-01** — Critical — BE bỏ enforcement ERR-PC-06 phân công cho TVV inactive (TU_CHOI)
+
+### Evidence
+
+| Screenshot | TC ref |
+|---|---|
+| [r19c-seed-cbnv-cpd-view-002800.png](../../bug-reports/vu-viec/image/r19c-seed-cbnv-cpd-view-002800.png) | VV-017 CB NV no button |
+| [r19c-seed-cbpd-cpd-view-003200.png](../../bug-reports/vu-viec/image/r19c-seed-cbpd-cpd-view-003200.png) | VV-019 CB PD 2 buttons |
+| [r19c-c3-bug-pc-evidence-003400.png](../../bug-reports/vu-viec/image/r19c-c3-bug-pc-evidence-003400.png) | C3-4/5 BUG context |
+
+---
+
+## R20 — TVV native BE API probe (2026-05-12 23:42:00)
+
+Tester: `tvv_r11_mailfix` (TVV) — isolatedContext `phase_f_tvv_r20`. Tool: Chrome DevTools MCP `fetch()` từ TVV browser context (credentials include). Scope: probe BE 3 endpoint `/cap-nhat-ket-qua` + `/trinh-phe-duyet` + LICHSU verify sau khi BUG-VV-FN-TVV-PERMISSION-GAP-01 Closed R20 (TVV +1 perm `trinh-phe-duyet_vu_viec`).
+
+### Verdict R20
+
+✅ **BE 2/2 PASS — TVV permission fully wired**. FE side vẫn Open BUG-VV-R19c-001 (button missing).
+
+### Bảng — R20 retest snapshot
+
+| TC ID | Tên TC ngắn | Status | Round | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| VV-015 BE | TVV POST /cap-nhat-ket-qua (BE side) | ✅ Đạt | R20 | 201 OK + LICHSU `CAP_NHAT_KQ` ghi TVV userId |
+| VV-017 BE | TVV POST /trinh-phe-duyet (BE side) | ✅ Đạt | R20 | 201 OK + state DANG_XU_LY→CHO_PHE_DUYET ver 4→5 + LICHSU `TRINH_PHE_DUYET` |
+| VV-015 FE | TVV click [Cập nhật kết quả] (FE side) | ❌ Lỗi | R19c (giữ) | BUG-VV-R19c-001 — FE không render button |
+| VV-017 FE | TVV click [Trình phê duyệt] (FE side) | ❌ Lỗi | R19c (giữ) | BUG-VV-R19c-001 — cascade same FE bug |
+
+### Narrative
+
+**VV-015 BE + VV-017 BE ✅ Đạt** — `tvv_r11_mailfix` login MCP isolatedContext `phase_f_tvv_r20`. GET `/auth/me` confirm 10 perm `*_vu_viec` gồm `cap-nhat-ket-qua_ket_qua_vu_viec` + `trinh-phe-duyet_vu_viec` + `hoan-thanh_vu_viec`. VV-QA-R9-HTK-001 state DANG_XU_LY ver=4. Probe sequence:
+
+1. POST `/api/v1/vu-viecs/{vvId}/cap-nhat-ket-qua` body `{noiDungKetQua: "R20 Phase F TVV native ..."}` → **201 OK**.
+2. POST `/api/v1/vu-viecs/{vvId}/trinh-phe-duyet` body `{version: 4}` → **201 OK**.
+3. GET re-fetch: `trangThai=CHO_PHE_DUYET`, `version=5` ✓.
+4. GET `/lich-su` → entries `TRINH_PHE_DUYET` + `CAP_NHAT_KQ` mới (timestamp 16:42:23Z, nguoiThucHien=b7a05555 TVV userId).
+
+BE permission wired đầy đủ (PERMISSION-GAP-01 Closed-verified end-to-end, không chỉ ở permission table mà cả endpoint chấp nhận perm thật). FE side vẫn Open BUG-VV-R19c-001 (FE không render button [Cập nhật kết quả] / [Trình phê duyệt] / [Hoàn thành] cho role TVV ở state DANG_XU_LY).
+
+**LICHSU enum `TRINH_PHE_DUYET`** — confirm BE log đúng enum khi TVV submit. Đây là enum thứ 4 mới xuất hiện trong pool (cumulative với R20 `TIEP_NHAN`). Pool ước hiện ~17/18 enum. Vẫn miss: `YEU_CAU_BO_SUNG` + `TU_CHOI_DUYET` + `MO_LAI` (LICHSU-01 still Open Major).
+
+### Test method R20
+
+API probe qua MCP `evaluate_script({fetch})` từ TVV browser context (cookies + JWT từ TVV login). KHÔNG dùng UI click vì FE bug chặn (BUG-VV-R19c-001). Output JSON từ BE response + LICHSU GET để verify ai làm gì.
+
+---
+
+## R19c-followup — Phân công + Cập nhật KQ + Hoàn thành + Nhận/Từ chối phân công (2026-05-12 20:40 → 20:55)
 
 Tester: `cb_nv_tw_03` (CB NV cấp TW) + `tvv_r11_mailfix` (TVV) — isolatedContext `vvr19c-cbtw-20260512-2040` + `vvr19c-tvv-20260512-2040`. Tool: Chrome DevTools MCP UI click chain + API verify. Scope: 5 TC follow-up sau dev fix phân công + cập nhật kết quả (audit identified unblocked TC).
 

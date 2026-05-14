@@ -51,7 +51,7 @@
 | 11 | Đào tạo (KH năm / CTĐT / Khóa / NHCH / ĐKT / GV / HV / LH) | [todo-dao-tao.md](todo-dao-tao.md) | 17 | ✅16 ⚠️1 | **P3** ✅R7.3.5, ✅R7.3.6, ✅R7.3.8, ✅R7.3.9, ✅R7.3.10, ✅R7.3.11, ✅R7.3.12, ✅R7.3.13, ✅R7.3.15<br>**P4** ✅R7.4.B0, ✅R7.4.B1, ✅R7.4.B5b, ✅R7.4.B7, ✅R7.4.B10, ✅R7.4.B11, ✅R7.4.B12<br>**P7** ⚠️R7.7.6 |
 | 12 | Biểu mẫu | [todo-bieu-mau.md](todo-bieu-mau.md) | 4 | ✅3 ⚠️1 | **P3** ✅R7.3.7<br>**P4** ✅R7.4.C1<br>**P7** ⚠️R7.7.10, ✅R7.7.10b |
 | 13 | Kho QA | [todo-kho-qa.md](todo-kho-qa.md) | 3 | ✅3 | **P3** ✅R7.3.16<br>**P4** ✅R7.4.D3, ✅R7.4.D3.AUTO |
-| 14 | Đánh giá Hiệu quả HTPL | [todo-danh-gia-hq.md](todo-danh-gia-hq.md) | 5 | ✅1 ⚠️3 🚫1 | **P4** ✅R7.4.D1, ⚠️R7.4.D2, ⚠️R7.4.D2a, 🚫R7.4.D2b<br>**P7** ⚠️R7.7.9 |
+| 14 | Đánh giá Hiệu quả HTPL | [todo-danh-gia-hq.md](todo-danh-gia-hq.md) | 5 | ✅4 ⚠️1 | **P4** ✅R7.4.D1, ✅R7.4.D2, ✅R7.4.D2a, ⚠️R7.4.D2b<br>**P7** ✅R7.7.9 |
 | 15 | Chi trả | [todo-chi-tra.md](todo-chi-tra.md) | 7 | ✅6 ⚠️1 | **P6** ✅R7.6.1<br>**P7** ✅R7.7.12, ✅R7.7.12.1, ⚠️R7.7.12.2, ✅R7.7.12.3, ✅R7.7.12.4<br>**Trụ E** ✅R7.E3 |
 | 16 | TV nhanh | [todo-tv-nhanh.md](todo-tv-nhanh.md) | 4 | ✅2 ⚠️1 ⏳1 | **P6** ✅R7.6.2, ⏳R7.6.3<br>**P7** ⚠️R7.7.11<br>**Trụ E** ✅R7.E4 |
 | 17 | CT HTPLDN | [todo-ct-htpldn.md](todo-ct-htpldn.md) | 5 | ✅5 | **P6** ✅R7.6.4, ✅R7.6.5<br>**P7** ✅R7.7.15, ✅R7.7.15.b<br>**Trụ E** ✅R7.E2 |

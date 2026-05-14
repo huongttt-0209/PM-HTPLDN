@@ -4,7 +4,7 @@
 **Phiên bản SRS:** 3.5
 **Nhóm:** VIII — Quản trị Hệ thống
 **UC range:** UC 99 – UC 123
-**Số FR:** 28 (gốc 25 + FR-VIII-26 Quên MK + FR-VIII-28 `[GAP-VIII-02]` + FR-VIII-29 `[GAP-VIII-05]` + FR-VIII-30 Tỉnh/TP — BA chốt 2026-05-07 Q2; trừ FR-VIII-06 đã chuyển sang FR-04)
+**Số FR:** 29 (gốc 25 + FR-VIII-26 Quên MK + FR-VIII-28 `[GAP-VIII-02]` + FR-VIII-29 `[GAP-VIII-05]` + FR-VIII-30 Tỉnh/TP — BA chốt 2026-05-07 Q2; + FR-VIII-31 Lĩnh vực kinh doanh — BA chốt 2026-05-09; trừ FR-VIII-06 đã chuyển sang FR-04)
 **File chính:** `srs-v3.md` Section 3.2
 
 ---
@@ -19,6 +19,8 @@
 | 2026-05-06 | BA + SRS Agent | **Phát hành v3.5**: gói 14 Thay đổi từ delta report `v3.5-delta-fr-10.md` + 5 fix V4-CHƯA-SỬA (C.1 SCR-VIII-03 mật khẩu thêm "ký tự đặc biệt"; C.2 §6 BR cột "Áp dụng FR" mở rộng; C.3 SM-TAIKHOAN "Tham chiếu FR"; C.4 SM bảng FR Ref; C.5 SCR-VIII-03 nút "Phân quyền"). |
 | 2026-05-07 | BA + SRS Agent | **Hướng A — Bỏ Tab 4 Quy trình hỗ trợ** khỏi SCR-VIII-06 (4 → 3 tab). Workflow VV cứng theo SM-VUVIEC trong code. Đồng bộ bỏ FR-V.I-NEW-01 + entity CAU_HINH_QUY_TRINH ở srs-fr-05. |
 | 2026-05-07 | BA + SRS Agent | **Áp 11 câu QA chốt 2026-05-07** (`ba-answers-fr10-2026-05-07.md`): **Q1** NGAY_LE schema theo Entity 3.4.3.51 (single date + nam + loai); **Q2** thêm FR-VIII-30 Quản lý Tỉnh/Thành phố + 14 tab SCR-VIII-01; **Q3** bỏ trạng thái CHO_PHAN_QUYEN (SM 5→4 states, revert nút Phân quyền + xóa SCR-VIII-08a); **Q4** AUDIT_LOG export 10K (đồng bộ FR-VIII-28); **Q5** giữ `qua_han_he_so 2.0` ở DB, KHÔNG hiển thị UI, bổ sung field vào FR-VIII-10 Inputs; **Q6** SM dòng `CHO_KICH_HOAT → HOAT_DONG QTHT kích hoạt` đổi FR Ref FR-VIII-18 → FR-VIII-15; **Q8** Acceptance "19 DN" → "18 DN"; **Q9** FR-VIII-23 Tác nhân thêm DN; **Q10** xóa SCR-VIII-08a (đồng bộ Q3); **Q11** bỏ Tab 2 Phân công + entity CAU_HINH_PHAN_CONG (SCR-VIII-06 3 → 2 tab); FR-II-06 dùng auto-filter 4 tiêu chí (lĩnh vực + đơn vị + workload + FIFO) thay cho cấu hình tĩnh — đồng bộ pattern với FR-V.I-09 + FR-XII. |
+| 2026-05-09 | BA + SRS Agent | Chốt nguồn `LINH_VUC_KINH_DOANH` = **VSIC 2025 cấp 4 theo QĐ 36/2025/QĐ-TTg** (hiệu lực 15/11/2025), đồng bộ chuẩn ĐKKD NĐ 168/2025/NĐ-CP Đ.7. Thêm **FR-VIII-31** Quản lý danh mục Lĩnh vực kinh doanh + sidebar SCR-VIII-01 tăng 14→15 tab. Seed **517 records** (22 cấp 1 A–V dùng `danh_muc_cha_id=NULL` + 495 cấp 4 trỏ về cấp 1 cha). Đóng câu hỏi BA mở từ Phase 3 cherry-pick v3 → v3.5. |
+| 2026-05-10 | BA + SRS Agent | **FR-VIII-29 mở thêm vai trò CB NV TW = ngang QTHT cho CRUD ngày lễ.** Sửa 5 vị trí trong FR-VIII-29 (Tác nhân, Preconditions, Processing bước 1+6, Error E1, AC) + Permission Matrix `srs-v3.5.md` line 1307 (cột CB_NV_TW: R → CRUD) + BR-SLA-04 line 5435 (QTHT → QTHT/CB NV TW cập nhật hàng năm). Lý do: ngày lễ là dữ liệu cấp quốc gia, CB NV TW phụ trách nghiệp vụ trung ương đủ thẩm quyền cập nhật theo Quyết định Thủ tướng. CB NV BN/ĐP và các vai trò khác giữ nguyên quyền R (chỉ Xem). Audit log lưu vai trò + đơn vị người thao tác để truy nguồn. |
 
 ---
 
@@ -1043,7 +1045,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 13 | chuc_vu_dd | text | N | Chức vụ người đại diện | — | user input |
 | 14 | email | text | Y | RFC 5322, unique trên TAI_KHOAN.email (toàn hệ thống). Khi đăng ký, hệ thống lưu cùng giá trị vào cả TAI_KHOAN.email (kênh login + nhận mail kích hoạt + reset MK + 2FA + workflow notification) và DOANH_NGHIEP.email (email liên hệ DN). Sau đăng ký có thể đổi độc lập 2 trường (BR-AUTH-EMAIL-01) | — | user input |
 | 15 | so_dien_thoai | text | Y | Số điện thoại liên hệ | — | user input |
-| 16 | linh_vuc_kinh_doanh | text | N | Lĩnh vực kinh doanh chính | — | user input |
+| 16 | linh_vuc_ids | structured | N | Multi-select FK → DANH_MUC (loai='LINH_VUC_KINH_DOANH', mã VSIC cấp 4 theo QĐ 36/2025/QĐ-TTg, quản lý ở FR-VIII-31); lưu thành DOANH_NGHIEP_LINH_VUC (M-N). DN có thể chọn 1 hoặc nhiều ngành kinh doanh | — | user input |
 | 17 | ghi_chu | text (long) | N | — | — | user input |
 | 18 | file_dinh_kem | binary[] | N | Upload nhiều file (Giấy ĐKKD, v.v.) | — | user upload |
 | **Thông tin tài khoản** (3 trường — username auto-derived từ MST, không nhập tay) | | | | | | |
@@ -1063,6 +1065,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 6 | Mã hóa mật khẩu (hash 1 chiều) | — |
 | 7 | Tạo bản ghi TAI_KHOAN ở trạng thái CHO_KICH_HOAT, gán vai trò "DN" sẵn ngay từ thời điểm tạo (sau BA chốt 2026-05-07 Q3 bỏ CHO_PHAN_QUYEN, mọi loại TK đều có vai trò gán trước → đi thẳng CHO_KICH_HOAT → HOAT_DONG khi user kích hoạt qua mail). Set `username = ma_so_thue`, `email = email DN khai` | SM-TAIKHOAN, BR-AUTH-USERNAME-01 |
 | 8 | Tạo bản ghi DOANH_NGHIEP với toàn bộ thông tin DN khai (auto-pass — không validate nội dung với cơ quan ngoài). Set `DOANH_NGHIEP.email = email DN khai` (cùng giá trị TAI_KHOAN.email tại thời điểm đăng ký) | BR-AUTH-EMAIL-01 |
+| 8a | Với mỗi `linh_vuc_id` DN đã chọn ở `linh_vuc_ids` (nếu có): kiểm tra `linh_vuc_id` tồn tại trong DANH_MUC `loai='LINH_VUC_KINH_DOANH'` + `trang_thai='KICH_HOAT'`; nếu một hoặc nhiều `linh_vuc_id` không hợp lệ → từ chối toàn bộ đăng ký (ERR-REG-LV-01), không lưu bất kỳ bản ghi nào (rollback DOANH_NGHIEP + TAI_KHOAN ở bước 7-8). Nếu hợp lệ → tạo các bản ghi DOANH_NGHIEP_LINH_VUC liên kết DOANH_NGHIEP vừa tạo với từng lĩnh vực; UNIQUE `(doanh_nghiep_id, linh_vuc_id)` đảm bảo không trùng. Trường hợp `linh_vuc_ids = []` (DN bỏ trống — Inputs row 16 không bắt buộc): không tạo bản ghi bridge nào. | BR-DATA-02 |
 | 9 | Liên kết TAI_KHOAN ↔ DOANH_NGHIEP qua mã số thuế (khóa định danh chính) | — |
 | 10 | Gửi mail link kích hoạt cho DN (link vĩnh viễn, 1 lần dùng) — gửi đến TAI_KHOAN.email | — |
 | 11 | Ghi nhật ký thao tác (hành động = 'SELF_REGISTER_DN') | BR-DATA-05 |
@@ -1077,10 +1080,12 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | E4 | Mật khẩu yếu | ERR-REG-04 | "Mật khẩu chưa đủ mạnh" | ERROR |
 | E5 | Mật khẩu xác nhận không khớp | ERR-REG-05 | "Mật khẩu xác nhận không khớp" | ERROR |
 | E6 | Chưa tích cam kết thông tin đúng sự thật | ERR-REG-06 | "Vui lòng tích cam kết thông tin đúng sự thật để tiếp tục" | ERROR |
+| E7 | Một hoặc nhiều `linh_vuc_id` ở `linh_vuc_ids` không tồn tại trong DANH_MUC `loai='LINH_VUC_KINH_DOANH'`, hoặc đã `VO_HIEU_HOA` | ERR-REG-LV-01 | "Một hoặc nhiều lĩnh vực kinh doanh đã chọn không hợp lệ hoặc đã ngừng sử dụng. Vui lòng chọn lại từ danh sách." | ERROR |
 
 **Postconditions:**
 - Bản ghi TAI_KHOAN được tạo ở trạng thái CHO_KICH_HOAT, đã gán vai trò DN
 - Bản ghi DOANH_NGHIEP được tạo với toàn bộ thông tin DN khai
+- Với mỗi `linh_vuc_id` DN đã chọn (nếu có): bản ghi DOANH_NGHIEP_LINH_VUC được tạo, liên kết DOANH_NGHIEP ↔ DANH_MUC `loai='LINH_VUC_KINH_DOANH'` (UNIQUE per cặp). Nếu DN bỏ trống lĩnh vực: 0 bản ghi bridge được tạo
 - TAI_KHOAN ↔ DOANH_NGHIEP được liên kết qua mã số thuế
 - Mail link kích hoạt đã gửi cho DN
 - DN bấm link kích hoạt + đặt mật khẩu lần đầu (qua FR-VIII-XX Quên mật khẩu / Kích hoạt) → TAI_KHOAN chuyển HOAT_DONG → DN có thể đăng nhập + dùng đầy đủ chức năng (không hạn chế dù chưa đồng bộ VNeID Tổ chức)
@@ -1093,6 +1098,9 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 - **Given** DN bấm link kích hoạt + đặt mật khẩu **When** lưu thành công **Then** TAI_KHOAN chuyển HOAT_DONG, DN đăng nhập bằng MST + mật khẩu
 - **Given** mã số thuế hoặc email đã tồn tại **When** DN submit **Then** từ chối với ERR-REG-01 hoặc ERR-REG-02
 - **Given** DN không tích cam kết thông tin đúng sự thật **When** submit **Then** từ chối với ERR-REG-06
+- **Given** DN chọn 3 lĩnh vực kinh doanh ở dropdown multi-select **When** đăng ký thành công **Then** 3 bản ghi DOANH_NGHIEP_LINH_VUC được tạo, mỗi bản ghi liên kết DOANH_NGHIEP vừa tạo với 1 trong 3 `linh_vuc_id` DN đã chọn (UNIQUE per cặp `doanh_nghiep_id × linh_vuc_id`)
+- **Given** DN bỏ trống lĩnh vực kinh doanh (`linh_vuc_ids = []`) **When** submit **Then** đăng ký vẫn được chấp nhận, 0 bản ghi DOANH_NGHIEP_LINH_VUC được tạo (Inputs row 16 không bắt buộc)
+- **Given** DN chọn `linh_vuc_id` không tồn tại trong DANH_MUC hoặc đã `VO_HIEU_HOA` **When** submit **Then** từ chối toàn bộ đăng ký với ERR-REG-LV-01, KHÔNG tạo bất kỳ bản ghi TAI_KHOAN / DOANH_NGHIEP / DOANH_NGHIEP_LINH_VUC nào
 
 ---
 
@@ -1390,10 +1398,10 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 
 **Mô tả:** CRUD danh sách ngày lễ, ngày nghỉ bù quốc gia. Hệ thống dùng để tính SLA (trừ ngày lễ khi tính ngày làm việc).
 
-**Tác nhân:** Quản trị hệ thống (QTHT)
+**Tác nhân:** Quản trị hệ thống (QTHT) **hoặc** Cán bộ Nghiệp vụ Trung ương (CB NV TW). Hai vai trò có quyền CRUD ngang nhau (BA chốt 2026-05-10). Vai trò khác (CB NV BN/ĐP, CB PD, DN, NHT, TVV, CG) chỉ có quyền Xem (R).
 
 **Preconditions:**
-- User đã đăng nhập, vai trò QTHT
+- User đã đăng nhập với vai trò QTHT hoặc CB NV TW
 
 **Inputs:**
 
@@ -1409,12 +1417,12 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra quyền QTHT | BR-AUTH-01 |
+| 1 | Kiểm tra quyền: vai trò người dùng phải là QTHT hoặc CB NV TW | BR-AUTH-01 |
 | 2 | Validate: `ngay` hợp lệ; `nam` >= 2024; `loai` thuộc 3 enum; cặp (ngay, nam) UNIQUE | — |
 | 3 | Kiểm tra trùng: không có dòng khác cùng (ngay, nam) | — |
 | 4 | Tạo / Cập nhật / Xóa (soft delete) bản ghi NGAY_LE — mỗi ngày là 1 dòng riêng (vd Tết 5 ngày = 5 dòng cùng `ten_ngay_le="Tết Nguyên đán"`) | BR-DATA-01, BR-DATA-03 |
-| 5 | Ghi nhật ký thao tác | BR-DATA-05 |
-| 6 | Import danh sách: cho phép QTHT upload file Excel (.xlsx) — mỗi row Excel = 1 ngày lễ riêng | — |
+| 5 | Ghi nhật ký thao tác (lưu lại vai trò + đơn vị của người thao tác để truy nguồn) | BR-DATA-05 |
+| 6 | Import danh sách: cho phép QTHT hoặc CB NV TW upload file Excel (.xlsx) — mỗi row Excel = 1 ngày lễ riêng | — |
 
 **Outputs:**
 
@@ -1427,7 +1435,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
-| E1 | Không có quyền QTHT | ERR-NL-01 | "Bạn không có quyền quản lý ngày lễ" | ERROR |
+| E1 | Vai trò không phải QTHT cũng không phải CB NV TW | ERR-NL-01 | "Bạn không có quyền quản lý ngày lễ. Chỉ Quản trị hệ thống và Cán bộ Nghiệp vụ Trung ương được phép." | ERROR |
 | E2 | Trùng (ngay, nam) | ERR-NL-02 | "Ngày {ngay} năm {nam} đã tồn tại trong danh sách" | ERROR |
 | E3 | Loại không thuộc enum | ERR-NL-03 | "Loại ngày nghỉ phải là NGAY_LE / NGHI_BU / NGHI_KHAC" | ERROR |
 
@@ -1437,8 +1445,10 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 
 **Acceptance Criteria:**
 - **Given** QTHT thêm ngày lễ **When** lưu thành công **Then** hệ thống tính SLA trừ ngày lễ đó
-- **Given** QTHT import file Excel **When** file hợp lệ **Then** danh sách ngày lễ được cập nhật hàng loạt
-- **Given** QTHT xem lịch ngày lễ **When** hiển thị **Then** thấy tất cả ngày lễ trong năm dạng calendar
+- **Given** CB NV TW thêm ngày lễ **When** lưu thành công **Then** hệ thống tính SLA trừ ngày lễ đó (kết quả y hệt QTHT, audit log ghi rõ vai trò CB NV TW)
+- **Given** QTHT hoặc CB NV TW import file Excel **When** file hợp lệ **Then** danh sách ngày lễ được cập nhật hàng loạt
+- **Given** vai trò không phải QTHT cũng không phải CB NV TW (vd CB NV BN/ĐP, CB PD, DN, NHT, TVV, CG) **When** truy cập chức năng tạo/sửa/xóa ngày lễ **Then** hệ thống từ chối với ERR-NL-01; tuy nhiên các vai trò này vẫn được Xem danh sách ngày lễ (R) theo Permission Matrix
+- **Given** mọi vai trò có quyền xem ngày lễ **When** truy cập màn hình **Then** thấy tất cả ngày lễ trong năm dạng calendar
 
 ---
 
@@ -1476,6 +1486,47 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 
 ---
 
+### FR-VIII-31: Quản lý danh mục Lĩnh vực kinh doanh `[BA chốt 2026-05-09]`
+
+**UC Reference:** — (BA bổ sung 2026-05-09 vì danh mục `LINH_VUC_KINH_DOANH` cần UI CRUD cho QTHT khi VSIC cập nhật; CSV không có UC tương ứng — phantom FR, lấp gap cross-FR do FR-07 đã ref FK `DANH_MUC loai='LINH_VUC_KINH_DOANH'`)
+**Source:** BA chốt 2026-05-09 — đóng câu hỏi BA mở Phase 3 cherry-pick v3 → v3.5; nguồn danh mục = VSIC 2025 cấp 4 theo QĐ 36/2025/QĐ-TTg, đồng bộ chuẩn ĐKKD NĐ 168/2025/NĐ-CP Điều 7
+**Priority:** Must Have (FR-VIII-22 DN tự đăng ký phụ thuộc dropdown này) | **Stability:** High
+**Màn hình:** SCR-VIII-01 — Tab "Lĩnh vực kinh doanh" (tab 15)
+**Template:** TPL-DM-CRUD
+
+**Mô tả:** CRUD danh mục Lĩnh vực kinh doanh, mã VSIC theo Phụ lục I QĐ 36/2025/QĐ-TTg. **517 records** seed sẵn khi deploy DDL gồm 22 ngành cấp 1 (mã chữ A–V) + 495 ngành cấp 4 (mã 4 chữ số 0111–9900) liên kết với cấp 1 cha qua `danh_muc_cha_id`. UI cho QTHT chỉnh sửa khi Thủ tướng cập nhật VSIC.
+
+**Tác nhân:** Quản trị hệ thống
+
+**Inputs — trường riêng:**
+
+> **Ghi chú:** Dùng nguyên schema DANH_MUC §3.4.3.39 (14 cột đã có), KHÔNG thêm cột mới. Inputs liệt kê dưới là field người dùng nhập/sửa qua UI.
+
+| # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
+|---|----------|-----------|----------|-----------|----------|-------|
+| 1 | ma | text | Y | UNIQUE per loai_danh_muc; cấp 1 = 1 ký tự A–V; cấp 4 = `^\d{4}$` (0111–9900) | — | user input |
+| 2 | ten | text | Y | Tên ngành kinh tế (cấp 1 hoặc cấp 4) | — | user input |
+| 3 | mo_ta | text | N | Ghi chú (vd: văn bản tham chiếu khi update VSIC) | — | user input |
+| 4 | danh_muc_cha_id | identifier | N | FK → DANH_MUC(id) cùng loai='LINH_VUC_KINH_DOANH'; bản ghi cấp 4 trỏ về cấp 1 cha; bản ghi cấp 1 = NULL | — | user input |
+| 5 | loai_danh_muc | text | Y (system) | = 'LINH_VUC_KINH_DOANH' | LINH_VUC_KINH_DOANH | system |
+
+**Processing:** Theo TPL-DM-CRUD
+
+**Ràng buộc xóa:** Kiểm tra tham chiếu từ DOANH_NGHIEP_LINH_VUC.linh_vuc_id; nếu có DN đã liên kết → từ chối xóa cứng, gợi ý đổi `trang_thai = VO_HIEU_HOA`. Bản ghi cấp 1 bị xóa khi còn cấp 4 con → từ chối + cảnh báo "còn N cấp 4 con".
+
+**Seed Data:** 517 records theo Phụ lục I QĐ 36/2025/QĐ-TTg (hiệu lực 15/11/2025):
+- 22 cấp 1 (`ma='A'..'V'`, `danh_muc_cha_id=NULL`) — vd: A Nông nghiệp/lâm nghiệp/thủy sản, C Công nghiệp chế biến chế tạo, G Bán buôn/bán lẻ, K Viễn thông/lập trình máy tính, ...
+- 495 cấp 4 (`ma='0111'..'9900'`, `danh_muc_cha_id` trỏ cấp 1 cha) — vd: 0111 Trồng lúa (cha A), 2610 Sản xuất linh kiện điện tử (cha C), 4711 Bán lẻ tổng hợp (cha G), 6201 Lập trình máy vi tính (cha K), ...
+
+**Acceptance Criteria:**
+- **Given** QTHT truy cập tab "Lĩnh vực kinh doanh" **When** deploy DDL xong **Then** danh sách 517 records hiển thị (22 cấp 1 + 495 cấp 4)
+- **Given** QTHT thêm mã 4 chữ số trùng mã đã tồn tại **When** submit **Then** từ chối + cảnh báo trùng mã
+- **Given** QTHT đổi `trang_thai = VO_HIEU_HOA` cho 1 lĩnh vực **When** DN tự đăng ký FR-VIII-22 hoặc filter SCR-V.III-01 **Then** lĩnh vực đó không hiển thị trong dropdown
+- **Given** QTHT cố xóa cấp 1 còn cấp 4 con **When** xác nhận **Then** từ chối + cảnh báo "còn N cấp 4 con"
+- **Given** QTHT cố xóa lĩnh vực đang có DN tham chiếu **When** xác nhận **Then** từ chối + gợi ý vô hiệu hóa thay vì xóa
+
+---
+
 ---
 
 ## 3. Màn hình chức năng
@@ -1493,7 +1544,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | # | Vùng | Thành phần | Loại | Dữ liệu / Nội dung | Hành vi | Điều kiện hiển thị |
 |---|------|-----------|------|---------------------|---------|-------------------|
 | 1 | toolbar | Breadcrumb | breadcrumb | "Trang chủ > Quản trị > Danh mục" | navigate | luôn hiển thị |
-| 2 | sidebar | Tab dọc bên trái (14 tab) | tab | 14 loại danh mục: Lĩnh vực PL, Loại hình HT, Chương trình HT, Tình trạng VV, Cơ quan ĐV, Loại DN, Hồ sơ đề nghị HT, Hồ sơ đề nghị TT, Tiêu chí ĐG hiệu quả, Tiêu chí ĐG chi phí, Loại TK, Loại hình tiếp nhận, Kênh tiếp nhận, **Tỉnh/Thành phố** (FR-VIII-30) | click → chuyển tab | luôn hiển thị |
+| 2 | sidebar | Tab dọc bên trái (15 tab) | tab | 15 loại danh mục: Lĩnh vực PL, Loại hình HT, Chương trình HT, Tình trạng VV, Cơ quan ĐV, Loại DN, Hồ sơ đề nghị HT, Hồ sơ đề nghị TT, Tiêu chí ĐG hiệu quả, Tiêu chí ĐG chi phí, Loại TK, Loại hình tiếp nhận, Kênh tiếp nhận, **Tỉnh/Thành phố** (FR-VIII-30), **Lĩnh vực kinh doanh** (FR-VIII-31) | click → chuyển tab | luôn hiển thị |
 | 3 | toolbar | Nút thêm mới | button | [+ Thêm mới] | click → mở modal CRUD | luôn hiển thị |
 | 4 | filter-bar | Ô tìm kiếm | search-box | Tìm theo mã hoặc tên | change → filter | luôn hiển thị |
 | 5 | content | Cột Mã | table-column | Mã danh mục (unique, max 20 ký tự) | — | luôn hiển thị |
@@ -1777,7 +1828,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 13 | content | Chức vụ người đại diện | text-input | Tùy chọn | — | luôn |
 | 14 | content | Email | text-input | Bắt buộc, RFC 5322, unique trên TAI_KHOAN.email. Tooltip: "Email này dùng đăng ký tài khoản (login + nhận mail kích hoạt + reset MK + 2FA + thông báo) đồng thời là email liên hệ của DN. Sau khi đăng ký, có thể đổi 2 trường này độc lập trong phần Cập nhật thông tin." | Lỗi trùng: "Email đã được sử dụng" | luôn |
 | 15 | content | Số điện thoại liên hệ | text-input | Bắt buộc | — | luôn |
-| 16 | content | Lĩnh vực kinh doanh chính | text-input | Tùy chọn | — | luôn |
+| 16 | content | Lĩnh vực kinh doanh | multi-select có search | Tùy chọn, multi `linh_vuc_ids` — chọn 1 hoặc nhiều ngành VSIC cấp 4 (FK → DANH_MUC `loai='LINH_VUC_KINH_DOANH'`, quản lý ở FR-VIII-31). Dropdown chỉ cho chọn bản ghi cấp 4 đang `KICH_HOAT`; bản ghi cấp 1 A–V chỉ dùng làm group header, không chọn được. Option cấp 4 hiển thị dạng "mã cấp 4 — tên cấp 4" (vd "2610 — Sản xuất linh kiện điện tử"). Header cấp 1 hiển thị dạng "mã cấp 1 — tên cấp 1" (vd "C — Công nghiệp chế biến, chế tạo") theo `danh_muc_cha_id`. Search không phân biệt hoa/thường, hỗ trợ có dấu/không dấu, match theo mã/tên cấp 4 và mã/tên cấp 1 cha; nếu query match cấp 1 cha thì hiển thị toàn bộ cấp 4 con đang `KICH_HOAT` thuộc nhóm đó | — | luôn |
 | 17 | content | Ghi chú | textarea | Tùy chọn | — | luôn |
 | 18 | content | File đính kèm (Giấy ĐKKD, etc.) | file-upload | Tùy chọn, multi | — | luôn |
 | **Nhóm 2 — Tài khoản đăng nhập** (3 trường nhập + 1 ô hiển thị readonly) | | | | | | |
@@ -2018,6 +2069,37 @@ erDiagram
 
 **Seed Data:** ~100 records.
 
+### 3.4.3.50a VAI_TRO_QUYEN_HAN (owned)
+
+**Mô tả:** Bảng nối N:M giữa VAI_TRO và QUYEN_HAN với row-level RBAC scope (`pham_vi_du_lieu`, `cap`, `don_vi_id`, `linh_vuc_id`) — gán quyền cho vai trò trong phạm vi cụ thể (toàn hệ thống / theo cấp / theo đơn vị / theo lĩnh vực / theo người tạo). Phục vụ UC114 (tạo vai trò) + UC115 (gán/thu hồi quyền cho vai trò). Đồng bộ §3.4.3.50a master.
+**Module:** Nhóm VIII — Quản trị hệ thống
+**Tham chiếu FR:** FR-VIII-14 (UC114 — Quản lý vai trò), FR-VIII-15 / FR-VIII-17 (UC115 — Phân quyền chức năng)
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
+| 2 | vai_tro_id | identifier | Y | FK → VAI_TRO(id) | — | Vai trò được gán quyền |
+| 3 | quyen_han_id | identifier | Y | FK → QUYEN_HAN(id) | — | Quyền hạn cụ thể |
+| 4 | pham_vi_du_lieu | text | Y | CHECK IN ('TOAN_HE_THONG','THEO_CAP','THEO_DON_VI','THEO_LINH_VUC','THEO_NGUOI_TAO') | 'THEO_DON_VI' | Phạm vi dữ liệu áp dụng (RBAC scope) |
+| 5 | cap | text | N | CHECK IN ('TW','BN','DP'); chỉ điền khi `pham_vi_du_lieu='THEO_CAP'` | — | Cấp áp dụng (theo BR-AUTH-08) |
+| 6 | don_vi_id | identifier | N | FK → DON_VI(id); chỉ điền khi `pham_vi_du_lieu='THEO_DON_VI'` | — | Đơn vị áp dụng |
+| 7 | linh_vuc_id | identifier | N | FK → DANH_MUC(id) `loai='LINH_VUC_PL'`; chỉ điền khi `pham_vi_du_lieu='THEO_LINH_VUC'` | — | Lĩnh vực pháp luật áp dụng |
+| 8 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
+| 9 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người gán quyền (NULL khi seed data) |
+| 10 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
+
+**CHECK constraints bổ sung:**
+- `UNIQUE (vai_tro_id, quyen_han_id, pham_vi_du_lieu)` — không cho gán trùng cùng phạm vi
+- Quy tắc kiểm tra dữ liệu (đảm bảo cột phụ khớp với phạm vi):
+  - `pham_vi_du_lieu = 'THEO_CAP'` → `cap` bắt buộc, các cột `don_vi_id`, `linh_vuc_id` phải rỗng
+  - `pham_vi_du_lieu = 'THEO_DON_VI'` → `don_vi_id` bắt buộc, các cột `cap`, `linh_vuc_id` phải rỗng
+  - `pham_vi_du_lieu = 'THEO_LINH_VUC'` → `linh_vuc_id` bắt buộc, các cột `cap`, `don_vi_id` phải rỗng
+  - `pham_vi_du_lieu IN ('TOAN_HE_THONG','THEO_NGUOI_TAO')` → cả 3 cột `cap`, `don_vi_id`, `linh_vuc_id` phải rỗng
+
+**Volume:** ~2,000 records | **Growth:** Theo nhu cầu phân quyền — tăng khi thêm vai trò mới hoặc tinh chỉnh phạm vi.
+
+**Tham chiếu quy tắc:** BR-AUTH-05 (lọc theo đơn vị), BR-AUTH-08 (phân quyền theo cấp), BR-AUTH-10 (lọc kép NHT/TVV/CG)
+
 ### 3.4.3.39 DANH_MUC (owned)
 
 **Mô tả:** Bảng danh mục dùng chung (key-value) cho lĩnh vực PL, loại hình HT, loại DN, tổ chức TV, kênh tiếp nhận.
@@ -2142,7 +2224,7 @@ stateDiagram-v2
 | BR-AUTH-06 | Session timeout | FR-VIII-20, FR-VIII-21 |
 | BR-AUTH-07 | Khóa TK sau 5 lần sai | FR-VIII-20 |
 | BR-AUTH-08 | chính sách phân quyền dữ liệu | FR-VIII-05 đến FR-VIII-29 (trừ FR-VIII-06 đã chuyển) |
-| BR-AUTH-09 | Cán bộ nội bộ chỉ Tier 1, không VNeID | FR-VIII-23, FR-VIII-25 |
+| BR-AUTH-13 | Cán bộ nội bộ chỉ Tier 1, không VNeID | FR-VIII-23, FR-VIII-25 |
 | BR-AUTH-USERNAME-01 | Quy ước sinh username theo loại TK (DN = MST 10 chữ số; CB nội bộ QTHT đặt; TVV/CG = local-part email; NHT CB NV nhập) | FR-VIII-15, FR-VIII-22 |
 | BR-AUTH-EMAIL-01 | Quy ước 2 email — TAI_KHOAN.email (login, UNIQUE) vs DOANH_NGHIEP.email (liên hệ tổ chức, không UNIQUE); UI 1 ô khi đăng ký, đổi độc lập sau không cần OTP | FR-VIII-22, FR-V.III-02 |
 | BR-DATA-01 | Soft delete | FR-VIII-05 đến FR-VIII-15, FR-VIII-18, FR-VIII-19, FR-VIII-29 (trừ FR-VIII-06) |
@@ -2199,11 +2281,11 @@ stateDiagram-v2
 |----|-------------------|-------|----------------------|---------|------------|
 | BR-AUTH-08 | chính sách phân quyền dữ liệu áp dụng cho MỌI bảng có cột `don_vi_id` | Architecture AD-07 | FR-VIII-05 đến FR-VIII-21 | AUDIT_LOG không có phân quyền | Verify phân quyền |
 
-### BR-AUTH-09: Cán bộ nội bộ chỉ Tier 1, không VNeID
+### BR-AUTH-13: Cán bộ nội bộ chỉ Tier 1, không VNeID
 
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm này) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|----------------------|---------|------------|
-| BR-AUTH-09 | Cán bộ nội bộ (Cán bộ Nghiệp vụ, Cán bộ Phê duyệt, Quản trị Hệ thống) chỉ đăng nhập bằng Tier 1 (tên đăng nhập + mật khẩu + mã xác thực 2 lớp) qua mạng kín. KHÔNG đăng nhập qua VNeID, KHÔNG đồng bộ tài khoản với VNeID qua UC123 | BA chốt 2026-05-05 (design-fixes Vấn đề 2) | FR-VIII-23 (UC121 đăng nhập VNeID), FR-VIII-25 (UC123 đồng bộ VNeID) | DN/NHT/TVV/CG vẫn được dùng VNeID bình thường | Verify FR-VIII-23 từ chối CB nội bộ với ERR-VN-04; FR-VIII-25 không cho CB nội bộ tham gia đồng bộ |
+| BR-AUTH-13 | Cán bộ nội bộ (Cán bộ Nghiệp vụ, Cán bộ Phê duyệt, Quản trị Hệ thống) chỉ đăng nhập bằng Tier 1 (tên đăng nhập + mật khẩu + mã xác thực 2 lớp) qua mạng kín. KHÔNG đăng nhập qua VNeID, KHÔNG đồng bộ tài khoản với VNeID qua UC123 | BA chốt 2026-05-05 (design-fixes Vấn đề 2) | FR-VIII-23 (UC121 đăng nhập VNeID), FR-VIII-25 (UC123 đồng bộ VNeID) | DN/NHT/TVV/CG vẫn được dùng VNeID bình thường | Verify FR-VIII-23 từ chối CB nội bộ với ERR-VN-04; FR-VIII-25 không cho CB nội bộ tham gia đồng bộ |
 
 ### BR-AUTH-USERNAME-01: Quy ước sinh username theo loại tài khoản
 

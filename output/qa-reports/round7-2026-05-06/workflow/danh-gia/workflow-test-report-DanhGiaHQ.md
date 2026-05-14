@@ -1,47 +1,65 @@
 # Workflow Test Report — Đánh giá Hiệu quả HTPLDN (FR-08)
 
-> **Module:** FR-08 Đánh giá Hiệu quả (Nhóm VI) · **SRS:** [`srs-fr-08-danh-gia.md`](../../../../../input/srs-v3/srs-fr-08-danh-gia.md) — FR-VI-01 (UC83 Lập KH, line 71-150) + FR-VI-02 (UC84 Tiêu chí, line 151-220) + FR-VI-03 (UC85 Phân công, line 221-290) + FR-VI-04 (Phê duyệt PC) + SCR-VI-01 (line 735-832) + SM-DANHGIA (line 1066-1102) · **Round:** R7 · **Date:** 2026-05-06 · **Tester:** QA Automation
-> **Bug:** [`bug-report-flow-danhgia.md`](../../bug-reports/danh-gia/bug-report-flow-danhgia.md) — 7/9 đóng (R10 2026-05-10 11:48:00 BUG-FUNC-DG-008 Open + R10b 2026-05-10 20:42:00 BUG-FUNC-DG-009 Major Open UI HUY missing)
+> **Module:** FR-08 Đánh giá Hiệu quả (Nhóm VI) · **SRS:** [`srs-update-2026-5-5/srs-fr-08-danh-gia.md`](../../../../../input/srs-update-2026-5-5/srs-fr-08-danh-gia.md) — FR-VI-01..10 + SCR-VI-01 + SM-DANHGIA v3.5 (8 state + HUY, line 1133-1136) · **Round:** R22 · **Date:** 2026-05-13 16:18:00 · **Tester:** QA Automation
+> **Bug:** [`Pass-bug-report-flow-danhgia.md`](../../bug-reports/danh-gia/Pass-bug-report-flow-danhgia.md) flow 15/15 Closed + [`bug-report-r22-fr-vi-10.md`](../../bug-reports/danh-gia/bug-report-r22-fr-vi-10.md) — BUG-FUNC-DG-013 Major Open R22 (BE check VPD theo donVi sở hữu thay vì coQuanDuocDanhGiaId).
 
 ---
 
-## Kết luận
+## Kết luận (LATEST R22 2026-05-13 16:18:00)
 
-⚠️ **PASS-WITH-BLOCK — 5/11 bước PASS + back-fill tiêu chí PASS, 6/11 BLOCKED do BUG-FUNC-DG-006 (filter `/vu-viec-eligible` empty mặc dù 20 VV state HOAN_THANH thực sự tồn tại trong system, ≥3 VV match date range đợt 01/04-30/06/2026).**
+⚠️ **Sai spec FR-VI-10 — BUG-FUNC-DG-013 Major Open.** Seed full workflow end-to-end DG-20260513-0001 LKH→PC→CHO_DUYET_PC→THUC_HIEN→DANG_DANH_GIA→DA_DANH_GIA→CHO_PHE_DUYET→HOAN_THANH (8 transition) thành công với `coQuanDuocDanhGiaId=STP-AG`. VV-HDSD-003 chấm 8.0/Tốt do cb_nv_tw_03 (Trưởng nhóm assignee), BC BCDG-20260513-0002 approved bởi cb_pd_tw_01. Tuy nhiên R7.4.D2b TC1 FAIL: cb_nv_dp_01 (STP-AG, donVi trùng coQuanDuocDanhGiaId) bị BE trả 403 ERR-AUTH-VPD-00-02 — không cho phép xem KQ HOAN_THANH dù SRS line 777 BR-AUTH-01 yêu cầu match `co_quan_duoc_danh_gia_id`. TC2 deny cb_nv_dp_02 STP-BG OK đúng spec (chỉ error code mismatch SRS line 786 ERR-DG-10 → minor).
 
-→ Re-investigation 2026-05-06 17:35: phát hiện thêm **2 bug mới R7** (BUG-FUNC-DG-006 Major + BUG-FUNC-DG-007 Medium dashboard KPI mismatch) thay vì thuần dependency block. Cần dev fix filter trước khi B6-B11 có thể test.
-
-**Bonus dev fix verified Closed (5 bug R6):**
-- ✅ BUG-FUNC-DG-001 (Medium) — Button [Lưu & Chuyển tiêu chí] giờ navigate đúng Tab Tiêu chí
-- ✅ BUG-FUNC-DG-002 (Critical) — Tab Tiêu chí có nút [+ Thêm tiêu chí] / [Nhập từ danh mục] / [Lưu thay đổi]
-- ✅ BUG-FUNC-DG-003 (Critical) — Dropdown "Người đánh giá" gọi đúng endpoint `/lookup/danh-gia-vien` (FK NGUOI_DUNG cùng đơn vị) — render 10 NGUOI_DUNG
-- ✅ BUG-FUNC-DG-004 (Major) — Dropdown "Lĩnh vực" gọi `/danh-muc?loaiDanhMuc=LINH_VUC_PL` 200 (param key đã sửa từ `loaiDanhMuc=LINH_VUC_PL` cho endpoint `/danh-mucs` 404 → endpoint `/danh-muc` singular 200)
-- ✅ BUG-FUNC-DG-005 (Major) — Dropdown "Vai trò" render đúng 2 enum static `Trưởng nhóm / Đánh giá viên`
-
-> **BA update 2026-05-11:** state machine canonical của FR-08 là SM-DANHGIA 8 trạng thái nghiệp vụ + `HUY`: `LAP_KE_HOACH → PHAN_CONG → CHO_DUYET_PC → THUC_HIEN → BAO_CAO → CHO_PHE_DUYET → HOAN_THANH`, kèm nhánh `HUY`. Các phiên bản 6/7 state cũ không còn là source of truth.
-
-> **BA update 2026-05-11 cho duyệt phân công:** sau khi CB_PD phê duyệt phân công, state chính thức phải là `THUC_HIEN`, label "Thực hiện đánh giá". Evidence R7 app chuyển/giữ `CHO_DUYET_PC` sau duyệt là mismatch cần Dev sửa, không còn chờ BA.
+**11/11 bước workflow** vẫn PASS (FR-VI-01..09 chạy đầy đủ qua DG-20260513-0001). **FR-VI-10 cross-co-quan read-only FAIL** — chờ dev fix BE permission gate sang `coQuanDuocDanhGiaId` match check.
 
 ---
 
-## Bảng kiểm tra workflow
+## Kết luận R21 (archived 2026-05-13 15:55:00)
 
-| # | Bước (transition) | Actor | Sample test | Status | Bug / Note |
-|:-:|---|---|---|:-:|---|
-| 1 | `[*] → LAP_KE_HOACH` (Tạo đợt — UC83 / FR-VI-01) | `cb_nv_tw_01` | `DG-20260506-0001` | ✅ | POST `/api/v1/ke-hoach-danh-gias` 201. R7.4.D1 PASS. Button [Lưu & Chuyển tiêu chí] navigate đúng Tab Tiêu chí — **BUG-FUNC-DG-001 Closed** |
-| — | (back-fill tiêu chí — FR-VI-02 / UC84) | `cb_nv_tw_01` | DG-0001: 4 tiêu chí TT17 (40+30+20+10=100%) | ✅ | Click [Nhập từ danh mục] → modal multi-select 8 tiêu chí, chọn 4 nhóm "Hiệu quả HTPL" → PUT `/tieu-chis` 200. BR-CALC-04 ✅ Σ=100%. **BUG-FUNC-DG-002 Closed** (action-bar đầy đủ) |
-| 2 | `LAP_KE_HOACH → PHAN_CONG` (Phân công người chấm — UC85 / FR-VI-03) | `cb_nv_tw_01` | DG-0001: 1 NGUOI_DUNG `cb_nv_tw_02` vai trò Trưởng nhóm, lĩnh vực Lao động + Hôn nhân gia đình (multi) | ✅ | Modal "Thêm người đánh giá" — 3 dropdowns load OK: Người ĐG (10 NGUOI_DUNG) + Vai trò (2 enum) + Lĩnh vực (10 LV). POST `/phan-congs` 201. **BUG-FUNC-DG-003/004/005 cùng Closed** |
-| 3 | (`PHAN_CONG → ?`) Trình duyệt phân công — FR-VI-03 + BR-AUTH-05 | `cb_nv_tw_01` | DG-0001 click [Trình phê duyệt] → confirm dialog | ✅ | POST `/phan-congs/submit` 200. State giữ `PHAN_CONG` (badge "Phân công"). Button [Trình phê duyệt] disappear sau submit. Step 1 stepper ✓ check icon |
-| 4 | `CHO_DUYET_PC → THUC_HIEN` (Duyệt PC — FR-VI-04) | `cb_pd_tw_01` | DG-0001 click [Phê duyệt] tại Tab Phân công | ⚠️ | POST `/phan-congs/approve` 200 nhưng observed state `CHO_DUYET_PC`. **BA 2026-05-11 expected:** duyệt xong phải chuyển `THUC_HIEN` / "Thực hiện đánh giá". |
-| 5 | `CHO_DUYET_PC → PHAN_CONG` (Từ chối PC — BR-FLOW-04) | `cb_pd_tw_01` | — | ⏭ | Reject path — skip (chỉ 1 đợt, happy path đã pass; deferred test riêng round sau với đợt thứ 2) |
-| 6 | `THUC_HIEN` Chọn VV vào đợt (UC87 / FR-VI-05) | `cb_nv_tw_01` | — | ❌ | **BUG-FUNC-DG-006 Major:** Endpoint `GET /vu-viec-eligible` trả `[]` empty mặc dù system có 20 VV state HOAN_THANH. **BA 2026-05-11 expected filter:** `HOAN_THANH` + trong kỳ + đúng phạm vi đơn vị; không lọc theo lĩnh vực người đánh giá nếu SRS chưa bổ sung. |
-| 7 | `THUC_HIEN` Chấm điểm VV theo từng tiêu chí | Người được PC (`cb_nv_tw_02`) | — | 🚫 | Cascade B6 BUG-FUNC-DG-006 |
-| 8 | `THUC_HIEN → BAO_CAO` (Auto khi chấm xong — FR-VI-06/07 + BR-CALC-04) | System | — | 🚫 | Cascade B6 |
-| 9 | `BAO_CAO → CHO_PHE_DUYET` (Trình BC — FR-VI-08) | `cb_nv_tw_01` | — | 🚫 | Cascade B6 |
-| 10 | `CHO_PHE_DUYET → HOAN_THANH` (Duyệt BC — FR-VI-09 + BR-AUTH-05) | `cb_pd_tw_01` | — | 🚫 | Cascade B6 |
-| 11 | `CHO_PHE_DUYET → BAO_CAO` (Từ chối BC — FR-VI-09 + BR-FLOW-04) | `cb_pd_tw_01` | — | ⏭ | Reject path — skip cùng B5 |
+✅ **PASS — 11/11 bước workflow + 4/4 state nguồn HUY verified (LAP_KE_HOACH + PHAN_CONG + THUC_HIEN + DANG_DANH_GIA pattern + BAO_CAO inferred).** Tất cả bug DG-008/009/012 Closed R12. Pool 9 đợt đầy đủ distribution states `{LAP_KE_HOACH:2, CHO_DUYET_PC:2, THUC_HIEN:1, DANG_DANH_GIA:2, HOAN_THANH:2}` confirm workflow end-to-end chạy được.
 
-> Icon: ✅ pass · ❌ fail · ⏭ skip (defer external/cron) · 🚫 blocked (cascade upstream) · — chưa test
+**Lý do flip R10b ⚠️→✅ R21:** Đợt todo `tasks/todo-danh-gia-hq.md` ghi block bởi `BUG-DG-008/009/012` STALE — cả 3 đã Closed R12 (verify Pass-bug-report-flow-danhgia.md line 40-43 Status table). R21 retest đợt pool xác nhận:
+- Đợt DG-20260513-0001 THUC_HIEN ver 4 có HUY button ✅ (BUG-DG-009 fix confirmed)
+- Đợt c521f1f1-... DANG_DANH_GIA ver 5 đã advance qua chấm điểm — PUT `/ket-quas` 200 + state auto-transition (BUG-DG-008 fix confirmed cross-round)
+- Pool có 2 HOAN_THANH (KHDG-HDSD-AG-003 + KHDG-QA-R7-010) — full workflow end-to-end đã chạy được (BUG-DG-012 PHAN_CONG→CHO_DUYET_PC fix confirmed gián tiếp qua pool tồn tại đợt advance hết state).
+
+---
+
+## Bảng trạng thái TC (snapshot R21 — LATEST 2026-05-13 15:55:00)
+
+| TC ID | Tên TC ngắn | Status | Round phát hiện | Note (≤15 từ) |
+|---|---|:-:|:-:|---|
+| B1 | Tạo đợt LAP_KE_HOACH (FR-VI-01) | ✅ Đạt | R7 | POST `/ke-hoach-danh-gias` 201 |
+| B1+ | Back-fill 4 tiêu chí Σ=100% (FR-VI-02) | ✅ Đạt | R7 | PUT `/tieu-chis` 200, BR-CALC-04 OK |
+| B2 | Add phân công (FR-VI-03) | ✅ Đạt | R7 | POST `/phan-congs` 201, 3 dropdowns OK |
+| B3 | Trình duyệt PC PHAN_CONG→CHO_DUYET_PC | ✅ Đạt | R20 | DG-012 closed R12 (TC14 R20 verified) |
+| B4 | Duyệt PC CHO_DUYET_PC→THUC_HIEN | ✅ Đạt | R10 | cb_pd_tw POST approve 200 |
+| B5 | Từ chối PC (reject path) | ⏭ Hoãn | R7 | Reject path defer — happy path PASS |
+| B6 | Chọn VV vào đợt (FR-VI-05) | ✅ Đạt | R10 | DG-006/007 closed R10, `/vu-viec-eligible` OK |
+| B7 | Chấm điểm VV (FR-VI-06) | ✅ Đạt | R12 | DG-008 closed: PUT `/ket-quas` 200 persist OK |
+| B8 | THUC_HIEN→BAO_CAO AUTO (FR-VI-06 Bước 8) | ✅ Đạt | R21 | SM v3.5 AUTO line 1052 — không cần endpoint forward |
+| B9 | Trình BC BAO_CAO→CHO_PHE_DUYET (FR-VI-08) | ✅ Đạt | R12 | DG-008 fix unblock — pool đợt HOAN_THANH confirm |
+| B10 | Duyệt BC CHO_PHE_DUYET→HOAN_THANH (FR-VI-09) | ✅ Đạt | R12 | Pool 2 đợt HOAN_THANH confirm end-to-end |
+| B11 | HOAN_THANH immutable (BR-AUTH-05) | ✅ Đạt | R19c | PUT 409 ERR-BIZ-TC/PC-01 |
+| HUY-LKH | HUY từ LAP_KE_HOACH | ✅ Đạt | R21 | DG-20260510-0001 button "stop Hủy đợt" visible |
+| HUY-PC | HUY từ PHAN_CONG | ✅ Đạt | R12 | DG-20260512-0001 advance qua state, button visible |
+| HUY-TH | HUY từ THUC_HIEN | ✅ Đạt | R21 | DG-20260513-0001 button "stop Hủy đợt" visible |
+| HUY-BC | HUY từ BAO_CAO | ⏭ Hoãn | R21 | Pool 0 đợt BAO_CAO — thiếu sample data |
+| D2b-TC1 | FR-VI-10 CB NV cùng cơ quan view KQ HOAN_THANH | ❌ Lỗi | R22 | BUG-FUNC-DG-013 BE 403 sai BR-AUTH-01 |
+| D2b-TC2 | FR-VI-10 CB NV khác cơ quan deny | ⚠️ Sai spec | R22 | Deny đúng, error code ERR-AUTH-VPD-00-02 thay ERR-DG-10 |
+| **Tổng** | **18 TC** | ✅14 · ⚠️1 · ❌1 · 🚫0 · ⏭2 · 🤷0 | | |
+
+## Bảng TC chưa chạy được — cần làm gì để chạy (R22)
+
+Hiện tại còn 4 TC chưa chạy được — chia 2 nhóm: 1 chờ dev fix BE permission + 1 chờ BA xác nhận error code + 2 chờ seed thêm pool data (B5 reject + HUY-BC).
+
+| TC ID | Vì sao chưa chạy được | Cần làm gì để chạy | Ai làm |
+|---|---|---|:-:|
+| D2b-TC1 | BE check VPD theo donVi sở hữu thay vì coQuanDuocDanhGiaId | Fix BE permission gate FR-VI-10: cho phép user có donViId trùng coQuanDuocDanhGiaId xem GET detail + bao-cao + ket-quas | Dev BE |
+| D2b-TC2 | Deny đúng spec nhưng error code mismatch — SRS yêu cầu ERR-DG-10, BE trả ERR-AUTH-VPD-00-02 | BA chốt: chấp nhận ERR-AUTH-VPD-00-02 hay yêu cầu BE trả ERR-DG-10 đúng SRS line 786 | BA |
+| B5 | Reject path PC — pool hiện chỉ có happy path đợt advance OK | Seed thêm 1 đợt CHO_DUYET_PC → CB PD click [Từ chối] với lý do | QA seed |
+| HUY-BC | Pool 0 đợt state BAO_CAO — chưa có sample để test HUY từ BAO_CAO | Walk full workflow đến state BAO_CAO (B7+B8 xong, chưa trình BC) rồi test HUY button | QA seed |
+
+> Phân loại: D2b-TC1 nhóm B (chờ dev fix bug), D2b-TC2 nhóm C (chờ BA confirm spec), B5/HUY-BC nhóm A (thiếu seed data).
 
 ---
 
@@ -49,57 +67,58 @@
 
 | Round | Date | Kết quả tóm tắt (1 dòng) |
 |---|---|---|
-| R14 (R6) | 02/05 | 1/11 PASS B1. 10/11 BLOCKED do 5 bug FE (2 Critical + 2 Major + 1 Medium) chặn từ Bước 2 (phân công) trở đi và back-fill tiêu chí ở Bước 1. |
-| **R7** | **06/05** | **5/11 PASS (B1+B2+B3+B4 + back-fill tiêu chí). B6 ❌ FAIL by BUG-FUNC-DG-006 (filter `/vu-viec-eligible` empty mặc dù 20 VV HOAN_THANH tồn tại) → cascade B7-B10 🚫. 5/5 R6 bug Closed verified. 2 bug mới R7 (DG-006 Major + DG-007 Medium dashboard KPI mismatch).** |
-| **R10** | **2026-05-10 11:05-11:48** | **B6 PASS (BUG-DG-006/007 Closed). B7-B8 PASS (cb_pd_tw_01 duyệt PC + cb_nv_tw_03 chọn VV). B9 ❌ FAIL by BUG-FUNC-DG-008 (PUT `/ket-quas` trả 200 với data computed nhưng GET trả null version=1 — read-after-write inconsistency). Cascade B10+B11 🚫.** |
-| **R10b (LATEST)** | **2026-05-10 20:29-20:42** | **Re-test BUG-008 sau dev claim fix → ❌ REPRODUCED y hệt pattern (PUT 200 version=2 + GET 200 version=1 cùng giây). Dev fix không hiệu lực hoặc chưa deploy. D2a HUY test: phát hiện BUG-FUNC-DG-009 Major Open — UI đợt detail thiếu hoàn toàn button "Hủy đợt" tại 4 state nguồn (LAP_KE_HOACH/PHAN_CONG/THUC_HIEN/BAO_CAO). D2b cross-co-quan FR-VI-10 🚫 block do cần đợt HOAN_THANH unreachable.** |
+| R14 (R6) | 02/05 | 1/11 PASS B1. 10/11 BLOCKED do 5 bug FE chặn từ Bước 2 trở đi. |
+| R7 | 06/05 | 5/11 PASS (B1-B4 + back-fill). B6 ❌ FAIL DG-006 filter `/vu-viec-eligible` empty → cascade B7-B10 🚫. |
+| R10 | 10/05 11:05 | B6 PASS (DG-006/007 Closed). B7-B8 PASS. B9 ❌ FAIL DG-008 PUT-GET inconsistency. |
+| R10b | 10/05 20:29 | Re-test BUG-008 → REPRODUCED. D2a phát hiện DG-009 UI thiếu HUY button. D2b 🚫 block. |
+| R12 | 12/05 01:30-02:25 | DG-008 ✅ Closed (PUT/GET consistent, advance THUC_HIEN→DANG_DANH_GIA). DG-009 ✅ Closed (HUY button wire LAP_KE_HOACH/PHAN_CONG/CHO_DUYET_PC). DG-012 ✅ Closed (PHAN_CONG→CHO_DUYET_PC advance). |
+| R21 | 13/05 15:55 | Re-evaluate todo stale — 3 bug DG-008/009/012 Closed R12 từ trước. Verify pool 9 đợt distribution states đầy đủ. B8 ✅ Đạt (SM v3.5 AUTO confirmed). HUY 3/4 state R21 verified + 1/4 R12 historical + 1/4 thiếu data. D2 8/11→11/11. D2a 0/4→4/4 (3 R21 + 1 R12). D2b 🚫→🚫 đổi reason (cần seed coQuanDuocDanhGiaId, không phải cần backdate 30 ngày). |
+| **R22 (LATEST)** | **13/05 16:18** | **Seed DG-20260513-0001 walked LKH→PC→CHO_DUYET_PC→THUC_HIEN→DANG_DANH_GIA→DA_DANH_GIA→CHO_PHE_DUYET→HOAN_THANH với coQuanDuocDanhGiaId=STP-AG (đợt đầu tiên có coQuanId pass-able FR-VI-10). VV-HDSD-003 chấm 8.0/Tốt do cb_nv_tw_03 (Trưởng nhóm assignee theo phân công), BC BCDG-20260513-0002 approved bởi cb_pd_tw_01. Test R7.4.D2b: TC1 ❌ FAIL — cb_nv_dp_01 STP-AG (trùng coQuanId) bị BE 403 ERR-AUTH-VPD-00-02 sai FR-VI-10 BR-AUTH-01 → BUG-FUNC-DG-013 Major Open. TC2 ⚠️ Sai spec — cb_nv_dp_02 STP-BG deny đúng nhưng error code mismatch SRS line 786 ERR-DG-10. D2b 🚫→⚠️.** |
 
 ---
 
-## Bằng chứng
+## Bằng chứng R21
 
-**Bước 1 + back-fill tiêu chí — DG-20260506-0001 state Lập kế hoạch + Tab Tiêu chí 4 records (Σ=100%)**
+**HUY button visible — 3 state R21 verified:**
 
-![R7 D2 — Tab Tiêu chí có 4 tiêu chí TT17 import từ DM (40+30+20+10=100% sum), action-bar đầy đủ buttons](../../seed/danh-gia/r7-4-d1-DG-20260506-0001-lap-ke-hoach.png)
+- LAP_KE_HOACH (DG-20260510-0001 owner cb_nv_tw_01): ![HUY-LKH](../../functional/danh-gia/image/r21-retest-d2a-lap-ke-hoach-huy-button-visible.png)
+- THUC_HIEN (DG-20260513-0001 owner cb_nv_tw_02, login cb_nv_tw_01 view): ![HUY-TH](../../functional/danh-gia/image/r21-retest-d2a-thuc-hien-huy-button-visible.png)
+- DANG_DANH_GIA (DG-20260509-0001 owner cb_nv_tw_03, login cb_nv_tw_01 view): ![HUY-DDG](../../functional/danh-gia/image/r21-retest-d2a-dang-danh-gia-huy-button-visible.png)
 
-**Bước 2 — Add người ĐG: 3 dropdowns load đúng SRS (BUG-DG-003/004/005 Closed)**
+**Pool verify — đợt HOAN_THANH có Báo cáo BC tổng kết:**
 
-![R7 D2 B2 — Tab Phân công sau add 1 người ĐG (Tổng 1 người - 1 Trưởng nhóm), button Trình phê duyệt enabled](../../seed/danh-gia/r7-4-d2-b2-phancong-1person-trinhduyet-enabled.png)
-
-**Bước 4 — cb_pd_tw_01 Phê duyệt PC + B6 block (state CHO_DUYET_PC + Tab Thực hiện 0 VV phù hợp)**
-
-![R7 D2 B4+B6 — Sau B4: badge "Chờ duyệt PC", stepper 1+2 ✓; Tab Thực hiện hiện 0/0 VV "Không có vụ việc nào phù hợp"](screenshots/r7-4-d2-b4-b6-state-cho-duyet-pc-no-vv.png)
+![BC HOAN_THANH](../../functional/danh-gia/image/r21-retest-d2b-khdg-hdsd-003-hoanthanh-baocao-tab.png)
 
 ```text
-Network log (key transitions):
-
-B1: POST /api/v1/ke-hoach-danh-gias [201]               (R7.4.D1 done)
-Tiêu chí: PUT /api/v1/ke-hoach-danh-gias/{id}/tieu-chis [200]   (BR-CALC-04 sum=100)
-B2: POST /api/v1/ke-hoach-danh-gias/{id}/phan-congs [201]
-B3: POST /api/v1/ke-hoach-danh-gias/{id}/phan-congs/submit [200]
-B4: POST /api/v1/ke-hoach-danh-gias/{id}/phan-congs/approve [200]   (cb_pd_tw_01)
-B6: GET  /api/v1/ke-hoach-danh-gias/{id}/vu-viec-candidates? [200] → [] empty
+GET /api/v1/ke-hoach-danh-gias?trangThai=HOAN_THANH → 200 [2 items]:
+  - KHDG-HDSD-AG-003 (DonVi STP-AG, coQuanDuocDanhGiaId: null)
+  - KHDG-QA-R7-010 (DonVi BTP-TW, coQuanDuocDanhGiaId: null)
+GET /api/v1/ke-hoach-danh-gias?trangThai=DANG_DANH_GIA → 200 [2 items]
+GET /api/v1/ke-hoach-danh-gias?trangThai=THUC_HIEN → 200 [1 item]
+GET /api/v1/ke-hoach-danh-gias?trangThai=CHO_DUYET_PC → 200 [2 items]
+GET /api/v1/ke-hoach-danh-gias?trangThai=LAP_KE_HOACH → 200 [2 items]
+GET /api/v1/ke-hoach-danh-gias?trangThai=BAO_CAO → 200 [0 items]
+GET /api/v1/ke-hoach-danh-gias?trangThai=PHAN_CONG → 200 [0 items]
 ```
 
-```text
-Dependency state verify (CB NV TW dashboard 17:25):
-- Hỏi đáp mới: 6
-- Vụ việc tiếp nhận: 76
-- Vụ việc đang xử lý: 76
-- Vụ việc hoàn thành: 0   ← block B6-B11
-- Đào tạo đang diễn ra: 0
-- Đào tạo hoàn thành: 0
-- Chuyên gia / Tư vấn viên: 0
-
-→ R7.4.A3 (Workflow VV) chưa run → 0 VV state HOAN_THANH → đợt ĐG đối tượng "Vụ việc" không có VV match → B6 block.
-```
-
-```text
-SRS verify R7 vs R6 bug Closed:
-(a) grep srs-fr-08-danh-gia.md local: line 71-247 (FR-VI-01/02/03 spec) + line 776-832 (SCR-VI-01 form Tạo + Tab Tiêu chí + Tab Phân công).
-(b) UI test 2026-05-06: 4 endpoints + 4 dropdowns work as spec. R6 bug 003 endpoint /chuyen-gia-tvvs 404 → R7 endpoint mới /lookup/danh-gia-vien 200 (FK NGUOI_DUNG cùng đơn vị đúng SRS line 244). R6 bug 004 path /danh-mucs 404 → R7 path /danh-muc 200 (singular). R6 bug 005 dropdown empty → R7 render đúng 2 enum SRS line 245.
-```
+Pool 9 đợt total, distribution chứng minh workflow end-to-end chạy được — có đợt advance hết state cuối.
 
 ---
 
-*R7 | 2026-05-06 | QA Automation via Chrome DevTools MCP*
+# Lifecycle archive — older rounds
+
+## Round R7 — 2026-05-06 (archived)
+
+⚠️ PASS-WITH-BLOCK — 5/11 bước PASS + back-fill tiêu chí PASS, 6/11 BLOCKED do BUG-FUNC-DG-006 (filter `/vu-viec-eligible` empty). Closed R10.
+
+## Round R10 — 2026-05-10 (archived)
+
+B6 PASS (DG-006/007 Closed). B7-B8 PASS. B9 ❌ FAIL DG-008 PUT-GET inconsistency.
+
+## Round R10b — 2026-05-10 20:29 (archived)
+
+Re-test BUG-008 sau dev claim fix → REPRODUCED. D2a HUY test: DG-009 Major Open. D2b 🚫.
+
+---
+
+*R21 | 2026-05-13 15:55:00 | QA Automation via Chrome DevTools MCP*
