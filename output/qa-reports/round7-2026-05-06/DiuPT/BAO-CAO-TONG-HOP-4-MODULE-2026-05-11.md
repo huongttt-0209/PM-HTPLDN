@@ -143,7 +143,7 @@
 
 ## 8. Reference
 
-- **Bug reports mới R11 19:23:** [bug-report-r7-7-6-chuyen-trang-vpd-inbound.md](../bug-reports/dao-tao/bug-report-r7-7-6-chuyen-trang-vpd-inbound.md)
+- **Bug reports mới R11 19:23:** [Pass-bug-report-r7-7-6-chuyen-trang-vpd-inbound.md](../bug-reports/dao-tao/Pass-bug-report-r7-7-6-chuyen-trang-vpd-inbound.md)
 - **Todo modules:** [todo-dao-tao.md](../../../tasks/todo-dao-tao.md) · [todo-bieu-mau.md](../../../tasks/todo-bieu-mau.md) · [todo-ct-htpldn.md](../../../tasks/todo-ct-htpldn.md) · [todo-qtht.md](../../../tasks/todo-qtht.md)
 - **Functional reports gần nhất:**
   - Đào tạo: [functional-test-report-r7-7-6-khoa-hoc-r10.md](../functional/dao-tao/functional-test-report-r7-7-6-khoa-hoc-r10.md)

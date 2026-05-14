@@ -252,7 +252,7 @@
 ## Reference
 
 - [Báo cáo tổng hợp 4 module](BAO-CAO-TONG-HOP-4-MODULE-2026-05-11.md)
-- [Bug report mới — Chuyên trang VPD + Inbound](../bug-reports/dao-tao/bug-report-r7-7-6-chuyen-trang-vpd-inbound.md)
+- [Bug report mới — Chuyên trang VPD + Inbound](../bug-reports/dao-tao/Pass-bug-report-r7-7-6-chuyen-trang-vpd-inbound.md)
 - [permission-matrix.md](../../../permission-matrix.md) — line 534 NHT BIEU_MAU
 - [SRS v3.5](../../../../input/srs-update-2026-5-5/srs-v3.5.md) · [SRS v3 base](../../../../input/srs-v3/)
 
