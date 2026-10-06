@@ -1,0 +1,5 @@
+❌ Không phải bug.
+- Chức năng: Báo cáo thống kê › BC Đánh giá hiệu quả HTPL › Xuất Excel (UC132).
+- Đối tác phản ánh: bấm Xuất Excel báo lỗi "Không thể tạo file xuất. Vui lòng thử lại.".
+- Kiểm tra lại (kỳ Năm 2026, đơn vị Toàn quốc, báo cáo đã có dữ liệu: 2 đợt / 4 lượt đánh giá): bấm Xuất Excel → hệ thống báo "Tạo file thành công" và tải về file .xlsx đầy đủ (tiêu đề + kỳ + đơn vị + ngày tạo + số liệu 3 đơn vị đúng). Lỗi không xảy ra.
+→ Đối tác kiểm tra lại.

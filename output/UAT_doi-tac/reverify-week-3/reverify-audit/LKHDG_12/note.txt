@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: file Excel "Xuất Excel" từ màn danh sách đợt đánh giá có 2 vấn đề (đã đọc trực tiếp nội dung file xuất ra, tài khoản CB Nghiệp vụ TW):
+  1) Thiếu cột: file chỉ có 7 cột (Mã KH, Tên đợt, Tần suất, Đối tượng, Từ ngày, Đến ngày, Trạng thái) — THIẾU 3 cột đang hiển thị trên bảng danh sách: "Số vụ việc", "Người tạo", "Ngày tạo".
+  2) Cột Tần suất / Đối tượng / Trạng thái ghi MÃ enum thô (TRON_NAM, VU_VIEC, LAP_KE_HOACH, CHO_PHE_DUYET, HOAN_THANH) thay vì nhãn tiếng Việt như trên giao diện ("Trọn năm", "Vụ việc", "Lập kế hoạch"...). Đối tác mô tả là "hiển thị không dấu".
+- Chuẩn: SRS SCR-VI-01 quy định các cột này hiển thị nhãn tiếng Việt (Tần suất: TRON_NAM → nhãn "Tròn năm", dòng 821; Trạng thái: nhãn theo máy trạng thái SM-DANHGIA, dòng 824). File xuất phải trình bày dữ liệu người dùng đọc được và nhất quán với bảng danh sách.
+- Về ý "xuất sai tiêu chí lọc": lần kiểm này export ở chế độ không lọc trả đúng 3 đợt; chưa tái hiện được lỗi lọc (phiên đăng nhập hết hạn khi thử áp bộ lọc). Hai lỗi trên đã đủ căn cứ.
+- Mã lỗi nội bộ: BUG-LKHDG_12.

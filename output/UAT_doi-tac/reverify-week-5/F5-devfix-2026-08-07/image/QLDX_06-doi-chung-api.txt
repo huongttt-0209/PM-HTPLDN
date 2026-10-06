@@ -1,0 +1,145 @@
+================================================================================
+QLDX_06 — DOI CHUNG DOC LAP (dung MOT duong / nhanh)
+Muc dich: chung minh phien bi HUY THAT o phia may chu, khong phai chi la FE
+tu dieu huong ve /login (chuan cham §4 "Chan PASS-oan").
+Cach goi: fetch('/api/v1/auth/me', {credentials:'include', cache:'no-store'})
+goi TU TRONG TRANG, vi access_token la cookie HttpOnly (document.cookie = rong).
+================================================================================
+
+NHANH 1 — BAM [Dang xuat] TREN HOP THOAI
+--------------------------------------------------------------------------------
+LAN DO B (chinh thuc)
+  Thoi diem goi        : 2026-08-07 02:50:14 gio VN
+  Server `date` header : Thu, 06 Aug 2026 19:50:14 GMT  (= 02:50:14 VN)
+  MA HTTP THAT         : **401**
+  Body:
+    {"success":false,"error":{"code":"ERR-AUTH-SYS-00-01",
+     "message":"Yêu cầu đăng nhập (thiếu token xác thực)",
+     "timestamp":"2026-08-06T19:50:14.332Z",
+     "requestId":"4660c836-9d95-4b47-9a8f-b3578ae34f98"}}
+  document.cookie      : "" (rong)
+
+LAN DO A (doi chieu, cung ket qua)
+  Thoi diem goi        : 2026-08-07 02:44:32
+  Server `date` header : Thu, 06 Aug 2026 19:44:32 GMT
+  MA HTTP THAT         : **401**  · code ERR-AUTH-SYS-00-01
+                         requestId 17ea682a-e03e-4ce6-9d49-487a0172a9fd
+
+NHANH 2 — DE IDLE TOI PHUT 30
+--------------------------------------------------------------------------------
+LAN DO C (dong ho that, chinh thuc cho moc 30')
+  Thoi diem goi        : 2026-08-07 03:00:15 gio VN  (= moc 30' + 80 s)
+  Server `date` header : Thu, 06 Aug 2026 20:00:15 GMT  (= 03:00:15 VN)
+  MA HTTP THAT         : **401**
+  Body:
+    {"success":false,"error":{"code":"ERR-AUTH-SYS-00-01",
+     "message":"Yêu cầu đăng nhập (thiếu token xác thực)",
+     "timestamp":"2026-08-06T20:00:15.213Z",
+     "requestId":"6ad26431-ed5f-4665-b8e7-888591bbfd35"}}
+  document.cookie      : "" (rong)
+  auth-last-activity   : 1786044534888 = 02:28:54.888 = DUNG baseline, CHUA
+                         TUNG bi reset trong ca 30 phut idle.
+
+KET LUAN CUA DOI CHUNG (va gioi han cua no — ghi ro, khong suy qua)
+--------------------------------------------------------------------------------
+  Ca 2 nhanh: 401, KHONG phai 200 => sau khi ve /login, may chu KHONG con coi
+  phien la hop le. Phien da bi ket thuc THAT, khong phai FE chi doi man hinh.
+  ==> Khop srs-fr-10-quan-tri.md:1004 (buoc 5 "Chuyen huong ve man hinh dang
+      nhap") va :1002 (buoc 4 "Xoa phien/cookie phia client").
+  GIOI HAN: ma loi tra ve la ERR-AUTH-SYS-00-01 "thieu token xac thuc", tuc
+  401 nay chung minh COOKIE DA BI XOA (khong con token de gui len). No KHONG
+  tu minh chung minh JWT da bi cho vao DANH SACH DEN theo :1001, vi khong con
+  token nao duoc gui de may chu co co hoi tra ve loi "token bi thu hoi".
+  Bang chung ve phia may chu cho viec huy phien nam o response cua chinh cu
+  logout (xem duoi): may chu chu dong het han CA HAI cookie.
+
+BANG CHUNG SERVER-SIDE TU CHINH CU LOGOUT
+--------------------------------------------------------------------------------
+NHANH 1 (LAN DO A — da dump day du header)
+  POST https://18.143.165.120.nip.io/api/v1/auth/logout  ->  200
+  referer     : /chuyen-gia-tvv/danh-sach
+  server date : Thu, 06 Aug 2026 19:43:45 GMT  (= 02:43:45 VN, khop moc bam)
+  set-cookie  : refresh_token=; Path=/api/v1/auth; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Strict
+                access_token=;  Path=/;            Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Strict
+  JWT gui kem : jti=dee8cb16-3037-47d1-bf48-1c9e90aa3f89, iat=1786045306
+                (02:41:46), idleTtl=1800, vaiTro=["CB_NV_TW"], capDonVi=TW
+  ==> may chu chu dong het han CA HAI cookie (access_token + refresh_token).
+NHANH 1 (LAN DO B): reqid=646 POST /api/v1/auth/logout [200] (cung endpoint,
+  cung ket qua; header khong dump lai).
+
+NHANH 2 (LAN DO C)
+  POST https://18.143.165.120.nip.io/api/v1/auth/logout  ->  200  (reqid=798)
+  referer     : /chuyen-gia-tvv/danh-sach   <== gui TU TRANG APP truoc khi reload
+  server date : Thu, 06 Aug 2026 19:58:55 GMT  (= 02:58:55 VN)
+                t_logout_goc = 02:58:54.888  ==> LECH DUOI 1 GIAY
+  set-cookie  : refresh_token=; ... Expires=Thu, 01 Jan 1970 00:00:00 GMT
+                access_token=;  ... Expires=Thu, 01 Jan 1970 00:00:00 GMT
+  JWT gui kem : jti=bbe0ace4-4f72-4ae9-87d9-d611eeb6f202, iat=1786045983
+                (02:53:03), idleTtl=1800
+  ==> Nhanh idle 30' KHONG chi la FE tu xoa: FE co goi xuong may chu, may chu
+      xu ly 200 va het han cookie. Khop :1000 ("Nhan yeu cau dang xuat (click
+      "Dang xuat" HOAC timeout 30 phut)") va :1959 ("30 phut -> Auto invalidate
+      -> Redirect MH-10.8b").
+
+CO HAY KHONG 401 TRUOC LUC CHUYEN TRANG?  (bay quan trong nhat cua nhanh 2)
+--------------------------------------------------------------------------------
+Cau hoi phai chan: "tu dang xuat do dong ho" hay "bi da do may chu tra 401"?
+
+NHANH 2 (LAN DO C) — dump 28/28 request xhr+fetch, khong cat trang:
+  reqid=703 GET  /api/v1/auth/me                       [401]  <-- probe TRUOC khi dang nhap, referer /login
+  reqid=704 POST /api/v1/auth/login                    [200]
+  reqid=705 POST /api/v1/auth/verify-otp               [200]
+  reqid=706 GET  /api/v1/auth/me                       [304]
+  reqid=723 GET  /api/v1/thong-baos/unread-count       [304]
+  reqid=724 GET  /api/v1/don-vi/public                 [304]
+  reqid=725 GET  /api/v1/dashboard?nam=2026            [200]
+  reqid=726 GET  /api/v1/dashboard/chart/hieu-qua-ho-tro?nam=2026    [200]
+  reqid=727 GET  /api/v1/dashboard/chart/chat-luong-dao-tao?nam=2026 [200]
+  reqid=782 GET  /api/v1/to-chuc-tu-vans?...           [304]
+  reqid=783 GET  /api/v1/danh-muc/tree?...             [304]
+  reqid=784 GET  /api/v1/tu-van-viens?...HOAT_DONG     [304]
+  reqid=785 GET  /api/v1/tu-van-viens?...MOI_DANG_KY   [200]
+  reqid=786 GET  /api/v1/tu-van-viens?...YEU_CAU_BO_SUNG [304]
+  reqid=787..797 GET /api/v1/thong-baos/unread-count   [304] x 11  <-- poll nen suot 5 phut cho
+  reqid=798 POST /api/v1/auth/logout                   [200]  <-- 02:58:55, cu tu dang xuat
+  reqid=826 GET  /api/v1/auth/me                       [401]  <-- probe cua trang /login MOI
+  reqid=827 GET  /api/v1/auth/me                       [401]  <-- cu doi chung cua QA
+  Thong ke: 401 x 3 · 200 x 5 · 304 x 20 · 0 loi 5xx · 0 loi 4xx khac.
+  ==> TAT CA 11 request nen trong khoang cho deu 304 (co cookie, con hieu luc).
+      KHONG CO BAT KY 401 NAO truoc reqid=798.
+  ==> KET LUAN: day la TU DANG XUAT DO DONG HO IDLE, khong phai bi da do may
+      chu tra 401. Bay "nham modal/nham nguyen nhan 401" da bi loai tru.
+  ==> Dong thoi loai tru Bay do #3 (man tu lam moi): poll nen
+      /thong-baos/unread-count chay deu ~30 s/lan suot 5 phut ma
+      auth-last-activity KHONG he bi ghi lai (moc con nguyen = 1 o 100% mau)
+      => FE tinh idle theo SU KIEN NGUOI DUNG, khong theo hoat dong mang.
+
+NHANH 1 (LAN DO B) — dump 17/17 request xhr+fetch:
+  reqid=553 GET  /api/v1/auth/me                 [304]
+  reqid=574..580, 639..645  (unread-count / don-vi / dashboard / tu-van-viens)  [304/200]
+  reqid=645 GET  /api/v1/thong-baos/unread-count [304]  <-- request cuoi TRUOC khi bam
+  reqid=646 POST /api/v1/auth/logout             [200]  <-- chinh cu bam [Dang xuat]
+  reqid=674 GET  /api/v1/auth/me                 [401]  <-- probe cua trang /login MOI
+  reqid=675 GET  /api/v1/auth/me                 [401]  <-- cu doi chung cua QA
+  ==> KHONG co 401 nao giua reqid=645 va reqid=646 => viec chuyen ve /login la
+      HE QUA CUA CU BAM, khong phai do may chu da phien.
+
+TAB CO BI DAY SANG chrome-error://chromewebdata KHONG?
+--------------------------------------------------------------------------------
+  KHONG. O ca 2 nhanh, URL sau khi chuyen deu la
+  https://18.143.165.120.nip.io/login (doc bang location.href), va trang dich
+  render day du form dang nhap + goi duoc /api/v1/auth/me toi may chu (401 that,
+  co body JSON, co header `date` cua nginx). Neu la loi mang thi khong the co
+  response JSON tu may chu. => Khong gap trieu chung "rot mang gia dang tu
+  dang xuat".
+
+CONSOLE (loi/canh bao cua APP, khong tinh do do cua QA)
+--------------------------------------------------------------------------------
+  Sau khi loc bo cac message do QA tu chen (tien to "QLDX06NOTI", "QX|", "QY|")
+  chi con: "Failed to load resource: the server responded with a status of 401"
+  — day la cu probe /api/v1/auth/me cua trang /login khi chua co token, hanh vi
+  binh thuong, khong phai loi.
+  Ngoai ra co 1 loi cua CHINH BO DO o lan do A: "Uncaught TypeError: Failed to
+  execute 'observe' on 'MutationObserver': parameter 1 is not of type 'Node'"
+  => loi cua QA, khong phai loi app. Da sua va da self-test lai.
+  KHONG co loi 5xx, KHONG co TypeError nao cua app.

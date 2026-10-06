@@ -1,0 +1,16 @@
+✅ PASS sau Dev fix (14/08/2026) — UI DEV, `cbnv_tw_02`, OTP qua MailHog.
+- Reopen cũ là false-positive: `VV-BTP-TW-20260712-005` chỉ có thao tác thêm tài liệu `Bổ sung hồ sơ`, không từng qua trạng thái `Yêu cầu bổ sung`, nên không thuộc tử số.
+- Dữ liệu fresh `VV-BTP-TW-20260814-002`: lịch sử UI có `Yêu cầu bổ sung` 17:14 → `Hoàn thành` 17:16 ngày 14/08/2026.
+- Bộ lọc `2026 / Cả năm / Toàn quốc / Tất cả`: `24` vụ hoàn thành; tỷ lệ bổ sung `4,2%`, khớp `1/24 = 4,166…%` làm tròn. Danh sách 24 kết quả có hồ sơ fresh trên.
+→ Dev fix đạt, khép bug.
+Ảnh UI: `image/05-dashboard-after-apply-pass.png`; `image/04-fresh-case-full-history.png`; `image/07-completed-list-fresh-row.png`; `image/08-completed-list-total-24.png`.
+
+⏸ UAT CHƯA THỂ KẾT LUẬN (14/08/2026) — Chrome DevTools MCP, UI only, OTP qua MailHog.
+- `cbnv_tw`, bộ lọc `2026 / Cả năm / Toàn quốc / Tất cả`: 13 vụ hoàn thành; kiểm đủ 13 dòng thời gian, 0 vụ từng qua trạng thái `Yêu cầu bổ sung`; thẻ hiện `0%` và không còn dòng `Chưa có dữ liệu` → nhánh tử số 0 đang đúng.
+- Dựng fresh `VV-BTP-TW-20260814-012` hoàn toàn trên UI và đưa tới `Yêu cầu bổ sung` lúc 19:48. DN chủ hồ sơ `0151554887` đăng nhập thành công nhưng màn chi tiết/list UAT V1.0.14 không có thao tác `Bổ sung hồ sơ`; không thể đưa hồ sơ về `Đang kiểm tra` rồi hoàn thành bằng UI.
+- Vì chưa tạo được vụ hoàn thành có tử số dương, chưa đủ căn cứ chấm PASS/FAIL toàn bộ công thức. Giữ `Trạng thái dev fix = Test done`, không đổi `UAT done`.
+── CÁCH VERIFY tiếp khi bỏ blocker UI ──
+1) DN `0151554887` bổ sung Mẫu 01 cho `VV-BTP-TW-20260814-012`; xác nhận trạng thái về `Đang kiểm tra`.
+2) `cbnv_tw` kiểm tra Đạt → phân công → hoàn tất phê duyệt → `Hoàn thành` trong kỳ.
+✅ PASS khi cùng bộ lọc có 14 vụ hoàn thành, đúng 1 vụ từng qua `Yêu cầu bổ sung`, thẻ hiện `7,1%` (= 1/14, làm tròn 1 chữ số) và không có `Chưa có dữ liệu`.
+❌ FAIL nếu hồ sơ đã hoàn thành và có mốc `Yêu cầu bổ sung` nhưng thẻ vẫn `0%`, hoặc tỷ lệ không khớp tử số/mẫu số.

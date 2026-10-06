@@ -1,0 +1,4 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web (BC Vụ việc đang hỗ trợ) KHÔNG hiển thị biểu đồ cột theo người hỗ trợ, cũng không có bảng "Người hỗ trợ" (Số vụ việc, Số quá hạn). API backend đã trả dữ liệu theo người hỗ trợ (1 người, số lượng 1) nhưng giao diện không dựng → lỗi hiển thị FE.
+- Theo SRS FR-IX-03 (UC126) §Output, báo cáo phải luôn có phần thống kê theo người hỗ trợ (NHT phân công). Ngoài ra bảng theo đơn vị còn thiếu cột "Số quá hạn" so với SRS.
+- Verify: tài khoản cbnv_tw (Toàn quốc), Kỳ Năm 2026, 7 vụ việc đang hỗ trợ. Bug ID: BUG-VVDHT_04.

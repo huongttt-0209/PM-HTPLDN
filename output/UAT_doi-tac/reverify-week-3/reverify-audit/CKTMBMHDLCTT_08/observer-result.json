@@ -1,0 +1,28 @@
+{
+  "case": "CKTMBMHDLCTT_08 (row 94) — Công khai hàng loạt một phần",
+  "env": "https://18.143.165.120.nip.io",
+  "account": "cbnv_tw (CB_NV_TW)",
+  "timestamp": "2026-07-20 ~22:40",
+  "action": "Chọn 2 thư mục [QA Hidden Folder 715 = Nháp+1 biểu mẫu (đủ đk) · BM-B3-0720-Rong-1 = Nháp+0 biểu mẫu (rỗng)] → Công khai hàng loạt",
+  "confirm_modal": "Công khai 2 thư mục?\nCác thư mục sẽ được đồng bộ lên Cổng PLQG.",
+  "toast_observer": {
+    "so_toast": 1,
+    "chu": ["Công khai 1/2 thư mục, 1 thất bại."],
+    "note": "Đo bằng MutationObserver toast-capture (không lọc trùng, innerText). 1 toast — không nhân đôi."
+  },
+  "network": {
+    "so_request_non_get": 1,
+    "requests": ["POST /api/v1/thu-muc-bieu-maus/batch-cong-khai"],
+    "note": "1 request cho 1 thao tác — không gọi trùng."
+  },
+  "after_state": {
+    "QA Hidden Folder 715 (1 biểu mẫu, đủ đk)": "Đã công khai + Đã đồng bộ → action đổi thành Ẩn (THÀNH CÔNG)",
+    "BM-B3-0720-Rong-1 (0 biểu mẫu, rỗng)": "vẫn Nháp → action vẫn Công khai (THẤT BẠI — đúng, thư mục rỗng)"
+  },
+  "selection_after": "Thanh 'Đã chọn 2 thư mục' + [Công khai/Ẩn/Xóa hàng loạt] + 2 checkbox vẫn tích — selection KHÔNG clear sau bulk (liên quan case 93/95).",
+  "ket_luan": {
+    "logic_0/2": "KHÔNG tái hiện. Thư mục đủ điều kiện (NHAP + ≥1 biểu mẫu) ĐƯỢC công khai qua bulk → kết quả '1/2', không phải '0/2'. Đối tác báo '0/2' (thư mục đủ đk cũng fail) không xảy ra trên env này.",
+    "wording": "Message 'Công khai X/Y thư mục, Z thất bại' — SRS §Error Handling (dòng 250-251) chỉ định nghĩa ERR-CK-01 (thư mục rỗng đơn lẻ) + WRN-CK-01, KHÔNG có message chuẩn cho bulk một phần. Expected đối tác 'Đã công khai {X}. {Y} không đủ điều kiện...' cũng không có trong SRS → cần BA chốt.",
+    "verdict": "BA confirm"
+  }
+}

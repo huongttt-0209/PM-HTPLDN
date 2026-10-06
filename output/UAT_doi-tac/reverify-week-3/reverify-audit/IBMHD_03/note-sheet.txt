@@ -1,0 +1,16 @@
+IBMHD_03 (dòng 117) — Verdict: BA confirm (cùng gốc IBMHD_02) — 2026-07-20
+Verify: Chrome DevTools MCP, tài khoản cbnv_bn (CB Nghiệp vụ - Bộ ngành), URL /bieu-mau/nhap-hang-loat.
+
+Claim đối tác: màn Import không có chức năng "Tải mẫu Excel".
+
+Quan sát: TÁI HIỆN ĐÚNG. Không có nút "Tải mẫu Excel". Nút này là thành phần của trường "Tải file Excel
+metadata" (SCR-VII-03 #2, :673 "Template: [Tải mẫu Excel]"). FR-VII-06 §Inputs (:460-461) không có phần
+metadata → không có nút. Cùng mâu thuẫn SRS như IBMHD_02.
+
+→ Cần BA chốt chung với IBMHD_02 (xem ba-confirmation-needed-week-3-bieu-mau-batch6.md).
+
+Vai trò: case chỉ định "CB Nghiệp vụ"; dùng cbnv_bn do cbnv_tw bị chiếm session. Render UI, không phụ thuộc đơn vị.
+
+Evidence web: ../../bug-reports/image/BUG-IBMHD_02-03-import-screen-step1.png
+Condition table: ../../cond/IBMHD_03.md
+Sheet: dòng 117, P="BA confirm".

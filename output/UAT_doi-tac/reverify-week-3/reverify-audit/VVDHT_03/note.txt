@@ -1,0 +1,4 @@
+⚠️ Cần BA xác nhận.
+- Web (BC Vụ việc đang hỗ trợ) hiển thị đủ các mức thời hạn: Bình thường (7), Sắp hết hạn (0), Quá hạn (0), Quá hạn nghiêm trọng (0) — ở dạng biểu đồ cột + bảng "Mức SLA". Phần "Chỉ số tổng hợp nhanh" (thẻ số) hiện chỉ có 1 thẻ "Tổng vụ việc = 7".
+- Đối tác kỳ vọng (theo thiết kế PTYC) mỗi mức thời hạn là 1 thẻ chỉ số riêng. Theo SRS FR-IX-03 (UC126) §Output, các trị Bình thường / Sắp hết hạn / Quá hạn là số liệu bắt buộc — web đã hiển thị đủ trong bảng + biểu đồ; SRS KHÔNG quy định phải là thẻ KPI, và KHÔNG liệt kê "Quá hạn nghiêm trọng" trong output (đó chỉ là bộ lọc đầu vào).
+- Câu hỏi BA: có bổ sung thẻ chỉ số nhanh cho từng mức SLA (theo thiết kế PTYC) hay giữ cách hiển thị hiện tại (biểu đồ + bảng)?

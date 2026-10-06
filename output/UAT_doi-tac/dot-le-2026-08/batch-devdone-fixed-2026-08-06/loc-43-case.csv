@@ -1,0 +1,218 @@
+row,Mã TC,Tuần,Mô tả,Các bước thực hiện,Kết quả mong đợi,Kết quả thực tế,Ảnh/vieo 1,Trạng thái,Dopai,Loại vấn đề,TKM phản hồi lần 1,Trạng thái dev fix,DEV phản hồi lần 1,Kết quả verify,Trạng thái 2,TKM phản hồi lần 2,Trạng thái dev fix 2
+20,QLLKHDTBD_09,Tuần 2,Xuất Excel với điều kiện lọc,"1. Chọn menu ""Đào tạo, tập huấn"" -> ""Kế hoạch đào tạo""
+2. Nhập tiêu chí lọc và nhấn Xuất excel",Hệ thống xuất danh sách theo điều kiện lọc hiện tại ra tệp Excel.,Hệ thống xuất toàn bộ danh sách hiện có trên bảng danh sách, QLLKHDTBD_09.webm,Fail,dev done,,"QLLKHDTBD_09_v2.jpg
+File excel được xuất thiếu trường thông tin Người tạo, Ngày tạo",Fixed,,,,,
+32,QLTVV_02,Tuần 2,Kiểm tra hiển thị bảng danh sách,"1. Chọn menu ""Mạng lướt tư vấn viên"" -> ""Tư vấn viên/Chuyên gia""","- Hệ thống hiển thị bảng danh sách giống với thiết kế
+- Dữ liệu hiển thị đúng định dạng và trường thông tin
+- Mặc định: hệ thống sắp xếp theo ngày công nhận mới nhất trước, 20 bản ghi mỗi trang
+- Dữ liệu hiển thị không bị tràn/đè lên nhau, đồng nhất ngôn ngữ hiển thị","- Trường thông tin Điểm đánh giá hiển thị không giống với thiết kế
+- Trường thông tin Loại viết tắt
+- Hệ thống không mặc định sắp xếp theo ngày công nhận mới nhất",QLTVV_02.webm,Fail,dev done,,,Fixed,,"- Dữ liệu cột Điểm ĐG bị tràn/đè lên cột Trạng thái
+- Dữ liệu cột Điểm ĐG hiển thị không đồng nhất: chưa có điểm hiển thị ""-/5"" nhưng có điểm hiển thị số sao
+- Các nút thao tác Xem, Sửa bị xuống dòng.",Fail,TKM retest 3/8: Dữ liệu cột Điểm ĐG bị tràn/đè lên cột Trạng thái,dev done
+36,CNHSNLTVV_03,Tuần 2,Lưu thành công khi nhập dữ liệu hợp lệ,"1. Chọn menu ""Mạng lướt tư vấn viên"" -> ""Tư vấn viên/Chuyên gia""
+2. Nhập dữ liệu hợp lệ",Thực hiện lưu lại dữ liệu đã cập nhật,"Hệ thống hiển thị thông báo ""Lỗi hệ thống, vui lòng thử lại sau.""",CNHSNLTVV_03.jpg,Fail,dev done,,,Fixed,"ĐÃ VERIFY E2E PASS local + server 120 V1.0.6 (04/08/2026). Actor 120 nht_qa_tw, hồ sơ TVV-BTP-TW-0002: Cập nhật năng lực lưu thành công, PATCH /nang-luc HTTP 200; reload GET HTTP 200 và dữ liệu hiển thị đúng. Đã khôi phục dữ liệu test sau verify. Không cần code/commit mới: happy-path đã được khắc phục bởi nhóm CNHSNLTVV_02 (3735fa1b9, f5c87089d, 77857dd16, b296b5529). Evidence: CNHSNLTVV_03-120-v106-save-pass.png.",,,,
+37,CNDSMLTVV_01,Tuần 2,Thực hiện cập nhật danh sách các tư vấn viên đã được phê duyệt lên Cổng công khai.,"1. Chọn menu ""Mạng lướt tư vấn viên"" -> ""Tư vấn viên/Chuyên gia""
+2. Tích chọn các ứng viên hợp lệ
+3. Nhấn ""Công khai hàng loạt"" và Xác nhận","- Hệ thống hiển thị cửa sổ nhập mô tả công khai (bắt buộc) áp cho các tư vấn viên đã chọn và xác nhận ""Công khai {N} tư vấn viên đã chọn lên Cổng pháp luật quốc gia?""
+- Lưu mô tả công khai, đặt cờ công khai, chuyển trạng thái công khai, ghi thời điểm.","Hệ thống không mở cửa sổ nhập mà hiển thị thông báo ""Mô tả công khai là bắt buộc trước khi đẩy lên Cổng pháp luật quốc gia""",CNDSMLTVV_01.jpg,Fail,dev done,,,Fixed,,,,,
+45,KTHSYCHTPL_11,Tuần 2,Kiểm tra nút chức năng Hoàn tất kiểm tra khi chọn kết luận Đạt,"1. Chọn menu ""Vụ việc HTPL""
+2. Tìm kiếm và nhấn Xem chi tiết
+3. Bấm nút ""Hoàn tất kiểm tra"", chọn kết luận Đạt","- Hệ thống chuyển trạng thái hồ sơ: ""Đang kiểm tra"" → ""Đã phân công"" 
+- Ghi người kiểm tra và thời điểm kiểm tra","Màn hình không hiển thị nút chức năng ""Hoàn tất kiểm tra"" mà hiển thị nút chức năng Kiểm tra lại",KTHSYCHTPL_11.jpg,Fail,dev done,,,Fixed,,Hệ thống không chuyển trạng thái hồ sơ,Fail,,Bỏ qua
+50,TKHSYCHTPL_03,Tuần 2,Tìm kiếm bộ lọc có kết quả,"1. Chọn menu ""Vụ việc HTPL""
+2. Tìm kiếm bộ lọc có kết quả","Có kết quả, hệ thống hiển thị danh sách kết quả tìm kiếm, phân trang 20 bản ghi mỗi trang.","Khi chọn Mức SLA là ""Sắp hết hạn"" hệ thống hiển thị thông báo lỗi", TKHSYCHTPL_03.webm,Fail,dev done,,,Fixed,,,,,
+51,XNTGHTVV_03,Tuần 3,Từ chối thành công,"1. Chọn menu ""Vụ việc HTPL""
+2. Tìm kiếm và nhấn Xem chi tiết
+3. Bấm nút ""Từ chối"", nhập lý do hợp lệ và nhấn Xác nhận","- Hệ thống hiển thị thông báo ""Đã từ chối tham gia vụ việc"" và chuyển về màn hình danh sách.
+- Cập nhật bản ghi phân công: trạng thái ""Từ chối"", thời điểm từ chối, lý do từ chối.
++ Chuyển trạng thái hồ sơ: ""Đã phân công"" → ""Đã tiếp nhận"" 
++ Gửi thông báo cho cán bộ nghiệp vụ phụ trách kèm lý do từ chối.
++ Lưu vết thao tác theo quy định.
+","Hệ thống chuyển hướng đến màn hình thông báo lỗi 403 ""Vụ việc không được phân công cho bạn"" mặc dù vụ việc được phân công cho tư vấn viên, sau đó hệ thống cập nhật trạng thái của bản ghi là ""Chờ phê duyệt""",XNTGHTVV_03.webm,Fail,dev done,,,Fixed,,Cán bộ nghiệp vụ phụ trách không nhận được thông báo kèm lý do từ chối.,Fail,,dev done
+62,CNKQHT_07,Tuần 3,Cập nhật thành công,"1. Chọn menu ""Vụ việc HTPL""
+2. Tìm kiếm và nhấn Xem chi tiết
+3. Nhập nội dung và tải tệp, sau đó bấm nút ""Cập nhật kết quả""","- Hệ thống hiển thị thông báo ""Đã cập nhật kết quả hỗ trợ"" và làm mới Nhóm 6.
++ Lưu nội dung, tệp và ghi chú vào hồ sơ.
++ Gửi thông báo cho cán bộ nghiệp vụ phụ trách để xem xét và chuẩn bị trình phê duyệt.
++ Lưu vết thao tác theo quy định.
+",CBNV không nhận được thông báo, CNKQHT_07.webm,Fail,dev done,,,Fixed,,,,,
+64,DGKQHTVV_01,Tuần 3,Cung cấp chức năng để CB Nghiệp vụ hoặc DNNVV đánh giá chất lượng của quá trình hỗ trợ và kết quả vụ việc.,"1. Chọn menu ""Vụ việc HTPL""
+2. Tìm kiếm và nhấn Xem chi tiết
+3. Mở Nhóm 8 – Đánh giá",Cung cấp chức năng để CB Nghiệp vụ hoặc DNNVV đánh giá chất lượng của quá trình hỗ trợ và kết quả vụ việc.,Hệ thống không hiển thị nút chức năng mặc dù bản ghi ở trạng thái phù hợp,DGKQHTVV_01.jpg,Fail,dev done,,TKM retest 27/7: Hệ thống vẫn chưa có nút chức năng,Fixed,,Hệ thống hiển thị thông báo thành công nhưng Đánh giá không được lưu vào Nhóm 8,,,
+72,QLHSDNHTCP_03,Tuần 3,Kiểm tra Cột dữ liệu trong bảng kết quả,"1. Chọn menu ""Chi trả chi phí""","- Hệ thống hiển thị các trường thông tin giống với thiết kế
+- Dữ liệu hiển thị đúng định dạng và trường thông tin
+- Dữ liệu hiển thị không bị tràn/đè lên nhau, đồng nhất ngôn ngữ hiển thị
+- Mặc định: hệ thống sắp xếp theo ngày cập nhật mới nhất trước, 20 bản ghi mỗi trang.",Cột thông tin Mức cảnh báo thời hạn không giống với thiết kế,QLHSDNHTCP_03.jpg,Fail,dev done,,,Fixed,,"Dữ liệu cột ""Mức cảnh báo thời hạn"" bị tràn sang cột ""Ngày nộp""",Fail,,dev done
+138,QLBMHD_02,Tuần 3,Kiểm tra hiển thị các trường thông tin ,"1. Chọn menu ""Biểu mẫu"" -> ""Danh sách biểu mẫu""
+","- Hệ thống hiển thị các trường thông tin giống với thiết kế
+- Dữ liệu hiển thị đúng định dạng và trường thông tin
+- Dữ liệu hiển thị không bị tràn/đè lên nhau, đồng nhất ngôn ngữ hiển thị","- Thiếu Ô chọn biểu mẫu
+- Thiếu các cột thông tin: Cơ quan ban hành, Định dạng",QLBMHD_02.jpg,Fail,dev done,,"- TKM retest 27/7: Thiếu cột ""Cơ quan ban hành""
+- Cần chị anhduong16.work@gmail.com xác nhận về ""Ô tích chọn""",Fixed,"[Lý do] Về ô tích chọn từng dòng biểu mẫu: màn Danh sách biểu mẫu không được thiết kế ô tích chọn từng dòng; việc công khai, ẩn, xóa hàng loạt được đặt ở cấp thư mục theo đúng cách Cổng Pháp luật quốc gia lấy dữ liệu — đây là thiết kế có chủ đích, không phải thiếu sót. Bổ sung thao tác hàng loạt ở cấp biểu mẫu là chức năng mới vượt phạm vi hiện hành. [Nhận định] Kính đề nghị Quý đối tác đưa nội dung này vào danh sách yêu cầu cải tiến. (Lưu ý: điểm thiếu cột Cơ quan ban hành/Định dạng là lỗi phần mềm Dev phải sửa, nên trạng thái xử lý giữ nguyên.)",,,,
+174,SLHDVM_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng.,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",SLHDVM_06.webm,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+SLHDVM_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+178,VVDTN_04,Tuần 3,Kiểm tra hiển thị Biểu đồ và bảng kết quả,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện hợp lệ
+3. Nhấn Xem báo cáo","- Hệ thống hiển thị các trường thông tin giống với thiết kế
+- Dữ liệu hiển thị đúng định dạng và trường thông tin
+- Dữ liệu hiển thị không bị tràn/đè lên nhau, đồng nhất ngôn ngữ hiển thị","- Không hiển thị biểu đồ tròn theo lĩnh vực
+- Bảng tổng hợp thiếu các cột: Theo kênh, Theo lĩnh vực",VVDTN_04.webm,Fail,dev done,,"TKM retest 31/7: Không hiển thị biểu đồ tròn theo lĩnh vực
+VVDTN_04_v2.jpg",Fixed,,,,,
+179,VVDTN_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng.,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",VVDTN_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+VVDTN_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+183,VVDHT_01,Tuần 3,"Thống kê số lượng vụ việc đang được xử lý theo đơn vị, chuyên gia.","1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện hợp lệ
+3. Nhấn Xem báo cáo","Có dữ liệu, hệ thống hiển thị khu vực kết quả gồm các chỉ số tổng hợp, biểu đồ và bảng tổng hợp theo đơn vị.","- Đơn vị có dữ liệu thống kê nhưng khi chọn người hỗ trợ hệ thống thông báo  ""Không có dữ liệu báo cáo cho kỳ và đơn vị đã chọn"".",VVDHT_01.webm,Fail,dev done,,TKM retest 28/7: Lỗi chưa được fix,Fixed,,,,,
+185,VVDHT_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng.,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",VVDHT_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+VVDHT_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+189,VVDHTHT_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng.,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",VVDHTHT_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+VVDHTHT_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+193,VVTTG_01,Tuần 3,"Thống kê diễn biến số lượng vụ việc theo các mốc thời gian (ngày, tuần, tháng, quý).","1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện hợp lệ
+3. Nhấn Xem báo cáo","Có dữ liệu, hệ thống hiển thị khu vực kết quả gồm các chỉ số tổng hợp, biểu đồ và bảng tổng hợp theo đơn vị.",Số liệu thống kê không chính xác,VVTTG_01.webm,Fail,dev done,,"TKM retest 28/7: 
+- Số liệu BC Vụ việc đã tiếp nhận > BC Vụ việc theo thời gian mặc dù chọn cùng 1 khoảng thời gian",Fixed,,,,,
+195,VVTTG_05,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng.,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",VVTTG_05.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+VVTTG_05_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+200,CLDTBDDDR_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: BaoCaoDaoTao_{YYYYMMDD_HHmm}.xlsx hoặc BaoCaoDaoTao_{YYYYMMDD_HHmm}.pdf.,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",CLDTBDDDR_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+CLDTBDDDR_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+205,LDTBDDDR_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: BaoCaoDaoTao_{YYYYMMDD_HHmm}.xlsx hoặc BaoCaoDaoTao_{YYYYMMDD_HHmm}.pdf.,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",CLDTBDDDR_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+LDTBDDDR_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+210,CGTVPL_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: BaoCaoDanhGia_{YYYYMMDD_HHmm}.xlsx / .pdf,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",CGTVPL_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+CGTVPL_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+214,DGHQHTPL_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: BaoCaoDanhGia_{YYYYMMDD_HHmm}.xlsx / .pdf,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",DGHQHTPL_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+DGHQHTPL_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+218,CLDTBDPL_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: BaoCaoDaoTao_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",CLDTBDPL_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+CLDTBDPL_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+222,VVTDVQL_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoVuViec_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",VVTDVQL_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""VVTDVQL_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+226,VVTLV_05,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoVuViec_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",VVTLV_05.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+VVTLV_05_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+230,VVTLHDN_05,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoVuViec_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",VVTLHDN_05.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+VVTLHDN_05_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+234,VVTTGCT_05,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoVuViec_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",VVTTGCT_05.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+VVTTGCT_05_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+238,CPHTCT_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoChiPhi_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",CPHTCT_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+CPHTCT_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+243,CPCTHTTDVQL_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoChiPhi_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",CPCTHTTDVQL_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+CPCTHTTDVQL_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+258,CPCTHTTLHDN_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoChiPhi_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",CPCTHTTLHDN_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+CPCTHTTLHDN_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+263,CPCTHTTTG_05,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoChiPhi_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",CPCTHTTTG_05.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+CPCTHTTTG_05_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+264,CPCTHTTTG_06,Tuần 3,Kiểm tra chức năng Xuất PDF,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất PDF","Hệ thống tạo tệp PDF theo đúng mẫu biểu Thông tư số 17/2025/TT-BTP — khổ A4, phông chữ Times New Roman cỡ 13, đầu trang có quốc hiệu và tên cơ quan, cuối trang có ngày ký và chức danh người ký.
+- Tên tệp xuất: BaoCaoChiPhi_{YYYYMMDD_HHmm}.pdf","Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",CPCTHTTTG_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+CPCTHTTTG_05_v2.jpg",Fixed,"Không phải lỗi code. Đã verify lại trên 120 (V1.0.8, 05/08) đúng luồng phiếu:
+  POST /bao-cao/export trả HTTP 200, không còn Forbidden; toast ""Tạo file thành công"";
+  tệp BaoCaoChiPhiTheoThoiGian_20260805_2115.pdf khổ A4, đủ khung TT 17/2025
+  (quốc hiệu + tên cơ quan đầu trang; ngày ký + người xuất + chỗ đóng dấu cuối trang).
+  Guard quyền và seed export_bao_cao không đổi suốt 28/07-05/08 nên không có thay đổi
+  code nào gây ra 403 ngày 31/07; phiếu nằm trong cụm ~44 phiếu Báo cáo cùng báo
+  ""Forbidden"" ngày 31/07 do lệch build môi trường. Đề nghị retest trên bản mới nhất.
+  Lưu ý: phông trong PDF tên ""Tinos"" (bản thay thế metric-compatible của Times New Roman);
+  khối ký không in chức danh theo BA chốt 04/08 vì tài khoản không lưu chức vụ.",,,,
+267,SLCTHT_06,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoChuongTrinh_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",SLCTHT_06.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+SLCTHT_06_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+272,CTTDVQL_04,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoChuongTrinh_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",CTTDVQL_04.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+CTTDVQL_04_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+277,CTTLV_05,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoChuongTrinh_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",CTTLV_05.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+CTTLV_05_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+281,CTTTG_04,Tuần 3,Kiểm tra chức năng Xuất excel,"1. Chọn menu ""Báo cáo thống kê""
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel",Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoChuongTrinh_{YYYYMMDD_HHmm}.xlsx ,"Hệ thống hiển thị thông báo ""Không thể tạo file xuất. Vui lòng thử lại."".",CTTTG_04.jpg,Fail,dev done,,"TKM retest 31/7: Hệ thống hiển thị thông báo ""Forbidden""
+CTTTG_04_v2.jpg",Fixed,Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.,,,,
+291,QLHSPLDN_06,Tuần 3,Xem ,"1. Chọn menu ""Doanh nghiệp""
+2. Nhấn ""Xem chi tiết""
+3. Chọn thẻ ""Hồ sơ pháp lý doanh nghiệp""
+4. Nhấn ""Xem""",Hệ thống mở cửa sổ chi tiết hiển thị toàn bộ thông tin của hồ sơ và danh sách tệp đính kèm (nếu có) ở chế độ chỉ đọc.,Màn hình không có nút chức năng xem chi tiết,QLHSPLDN_06.jpg,Fail,dev done,,,Fixed,,,,,
+292,QLHSPLDN_07,Tuần 3,Sửa,"1. Chọn menu ""Doanh nghiệp""
+2. Nhấn ""Xem chi tiết""
+3. Chọn thẻ ""Hồ sơ pháp lý doanh nghiệp""
+4. Nhấn ""Sửa""","- Hệ thống mở cửa sổ chỉnh sửa với dữ liệu hiện có.
+- NSD cập nhật và bấm ""Lưu"", hệ thống cập nhật bản ghi và lưu vết thao tác.
+",Hệ thống hiển thị thông báo cập nhật thành công nhưng dữ liệu chưa được cập nhật vào bản ghi,"QLHSPLDN_07.jpg 
+ QLHSPLDN_07.webm",Fail,dev done,,,Fixed,,,,,
+299,QLTLPLCVV_15,Tuần 3,Tải lên tệp đính kèm chứa mã độc,"1. Chọn menu ""Tư vấn"" => ""Tư vấn chuyên sâu""
+2. Nhấn ""Xem chi tiết"" tại bản ghi
+3. Mở Nhóm 3 — Tư liệu pháp lý liên kết
+4. Nhấn nút ""Tải tệp"" trong cửa sổ chỉnh sửa hồ sơ","Hệ thống hiển thị thông báo ""Tệp «{tên_tệp}» chứa mã độc, không thể tải lên"".","Hệ thống hiển thị thông báo ""Tải file thất bại""",QLTLPLCVV_15.jpg,Fail,dev done,,,Fixed,,,,,
+300,QLTLPLCVV_17,Tuần 3,Xem tệp trực tuyến,"1. Chọn menu ""Tư vấn"" => ""Tư vấn chuyên sâu""
+2. Nhấn ""Xem chi tiết"" tại bản ghi
+3. Mở Nhóm 3 — Tư liệu pháp lý liên kết
+4. Bấm vào tên tệp đính kèm,","Hệ thống mở trình xem trực tuyến cho định dạng hỗ trợ (PDF, hình ảnh). Định dạng không hỗ trợ xem trực tuyến, hệ thống tải tệp về máy người dùng.",Hệ thống disable nút chức năng Xem,QLTLPLCVV_17_v2.jpg,Fail,dev done,,,Fixed,,,,,
+305,QLKCHTV_37,Tuần 4,Xuất Excel đánh giá,"1. Chọn menu ""Tư vấn"" => ""Tư vấn nhanh""
+2. Bấm nút Trả lời
+3. Nhấn  nút ""Xuất Excel""","- Hệ thống xuất chi tiết đánh giá của phiên ra tệp Excel bao gồm mã phiên, điểm đánh giá, nhận xét của doanh nghiệp, ngày đánh giá, tên doanh nghiệp và mã doanh nghiệp.
+- Có dữ liệu, hệ thống tải tệp về máy người dùng với tên dạng ""danh-gia-tv-nhanh-{mã phiên}{YYYYMMDD-HHmm}.xlsx"".
+",Màn hình không có nút chức năng,QLKCHTV_37.jpg,Fail,dev done,,TKM retest 3/8: Màn hình chưa có nút chức năng,Fixed,Ghi nhận của Quý đơn vị là đúng. Nội dung này đã được chấp thuận và cập nhật vào đặc tả; đơn vị phát triển sẽ chỉnh sửa phần mềm theo đặc tả đã cập nhật. Kính đề nghị Quý đơn vị giữ nguyên Kết quả mong đợi.,,,,
+335,LBCKQTHCT_01,Tuần 4,Cung cấp công cụ để CB Nghiệp vụ lập báo cáo kết quả thực hiện chương trình.,"1. Chọn menu ""Đợt báo cáo""
+2. Mở đợt báo cáo, chọn biểu mẫu, nhập hoặc chỉnh số liệu và nhận xét rồi bấm ""Lưu nháp""","- Cập nhật trạng thái nộp của đơn vị thành ""Đang lập"".
++ Lưu nội dung báo cáo chi tiết.
++ Lưu vết thao tác theo quy định.
+- Lưu thành công, hệ thống hiển thị thông báo nhanh ""Đã lưu nháp"".","Hệ thống hiển thị ""403- Đơn vị không nằm trong phạm vi truy cập của bạn- Mã lỗi: ERR-AUTH-VPD-00-02- Vai trò hiện tại: CB_NV_DP"" mặc dù đơn vị và tài khoản đăng nhập đã được thiết lập quyền lập báo cáo",LBCKQTHCT_01.webm,Fail,dev done,,,Fixed,,"Hệ thống không chuyển trạng thái thành ""Đang lập""",Fail,,dev done

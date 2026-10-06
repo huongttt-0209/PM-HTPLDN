@@ -1,0 +1,64 @@
+# QLDMTCTV_OOS_09 — dòng 335 (tab `UAT_TGPL Doanh Nghiệp-tuần 3`)
+
+## Tuần
+
+Tuần 3
+
+## Mã TC
+
+QLDMTCTV_OOS_09
+
+## Mô tả
+
+Biểu mẫu Chỉnh sửa Tổ chức tư vấn — đường dẫn điều hướng không kèm tên tổ chức đang sửa
+
+## Điều kiện
+
+1. Đăng nhập tài khoản Cán bộ Nghiệp vụ cấp Trung ương (cbnv_tw_04), đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp.
+2. Chọn menu "Mạng lưới Tư vấn viên" -> "Tổ chức tư vấn".
+
+## Dữ liệu đầu vào
+
+Tổ chức TCTV-SEED-0001 "Trung tâm Tư vấn Pháp luật Seed", trạng thái Đang hoạt động.
+
+## Các bước thực hiện
+
+1. Bấm biểu tượng Sửa trên dòng của tổ chức cần sửa.
+2. Đọc đường dẫn điều hướng ở thanh trên cùng.
+
+## Kết quả mong đợi
+
+Màn hình SCR-IV-NEW-02 dòng 1675 quy định đường dẫn điều hướng là "Trang chủ > Mạng lưới Tư vấn viên > Tổ chức tư vấn > Thêm mới", hoặc "... > Chỉnh sửa [Tên TC]" khi ở chế độ sửa — tức phải kèm tên tổ chức đang sửa.
+
+## Kết quả thực tế
+
+Đường dẫn hiển thị là "Trang chủ / Mạng lưới Tư vấn viên / Tổ chức tư vấn / Chi tiết / Chỉnh sửa" — không kèm tên tổ chức.
+Ngoài ra còn chèn thêm một cấp "Chi tiết" không có trong đặc tả.
+Hệ quả: khi mở nhiều tổ chức liên tiếp, người dùng không biết mình đang sửa hồ sơ nào nếu chỉ nhìn đường dẫn.
+
+## Ảnh/vieo 1
+
+QLDMTCTV_09-01-TCTV-SEED-0001-form-sua-tu-dau-den-muc-cong-bo.png
+
+## Trạng thái 1
+
+Fail
+
+## Trạng thái dev fix 1
+
+dev done
+
+## Verify
+
+Pass
+
+## DEV phản hồi lần 1
+
+✅ Bug ĐÚNG - chuyển dev.
+- Ở chế độ Chỉnh sửa, đường dẫn điều hướng hiển thị "Trang chủ / Mạng lưới Tư vấn viên / Tổ chức tư vấn / Chi tiết / Chỉnh sửa", không kèm tên tổ chức đang sửa.
+- Theo màn hình SCR-IV-NEW-02 (dòng 1675), đường dẫn phải là "... > Chỉnh sửa [Tên tổ chức]".
+- Ngoài ra web còn chèn thêm một cấp "Chi tiết" không có trong đặc tả.
+- Hệ quả: mở nhiều hồ sơ liên tiếp thì không biết đang sửa tổ chức nào nếu chỉ nhìn đường dẫn.
+- Ghi chú tham chiếu: chức năng "Quản lý Tổ chức tư vấn" (FR-IV-NEW-01) trong đặc tả KHÔNG được cấp mã UC (dòng 1029 ghi "chưa có trong CSV"), nên chỉ nêu tên chức năng và số dòng, không có mã UC để dẫn.
+- Lỗi do QA phát hiện thêm khi kiểm 4 phiếu QLDMTCTV_02 / _05 / _06 / _09 ngày 03/08/2026, không nằm trong phạm vi 4 phiếu đó nên mở dòng riêng để chuyển dev.
+- Môi trường kiểm: bản dựng HTPLDN V1.0.5.

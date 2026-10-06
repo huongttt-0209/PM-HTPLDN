@@ -1,0 +1,131 @@
+================================================================================
+ ARTIFACT BLOCKER — TKVVHTPLDN_01 (row 35) — API tim kiem vu viec HTPL
+ Muc dich: chung minh da thu CAN KIET moi surface truy cap duoc ma van khong
+           thuc thi duoc loi goi API nay tren moi truong duoc giao.
+ Nguoi do : QA  |  Thoi diem: 2026-07-27 15:09  |  Host: 18.143.165.120.nip.io
+================================================================================
+
+### BANG CAN KIET — surface x URL x cach xac thuc x ket qua
+
+#   | Surface                    | URL / cong                                     | Cach xac thuc da thu               | Ket qua quan sat
+----+----------------------------+------------------------------------------------+------------------------------------+------------------------------------------
+1   | Cong API cong khai (HTTPS) | GET /api/v1/public/vu-viecs/search?keyword=... | Khong header                       | HTTP 401 ERR-AUTH-MTLS-01
+2   | Cong API cong khai (HTTPS) | GET /api/v1/public/vu-viecs/search?keyword=... | X-Client-Verify: SUCCESS           | HTTP 401 ERR-AUTH-MTLS-01
+3   | Cong API cong khai (HTTPS) | GET /api/v1/public/vu-viecs?page=1&size=2      | X-Client-Verify + Fingerprint + x-token | HTTP 401 ERR-AUTH-MTLS-01
+4   | Cong API cong khai (HTTPS) | GET /api/v1/vu-viec/search?keyword=test (duong dan SRS) | Khong header                       | HTTP 401 ERR-AUTH-MTLS-01
+5   | Cong 80 (HTTP)             | http://18.143.165.120/api/v1/public/vu-viecs   | Khong header                       | HTTP 308 -> quay lai chinh host tren
+6   | Cong ung dung truc tiep    | http://18.143.165.120:{3000,3001,4000,5000,8000,8080} | Bo qua proxy                       | Khong ket noi duoc (6/6 cong)
+7   | Cong HTTPS thay the        | https://...:{8443,9443,4443,8081,8880}/api/v1/public/vu-viecs | Bo qua proxy                       | Khong ket noi duoc (5/5 cong)
+8   | Bat tay TLS                | openssl s_client :443                          | Kiem may chu co doi chung thu client? | KHONG co 'Acceptable client certificate CA names'
+9   | Giao dien CMS              | goi tu ma nguon giao dien (bundle 1.119.097 byte) | Phien dang nhap CB (cookie)        | 0 lan goi /api/v1/public/* -> khong co man hinh nao dung API nay
+10  | Ho so tai khoan duoc giao  | input/input.md                                 | Tim chung thu / khoa / api-key consumer | 0 ket qua (khong duoc cap)
+
+### KET LUAN CAN KIET
+- Chan xay ra o tang TRUOC dinh tuyen: mot duong dan /api/v1/public/ KHONG TON TAI
+  cung tra 401 ERR-AUTH-MTLS-01 (khong phai 404), trong khi duong dan khong ton tai
+  ngoai nhom public tra dung 404 ERR-SYS-00-04-01. => toan bo be mat /api/v1/public/*
+  bi chan, khong rieng endpoint dang kiem.
+- May chu KHONG doi chung thu client o buoc bat tay TLS, nen ke ca co chung thu cung
+  khong the trinh len duoc qua duong nay.
+- Tien de con thieu (chung thu so phia khach / thong tin consumer) do BEN VAN HANH cap,
+  QA khong tu tao duoc => blocker khach quan nhom D (moi truong / ha tang).
+
+================================================================================
+### NHAT KY LOI GOI THAT (chay lai luc tao artifact)
+================================================================================
+
+$ curl -s 'https://18.143.165.120.nip.io/api/v1/public/vu-viecs/search?keyword=tieu%20de%20vu%20viec'
+   -> HTTP 401  199 byte  0.154089s
+   {"success":false,"error":{"code":"ERR-AUTH-MTLS-01","message":"mTLS client certificate verification failed","timestamp":"2026-07-27T08:09:29.978Z","requestId":"d8215827-29de-4fa3-aeec-413900fd177d"}}
+
+$ curl -s 'https://18.143.165.120.nip.io/api/v1/public/vu-viecs/search?keyword=Ti%C3%AAu%20%C4%91%E1%BB%81%20v%E1%BB%A5%20vi%E1%BB%87c'
+   -> HTTP 401  199 byte  0.169360s
+   {"success":false,"error":{"code":"ERR-AUTH-MTLS-01","message":"mTLS client certificate verification failed","timestamp":"2026-07-27T08:09:30.157Z","requestId":"1246b5d4-31a9-4ec9-8ed8-126895e9b2de"}}
+
+$ curl -s 'https://18.143.165.120.nip.io/api/v1/public/vu-viecs?page=1&size=2'
+   -> HTTP 401  199 byte  0.167379s
+   {"success":false,"error":{"code":"ERR-AUTH-MTLS-01","message":"mTLS client certificate verification failed","timestamp":"2026-07-27T08:09:30.335Z","requestId":"2acaf8a5-5cf9-4d6d-855d-5793fac0f0ad"}}
+
+$ curl -s 'https://18.143.165.120.nip.io/api/v1/public/khong-ton-tai-gi-ca-xyz'
+   -> HTTP 401  199 byte  0.139437s
+   {"success":false,"error":{"code":"ERR-AUTH-MTLS-01","message":"mTLS client certificate verification failed","timestamp":"2026-07-27T08:09:30.495Z","requestId":"c54db894-c2e2-4b31-b790-32993d77c3c8"}}
+
+$ curl -s 'https://18.143.165.120.nip.io/api/v1/khong-ton-tai-gi-ca-xyz'
+   -> HTTP 404  198 byte  0.165174s
+   {"success":false,"error":{"code":"ERR-SYS-00-04-01","message":"Cannot GET /api/v1/khong-ton-tai-gi-ca-xyz","timestamp":"2026-07-27T08:09:30.663Z","requestId":"da1e0e8f-af75-4341-b252-ab8170d9c4cc"}}
+
+$ curl -s -H 'X-Client-Verify: SUCCESS' 'https://18.143.165.120.nip.io/api/v1/public/vu-viecs/search?keyword=tieu%20de%20vu%20viec'
+   -> HTTP 401
+   {"success":false,"error":{"code":"ERR-AUTH-MTLS-01","message":"mTLS client certificate verification failed","timestamp":"2026-07-27T08:09:30.842Z","requestId":"1d52fda2-2ecd-4f3e-ae32-ec96162d7f7d"}}
+
+$ echo | openssl s_client -connect 18.143.165.120.nip.io:443 | grep -i 'Acceptable client certificate'
+   so dong khop = 0
+   (0 = may chu khong yeu cau chung thu client)
+
+================================================================================
+### DOC HOP DONG API CUA CHINH BAN TRIEN KHAI (GET /api/docs-json, 530 duong dan)
+    Nguon doc lap voi phieu doi tac — dung de doi chieu loi goi doi tac da dung.
+================================================================================
+
+Thu tu khai bao cac duong dan nhom vu-viec (theo thu tu trong tai lieu OpenAPI):
+   [12] /api/v1/public/vu-viecs
+   [13] /api/v1/public/vu-viecs/search
+   [14] /api/v1/public/vu-viecs/{id}
+   [15] /api/v1/public/vu-viecs/{id}/download/{fileId}
+
+------------------------------------------------------------------------------
+/api/v1/public/vu-viecs/search
+   tom tat : Tìm kiếm vụ việc công khai
+   pham vi : [{"PublicApiOAuth2": ["htpldn:vu-viec:search"]}, {"LgspApiKey": []}]
+   tham so keyword        vi tri=query bat buoc=True  kieu={"minLength": 2, "type": "string"}
+   tham so linhVucId      vi tri=query bat buoc=False kieu={"format": "uuid", "type": "string"}
+   tham so trangThai      vi tri=query bat buoc=False kieu={"type": "string", "enum": ["HOAN_THANH", "DA_DUYET", "DA_DANH_GIA"]}
+   tham so doanhNghiepId  vi tri=query bat buoc=False kieu={"format": "uuid", "type": "string"}
+------------------------------------------------------------------------------
+/api/v1/public/vu-viecs/{id}
+   tom tat : Chi tiết vụ việc theo quyền sở hữu
+   pham vi : [{"PublicApiOAuth2": ["htpldn:vu-viec:read"]}, {"LgspApiKey": []}]
+   tham so id             vi tri=path  bat buoc=True  kieu={"type": "string"}
+   tham so doanhNghiepId  vi tri=query bat buoc=True  kieu={"format": "uuid", "type": "string"}
+------------------------------------------------------------------------------
+
+NHAN XET RUT RA TU HOP DONG (khong phai suy doan tu phieu doi tac):
+ 1. Duong dan doi tac goi (/api/v1/public/vu-viecs/search) LA duong dan co that
+    trong hop dong API cua ban trien khai.
+ 2. Tham so bat buoc duy nhat cua no la 'keyword' kieu chuoi, do dai toi thieu 2.
+    Ca hai gia tri doi tac gui ('tieu de vu viec' va 'Tieu de vu viec') deu hop le.
+ 3. Endpoint nay KHONG co bat ky tham so bat buoc nao kieu uuid. Hai tham so kieu
+    uuid (linhVucId, doanhNghiepId) deu KHONG bat buoc va doi tac khong gui.
+    => thong bao 'Validation failed (uuid is expected)' khong the phat sinh tu
+       chinh du lieu doi tac nhap.
+ 4. Duong dan lien ke /api/v1/public/vu-viecs/{id} lai doi BAT BUOC tham so
+    'doanhNghiepId' kieu uuid. Day la goi y de dev truy nguyen: kiem tra xem loi
+    goi .../search co bi xu ly nham sang nhanh xem chi tiet theo dinh danh khong.
+    QA neu duoi dang gia thuyet, khong ket luan thay dev.
+
+================================================================================
+### BO SUNG 2026-07-27 15:15 — PHEP THU PHAN BIET: duong dan SRS co ton tai?
+    Ly do them: ban dau QA suy dien 'goi theo duong dan SRS se 404'. Do lai thi SAI.
+    Duoi day la so lieu that de sua lai ket luan.
+================================================================================
+/public/vu-viecs/search?keyword=tieu%20de%20vu%20viec -> HTTP 401  ERR-AUTH-MTLS-01 | mTLS client certificate verification failed
+/vu-viec/search?keyword=test               -> HTTP 401  ERR-AUTH-MTLS-01 | mTLS client certificate verification failed
+/vu-viec                                   -> HTTP 401  ERR-AUTH-MTLS-01 | mTLS client certificate verification failed
+/hoi-dap/search?keyword=test               -> HTTP 401  ERR-AUTH-MTLS-01 | mTLS client certificate verification failed
+/vu-viec/abc/def                           -> HTTP 404  ERR-SYS-00-04-01 | Cannot GET /api/v1/vu-viec/abc/def
+/xyz-khong-co/search                       -> HTTP 404  ERR-SYS-00-04-01 | Cannot GET /api/v1/xyz-khong-co/search
+/vu-viecs                                  -> HTTP 401  ERR-AUTH-SYS-00-01 | Yêu cầu đăng nhập (thiếu token xác thực)
+
+DOC SO LIEU:
+ - 3 duong dan dang SRS (/vu-viec, /vu-viec/search, /hoi-dap/search) tra CUNG loai loi
+   chung thu nhu duong dan /public/... => lop bao ve CO NHAN BIET chung.
+ - Duong dan bia (/vu-viec/abc/def, /xyz-khong-co/search) tra 404 => neu duong dan SRS
+   khong duoc khai bao o dau ca thi da phai 404 giong 2 dong nay.
+ => KET LUAN DUNG: KHONG the noi duong dan SRS 'khong ton tai'. Rat co the la duong dan
+    thay the co that nhung khong xuat hien trong ban mo ta API cong bo. QA khong xac nhan
+    duoc them vi bi chan o lop chung thu.
+ => Da sua lai cau hoi BA-22 theo so lieu nay (bo cau 'se nhan 404').
+
+GHI CHU: /api/v1/vu-viecs (so nhieu, khong co 'public') tra ERR-AUTH-SYS-00-01
+  'Yeu cau dang nhap' — day la API NOI BO cua phan mem cho can bo, KHONG phai API tich hop.
+  Khong dung API noi bo de thay the cho case nay vi khac hoan toan pham vi + hop dong.

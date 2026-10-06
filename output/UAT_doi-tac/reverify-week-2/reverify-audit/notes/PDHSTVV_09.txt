@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Đã tái hiện đúng điều kiện đối tác: phê duyệt hồ sơ TVV-BTP-TW-0008 bằng cbpd_tw với số quyết định "QĐ-123/QĐ-BTP" — trùng với số quyết định đã dùng cho hồ sơ TVV-BTP-TW-0006 trước đó. Hệ thống báo "Phê duyệt TVV thành công", không báo lỗi; kết quả là 2 hồ sơ khác nhau cùng mang một số quyết định.
+- Tuy nhiên SRS hiện KHÔNG quy định số quyết định công nhận phải là duy nhất: entity Tư vấn viên, trường Số quyết định công nhận (srs-fr-04 dòng 2025) chỉ ràng buộc định dạng QĐ-{số}/QĐ-{đơn vị}, không có ràng buộc duy nhất; FR-IV-07 (UC45) §Error Handling (dòng 611-615) cũng không có mã lỗi nào cho trường hợp trùng số quyết định. Trong khi đó SRS ghi rất rõ ràng buộc duy nhất cho Căn cước công dân và Email (kèm thông báo lỗi riêng) — cho thấy việc thiếu ràng buộc ở Số quyết định là có chủ ý hoặc bị bỏ sót.
+- Lưu ý nghiệp vụ: trên thực tế một quyết định công nhận có thể công nhận nhiều tư vấn viên cùng lúc (danh sách kèm theo quyết định). Nếu bắt buộc số quyết định là duy nhất thì các trường hợp này sẽ bị chặn sai.
+- Đề nghị BA chốt: Số quyết định công nhận có bắt buộc duy nhất toàn hệ thống không? Nếu có, cần bổ sung ràng buộc + thông báo lỗi vào SRS rồi mới chuyển dev.
+- Verify: tài khoản cbpd_tw (CB Phê duyệt - Trung ương), hồ sơ ở trạng thái "Chờ phê duyệt" trước thao tác.

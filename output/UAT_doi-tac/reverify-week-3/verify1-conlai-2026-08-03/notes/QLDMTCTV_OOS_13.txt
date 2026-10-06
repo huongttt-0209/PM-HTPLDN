@@ -1,0 +1,11 @@
+⚠️ Cần BA xác nhận.
+- Đặc tả đang gọi cùng một giấy tờ bằng ba cách khác nhau và ghi tính bắt buộc trái ngược nhau.
+- Về tên gọi: dòng 1681 và 1682 gọi là "Số Giấy đăng ký hành nghề" / "Ngày cấp Giấy đăng ký hành nghề"; dòng 1073 gọi là "Giấy đăng ký hoạt động Sở TP"; dòng 2216 và 2217 gọi là "Giấy ĐKHĐ Sở TP", nhãn ghi "Số giấy ĐKHĐ" / "Ngày cấp giấy ĐKHĐ". Lưu ý "đăng ký hoạt động" và "đăng ký hành nghề" là hai loại giấy tờ khác nhau nên không thể coi là cùng một tên rút gọn.
+- Về tính bắt buộc: dòng 1052 và 1053 ghi Bắt buộc = "N" (không bắt buộc), nhưng dòng 1073, 1681, 1682, 2216 và 2217 đều ghi bắt buộc.
+- Thực tế phần mềm: biểu mẫu Thêm mới đang dùng nhãn "Số Giấy ĐKHĐ Sở TP" và đặt hai trường này là bắt buộc, tức theo dòng 1073 và 2216.
+⚠️ Câu hỏi gửi BA: đề nghị chốt một tên gọi chuẩn và một mức bắt buộc duy nhất, rồi sửa đặc tả cho khớp ở cả bốn chỗ nói trên. Nếu chốt là bắt buộc, cần chốt thêm cách xử lý hồ sơ cũ đang thiếu hai thông tin này: cho lưu tiếp và chỉ bắt buộc với hồ sơ tạo mới, hay bắt bổ sung đủ mới lưu được.
+- Đây là ý duy nhất trong nhóm này có thể chặn người dùng lưu hồ sơ, đề nghị ưu tiên trả lời trước.
+- Rút lại một ý so với lượt trước: ý "thứ tự trường trên biểu mẫu" đã được rà lại và rút, vì bảng thành phần màn hình là bảng liệt kê thành phần chứ không phải bản vẽ bố cục, không đủ căn cứ coi thứ tự là ràng buộc bắt buộc.
+- Ghi chú tham chiếu: chức năng "Quản lý Tổ chức tư vấn" (FR-IV-NEW-01) trong đặc tả không được cấp mã UC (dòng 1029 ghi "chưa có trong CSV"), nên chỉ nêu tên chức năng và số dòng.
+- Đã đưa vào file gửi BA: ba-confirmation-needed-luong4-to-chuc-tu-van-2026-08-03.md, mục 1.
+- Kiểm bằng vai trò Cán bộ Nghiệp vụ Trung ương (cbnv_tw_04), bản dựng HTPLDN V1.0.5.

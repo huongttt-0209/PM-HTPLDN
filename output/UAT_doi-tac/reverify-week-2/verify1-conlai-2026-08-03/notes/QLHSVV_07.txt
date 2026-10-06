@@ -1,0 +1,7 @@
+☑️ Đã kiểm tra lại — chức năng chạy đúng.
+- Kiểm tra lại bằng vai trò Cán bộ Nghiệp vụ Trung ương, đúng tiền đề của phiếu: hồ sơ vụ việc đã tiếp nhận và có tệp đính kèm (tệp ảnh JPG, đã quét sạch) — quản lý hồ sơ vụ việc (UC57).
+- Trên hàng tệp trong nhóm "Tài liệu đính kèm", cột "Thao tác" nay có HAI nút tách riêng: nút "Xem" (hình con mắt) và nút "Tải" (hình mũi tên tải xuống). Hai nút làm hai việc khác nhau.
+- Bấm "Tải": hệ thống tải tệp về máy người dùng. Đã kiểm tệp nhận được có kích thước và nội dung y hệt tệp đã đính kèm, không sai lệch. Màn hình vẫn đứng nguyên ở trang Chi tiết vụ việc, không mở màn xem nào.
+- Bấm "Xem": mới là nút mở khung xem trước tệp ngay trong trang (có phóng to, xoay ảnh), và không tải tệp về máy.
+- Lặp lại thao tác "Tải" 3 lần, trong đó 2 lần sau khi tải lại trang và xóa sạch tệp cũ trong thư mục Tải xuống: cả 3 lần tệp đều về máy đầy đủ.
+- Kết luận: không còn tình trạng bấm biểu tượng tải xuống mà hệ thống lại mở màn hình xem. Phiếu này đạt.

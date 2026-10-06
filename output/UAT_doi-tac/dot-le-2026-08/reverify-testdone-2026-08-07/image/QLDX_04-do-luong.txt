@@ -1,0 +1,84 @@
+QLDX_04 — do lai tren env nghiem thu https://htpldn-uat.ospgroup.vn
+Build: HTPLDN V1.0.10 — bo ma FE /assets/index-Bd1akG3f.js
+Vai tro: CB_NV_TW (Can bo NV Trung uong), tai khoan cbnv_tw
+Man dang mo: /doanh-nghiep/danh-sach
+
+== BUOC A — co che dem gio ==
+localStorage keys: ["auth-store","auth-last-activity"]
+sessionStorage keys: []
+Moc hoat dong cuoi = localStorage["auth-last-activity"] (chuoi mili-giay epoch)
+
+== QUAN SAT TU NHIEN (khong rut ngan) ==
+Phien de yen that su tu truoc. Luc 2026-08-07T12:59:31Z do duoc idle = 25.924 phut
+-> HOP THOAI CANH BAO DANG HIEN SAN, dem nguoc "Phien se tu dang xuat sau 4:05".
+Day la lan bat that, khong can can thiep gi.
+
+Tieu de: "Phiên làm việc sắp hết hạn"
+Doan noi dung (innerText cua the <p> la nut la, dang hien):
+"Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc."
+So sanh === voi cau trong phieu: TRUE (khop tung ky tu)
+
+So nut trong pham vi hop thoai (chi tinh nut dang hien): 2
+  [1] "Đăng xuất"     — ant-btn-default,  disabled=false
+  [2] "Gia hạn phiên" — ant-btn-primary,  disabled=false
+
+== BUOC E — doi chung loai tru (do luc hop thoai dang hien) ==
+12:59:59Z, idle 26.384 phut, hop thoai van hien (dem nguoc 3:38):
+  GET /api/v1/auth/me -> 200 {"success":true,"data":{"hoTen":"Cán bộ NV Trung ương","vaiTro":["CB_NV_TW"],...}}
+=> Phien VAN CON HIEU LUC o may chu khi hop thoai bat.
+Ra soat network sau dang nhap: khong co request nao tra 401.
+(401 duy nhat la reqid=907 GET /auth/me TRUOC khi dang nhap — kiem tra dau phien, khong lien quan.)
+Nen: hop thoai do DONG HO CHO phia trinh duyet, khong phai may chu da ra.
+
+== BUOC B — moc co bi ghi de nen khong ==
+Cai bo theo doi localStorage["auth-last-activity"] moi 2 giay roi NGOI IM 165,4 giay.
+  so lan kiem tra: 82
+  so lan gia tri bi thay doi: 0
+  gia tri dau = gia tri cuoi = 1786107605868
+=> Moc KHONG bi request nen (poll /thong-baos/unread-count ~30s/lan) ghi de.
+=> Phep rut ngan hop le.
+
+== BUOC C — kep hai dau nguong ==
+Bo ghi mau: doc moi 1000ms, dem so .ant-modal DANG HIEN (width>0 va display!=none).
+
+-- C1 (am tinh) --
+Dat moc = now - 23:50, de yen 58 giay (khong cham gi).
+  so mau: 69   |  tuoi moc trai qua: 23:50.7 -> 24:58.7
+  so lan thay hop thoai: 0   (distinct counts = [0])
+  moc khong bi doi trong suot cua so: TRUE
+=> PASS: khong bat truoc 25 phut.
+
+-- C2 (duong tinh) --
+Dat moc = now - 25:05, de yen 60 giay (khong cham gi).
+  so mau: 73   |  so lan thay hop thoai: 73/73
+  do tre tu luc dat moc den khi hop thoai hien: 0,3 giay
+  tuoi moc tai lan thay dau tien: 1505,3 giay (= 25:05,3)
+  moc khong bi doi: TRUE
+=> PASS: hop thoai TU BAT, khong can thao tac nguoi dung.
+
+-- Diem lat chinh xac (bat duoc o lan do truoc do) --
+  tuoi moc 1500,5 giay (25:00,5) -> CHUA co hop thoai
+  tuoi moc 1501,0 giay (25:01,0) -> DA co hop thoai
+=> Nguong = dung 25:00, sai so duoi 1 giay.
+
+== BUOC D — noi dung (do o C2) ==
+innerText the <p> dang hien:
+"Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc."
+Cau trong phieu:
+"Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc."
+So sanh === : TRUE
+Tieu de: "Phiên làm việc sắp hết hạn"
+Dem nguoc: "Phiên sẽ tự đăng xuất sau 3:43." (chay that, quan sat tiep 3:34 roi 3:31)
+So nut trong pham vi hop thoai: 2 -> ["Đăng xuất", "Gia hạn phiên"]
+KHONG bam nut nao (de danh cho QLDX_05 / QLDX_06).
+
+== BUOC E — doi chung loai tru (do o C2) ==
+Ra soat toan bo 114 luot goi cua phien:
+  401 duy nhat = reqid 907 GET /auth/me TRUOC khi dang nhap. Sau dang nhap: KHONG co 401 nao.
+  13:08:46Z (hop thoai dang hien, dem nguoc 3:31): GET /api/v1/auth/me -> 200, tra dung ho so CB_NV_TW.
+=> Hop thoai do DONG HO CHO phia trinh duyet, KHONG phai may chu thu hoi phien.
+
+== BAT THUONG NGOAI PHIEU (ghi nhan, khong tai hien duoc) ==
+reqid 1063/1064/1065 GET /api/v1/thong-baos/unread-count -> 404 (3 lan lien tiep).
+Probe lai ngay sau do 3 lan -> 200 {"success":true,"data":{"count":426}}.
+=> Loi thoang qua, khong tai hien. Khong lien quan QLDX_04.

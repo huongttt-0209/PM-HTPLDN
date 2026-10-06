@@ -1,0 +1,26 @@
+{
+  "date_jun_dec_context": {
+    "status": 401,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-AUTH-COMMON-01",
+        "message": "Phiên đăng nhập đã hết hạn do không hoạt động",
+        "timestamp": "2026-06-25T15:38:06.893Z",
+        "requestId": "56d5b50d-c05c-4500-a118-47c1c101c819"
+      }
+    }
+  },
+  "combo_keyword_hdtv_date_context": {
+    "status": 401,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-AUTH-COMMON-01",
+        "message": "Phiên đăng nhập đã hết hạn do không hoạt động",
+        "timestamp": "2026-06-25T15:38:06.929Z",
+        "requestId": "196f89e3-1cee-4d6a-85bf-4f02e8904b3d"
+      }
+    }
+  }
+}

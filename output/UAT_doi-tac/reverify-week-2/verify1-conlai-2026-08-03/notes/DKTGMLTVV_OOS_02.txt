@@ -1,0 +1,9 @@
+☑️ Đã kiểm tra lại — lỗi không còn, chuyển Pass.
+- Kiểm lại ngày 03/08/2026 lúc 21:05 trên màn "Mạng lưới Tư vấn viên → Tư vấn viên / Chuyên gia → Thêm mới", tài khoản nht_qa_tw (Người hỗ trợ pháp lý, cấp Trung ương, Cục Bổ trợ tư pháp). Bản dựng V1.0.5, gói giao diện index-B1e0L2GY.js (khác gói lúc phát hiện lỗi).
+- Cả 3 nhãn nay đã đúng đặc tả SCR-IV-02 "Thêm mới / Chỉnh sửa Tư vấn viên" §Danh sách trường:
+  1. Tên nhóm 2 hiển thị "Thông tin nghề nghiệp" (dòng 1500) — trước hiển thị "Nghề nghiệp".
+  2. Nhãn ô giấy tờ tùy thân hiển thị "Số Căn cước công dân" (dòng 1495) — trước hiển thị "Số CMND/CCCD".
+  3. Nhãn ô trình độ hiển thị "Trình độ" (dòng 1503) — trước hiển thị "Trình độ học vấn".
+- Rút lại đề nghị BA xác nhận đã nêu ở lần trước: đặc tả không mâu thuẫn ở điểm này. Mọi chuỗi hiển thị cho người dùng trong đặc tả đều dùng "Căn cước công dân" — nhãn và thông báo trùng ở dòng 1495, mã lỗi ERR-TVV-02 dòng 202, mã lỗi ERR-DK-04 dòng 337, gợi ý ô tìm kiếm dòng 1438, kiểm tra khi rời ô dòng 1527. Chữ "cmnd_cccd" chỉ còn tồn tại ở tên cột nội bộ, người dùng không nhìn thấy. Vậy đây chỉ là sai câu chữ trên nhãn, không phải thay đổi phạm vi giấy tờ được chấp nhận — không cần BA quyết.
+- Ghi nhận thêm, KHÔNG tính là lỗi: ô nhập gợi ý "9-12 chữ số", trong khi đặc tả dòng 1495 chỉ quy định "tối đa 12 ký tự" nên không trái đặc tả. Nêu ra để bộ phận nghiệp vụ biết ô mang nhãn Căn cước công dân hiện vẫn nhận số 9 chữ số.
+- Giữ nguyên phản hồi của dev ở lần trước: [DEV 03/08] Nhãn "Số CMND/CCCD" → đã đổi "Số Căn cước công dân" theo SCR-IV-02 :1495 (commit 16a54e26a). Đủ 3 nhãn đúng SRS → dev done.

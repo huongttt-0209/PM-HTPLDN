@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Chức năng: Báo cáo thống kê › BC Đánh giá hiệu quả HTPL › Xuất PDF (FR-IX-09 / UC132).
+- Lỗi đối tác báo ("Không thể tạo file xuất") KHÔNG tái hiện: bấm Xuất PDF → "Tạo file thành công", tải được file .pdf.
+- Nhưng file PDF xuất ra THIẾU 3/4 dòng thông tin đầu trang bắt buộc: Kỳ báo cáo, Đơn vị, Ngày tạo (chỉ có tiêu đề rồi vào thẳng bảng số liệu). Bản Excel cùng báo cáo có đủ 4 dòng.
+- Theo SRS srs-fr-11-bao-cao.md:1088: "Export XLSX/PDF chèn tiêu đề BC + thông tin kỳ + đơn vị + ngày tạo vào header file" — áp dụng cho cả PDF.
+- Verify: tài khoản cbnv_tw (CB Nghiệp vụ TW), kỳ Năm 2026, đơn vị Toàn quốc, báo cáo có dữ liệu.
+- Bug ID: BUG-DGHQHTPL_07 (thuộc lỗi template PDF dùng chung BUG-EXPORT-PDF-HEADER).

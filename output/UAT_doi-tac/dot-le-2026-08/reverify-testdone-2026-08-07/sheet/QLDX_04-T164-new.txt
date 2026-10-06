@@ -1,0 +1,19 @@
+✅ ĐÃ HẾT LỖI — hộp thoại cảnh báo sắp hết phiên bật đúng mốc 25 phút không thao tác, đúng câu chữ và đủ hai nút như phiếu yêu cầu.
+
+- Đo lại ngày 07/08/2026 trên môi trường nghiệm thu htpldn-uat.ospgroup.vn, bản dựng V1.0.10 (chân sidebar ghi "HTPLDN · V1.0.10"), vai trò Cán bộ Nghiệp vụ Trung ương.
+
+- Xin nói rõ cách đo: để không phải ngồi chờ đủ 25 phút, phép đo đặt mốc hoạt động cuối (mốc này được lưu trên máy người dùng) lùi về quá khứ rồi để máy tự chạy, tuyệt đối không chạm chuột hay bàn phím. Trước khi rút ngắn, đã ngồi im 2 phút 45 giây và theo dõi liên tục để chắc chắn mốc này không bị hệ thống tự làm mới sau lưng: 82 lần kiểm tra, 0 lần bị ghi đè — nên phép rút ngắn phản ánh đúng trải nghiệm người dùng thật.
+
+- Kẹp hai đầu ngưỡng. Ở mức không thao tác từ 23 phút 50 giây đến 24 phút 59 giây, theo dõi 69 lần liên tiếp: hộp thoại KHÔNG hiện. Ở mức 25 phút 05 giây: hộp thoại TỰ BẬT sau 0,3 giây và hiện ổn định suốt 73/73 lần theo dõi, không cần bất kỳ thao tác nào. Một lượt đo khác bắt được đúng điểm lật: 25 phút 00,5 giây chưa có, 25 phút 01,0 giây đã có — ngưỡng rơi đúng 25 phút, sai số dưới 1 giây.
+
+- Ngoài ra còn bắt được một lần hộp thoại bật hoàn toàn tự nhiên, không hề can thiệp: phiên bị bỏ không thật, đến 25,9 phút thì hộp thoại đã hiện sẵn và đang đếm ngược "Phiên sẽ tự đăng xuất sau 4:05".
+
+- Câu chữ đọc được trùng từng ký tự với kết quả mong đợi của phiếu: "Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc." Tiêu đề "Phiên làm việc sắp hết hạn", kèm dòng đếm ngược chạy thật.
+
+- Đếm nút trong phạm vi hộp thoại: đúng 2 nút, cả hai đều hiển thị và bấm được — [Đăng xuất] và [Gia hạn phiên], đúng và đủ nhãn phiếu yêu cầu. Không bấm nút nào, để giữ nguyên hiện trạng cho hai phiếu QLDX_05 và QLDX_06 đo riêng.
+
+- Đối chứng loại trừ: rà toàn bộ 114 lượt gọi của phiên, sau khi đăng nhập không có lượt nào bị máy chủ từ chối vì hết phiên. Ngay lúc hộp thoại đang hiện và đang đếm ngược, kiểm tra lại thì phiên vẫn còn hiệu lực ở máy chủ và trả về đúng hồ sơ người dùng đang đăng nhập. Vậy hộp thoại do đồng hồ chờ không thao tác bật ra, không phải do máy chủ đá người dùng ra ngoài.
+
+- Đề nghị BA chốt lại một điểm trong đặc tả (không chặn bàn giao, không phải lỗi dev): srs-fr-10-quan-tri.md dòng 1959 ghi "25 phut idle → Modal canh bao → 30 phut → Auto invalidate", nhưng dòng 1891 trong bảng thành phần màn hình đăng nhập lại ghi điều kiện hiển thị là "30 phut idle" — hai dòng mâu thuẫn nhau. Bản đang chạy làm theo dòng 1959 và đúng như phiếu yêu cầu. Dòng 1891 cũng chỉ ghi chuỗi rút gọn không dấu "Phien sap het han trong 5 phut. [Gia han] [Dang xuat]"; tra toàn bộ đặc tả thì không còn chỗ nào quy định câu chữ đầy đủ của hộp thoại, nên chuẩn đối chiếu duy nhất là mục "Kết quả mong đợi" của phiếu.
+
+Ảnh chụp màn hình và nhật ký đo đã lưu kèm hồ sơ QA của đợt nghiệm thu này.

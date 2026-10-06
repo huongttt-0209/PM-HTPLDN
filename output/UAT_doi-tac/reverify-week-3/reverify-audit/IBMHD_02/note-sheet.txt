@@ -1,0 +1,22 @@
+IBMHD_02 (dòng 116) — Verdict: BA confirm (SRS tự mâu thuẫn) — 2026-07-20
+Verify: Chrome DevTools MCP, tài khoản cbnv_bn (CB Nghiệp vụ - Bộ ngành), URL /bieu-mau/nhap-hang-loat.
+
+Claim đối tác: màn Import thiếu trường "Tệp Excel mô tả dữ liệu" + nút "Tải mẫu Excel".
+
+Quan sát: TÁI HIỆN ĐÚNG. Màn bước 1 "Chọn file" chỉ có "Thư mục đích" + "Tải lên file biểu mẫu"
+(.doc/.docx/.xls/.xlsx). Không có trường Excel metadata, không có nút "Tải mẫu Excel". Ảnh đối tác (bản đối
+tác, chụp trên TW) khớp 100% màn cbnv_bn → render giống nhau ở cả 2 cấp.
+
+SRS mâu thuẫn:
+ - FR-VII-06 §Inputs: chỉ thu_muc_id (srs-fr-09-bieu-mau.md:460) + files (:461); Processing (:463-472) không
+   tiêu thụ metadata → app hiện tại đúng nhánh này.
+ - SCR-VII-03 #2 (:673): "Tải file Excel metadata | .xlsx (max 5MB), Template: [Tải mẫu Excel] | luôn hiển thị"
+   → yêu cầu trường này.
+→ QA không tự chốt được, cần BA chọn source truth (xem ba-confirmation-needed-week-3-bieu-mau-batch6.md).
+
+Vai trò: case chỉ định "CB Nghiệp vụ" (không phân cấp). Dùng cbnv_bn do cbnv_tw bị session khác chiếm
+(MailHog ~10 login 15:43-16:00). Bug là render UI, không phụ thuộc đơn vị.
+
+Evidence web: ../../bug-reports/image/BUG-IBMHD_02-03-import-screen-step1.png
+Condition table: ../../cond/IBMHD_02.md
+Sheet: dòng 116, P="BA confirm", R=note đề nghị BA chốt bỏ SCR-VII-03 #2 hay bổ sung trường.

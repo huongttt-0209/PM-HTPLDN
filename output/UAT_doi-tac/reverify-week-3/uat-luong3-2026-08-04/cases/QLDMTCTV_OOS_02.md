@@ -1,0 +1,65 @@
+# QLDMTCTV_OOS_02 — dòng 328 (tab `UAT_TGPL Doanh Nghiệp-tuần 3`)
+
+## Tuần
+
+Tuần 3
+
+## Mã TC
+
+QLDMTCTV_OOS_02
+
+## Mô tả
+
+Danh sách Tổ chức tư vấn — cột "Công khai" là nhãn tĩnh, bấm không mở được hộp thoại công khai
+
+## Điều kiện
+
+1. Đăng nhập tài khoản Cán bộ Nghiệp vụ cấp Trung ương (cbnv_tw_04), đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp.
+2. Chọn menu "Mạng lưới Tư vấn viên" -> "Tổ chức tư vấn".
+
+## Dữ liệu đầu vào
+
+3 tổ chức ở thẻ "Đang hoạt động", trong đó có tổ chức đã công khai và tổ chức chưa công khai.
+
+## Các bước thực hiện
+
+1. Ở thẻ "Đang hoạt động", cuộn ngang bảng sang phải tới cột "Công khai".
+2. Đọc nhãn đang hiển thị trên từng dòng.
+3. Bấm vào nhãn đó và quan sát hệ thống có mở hộp thoại nào không.
+
+## Kết quả mong đợi
+
+Màn hình SCR-IV-NEW-01 dòng 1645 quy định cột "Công khai" là một công tắc bật/tắt, nhãn "Đã công khai" (xanh) / "Chưa công khai" (xám), bấm vào thì mở hộp thoại xác nhận công khai hoặc hủy công khai, và chỉ bật được khi tổ chức đang ở trạng thái "Đang hoạt động".
+
+## Kết quả thực tế
+
+Cột "Công khai" chỉ là nhãn tĩnh, không bấm được (con trỏ chuột không đổi thành hình bàn tay), bấm vào không mở hộp thoại nào.
+Nhãn hiển thị cũng khác đặc tả: web dùng "Công khai" / "Riêng tư", đặc tả yêu cầu "Đã công khai" / "Chưa công khai".
+Hiện chỉ công khai được bằng cách tích chọn dòng rồi bấm nút trên thanh thao tác hàng loạt.
+
+## Ảnh/vieo 1
+
+QLDMTCTV_02-cuon-ngang-hien-cot-trang-thai-va-cong-khai.png
+
+## Trạng thái 1
+
+Fail
+
+## Trạng thái dev fix 1
+
+dev done
+
+## Verify
+
+Pass
+
+## DEV phản hồi lần 1
+
+✅ Bug ĐÚNG - chuyển dev.
+- Cột "Công khai" trên bảng danh sách chỉ là nhãn hiển thị, bấm vào không mở hộp thoại công khai / hủy công khai.
+- Theo màn hình SCR-IV-NEW-01 (dòng 1645), cột này phải là công tắc bật/tắt bấm được, và bấm vào thì mở hộp thoại xác nhận tương ứng.
+- Nhãn cũng khác đặc tả: web đang hiển thị "Công khai" / "Riêng tư", trong khi đặc tả yêu cầu "Đã công khai" / "Chưa công khai".
+- Chức năng công khai vẫn làm được qua thanh thao tác hàng loạt nên mức ảnh hưởng vừa phải, nhưng thao tác trên từng dòng thì chưa có.
+- Ghi chú tham chiếu: chức năng "Quản lý Tổ chức tư vấn" (FR-IV-NEW-01) trong đặc tả KHÔNG được cấp mã UC (dòng 1029 ghi "chưa có trong CSV"), nên chỉ nêu tên chức năng và số dòng, không có mã UC để dẫn.
+- Lỗi do QA phát hiện thêm khi kiểm 4 phiếu QLDMTCTV_02 / _05 / _06 / _09 ngày 03/08/2026, không nằm trong phạm vi 4 phiếu đó nên mở dòng riêng để chuyển dev.
+- Môi trường kiểm: bản dựng HTPLDN V1.0.5.

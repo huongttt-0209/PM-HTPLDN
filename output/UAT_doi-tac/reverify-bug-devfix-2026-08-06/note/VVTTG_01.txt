@@ -1,0 +1,12 @@
+Verify 06/08/2026, bản dựng V1.0.8 (đối tác quay 15/07 trên V1.0), tài khoản Cán bộ Nghiệp vụ Trung ương — đúng tác nhân theo đặc tả, cấp TW nên thấy được phạm vi Toàn quốc như đối tác. Không tái hiện: số liệu hai báo cáo KHỚP NHAU và khớp dữ liệu thật.
+
+Vế đối tác nêu là "BC Vụ việc đã tiếp nhận nhiều hơn BC Vụ việc theo thời gian dù chọn cùng khoảng thời gian". Đo lại thì:
+- Ép CÙNG đơn vị cho cả hai báo cáo (điều mà bằng chứng của đối tác chưa làm được — ảnh BC đã tiếp nhận lọc Cục Bổ trợ tư pháp, còn ảnh BC theo thời gian để Toàn quốc): phạm vi Cục Bổ trợ tư pháp ra 36 = 36; phạm vi Toàn quốc ra 50 = 50. Hai báo cáo bằng nhau, không bên nào nhỏ hơn.
+- Đếm độc lập từ danh sách vụ việc (không qua báo cáo): số vụ việc có ngày tiếp nhận trong năm 2026, trừ vụ việc bị từ chối, ra đúng 50 (Toàn quốc) và 36 (Cục Bổ trợ tư pháp) — khớp cả hai báo cáo từng con số.
+- Thử đủ 3 kỳ (Năm, Tháng, Quý) trên cả hai phạm vi, tổng cộng 12 phép đo: kết quả nhất quán, và khớp tới từng mốc thời gian (ví dụ kỳ Tháng Toàn quốc: T1 1, T2 4, T3 5, T4 9, T7 11, T8 20 — cộng lại đúng 50). Tổng toàn kỳ không đổi khi đổi kỳ trên cùng khoảng thời gian.
+
+=> Chỗ khiến đối tác thấy lệch nhiều khả năng là hai ảnh chụp ở HAI phạm vi đơn vị khác nhau. Đáng chú ý: chính ảnh của đối tác ngày 31/07 đã cho quan hệ thuận (51 so với 27), tức triệu chứng đã không còn ngay trên môi trường của họ.
+
+Lưu ý khi đối tác đo lại: màn báo cáo có nhớ kết quả trong thời gian ngắn (mục "Thời điểm tạo" cho biết số được tính lúc nào). Trong lượt đo này đã gặp một lần lệch đúng 1 đơn vị do dữ liệu vừa được thêm sau khi số đã tính xong; đổi lại khoảng thời gian rồi xem lại thì hai con số khớp tuyệt đối. Nên đọc "Thời điểm tạo" trước khi kết luận số sai.
+
+Lưu ý hiệu lực: đo trên môi trường nội bộ 18.143.165.120.nip.io bản V1.0.8, chưa phải môi trường đối tác; dữ liệu vụ việc của hai môi trường hoàn toàn khác nhau nên đây là kết luận "hiện trạng đúng đặc tả", chưa phải xác nhận bản vá đã lên môi trường đối tác.

@@ -1,0 +1,16 @@
+{
+  "STT": "03/08/2026",
+  "Tuần": "Tuần 3",
+  "Mã TC": "QLDMTCTV_OOS_03",
+  "Mô tả": "Danh sách Tổ chức tư vấn — cột \"Hành động\" thiếu nhóm lệnh \"...\" (Trình phê duyệt / Phê duyệt / Từ chối / Cập nhật trạng thái)",
+  "Điều kiện": "1. Đăng nhập tài khoản Cán bộ Nghiệp vụ cấp Trung ương (cbnv_tw_04), đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp.\n2. Chọn menu \"Mạng lưới Tư vấn viên\" -> \"Tổ chức tư vấn\".",
+  "Dữ liệu đầu vào": "3 tổ chức ở thẻ \"Đang hoạt động\" và 2 tổ chức ở thẻ \"Mới đăng ký\".",
+  "Các bước thực hiện": "1. Cuộn ngang bảng sang phải tới cột \"Hành động\".\n2. Đếm và đọc các nút đang có trên mỗi dòng.\n3. Tìm nhóm lệnh dạng dấu ba chấm \"...\" trên dòng.",
+  "Kết quả mong đợi": "Màn hình SCR-IV-NEW-01 dòng 1646 quy định cột \"Hành động\" gồm 2 biểu tượng thường (Xem, Sửa) và một nhóm lệnh \"...\" chứa: \"Trình phê duyệt\", \"Phê duyệt\", \"Từ chối\", \"Cập nhật trạng thái\", \"Xóa\" — mỗi lệnh hiện theo đúng vai trò và trạng thái của dòng.",
+  "Kết quả thực tế": "Cột \"Hành động\" chỉ có 3 biểu tượng rời: Xem, Sửa, Xóa. Không có nhóm lệnh \"...\" nào.\nHệ quả: các lệnh \"Trình phê duyệt\" và \"Cập nhật trạng thái\" không thao tác được từ danh sách, phải mở màn Chi tiết của từng tổ chức mới làm được.",
+  "Ảnh/vieo 1": "QLDMTCTV_02-cuon-ngang-hien-cot-trang-thai-va-cong-khai.png",
+  "Trạng thái 1": "Fail",
+  "Verify": "Open",
+  "DEV phản hồi lần 1": "✅ Bug ĐÚNG - chuyển dev.\n- Cột \"Hành động\" trên danh sách chỉ có 3 biểu tượng Xem / Sửa / Xóa, không có nhóm lệnh dấu ba chấm.\n- Theo màn hình SCR-IV-NEW-01 (dòng 1646), cột này phải có thêm nhóm lệnh \"...\" chứa \"Trình phê duyệt\", \"Phê duyệt\", \"Từ chối\", \"Cập nhật trạng thái\" và \"Xóa\", hiện theo vai trò và trạng thái từng dòng.\n- Hệ quả thực tế: muốn trình phê duyệt hoặc cập nhật trạng thái thì phải mở màn Chi tiết từng tổ chức, không làm được ngay trên danh sách.\n- Ghi chú tham chiếu: chức năng \"Quản lý Tổ chức tư vấn\" (FR-IV-NEW-01) trong đặc tả KHÔNG được cấp mã UC (dòng 1029 ghi \"chưa có trong CSV\"), nên chỉ nêu tên chức năng và số dòng, không có mã UC để dẫn.\n- Lỗi do QA phát hiện thêm khi kiểm 4 phiếu QLDMTCTV_02 / _05 / _06 / _09 ngày 03/08/2026, không nằm trong phạm vi 4 phiếu đó nên mở dòng riêng để chuyển dev.\n- Môi trường kiểm: bản dựng HTPLDN V1.0.5.",
+  "Trạng thái dev fix 1": "Open"
+}

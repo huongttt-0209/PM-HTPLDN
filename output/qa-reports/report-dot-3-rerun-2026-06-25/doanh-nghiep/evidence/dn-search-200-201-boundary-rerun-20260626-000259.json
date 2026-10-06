@@ -1,0 +1,231 @@
+{
+  "run_id": "20260626-000259",
+  "base": "http://103.172.236.130:3000/api/v1",
+  "auth": {
+    "login": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/auth/login"
+    },
+    "login_body_success": true,
+    "otp": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/auth/verify-otp"
+    },
+    "otp_body_success": true
+  },
+  "name200_len": 200,
+  "tests": {
+    "pre_list": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps?page=1&pageSize=1",
+      "body": {
+        "success": true,
+        "data": [
+          {
+            "id": "1e29453e-cba4-4618-b3f9-6740f411e906",
+            "nguoiTaoId": "de7d2f4a-9eac-4972-a8c5-f86232009217",
+            "nguoiCapNhatId": "de7d2f4a-9eac-4972-a8c5-f86232009217",
+            "ngayTao": "2026-05-09T15:13:47.536Z",
+            "ngayCapNhat": "2026-06-25T16:56:04.108Z",
+            "donViId": "00000000-0000-4000-8002-000000000001",
+            "seqId": "30",
+            "version": 3,
+            "maDoanhNghiep": "DN-HNI-0004",
+            "tenDoanhNghiep": "Công ty TNHH DN Test 01",
+            "tenVietTat": null,
+            "maSoThue": "9999999990",
+            "giayCnDkkd": null,
+            "ngayCapDkkd": null,
+            "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+            "diaChi": "Số 1, Đường Test, Quận Test, Hà Nội",
+            "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+            "dienThoai": "0901234567",
+            "email": "dntest01@htpldn.test",
+            "fax": null,
+            "nganhNghe": "THUONG_MAI",
+            "nguoiDaiDien": "Nguyễn Văn A",
+            "chucVuDaiDien": null,
+            "doanhThu": "0.00",
+            "soLaoDong": 1,
+            "soLaoDongNu": null,
+            "soLaoDongKhuyetTat": null,
+            "laNuLamChu": false,
+            "tongSoVuViec": 5,
+            "tongChiPhiHoTro": "0.00",
+            "ghiChu": null,
+            "quyMo": "SIEU_NHO",
+            "tongNguonVon": null,
+            "laCongKhai": false,
+            "linhVucIds": []
+          }
+        ],
+        "meta": {
+          "total": 41,
+          "page": 1,
+          "pageSize": 1,
+          "totalPages": 41
+        }
+      }
+    },
+    "create_boundary_dn": {
+      "status": 201,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": true,
+        "data": {
+          "id": "89bf7c2e-6a0b-4b41-9f2d-c4604d47d5c0",
+          "nguoiTaoId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "nguoiCapNhatId": null,
+          "ngayTao": "2026-06-25T17:03:00.800Z",
+          "ngayCapNhat": "2026-06-25T17:03:00.800Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "version": 1,
+          "maDoanhNghiep": "DN-HNI-0012",
+          "tenDoanhNghiep": "QASEARCHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+          "tenVietTat": null,
+          "maSoThue": "6606980655",
+          "giayCnDkkd": null,
+          "ngayCapDkkd": null,
+          "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+          "diaChi": "QA Search Boundary 20260626-000259",
+          "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+          "dienThoai": "0901234567",
+          "email": "qa-search-20260626-000259@example.test",
+          "fax": null,
+          "nganhNghe": "CONG_NGHIEP",
+          "nguoiDaiDien": "Nguyen QA",
+          "chucVuDaiDien": null,
+          "doanhThu": "1",
+          "soLaoDong": 1,
+          "soLaoDongNu": 0,
+          "soLaoDongKhuyetTat": 0,
+          "laNuLamChu": false,
+          "tongSoVuViec": 0,
+          "tongChiPhiHoTro": "0.00",
+          "ghiChu": null,
+          "quyMo": "SIEU_NHO",
+          "tongNguonVon": "1",
+          "laCongKhai": false
+        },
+        "meta": null
+      }
+    },
+    "search_200": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps?page=1&pageSize=20&search=QASEARCHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+      "body": {
+        "success": true,
+        "data": [
+          {
+            "id": "89bf7c2e-6a0b-4b41-9f2d-c4604d47d5c0",
+            "nguoiTaoId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+            "nguoiCapNhatId": null,
+            "ngayTao": "2026-06-25T17:03:00.800Z",
+            "ngayCapNhat": "2026-06-25T17:03:00.800Z",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "seqId": "55",
+            "version": 1,
+            "maDoanhNghiep": "DN-HNI-0012",
+            "tenDoanhNghiep": "QASEARCHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+            "tenVietTat": null,
+            "maSoThue": "6606980655",
+            "giayCnDkkd": null,
+            "ngayCapDkkd": null,
+            "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+            "diaChi": "QA Search Boundary 20260626-000259",
+            "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+            "dienThoai": "0901234567",
+            "email": "qa-search-20260626-000259@example.test",
+            "fax": null,
+            "nganhNghe": "CONG_NGHIEP",
+            "nguoiDaiDien": "Nguyen QA",
+            "chucVuDaiDien": null,
+            "doanhThu": "1.00",
+            "soLaoDong": 1,
+            "soLaoDongNu": 0,
+            "soLaoDongKhuyetTat": 0,
+            "laNuLamChu": false,
+            "tongSoVuViec": 0,
+            "tongChiPhiHoTro": "0.00",
+            "ghiChu": null,
+            "quyMo": "SIEU_NHO",
+            "tongNguonVon": "1.00",
+            "laCongKhai": false,
+            "linhVucIds": []
+          }
+        ],
+        "meta": {
+          "total": 1,
+          "page": 1,
+          "pageSize": 20,
+          "totalPages": 1
+        }
+      }
+    },
+    "search_201": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps?page=1&pageSize=20&search=QASEARCHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXY",
+      "body": {
+        "success": true,
+        "data": [
+          {
+            "id": "89bf7c2e-6a0b-4b41-9f2d-c4604d47d5c0",
+            "nguoiTaoId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+            "nguoiCapNhatId": null,
+            "ngayTao": "2026-06-25T17:03:00.800Z",
+            "ngayCapNhat": "2026-06-25T17:03:00.800Z",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "seqId": "55",
+            "version": 1,
+            "maDoanhNghiep": "DN-HNI-0012",
+            "tenDoanhNghiep": "QASEARCHXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+            "tenVietTat": null,
+            "maSoThue": "6606980655",
+            "giayCnDkkd": null,
+            "ngayCapDkkd": null,
+            "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+            "diaChi": "QA Search Boundary 20260626-000259",
+            "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+            "dienThoai": "0901234567",
+            "email": "qa-search-20260626-000259@example.test",
+            "fax": null,
+            "nganhNghe": "CONG_NGHIEP",
+            "nguoiDaiDien": "Nguyen QA",
+            "chucVuDaiDien": null,
+            "doanhThu": "1.00",
+            "soLaoDong": 1,
+            "soLaoDongNu": 0,
+            "soLaoDongKhuyetTat": 0,
+            "laNuLamChu": false,
+            "tongSoVuViec": 0,
+            "tongChiPhiHoTro": "0.00",
+            "ghiChu": null,
+            "quyMo": "SIEU_NHO",
+            "tongNguonVon": "1.00",
+            "laCongKhai": false,
+            "linhVucIds": []
+          }
+        ],
+        "meta": {
+          "total": 1,
+          "page": 1,
+          "pageSize": 20,
+          "totalPages": 1
+        }
+      }
+    },
+    "cleanup_delete_boundary_dn": {
+      "status": 204,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/89bf7c2e-6a0b-4b41-9f2d-c4604d47d5c0",
+      "body": null
+    }
+  },
+  "created_id": "89bf7c2e-6a0b-4b41-9f2d-c4604d47d5c0",
+  "ids200": [
+    "89bf7c2e-6a0b-4b41-9f2d-c4604d47d5c0"
+  ],
+  "ids201": [
+    "89bf7c2e-6a0b-4b41-9f2d-c4604d47d5c0"
+  ],
+  "verdict": "PASS_201_TRUNCATED_TO_200"
+}

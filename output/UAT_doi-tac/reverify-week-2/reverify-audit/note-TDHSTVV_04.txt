@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web đang hiển thị hộp tích của "Nhóm 3 — Hiệu quả & uy tín" là "N/A — TVV mới, chưa có lịch sử hỗ trợ".
+- Theo FR-IV-06 (UC44) · màn hình SCR-IV-03 tab "Thẩm định" (srs-fr-04-chuyen-gia-tvv.md, dòng 1558), hộp tích của Nhóm 3 phải có tên "Không áp dụng (tư vấn viên mới)". Ngoài sai tên, nhãn hiện tại còn dùng chữ viết tắt tiếng Anh "N/A" và "TVV", không đồng nhất ngôn ngữ hiển thị tiếng Việt như các nhãn khác trong biểu mẫu.
+- Verify: tài khoản cbnv_tw (Cán bộ Nghiệp vụ - Trung ương), hồ sơ TVV-BTP-TW-0003, tab "Thẩm định".
+- Bug ID: BUG-TDHSTVV_04.

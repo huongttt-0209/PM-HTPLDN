@@ -1,0 +1,43 @@
+tuan,dong,ma_tc,cot_da_ghi_pass,cot_tieu_chi,trang_thai_hien_tai,mo_ta_ngan
+tuần 2,116,KTDGKQHT_02,Q (Verify),R (DEV phản hồi lần 1),Pass,Kiểm tra dữ liệu hiển thị trong mỗi tab
+tuần 2,121,CBKQDTBD_01,X (Verify 2),Y (DEV phản hồi lần 2),Pass,"Cung cấp chức năng công bố kết quả, cập nhật kết quả vào tài khoản của học viên."
+tuần 2,123,DKTGMLTVV_05,Q (Verify),R (DEV phản hồi lần 1),Pass,Kiểm tra hiển thị Nhóm 4  Tệp đính kèm
+tuần 2,125,QLLSHTCTVV_03,Q (Verify),R (DEV phản hồi lần 1),Pass,Kiểm tra hiển thị Cột dữ liệu trong bảng danh sách vụ việc
+tuần 2,126,QLLSHTCTVV_04,Q (Verify),R (DEV phản hồi lần 1),Pass,Kiểm tra các trường thông tin tìm kiếm
+tuần 2,127,NHSYC_01,Q (Verify),R (DEV phản hồi lần 1),Pass,"Cung cấp giao diện cho CB Nghiệp vụ nhập hồ sơ yêu cầu hỗ trợ pháp lý thủ công (từ văn bản giấy, điện thoại...)."
+tuần 2,128,QLHSVV_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Tải tệp
+tuần 2,134,QLDXDTTH_10,X (Verify 2),Y (DEV phản hồi lần 2),Pass,"Tab ""Đề xuất đào tạo"" (màn Chương trình đào tạo) thiếu cột ""Người đề xuất""."
+tuần 2,135,QLDXDTTH_11,Q (Verify),R (DEV phản hồi lần 1),Pass,"Quyền của Cán bộ nghiệp vụ trên tab ""Đề xuất đào tạo"": thiếu thao tác Tiếp nhận / Đánh dấu thực hiện, nhưng lại có nút G"
+tuần 2,144,QLLKHDTBD_50,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Bảng danh sách Kế hoạch đào tạo thiếu cột và sai định dạng so với thiết kế
+tuần 2,145,TKHSYCHTPL_OOS_01,Q (Verify),R (DEV phản hồi lần 1),Pass,"Hồ sơ đã kết thúc vẫn lọt bộ lọc ""Mức SLA = Sắp hết hạn"", nhưng cột ""Cảnh báo thời hạn"" của chính các hồ sơ đó lại hiển "
+tuần 2,149,KTDGKQHT_23,Q (Verify),R (DEV phản hồi lần 1),Pass,"Tỷ lệ chuyên cần ở tab ""Kết quả"" không cập nhật lại khi lịch học của khóa được thêm buổi sau lúc điểm danh — mẫu số đóng"
+tuần 2,154,NHSYC_OOS_02,Q (Verify),R (DEV phản hồi lần 1),Pass,"Biểu mẫu Thêm mới Hồ sơ Vụ việc tự điền sẵn ô ""Ngày tiếp nhận"" bằng ngày hôm nay, nhưng giữ nguyên chính giá trị mặc địn"
+tuần 2,155,TKHSYCHTPL_OOS_02,Q (Verify),R (DEV phản hồi lần 1),Pass,"Hồ sơ vụ việc đã vào luồng xử lý nhưng không có Thời hạn xử lý, nên cột ""Cảnh báo thời hạn"" cũng trống — hồ sơ nằm ngoài"
+tuần 2,156,NHSYC_OOS_03,Q (Verify),R (DEV phản hồi lần 1),Pass,"Màn Chi tiết hồ sơ vụ việc chỉ hiện con số mức ưu tiên, không kèm chú giải bằng chữ và không có huy hiệu màu — cán bộ kh"
+tuần 3,58,TLCTCDG_11,X (Verify 2),Y (DEV phản hồi lần 2),Pass,"Kiểm tra lưu thành công, tổng trọng số khác 100%"
+tuần 3,91,TKTMBMHD_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Xóa bộ lọc
+tuần 3,166,QLTKND_03,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra Thẻ trạng thái (tab nhanh)
+tuần 3,192,SLHDVM_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,197,VVDTN_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,204,VVDHT_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,210,VVDHTHT_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,217,VVTTG_06,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,223,CLDTBDDDR_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,228,LDTBDDDR_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,231,CGTVPL_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,234,DGHQHTPL_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,238,CLDTBDPL_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,240,VVTDVQL_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,244,VVTLV_06,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,247,VVTLHDN_06,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,249,VVTTGCT_06,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,251,CPHTCT_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,254,CPCTHTTDVQL_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,258,CPCTHTTLHDN_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,259,CPCTHTTTG_03,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra hiển thị Biểu đồ và bảng tổng hợp
+tuần 3,261,CPCTHTTTG_06,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,265,SLCTHT_07,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,269,CTTDVQL_05,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,274,CTTLV_06,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,276,CTTTG_05,X (Verify 2),Y (DEV phản hồi lần 2),Pass,Kiểm tra chức năng Xuất PDF
+tuần 3,339,QLDMTCTV_OOS_13,Q (Verify),R (DEV phản hồi lần 1),Pass,Biểu mẫu Thêm mới / Chỉnh sửa Tổ chức tư vấn — thứ tự trường và tên gọi Giấy ĐKHĐ chưa thống nhất với đặc tả

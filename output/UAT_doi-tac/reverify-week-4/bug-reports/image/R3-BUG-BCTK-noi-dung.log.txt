@@ -1,0 +1,216 @@
+R3 RE-VERIFY — BUG-BCTK-XUAT-THIEU-BANG (XUATTEP_OOS_09)
+Ngay chay: 29/07/2026  |  Env: https://18.143.165.120.nip.io  |  Tai khoan: cbnv_tw_01
+Ky: Nam (01/01/2026 - 31/12/2026)  |  Don vi: Toan quoc
+Cach lay tep: bam nut [Xuat Excel] / [Xuat PDF] tren giao dien, doc Blob do chinh UI sinh ra.
+Quet DU 7 loai bao cao co trong o 'Loai bao cao' cua vai tro nay.
+==============================================================================
+
+------------------------------------------------------------------------------
+[1/7] BC Vu viec da tiep nhan   -> DA SUA
+------------------------------------------------------------------------------
+  MAN HINH: 3 bang + 1 the so lieu
+     the : Tong vu viec = 27
+     bang: Kenh tiep nhan / So luong                (1 dong)
+     bang: Linh vuc PL / So luong / Ty le           (2 dong)
+     bang: Don vi / So luong                        (4 dong)
+  TEP EXCEL: sheet 'BC Vụ việc đã tiếp nhận'  vung A1:B28
+     r 1: BC Vụ việc đã tiếp nhận | 
+     r 2: Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026) | 
+     r 3: Đơn vị: Toàn quốc | 
+     r 4: Ngày tạo: 29/07/2026 | 
+     r 6: Tổng số vụ việc đã tiếp nhận | 
+     r 7: Chỉ tiêu | Số lượng
+     r 8: Tổng số vụ việc đã tiếp nhận | 27
+     r10: Theo kênh tiếp nhận | 
+     r11: Kênh tiếp nhận | Số lượng
+     r12: Trực tiếp | 27
+     r14: Theo lĩnh vực pháp luật | 
+     r15: Lĩnh vực pháp luật | Số lượng
+     r16: Thương mại | 14
+     r17: Dân sự | 13
+     r19: Theo đơn vị | 
+     r20: Đơn vị | Số lượng
+     r21: Cục Bổ trợ tư pháp - Bộ Tư pháp | 20
+     r22: Bộ Kế hoạch và Đầu tư | 3
+     r23: Sở Tư pháp An Giang | 3
+     r24: Sở Tư pháp Hà Nội | 1
+     r26: Theo kỳ | 
+     r27: Kỳ | Số lượng
+     r28: 2026-01-01 | 27
+  TEP PDF: 1 trang
+     BC VỤ VIỆC ĐÃ TIẾP NHẬN
+     Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+     Đơn vị: Toàn quốc
+     Ngày tạo: 29/07/2026
+     Tổng số vụ việc đã tiếp nhận
+     Chỉ tiêu
+     Số lượng
+     Tổng số vụ việc đã tiếp nhận
+     27
+     Theo kênh tiếp nhận
+     Kênh tiếp nhận
+     Số lượng
+     Trực tiếp
+     27
+     Theo lĩnh vực pháp luật
+     Lĩnh vực pháp luật
+     Số lượng
+     Thương mại
+     14
+     Dân sự
+     13
+     Theo đơn vị
+     Đơn vị
+     Số lượng
+     Cục Bổ trợ tư pháp - Bộ Tư pháp
+     20
+     Bộ Kế hoạch và Đầu tư
+     3
+     Sở Tư pháp An Giang
+     3
+     Sở Tư pháp Hà Nội
+     1
+     Theo kỳ
+     Kỳ
+     Số lượng
+     2026-01-01
+     27
+  => DU: co ca 5 phan (Tong so / Theo kenh / Theo linh vuc / Theo don vi / Theo ky), ca Excel lan PDF.
+
+------------------------------------------------------------------------------
+[2/7] BC Vu viec da hoan thanh   -> VAN THIEU
+------------------------------------------------------------------------------
+  MAN HINH: 3 bang + 4 the so lieu
+     the : Tong vu viec = 17 | Thanh cong = 2 | Khong thanh cong = 0 | Ty le thanh cong = 11.8%
+     bang: Linh vuc PL / So luong                   (2 dong)
+     bang: Ket qua / So luong / Ty le               (2 dong)
+     bang: Don vi / So luong                        (3 dong)
+  TEP EXCEL: sheet 'BC Vụ việc đã hoàn thành'  vung A1:B8
+     r 1: BC Vụ việc đã hoàn thành | 
+     r 2: Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026) | 
+     r 3: Đơn vị: Toàn quốc | 
+     r 4: Ngày tạo: 29/07/2026 | 
+     r 6: Lĩnh vực PL | Số lượng
+     r 7: Dân sự | 11
+     r 8: Thương mại | 6
+  TEP PDF: 1 trang
+     BC VỤ VIỆC ĐÃ HOÀN THÀNH
+     Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+     Đơn vị: Toàn quốc
+     Ngày tạo: 29/07/2026
+     Lĩnh vực PL
+     Số lượng
+     Dân sự
+     11
+     Thương mại
+     6
+  => THIEU: bang 'Ket qua', bang 'Don vi', va ca 4 the so lieu. Ca Excel lan PDF chi co 1 bang dau.
+
+------------------------------------------------------------------------------
+[3/7] BC Số lượng hỏi đáp/vướng mắc pháp luật   -> VAN THIEU
+------------------------------------------------------------------------------
+  MAN HINH: 2 bang + 4 the so lieu
+     the : Tổng hỏi đáp = 13
+     the : Đã trả lời = 9
+     the : Chờ trả lời = 4
+     the : Tỷ lệ trả lời = 69.2%
+     bang: Lĩnh vực PL / Số lượng (3 dong)
+     bang: Đơn vị / Số lượng (2 dong)
+  TEP EXCEL: sheet 'BC Số lượng hỏi đáp'  vung A1:B9
+     r 1: BC Số lượng hỏi đáp/vướng mắc pháp luật | 
+     r 2: Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026) | 
+     r 3: Đơn vị: Toàn quốc | 
+     r 4: Ngày tạo: 29/07/2026 | 
+     r 6: Lĩnh vực PL | Số lượng
+     r 7: Thuế | 6
+     r 8: Thương mại | 6
+     r 9: Lao động | 1
+
+------------------------------------------------------------------------------
+[4/7] BC Vụ việc đang hỗ trợ   -> VAN THIEU
+------------------------------------------------------------------------------
+  MAN HINH: 3 bang + 1 the so lieu
+     the : Tổng vụ việc = 6
+     bang: Mức SLA / Số lượng (4 dong)
+     bang: Người hỗ trợ / Số lượng / Số quá hạn / Tỷ lệ (1 dong)
+     bang: Đơn vị / Số lượng / Số quá hạn (4 dong)
+  TEP EXCEL: sheet 'BC Vụ việc đang hỗ trợ'  vung A1:B10
+     r 1: BC Vụ việc đang hỗ trợ | 
+     r 2: Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026) | 
+     r 3: Đơn vị: Toàn quốc | 
+     r 4: Ngày tạo: 29/07/2026 | 
+     r 6: Mức SLA | Số lượng
+     r 7: Bình thường | 3
+     r 8: Sắp hết hạn | 3
+     r 9: Quá hạn | 0
+     r10: Quá hạn nghiêm trọng | 0
+
+------------------------------------------------------------------------------
+[5/7] BC Vụ việc theo thời gian   -> VAN THIEU
+------------------------------------------------------------------------------
+  MAN HINH: 2 bang + 1 the so lieu
+     the : Tổng vụ việc toàn kỳ = 27
+     bang: Kỳ / Tiếp nhận / Hoàn thành (1 dong)
+     bang: Đơn vị / Số lượng (4 dong)
+  TEP EXCEL: sheet 'Vụ việc theo thời gian'  vung A1:D7
+     r 1: BC Vụ việc theo thời gian |  |  | 
+     r 2: Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026) |  |  | 
+     r 3: Đơn vị: Toàn quốc |  |  | 
+     r 4: Ngày tạo: 29/07/2026 |  |  | 
+     r 6: Kỳ | Từ ngày | Đến ngày | Số vụ việc
+     r 7: 2026 | 01/01/2026 | 31/12/2026 | 27
+
+------------------------------------------------------------------------------
+[6/7] BC Lớp đào tạo đang diễn ra   -> VAN THIEU
+------------------------------------------------------------------------------
+  MAN HINH: 1 bang + 3 the so lieu
+     the : Tổng số = 1
+     the : Số trực tuyến = 1
+     the : Số trực tiếp = 0
+     bang: Đơn vị / Trực tuyến / Trực tiếp / Tổng số (1 dong)
+  TEP EXCEL: sheet 'Lớp đào tạo đang diễn ra'  vung A1:D7
+     r 1: BC Lớp đào tạo đang diễn ra |  |  | 
+     r 2: Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026) |  |  | 
+     r 3: Đơn vị: Toàn quốc |  |  | 
+     r 4: Ngày tạo: 29/07/2026 |  |  | 
+     r 6: Đơn vị | Trực tuyến | Trực tiếp | Tổng số
+     r 7: Bộ Kế hoạch và Đầu tư | 1 | 0 | 1
+
+------------------------------------------------------------------------------
+[7/7] BC Lớp đào tạo đã diễn ra   -> VAN THIEU
+------------------------------------------------------------------------------
+  MAN HINH: 1 bang + 2 the so lieu
+     the : Tổng khóa học = 7
+     the : Tổng học viên = 15
+     bang: Đơn vị / Số khóa học / Số học viên / Trực tuyến / Trực tiếp (3 dong)
+  TEP EXCEL: sheet 'Lớp đào tạo đã diễn ra'  vung A1:E9
+     r 1: BC Lớp đào tạo đã diễn ra |  |  |  | 
+     r 2: Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026) |  |  |  | 
+     r 3: Đơn vị: Toàn quốc |  |  |  | 
+     r 4: Ngày tạo: 29/07/2026 |  |  |  | 
+     r 6: Đơn vị | Số khóa học | Số học viên | Trực tuyến | Trực tiếp
+     r 7: Cục Bổ trợ tư pháp - Bộ Tư pháp | 4 | 9 | 3 | 1
+     r 8: Bộ Kế hoạch và Đầu tư | 1 | 3 | 1 | 0
+     r 9: Sở Tư pháp Hà Nội | 2 | 3 | 2 | 0
+
+==============================================================================
+TONG KET
+------------------------------------------------------------------------------
+
+ Bao cao                              Man hinh          Trong tep Excel   Ket qua
+ ------------------------------------ ----------------- ----------------- ----------
+ BC Vu viec da tiep nhan              3 bang + 1 the    5 phan day du     DA SUA
+ BC Vu viec da hoan thanh             3 bang + 4 the    1 bang, 0 the     VAN THIEU
+ BC So luong hoi dap/vuong mac PL     2 bang + 4 the    1 bang, 0 the     VAN THIEU
+ BC Vu viec dang ho tro               3 bang + 1 the    1 bang, 0 the     VAN THIEU
+ BC Vu viec theo thoi gian            2 bang + 1 the    1 bang, 0 the     VAN THIEU
+ BC Lop dao tao dang dien ra          1 bang + 3 the    1 bang, 0 the     VAN THIEU
+ BC Lop dao tao da dien ra            1 bang + 2 the    1 bang, 0 the     VAN THIEU
+
+ => 1/7 bao cao da sua. 6/7 van chi xuat duoc BANG DAU TIEN va MAT TOAN BO the so lieu.
+ => Ban PDF cua 'BC Vu viec da hoan thanh' cung chi co 1 bang, giong het ban Excel.
+
+ Diem phu (ghi de dev biet, khong tinh la loi cua bug nay):
+   O 'Ky' trong phan 'Theo ky' cua BC Vu viec da tiep nhan ghi '2026-01-01'
+   (dang nam-thang-ngay kieu quoc te) thay vi nhan ky kieu 'Nam 2026' hoac ngay dd/MM/yyyy.
+

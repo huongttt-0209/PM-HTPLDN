@@ -1,0 +1,43 @@
+📌 KẾT QUẢ CHUNG: CẦN BA XÁC NHẬN — hai yêu cầu chấm được đều ĐẠT, còn một điểm đặc tả chưa nói rõ nên chưa được chấm đạt.
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-BbPPdate.js (bản lên lúc 13:47 ngày 07/08/2026), đo lúc 14:16-14:24 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_03, đơn vị "Cục Bổ trợ tư pháp - Bộ Tư pháp" - đúng vai trò được phép mở biểu mẫu thêm hợp đồng; không dùng tài khoản quản trị.
+
+ĐƯỜNG VÀO THỰC TẾ (nói rõ vì bước 1 của phiếu đã hết hiệu lực)
+
+Bước 1 của phiếu ghi "Chọn menu Hợp đồng Tư vấn". Đã xác nhận bằng mắt: thanh bên có 14 mục và KHÔNG có mục "Hợp đồng Tư vấn" - đúng theo quyết định nghiệp vụ ngày 11/05/2026 (bỏ menu riêng), như phản hồi của bộ phận phát triển. Đây là đường đi, không phải điểm chấm của phiếu, nên không tính là lỗi.
+
+Đường thực tế đã đi: Vụ việc HTPL > tìm vụ việc VV-BTP-TW-20260804-002 > mở Chi tiết vụ việc > mở mục "HĐ tư vấn liên kết" > bấm nút "+ Tạo hợp đồng". Đây là nơi DUY NHẤT trong phần mềm có nút mở biểu mẫu thêm hợp đồng.
+
+ĐÃ ĐẠT - 2 phần
+
+1) Biểu mẫu mở đúng ở chế độ Thêm mới và các trường người dùng nhập đều TRỐNG. Bấm "+ Tạo hợp đồng" lúc 14:22:46, hệ thống mở hộp thoại "Tạo hợp đồng tư vấn". Đọc giá trị thật của từng ô (đọc giá trị đang lưu trong ô, không đọc chữ mờ gợi ý): Tên hợp đồng, Số hợp đồng, Bên B, Tư vấn viên/Chuyên gia, Giá trị hợp đồng, Thời gian thực hiện, Ngày ký, Nội dung hợp đồng, Ghi chú - TẤT CẢ đều rỗng. Ba nhóm con cũng ở trạng thái khởi tạo: Mốc tiến độ 0 dòng, Thanh toán giai đoạn 0 giai đoạn / 0%, Tài liệu đính kèm trống. Kiểm lại bằng đường thứ hai: đọc danh sách yêu cầu mà phần mềm gửi đi ngay tại lượt bấm đó - chỉ có 4 yêu cầu (đọc hồ sơ tài khoản, xem trước mã hợp đồng, nạp danh sách tư vấn viên, nạp danh sách tổ chức tư vấn), KHÔNG có yêu cầu nào đọc một bản ghi hợp đồng cũ. Điều này chứng minh đây thực sự là chế độ tạo mới, không phải mở nhầm bản ghi sẵn có. Hai đường đo khớp nhau. Yêu cầu của đặc tả tại srs-fr-14-hop-dong-tv.md:279 và :290, cột "Mặc định" của bảng đầu vào :82 và :84-:92 (đều để trống).
+
+2) Ô "Bên A" được hệ thống TỰ ĐIỀN, và điền ĐÚNG đơn vị của người đang đăng nhập. Ô Bên A hiện sẵn "Cục Bổ trợ tư pháp - Bộ Tư pháp" - đây là giá trị thật đang nằm trong ô, không phải chữ mờ gợi ý (chữ gợi ý của chính ô đó là "Tên bên A"). Kiểm lại bằng đường thứ hai: đọc hồ sơ tài khoản đang đăng nhập từ máy chủ rồi tra tên đơn vị tương ứng, kết quả là "Cục Bổ trợ tư pháp - Bộ Tư pháp" - trùng khít từng chữ với chuỗi trên biểu mẫu. Nhờ vậy loại được khả năng "có điền nhưng điền nhầm đơn vị khác". Yêu cầu của đặc tả tại srs-fr-14-hop-dong-tv.md:83 (Bên A lấy tự động theo đơn vị quản lý, nguồn là hệ thống) và :290.
+
+CẦN NGHIỆP VỤ CHỐT - 1 điểm (đặc tả tự mâu thuẫn, chưa được chấm đạt hay lỗi)
+
+Điểm chưa chốt: THỜI ĐIỂM ô "Mã hợp đồng" được điền.
+- Đặc tả nói hai đằng: srs-fr-14-hop-dong-tv.md:290 khai "Mã (auto)" như một trường CÓ SẴN TRÊN BIỂU MẪU, còn :119 lại xếp việc sinh mã tự động vào BƯỚC XỬ LÝ KHI LƯU của giao dịch Thêm mới. Không dòng nào phát biểu mã phải hiện ngay lúc mở biểu mẫu.
+- WEB HIỆN TẠI: ĐÚNG KỲ VỌNG ĐỐI TÁC. Ngay khi biểu mẫu vừa mở, ô Mã hợp đồng đã có sẵn "HDTV-20260807-0006", đúng khuôn HDTV-{ngày}-{số thứ tự}. Bộ phận phát triển còn dựng hẳn một điểm xem trước mã riêng; phản hồi của máy chủ cho lượt mở biểu mẫu này trả về đúng chuỗi "HDTV-20260807-0006", trùng khít chuỗi hiển thị. Lưu ý: mã này mới chỉ là XEM TRƯỚC, chưa được cấp cho bản ghi nào vì lượt đo này không bấm lưu.
+- CÂU HỎI CHO NGHIỆP VỤ: đề nghị chốt và BỔ SUNG VÀO ĐẶC TẢ - mã hợp đồng phải hiện ngay khi mở biểu mẫu Thêm mới, hay chỉ được sinh khi bấm lưu? Đây là câu hỏi để hoàn thiện tài liệu, KHÔNG PHẢI điểm chặn bàn giao: phần mềm đang làm đúng như phiếu mong đợi.
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Biểu mẫu có thêm hai trường "Số hợp đồng" và "Ngày ký". Hai trường này có trong phần mô tả dữ liệu của đặc tả (:385, :390) nhưng không nằm trong bảng thành phần biểu mẫu (:290). Thừa thành phần so với bảng thành phần, ghi nhận để nghiệp vụ bổ sung tài liệu, không tính là lỗi.
+- Nhãn nút thực tế là "+ Tạo hợp đồng"; phiếu và đặc tả :286 ghi "+ Thêm hợp đồng"; quy ước chung ở phụ lục lại bắt nhãn "Thêm mới". Ba nguồn lệch nhau về câu chữ. Phiếu này không chấm nhãn nút nên không tính là lỗi; đề nghị nghiệp vụ thống nhất một nhãn.
+- Biểu mẫu hiện dưới dạng hộp thoại chứ không phải trang mới - đặc tả cho phép cả ba hình thức nên không tính là lỗi.
+- Ô "Vụ việc liên kết" trên biểu mẫu hiện sẵn mã vụ việc đang mở, và ô "Trạng thái" hiện sẵn "Đang thực hiện". Cả hai đều hợp lý (một cái là hệ quả của đường vào, một cái là giá trị mặc định của dữ liệu theo :396) nên không tính là vi phạm yêu cầu "các trường trống".
+- Một điểm chuyển sang phiếu QLHDTVVCG_15 xử lý: ở chế độ Thêm mới, mục "Tài liệu đính kèm" KHÔNG cho chọn tệp mà hiện dòng chữ "Vui lòng lưu hợp đồng trước khi đính kèm tài liệu", trong khi đặc tả :92 và :290 đều khai tệp đính kèm là đầu vào của biểu mẫu thêm/sửa. Điểm này thuộc yêu cầu của phiếu QLHDTVVCG_15 nên được đo và kết luận ở phiếu đó.
+
+DỮ LIỆU: lượt đo này KHÔNG tạo, KHÔNG sửa, KHÔNG xóa bản ghi nào - chỉ mở biểu mẫu rồi bấm "Hủy".
+
+Ảnh bằng chứng:
+- Đường vào thực tế: mục "HĐ tư vấn liên kết" trong Chi tiết vụ việc, có nút "+ Tạo hợp đồng": https://drive.google.com/file/d/1s5eRH0ReJ5XY3-KsC1Bf-8Qy3UYs3N8Q/view?usp=drivesdk
+- Biểu mẫu vừa mở: Mã hợp đồng và Bên A đã tự điền, các ô còn lại trống: https://drive.google.com/file/d/1qymUuEc2jEqkB9seNAVYlHwy7zygY5Mj/view?usp=drivesdk
+- Phần dưới biểu mẫu: Nội dung/Ghi chú trống, Mốc tiến độ và Thanh toán giai đoạn chưa có dòng nào: https://drive.google.com/file/d/1fj-A_6RwPm4ZkxoVjqxouGS5MFPPSK5v/view?usp=drivesdk
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.

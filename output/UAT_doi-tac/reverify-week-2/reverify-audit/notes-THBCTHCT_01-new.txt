@@ -1,0 +1,4 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Trên đợt `DOT-THBC01-UAT`, tài khoản `cbnv_tw_01` thấy 2/2 đơn vị đã nộp nhưng bảng không có ô chọn báo cáo; kiểm tra giao diện lần hai cũng ghi nhận 0 ô checkbox.
+- Theo FR-XI-09 (UC170) §Inputs/Processing (dòng 984-1008), CBNV TW phải chọn các báo cáo BN/ĐP đã gửi trước khi tổng hợp.
+- Bug ID: BUG-THBCTHCT_01.

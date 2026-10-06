@@ -1,0 +1,15 @@
+✅ ĐÃ HẾT LỖI. Đo lại 07/08/2026 lúc 16:46 trên bản dựng mới nhất (nhãn HTPLDN · V1.0.10), màn Báo cáo thống kê, loại báo cáo "BC Vụ việc theo đơn vị quản lý", kỳ Năm 01/01/2026 → 31/12/2026, đơn vị Toàn quốc. Vai trò đo: Cán bộ Nghiệp vụ Trung ương — đây là vai trò mà đặc tả nêu đích danh là người dùng của chức năng báo cáo thống kê. Trang được tải lại từ đầu trước khi đo để chắc chắn chạy trên bản mới.
+
+ĐO CÁI GÌ VÀ THẤY GÌ
+Bấm nút [Xuất Excel] thật trên màn hình. Màn báo "Đang tạo file..." rồi đổi ngay thành "Tạo file thành công.". KHÔNG còn thông báo "Không thể tạo file xuất. Vui lòng thử lại." như phiếu phản ánh, cũng không còn chữ từ chối nào.
+Tệp tải về máy có tên BaoCaoVuViecTheoDonVi_20260807_1646.xlsx, dung lượng 6.834 byte — đúng khuôn tên {Tên báo cáo}_{Ngày giờ}.xlsx mà đặc tả quy định và BA đã chốt.
+
+ĐÃ MỞ TỆP RA ĐỌC, KHÔNG CHỈ KIỂM "TỆP TẠO ĐƯỢC"
+Tệp mở lên bình thường, không rỗng, không hỏng: 1 trang tính "Vụ việc theo đơn vị"; đủ 4 mục đầu tệp (tên báo cáo / kỳ + khoảng thời gian / đơn vị / ngày tạo); số liệu khớp từng con số với bảng trên màn hình — Bộ Kế hoạch và Đầu tư 0/0/2/2 = 4; Cục Bổ trợ tư pháp - Bộ Tư pháp 2/13/4/17 = 40; Sở Tư pháp An Giang 0/2/4/1 = 8; Sở Tư pháp Hà Nội 0/3/3/1 = 7; cộng lại 59, khớp ô "Tổng số vụ việc: 59" trong tệp.
+
+VÌ SAO KẾT LUẬN NHƯ VẬY
+Triệu chứng mà phiếu ghi ở ô Kết quả thực tế là hệ thống báo "Không thể tạo file xuất. Vui lòng thử lại." — triệu chứng đó đã hết. Kết quả mong đợi của phiếu là "hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng", và điều này nay đã làm được: tệp ra thật, tải về được, mở đọc được, số liệu đúng.
+
+ĐÃ HẾT LỖI — ĐỪNG ĐỤNG LẠI: luồng xuất Excel của báo cáo "Vụ việc theo đơn vị quản lý" với vai trò Cán bộ Nghiệp vụ.
+
+GIỚI HẠN HIỆU LỰC: kết quả trên ứng với bản dựng đã đo ngày 07/08/2026. Đề nghị xác nhận lại khi chính bản dựng này được đưa lên môi trường nghiệm thu.

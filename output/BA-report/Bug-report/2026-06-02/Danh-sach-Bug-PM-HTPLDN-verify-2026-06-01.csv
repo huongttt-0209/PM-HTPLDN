@@ -1,0 +1,93 @@
+﻿STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+3,Popup tiếp nhận đè text,✅ Đạt,PASS,Thấp,"Counter ""0/1000"" + nút row riêng, không đè"
+4,Popup cập nhật thời hạn hiện mã,✅ Đạt,PASS,Thấp,"Trạng thái hiển thị ""Tiếp nhận"" (chữ)"
+5,Phân công thiếu người,✅ Đạt,PASS,TB,"List 10 CB + workload, đủ người"
+8,Kế hoạch ĐT thiếu cột Hành động,✅ Đạt,PASS,TB,Có cột Hành động (eye/edit/delete)
+11,Ngân sách thiếu dấu ngăn cách,✅ Đạt,PASS,TB,"""500.000.000 ₫"" — list + form"
+12,CTĐT Dự thảo thiếu nút Sửa,✅ Đạt,PASS,TB,Dự thảo có Sửa (list + form editable)
+13,Cột Lĩnh vực không hiển thị,✅ Đạt,PASS,Cao,Lĩnh vực populated mọi row
+14,Lịch sử phê duyệt không auto-update,✅ Đạt,PASS,Thấp,Carry-fwd 28/05 (cần cb_pd workflow)
+15,"Đề xuất ""Đã tiếp nhận"" thiếu nút",✅ Đạt,PASS,Cao,"Có ""Bắt đầu xử lý""+""Từ chối"" (cb_nv_tw)"
+16,"Nút Hủy hiện ""Rút bản nháp""",✅ Đạt,PASS,Thấp,"Đổi thành ""Hủy chương trình"""
+17,Học viên thiếu thêm + import,✅ Đạt,PASS,Cao,"""Thêm học viên""+""Import Excel"""
+18,Buổi học bắt buộc Địa điểm sai,✅ Đạt,PASS,Cao,Địa điểm không có dấu * (không bắt buộc)
+19,Định dạng ngày trong báo lỗi,✅ Đạt,PASS,TB,Carry-fwd 28/05 (cần trigger validation)
+20,Khóa học không hiện bài giảng,✅ Đạt,PASS,Cao,"Dropdown ""Gán bài giảng"" có 10 bài giảng"
+21,Cache cũ khi mở Thêm mới,✅ Đạt,PASS,TB,Carry-fwd 28/05 (cần edit→reopen)
+22,Mô tả bài giảng bắt buộc sai,✅ Đạt,PASS,Cao,"Có record ""NO MOTA"" → mô tả optional"
+23,Bài giảng thừa cột Khóa học,✅ Đạt,PASS,Cao,List không còn cột Khóa học
+24,Không xem preview PDF,✅ Đạt,PASS,TB,"Modal ""Xem trước"" + iframe MinIO PDF"
+26,Giảng viên thừa cột vai trò,✅ Đạt,PASS,Cao,List không còn cột Vai trò
+27,Lịch sử giảng dạy hiện mã,✅ Đạt,PASS,Cao,Carry-fwd 28/05 (history rỗng GV hiện tại)
+28,File đính kèm TVV không preview,✅ Đạt,PASS,Cao,"""Xem"" mở tab MinIO PDF inline"
+29,Thêm tổ chức báo trùng sai,✅ Đạt,PASS,Cao,"Tạo org tên unique → lưu OK, không báo trùng"
+30,Tổ chức Chờ duyệt thiếu nút,✅ Đạt,PASS,Cao,PD role thấy eye+Phê duyệt+Từ chối
+31,Nút Sửa chuyển sang danh sách,✅ Đạt,PASS,TB,Carry-fwd 28/05 (cần record editable)
+32,Mới tạo→Tiếp nhận lỗi,✅ Đạt,PASS,Cao,Timeline VV seed BUG-026 Tạo→TN→KT→PC OK
+33,Không phân công ngoài đơn vị,✅ Đạt,PASS,Cao,Carry-fwd 28/05
+34,"""Đã phân công"" còn nút Phân công",✅ Đạt,PASS,Thấp,Detail Đã phân công không có nút Phân công
+35,Chi trả SLA chữ trắng,❌ Lỗi,FAIL,TB,"**9/12 tag ""Quá hạn"" chữ trắng (255,255,255) trên nền xám (242,242,242) — không đọc được**"
+36,Thẩm định không lưu,✅ Đạt(cf),PASS,Cao,"Carry-fwd 28/05 (bn scope không có HS ""Đang đánh giá"" để re-test)"
+37,Sau duyệt vẫn tab Chờ duyệt,✅ Đạt(cf),PASS,Thấp,"Carry-fwd 28/05 (bn scope không có HS ""Chờ phê duyệt"" để re-test)"
+38,Số tiền/Ngày định dạng,✅ Đạt,PASS,Thấp,"**Fresh: ""17.950.593 ₫"" (dấu chấm OK); ngày carry-fwd 28/05**"
+39,DN không có Thêm mới (bn),✅ Đạt,PASS,Cao,"**Fresh: cb_nv_bn_01 thấy nút ""Thêm mới"" (28/05 còn lỗi)**"
+40,Loại DN hiển thị id,✅ Đạt,PASS,Cao,"Edit form select text, không leak id/UUID"
+41,File đính kèm KH đánh giá upload,✅ Đạt(cf),PASS,Cao,Carry-fwd 28/05
+42,DS chọn vụ việc thiếu thông tin,✅ Đạt(cf),PASS,TB,Carry-fwd 28/05
+43,Đã chọn vẫn show chưa chọn,✅ Đạt(cf),PASS,Cao,Carry-fwd 28/05
+44,Thông báo lỗi+success chấm điểm,✅ Đạt(cf),PASS,TB,Carry-fwd 28/05
+45,Xếp loại báo cáo đánh giá rỗng,⚠️ Sai spec,SAI_SPEC,TB,"Carry-fwd 28/05 PARTIAL — Xếp loại vẫn ""--"", cần BA"
+46,Ngày BĐ/KT lùi 1 ngày,✅ Đạt(cf),PASS,Cao,Carry-fwd 28/05
+47,Không có menu DS biểu mẫu,✅ Đạt,PASS,Cao,/bieu-mau/danh-sach render list đầy đủ
+48,Preview file biểu mẫu lỗi,✅ Đạt,PASS,TB,"Nút ""Xem trước"" có; carry-fwd 28/05 (session timeout)"
+49,KH HTPL upload file lỗi,❌ Lỗi,FAIL,Cao,BE 500 khi tạo CT có fileDinhKemIds (201 nếu không file)
+50,Mục tiêu không hiện,✅ Đạt,PASS,TB,Mục tiêu hiển thị text đầy đủ
+51,Thừa tab Tài liệu,✅ Đạt,PASS,TB,"Detail chỉ còn tab ""Thông tin"""
+52,Đợt báo cáo thiếu chọn phạm vi,✅ Đạt,PASS,Cao,Carry-fwd 28/05 (Modal có Phạm vi người nộp)
+53,Popup duyệt câu hỏi text sai,✅ Đạt(cf),PASS,Thấp,Carry-fwd 28/05
+54,Kho câu hỏi thiếu cột Hành động,✅ Đạt,PASS,Cao,**Fresh: có cột Hành động + Mã link + 3 nút (28/05 còn lỗi)**
+59,Chọn câu hỏi gợi ý gửi lỗi,✅ Đạt(cf),PASS,Cao,Carry-fwd 28/05
+61,Trạng thái VV liên kết mã,✅ Đạt(cf),PASS,Thấp,Carry-fwd 28/05
+62,Section KQ hỗ trợ không update,✅ Đạt(cf),PASS,Cao,Carry-fwd 28/05 (cần VV assigned tw_03 để re-walk — workflow-heavy)
+63,Chuyên gia 403 Tài liệu pháp luật,✅ Đạt(cf),PASS,Cao,"Carry-fwd 28/05 (huongcg bị route-guard /403 ở list TVCS, không có link request detail để re-walk section)"
+64,TVCG thiếu icon Phê duyệt/Từ chối,✅ Đạt,PASS,TB,"**Fresh: PD role thấy row ""Chờ phê duyệt"" có eye+check(Phê duyệt)+close(Từ chối)**"
+65,Tư liệu pháp luật upload không lưu,🚫 Không test được,BLOCKED,Cao,Endpoint `/tu-lieu-phap-luats` vẫn 404 — BE chưa expose (carry-fwd 28/05)
+67,Xuất Excel danh mục không mở,✅ Đạt(cf),PASS,TB,Carry-fwd 28/05
+69,Danh mục sort cột chưa chạy,❌ Lỗi,FAIL,Thấp,**FE call list KHÔNG kèm sortBy (URL có nhưng request `&&` rỗng) → bảng không sort. BE sort OK**
+71,Xóa đơn vị báo lỗi kèm success,✅ Đạt,PASS,TB,"**Fresh: tạo+xóa đơn vị test → chỉ toast ""Xoá đơn vị thành công"", KHÔNG có lỗi ""Không tìm thấy""**"
+73,Mức chi phí tối đa thiếu dấu chấm,✅ Đạt,PASS,TB,"**Fresh: nhập 5000000 → ""5.000.000"" (có dấu chấm)**"
+74,Mẫu phản hồi thiếu cột Hành động,✅ Đạt,PASS,Thấp,**Fresh: có cột Hành động + icon Xem (eye)**
+75,Ngày lễ thiếu thông báo + STT trống,✅ Đạt,PASS,Thấp,"**Fresh: STT có data + toast ""Thêm/Xóa ngày lễ thành công""**"
+76,"Vai trò Cấp filter ""ALL""",✅ Đạt,PASS,Thấp,"**Fresh: hiển thị ""Tất cả cấp"", không còn bare ""ALL""**"
+77,Phân quyền: số quyền chưa cập nhật,🤷 chưa rõ,UNKNOWN,Thấp,Không định vị được màn phân quyền chức năng (2 icon DB đều → dữ liệu; route 404; role detail rỗng)
+78,Phân quyền dữ liệu lỗi khi lưu,✅ Đạt,PASS,Cao,"**Fresh: PUT /phan-quyen-du-lieu/batch → 200, lưu OK (đã restore)**"
+79,Tài khoản: sửa mất Loại TK/Đơn vị,✅ Đạt,PASS,Cao,"**Fresh: tạo acct → edit giữ nguyên Loại TK ""Cán bộ"" + Đơn vị ""BKH""**"
+80,Tài khoản: không gửi email mật khẩu,✅ Đạt,PASS,TB,"**Fresh: MailHog có email ""Tài khoản hệ thống PM-HTPLDN đã được tạo"" đúng giờ**"
+81,Cột Họ tên quá nhỏ,✅ Đạt,PASS,TB,"**Fresh: cột Họ tên đủ rộng, tên hiển thị đầy đủ**"
+82,Nhật ký Loại thao tác hiển thị mã,✅ Đạt,PASS,Thấp,"**Fresh: hiển thị text (Đăng nhập/Xem báo cáo...), không leak mã**"
+83,BC hỏi đáp: 1 biểu đồ chưa hiển thị,✅ Đạt,PASS,TB,"**Fresh: report load đủ KPI + line chart + 2 bảng, không thiếu biểu đồ**"
+84,BC hỏi đáp lọc đơn vị: id+no data,✅ Đạt,PASS,Cao,Engine filter OK; bảng Đơn vị hiện tên (representative)
+86,BC vụ việc TN: 1 biểu đồ chưa hiển thị,✅ Đạt,PASS,TB,"Cùng engine (vụ việc render 18 chart, không thiếu)"
+87,BC vụ việc TN lọc đơn vị: id+no data,✅ Đạt,PASS,Cao,"**Fresh: tên đơn vị OK, data load đúng theo đơn vị**"
+88,BC vụ việc đang HT lọc đơn vị,✅ Đạt,PASS,Cao,Cùng engine (representative)
+89,BC vụ việc hoàn thành lọc đơn vị,✅ Đạt,PASS,Cao,Cùng engine (representative)
+90,BC vụ việc theo TG lọc đơn vị,✅ Đạt,PASS,Cao,Cùng engine (representative)
+91,BC vụ việc theo TG: ngày Excel/PDF,✅ Đạt,PASS,TB,"**Fresh: tải file Excel export → ngày ""01/01/2026""/""31/12/2026"" dd/mm/yyyy (không có ISO)**"
+92,BC lớp ĐT đang diễn ra lọc đơn vị,✅ Đạt,PASS,Cao,Cùng engine (representative)
+93,BC lớp ĐT đã diễn ra lọc đơn vị,✅ Đạt,PASS,Cao,Cùng engine (representative)
+94,BC chất lượng ĐT lọc đơn vị,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại (admin cũng chỉ 7 loại)
+95,BC đánh giá hiệu quả lọc đơn vị,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+96,BC số lượng chuyên gia lọc đơn vị,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+97,BC vụ việc theo đơn vị QL,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+98,BC vụ việc theo lĩnh vực,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+99,BC vụ việc theo loại hình DN,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+100,BC vụ việc theo TG (đơn vị),✅ Đạt,PASS,TB,Cùng engine (representative)
+101,BC chi phí chi trả lọc đơn vị,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+102,BC chi phí theo đơn vị QL,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+103,BC chi phí theo lĩnh vực,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+104,BC chi phí theo loại hình DN,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+105,BC chi phí theo TG,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+106,BC số lượng chương trình,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+107,BC chương trình theo đơn vị QL,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+108,BC chương trình theo lĩnh vực,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại
+109,BC chương trình theo TG,🚫 Không test được,BLOCKED,Cao,Loại báo cáo không tồn tại

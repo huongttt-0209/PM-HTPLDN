@@ -1,0 +1,14 @@
+{
+  "Tuần": "Tuần 3",
+  "Mã TC": "BCTK_QA04",
+  "Tên chức năng": "Báo cáo thống kê — BC Vụ việc đang hỗ trợ",
+  "Mô tả": "Báo cáo thống kê — QA phát hiện ngoài phạm vi (không thuộc case nào của đối tác), phát sinh khi verify phiếu VVDHT_06 (xuất tệp).\n\nKhi người dùng lọc báo cáo về ĐÚNG MỘT đơn vị, phần \"Theo đơn vị\" của báo cáo bị bỏ trống: trên tệp Excel xuất ra chỉ còn dòng tiêu đề \"Theo đơn vị\" và dòng tên cột, không có dòng dữ liệu nào; trên màn hình cũng không hiện bảng này. Nếu để Đơn vị là \"Toàn quốc\" thì phần đó lại hiện đầy đủ. Người mở tệp Excel không biết số liệu trong tệp thuộc đơn vị nào ngoài dòng tiêu đề chung.",
+  "Điều kiện": "1. Đăng nhập bằng tài khoản xem được báo cáo và chọn được đơn vị cụ thể\n2. Đơn vị được chọn có ít nhất một vụ việc đang hỗ trợ",
+  "Dữ liệu đầu vào": "Loại báo cáo: BC Vụ việc đang hỗ trợ. Kỳ báo cáo: Năm (01/01/2026 – 31/12/2026).\nLượt A — Đơn vị: Cục Bổ trợ tư pháp - Bộ Tư pháp (BTP-TW), màn hiện Tổng vụ việc = 14.\nLượt B (đối chứng) — Đơn vị: Toàn quốc, màn hiện Tổng vụ việc = 22.\nBản dựng V1.0.8, môi trường 18.143.165.120.nip.io.",
+  "Các bước thực hiện": "1. Đăng nhập, vào menu \"Báo cáo thống kê\"\n2. Chọn Loại báo cáo \"BC Vụ việc đang hỗ trợ\", Kỳ báo cáo \"Năm\", Đơn vị \"Cục Bổ trợ tư pháp - Bộ Tư pháp\"\n3. Nhấn [Xem báo cáo] — báo cáo hiện Tổng vụ việc 14, có bảng theo Mức SLA và bảng theo Người hỗ trợ\n4. Nhấn [Xuất Excel], mở tệp tải về, đọc phần \"Theo đơn vị\"\n5. Đổi Đơn vị sang \"Toàn quốc\", nhấn [Xem báo cáo] rồi so lại phần \"Theo đơn vị\"",
+  "Kết quả mong đợi": "Theo đặc tả srs-fr-11-bao-cao.md:262 (FR-IX-03, output đặc thù #6), phần thống kê theo đơn vị luôn phải có, kèm tên đơn vị và số liệu. Khi người dùng lọc về một đơn vị thì phần này vẫn phải nêu được đơn vị đó và số vụ việc của họ, để tệp xuất ra tự nói được số liệu thuộc về đơn vị nào.",
+  "Kết quả thực tế": "Lọc đúng một đơn vị (Cục Bổ trợ tư pháp): tệp Excel xuất ra có dòng tiêu đề \"Theo đơn vị\" và dòng tên cột (Đơn vị · Tiếp nhận · Hoàn thành · Tổng số) nhưng KHÔNG có dòng dữ liệu nào; dữ liệu máy chủ trả về phần theo đơn vị là danh sách rỗng. Trên màn hình cũng không hiện bảng theo đơn vị.\nĐối chứng cùng lúc với Đơn vị \"Toàn quốc\": phần theo đơn vị hiện đủ 4 dòng (Cục Bổ trợ tư pháp 16, Sở Tư pháp An Giang 3, Bộ Kế hoạch và Đầu tư 2, Sở Tư pháp Hà Nội 1). Vậy chỉ hỏng ở nhánh lọc một đơn vị.\n\nMức độ: nhẹ, không sai số liệu — nhưng tệp xuất ra trông như bị thiếu nội dung, và người nhận tệp phải tra lại mới biết số liệu của đơn vị nào.",
+  "Ảnh/vieo 1": "https://docs.google.com/spreadsheets/d/1sjPrC5b2PagUx9ouSivI9hEFxu0G0sHH/edit?usp=drivesdk&ouid=118082695614085764923&rtpof=true&sd=true",
+  "Trạng thái": "Fail",
+  "Dopai": "bug"
+}

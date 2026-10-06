@@ -1,0 +1,25 @@
+{
+  "measured_at_local": "2026-08-14 16:50 Asia/Ho_Chi_Minh",
+  "account": "cbnv_tw_02",
+  "scope": "Toàn quốc / Tất cả",
+  "filter": {
+    "nam": 2026,
+    "thang": "Cả năm",
+    "tu_ngay": "2026-01-01",
+    "den_ngay": "2026-08-14",
+    "date_field": "ngay_hoan_thanh"
+  },
+  "denominator_completed_cases": 23,
+  "directly_proven_numerator_lower_bound": 1,
+  "proven_numerator_record": {
+    "ma_vu_viec": "VV-BTP-TW-20260712-005",
+    "status": "Hoàn thành",
+    "completed_at": "2026-07-25 02:23",
+    "supplement_event": "Bổ sung hồ sơ",
+    "supplement_event_at": "2026-07-15 12:15"
+  },
+  "expected_percent_lower_bound": 4.3478260869565215,
+  "dashboard_percent": 0,
+  "verdict": "FAIL",
+  "reason": "Một phản ví dụ thuộc tử số đã đủ bác giá trị 0%; không suy diễn đây là toàn bộ tử số."
+}

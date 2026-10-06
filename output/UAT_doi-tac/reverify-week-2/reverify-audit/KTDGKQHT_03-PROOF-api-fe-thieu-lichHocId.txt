@@ -1,0 +1,84 @@
+PROOF KTDGKQHT_03 — FE không truyền lichHocId khi lưu điểm danh
+Env: http://18.143.165.120 | Account: cbnv_tw (CB_NV_TW) | Ngày verify: 2026-07-16
+Khóa: 5eed0002-0000-4000-8000-000000000001 "Khóa học pháp luật doanh nghiệp seed" (DA_KET_THUC)
+Học viên: 8 đăng ký → 1 DA_DUYET ("QA Import Reverify12 OK"), 6 CHO_DUYET, 1 TU_CHOI
+   → Bảng điểm danh chỉ hiện 1 học viên DA_DUYET (đúng: chỉ điểm danh học viên đã duyệt)
+
+================================================================
+BƯỚC 1 — Ngày 20/02/2026 CHỈ CÓ 1 BUỔI (sáng 08:00-11:00) → LƯU OK
+================================================================
+Lịch học:
+  e2d8044a-b8a3-4b0b-9300-73eea8af0f0c | 2026-02-20 | 08:00:00-11:00:00 | "QA seed KTDGKQHT_03 - buoi SANG"
+
+POST /api/v1/khoa-hocs/5eed0002-0000-4000-8000-000000000001/diem-danhs/batch-update
+REQUEST BODY:
+  {"ngayDiemDanh":"2026-02-20","diemDanhs":[{"hocVienId":"6f32b686-cc04-4b73-b92f-ad211845d642","trangThai":"CO_MAT"}]}
+  ^^^ KHÔNG có lichHocId
+RESPONSE: 200
+  {"success":true,"data":{"message":"Lưu điểm danh thành công"},"meta":null}
+TOAST: "Đã lưu điểm danh"
+=> 1 buổi/ngày: BE tự suy ra buổi duy nhất → lưu được.
+
+GET /api/v1/khoa-hocs/{id}/diem-danhs?ngayDiemDanh=2026-02-20
+  [{"id":"5e0820dd-85b9-4c47-b448-85d9a308d7a8","hocVienId":"6f32b686-...","hoTen":"QA Import Reverify12 OK",
+    "ngayDiemDanh":"2026-02-20T00:00:00.000Z","trangThai":"CO_MAT","coMat":true,"ghiChu":null}]
+
+================================================================
+BƯỚC 2 — Thêm buổi CHIỀU cùng ngày → 20/02/2026 CÓ 2 BUỔI → LƯU THẤT BẠI 422
+================================================================
+Lịch học (2 buổi CÙNG NGÀY):
+  e2d8044a-b8a3-4b0b-9300-73eea8af0f0c | 2026-02-20 | 08:00:00-11:00:00 | "buoi SANG"
+  5e3767c0-a5f2-4210-a5f4-53893d56ba93 | 2026-02-20 | 14:00:00-17:00:00 | "buoi CHIEU"
+
+UI tab Điểm danh khi chọn ngày 20/02/2026:
+  - Chỉ có ô "Chọn ngày điểm danh" (date picker) — KHÔNG có chỗ chọn buổi
+  - Cột bảng: STT | Họ tên | Email | Số điện thoại | Đơn vị | Trạng thái | Ghi chú
+    → KHÔNG có cột "Buổi học" (SRS dòng 1822 yêu cầu)
+  - Chỉ 1 dòng/học viên cho cả ngày (1 bộ radio Có mặt/Vắng có phép/Vắng không phép)
+
+POST /api/v1/khoa-hocs/5eed0002-0000-4000-8000-000000000001/diem-danhs/batch-update
+REQUEST BODY (FE gửi):
+  {"ngayDiemDanh":"2026-02-20","diemDanhs":[{"hocVienId":"6f32b686-cc04-4b73-b92f-ad211845d642","trangThai":"VANG_KHONG_PHEP"}]}
+  ^^^ VẪN KHÔNG có lichHocId
+RESPONSE: 422
+  {"success":false,"error":{
+     "code":"ERR-BIZ-III-05-04",
+     "message":"Có nhiều buổi học cùng ngày — cần truyền lichHocId",
+     "ngayDiemDanh":"2026-02-20",
+     "lichHocIds":["e2d8044a-b8a3-4b0b-9300-73eea8af0f0c","5e3767c0-a5f2-4210-a5f4-53893d56ba93"],
+     "requestId":"0a77d980-8ec8-4b18-aadf-537c649fe929"}}
+TOAST (hiện cho người dùng cuối): "Có nhiều buổi học cùng ngày — cần truyền lichHocId"
+
+Sau lỗi: GET diem-danhs?ngayDiemDanh=2026-02-20 → vẫn 1 bản ghi, trangThai=CO_MAT (KHÔNG lưu được thay đổi)
+
+================================================================
+KẾT LUẬN
+================================================================
+1. BE ĐÃ hỗ trợ lichHocId: BE chủ động đòi lichHocId + trả về danh sách lichHocIds của ngày đó.
+   => KHÔNG phải lỗi mô hình dữ liệu BE.
+2. FE THIẾU: (a) UI chọn buổi học, (b) cột "Buổi học", (c) không truyền lichHocId trong payload.
+3. Hệ quả: khóa có >=2 buổi trong cùng 1 ngày => KHÔNG điểm danh được (bế tắc, 422).
+   Khóa 1 buổi/ngày vẫn lưu được (BE tự suy) => lỗi chỉ lộ khi 1 ngày nhiều buổi.
+4. Phụ: thông báo lỗi cho người dùng cuối là thông điệp kỹ thuật ("cần truyền lichHocId").
+
+Ghi chú seed (có thể xóa sau khi dev tiếp nhận):
+  2 buổi 20/02/2026 trên khóa 5eed0002 + 1 bản ghi điểm danh CO_MAT của HV "QA Import Reverify12 OK".
+
+================================================================
+TAI HIEN LAI LAN 2 (2026-07-16 09:47:12 UTC) — bat truc tiep tren tab Network
+================================================================
+POST /api/v1/khoa-hocs/5eed0002-0000-4000-8000-000000000001/diem-danhs/batch-update
+Referer: /dao-tao/khoa-hoc/5eed0002-.../?tab=lich-hoc-diem-danh
+REQUEST BODY (FE gui):
+  {"ngayDiemDanh":"2026-02-20","diemDanhs":[{"hocVienId":"6f32b686-cc04-4b73-b92f-ad211845d642","trangThai":"VANG_KHONG_PHEP"}]}
+  ^^^ VAN KHONG co lichHocId
+RESPONSE: 422
+  {"success":false,"error":{"code":"ERR-BIZ-III-05-04",
+   "message":"Có nhiều buổi học cùng ngày — cần truyền lichHocId",
+   "ngayDiemDanh":"2026-02-20",
+   "lichHocIds":["e2d8044a-b8a3-4b0b-9300-73eea8af0f0c","5e3767c0-a5f2-4210-a5f4-53893d56ba93"],
+   "timestamp":"2026-07-16T09:47:12.700Z",
+   "requestId":"a850732f-8aee-4cbc-a91d-ae712bcfc69e"}}
+=> Tai hien on dinh (2/2 lan, 2 requestId khac nhau). Anh chup toast
+   image/BUG-KTDGKQHT_03-422-thieu-lichHocId.png la toast that do app render
+   (.ant-message-notice-error), cung thao tac voi request 422 o tren.

@@ -1,0 +1,100 @@
+QLDX_05 — ĐỐI CHỨNG ĐỘC LẬP (đúng MỘT đường) · MÃ HTTP THẬT SAU MỐC AUTO-LOGOUT GỐC
+====================================================================================
+Env      : https://18.143.165.120.nip.io   ·   Bó mã FE: assets/index-DsMHK7Dp.js
+Tài khoản: cbnv_tw_03  ("CB Nghiệp vụ - Trung ương #03")
+Trục     : t_logout_goc = t_baseline + 30' = 2026-08-07 02:26:53.717 (giờ VN)
+
+------------------------------------------------------------------------------------
+1. LỆNH ĐỐI CHỨNG (đúng 1 request, KHÔNG bấm lại nút, KHÔNG thêm đường thứ ba)
+------------------------------------------------------------------------------------
+Cách gọi : fetch('/api/v1/auth/me', {method:'GET', credentials:'include', cache:'no-store'})
+           — chạy trong trang, dùng chính cookie phiên hiện có (access_token là HttpOnly,
+             document.cookie đọc ra RỖNG nên buộc phải gọi từ trong trang).
+reqid    : 282
+Thời điểm: 02:28:46 giờ VN  =  +113.2 s SAU t_logout_goc
+Server date (header) : Thu, 06 Aug 2026 19:28:47 GMT  = 02:28:47 giờ VN
+
+>>> MÃ HTTP THẬT :  200   <<<
+    statusText: (rỗng, HTTP/2)   ·   ok: true   ·   body length: 5772 bytes
+    content-type: application/json; charset=utf-8
+    etag: W/"1692-hfJgw4niU45nrTNF1cAMlsGdzxA"
+    x-ratelimit-limit: 500 · x-ratelimit-remaining: 499
+
+Body (mở đầu):
+{"success":true,"data":{"userId":"9b557200-be4b-46ac-b84b-fe6c154dc65f",
+ "hoTen":"CB Nghiệp vụ - Trung ương #03","vaiTro":["CB_NV_TW"],
+ "donViId":"00000000-0000-4000-8000-000000000001","capDonVi":"TW","authMethod":"LOCAL",
+ "permissions":[...236 quyền...],"tinhThanhId":null},"meta":null}
+Body đầy đủ: QLDX_05-doi-chung-api-response-body.network-response
+
+⇒ 200 (không phải 401) ⇒ sau mốc auto-logout GỐC, phía máy chủ VẪN coi phiên còn hiệu lực,
+  và vẫn phân giải đúng danh tính cbnv_tw_03. Không phải chỉ đóng modal ở FE.
+
+------------------------------------------------------------------------------------
+2. REQUEST CỦA CHÍNH THAO TÁC BẤM "Gia hạn phiên"
+------------------------------------------------------------------------------------
+reqid=269   GET /api/v1/auth/me   →  304
+            date: Thu, 06 Aug 2026 19:22:28 GMT = 02:22:28 giờ VN
+            referer: /chuyen-gia-tvv/danh-sach
+            ⇒ trùng khít thời điểm bấm (02:22:28.831) ⇒ việc gia hạn CÓ gửi request xuống BE,
+              KHÔNG phải thao tác thuần client-side.
+            ⇒ Nhưng đây là request /auth/me (đọc danh tính), KHÔNG phải endpoint gia hạn/refresh
+              riêng. Khớp ghi nhận của Giai đoạn A: srs-fr-16-api.md không đặc tả endpoint
+              refresh/extend nào.
+            ⇒ access_token KHÔNG được phát hành lại: JWT trong cookie ở reqid=269, 281 và 282
+              đều cùng jti=5e6ef7c9-5e78-4e77-aa36-06e8e9061965 và iat=1786044017 (=02:20:17,
+              thời điểm đăng nhập), idleTtl=1800, exp=1788636017. Tức bấm "Gia hạn phiên"
+              không đổi token, chỉ chạm tới phiên.
+
+------------------------------------------------------------------------------------
+3. TOÀN BỘ REQUEST xhr/fetch CỦA PHIÊN ĐO (33/33, không cắt trang)
+------------------------------------------------------------------------------------
+reqid=181  GET  /api/v1/auth/me                          401   <- probe khi vừa mở /login, CHƯA có token
+reqid=182  POST /api/v1/auth/login                        200
+reqid=183  POST /api/v1/auth/verify-otp                   200
+reqid=184  GET  /api/v1/auth/me                           304
+reqid=201  GET  /api/v1/thong-baos/unread-count           304
+reqid=202  GET  /api/v1/don-vi/public                     304
+reqid=203  GET  /api/v1/dashboard?nam=2026                200
+reqid=204  GET  /api/v1/dashboard/chart/hieu-qua-ho-tro   200
+reqid=205  GET  /api/v1/dashboard/chart/chat-luong-dao-tao 200
+reqid=260  GET  /api/v1/to-chuc-tu-vans?...               304
+reqid=261  GET  /api/v1/danh-muc/tree?loaiDanhMuc=LINH_VUC_PL 304
+reqid=262  GET  /api/v1/tu-van-viens?...trangThai=HOAT_DONG   304
+reqid=263  GET  /api/v1/tu-van-viens?trangThai=MOI_DANG_KY    304
+reqid=264  GET  /api/v1/tu-van-viens?trangThai=YEU_CAU_BO_SUNG 304
+reqid=265  GET  /api/v1/thong-baos/unread-count           304
+reqid=266  GET  /api/v1/thong-baos/unread-count           304
+reqid=267  GET  /api/v1/thong-baos/unread-count           304
+reqid=268  GET  /api/v1/thong-baos/unread-count           304
+reqid=269  GET  /api/v1/auth/me                           304   <- THAO TÁC BẤM "Gia hạn phiên" (02:22:28)
+reqid=270  GET  /api/v1/thong-baos/unread-count           304
+reqid=271..281  GET /api/v1/thong-baos/unread-count       304   (11 request, poll nền ~30s/lần)
+                (reqid=281 date: 19:28:19 GMT = 02:28:19 giờ VN)
+reqid=282  GET  /api/v1/auth/me                           200   <- ĐỐI CHỨNG (02:28:46, sau mốc gốc)
+reqid=283  GET  /api/v1/thong-baos/unread-count           304
+
+Thống kê: 401 × 1 · 200 × 6 · 304 × 26 · 0 lỗi 5xx · 0 lỗi 4xx khác.
+401 duy nhất = reqid=181, xảy ra TRƯỚC khi đăng nhập (referer /login, chưa có token) —
+hành vi bình thường của trang đăng nhập, không phải lỗi.
+Sau khi bấm "Gia hạn phiên" KHÔNG có bất kỳ 401 nào ⇒ không có modal/redirect nào trong
+phép đo là loại "phản ứng HTTP 401" (srs-fr-02-hoi-dap.md:1135). Bẫy đo #1 đã loại trừ.
+
+list_console_messages (error + warn) = RỖNG.
+
+------------------------------------------------------------------------------------
+4. GIỚI HẠN CỦA ĐỐI CHỨNG NÀY — ghi rõ để không suy quá số đo
+------------------------------------------------------------------------------------
+Trong toàn bộ khoảng chờ, FE vẫn tự poll /api/v1/thong-baos/unread-count đều đặn
+(reqid=270..281), mỗi request đều mang cookie access_token. Vì vậy mã 200 ở reqid=282
+chứng minh CHẮC CHẮN rằng "sau mốc auto-logout gốc phiên vẫn còn hiệu lực phía máy chủ",
+nhưng KHÔNG tách riêng được nguyên nhân là do cú bấm "Gia hạn phiên": các poll nền cũng
+chạm tới máy chủ và có thể tự giữ phiên sống.
+
+Vế "đồng hồ đếm đã được đặt lại" được chốt bằng dấu hiệu KHÔNG bị nhiễu bởi poll nền:
+app đi qua t_logout_goc (02:26:53.717) mà KHÔNG tự đăng xuất. Theo quan sát tình cờ đã ghi
+trong do/QLDX_04.md §6, app CÓ tự đăng xuất khi idle vượt 30' *dù* các poll nền này vẫn
+chạy — nghĩa là poll nền không ngăn được auto-logout. Do đó việc vượt mốc gốc an toàn quy
+về đúng một nguyên nhân: đồng hồ idle đã được đặt lại bởi cú bấm.
+(Quan sát 30' auto-logout thuộc vế QLDX_06 C2a — ở đây chỉ dùng làm ngữ cảnh, không dùng
+ làm số đo của QLDX_05.)

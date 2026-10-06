@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Đối tác báo: bấm Xuất PDF báo cáo "Chi phí theo đơn vị" hiện lỗi "Không thể tạo file xuất. Vui lòng thử lại.".
+- Kiểm tra lại (Cán bộ nghiệp vụ Trung ương, kỳ Năm 2026, phạm vi Toàn quốc, báo cáo đã có dữ liệu): lỗi "không thể tạo file" KHÔNG xảy ra — file PDF vẫn tải về được. NHƯNG file PDF xuất ra bị thiếu phần đầu trang bắt buộc: kỳ báo cáo, đơn vị, ngày tạo. Bản Excel cùng báo cáo lại có đủ 4 dòng này.
+- Theo yêu cầu xuất file (SRS Báo cáo thống kê, SCR-IX-01 §Quy tắc tương tác, dòng 1088; AC Xuất PDF dòng 124): file xuất phải chèn tiêu đề + kỳ + đơn vị + ngày tạo vào đầu trang, áp dụng cho cả Excel lẫn PDF.
+- Bug ID: BUG-EXPORT-PDF-HEADER (lỗi template PDF dùng chung toàn module — đã ghi nhận trên nhiều loại báo cáo).

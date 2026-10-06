@@ -1,0 +1,5 @@
+STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+49,KH HTPL upload file lỗi,✅ Đạt,PASS,TB,"R-verify-2b 06-05 13:53: ĐÃ FIX (Closed) — PATCH + fileDinhKemIds → 200; API re-check 2 file persist entityType=CHUONG_TRINH_HTPL (dev theo phương án (a), khớp C15). Sync tài liệu SRS → SRS-C-006 (BA). Bug: bugs/ct-htpldn/Pass-bug-49-upload-file-500.md"
+50,Mục tiêu không hiện,✅ Đạt,PASS,TB,"R2 06-02: CT detail hiện Mục tiêu textarea ""verify stt49"" đầy đủ"
+51,Thừa tab Tài liệu,✅ Đạt,PASS,TB,"R2 06-02: chi tiết CT chỉ tab ""Thông tin"" — không có tab Tài liệu thừa"
+52,Đợt báo cáo thiếu chọn phạm vi,✅ Đạt,PASS,Cao,"R2 06-02: modal Tạo đợt BC có field ""Đơn vị nộp báo cáo"" (phạm vi) required, 81+ đơn vị chọn được"

@@ -1,0 +1,56 @@
+🔁 Còn lỗi — chuyển lại dev.
+
+- Triệu chứng lần này: vai trò Quản trị hệ thống (QTHT) bấm [Xem báo cáo] thì thấy đầy đủ số liệu
+  (Tổng hỏi đáp 22 · Đã trả lời 11 · Chờ trả lời 11 · Tỷ lệ 50,0 %) và nút [Xuất Excel] hiện ở
+  trạng thái bấm được, nhưng bấm vào thì bị từ chối, không nhận được tệp nào, chữ hiện ra cho
+  người dùng đúng một chữ "Forbidden" (máy chủ trả 403, mã ERR-PERM-SYS-00-01). Đúng chữ đã ghi
+  ở ô TKM phản hồi lần 1.
+- Phần đã hết lỗi: với vai trò Cán bộ Nghiệp vụ Trung ương, [Xuất Excel] chạy tốt ở cả 3 cấu hình
+  bộ lọc — tệp .xlsx mở được, phần đầu tệp có đủ tiêu đề báo cáo + kỳ + khoảng thời gian + đơn vị
+  + ngày tạo; 4 chỉ số trong tệp khớp đúng số trên màn; đổi bộ lọc thì nội dung tệp đổi theo.
+  Không còn tái hiện câu "Không thể tạo file xuất. Vui lòng thử lại.".
+- Đặc tả đòi gì: srs-fr-11-bao-cao.md:117 (E7 ERR-RPT-05) — khi từ chối vì thiếu quyền, hệ thống
+  phải cho người dùng biết bằng tiếng Việt rằng họ không có quyền xem báo cáo, không đẩy chuỗi kỹ
+  thuật tiếng Anh ra màn hình. srs-fr-11-bao-cao.md:79 (Processing bước 1) đặt việc kiểm quyền truy
+  cập báo cáo ở đầu luồng, nên bước Xem và bước Xuất phải nhất quán. srs-fr-11-bao-cao.md:1052 ghi
+  điều kiện hiện nút Xuất Excel chỉ là "sau khi đã Xem báo cáo", không kèm điều kiện vai trò.
+  srs-fr-11-bao-cao.md:1268 (BR-AUTH-08) ghi ngoại lệ "QTHT bypass" áp dụng toàn bộ nhóm FR-IX.
+- Tài khoản / dữ liệu đã test: admin (QTHT, cấp TW) và cbnv_tw_05 (CB Nghiệp vụ Trung ương, cấp TW);
+  22 hỏi đáp đã duyệt trong kỳ Năm 2026, phạm vi Toàn quốc, trải 3 lĩnh vực và 2 đơn vị; 3 cấu hình
+  bộ lọc (không lọc / lọc Lĩnh vực PL = Thuế / lọc Trạng thái HĐ = Đã trả lời), mỗi tệp xuất đều mở
+  ra đọc nội dung. Việc bị chặn không riêng báo cáo này: vai trò QTHT xem được cả 3 loại báo cáo đã
+  thử nhưng xuất thì bị từ chối ở 3 loại × 2 định dạng. Không tạo, sửa hay xoá bản ghi nào.
+- Owner: Dev BE thống nhất quy tắc quyền giữa bước xem và bước xuất báo cáo cho vai trò QTHT và trả
+  thông báo từ chối theo :117; Dev FE không đẩy nguyên chuỗi kỹ thuật của máy chủ ra màn hình.
+  Cần BA chốt "QTHT có được xuất báo cáo không" trước khi dev chọn hướng sửa.
+
+── CÁCH VERIFY sau Dev fix ──
+Precondition: tài khoản admin (vai trò Quản trị hệ thống, cấp TW) + màn Báo cáo thống kê
+  (/bao-cao). Cần ≥1 hỏi đáp/vướng mắc pháp luật đã duyệt nằm trong năm 2026 để báo cáo có dữ
+  liệu; nếu báo cáo trống thì tạo hỏi đáp mới ở màn Hỏi đáp/vướng mắc pháp luật và đưa lên
+  trạng thái đã duyệt trở đi, hoặc đổi kỳ báo cáo sang kỳ có dữ liệu.
+1) Chọn Loại báo cáo "BC Số lượng hỏi đáp/vướng mắc pháp luật", Kỳ báo cáo "Năm"
+   (01/01/2026 → 31/12/2026), Đơn vị "Toàn quốc", để trống cả Lĩnh vực PL và Trạng thái HĐ.
+   Bấm [Xem báo cáo], ghi lại 4 số trên màn: Tổng hỏi đáp / Đã trả lời / Chờ trả lời / Tỷ lệ
+   trả lời.
+2) Bấm [Xuất Excel]. Đọc nguyên văn chữ hiện ra và kiểm có tệp về máy không. Làm lại bước 1-2
+   một lần nữa với Lĩnh vực PL = "Thuế" để phủ đúng cấu hình bộ lọc của lần nghiệm thu đầu.
+3) Đo bằng đường thứ hai: mở tab Network xem lời gọi xuất báo cáo trả mã gì và thân phản hồi ghi
+   gì; nếu có tệp thì MỞ TỆP RA ĐỌC, đối chiếu 4 số ở bước 1 với số trong tệp, và so 2 tệp của
+   2 cấu hình bộ lọc xem nội dung có khác nhau không.
+✅ PASS khi: vai trò Quản trị hệ thống bấm [Xuất Excel] thì nhận được tệp .xlsx mở được, 4 số
+   trong tệp khớp đúng 4 số trên màn của chính lần đó, tệp của cấu hình lọc "Thuế" khác tệp
+   không lọc, và không hiện thông báo từ chối nào.
+   HOẶC (nếu nghiệp vụ chốt là vai trò này không được xuất): hệ thống chặn NGAY từ bước
+   [Xem báo cáo] chứ không cho xem rồi mới chặn, và chữ hiện ra là câu tiếng Việt cho người
+   dùng biết họ không có quyền xem báo cáo này.
+❌ FAIL nếu: vẫn hiện chuỗi "Forbidden" hoặc bất kỳ chuỗi tiếng Anh/mã kỹ thuật nào; hoặc vẫn cho
+   Xem đầy đủ số liệu rồi mới chặn ở bước Xuất; hoặc xuất được ở cấu hình bộ lọc này nhưng vẫn bị
+   chặn ở cấu hình kia (đúng một phần cũng tính FAIL).
+⚠️ Đừng chấm Fail vì tên tệp, tên sheet, thứ tự cột, khổ giấy, phông chữ hay việc thiếu thông báo
+   "Đang tạo file..." — những thứ đó nằm ngoài điều đối tác phản ánh ở case này.
+⚠️ Đừng kết luận "đã fix" khi chỉ thấy vai trò Cán bộ Nghiệp vụ xuất được — vai trò đó vốn đã chạy
+   tốt ở lượt đo 06/08/2026. Phép đo quyết định là chạy bằng chính vai trò Quản trị hệ thống. Cũng
+   đừng dừng ở "tải được tệp": phải mở tệp ra đọc mới chốt được. Và đừng chỉ nghe bộ bắt thông báo
+   kiểu "node mới thêm" — giao diện thay chữ ngay trong khung thông báo cũ nên dễ báo nhầm là
+   "không có thông báo nào"; phải theo dõi nội dung khung thông báo theo thời gian.

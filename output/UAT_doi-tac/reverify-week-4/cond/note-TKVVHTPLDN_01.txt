@@ -1,0 +1,21 @@
+✅ Là bug — chuyển dev
+QA KHÔNG verify lại được thao tác này. Đề nghị dev verify lại và xác nhận.
+
+✅ 1) Lỗi đối tác báo.
+Gọi API tìm kiếm vụ việc dành cho hệ thống tích hợp bên ngoài, tìm theo từ khóa, thì nhận lỗi 400 kèm thông báo đòi một mã định danh dạng uuid — trong khi thao tác chỉ là tìm theo từ khóa. Xảy ra 2 lần trong cùng phiên; một lời gọi cùng nhóm không kèm từ khóa thì lại chạy bình thường.
+Bug ID: BUG-API-TIM-VUVIEC-BAO-LOI-UUID.
+
+2) Vì sao QA không verify lại được.
+Nhóm API này yêu cầu chứng thư số phía khách. Môi trường đang test chưa được cấp chứng thư nên mọi lời gọi đều bị chặn ngay ở bước xác thực, chưa vào đến phần xử lý. Cũng không có màn hình nào trong phần mềm dùng nhóm API này để kiểm thay.
+
+3) Cơ sở QA vẫn chấm là lỗi.
+Đối chiếu bản mô tả API của chính bản đã triển khai: tham số bắt buộc duy nhất của chức năng tìm kiếm là từ khóa (kiểu chuỗi, tối thiểu 2 ký tự); không có tham số bắt buộc nào dạng uuid. Cả hai từ khóa đối tác gửi đều hợp lệ. Lỗi phát sinh ở tầng kiểm tra dữ liệu vào, trước khi truy vấn dữ liệu, nên không phụ thuộc vai trò hay trạng thái bản ghi.
+
+4) Đề nghị dev.
+Thực thi lại đúng lời gọi này trên môi trường có chứng thư rồi xác nhận kết quả. Hướng truy nguyên gợi ý: kiểm tra xem lời gọi tìm kiếm có bị xử lý nhầm sang nhánh xem chi tiết theo mã định danh không — nhánh đó đòi bắt buộc một tham số dạng uuid, khớp đúng thông báo lỗi nhận được. Dev tự quyết cách sửa.
+
+⚠️ 5) Một điểm cần BA xác nhận, gửi riêng.
+Tài liệu đặc tả và bản mô tả API đã triển khai đang ghi hai dạng đường dẫn khác nhau cho cùng chức năng này. Đã gửi câu hỏi BA-22 để chốt bản nào là bản chính thức cho đối tác tích hợp.
+
+6) Lưu ý về nguồn số liệu.
+Số liệu lỗi ở ý 1 lấy từ bản ghi hình trong phiếu của đối tác, KHÔNG phải phép đo của QA. Phần QA tự kiểm và chịu trách nhiệm là ý 3.

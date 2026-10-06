@@ -1,0 +1,5 @@
+❌ Không phải bug.
+• Điểm danh gắn với buổi học cụ thể: tab "Điểm danh" yêu cầu chọn ngày buổi học trước, sau đó mới hiện danh sách học viên (đúng thiết kế — điểm danh theo từng buổi).
+• Đã tái hiện (CB_NV_TW): chọn ngày có buổi học → hiện đủ 4 học viên với lựa chọn Có mặt / Vắng có phép / Vắng không phép; bấm Lưu → hệ thống báo "Đã lưu điểm danh".
+• Bảng trống ban đầu là do chưa chọn ngày (hoặc khóa chưa có buổi học), không phải lỗi hiển thị. Theo đặc tả Quản lý kiểm tra, đánh giá kết quả (UC24), điểm danh gắn với một buổi học cụ thể.
+→ Đối tác chọn ngày buổi học để hiện danh sách điểm danh.

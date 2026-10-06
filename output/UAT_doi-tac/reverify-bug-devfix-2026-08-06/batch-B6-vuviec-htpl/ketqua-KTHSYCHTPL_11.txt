@@ -1,0 +1,15 @@
+✅ Đã hết lỗi — verify lại 06/08/2026 trên bản dựng V1.0.8, vai trò Cán bộ Nghiệp vụ Địa phương, trên 3 vụ việc tự dựng và 3 tình huống kết luận khác nhau.
+
+- Vẫn mở được phiếu kiểm tra ở trạng thái "Đang kiểm tra": nút mở phiếu là [Kiểm tra hồ sơ] khi hồ sơ mới ở "Đã tiếp nhận", và đổi thành [Kiểm tra lại] sau khi kết quả kiểm tra đã được lưu. Cả hai mở cùng một phiếu gồm đủ 6 hạng mục C01–C06 và ô kết luận đủ 3 lựa chọn (Đạt / Không đạt / Yêu cầu bổ sung), lưu bình thường. Trạng thái mô tả trong phiếu kiểm thử (chỉ còn [Phân công] và [Kiểm tra lại]) chính là trạng thái sau khi kiểm tra đã lưu thành công, không phải màn bị thiếu chức năng.
+
+- Hệ thống CÓ ghi người kiểm tra và thời điểm kiểm tra. Sau khi chọn kết luận Đạt và tải lại trang, mục "Kết quả kiểm tra" hiển thị: Kết luận "Đạt", Người kiểm tra "CB Nghiệp vụ - Địa phương #01", Ngày kiểm tra "06/08/2026 13:23" — đúng người vừa thao tác, lệch 4 giây so với thời điểm bấm lưu, và vẫn còn sau khi tải lại trang.
+
+- Hai thông tin này cập nhật theo lần lưu mới nhất: khi một cán bộ khác cùng đơn vị bấm [Kiểm tra lại] và lưu lại, mục này đổi sang "CB Nghiệp vụ - Địa phương #02" / "06/08/2026 13:32" (trước đó là #01 / 13:31), không bị giữ nguyên theo lần lưu đầu.
+
+- Hai thông tin này cũng được ghi ở nhánh kết luận khác Đạt: với kết luận "Yêu cầu bổ sung" kèm lý do, mục "Kết quả kiểm tra" vẫn ghi đủ người kiểm tra và ngày kiểm tra (06/08/2026 13:28).
+
+- Về mong đợi "Đang kiểm tra chuyển sang Đã phân công" ngay khi chọn Đạt: BA đã chốt ngày 16/07/2026 rằng kết luận Đạt giữ nguyên trạng thái "Đang kiểm tra", chỉ chuyển "Đã phân công" khi cán bộ phân công người xử lý. Đo thực tế đúng như vậy: sau khi lưu Đạt, hồ sơ vẫn "Đang kiểm tra"; sau khi bấm [Phân công], chọn người xử lý và xác nhận thì hồ sơ mới chuyển "Đã phân công".
+
+Ghi chú: nút mở phiếu không mang đúng chữ "Hoàn tất kiểm tra" mà là [Kiểm tra hồ sơ] / [Kiểm tra lại]; đây là cách đặt tên trên giao diện, chức năng ghi và sửa kết luận kiểm tra vẫn đầy đủ nên không tính là lỗi.
+
+Kết quả này ứng với bản dựng V1.0.8 đã kiểm; đề nghị xác nhận lại khi bản dựng này được đưa lên môi trường nghiệm thu.

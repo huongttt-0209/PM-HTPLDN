@@ -1,0 +1,25 @@
+⚠️ Cần BA xác nhận
+
+Cần BA chốt — hiện tượng tái hiện đúng, nhưng câu chữ mà phiếu test kỳ vọng không có trong đặc tả v3.5.
+Đã kiểm tra lại bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), trên bản ghi cùng loại với ảnh (nguồn Tự động, trạng thái Đã duyệt, đang có hiệu lực). Đã đo cả 2 chiều bật và tắt, sau đó khôi phục nguyên trạng dữ liệu.
+
+1) Hiện tượng tái hiện đúng.
+- Chiều tắt: hộp thoại tiêu đề "Đánh dấu hết hiệu lực", nội dung "Câu hỏi sẽ ngừng hiển thị nhưng vẫn lưu trong hệ thống. Tiếp tục?", nút Hủy / Đồng ý.
+- Chiều bật lại: tiêu đề "Kích hoạt hiệu lực", nội dung "Câu hỏi sẽ được kích hoạt lại và hiển thị cho người dùng. Tiếp tục?".
+- Cả hai đều không nhắc mã câu hỏi.
+
+2) Vì sao chưa chuyển dev được.
+- Đã tìm toàn bộ đặc tả v3.5 (cả file chính và tài liệu ghi nhận thay đổi) với các biến thể "Bạn có chắc" — không có kết quả nào. Câu chữ mà phiếu test kỳ vọng không tồn tại trong đặc tả v3.5, nhiều khả năng lấy từ tài liệu thiết kế khác.
+- Đặc tả còn nói theo hướng ngược lại: srs-fr-13-tv-nhanh.md dòng 533 mô tả bật/tắt hiệu lực là thao tác GẠT VÀ CẬP NHẬT NGAY, không nhắc tới hộp thoại xác nhận nào. Dòng 118 và 160 cũng chỉ mô tả kết quả.
+- Đối chứng ngay trong cùng màn hình: hành động Công khai / Hủy công khai (dòng 538) thì đặc tả CÓ ghi rõ "modal xác nhận". Việc có ghi cho hành động này mà không ghi cho bật/tắt hiệu lực là khác biệt có chủ ý.
+- Nói cách khác, web đang làm CẨN THẬN HƠN đặc tả (thêm bước xác nhận mà đặc tả không đòi hỏi).
+
+⚠️ 3) Đề nghị BA chốt 2 điểm.
+- Bật/tắt hiệu lực có bắt buộc hộp thoại xác nhận không, hay gạt là cập nhật ngay?
+- Nếu có, câu chữ chuẩn là gì, và có phải nhắc mã câu hỏi trong câu xác nhận không?
+
+❌ 4) Chức năng thì chạy đúng — đã đo bằng thao tác thật.
+- Bấm Đồng ý: 1 lần gọi máy chủ, 1 thông báo "Đã đánh dấu hết hiệu lực", bản ghi chuyển sang "Hết hiệu lực" / Hiệu lực "Không". Bật lại thì trở về "Đã duyệt" / Hiệu lực "Có".
+
+✅ 5) Phát hiện thêm khi test (ngoài phạm vi phiếu) — đã tách bug riêng.
+- Phía sau hộp thoại, phần "Câu trả lời" hiện nguyên văn thẻ HTML. Bug ID: BUG-KCH-HTML-THO.

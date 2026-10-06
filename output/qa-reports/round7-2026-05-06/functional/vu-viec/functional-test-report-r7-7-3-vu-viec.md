@@ -186,7 +186,7 @@ Body: {"tvvId":"aa999023-0000-4000-8000-000000000001","loaiDoiTuongXuLy":"CA_NHA
 
 **C3-6 ERR-PC-07 TVV không match LV:** Cần fresh DANG_KIEM_TRA VV (sau C3-4 + C3-5 đã dùng hết 2 VV còn lại). Tentative walk VV-BTP-TW-20260509-007 DA_TIEP_NHAN → kiem-tra block do thiếu hangMucId UUID (endpoint `/danh-muc?loaiDanhMuc=HANG_MUC_KIEM_TRA` 404 ERR-VAL-SYS-00-01 + variants 404). Hoãn → cần dev BE expose endpoint catalog hoặc seed fixture cung cấp 6 hangMucId.
 
-### Bug mới — log file `bug-report-r7-7-3-functional-vu-viec.md`
+### Bug mới — log file `Pass-bug-report-r7-7-3-functional-vu-viec.md`
 
 1. **BUG-VV-FN-PC-CROSS-CAP-01** — Critical — BE bỏ enforcement ERR-PC-05 phân công cross-cấp đơn vị
 2. **BUG-VV-FN-PC-INACTIVE-01** — Critical — BE bỏ enforcement ERR-PC-06 phân công cho TVV inactive (TU_CHOI)
@@ -276,7 +276,7 @@ Hiện tại còn **2 TC** chưa chạy được — chia **2 nhóm**: 1 chờ d
 
 2. **VV-014** — Seed prep: `cb_nv_tw_03` walk VV-QA-R9-HTK-001 (DA_TIEP_NHAN → DANG_KIEM_TRA via Kiểm tra hồ sơ → DA_PHAN_CONG via Phân công cho `[TVV] TVV R11 Verify Mail Fix`). Switch sang TVV page (isolatedContext `vvr19c-tvv-20260512-2040`). Navigate `/vu-viec/aad90001-0000-4000-8000-000000000001` → **page render 200 OK đầy đủ**: header với state badge "Đã phân công" + breadcrumb + stepper 10 trạng thái + accordion 9 section (Thông tin DN / Nội dung / Tài liệu / Kết quả kiểm tra / Phân công / Kết quả hỗ trợ / Phê duyệt / Đánh giá / HĐ liên kết) + Dòng thời gian 2 entries (Phân công + Kiểm tra). KHÔNG 403. **TVV-DETAIL-403-01 đóng R18-P2 vẫn confirmed.** Evidence: [`r19c-followup-vv014-tvv-detail-view-204800.png`](../../bug-reports/vu-viec/image/r19c-followup-vv014-tvv-detail-view-204800.png).
 
-3. **VV-015** — `tvv_r11_mailfix` reload page sau khi Chấp nhận phân công (state DANG_XU_LY, version 4, TVV là người xử lý). Quan sát header action area + accordion "Kết quả hỗ trợ" (đã auto-expand) → **0 button hành động** nào để TVV cập nhật kết quả. DOM grep "Cập nhật kết quả" chỉ thấy 1 chỗ — `span.ant-tag` trong timeline event (label của action đã ghi từ BE call), không phải button click được. Probe BE: POST `/cap-nhat-ket-qua` body `{noiDungKetQua:"R19c test"}` → **201 OK + DU_THAO + LICHSU `CAP_NHAT_KQ` ghi**. Permission TVV qua `/auth/me` trả 20 perm gồm `cap-nhat-ket-qua_ket_qua_vu_viec` đủ điều kiện. **Verdict: FE thuần — không render button cho role TVV ở state DANG_XU_LY.** Log [BUG-VV-R19c-001](../../bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md#bug-vv-r19c-001--tvv-không-thấy-button-hành-động-cập-nhật-kết-quả--trình-phê-duyệt--hoàn-thành-trong-chi-tiết-vv-được-phân-công). Evidence: [`r19c-followup-vv015-016-tvv-no-action-buttons-204920.png`](../../bug-reports/vu-viec/image/r19c-followup-vv015-016-tvv-no-action-buttons-204920.png).
+3. **VV-015** — `tvv_r11_mailfix` reload page sau khi Chấp nhận phân công (state DANG_XU_LY, version 4, TVV là người xử lý). Quan sát header action area + accordion "Kết quả hỗ trợ" (đã auto-expand) → **0 button hành động** nào để TVV cập nhật kết quả. DOM grep "Cập nhật kết quả" chỉ thấy 1 chỗ — `span.ant-tag` trong timeline event (label của action đã ghi từ BE call), không phải button click được. Probe BE: POST `/cap-nhat-ket-qua` body `{noiDungKetQua:"R19c test"}` → **201 OK + DU_THAO + LICHSU `CAP_NHAT_KQ` ghi**. Permission TVV qua `/auth/me` trả 20 perm gồm `cap-nhat-ket-qua_ket_qua_vu_viec` đủ điều kiện. **Verdict: FE thuần — không render button cho role TVV ở state DANG_XU_LY.** Log [BUG-VV-R19c-001](../../bug-reports/vu-viec/Pass-bug-report-r7-7-3-functional-vu-viec.md#bug-vv-r19c-001--tvv-không-thấy-button-hành-động-cập-nhật-kết-quả--trình-phê-duyệt--hoàn-thành-trong-chi-tiết-vv-được-phân-công). Evidence: [`r19c-followup-vv015-016-tvv-no-action-buttons-204920.png`](../../bug-reports/vu-viec/image/r19c-followup-vv015-016-tvv-no-action-buttons-204920.png).
 
 4. **VV-016** — Không thực hiện được. SRS FR-V.I-16 `srs-fr-05-vu-viec.md:1110` quy định actor là **CB NV** chuyển VV `DA_DUYET → HOAN_THANH`. Precondition cần: TVV cập nhật kết quả + Trình phê duyệt → CB NV duyệt → DA_DUYET. Cascade block: (a) BUG-VV-R19c-001 chặn TVV cập nhật kết quả qua UI; (b) BUG-VV-FN-TVV-PERMISSION-GAP-01 chặn `/trinh-phe-duyet` 403 cho TVV. Không có VV state DA_DUYET fresh để CB NV hoàn thành. Mark 🚫.
 
@@ -660,7 +660,7 @@ States:
 
 ### Bug summary
 
-→ Chi tiết 4 bug ở [bug-report-r7-7-3-functional-vu-viec.md](../../bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md):
+→ Chi tiết 4 bug ở [Pass-bug-report-r7-7-3-functional-vu-viec.md](../../bug-reports/vu-viec/Pass-bug-report-r7-7-3-functional-vu-viec.md):
 
 | Bug ID | Severity | Title |
 |--------|:--------:|-------|

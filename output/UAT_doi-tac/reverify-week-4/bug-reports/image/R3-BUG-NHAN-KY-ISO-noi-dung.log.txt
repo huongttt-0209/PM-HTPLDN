@@ -1,0 +1,56 @@
+R3 — BUG-BCTK-NHAN-KY-GHI-NGAY-ISO (BCTK_OOS_14)
+Ngay chay: 29/07/2026  |  Env: https://18.143.165.120.nip.io  |  Tai khoan: cbnv_tw_01
+Cach lay tep: bam nut [Xuat Excel] tren giao dien (khong goi API), doc Blob do chinh UI sinh ra.
+==============================================================================
+
+MAN: Bao cao thong ke > "BC Vu viec da tiep nhan" > Ky bao cao = Nam > [Xem bao cao]
+URL sau khi xem: /bao-cao?loai=vu-viec-tiep-nhan&kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+
+PHAN 1 — TREN MAN HINH
+------------------------------------------------------------------------------
+Dong mo ta ky (ngay duoi tieu de bao cao):
+   "Ky: Nam - Khoang thoi gian: 01/01/2026 -> 31/12/2026 - Don vi: Toan quoc"
+   -> dung dd/MM/yyyy, doc duoc
+
+Bieu do cot "theo ky" (nhan truc hoanh, doc bang innerText cua vung bao cao):
+   "2026-01-01"                                                   <<< SAI
+   -> nhan ky la mot NGAY kieu quoc te, khong phai nhan ky kieu "Nam 2026"
+
+PHAN 2 — TRONG TEP XUAT (bc-vuviec-tiepnhan-R3.xlsx, sheet "BC Vu viec da tiep nhan")
+------------------------------------------------------------------------------
+ O     | Noi dung
+ ------+--------------------------------------------------------------
+ A2    | "Ky bao cao: Nam (tu 01/01/2026 den 31/12/2026)"        -> DUNG
+ A4    | "Ngay tao: 29/07/2026"                                  -> DUNG
+ A26   | "Theo ky"                                               (tieu de bang)
+ A27   | "Ky"            | B27 = "So luong"                      (tieu de cot)
+ A28   | "2026-01-01"    | B28 = 27                              <<< SAI
+
+ => Trong CUNG MOT TEP: dong A2 ghi ngay dung dd/MM/yyyy, con o A28 duoi cot
+    "Ky" lai ghi kieu nam-thang-ngay. Tu mau thuan noi bo.
+
+PHAN 3 — DOI CHIEU DAC TA
+------------------------------------------------------------------------------
+ srs-fr-01-dashboard.md:209
+   | 7 | scope_label | text | - | UI text hien thi scope. VD: "Nam 2026",
+     "Thang 4/2026", "Nam 2025" |
+   -> nhan ky phai la CHU kieu "Nam 2026", khong phai mot ngay.
+
+ srs-v3.5.md:4617  (I18N-03, trang thai: CDT xac nhan)
+   | I18N-03 | Dinh dang ngay | dd/MM/yyyy (vi du: 25/03/2026). Luu tru DB:
+     kieu ngay/thoi gian chuan |
+   -> neu van chon hien thi dang ngay thi cung phai la 01/01/2026.
+
+ srs-v3.5.md:950  (DG-01 — quy tac du lieu chung cho bang)
+   | DG-01 | Dinh dang ngay | dd/mm/yyyy HH:mm hoac dd/mm/yyyy |
+
+PHAN 4 — RANH GIOI VOI BUG DA CO (de khong dong nham)
+------------------------------------------------------------------------------
+ BUG-BCTK-XUAT-THIEU-BANG (XUATTEP_OOS_09, row 44, dang Reopen):
+   noi ve viec BANG "Theo ky" KHONG CO trong tep xuat.
+   Bang do nay DA CO. Bug hien tai noi ve GIA TRI ben trong bang do,
+   va loi con xuat hien ca TREN MAN HINH (nhan truc bieu do) — khong chi trong tep.
+   -> Hai bug khac nhau, khong trung.
+
+ Cum "2026-01-01" khong xuat hien o bat ky bug nao khac trong
+ bug-report-UAT-tuan-4.md (da grep toan file).

@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+- Web tái hiện đúng như đối tác phản ánh: form Sửa (Chỉnh sửa danh mục) tab "Tiêu chí đánh giá chi phí" có trường "Danh mục cha" (để tùy chọn, không bắt buộc) và 2 trường tên "Tỷ lệ phần trăm", "Mức chi phí tối đa" — giống hệt form Thêm mới.
+- Theo SRS FR-VIII-12 (UC110), màn SCR-VIII-01: bảng trường chung của danh mục chỉ gồm Mã, Tên, Mô tả, Thứ tự, Trạng thái — KHÔNG có "Danh mục cha"; hai trường bổ sung SRS gọi là "Mức hỗ trợ (%)" và "Trần hỗ trợ/năm (VNĐ)".
+- Điểm khác: (1) "Danh mục cha" là trường thừa so với SRS vì danh mục này dạng phẳng (không phân cấp cha-con), nhưng để tùy chọn nên không chặn lưu; (2) tên hai trường bổ sung khác cách gọi trong SRS.
+- Câu hỏi BA: có yêu cầu bỏ trường "Danh mục cha" ở các danh mục phẳng và đổi tên hai trường về đúng SRS ("Mức hỗ trợ (%)", "Trần hỗ trợ/năm") không, hay chấp nhận cách hiển thị hiện tại? Nếu BA chốt theo SRS → chuyển Dev FE.

@@ -1,0 +1,8 @@
+- Đã kiểm tra lại thanh thẻ trạng thái ở màn Tài khoản & phân quyền: nay còn đúng 4 thẻ "Tất cả / Hoạt động / Chờ kích hoạt / Tạm khóa", không còn thẻ "Chờ phân quyền" như lần trước. Bấm lần lượt từng thẻ đều lọc ra đúng số liệu tương ứng (207 / 145 / 20 / 2). Phần này đã đạt.
+- Về ý "thiếu thẻ Vô hiệu hóa": đặc tả chỉ quy định 4 thẻ nêu trên, còn tài khoản đã vô hiệu hóa được xem qua bộ lọc "Trạng thái" ngay bên dưới. Chúng tôi đã thử: chọn "Vô hiệu hóa" rồi bấm "Tìm kiếm" thì ra 38 tài khoản. Ý này xin phép khép lại.
+- Về ý "Chờ kích hoạt chưa có màu nhấn": phản ánh này có cơ sở, nhưng chỗ được quy định màu là cột "Trạng thái" trong danh sách chứ không phải thẻ lọc. Kiểm tra cột đó thì màu đang lệch ở 3/4 trạng thái:
+  - "Chờ kích hoạt" đang màu xám, trong khi yêu cầu là màu vàng;
+  - "Tạm khóa" đang màu vàng cam, trong khi yêu cầu là màu đỏ;
+  - "Vô hiệu hóa" đang màu đỏ, trong khi yêu cầu là màu đen;
+  - riêng "Hoạt động" màu xanh là đúng.
+- Vì vậy chúng tôi để phiếu này ở trạng thái Reopen. Phạm vi còn lại chỉ là chỉnh bảng màu cho cột "Trạng thái"; phần thẻ lọc trạng thái đã đúng, không cần sửa thêm.

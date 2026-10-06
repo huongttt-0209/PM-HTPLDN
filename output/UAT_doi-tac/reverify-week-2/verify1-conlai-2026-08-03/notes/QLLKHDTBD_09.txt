@@ -1,0 +1,14 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Đã kiểm tra lại đúng điều kiện phản ánh: vai trò Cán bộ Nghiệp vụ Trung ương (đơn vị Bộ Tư pháp - Trung ương), màn "Đào tạo, tập huấn → Kế hoạch đào tạo → Danh sách", tab "Tất cả", đặt đúng hai giá trị lọc trong phiếu là Từ ngày 01/07/2026 và Đến ngày 31/07/2026, các ô còn lại để trống, rồi bấm "Xuất Excel".
+- Lỗi tái hiện: màn danh sách ghi "Hiển thị 1-1 / 1 kết quả" nhưng tệp Excel tải về có 13 dòng dữ liệu, tức toàn bộ danh sách. Trong đó 12 dòng là kế hoạch nằm hoàn toàn ngoài khoảng lọc, ví dụ 01/09/2026 - 31/12/2026 và 01/01/2026 - 31/12/2026.
+- Đã đo thêm một bộ lọc thứ hai theo chiều khác để loại trừ trùng số ngẫu nhiên: lọc theo từ khoá tên kế hoạch "RECON" cho 2 kết quả trên màn, tệp Excel vẫn ra đúng 13 dòng, trong đó 11 dòng không hề chứa từ khoá này.
+- Mốc đối chứng: khi không đặt bộ lọc nào, số kết quả trên màn và số dòng trong tệp bằng nhau. Cộng với hai phép đo trên, có thể khẳng định tệp luôn lấy trọn danh sách bất kể bộ lọc đang đặt.
+- Đã mở tệp ra đếm số dòng bằng hai cách độc lập (đọc thẳng nội dung tệp trong trình duyệt và mở tệp đã tải về bằng công cụ đọc bảng tính), hai cách cho cùng một con số.
+- Kỳ vọng theo đặc tả FR-III-14 (UC33) - Lập kế hoạch đào tạo năm:
+  + Mục Màn hình SCR-III-00, Thành phần 1 (srs-fr-03-dao-tao.md dòng 1752): nút "Xuất Excel" phải "xuất danh sách KH theo bộ lọc, tối đa 10.000 dòng".
+  + Mục Processing - Xuất Excel (srs-fr-03-dao-tao.md dòng 1147, bước 2 tại dòng 1152): "Lấy danh sách theo filter, tối đa 10.000 dòng".
+  + Quy tắc BR-DATA-06 (srs-v3.5.md dòng 5524), phạm vi "Toàn bộ CRUD list": "File xuất theo bộ lọc hiện tại, không vượt quá 10.000 rows/file". Phần giới hạn 10.000 dòng đang đạt, phần "theo bộ lọc hiện tại" chưa đạt.
+- Ghi chú thêm: điều kiện lọc CÓ được gửi lên khi bấm xuất tệp, nên phần cần xử lý nằm ở bước dựng dữ liệu cho tệp chứ không phải ở bước gửi điều kiện.
+- Phạm vi đã chốt: case này chỉ xét số bản ghi trong tệp có khớp bộ lọc hay không. Danh sách cột và định dạng bên trong tệp không thuộc phạm vi vì đặc tả không quy định.
+- Mã lỗi: BUG-QLLKHDTBD_09.
+- Verify: tài khoản Cán bộ Nghiệp vụ Trung ương (đơn vị Bộ Tư pháp - Trung ương), bản dựng V1.0.5, ngày 03/08/2026.

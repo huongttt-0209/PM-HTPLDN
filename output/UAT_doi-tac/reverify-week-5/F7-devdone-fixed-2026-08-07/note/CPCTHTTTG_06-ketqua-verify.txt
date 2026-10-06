@@ -1,0 +1,16 @@
+✅ Đã hết lỗi.
+
+VAI TRÒ QUẢN TRỊ HỆ THỐNG — nay chặn ngay ở cửa vào
+- Mục "Báo cáo thống kê" đã ẩn hẳn khỏi thanh điều hướng của tài khoản quản trị (đếm 33 mục, không còn mục này) — ẩn chứ không làm mờ, đúng srs-v3.5.md:684 (M-05). Tài khoản Cán bộ Nghiệp vụ vẫn thấy mục này ở vị trí cũ ⇒ ẩn theo vai trò, không phải gỡ chức năng.
+- Gõ thẳng địa chỉ màn báo cáo cũng không vào được. Việc chặn nay nằm ở BƯỚC XEM chứ không phải bước xuất: cả yêu cầu lấy danh sách loại báo cáo lẫn yêu cầu lấy số liệu đều bị từ chối, kèm câu tiếng Việt "Bạn không có quyền xem báo cáo này" (srs-fr-11-bao-cao.md:117). Hết chữ "Forbidden" và mã kỹ thuật.
+⇒ Đúng hướng nghiệp vụ chốt 06/08/2026, nay đã ghi vào đặc tả (srs-fr-11-bao-cao.md:79): quản trị hệ thống không phải tác nhân của báo cáo thống kê nên không vào màn và không xuất tệp.
+
+CÁN BỘ NGHIỆP VỤ TRUNG ƯƠNG KHÔNG HỎNG THEO — BC Chi phí theo thời gian (xuất PDF)
+- Xem báo cáo ra đủ số liệu: Tổng chi phí toàn kỳ 23.000.000 ₫ · Tổng hồ sơ toàn kỳ 2; bảng Theo kỳ có dòng Năm 2026 (01/01/2026 → 31/12/2026 · 2 hồ sơ · 23.000.000 ₫).
+- Xuất được tệp BaoCaoChiPhiTheoThoiGian_20260807_1012.pdf (để nguyên tuỳ chọn mặc định A4 + Dọc rồi bấm "Xuất file"); hết câu "Không thể tạo file xuất. Vui lòng thử lại." mà đối tác báo 16/07.
+- Đã mở tệp ra đọc, không dừng ở "tải được tệp": tệp ra đúng khung văn bản hành chính — 1 trang khổ A4 đúng như tuỳ chọn mặc định; đầu trang có tên cơ quan, quốc hiệu và tiêu ngữ; giữa trang đủ tên báo cáo, kỳ kèm khoảng thời gian, đơn vị, ngày tạo và bảng số khớp màn; cuối trang có ngày ký, dòng NGƯỜI XUẤT BÁO CÁO, dòng (Ký, ghi rõ họ tên và đóng dấu) và họ tên cán bộ xuất báo cáo. Không in dòng chức danh người ký — đúng quyết định nghiệp vụ 04/08/2026.
+
+Phạm vi: chạy lại 1 cấu hình (Kỳ Năm 2026, Toàn quốc, khổ giấy mặc định). Kỳ "Khoảng tùy chọn" vòng 06/08 đã ghi là đạt; các khổ A3, Letter và hướng Ngang không thuộc phạm vi phiếu.
+Lưu ý cách bấm: nút "Xuất PDF" chỉ mở hộp thoại chọn khổ giấy, lượt xuất thật là nút "Xuất file" bên trong hộp thoại.
+Hai việc không chấm ở phiếu này vì đã có phiếu riêng: nút Xuất bị khoá sau lần xem thứ 2 (BCTK_QA07, dòng 370) và tệp PDF in mã kỹ thuật "KHOANG" ở dòng Kỳ báo cáo khi chọn Khoảng tùy chọn (BCTK_QA09, dòng 372).
+Chi tiết: do/CPCTHTTTG_06.md

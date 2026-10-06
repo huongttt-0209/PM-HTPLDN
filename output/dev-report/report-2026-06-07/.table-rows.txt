@@ -1,0 +1,79 @@
+| 1 | api-consumer-log-drawer-meta-null-crash | api-consumer | P2 | 1a | ✅ PASS | Drawer 'Log tích hợp' mở OK + empty-state; console không có null TypeE | Hết white-screen, guard meta null OK |
+| 2 | api-consumer-notfound-wrong-code | api-consumer | P3 | 1a | ✅ PASS | GET api-consumers/{missing} → 404 ERR-NOT-FOUND-ADM-00-01 | Resource code đúng, hết generic |
+| 3 | audit-log-search-ignored | audit-log | P2 | 1a | ✅ PASS | audit-logs base735 nomatch→0 'TAI_KHOAN'→3 | search param wired (keyword→search ILIKE) |
+| 4 | audit-log-lock-account-null-endpoint-responsecode | audit-log | P3 | 1a | ✅ PASS | lock/unlock acct → audit LOCK/UNLOCK_ACCOUNT rows có endpoint + respon | Hết null endpoint/response_code; acct restored |
+| 5 | auth-lockout-retry-after-stripped | auth | P1 | 1a | ✅ PASS | cb_nv_tw_08 sai pass 5 lần → 401 ERR-AUTH-LOCKED-01 có retry_after_sec | retry_after_seconds không còn bị strip (machine-readable). A |
+| 6 | password-cp02-weak-dto-preempts-service-code | auth | P3 | 1a | ✅ PASS | POST change-password newPassword='weak' → 422 error.code ERR-VAL-VIII- | Domain code promoted, hết generic; password không đổi (rejec |
+| 7 | vneid-callback-error-masked-by-global-401-interceptor | auth | P2 | 1a | ✅ PASS | callback?code=invalid → giữ /auth/vneid/callback (không bounce /login) | Lỗi VNeID không bị global 401 interceptor mask, render đúng  |
+| 8 | bao-cao-export-no-double-submit-guard | bao-cao | P2 | 1a | ✅ PASS | 3 click Xuất Excel liên tiếp → chỉ 1 POST /bao-cao/export (200) | Guard double-submit export, không tạo 2 job/audit-row |
+| 9 | bao-cao-filter-controls-not-hydrated-from-url | bao-cao | P2 | 1a | ✅ PASS | Reload deep-link ?loai&kyBaoCao=NAM&tuNgay&denNgay → Loại/Kỳ/Thời gian | Control hydrate từ URL params đúng |
+| 10 | bao-cao-lam-moi-does-not-clear-report-view | bao-cao | P3 | 1a | ✅ PASS | Click Làm mới → URL clear, table/chart/result mất, Loại+Kỳ reset place | Làm mới reset toàn bộ view + filter + URL |
+| 11 | bieu-mau-delete-folder-with-templates-500-fk-restrict | bieu-mau | P1 | 1a | ✅ PASS | DELETE folder(so=1) → 409 ERR-TM-02, folder intact | Hết 500 FK RESTRICT, trả 409 đúng |
+| 12 | bieu-mau-import-confirm-rls-write-500 | bieu-mau | P2 | 1a | ✅ PASS | Corroborated via sibling #41 (identical import-confirm RLS-QR fix, PAS | bieu-mau import multi-step file contract không dựng được raw |
+| 13 | mau-phan-hoi-keyword-search-ignored | cau-hinh-he-thong | P2 | 1a | ✅ PASS | base15, nomatch→0, match wired | search param wired, lọc OK |
+| 14 | chi-tra-trinh-phe-duyet-thamdinh-read-rls-context-409 | chi-tra | P1 | 1a | 🚫 BLOCKED | Pool chi-tra chỉ YEU_CAU_BO_SUNG/TU_CHOI/DA_THANH_TOAN — 0 HS walkable | Nhóm D (env/infra) — cần Dev BE/DBA inject 1 HS chi-tra hoặc |
+| 15 | tabcounts-stripped-by-response-interceptor | chi-tra | P2 | 1a | ✅ PASS | GET ho-so-chi-tras → meta.tabCounts {TAT_CA:5,...} | tabCounts nested meta, không bị strip |
+| 16 | tvv-vhh-500 | chuyen-gia-tvv | P1 | 1a | ✅ PASS | 5 TVV → 422 ERR-STATE-IV-TT-02 (msg '...0 hỏi đáp...'), no 500 | Guard hoi_dap chạy sạch, hết 500 |
+| 17 | chuyen-gia-tvv-edit-save-files-404-blocks-patch | chuyen-gia-tvv | P2 | 1a | ✅ PASS | POST tu-van-viens/:id/files → 201 | Hết false 404 ERR-TVV-02, resolveHoSoId RLS-pinned |
+| 18 | fe-create-no-double-submit-guard-duplicate-records | ct-htpldn | P2 | 1a | ✅ PASS | 3 click Lưu liên tiếp → chỉ 1 POST chuong-trinh-htpls (201), chỉ 1 rec | Guard double-submit chặn request thứ 2+, không tạo trùng |
+| 19 | qtht-manage-all-exceeds-srs | cross-cutting | P2 | 1a | ✅ PASS | QTHT POST mau-phan-hoi/export/approve → 403; GET mau-phan-hoi → 200 | SoD enforced, write gated |
+| 20 | list-keyword-maxlength-422-vs-spec-slice | cross-cutting | P3 | 1a | ✅ PASS | GET doanh-nghieps?search=250chars → 200 (sliced) | Hết 422 reject, slice-to-200 OK |
+| 21 | list-pagesize-over-max-422-vs-spec | cross-cutting | P3 | 1b | ❓ Chờ BA | - | Fix sai hướng: clamp 100+200 vs SRS đòi reject ERR-PARAM-01 |
+| 22 | ct-htpl-pause-500 | ct-htpldn | P1 | 1a | ✅ PASS | activate TW CT→DANG_THUC_HIEN→pause 200 TAM_DUNG (ver6→7) | Hết 500 dead-column SQL guard |
+| 23 | ct-htpl-complete-500-bad-column-chuong-trinh-id | ct-htpldn | P1 | 1a | ✅ PASS | cb_pd_tw_01: POST chuong-trinh-htpls/{id}/complete → 200, DANG_THUC_HI | Hết 500 bad column chuong_trinh_id, complete OK |
+| 24 | ct-htpl-detail-no-error-state | ct-htpldn | P2 | 1a | ✅ PASS | UUID không tồn tại → skeleton=0, Result 'Chương trình HTPL không tồn t | Thoát Skeleton, render error Result đúng mã |
+| 25 | ct-htpl-export-500-bad-column-dbc-chuong-trinh-id | ct-htpldn | P2 | 1a | ✅ PASS | POST export → 200 xlsx (spreadsheetml.sheet) | Hết 500 bad column, xuất Excel OK |
+| 26 | ct-htpl-list-tabcounts-stripped | ct-htpldn | P2 | 1a | ✅ PASS | GET list → meta.tabCounts {DU_THAO:14,DANG_THUC_HIEN:2,...} | tabCounts nested meta, không bị strip |
+| 27 | ct-htpl-pause-lydo-dto-preempts-business-code | ct-htpldn | P3 | 1a | ✅ PASS | pause lyDo<10 → 422 ERR-VAL-XI-06-06 | Domain code promoted đúng |
+| 28 | danh-gia-addassignment-trongso-read-rls-context-422 | danh-gia | P1 | 1a | ✅ PASS | cb_nv_dp_01 (DP): GET tieu-chi-danh-gias/cho-ke-hoach → 8 rows; /trong | listCatalog RLS read trả master rows cho DP (hết empty→false |
+| 29 | rls-write-500-baocao-danhgia-getorcreate | danh-gia | P1 | 1a | ✅ PASS | GET ke-hoach HOAN_THANH/bao-cao → 200 get-or-create BCDG-20260513-0002 | RLS-write get-or-create OK, hết 500 |
+| 30 | tieu-chi-batchupsert-rls-write-500 | danh-gia | P1 | 1a | ✅ PASS | PUT ke-hoach-danh-gias/{id}/tieu-chis batchUpsert → 200 | RLS write batchupsert OK, hết 500 |
+| 31 | bao-cao-danh-gia-ma-counter-collision-409 | danh-gia | P2 | 1a | ✅ PASS | Equivalence: cùng ma_sequence(namespace) verified LIVE 7 F2 sibling hô | PASS gián tiếp (equivalence). Fix note dev: 'mechanism ident |
+| 32 | ke-hoach-danh-gia-create-409-unique-collision | danh-gia | P2 | 1a | ✅ PASS | POST ke-hoach 2x same day cùng đơn vị → DG-20260607-0004,-0005 both 20 | Atomic ma_sequence, hết 409 collision |
+| 33 | qtht-readonly-upload-control-not-disabled | danh-gia | P2 | 1a | ✅ PASS | QTHT/LAP_KE_HOACH: input[type=file].disabled=true + dragger ant-upload | readOnly enforced theo canMutate |
+| 34 | danh-gia-tieuchi-validation-generic-errorcode | danh-gia | P3 | 1a | ✅ PASS | PUT tieu-chis tenTieuChi='' → 422 ERR-VAL-TC-02 (nested) | Domain code promoted nested item |
+| 35 | phan-cong-reject-lydo-generic-valcode-not-pc06 | danh-gia | P3 | 1b | ❓ Chờ BA | - | Mã ERR-VAL-PC-06 không có trong SRS; spec đòi ERR-DG-PD-02 |
+| 36 | diem-danh-recalc-param-type-500 | dao-tao-hoc-lieu | P2 | 1a | ✅ PASS | batch-update payload hợp lệ → 403 state-guard ERR-BIZ-III-05-01 (CHO_D | SQL param bind OK, query prep hết crash 'parameter $2' |
+| 37 | rls-write-500-diem-danh-batch-update | dao-tao-hoc-lieu | P1 | 1a | ✅ PASS | batch-update data hợp lệ (lich+5hv) → 403 guard trong RLS context lành | RLS-write crash hết; 200-write chưa cô lập được do thiếu see |
+| 38 | khoa-hoc-edit-no-editable-form-readonly-detail | dao-tao-core | P2 | 1a | ✅ PASS | Route /chinh-sua mở form 'Sửa khóa học' 15 input editable + Lưu; PATCH | Form editable + giảng viên persist (GV cross-đơn-vị bị filte |
+| 39 | khoa-hoc-list-search-accent-insensitive | dao-tao-core | P2 | 1a | ✅ PASS | 'Khóa'→4 = 'Khoa'→4, nomatch→0 | Accent-insensitive OK |
+| 40 | rls-write-500-giang-vien-create | dao-tao-hoc-lieu | P1 | 1a | ✅ PASS | create 201 (GV-BTP-TW-0009) + PATCH 200 + DELETE 204 | RLS write OK, hết 500 |
+| 41 | rls-write-500-nganhang-import-confirm | dao-tao-hoc-lieu | P1 | 1a | ✅ PASS | upload template→validate hopLe:1→confirm 201 {imported:1} | RLS write import confirm OK, hết 500 |
+| 42 | de-kiem-tra-search-param-mismatch | dao-tao-hoc-lieu | P2 | 1a | ✅ PASS | base6, nomatch→0, 'kiểm'→1 | keyword param wired |
+| 43 | bai-giang-search-param-ignored | dao-tao-hoc-lieu | P3 | 1a | ✅ PASS | base10, nomatch→0, 'Test'→1 | keyword param wired |
+| 44 | de-xuat-dao-tao-delete-received-409-vs-422 | dao-tao-hoc-lieu | P3 | 1a | ✅ PASS | DELETE de-xuat DA_TIEP_NHAN → 422 ERR-DX-03 | 409→422, không xóa |
+| 45 | dexuat-dao-tao-state-guard-409-vs-422 | dao-tao-hoc-lieu | P3 | 1a | ✅ PASS | edit→422 ERR-DX-02, delete→422 ERR-DX-03 | State guards 409→422 |
+| 46 | dkt-empty-tende-accepted | dao-tao-hoc-lieu | P3 | 1a | ✅ PASS | POST de-kiem-tras tenDe='' → 422 field=tenDe | IsNotEmpty fire, hết 201-accept |
+| 47 | dkt-illegal-transition-http-409-vs-422 | dao-tao-hoc-lieu | P3 | 1a | ✅ PASS | re-activate KICH_HOAT → 422 ERR-DKT-STATE | Illegal transition 409→422 |
+| 48 | empty-file-upload-500-chk-dung-luong | dao-tao-hoc-lieu | P3 | 1a | ✅ PASS | upload 0-byte → 400 ERR-VAL-FILE-05 | Hết 500 chk_dung_luong |
+| 49 | dashboard-aggregate-cache-key-omits-donvicap | dashboard | P2 | 1a | ✅ PASS | GET dashboard?donViCap=DP vs BN → appliedFilter.donViCap khác nhau (DP | Cache key gồm donViCap, không còn stale cross-cap |
+| 50 | dashboard-empty-period-ignores-hasData-shows-zero-bars | dashboard | P2 | 1a | ✅ PASS | ?nam=2020 hasData=false+infoCode INFO-DASH-02; UI chart 'Chất lượng đà | Empty-period gate OK, hiện placeholder không render cột 0 |
+| 51 | dashboard-scope-chip-dp-label-css-truncated | dashboard | P3 | 1a | ✅ PASS | Chip 'Phạm vi: Toàn quốc' render đầy đủ; textOverflow=clip (không elli | CSS clip thay ellipsis, label không bị cắt |
+| 52 | doanh-nghiep-create-button-hidden-cb-nv-tw | doanh-nghiep | P2 | 1a | ✅ PASS | /auth/me có create_doanh_nghiep; nút 'Thêm mới' hiện+enabled → mở /doa | Quyền grant đúng, nút create hiện + mở form |
+| 53 | doanh-nghiep-default-sort-ngaytao-vs-ngaycapnhat | doanh-nghiep | P3 | 1a | ✅ PASS | GET doanh-nghieps không sortBy → sort ngayCapNhat DESC (DN ngayTao 05- | Default sort = ngayCapNhat DESC đúng |
+| 54 | vuviec-file-upload-500-chk-entity-type | file-upload | P2 | 1a | ✅ PASS | files/upload entityType=VuViec → 422 ERR-VAL-FILE-03 | Hết 500 chk_file_entity_type |
+| 55 | ho-so-phap-ly-dn-ma-counter-collision-409 | tu-van | P1 | 1a | ✅ PASS | BKH→HSPL-20260607-0003 + BTC→HSPL-20260607-0004 cùng ngày, both 201 | Counter atomic cross-đơn-vị, mã tuần tự, hết 409 |
+| 56 | hoi-dap-lacongkhai-filter-ignored | hoi-dap | P2 | 1a | ✅ PASS | cb_nv_tw_01: GET hoi-daps/da-xu-ly?congKhai=true → 2 (all CONG_KHAI),  | Filter congKhai partitions đúng (data BTP-TW sẵn có). Block  |
+| 57 | hop-dong-tu-van-ma-counter-collision-409 | hop-dong-tv | P1 | 1a | ✅ PASS | cb_nv_tw_01: 2 HDTV same-day (chủ thể Kappa + Io) → HDTV-20260607-0003 | HDTV counter atomic (ma_sequence namespace). Đã seed 2 chủ t |
+| 58 | hop-dong-tv-export-500-typeorm-orderby-databasename | hop-dong-tv | P2 | 1a | ✅ PASS | cb_nv_dp_01: POST hop-dong-tu-vans/export → 200, OOXML magic 50 4b 03  | Hết 500 TypeORM orderBy, xuất xlsx OK |
+| 59 | hop-dong-tv-giatri-zero-dto-preempts-err-hdtv-05 | hop-dong-tv | P3 | 1a | ✅ PASS | POST hdtv giaTriHopDong=0 → 422 error.code ERR-HDTV-05 'Giá trị HĐ phả | Domain code promoted, hết generic ERR-VAL-SYS |
+| 60 | hop-dong-tv-subresource-404-code-inconsistent | hop-dong-tv | P3 | 1a | ✅ PASS | POST moc-tien-dos + thanh-toans HĐ không tồn tại → 404 ERR-VAL-X3-159- | Mã 404 đồng nhất domain HDTV, hết generic HOI_DAP code |
+| 61 | nht-vohieuhoa-guard-bypass-rls-pool-count-0 | vu-viec | P1 | 1a | ✅ PASS | Seed NHT active VV (nhan-phan-cong→DANG_XU_LY); cb_nv_tw_01 VHH NHT 27 | Guard count active VV chạy RLS-pinned đúng (count=1, hết byp |
+| 62 | concurrent-create-race-generic-23505-409-code | quan-tri/don-vi | P3 | 1a | ✅ PASS | POST don-vi dup ma → 409 ERR-VAL-VIII-103-03 DV_DUPLICATE_MA | Code path đúng; race sub-ms HTTP-unreproducible (dev unit-ve |
+| 63 | thong-bao-keyword-accent | thong-bao | P2 | 1a | ✅ PASS | keyword 'khoan'→24 = 'khoản', nomatch→0 | Accent-insensitive OK |
+| 64 | thong-bao-empty-title-accepted | thong-bao | P3 | 1a | ✅ PASS | POST thong-baos tieuDe='' → 422 field=tieuDe | IsNotEmpty fire |
+| 65 | tieu-chi-catalog-danh-muc-read-empty | tieu-chi-danh-gia | P1 | 1a | ✅ PASS | tieu-chi-danh-gias/danh-muc → 200, 8 master rows (dv=null) | RLS read NULL master OK, không empty |
+| 66 | tieu-chi-rls-write-500 | tieu-chi-danh-gia | P1 | 1a | ✅ PASS | create 201 + PATCH 200 + DELETE 204 | RLS write master tieu-chi OK, hết 500 |
+| 67 | tieu-chi-danh-gia-ma-counter-collision-409 | tieu-chi-danh-gia | P2 | 1a | ✅ PASS | PUT tieu-chis BTC plan → TC-20260607-0004 (200), mã tuần tự global | Counter date-based atomic OK, hết 409 |
+| 68 | hspl-patch-silently-ignores-doanhnghiepid | tu-van | P2 | 1a | ✅ PASS | PATCH doanhNghiepId → 400 ERR-VAL-X1-04-07 | Field không còn bị strip, guard fire |
+| 69 | tv-nhanh-rerate-wrong-code-empty-msg | tu-van | P2 | 1c | 🔧 Env/Infra | - | Endpoint inbound mTLS Cổng PLQG, không có cert/account QA |
+| 70 | tvcs-material-create-404-validateNoiDungTv | tvcs | P2 | 1a | ✅ PASS | POST tu-lieu-phap-ly-vvs noiDungTvId hợp lệ → 201; id không tồn tại →  | Tạo tư liệu OK với noiDungTv hợp lệ, miss thật vẫn 404 (khôn |
+| 71 | noi-dung-tu-van-cs-ma-counter-collision-409 | tvcs | P1 | 1a | ✅ PASS | BKH→TVCS-20260607-0003 + BTC→TVCS-20260607-0004 cùng ngày, both 201 | Counter atomic cross-đơn-vị, mã tuần tự, hết 409 |
+| 72 | kho-cau-hoi-ma-counter-collision-409 | tv-nhanh | P1 | 1a | ✅ PASS | BKH→QA-20260607-0003 + BTC→QA-20260607-0004 cùng ngày, both 201 | Counter atomic cross-đơn-vị, mã tuần tự, hết 409 |
+| 73 | kho-cau-hoi-search-param-mismatch-and-accent | tv-nhanh | P2 | 1a | ✅ PASS | keyword: base33 nomatch→0 'Tính'→5 'Tinh'→5 | param wired + accent-insensitive |
+| 74 | tu-van-nhanh-ma-counter-collision-409 | tv-nhanh | P1 | 1a | 🔧 Env/Infra | POST /inbound/tu-van-nhanh → 404 trên app origin (Cổng PLQG mTLS gatew | Nhóm D mTLS inbound. F2 ma_sequence(tu_van_nhanh) corroborat |
+| 75 | kho-cau-hoi-view-counter-not-incrementing | tv-nhanh | P3 | 1a | ✅ PASS | soLuotXem 0→3 sau detail GET | counter increments (RLS-pinned UPDATE) |
+| 76 | vu-viec-assignedtome-guard-rejects-assigned-tvv | vu-viec | P1 | 1a | ✅ PASS | nht_btp_tw_audit_r30 (assigned actor) POST nhan-phan-cong VV-BTP-TW-20 | AssignedToMeGuard fix (runAsSystem self-scoping isAssigned)  |
+| 77 | vu-viec-already-rated-generic-409-not-vi-16-02 | vu-viec | P2 | 1a | ❌ FAIL | 409 nhưng error.code=ERR-STATE-SYS-00-01 (generic); ERR-VAL-VI-16-02 c | Fix branch/message OK nhưng error.code vẫn generic (2/2 vv) |
+| 78 | vu-viec-kenh-doanh-nghiep-enum-not-whitelisted-422 | vu-viec | P2 | 1b | ❓ Chờ BA | - | Fix sai layer; enum SRS chỉ 5 giá trị, thiếu dropdown/badge |
+| 79 | vu-viec-tenant-isolation-shared-rls-code-not-module-code | vu-viec | P3 | 1a | ✅ PASS | GET vu-viecs/{non-existent} → 404 ERR-VAL-VI-03-02 'Vụ việc không tồn  | Mã domain vu-viec, không leak HOI_DAP ERR-VAL-VII-02-01 |

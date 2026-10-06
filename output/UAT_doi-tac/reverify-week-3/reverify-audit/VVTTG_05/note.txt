@@ -1,0 +1,6 @@
+❌ Không phải bug.
+- Đối tác phản ánh: khi Xuất Excel báo cáo "Vụ việc theo thời gian" thì hệ thống báo "Không thể tạo file xuất. Vui lòng thử lại.".
+- Kiểm thử lại ngày 21/07/2026 đúng điều kiện đối tác: báo cáo Vụ việc theo thời gian, kỳ Năm 2026, đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp; đã bấm Xem báo cáo ra dữ liệu rồi mới bấm Xuất Excel.
+- Kết quả: hệ thống tạo và tự động tải về tệp Excel (.xlsx) thành công, KHÔNG xuất hiện thông báo lỗi. Đã thử cả phạm vi Toàn quốc và đúng đơn vị Cục Bổ trợ tư pháp - đều tải file bình thường.
+- Đã mở file Excel tải về kiểm tra nội dung: có đủ phần đầu (tiêu đề báo cáo, kỳ báo cáo, đơn vị, ngày tạo) và số liệu khớp báo cáo trên màn hình.
+- → Đối tác kiểm tra lại.

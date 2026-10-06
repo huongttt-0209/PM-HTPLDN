@@ -1,0 +1,13 @@
+Verify 06/08/2026, bản dựng V1.0.8 (bó mã index-DIABnbIr.js, phát hành 06/08/2026 14:13), tài khoản Cán bộ Nghiệp vụ Trung ương — trùng khít vai trò và cấp đọc được trên ảnh của đối tác. Không tái hiện: khối "Đánh giá" ĐÃ có nút xuất tệp Excel và xuất ra tệp thật.
+
+Đã tự dựng lại đúng tiền đề trong phiếu (phiên Hoàn thành + đã có đánh giá của doanh nghiệp) bằng 3 phiên mới, phủ 2 dạng đánh giá (có nhận xét / không nhận xét) và cả 2 giá trị kênh (Tư vấn nhanh / Thủ công — kênh Thủ công trùng khít ảnh của đối tác). Bấm nút thật 3 lượt, cả 3 lượt đều nhận được tệp Excel hợp lệ (7008 / 6940 / 7000 byte, ba mã băm khác nhau nên không phải tệp lấy lại từ bộ nhớ đệm).
+
+Mở tệp ra đọc, cả 3 tệp đều đủ 6 trường phiếu yêu cầu: Mã phiên, Điểm đánh giá, Nhận xét của doanh nghiệp, Ngày đánh giá, Tên doanh nghiệp, Mã doanh nghiệp; dữ liệu khớp từng ô với đánh giá đang hiển thị trên màn (4 sao / 5 sao / 3 sao, ngày 06/08/2026, đúng tên và mã số thuế doanh nghiệp). Trường hợp đánh giá không kèm nhận xét thì ô nhận xét để trống đúng cách, tiếng Việt có dấu đọc ra nguyên vẹn.
+
+Lưu ý về tên tệp: phiếu ghi mong đợi tên dạng "danh-gia-tv-nhanh-{mã phiên}{ngày giờ}.xlsx", nhưng quy ước đặt tên tệp kết xuất đã được BA chốt lại ngày 06/08/2026 (Phụ lục E, mục quy ước tên tệp) theo khuôn viết liền không dấu. Tên tệp phần mềm sinh ra là DanhGiaTvNhanh_TVN202608060001_20260806_1504.xlsx — đúng khuôn mới, có đủ mã phiên và giờ-phút để hai lần xuất trong cùng ngày không đè nhau. Đây là khác biệt về quy ước đặt tên đã chốt, không phải lỗi.
+
+Nút cũng ẩn đúng lúc cần ẩn: phiên chưa Hoàn thành, hoặc đã Hoàn thành nhưng chưa có đánh giá nào, thì không hiện khối "Đánh giá" và không có nút xuất — nên không xảy ra trường hợp xuất ra tệp rỗng. Kiểm chứng thêm bằng đường đo thứ hai: gọi thẳng dịch vụ xuất tệp trong cùng phiên trả về 200 với đúng kiểu tệp bảng tính, và tên tệp do máy chủ đặt trùng khít tên mà giao diện dùng khi tải về. Hai cách đo cho cùng một kết quả.
+
+Ghi chú nhỏ khi thao tác: nút xuất tệp nằm ở màn CHI TIẾT phiên, trong khối "Đánh giá" (góc phải, cạnh 3 thẻ Tổng đánh giá / Điểm trung bình / Phân bố điểm); ở màn danh sách tab "Hoàn thành" không có nút này.
+
+Lưu ý hiệu lực: đo trên môi trường kiểm thử nội bộ bản V1.0.8, chưa phải môi trường nghiệm thu. Đề nghị đối tác mở lại đúng màn này sau khi bản dựng nêu trên được cập nhật sang môi trường nghiệm thu.

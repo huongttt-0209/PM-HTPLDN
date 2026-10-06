@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+• Thêm giảng viên hợp lệ: hệ thống lưu bản ghi thành công. Danh sách sắp xếp theo tên A→Z nên bản ghi mới nằm đúng vị trí bảng chữ cái, không lên đầu danh sách.
+• SRS FR-III-11 (UC30) và FR-III-12 (UC31, Processing dòng 994 "Phân trang") không quy định thứ tự sắp xếp mặc định → chưa đủ căn cứ khẳng định phải "mới nhất lên đầu".
+• Verify: CB_NV_TW — tạo lần lượt "Aaa" rồi "Zzz", danh sách hiển thị [Aaa, Zzz].
+→ Đề nghị BA chốt: sắp xếp mặc định "mới nhất lên đầu" hay theo tên A→Z.

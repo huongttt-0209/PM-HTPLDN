@@ -1,0 +1,168 @@
+R6 RE-VERIFY — BUG-BCTK-XUAT-THIEU-BANG (XUATTEP_OOS_09)
+Ngay chay: 30/07/2026 ~15:30-16:10  |  Env: https://18.143.165.120.nip.io  |  Ban dung: V1.0.3
+Tai khoan: cbnv_tw_04 (CB Nghiep vu - Trung uong #04, cung vai tro + cung cap TW voi
+tai khoan _02 dung o luot 5 => pham vi du lieu khong doi, phep do so sanh duoc).
+Thao tac hoan toan tren giao dien: [Xem bao cao] -> [Xuat Excel] / [Xuat PDF] -> [Xuat file].
+================================================================================
+
+BOI CANH: luot 5 da dat phan chinh (45/45 the so lieu, 22/22 loai co du lieu xuat du
+bang). Con DUNG 2 bao cao dang bang cheo mat toan bo phan chia theo don vi khi xuat tep:
+  - BC Vu viec theo linh vuc   : man 6 cot x 3 dong (15 o) -> tep chi con 2 cot
+  - BC Vu viec theo loai hinh DN: man 6 cot x 2 dong (10 o) -> tep chi con 2 cot
+
+--------------------------------------------------------------------------------
+PHAN 1 — HAI BAO CAO DICH: DOI CHIEU TUNG O, CA EXCEL LAN PDF
+--------------------------------------------------------------------------------
+ Cach doc tep: Excel doc truc tiep tu tep .xlsx vua xuat (giai nen, doc tung o);
+ PDF mo bang trinh xem PDF cua Chrome roi chup lai — tuc doc dung thu nguoi dung thay.
+
+ 1.1 — BC VU VIEC THEO LINH VUC  (ky Nam, don vi Toan quoc)
+   MAN HINH   6 cot: Linh vuc PL | Cuc Bo tro tu phap - Bo Tu phap | Bo Ke hoach va
+              Dau tu | So Tu phap Ha Noi | So Tu phap An Giang | Tong so
+              3 dong: Dan su 13/0/0/0/13 · Thue 1/0/0/0/1 · Thuong mai 8/4/2/3/17
+
+   TEP EXCEL  trang tinh "Vụ việc theo lĩnh vực" (14 dong x 6 cot)
+              dong 11: Linh vuc phap luat | Cuc Bo tro tu phap - Bo Tu phap | Bo Ke
+                       hoach va Dau tu | So Tu phap Ha Noi | So Tu phap An Giang | Tong so
+              dong 12: Dan su   | 13 | 0 | 0 | 0 | 13
+              dong 13: Thue     |  1 | 0 | 0 | 0 |  1
+              dong 14: Thuong mai | 8 | 4 | 2 | 3 | 17
+              => DU 6 cot, KHOP tung o voi man hinh. Luot 5 mat 12/15 o, nay mat 0.
+
+   TEP PDF    tieu de "BC VU VIEC THEO LINH VUC", bang "Theo linh vuc phap luat"
+              du 6 cot x 3 dong, gia tri trung khop Excel va man hinh.
+              => DAT. Anh: R6-BUG-XUAT-THIEU-BANG-pdf-vu-viec-theo-linh-vuc.png
+
+   Tep con co them bang "Tong so vu viec = 31" (= 13+1+17) ma man hinh khong co the
+   so lieu nao — tep NHIEU hon man hinh, khong phai thieu.
+
+ 1.2 — BC VU VIEC THEO LOAI HINH DN  (ky Nam, don vi Toan quoc)
+   MAN HINH   6 cot: Loai hinh DN | So Tu phap An Giang | Cuc Bo tro tu phap - Bo Tu
+              phap | Bo Ke hoach va Dau tu | So Tu phap Ha Noi | Tong so
+              2 dong: Nho 3/0/0/0/3 · Sieu nho 0/9/4/2/15
+
+   TEP EXCEL  trang tinh "Vụ việc theo loại hình DN"
+              dong 11: Quy mo DN | So Tu phap An Giang | Cuc Bo tro tu phap - Bo Tu
+                       phap | Bo Ke hoach va Dau tu | So Tu phap Ha Noi | Tong so
+              dong 12: Nho     | 3 | 0 | 0 | 0 |  3
+              dong 13: Sieu nho| 0 | 9 | 4 | 2 | 15
+              => DU 6 cot, KHOP tung o. Luot 5 mat 8/10 o, nay mat 0.
+
+   TEP PDF    bang "Theo loai hinh doanh nghiep" du 6 cot x 2 dong, khop gia tri.
+              => DAT. Anh: R6-BUG-XUAT-THIEU-BANG-pdf-vu-viec-theo-loai-hinh-DN.png
+
+   (Nhan cot dau: man ghi "Loai hinh DN", tep ghi "Quy mo DN" — chenh CHU, khong chenh
+    NOI DUNG. Diem nay da co tu truoc, khong thuoc pham vi loi nay.)
+
+--------------------------------------------------------------------------------
+PHAN 2 — THU DOI THAM SO DE CHAC BAN SUA KHONG CUNG THEO MOT BO
+--------------------------------------------------------------------------------
+ Neu ban sua chi ghi cung 4 cot don vi thi doi tham so se lo ra. Da thu 2 huong:
+
+ 2.1 — DOI KY: BC Vu viec theo linh vuc, ky QUY (01/07-30/09/2026)
+   MAN HINH   co 4 cot (chi 2 don vi co du lieu trong quy):
+              Linh vuc PL | Cuc Bo tro tu phap - Bo Tu phap | So Tu phap An Giang | Tong so
+              Dan su 13/0/13 · Thue 1/0/1 · Thuong mai 6/3/9
+   TEP EXCEL  dong 11: Linh vuc phap luat | Cuc Bo tro tu phap - Bo Tu phap | So Tu
+                       phap An Giang | Tong so
+              dong 12-14: 13/0/13 · 1/0/1 · 6/3/9   |  "Tong so vu viec = 23" (=13+1+9)
+              => Tep BAM THEO so don vi thuc co du lieu, khong cung 4 cot. DAT
+
+ 2.2 — LOC MOT DON VI: BC Vu viec theo loai hinh DN, don vi "So Tu phap An Giang (STP-AG)"
+   MAN HINH   3 cot: Loai hinh DN | So Tu phap An Giang | Tong so  —  Nho 3/3
+   TEP EXCEL  dong 3 : "Đơn vị: Sở Tư pháp An Giang"   <-- dau trang ghi dung bo loc
+              dong 11: Quy mo DN | So Tu phap An Giang | Tong so
+              dong 12: Nho | 3 | 3         |  "Tong so vu viec = 3"
+              => Tep xuat theo DUNG bo loc dang ap dung, khop BR-DATA-06. DAT
+
+--------------------------------------------------------------------------------
+PHAN 3 — QUET CHONG HONG NGUOC: DU 23 LOAI BAO CAO
+--------------------------------------------------------------------------------
+ Cach do: voi tung loai, doc man hinh (so the so lieu + moi bang bao nhieu cot x dong)
+ roi mo tep .xlsx vua xuat, tach thanh cac "phan" (khoi dong lien tiep) va so lai.
+ Tieu chi: tep KHONG duoc thieu bang / thieu dong / thieu cot so voi man hinh.
+
+ 22/23 loai co du lieu. Rieng "BC Chi phi theo linh vuc" man hinh TRONG (chua co du
+ lieu) — dung nhu luot 5, khong co gi de doi chieu.
+
+  #  Loai bao cao                          The  Bang tren man      Phan trong tep        KQ
+  1  BC So luong hoi dap/vuong mac PL       4   [2x3] [2x2]        4x[2x1] [2x3] [2x2]   DAT
+  2  BC Vu viec da tiep nhan                1   [2x1][3x2][2x4]    [2x1][2x1][2x2][2x4][2x1] DAT
+  3  BC Vu viec dang ho tro                 1   [2x4][4x1][3x4]    [2x1][2x4][3x1][3x4]  DAT
+  4  BC Vu viec da hoan thanh               4   [2x2][3x2][2x3]    4x[2x1][2x2][2x2][2x3] DAT
+  5  BC Vu viec theo thoi gian              1   [3x1][2x4]         [2x1][5x1][4x4]       DAT
+  6  BC Lop dao tao dang dien ra            3   [4x2]              3x[2x1][4x2]          DAT
+  7  BC Lop dao tao da dien ra              2   [5x3]              2x[2x1][5x3]          DAT
+  8  BC Chat luong dao tao                  4   [6x6]              4x[2x1][6x6]          DAT
+  9  BC Danh gia hieu qua HTPL              4   [4x3][3x9]         4x[2x1][4x3][3x9]     DAT
+ 10  BC So luong CG/TVV                     3   [4x4][3x2]         3x[2x1][4x4][2x2]     DAT
+ 11  BC Vu viec theo don vi quan ly         0   [6x4]              [2x1][6x4]            DAT
+ 12  BC Vu viec theo linh vuc  *dich*       0   [6x3]              [2x1][6x3]            DAT
+ 13  BC Vu viec theo loai hinh DN *dich*    0   [6x2]              [2x1][6x2]            DAT
+ 14  BC Vu viec theo thoi gian chi tiet     0   [6x1]              [2x1][6x1]            DAT
+ 15  BC Chi phi chi tra ho tro              3   [4x1]              3x[2x1][4x1][5x2]     DAT
+ 16  BC Chi phi theo don vi                 2   [4x1]              2x[2x1][4x1]          DAT
+ 17  BC Chi phi theo linh vuc               —   man hinh trong     —                     (khong co du lieu)
+ 18  BC Chi phi theo loai hinh DN           2   [7x1]              2x[2x1][7x1]          DAT
+ 19  BC Chi phi theo thoi gian              2   [5x1]              2x[2x1][5x1]          DAT
+ 20  BC So luong chuong trinh ho tro        3   [4x1]              3x[2x1][2x3][4x1][4x1] DAT
+ 21  BC Chuong trinh theo don vi            2   [4x1]              2x[2x1][4x1]          DAT
+ 22  BC Chuong trinh theo linh vuc          1   [2x5]              [2x1][2x5]            DAT
+ 23  BC Chuong trinh theo thoi gian         3   [6x1]              3x[2x1][6x1]          DAT
+
+ Doc bang: [cot x dong] khong tinh dong tieu de. Moi the so lieu tren man hinh xuat
+ hien trong tep duoi dang mot khoi [2x1] ("Chi tieu | So luong").
+
+ TONG KET QUET:  45/45 the so lieu co trong tep  ·  0 loai bi thieu bang
+                 0 loai bi thieu dong  ·  0 loai bi thieu cot
+ Nhieu loai tep con NHIEU hon man hinh (them bang phu, them cot Tu ngay/Den ngay,
+ them bang tong) — huong lech nay khong phai loi cua bug nay.
+
+ GIOI HAN CUA LUOT NAY (noi ro de khong hieu qua phep do):
+   PDF luot nay do cho 4 bao cao dang BANG CHEO — dung nhom ma ban sua dong vao:
+   theo linh vuc, theo loai hinh DN, theo don vi quan ly, theo thoi gian chi tiet.
+   Ca 4 deu DAT (bang cheo du cot, khop man hinh).
+   19 loai con lai luot nay chi do o Excel; ca 2 dinh dang cua 19 loai nay da do day
+   du va DAT o luot 5.
+
+--------------------------------------------------------------------------------
+PHAN 4 — GHI NHAN THEM, DA XEM XET VA KHONG LOG THANH LOI
+--------------------------------------------------------------------------------
+ a) Vai bao cao co cot "Ty le (%)" tren MAN HINH ma tep khong co (vd Vu viec da tiep
+    nhan, Vu viec dang ho tro, Vu viec da hoan thanh, So luong CG/TVV). Khong tinh la
+    tep thieu: dac ta khong dat truong ty le trong ket qua dau ra cua cac muc do —
+    srs-fr-11-bao-cao.md:166 / :216 / :305 dat theo_don_vi[] = {don_vi, ten, so_luong},
+    khong co ty_le. Day la man hinh co THEM, khong phai tep BOT.
+
+ b) Bang "Theo tieu chi" cua BC Danh gia hieu qua: man hinh dat ten cot "So luong" va
+    "Ty le" nhung moi o deu la dau gach, con tep ghi "Trong so" va "Diem TB" co so
+    that. Cho nay MAN HINH moi la ben thieu — da ghi o luot 5, khong thuoc bug nay.
+
+ c) Voi don vi So Tu phap An Giang, bang trang thai ghi Moi 0 / Tiep nhan 1 / Dang ho
+    tro 1 / Hoan thanh 0 nhung Tong so = 3 (4 cot cong lai = 2). So nay GIONG NHAU tren
+    man hinh, tep Excel va tep PDF, va giong nhau giua 3 bao cao khac nhau => khong
+    phai loi xuat tep. Co the con trang thai khac khong nam trong 4 cot. Neu CDT/BA
+    muon lam ro thi day la diem can chot rieng, khong gop vao bug nay.
+
+--------------------------------------------------------------------------------
+CAN CU DAC TA
+--------------------------------------------------------------------------------
+ Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/srs-fr-11-bao-cao.md
+  :602  FR-IX-12 — "Bao cao cross-tab vu viec theo linh vuc PL: hang = linh vuc, cot = don vi"
+  :608  "Dang cross-tab don vi"
+  :619  Output #4 theo_don_vi[] | structured | dieu kien "Luon" | {don_vi, ten, so_luong}
+  :622  AC — "When hien thi Then cross-tab: hang = linh vuc, cot = don vi"
+  :635  FR-IX-13 — cross-tab vu viec theo loai doanh nghiep, phan theo don vi
+  :658  Output #4 theo_don_vi[] | dieu kien "Luon"
+  :661  AC — "cross-tab: hang = loai DN, cot = don vi"
+  :85   "Neu xuat Excel: tao file .xlsx theo TT17/2025"
+  :86   "Neu xuat PDF: tao file .pdf giu nguyen dinh dang trinh bay theo TT 17/2025"
+  :87   BR-DATA-06 — gioi han 10.000 dong xuat (tep di theo bo loc hien tai)
+
+KET LUAN: DAT — dong loi nay. Ca 2 bao cao bang cheo con lai nay xuat du phan chia
+theo don vi o ca Excel lan PDF, khop tung o voi man hinh; con dung khi doi ky bao cao
+va khi loc mot don vi. Quet lai du 23 loai khong loai nao hong nguoc.
+
+ANH CHUP
+ R6-BUG-XUAT-THIEU-BANG-pdf-vu-viec-theo-linh-vuc.png       — PDF bao cao dich 1, du 6 cot
+ R6-BUG-XUAT-THIEU-BANG-pdf-vu-viec-theo-loai-hinh-DN.png   — PDF bao cao dich 2, du 6 cot

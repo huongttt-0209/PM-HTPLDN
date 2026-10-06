@@ -1,0 +1,78 @@
+VVDTN_06 - NOI DUNG 2 TEP EXCEL DA XUAT, DOC LAI TU CHINH TEP TAI VE
+Man: Bao cao thong ke - loai "BC Vu viec da tiep nhan"
+Vai tro: Can bo Nghiep vu Trung uong (tai khoan cbnv_tw_04)
+Ban dung: V1.0.10 - do ngay 07/08/2026
+==============================================================================
+
+LUOT 1 - bo loc: Ky Nam 01/01/2026-31/12/2026, Don vi Toan quoc, Kenh tiep nhan de trong
+Ten tep: BaoCaoVuViecTiepNhan_20260807_1458.xlsx
+SO TREN MAN HINH luot 1: Tong vu viec 55 | Kenh: Truc tiep 48, Doanh nghiep 7 | Linh vuc: Thuong mai 21 (38,2%), Dan su 13 (23,6%), Lao dong 12 (21,8%), Thue 9 (16,4%) | Don vi: Cuc Bo tro tu phap - Bo Tu phap 38, So Tu phap An Giang 8, So Tu phap Ha Noi 6, Bo Ke hoach va Dau tu 3 | Ky: Nam 2026 = 55 | Thoi diem tao 07/08/2026 14:57
+
+--- NOI DUNG DOC DUOC TRONG TEP ---
+[Trang tinh] BC Vụ việc đã tiếp nhận
+  BC Vụ việc đã tiếp nhận
+  Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+  Đơn vị: Toàn quốc
+  Ngày tạo: 07/08/2026
+  Tổng số vụ việc đã tiếp nhận
+  Chỉ tiêu | Số lượng
+  Tổng số vụ việc đã tiếp nhận | 55
+  Theo kênh tiếp nhận
+  Kênh tiếp nhận | Số lượng
+  Trực tiếp | 48
+  Doanh nghiệp | 7
+  Theo lĩnh vực pháp luật
+  Lĩnh vực pháp luật | Số lượng
+  Thương mại | 21
+  Dân sự | 13
+  Lao động | 12
+  Thuế | 9
+  Theo đơn vị
+  Đơn vị | Số lượng
+  Cục Bổ trợ tư pháp - Bộ Tư pháp | 38
+  Sở Tư pháp An Giang | 8
+  Sở Tư pháp Hà Nội | 6
+  Bộ Kế hoạch và Đầu tư | 3
+  Theo kỳ
+  Kỳ | Số lượng
+  Năm 2026 | 55
+
+==============================================================================
+
+LUOT 2 - DOI BO LOC: Kenh tiep nhan = "Truc tiep" (cac tieu chi khac giu nguyen)
+Ten tep: BaoCaoVuViecTiepNhan_20260807_1459.xlsx
+SO TREN MAN HINH luot 2: Tong vu viec 48 | Kenh: Truc tiep 48 | Linh vuc: Thuong mai 19 (39,6%), Dan su 13 (27,1%), Lao dong 9 (18,8%), Thue 7 (14,6%) | Don vi: Cuc Bo tro tu phap - Bo Tu phap 38, So Tu phap An Giang 6, Bo Ke hoach va Dau tu 3, So Tu phap Ha Noi 1 | Ky: Nam 2026 = 48 | Thoi diem tao 07/08/2026 14:59
+
+--- NOI DUNG DOC DUOC TRONG TEP ---
+[Trang tinh] BC Vụ việc đã tiếp nhận
+  BC Vụ việc đã tiếp nhận
+  Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+  Đơn vị: Toàn quốc
+  Ngày tạo: 07/08/2026
+  Tổng số vụ việc đã tiếp nhận
+  Chỉ tiêu | Số lượng
+  Tổng số vụ việc đã tiếp nhận | 48
+  Theo kênh tiếp nhận
+  Kênh tiếp nhận | Số lượng
+  Trực tiếp | 48
+  Theo lĩnh vực pháp luật
+  Lĩnh vực pháp luật | Số lượng
+  Thương mại | 19
+  Dân sự | 13
+  Lao động | 9
+  Thuế | 7
+  Theo đơn vị
+  Đơn vị | Số lượng
+  Cục Bổ trợ tư pháp - Bộ Tư pháp | 38
+  Sở Tư pháp An Giang | 6
+  Bộ Kế hoạch và Đầu tư | 3
+  Sở Tư pháp Hà Nội | 1
+  Theo kỳ
+  Kỳ | Số lượng
+  Năm 2026 | 48
+
+==============================================================================
+
+DOI CHIEU: tung con so trong tep trung khop tung con so tren man hinh o ca 2 luot.
+Doi bo loc thi noi dung tep doi theo => tep bam bo loc hien tai, khong xuat cung bang mau.
+Hai luot xuat trong cung ngay ra hai ten tep khac nhau => khong de len nhau.

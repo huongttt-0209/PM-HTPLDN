@@ -1,0 +1,173 @@
+{
+  "ts": "2026-06-25T17:17:58.334Z",
+  "loginNv": {
+    "username": "cb_nv_tw_01",
+    "status": 200,
+    "body": {
+      "success": true,
+      "expiresIn": 2592000
+    }
+  },
+  "dxlPatchCorrected": {
+    "before": {
+      "ma": "HD-20260625-049",
+      "id": "04f246a8-4b14-4e8f-be21-4e567ff8baf2",
+      "status": 200,
+      "version": 2,
+      "mucDoPhucTap": "THUONG"
+    },
+    "patch": {
+      "status": 200,
+      "body": {
+        "success": true,
+        "data": {
+          "id": "04f246a8-4b14-4e8f-be21-4e567ff8baf2",
+          "maHoiDap": "HD-20260625-049",
+          "noiDung": "TN102 concurrent tiep nhan 20 ky tu test nhe",
+          "linhVucId": "bbbbbbbb-0000-4000-8000-000000000013",
+          "linhVucTen": "Lao động",
+          "nguoiGuiId": null,
+          "doanhNghiepId": null,
+          "tenNguoiGui": "QA f",
+          "emailNguoiGui": null,
+          "sdtNguoiGui": null,
+          "kenhTiepNhan": "TRUC_TIEP",
+          "tuVanNhanhGocId": null,
+          "nguoiTiepNhanId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "nguoiTiepNhanTen": "CB Nghiệp vụ TW 01",
+          "ngayTiepNhan": "2026-06-25T14:52:49.921Z",
+          "loaiDoiTuongXuLy": null,
+          "toChucTuVanId": null,
+          "nguoiPhanCongId": null,
+          "nguoiPhanCongTen": null,
+          "deadline": "2026-07-02T14:52:49.921Z",
+          "mucDoCanhBao": "BINH_THUONG",
+          "mucDoPhucTap": "THUONG",
+          "congKhai": false,
+          "thoiGianDangTai": null,
+          "anhDaiDien": null,
+          "moTaCongKhai": null,
+          "fileDinhKemCongKhai": [],
+          "ngayHoanThanh": null,
+          "ghiChu": null,
+          "trangThai": "TIEP_NHAN",
+          "nguoiDuyetId": null,
+          "nguoiDuyetTen": null,
+          "ngayDuyet": null,
+          "lyDoTuChoi": null,
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "ngayTao": "2026-06-25T14:52:49.863Z",
+          "ngayCapNhat": "2026-06-25T14:52:49.914Z",
+          "version": 2,
+          "fileDinhKem": [],
+          "phanHois": [],
+          "lichSu": [
+            {
+              "thoiGian": "2026-06-25T14:52:49.874Z",
+              "nguoiThucHienTen": "CB Nghiệp vụ TW 01",
+              "hanhDong": "CREATE",
+              "lyDo": null
+            },
+            {
+              "thoiGian": "2026-06-25T14:52:49.914Z",
+              "nguoiThucHienTen": "CB Nghiệp vụ TW 01",
+              "hanhDong": "TIEP_NHAN",
+              "lyDo": null
+            },
+            {
+              "thoiGian": "2026-06-25T17:16:23.774Z",
+              "nguoiThucHienTen": "CB Nghiệp vụ TW 01",
+              "hanhDong": "UPDATE",
+              "lyDo": null
+            }
+          ],
+          "_links": {
+            "self": "/api/v1/hoi-daps/04f246a8-4b14-4e8f-be21-4e567ff8baf2",
+            "update": "/api/v1/hoi-daps/04f246a8-4b14-4e8f-be21-4e567ff8baf2"
+          }
+        },
+        "meta": null
+      }
+    },
+    "after": {
+      "status": 200,
+      "version": 2,
+      "mucDoPhucTap": "THUONG"
+    }
+  },
+  "loginPdDp": {
+    "username": "cb_pd_dp_01",
+    "status": 200,
+    "body": {
+      "success": true,
+      "expiresIn": 2592000
+    }
+  },
+  "rejectDp": {
+    "attempts": [
+      {
+        "ma": "HD-QA-R9-CPD-001",
+        "id": "aab90005-0000-4000-8000-000000000001",
+        "version": 1,
+        "status": 200,
+        "body": {
+          "success": true,
+          "data": {
+            "id": "aab90005-0000-4000-8000-000000000001",
+            "nguoiTaoId": "00000000-0000-4000-8000-000000000099",
+            "nguoiCapNhatId": "4ce17408-e1d8-4935-8686-e42060faca84",
+            "ngayTao": "2026-05-12T03:18:09.884Z",
+            "ngayCapNhat": "2026-06-25T17:17:59.562Z",
+            "donViId": "00000000-0000-4000-8002-000000000006",
+            "seqId": "36",
+            "version": 2,
+            "trangThai": "DANG_XU_LY",
+            "nguoiGuiDuyetId": "a7641452-e4c3-4251-8fa7-7e4caf586e69",
+            "ngayGuiDuyet": "2026-05-11T03:18:09.884Z",
+            "nguoiDuyetId": null,
+            "ngayDuyet": null,
+            "ghiChuPheDuyet": "QA tu choi hop le tren 10 ky tu",
+            "maHoiDap": "HD-QA-R9-CPD-001",
+            "noiDung": "Nội dung hỏi đáp QA R9 đang chờ phê duyệt (state CHO_PHE_DUYET).",
+            "linhVucId": "bbbbbbbb-0000-4000-8000-000000000010",
+            "nguoiGuiId": null,
+            "tenNguoiGui": "Nguyễn Văn Test A",
+            "emailNguoiGui": "test.a@example.com",
+            "sdtNguoiGui": "0911000001",
+            "kenhTiepNhan": "TRUC_TIEP",
+            "tuVanNhanhGocId": null,
+            "nguoiTiepNhanId": "ce60da61-688a-461a-9c58-2eb8651af275",
+            "ngayTiepNhan": "2026-05-06T03:18:09.884Z",
+            "loaiDoiTuongXuLy": null,
+            "toChucTuVanId": null,
+            "nguoiPhanCongId": "a7641452-e4c3-4251-8fa7-7e4caf586e69",
+            "deadline": "2026-05-16T03:18:09.884Z",
+            "mucDoCanhBao": "QUA_HAN_NGHIEM_TRONG",
+            "mucDoPhucTap": "THUONG",
+            "congKhai": false,
+            "thoiGianDangTai": null,
+            "anhDaiDien": null,
+            "moTaCongKhai": null,
+            "fileDinhKemCongKhai": [],
+            "ngayHoanThanh": null,
+            "ghiChu": null,
+            "lyDoHuy": null,
+            "maCongPlqg": null,
+            "trangThaiDongBo": null,
+            "ngayDongBo": null,
+            "loiDongBo": null,
+            "soLanThuLai": 0
+          },
+          "meta": null
+        }
+      }
+    ],
+    "candidates": [
+      {
+        "id": "aab90005-0000-4000-8000-000000000001",
+        "ma": "HD-QA-R9-CPD-001",
+        "trangThai": "CHO_PHE_DUYET"
+      }
+    ]
+  }
+}

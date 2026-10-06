@@ -1,0 +1,9 @@
+Đo lại 06/08/2026 trên bản dựng V1.0.8, tách riêng 2 vai trò.
+
+1) Vai trò trong cả 10 ảnh đối tác gửi (2 vòng x 5 phiếu) đều là "Quản trị viên - QTHT". Với vai trò này, bấm [Xuất Excel] vẫn bị máy chủ từ chối: HTTP 403, mã ERR-PERM-SYS-00-01, màn hiện chữ "Forbidden", không có tệp nào về máy. Triệu chứng đối tác phản ánh còn nguyên.
+
+2) Với vai trò mà đặc tả nêu đích danh (CB Nghiệp vụ TW - srs-fr-11-bao-cao.md:62), cùng bộ lọc thì xuất bình thường: tải về BaoCaoVuViecTheoDonVi_20260806_1305.xlsx (6.834 byte), không có thông báo lỗi nào. Tên tệp đúng khuôn {TenBaoCao}_{YYYYMMDD_HHmm}.xlsx như Kết quả mong đợi của phiếu yêu cầu (srs-fr-11-bao-cao.md:85 và :1092, BA chốt 04/08). Đã mở tệp đọc nội dung chứ không chỉ kiểm tệp tạo được: đủ 4 mục đầu tệp (tên báo cáo / kỳ + khoảng thời gian / đơn vị / ngày tạo), số liệu khớp màn hình 17/17 (Tổng 48; Bộ Kế hoạch và Đầu tư 0/0/2/2/4; Cục Bổ trợ tư pháp 2/10/5/15/36; Sở Tư pháp An Giang 0/1/1/0/3; Sở Tư pháp Hà Nội 0/3/1/1/5). Đổi Kỳ báo cáo sang Tháng rồi xuất lại thì tệp đổi theo (Tổng 15, chỉ còn 2 đơn vị) - đúng yêu cầu tệp bám bộ lọc hiện tại.
+
+3) Vướng cần BA chốt: đặc tả không nói vai trò QTHT có được xuất tệp báo cáo hay không. Dòng :62 chỉ liệt kê CB Nghiệp vụ / CB Phê duyệt; nhưng ma trận quyền srs-v3.5.md:1335 lại cho QTHT quyền R trên thực thể BAO_CAO, và nút Xuất tại :1052 chỉ đặt điều kiện "sau khi đã Xem báo cáo", không đặt điều kiện vai trò. Hai cách hiểu cho hai kết luận trái ngược nên chưa chốt được Pass hay Reopen. Câu hỏi đầy đủ kèm 2 nhánh xử lý: cau-hoi-BA.md.
+
+4) Phát hiện thêm trong lúc đo: khi bị từ chối quyền, màn chỉ hiện đúng chữ tiếng Anh "Forbidden", trong khi đặc tả srs-fr-11-bao-cao.md:117 quy định tình huống không có quyền phải báo bằng tiếng Việt cho biết người dùng không có quyền xem báo cáo. Đã log BUG-BCTK-QA01.

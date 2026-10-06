@@ -1,0 +1,281 @@
+===============================================================================
+CLDTBDPL_06 — BC Chất lượng đào tạo (FR-IX-10 / UC133)
+Nguyên văn chữ trên màn + phản hồi máy chủ + nội dung tệp xuất
+Đo 2026-08-06 16:02 → 16:19 · env https://18.143.165.120.nip.io (env kiểm thử NỘI BỘ)
+===============================================================================
+
+BẢN DỰNG (tự đo 2 lần, đầu phiên 16:01 và cuối phiên 16:19 — KHÔNG chép từ case khác):
+  index.html       etag W/"6a74340b-428"        last-modified Thu, 06 Aug 2026 07:13:15 GMT
+  gói giao diện    assets/index-DIABnbIr.js     etag W/"6a74340b-1124ed"
+                   md5 3904131cf562e0349890ac1bd058eb1f · 1.123.565 B
+  nhãn trong ứng dụng: HTPLDN · V1.0.8
+  ⇒ HAI LẦN ĐO GIỐNG HỆT NHAU ⇒ bản dựng KHÔNG trôi trong suốt phiên đo.
+  ⚠️ Môi trường ĐÃ trôi trước đó (07:13 GMT = 14:13 giờ máy) mà nhãn ứng dụng vẫn V1.0.8
+     ⇒ nhãn ứng dụng KHÔNG dùng để nhận diện bản dựng. Verdict chỉ có hiệu lực cho đúng
+     bó mã md5 3904131c… ở trên.
+
+BỘ BẮT THÔNG BÁO: output/UAT_doi-tac/tools/toast-capture.js (cài TRƯỚC mỗi lần bấm)
+  + BỘ LẤY MẪU NỘI DUNG bổ sung (innerText mỗi 100 ms) — BẮT BUỘC vì bài học
+    SLHDVM_06 §8 / CGTVPL_06 §3: thư viện giao diện THAY CHỮ TRONG NODE CŨ nên bộ
+    "nghe node mới được thêm" bỏ sót chữ "Forbidden".
+  TỰ KIỂM đầu phiên: soObserverDangSong = 1 (hợp lệ) → số liệu dưới đây mới có giá trị.
+  Đếm khung thông báo theo MỐC GIỜ khác nhau, KHÔNG theo số phần tử.
+
+===============================================================================
+PHẦN 1 — VAI TRÒ ĐẶC TẢ CHO PHÉP: CB Nghiệp vụ - Trung ương (vế a + vế c)
+===============================================================================
+
+Tài khoản: cbnv_tw_05 / Test@1234 — KHÔNG dùng fallback Rule 7.
+Danh tính lấy từ /api/v1/auth/me của CHÍNH phiên đo:
+  {"hoTen":"CB Nghiệp vụ - Trung ương #05","vaiTro":["CB_NV_TW"],"capDonVi":"TW",
+   "donViId":"00000000-0000-4000-8000-000000000001"}
+
+--- Dạng 1 — KHÔNG lọc khóa học (Toàn quốc, kỳ Năm 2026) = ĐÚNG cấu hình CẢ HAI VÒNG
+    của đối tác ---
+Màn: Tổng khóa học 7 · Tổng học viên 17 · Điểm trung bình 6 · Tỷ lệ đạt 28.6%
+     Thời điểm tạo 06/08/2026 16:04   (ảnh CLDTBDPL_06-01)
+Máy chủ (GET /api/v1/bao-cao/chat-luong-dao-tao?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31):
+  200 · {"tongKhoaHoc":7,"tongHocVien":17,"diemTrungBinhTong":6.35,"tyLeDatTong":28.6,
+         "danhSachKhoaHoc":[7 phần tử],"chartType":"BAR_LINE"}
+Bấm [Xuất Excel] (chuột thật):
+  SO_REQUEST = 1   → POST /api/v1/bao-cao/export
+  SO_KHUNG   = 1   (đếm theo mốc giờ)
+  MAU_NOI_DUNG (nguyên văn chữ NHÌN THẤY, theo thời gian):
+    t = 218053 ms  "Đang tạo file..."      (w=1432 h=40)
+    t = 218152 ms  "Tạo file thành công."  (w=1427 h=40, sống tới 220353 ms)
+  ⇒ KHÔNG có chữ nào mang nghĩa "không tạo được tệp" (:116);
+    KHÔNG có chữ nào mang nghĩa "từ chối quyền" (:117).
+Tệp NGƯỜI DÙNG NHẬN ĐƯỢC (rơi về ~/Downloads):
+  BaoCaoChatLuongDaoTao_20260806_1605.xlsx · 7.424 B · md5 ede4f155f07b609f617aa54f7a970d3a
+
+--- Dạng 2 — Lọc Khóa học = "Khóa pháp luật cơ bản cho DN 2026 (đợt 1)" (KH-2026-001) ---
+Màn: 1 khóa · 2 học viên · điểm TB 7 · tỷ lệ đạt 100.0% · Thời điểm tạo 06/08/2026 16:06
+     (ảnh CLDTBDPL_06-03)
+Bấm [Xuất Excel] → 1 request · chữ trên màn: "Đang tạo file..." → "Tạo file thành công."
+Tệp: BaoCaoChatLuongDaoTao_20260806_1607.xlsx · 6.950 B · md5 7cef580f7511cfaf3dd64f313ea2e376
+
+--- Dạng 3 — Lọc Khóa học = "QA RV5 - Khoa hoc test diem danh theo buoi" (KH-20260716-002) ---
+Màn: 1 khóa · 2 học viên · điểm TB 1 · tỷ lệ đạt 0.0% · Thời điểm tạo 06/08/2026 16:08
+     (ảnh CLDTBDPL_06-04)  ⇒ khác HẲN dạng 2 ⇒ bộ lọc Khóa học có tác dụng thật
+Bấm [Xuất Excel] → 1 request · chữ trên màn: "Đang tạo file..." → "Tạo file thành công."
+Tệp: BaoCaoChatLuongDaoTao_20260806_1608.xlsx · 6.964 B · md5 78dde1cfb371f02c251c3b74b6eaecbf
+
+--- Dạng 4 — Thu hẹp Đơn vị = Sở Tư pháp Hà Nội (STP-HN), khóa học để trống ---
+Màn: 1 khóa · 3 học viên · điểm TB 6 · tỷ lệ đạt 0.0% · Thời điểm tạo 06/08/2026 16:09
+     (ảnh CLDTBDPL_06-05)
+Bấm [Xuất Excel] → 1 request · chữ trên màn: "Đang tạo file..." → "Tạo file thành công."
+Tệp: BaoCaoChatLuongDaoTao_20260806_1609.xlsx · 6.922 B · md5 333967e95fca256fda2125adc96ca5ee
+
+--- Nhánh [Xuất PDF] (cấu hình dạng 4) ---
+Nút mở hộp thoại "Tùy chọn in báo cáo PDF" (Khổ giấy A4/A3/Letter · Hướng Dọc/Ngang ·
+[Hủy] [Xuất file]) — KHÔNG tải ngay (ảnh CLDTBDPL_06-06). Bấm [Xuất file]:
+  1 request · chữ trên màn "Đang tạo file..." → "Tạo file thành công."
+Tệp: BaoCaoChatLuongDaoTao_20260806_1610.pdf · 34.281 B · md5 d86887535e83ba5258c1a4eb080897a1
+  magic b'%PDF-' · 1 trang · khổ 595.28 × 841.89 pt (= A4)
+  Chữ đầu trang đọc bằng PyMuPDF: "CỤC BỔ TRỢ TƯ PHÁP - BỘ TƯ PHÁP / CỘNG HÒA XÃ HỘI CHỦ
+  NGHĨA VIỆT NAM / Độc lập - Tự do - Hạnh phúc / BC CHẤT LƯỢNG ĐÀO TẠO / Kỳ báo cáo: Năm
+  (từ 01/01/2026 đến 31/12/2026) / Đơn vị: Sở Tư pháp Hà Nội / Ngày tạo: 06/08/2026"
+
+--- PHÉP THỬ CHỐNG ĐÈ TỆP (lý do BA chốt bắt buộc giờ-phút) ---
+Xuất LẠI đúng cấu hình dạng 4, ở phút khác:
+  16:09 → BaoCaoChatLuongDaoTao_20260806_1609.xlsx (md5 333967e9…)
+  16:11 → BaoCaoChatLuongDaoTao_20260806_1611.xlsx (md5 dbc4d39d…)
+  ⇒ HAI TÊN KHÁC NHAU, không đè nhau. ĐẠT.
+
+--- ĐƯỜNG ĐO THỨ HAI: gọi thẳng máy chủ, cùng thân yêu cầu giao diện gửi ---
+Thân yêu cầu giao diện gửi (bắt bằng cách bọc XMLHttpRequest.send):
+  {"loaiBaoCao":"BC_CHAT_LUONG_DAO_TAO","kyBaoCao":"NAM","tuNgay":"2026-01-01",
+   "denNgay":"2026-12-31","filterDacThu":{},"formatXuat":"XLSX"}
+POST /api/v1/bao-cao/export — 3 lượt, cùng phiên, chỉ khác filterDacThu:
+  filterDacThu {}                                      → 200 · 7.423 B
+     content-disposition: attachment; filename="BaoCaoChatLuongDaoTao_20260806_1613.xlsx"
+  filterDacThu {"khoaHocId":"f0cccccc-…-000000000001"}  → 200 · 6.950 B
+  filterDacThu {"khoaHocId":"033910fc-…-8f7f0a9516c2"}  → 200 · 6.964 B
+  content-type cả 3: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+  ⇒ KHỚP kích thước tệp giao diện tải về của dạng 1 / 2 / 3 (7.423 ≈ 7.424 khác 1 B do
+    trường ngày-giờ bên trong; 6.950 và 6.964 TRÙNG KHÍT) ⇒ tệp BÁM bộ lọc hiện tại,
+    hai đường đo KHÔNG mâu thuẫn.
+
+TỔNG VAI TRÒ ĐẶC TẢ: 7 lượt bấm chuột (5 Excel + 1 PDF + 1 lượt bắt thân yêu cầu)
++ 3 lượt gọi thẳng máy chủ = 10/10 ĐỀU RA TỆP THẬT. Không lượt nào hiện chữ mang nghĩa
+"không tạo được tệp" hay "bị từ chối quyền".
+
+===============================================================================
+PHẦN 2 — VAI TRÒ ĐỐI TÁC DÙNG: Quản trị viên · QTHT · BTP · TW (vế b)
+===============================================================================
+
+Tài khoản: `admin` (tài khoản quản trị hệ thống của môi trường).
+Danh tính lấy từ /api/v1/auth/me của CHÍNH phiên đo:
+  {"hoTen":"Quản trị hệ thống","vaiTro":["QTHT"],"capDonVi":"TW",
+   "donViId":"00000000-0000-4000-8000-000000000001"}
+  ⇒ TRÙNG đơn vị với cbnv_tw_05 ⇒ hai tài khoản chỉ khác nhau ở VAI TRÒ.
+
+BƯỚC XEM: cùng cấu hình dạng 1 (kỳ Năm 2026, Toàn quốc, khóa học trống)
+  GET /api/v1/bao-cao/chat-luong-dao-tao?… → 200
+  {"tongKhoaHoc":7,"tongHocVien":17,"diemTrungBinhTong":6.35,"tyLeDatTong":28.6}
+  Màn render ĐẦY ĐỦ 7 · 17 · 6 · 28.6% · Thời điểm tạo 06/08/2026 16:14
+  CẢ HAI nút [Xuất Excel] / [Xuất PDF] hiện và BẤM ĐƯỢC (disabled = false)
+  (ảnh CLDTBDPL_06-07)
+
+BƯỚC XUẤT — nhánh Excel (8 cú bấm chuột thật cách nhau 2 s để chụp được khung tự tắt):
+  SO_REQUEST = 8 → POST /api/v1/bao-cao/export tại 1 / 2002 / 4002 / 6003 / 8002 /
+                   10003 / 12002 / 14002 ms
+  Bộ theo dõi "node mới" chỉ bắt được "Đang tạo file..." — chữ lỗi bị THAY TRONG NODE CŨ.
+  MAU_NOI_DUNG (nguyên văn chữ NHÌN THẤY, gốc t0 = lúc bắt đầu loạt bấm):
+    101 → 3401 ms    "Forbidden"
+    4101 → 7401 ms   "Forbidden"
+    8101 → 11401 ms  "Forbidden"
+    12100 → 15401 ms "Forbidden"
+  Một lượt bấm đơn đo riêng (hình học đầy đủ), gốc t0 = lúc hẹn giờ:
+    t = 2601 ms  "Forbidden"  x=0   y=-30  w=1431 h=40   (khung vừa trượt vào)
+    t = 2902 ms  "Forbidden"  x=8   y=16   w=1416 h=40   (khung đứng yên)
+    t = 5702 ms  "Forbidden"  x=6   y=14   w=1419 h=40   (bắt đầu trượt ra)
+    t = 5802 ms  "Forbidden"  x=1   y=9    w=1430 h=40   (biến mất sau đó)
+  ⇒ khung thông báo SỐNG ~3,2 s, rộng ~1.416 px, nằm sát đỉnh màn ⇒ người dùng NHÌN THẤY
+    thật. Chữ hiện ra là chuỗi tiếng Anh thô "Forbidden". KHÔNG có câu tiếng Việt nào.
+  (ảnh CLDTBDPL_06-08)
+
+BƯỚC XUẤT — nhánh PDF: hộp thoại "Tùy chọn in báo cáo PDF" mở BÌNH THƯỜNG, bấm [Xuất file]
+  SO_REQUEST = 6 → POST /api/v1/bao-cao/export tại 405 / 2406 / 4409 / 6415 / 8416 / 10418 ms
+  MAU_NOI_DUNG: 502→3801 ms "Forbidden" · 4502→7801 ms "Forbidden" · 8501 ms "Đang tạo
+  file..." → 8601→11902 ms "Forbidden"
+  (ảnh CLDTBDPL_06-09)
+
+NGUYÊN VĂN phản hồi máy chủ (gọi thẳng, cùng thân yêu cầu từng chữ với giao diện):
+  POST https://18.143.165.120.nip.io/api/v1/bao-cao/export
+  Thân gửi lên (XLSX):
+    {"loaiBaoCao":"BC_CHAT_LUONG_DAO_TAO","kyBaoCao":"NAM","tuNgay":"2026-01-01",
+     "denNgay":"2026-12-31","filterDacThu":{},"formatXuat":"XLSX"}
+  Mã trả về: 403
+  Header: content-type application/json; charset=utf-8 · content-length 167
+          (KHÔNG có content-disposition ⇒ không có tệp đính kèm)
+  Thân trả về (nguyên văn):
+    {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+     "timestamp":"2026-08-06T09:17:12.865Z","requestId":"7c1edd46-6581-4b37-9773-d3edc693d92e"}}
+  Lặp lại với "formatXuat":"PDF" → CŨNG 403, cùng mã ERR-PERM-SYS-00-01, cùng chữ "Forbidden"
+    ("timestamp":"2026-08-06T09:17:12.941Z","requestId":"af84c690-6e3f-43d9-921d-d7d3d0969c8b")
+
+TỔNG VAI TRÒ QTHT: 17 lượt bấm chuột (10 Excel + 7 PDF) + 2 lượt gọi thẳng máy chủ
+= 19 lượt · 0 TỆP về máy (thư mục tải xuống không có tệp nào mới sau 16:12) ·
+mọi lượt đo được mã trả về đều 403 ERR-PERM-SYS-00-01.
+
+===============================================================================
+PHẦN 3 — PHÉP ĐỐI CHỨNG ĐỔI ĐÚNG MỘT BIẾN (vai trò)
+===============================================================================
+Cùng đường dẫn POST /api/v1/bao-cao/export · CÙNG THÂN YÊU CẦU TỪNG CHỮ ·
+cùng donViId …0001 · cùng bản dựng md5 3904131c… :
+
+  CB_NV_TW (cbnv_tw_05) → 200 · content-disposition: attachment;
+      filename="BaoCaoChatLuongDaoTao_20260806_1613.xlsx" · nhận tệp 7.423 B
+  QTHT     (admin)      → 403 · KHÔNG có content-disposition ·
+      {"code":"ERR-PERM-SYS-00-01","message":"Forbidden"} · 0 tệp
+
+Và ở CHÍNH phiên QTHT, bước XEM lại 200 với dữ liệu đầy đủ (7 · 17 · 6.35 · 28.6) —
+hệ thống cho vai trò này vào tận nơi, thấy hết số liệu, BẬT cả hai nút xuất, rồi mới
+chặn ở cú bấm cuối bằng một chuỗi tiếng Anh. Đây đúng là hình ảnh đối tác chụp ở vòng 2.
+
+===============================================================================
+PHẦN 4 — NỘI DUNG TỆP XUẤT (mở đọc bằng openpyxl, KHÔNG dừng ở "200 + có bytes")
+===============================================================================
+Tất cả 6 tệp .xlsx mở được bằng openpyxl.load_workbook(); 1 sheet tên
+"BC Chất lượng đào tạo"; 4 dòng đầu sheet là HEADER theo :1092.
+
+HEADER (đủ 4 thông tin :1092 đòi) — ví dụ tệp dạng 1:
+  A1  BC Chất lượng đào tạo                              ← ① tiêu đề báo cáo
+  A2  Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)     ← ② thông tin kỳ
+  A3  Đơn vị: Toàn quốc                                  ← ③ đơn vị
+  A4  Ngày tạo: 06/08/2026                               ← ④ ngày tạo
+  (tệp dạng 4 đổi đúng dòng A3 thành "Đơn vị: Sở Tư pháp Hà Nội")
+
+SỐ LIỆU TRONG TỆP ↔ SỐ TRÊN MÀN:
+| Dạng | Tệp | Tổng KH | Tổng HV | Điểm TB | Tỷ lệ đạt | Màn |
+|---|---|---|---|---|---|---|
+| 1 | …_1605.xlsx | 7 | 17 | 6.35 | 28.6 | 7 · 17 · 6 · 28.6% ✔ |
+| 2 | …_1607.xlsx | 1 | 2  | 7.85 | 100  | 1 · 2 · 7 · 100.0% ✔ |
+| 3 | …_1608.xlsx | 1 | 2  | 1.5  | 0    | 1 · 2 · 1 · 0.0%   ✔ |
+| 4 | …_1609.xlsx | 1 | 3  | 6    | 0    | 1 · 3 · 6 · 0.0%   ✔ |
+| 4 lặp | …_1611.xlsx | 1 | 3 | 6 | 0 | giống hệt dạng 4 ✔ |
+| 1 lặp | …_1612.xlsx | 7 | 17 | 6.35 | 28.6 | giống hệt dạng 1 ✔ |
+
+CỘNG KHỚP (bảng "Danh sách khóa học" của tệp dạng 1, 7 dòng):
+  KH-20260716-002  2 HV · 1.5  · 0%
+  AAA-KH-DP        3 HV · 6    · 0%
+  KH-2026-002      2 HV · 6.25 · 100%
+  AAA-KH-BN        3 HV · 6    · 0%
+  KH-2026-001      2 HV · 7.85 · 100%
+  KH-SEED-0001     1 HV · 10   · 0%
+  AAA-KH-TW        4 HV · 6.88 · 0%
+  → cộng số học viên 2+3+2+3+2+1+4 = 17 = tongHocVien ✔
+  → đếm số dòng = 7 = tongKhoaHoc ✔
+  → điểm TB tổng 6.35 nằm trong [1.5 , 10] của các khóa thành phần ✔
+  → tỷ lệ đạt tổng 28.6 nằm trong [0 , 100] ✔
+
+TỆP BÁM BỘ LỌC (:1280): 6 tệp → 6 md5 KHÁC NHAU; mỗi tệp khớp màn của CHÍNH lần đó;
+dòng A3 đổi theo đơn vị. Không có cặp "màn khác số mà tệp giống hệt".
+
+===============================================================================
+PHẦN 5 — BỘ LỌC ĐẶC THÙ "KHÓA HỌC": ĐO TÊN THAM SỐ GIAO DIỆN ↔ MÁY CHỦ
+===============================================================================
+(Phiên chính báo: FR-IX-06 gửi `linhVuc`, FR-IX-08 gửi `linhVucCm`, máy chủ nhận
+`linhVucId` ⇒ bị bỏ qua. Màn FR-IX-10 KHÔNG có bộ lọc Lĩnh vực — bộ lọc đặc thù duy nhất
+là *Khóa học* (:534, :1073) — nên phải TỰ ĐO trên màn của mình.)
+
+Tên khoá giao diện gửi lên (đọc từ performance.getEntriesByType('resource')):
+  GET /api/v1/bao-cao/chat-luong-dao-tao?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+      &khoaHocId=f0cccccc-0000-4000-8000-000000000001
+  (thanh địa chỉ hiển thị `fd_khoaHocId` nhưng đó chỉ là khoá lưu trạng thái của trang;
+   khoá GỬI LÊN MÁY CHỦ là `khoaHocId`)
+
+Thử 5 cách viết khoá trên CÙNG một đường dẫn, cùng phiên:
+| Khoá gửi lên | tongKhoaHoc | tongHocVien | Điểm TB | Tỷ lệ đạt | Máy chủ có áp dụng? |
+|---|---|---|---|---|---|
+| (không lọc)     | 7 | 17 | 6.35 | 28.6 | — |
+| `khoaHocId`     | 1 | 2  | 7.85 | 100  | **CÓ** |
+| `fd_khoaHocId`  | 7 | 17 | 6.35 | 28.6 | không (bỏ qua) |
+| `khoa_hoc_id`   | 7 | 17 | 6.35 | 28.6 | không (bỏ qua) |
+| `khoaHoc`       | 7 | 17 | 6.35 | 28.6 | không (bỏ qua) |
+
+⇒ Giao diện gửi ĐÚNG khoá máy chủ nhận (`khoaHocId`), cả ở lượt XEM lẫn trong
+  `filterDacThu` của lượt XUẤT. **Màn FR-IX-10 KHÔNG dính lỗi lệch tên khoá bộ lọc.**
+
+LOẠI TRỪ NHỚ ĐỆM: màn này KHÔNG có trường `ngayTaoBc` trong phản hồi máy chủ (danh sách
+khoá trả về: tenBaoCao · tuNgay · denNgay · tongKhoaHoc · tongHocVien · diemTrungBinhTong ·
+tyLeDatTong · danhSachKhoaHoc · chartType) — dòng "Thời điểm tạo" trên màn do giao diện tự
+sinh. Vì vậy đã loại trừ nhớ đệm bằng cách KHÁC: gọi 5 biến thể khoá ở trên trong CÙNG một
+phiên, cùng thời điểm — 5 phản hồi cho 2 tập kết quả khác nhau ⇒ máy chủ tính lại theo tham
+số thật, không trả bản nhớ đệm chung.
+
+===============================================================================
+PHẦN 6 — QUAN SÁT NGOÀI VẾ ĐỐI TÁC NÊU (ghi lại, KHÔNG kéo verdict của case)
+===============================================================================
+(a) THIẾU nhóm đầu ra `theo_don_vi[]` điều kiện "Luôn" (:548). Phản hồi máy chủ chỉ có
+    `danhSachKhoaHoc` (ứng với `theo_khoa_hoc[]` :547); tệp xuất cũng chỉ có một bảng
+    "Danh sách khóa học". Không có bảng nào tổng hợp THEO ĐƠN VỊ {don_vi, ten, diem_tb,
+    ty_le_dat}. (Cột "Đơn vị" trong bảng khóa học là thuộc tính của từng khóa, không phải
+    số liệu tổng hợp theo đơn vị.)
+
+(b) HAI LẦN XUẤT TRONG CÙNG MỘT PHÚT ra TRÙNG TÊN TỆP. Hai lượt xuất lúc 16:12 (cùng cấu
+    hình) đều được máy chủ đặt tên `BaoCaoChatLuongDaoTao_20260806_1612.xlsx`; trình duyệt
+    phải tự thêm " (1)". Ba lượt gọi thẳng lúc 16:13 cũng cùng nhận
+    `…_20260806_1613.xlsx`. Phụ lục E §H8 (`srs-v3.5.md:6716`) ghi: *"Trùng tên (hai lần
+    xuất trong cùng phút) thì tự thêm hậu tố `_1`, `_2`"*. ⇒ hệ thống KHÔNG tự thêm hậu tố.
+    Đây KHÔNG phải vế đối tác nêu (đối tác chỉ đòi khuôn `{TenBaoCao}_{YYYYMMDD_HHmm}`), và
+    phép thử chống đè theo tiêu chí mục 4 (2 phút KHÁC nhau) vẫn ĐẠT.
+
+(c) Thẻ "Điểm trung bình" trên màn CẮT phần thập phân: 6.35 → hiện `6`; 7.85 → `7`;
+    1.5 → `1`. Bảng khóa học trên màn thì làm tròn 1 chữ số (1,5 · 6,3 · 7,9), còn tệp giữ
+    đủ (1.5 · 6.25 · 7.85). Ba cách hiển thị khác nhau cho cùng một con số. Mục 4 file tiêu
+    chí đã ghi TRƯỚC là KHÔNG chấm Fail vì đặc tả im lặng về công thức làm tròn.
+
+(d) Thẻ "Tỷ lệ đạt" tổng = 28.6% trong khi cộng theo học viên là 4/17 ≈ 23.5%; 28.6% ứng
+    với 2/7 khóa học. Đặc tả :536 chỉ ghi *"tỷ lệ đạt (số đạt điểm chuẩn / tổng)"* mà không
+    nói mẫu số là học viên hay khóa học ⇒ KHÔNG đủ căn cứ chấm, chỉ ghi nhận.
+
+===============================================================================
+PHẦN 7 — DỮ LIỆU ĐÃ SEED / THAY ĐỔI TRÊN ENV
+===============================================================================
+KHÔNG seed, KHÔNG sửa, KHÔNG xoá bất kỳ bản ghi nào. Toàn bộ phép đo là đọc + xuất tệp
+(read-only theo Postconditions chung của TPL-REPORT-FULL). Dữ liệu kỳ Năm 2026 / Toàn quốc
+đã có sẵn 7 khóa học đã chấm điểm, 17 học viên, trải 3 đơn vị (Cục Bổ trợ tư pháp ·
+Sở Tư pháp Hà Nội · Bộ Kế hoạch và Đầu tư) ⇒ đủ để đo 2 khóa học khác nhau và 1 đơn vị
+thu hẹp. Không lượt nào rơi vào INF-RPT-01.

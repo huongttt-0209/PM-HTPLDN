@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Web hiện tại (kiểm tra 21/07, tài khoản QTHT): form Sửa "Loại doanh nghiệp" VẪN có trường "Danh mục cha" (dạng tùy chọn, không chặn lưu).
+- Theo SRS mẫu dùng chung TPL-DM-CRUD (FR-VIII-07 / UC105) §Inputs, danh mục "Loại doanh nghiệp" là danh mục phẳng, KHÔNG có trường "Danh mục cha".
+- Về ý "Tiêu chí doanh thu bị bắt buộc": nay KHÔNG còn tái hiện — trường không có dấu *, placeholder ghi "(tùy chọn)", đã Cập nhật thành công khi để trống (đúng SRS: không bắt buộc).
+- Câu hỏi BA: có bổ sung "Danh mục cha" vào đặc tả cho danh mục phẳng, hay yêu cầu ẩn trường này?
+Ref: FR-VIII-07 (UC105) §Inputs (dòng 402); TPL-DM-CRUD §Inputs (dòng 77-83).

@@ -1,0 +1,16 @@
+PCNTHDG_06 — Nút "Hủy" modal Thêm người đánh giá — DOM evidence (env 18.143, cbnv_tw, đợt DG-20260720-0002)
+
+Đối chiếu video đối tác (PCNTHDG_06.webm, env htpldn-uat.ospgroup.vn): đối tác mở modal "Thêm người đánh giá",
+chọn Người đánh giá + Vai trò (Trưởng nhóm), bấm [Hủy] → modal đóng ngay, KHÔNG có cửa sổ xác nhận.
+
+Tái hiện env 18.143 (cbnv_tw):
+1. Tab Phân công → "Thêm người đánh giá" → chọn Người đánh giá "Cán bộ Nghiệp vụ Demo" + Vai trò "Trưởng nhóm".
+2. Bấm [Hủy].
+   → confirmPopup = false (KHÔNG có .ant-modal-confirm / .ant-popover xác nhận)
+   → addModalStillOpen = false, anyModalCount = 0 (modal đóng ngay)
+   → Tổng: 0 người (dữ liệu đã nhập bị hủy im lặng)
+
+KẾT LUẬN: modal [Hủy] đóng im lặng, không hiển thị cửa sổ xác nhận hủy thay đổi chưa lưu → khớp mô tả đối tác.
+SRS SCR-VI-01 KHÔNG quy định modal "Thêm người đánh giá" phải xác nhận trước khi hủy input chưa lưu
+(khác với Xóa tiêu chí #29 gán C12 confirm). Hành vi đóng im lặng của modal cancel là chuẩn UX phổ biến.
+→ Cần BA chốt có yêu cầu cửa sổ xác nhận "hủy bỏ thay đổi chưa lưu" cho modal này hay không.

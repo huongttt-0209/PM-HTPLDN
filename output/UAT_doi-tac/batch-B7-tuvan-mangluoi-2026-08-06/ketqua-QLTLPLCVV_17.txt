@@ -1,0 +1,72 @@
+QLTLPLCVV_17 — "Xem tệp trực tuyến" (tab `bug` dòng 300)
+Số đo thực của lượt verify 2026-08-06, env NỘI BỘ https://18.143.165.120.nip.io
+
+BẢN DỰNG (dấu vân tay đo đầu phiên 14:22, đo lại cuối phiên không đổi)
+  chuỗi phiên bản trên trang : HTPLDN · V1.0.8
+  bó mã FE                   : assets/index-DIABnbIr.js  +  assets/index-DVlgOkLg.css
+  GET / last-modified        : Thu, 06 Aug 2026 07:13:15 GMT  (14:13:15 giờ VN)
+  GET / etag                 : W/"6a74340b-428"
+  (khác bó mã của lô B6 sáng nay `index-CNwX9JjX.js` / last-modified 02:51:16 GMT
+   ⇒ env đã deploy lại lúc 14:13 giờ VN mà KHÔNG đổi số phiên bản V1.0.8)
+
+TÀI KHOẢN ĐO         cbnv_tw_02 · vai trò CB_NV_TW · cấp TW
+                     donViId 00000000-0000-4000-8000-000000000001 (Cục Bổ trợ tư pháp - Bộ Tư pháp)
+                     = trùng khít vai trò + cấp đọc được trên ảnh đối tác. KHÔNG dùng tài khoản quản trị.
+
+DỮ LIỆU QA TỰ SEED (bằng chính luồng chuẩn trên giao diện, KHÔNG đụng dữ liệu sẵn có)
+  TVCS   eb16294e-6231-45ce-9c50-fe480228f518  ·  mã TVCS-20260806-0003  ·  Tiếp nhận
+         DN "Cong ty TNHH QA UAT Kiem Thu" (DN-HNI-0001) · lĩnh vực Thương mại
+  Tư liệu 14cef4af-cb15-497b-88d6-8ed3ad22d9e7 · "QA B7 QLTLPLCVV_17 - tu lieu kiem thu xem tep 3 dinh dang"
+         loại Tài liệu · lĩnh vực Sở hữu trí tuệ  (cùng loại + cùng lĩnh vực với tư liệu trong ảnh đối tác)
+         Nháp lúc 14:27  →  Đã công khai lúc 14:33
+  3 tệp thật đính kèm (nguồn: seed-files/ trong chính thư mục lô này)
+         B7-QLTLPLCVV17-tailieu.pdf   629 B    file id b5869488-35da-4f08-97ec-729d8dfe7481
+         B7-QLTLPLCVV17-anh.png     45.802 B   file id 4d09bd8d-2b16-476f-9f90-c31c01fccc41
+         B7-QLTLPLCVV17-baocao.docx    964 B   file id 62ecee9e-5051-4b4e-8cf5-4b7d7e053d2f
+
+BỘ BẮT THÔNG BÁO   dùng output/UAT_doi-tac/tools/toast-capture.js — tự kiểm soObserverDangSong = 1 (hợp lệ)
+  thêm tư liệu   : 1 request POST /api/v1/tu-lieu-phap-ly-vvs        · 1 khung thông báo "Đã thêm tư liệu pháp luật"
+  công khai      : 1 request POST .../14cef4af.../cong-khai          · 1 khung thông báo "Đã công khai tư liệu"
+  bấm [Xem]      : 0 khung thông báo (đặc tả không đòi thông báo cho thao tác xem tệp)
+
+ĐO CHÍNH — bấm THẬT nút [Xem] cạnh tên tệp, trong hộp thoại "Xem tư liệu pháp luật"
+(hộp thoại mở từ hành động [Xem tệp] của hàng — đúng lối vào trong ảnh đối tác)
+
+  Chỉ số vô hiệu hoá đo cho CẢ 6 lượt (3 tệp × 2 trạng thái tư liệu):
+      disabled = false · aria-disabled = null · class không chứa ant-btn-disabled
+      pointer-events = auto · opacity = 1 · color = rgb(9,88,217) (xanh) · cursor = pointer · 68×24 px
+      ⇒ KHÔNG lượt nào nút bị vô hiệu hoá. Ảnh đối tác: cùng vị trí, chữ XÁM.
+
+  | trạng thái tư liệu | tệp   | bấm ra gì                                   | nội dung tệp có hiện |
+  |--------------------|-------|---------------------------------------------|----------------------|
+  | Nháp               | .pdf  | mở tab trình xem trực tuyến (URL ký sẵn)     | CÓ — đọc được chữ "QA UAT B7 QLTLPLCVV_17 - PDF xem truc tuyen 2026-08-06", 1/1 trang |
+  | Nháp               | .png  | mở khung xem ảnh (có thanh xoay/phóng)       | CÓ — naturalWidth×Height = 240×90 đúng tệp gốc, complete=true |
+  | Nháp               | .docx | tải tệp về máy (<a download=...>)            | CÓ — 964 B, md5 a397f16763a5e49b88637f87fc779697 = md5 tệp gốc |
+  | Đã công khai       | .pdf  | mở tab trình xem trực tuyến                  | CÓ — render cùng nội dung |
+  | Đã công khai       | .png  | mở khung xem ảnh                             | CÓ — 240×90, complete=true |
+  | Đã công khai       | .docx | tải tệp về máy                               | CÓ — 964 B, md5 trùng tệp gốc, mở zip đọc được đúng câu "QA UAT B7 QLTLPLCVV_17 - DOCX khong xem truc tuyen 2026-08-06" |
+
+  (Tệp .docx tải về đã xoá khỏi máy TRƯỚC lượt đo trạng thái "Đã công khai" để chắc chắn tệp
+   lấy được là của chính lượt bấm đó, không phải tệp còn sót từ lượt trước.)
+
+  Ngoài ra nút [Xem] trong hộp thoại "Thêm tư liệu pháp luật" (form còn sửa được) cũng bật:
+  3/3 nút disabled=false · opacity=1 · màu xanh.
+
+ĐỐI CHỨNG BẰNG ĐƯỜNG THỨ HAI — gọi thẳng API tải tệp trong cùng phiên rồi tải liên kết ký sẵn
+  GET /api/v1/tu-lieu-phap-ly-vvs/14cef4af.../files/{fileId}/download
+  | tệp   | HTTP | Content-Type tệp trả về                                | số byte | chữ ký đầu tệp | khớp gốc |
+  |-------|------|--------------------------------------------------------|---------|----------------|----------|
+  | .pdf  | 200  | application/pdf                                        |     629 | 25 50 44 46 (%PDF) | ✔ |
+  | .png  | 200  | image/png                                              |  45.802 | 89 50 4e 47 (\x89PNG) | ✔ |
+  | .docx | 200  | application/vnd.openxmlformats-...wordprocessingml.document | 964 | 50 4b 03 04 (PK) | ✔ |
+  ⇒ Hai phép đo (giao diện + máy chủ) KHỚP nhau, không có mâu thuẫn phải đẩy sang BA.
+
+QUAN SÁT PHỤ (không kéo verdict)
+  - Tên tệp hiển thị là chữ thường (<span>, cursor:auto, màu đen), không phải chỗ bấm; chỗ bấm là nút
+    [Xem] ngay cạnh trên cùng hàng. Đặc tả FR-X.1-06 không quy định hình thức/nhãn của điều khiển,
+    và chính đối tác ghi "Hệ thống disable nút chức năng Xem" ⇒ họ cũng dùng nút này, không phải chữ.
+  - Console không có lỗi liên quan (1 dòng ERR_FILE_NOT_FOUND của tài nguyên tĩnh, không thuộc luồng đo).
+  - Giữa phiên có 1 lần bị đăng xuất đột ngột (unread-count trả 401 → app tự gọi logout → về /login).
+    Đã đăng nhập lại cùng tài khoản cbnv_tw_02 và ĐO LẠI TỪ ĐẦU nhánh .png và .docx.
+    Không kết luận gì về hiện tượng này trong case: nó nằm ngoài triệu chứng đối tác nêu và chưa
+    tái hiện đủ lần để tách khỏi nhiễu môi trường.

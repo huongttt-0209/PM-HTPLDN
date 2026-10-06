@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+• Danh sách giảng viên: cột thao tác có Sửa/Xóa, không có nút "Xem" riêng; nhưng màn Chi tiết (2 tab Thông tin + Lịch sử giảng dạy) vẫn mở được bằng cách bấm vào TÊN giảng viên.
+• Đối tác kỳ vọng có nút "⊙ Xem" riêng. Theo SRS FR-III-11 (UC30) §Mô tả (dòng 959) + §AC (dòng 977): yêu cầu màn chi tiết 2 tab (hệ thống đã đáp ứng), KHÔNG quy định nút "Xem" riêng ở cột thao tác.
+• Câu hỏi BA: có cần bổ sung nút "Xem" riêng cho trực quan không, hay giữ mở chi tiết qua click tên?
+• Verify: CB_NV_TW, danh sách Giảng viên / Trợ giảng.

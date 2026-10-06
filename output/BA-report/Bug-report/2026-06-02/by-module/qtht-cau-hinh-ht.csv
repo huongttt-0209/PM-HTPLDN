@@ -1,0 +1,5 @@
+STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+71,Xóa đơn vị báo lỗi kèm success,✅ Đạt,PASS,TB,"R2 06-02: tạo+xóa đơn vị test → chỉ toast ""Xoá đơn vị thành công"", không kèm lỗi; GET đơn vị đã xóa → 404 đúng"
+73,Mức chi phí tối đa thiếu dấu chấm,✅ Đạt,PASS,TB,"R2 06-02: form Tiêu chí ĐG chi phí nhập 5000000 → ""5.000.000"" (dấu chấm hàng nghìn) đúng SRS:579"
+74,Mẫu phản hồi thiếu cột Hành động,✅ Đạt,PASS,Thấp,"R2 06-02: tab Mẫu phản hồi có cột Hành động + nút Xem (eye) mọi dòng — SRS:1769"
+75,Ngày lễ thiếu thông báo + STT trống,✅ Đạt,PASS,Thấp,"R2 06-02: thêm ngày lễ 15/08 → toast ""Thêm ngày lễ thành công"" + STT có data (7) đúng SRS:1469"

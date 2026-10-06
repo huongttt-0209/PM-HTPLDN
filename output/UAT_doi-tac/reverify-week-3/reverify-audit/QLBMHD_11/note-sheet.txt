@@ -1,0 +1,6 @@
+Không tái hiện — đề nghị đối tác kiểm tra lại.
+- Tái hiện: form Thêm biểu mẫu, chọn thư mục + đính kèm file .docx HỢP LỆ → trường File biểu mẫu nhận OK, 0 lỗi "Chỉ chấp nhận..."; submit "Thêm mới" → tạo biểu mẫu THÀNH CÔNG.
+- Lỗi "Chỉ chấp nhận .doc/.docx/.xls/.xlsx" chặn file hợp lệ mà đối tác báo KHÔNG tái hiện.
+- Lưu ý: dòng "Chỉ chấp nhận: .doc, .docx, .xls, .xlsx — Tối đa 20MB" trên web là TEXT HƯỚNG DẪN luôn hiển thị, không phải lỗi validation.
+- Đề nghị: nếu gặp lại, gửi kèm file cụ thể (có thể env cũ đọc sai MIME / lỗi tạm thời).
+- Verify: cbnv_tw (CB Nghiệp vụ - TW), form Thêm biểu mẫu, 20/07/2026.

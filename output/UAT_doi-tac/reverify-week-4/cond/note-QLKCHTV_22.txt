@@ -1,0 +1,21 @@
+✅ Là bug — chuyển dev · ⚠️ Có ý cần BA xác nhận
+
+Tái hiện được, chuyển dev một phần; phần định dạng giờ cần BA chốt.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), đọc trực tiếp tiêu đề và nội dung bảng bằng mã lệnh, đo ở cả thẻ "Tất cả" và thẻ "Hoàn thành".
+
+⚠️ 1) Ý đối tác nêu (Ngày gửi chỉ có ngày, thiếu giờ) tái hiện đúng.
+- Cột "Ngày gửi" hiện 27/07/2026; cột "Ngày cập nhật" ngay bên cạnh lại hiện 27/07/2026 11:54 — không nhất quán trong cùng một bảng.
+- Dữ liệu máy chủ CÓ đủ giờ phút giây, phần giờ bị mất ở khâu hiển thị chứ không thiếu ở dữ liệu.
+- Tuy nhiên đặc tả v3.5 không quy định định dạng giờ cho cột này: quy ước chung chỉ ghi "Định dạng ngày: dd/MM/yyyy", và màn Tư vấn nhanh không có bảng định dạng đầu ra. Các module khác (Hỏi đáp) thì CÓ ghi rõ "dd/mm/yyyy HH:mm". Vì vậy đề nghị BA chốt: cột "Ngày gửi" có cần hiển thị giờ phút không.
+
+✅ 2) Kiểm thêm toàn bộ bộ cột thì phát hiện lệch đặc tả rõ ràng hơn — phần này đã chuyển dev.
+- Đặc tả (srs-fr-13-tv-nhanh.md dòng 569) yêu cầu 9 cột: Mã phiên / Câu hỏi DN / Kênh / CB xử lý / Trạng thái / Ngày gửi / Ngày trả lời / Ngày cập nhật / Hành động.
+- Hệ thống đang có 8 cột: Mã phiên / Câu hỏi DN / Kênh / Số gợi ý / Trạng thái / Ngày gửi / Ngày cập nhật / Hành động.
+- Tức là THIẾU 2 cột "CB xử lý" và "Ngày trả lời", THỪA 1 cột "Số gợi ý" không có trong đặc tả.
+- Dữ liệu cho 2 cột thiếu đã có sẵn ở máy chủ (tên cán bộ trả lời và thời điểm trả lời), chỉ cần bổ sung cột hiển thị.
+- Cột "Số gợi ý" luôn hiện 0 và dữ liệu gợi ý luôn rỗng; đặc tả còn nói rõ hệ thống không tự động tìm kiếm và không hiển thị gợi ý tự động, nên cột này vừa thừa vừa không mang thông tin.
+- Bug ID: BUG-QLKCHTV_22.
+
+3) Bằng chứng.
+- Ảnh chụp bảng danh sách kèm trong hồ sơ lỗi.
+- Số liệu đọc trực tiếp từ giao diện và từ máy chủ, ghi trong bảng đối chiếu điều kiện.

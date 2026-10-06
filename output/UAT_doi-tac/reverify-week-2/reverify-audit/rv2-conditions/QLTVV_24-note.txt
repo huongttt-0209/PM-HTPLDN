@@ -1,0 +1,2 @@
+- Ảnh chân dung .png nay đã được chấp nhận và bấm Lưu thành công (không còn báo "Chỉ chấp nhận file PDF").
+- Nhưng sau khi lưu, ảnh chân dung không hiển thị ở màn chi tiết — vẫn là chữ viết tắt thay cho ảnh; thao tác xem/tải ảnh vừa lưu báo không tìm thấy tệp.

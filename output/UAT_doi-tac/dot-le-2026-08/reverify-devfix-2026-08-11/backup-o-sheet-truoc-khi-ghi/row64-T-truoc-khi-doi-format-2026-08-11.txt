@@ -1,0 +1,9 @@
+Reopen 11/08/2026 (môi trường nội bộ, bản dựng assets/index-x06iyQ52.js).
+
+Phần phạm vi dữ liệu ĐÃ ĐẠT: doanh nghiệp 0109998887 nhìn thấy đủ 18/18 vụ việc của mình, trong đó có cả vụ việc do Trung ương thụ lý; mở được từ danh sách và mở được khi dán thẳng địa chỉ chi tiết; đọc được kết quả hỗ trợ và tải được tài liệu đính kèm; vụ việc của doanh nghiệp khác vẫn bị chặn ("Không tìm thấy vụ việc").
+
+CÒN LỖI ở thao tác đánh giá: trên vụ việc VV-BTP-TW-20260804-001 (trạng thái Hoàn thành, chưa ai đánh giá), doanh nghiệp nhập 9 · 8 · 10 kèm nhận xét rồi bấm Xác nhận thì hệ thống báo "Lỗi hệ thống, vui lòng thử lại sau" (HTTP 500, mã ERR-SYS-00-00-01); tải lại trang, khối Đánh giá vẫn là "Chưa có thông tin" — đánh giá không được ghi nhận. Đo 2 lần trên 2 vụ việc khác nhau đều cùng kết quả.
+
+Phép thử phân biệt: trên CHÍNH vụ việc đó, tài khoản cán bộ gửi đánh giá thì lưu được bình thường; và ở vụ việc đã có đánh giá, cán bộ nhận thông báo nghiệp vụ "Vụ việc đã được đánh giá", còn doanh nghiệp vẫn nhận lỗi hệ thống. Vì vậy hỏng nằm ở đường đi của vai trò doanh nghiệp, không phải do bản ghi hay do đã có đánh giá trước đó.
+
+Yêu cầu: doanh nghiệp gửi được đánh giá cho vụ việc của mình ở trạng thái Hoàn thành / Đã đánh giá và nội dung đã gửi phải đọc lại được sau khi tải lại trang.

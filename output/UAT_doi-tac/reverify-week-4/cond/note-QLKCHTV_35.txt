@@ -1,0 +1,26 @@
+✅ Là bug — chuyển dev
+
+Tái hiện đúng, đã chuyển dev. Mức độ: Nghiêm trọng vừa (thiếu hẳn một chức năng nghiệp vụ).
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), trên phiên đang ở trạng thái "CB trả lời" (chưa Hoàn thành, đúng điều kiện hiển thị mà phiếu test nêu).
+
+✅ 1) Hiện tượng tái hiện đúng.
+- Màn trả lời không có nút "Đẩy sang Nhóm II". Cuối cột phải chỉ có duy nhất nút "Gửi trả lời".
+- Đã liệt kê TOÀN BỘ nút trong vùng nội dung bằng mã lệnh (không phụ thuộc cuộn tới đâu): chỉ có "Quay lại danh sách", "Tìm kiếm", "Gửi trả lời". Quét chữ toàn màn cũng không có cụm "Nhóm II" ở bất kỳ đâu.
+- Kiểm thêm trên một phiên mới tạo riêng để chắc chắn nút không phụ thuộc lịch sử thao tác — kết quả như nhau.
+- Bug ID: BUG-QLKCHTV_35.
+
+2) Căn cứ đặc tả — yêu cầu này được nêu ở 4 chỗ độc lập, không phải suy diễn.
+- srs-fr-13-tv-nhanh.md dòng 204 (bước xử lý 9): khi cán bộ thấy câu hỏi cần xử lý chính thức thì bấm "Đẩy sang Nhóm II", mở hộp thoại xác nhận, tạo bản ghi Hỏi đáp với kênh tiếp nhận là "từ Tư vấn nhanh" kèm liên kết về phiên gốc, chuyển phiên sang "Hoàn thành" với ghi chú "Đã đẩy sang Nhóm II hỏi đáp {mã}", và gửi thông báo cho cán bộ Nhóm II.
+- Dòng 227: đặc tả cấp hẳn một mã lỗi riêng cho thao tác này (báo "Phiên tư vấn đã kết thúc, không thể đẩy sang Nhóm II" khi phiên đã hoàn thành). Có mã lỗi riêng nghĩa là thao tác bắt buộc phải tồn tại.
+- Dòng 236: tiêu chí nghiệm thu mô tả đúng kịch bản bấm nút và xác nhận.
+- Dòng 572: mô tả giao diện, ghi rõ "thêm nút phụ Đẩy sang Nhóm II, đặt bên cạnh nút Gửi trả lời".
+
+3) Đã kiểm tầng máy chủ để dev ước lượng đúng khối lượng — chức năng CHƯA CÓ ở cả hai tầng, không chỉ thiếu nút.
+- Đọc danh mục giao diện lập trình của hệ thống: nhóm tư vấn nhanh có 10 đường dẫn, đường gần nghĩa nhất là "chuyển kênh". Đã gọi thử trên một phiên dựng riêng, kết quả không đáp ứng yêu cầu nào của đặc tả: không tạo bản ghi Hỏi đáp nào, không có liên kết về phiên gốc, phiên vẫn ở "CB trả lời" chứ không chuyển "Hoàn thành", không có ghi chú. Thực tế nó chỉ đổi Kênh từ "TV Nhanh" sang "Thủ công".
+- Vậy "chuyển kênh" là thao tác khác, không phải chức năng đẩy sang Nhóm II.
+
+4) Đầu nhận đã có trong đặc tả nên không phải chức năng bị dời sang chỗ khác.
+- Đặc tả dòng 573 mô tả luồng đi tới nhóm Hỏi đáp với kênh tiếp nhận "từ Tư vấn nhanh" kèm liên kết phiên gốc. Chỉ đầu gửi ở Tư vấn nhanh là chưa được dựng.
+
+5) Bằng chứng.
+- Ảnh chụp màn trả lời (2 tình huống: ô trả lời trống và ô đã có nội dung) kèm trong hồ sơ lỗi.

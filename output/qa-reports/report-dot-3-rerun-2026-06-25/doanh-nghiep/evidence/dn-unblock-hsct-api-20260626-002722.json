@@ -1,0 +1,39 @@
+{
+  "run_id": "20260626-002722",
+  "auth": {
+    "tw": {
+      "login": {
+        "status": 429,
+        "url": "http://103.172.236.130:3000/api/v1/auth/login",
+        "body": {
+          "success": false,
+          "error": {
+            "code": "ERR-SYS-00-29-01",
+            "message": "Bạn đã thử quá nhiều lần. Vui lòng đợi khoảng 1 phút rồi thử lại.",
+            "timestamp": "2026-06-25T17:27:22.134Z",
+            "requestId": "b60d26b5-7f17-41fe-ab3b-c1f4883db337"
+          }
+        }
+      }
+    },
+    "qtht": {
+      "login": {
+        "status": 429,
+        "url": "http://103.172.236.130:3000/api/v1/auth/login",
+        "body": {
+          "success": false,
+          "error": {
+            "code": "ERR-SYS-00-29-01",
+            "message": "Bạn đã thử quá nhiều lần. Vui lòng đợi khoảng 1 phút rồi thử lại.",
+            "timestamp": "2026-06-25T17:27:22.155Z",
+            "requestId": "c9a45c0c-a028-4da5-abed-8dc4ddbb3678"
+          }
+        }
+      }
+    }
+  },
+  "tests": {},
+  "verdicts": {
+    "ALL": "BLOCKED_NO_TOKEN"
+  }
+}

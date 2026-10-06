@@ -1,0 +1,8 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Tái hiện đúng phản ánh (1/1) trên bản hiện tại: đưa khóa học "QAW7 — Hội nghị đối thoại DN 2026" từ "Đã duyệt" sang "Đang diễn ra" bằng nút [Khai giảng], nhưng chương trình cha "CTDT-QAW7-01" vẫn đứng ở bước "3 Đã duyệt", bước "4 Đang thực hiện" không được kích hoạt. Thẻ "Đang thực hiện" trên danh sách chương trình vẫn 0.
+- Đã loại trừ khả năng chỉ hiển thị sai: sau thao tác, mốc cập nhật của bản ghi chương trình KHÔNG đổi ⇒ hệ thống không xử lý trạng thái chương trình.
+- Đã loại trừ khả năng "chạy theo lịch nên phải chờ": chương trình "CTDT-SEED-0001" (Đã duyệt) có khóa học con "Đang diễn ra" từ 16/07 mà tới 30/07 vẫn chưa chuyển.
+- Đã loại trừ khả năng thẻ lọc hỏng: lọc "Đã duyệt" ra 3 chương trình, "Đang thực hiện" ra 0 → thẻ lọc hoạt động, rỗng vì không có bản ghi ở trạng thái đó.
+- Yêu cầu theo đặc tả: FR-III-01 (UC20), máy trạng thái SM-CTDT — srs-fr-03-dao-tao.md dòng 2128 và 2144: "DA_DUYET → DANG_THUC_HIEN: Auto khi có ≥1 KHOA_HOC con DA_CONG_KHAI / DANG_DIEN_RA". Hệ thống phải tự chuyển chương trình sang "Đang thực hiện" ngay khi có khóa học con công khai/đang diễn ra.
+- Tài khoản + dữ liệu verify: cbnv_tw (CB Nghiệp vụ - Trung ương, BTP·TW) — đúng vai trò và cấp như đối tác; cặp chương trình/khóa học CTDT-QAW7-01 ↔ KH-QAW7-HOINGHI.
+- Bug ID: BUG-TTCTDTTH_16.

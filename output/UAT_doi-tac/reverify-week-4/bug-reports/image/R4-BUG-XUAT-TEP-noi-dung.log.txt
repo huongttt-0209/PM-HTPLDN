@@ -1,0 +1,77 @@
+R4 RE-VERIFY — BUG-XUAT-TEP-LECH-MUI-GIO (XUATTEP_OOS_08)
+Ngay chay: 29/07/2026 ~18:10  |  Env: https://18.143.165.120.nip.io  |  Tai khoan: admin
+Thao tac hoan toan tren giao dien; tep lay bang chinh nut [Xuat Excel] cua man hinh.
+================================================================================
+
+BOI CANH: luot 3 phan TEP XUAT da dat. Con lai duy nhat BO LOC NGAY cua man
+Quan tri he thong > Nhat ky he thong: chon 1 ngay nhung tra ve du lieu cua ngay khac,
+cua so loc chay tu 07:00 ngay duoc chon den 06:59 ngay hom sau (lech dung 7 tieng).
+
+--------------------------------------------------------------------------------
+PHAN 1 — BO LOC NGAY: CHAY LAI DUNG HAI PHEP THU CUA LUOT 3
+--------------------------------------------------------------------------------
+ Cach doc ket qua: sau khi bam [Tim kiem], bam luon [Xuat Excel] de lay TOAN BO ket
+ qua (khong chi 50 dong trang dau), roi doc cot "Thoi gian" cua tung dong.
+
+ PHEP THU A — loc "Tu ngay 22/07/2026 – Den ngay 22/07/2026"
+   Luot 3: 201 ket qua, trang dau TOAN BO la 23/07/2026
+           (tu 23/07/2026 05:36:42 xuong 23/07/2026 00:12:19)
+           => KHONG mot dong nao mang ngay 22/07.
+
+   Luot 4: 141 ket qua
+           Trang dau: 50/50 dong deu la 22/07/2026
+           Tep xuat (day du 141 dong):
+              phan bo ngay : {'22/07/2026': 141}     <-- 100% dung ngay duoc chon
+              som nhat     : 22/07/2026 13:36
+              muon nhat    : 22/07/2026 23:58
+           => Khong con dong nao cua 21/07 hay 23/07 lot vao.
+
+ PHEP THU B — loc "Tu ngay 23/07/2026 – Den ngay 23/07/2026"
+   Luot 3: 195 ket qua, trang dau chay tu 24/07/2026 02:03:04 xuong 23/07/2026 11:57:16
+           => lot ca ban ghi cua ngay 24/07.
+
+   Luot 4: 180 ket qua
+           Trang dau: 50/50 dong deu la 23/07/2026 (15:51:41 -> 11:46:07)
+           Tep xuat (day du 180 dong):
+              phan bo ngay : {'23/07/2026': 180}
+              som nhat     : 23/07/2026 00:01     <-- CHOT CHAN DUOI
+              muon nhat    : 23/07/2026 15:51
+           => Khong con dong nao cua 24/07.
+
+ Y NGHIA CUA MOC 00:01
+   Cua so loc cu bat dau luc 07:00. Neu van con lech, ban ghi luc 00:01 cua ngay 23/07
+   se bi day sang ket qua cua ngay 22/07 (dung nhu luot 3 da thay). Lan nay ban ghi
+   00:01 nam dung trong ket qua cua ngay 23/07 => chan duoi cua cua so da ve 00:00
+   gio Viet Nam. Doi xung, khong con ban ghi 24/07 nao lot vao => chan tren da ve
+   23:59 cung ngay.
+
+--------------------------------------------------------------------------------
+PHAN 2 — DOI CHUNG DONG HO
+--------------------------------------------------------------------------------
+ Dang nhap admin luc 17:20 gio Viet Nam.
+ Nhat ky he thong ghi: 29/07/2026 17:20:24 'Dang nhap' + 29/07/2026 17:20:09
+ 'Cho xac minh OTP'  => phan hien thi dung mui gio Viet Nam.
+
+--------------------------------------------------------------------------------
+PHAN 3 — KIEM LAI PHAN TEP XUAT (xem co hong nguoc khong)
+--------------------------------------------------------------------------------
+ Quet lai toan bo tep .xlsx da xuat qua giao dien trong ngay:
+   - 23 tep cua man Bao cao thong ke
+   - 3 tep Nhat ky he thong (khong loc / loc 22-07 / loc 23-07)
+   - 2 tep Diem danh khoa hoc (buoi SANG / buoi CHIEU)
+   - 1 tep DS Tu van vien
+ Tong 1.794 o co chua gia tri ngay.
+ Ket qua: 0 o sai dinh dang. Toan bo ghi dd/MM/yyyy (hoac dd/MM/yyyy HH:mm khi co gio).
+ Bon kieu sai cu deu khong con: thieu so 0 (11/4/2026), gio dat truoc ngay
+ (07:00 25/07/2026), nam 2 chu so (19:38 24/7/26), o kieu My thang-ngay-nam.
+
+--------------------------------------------------------------------------------
+CAN CU DAC TA
+--------------------------------------------------------------------------------
+ Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/
+  srs-v3.5.md:575  — UI-06: "Dinh dang ngay: dd/MM/yyyy"
+  srs-fr-10-quan-tri.md:1370-1374 — FR-VIII-28 input thoi_gian_tu / thoi_gian_den
+  srs-fr-10-quan-tri.md:1385 — Processing buoc 3: truy van AUDIT_LOG theo filter thoi gian
+
+KET LUAN: DAT — bo loc ngay nay khoanh dung tu 00:00 den 23:59 gio Viet Nam cua
+ngay duoc chon; phan tep xuat van giu nguyen ket qua dat cua luot 3. Dong loi nay.

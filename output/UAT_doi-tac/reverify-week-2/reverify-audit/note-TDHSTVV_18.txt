@@ -1,0 +1,9 @@
+Xác nhận là lỗi (Open) — đã tái hiện đúng điều kiện: CB Nghiệp vụ cấp Địa phương (CB_NV_DP), hồ sơ TVV cấp Địa phương ở trạng thái Đang thẩm định, kết luận ĐẠT, bấm "Trình duyệt".
+
+Kết quả tái hiện:
+1. Không hiển thị thông báo thành công: hồ sơ chuyển sang "Chờ phê duyệt" nhưng màn hình không hiện thông báo nào (theo dõi DOM 4 giây, không có phần tử thông báo). SRS srs-v3.5 dòng 571 (UI-04) yêu cầu có thông báo cho thao tác thành công.
+2. Cán bộ phê duyệt không nhận được thông báo: đăng nhập Cán bộ Phê duyệt cùng đơn vị (CB_PD_DP) ngay sau thao tác — hồ sơ CÓ nằm trong hàng chờ "Chờ phê duyệt" của tài khoản này, nhưng hộp thông báo hiển thị "Không có thông báo mới" (0 thông báo). SRS srs-fr-04 dòng 518 + 551 yêu cầu gửi thông báo cho Cán bộ Phê duyệt cùng đơn vị.
+
+Thêm: bấm "Trình duyệt" không có hộp thoại xác nhận (SRS dòng 1565 quy định phải có); hệ thống cũng không lưu người trình / ngày trình.
+
+Lưu ý về Kết quả mong đợi trong test case: phần "hệ thống tự động chuyển hồ sơ lên cấp Bộ/Ngành" KHÔNG đúng với SRS. SRS dòng 80 (BR-FLOW-03 "KHÔNG xuyên cấp"), dòng 518 ("KHÔNG có ESCALATE bắt buộc — mỗi cấp tự công bố") và dòng 570 ("CB_PD_ĐP duyệt hồ sơ do CB_NV_ĐP thẩm định") quy định hồ sơ ở lại đơn vị Địa phương và do Cán bộ Phê duyệt cùng đơn vị duyệt. Hệ thống đang chạy đúng theo SRS ở điểm này. Đã gửi BA xác nhận lại kỳ vọng.

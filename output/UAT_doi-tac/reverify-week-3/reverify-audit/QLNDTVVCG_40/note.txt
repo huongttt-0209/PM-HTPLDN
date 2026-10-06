@@ -1,0 +1,7 @@
+⚠️ Cần BA xác nhận.
+- Web hiện tại (vai trò Cán bộ Nghiệp vụ Trung ương): nút "Xuất Excel" hoạt động, tải được tệp .xlsx có dữ liệu (không bị lỗi/chặn).
+  + Tên tệp thực tế: "noi-dung-tu-van-cs-20260721.xlsx".
+  + Các cột trong tệp: Mã tư vấn, Nội dung, Trạng thái, Ngày tạo, Ngày bắt đầu, Ngày hoàn thành, Điểm đánh giá.
+- Đối tác kỳ vọng: tên tệp dạng "TVCS-danh-sach-{YYYYMMDD-HHmm}.xlsx", và tệp gồm toàn bộ cột đang hiển thị trên màn (Doanh nghiệp, Chuyên gia, Lĩnh vực, Tiêu đề) cộng thêm "Nội dung tư vấn đầy đủ" và "Ngày hoàn thành".
+- SRS FR-X.1-01 (UC147), màn SCR-X1-01 (dòng 1090) chỉ nêu có nút [Xuất Excel], KHÔNG quy định tên tệp và danh sách cột export cho danh sách TVCS. Phần "Processing — Xuất Excel" (dòng 632) là của chức năng Hồ sơ pháp lý DN (FR-X.1-04 / UC150), không áp cho màn này.
+- Câu hỏi BA: (1) Tên tệp export danh sách TVCS phải theo định dạng nào? (2) Tệp export phải gồm những cột nào — có bắt buộc thêm Doanh nghiệp / Chuyên gia / Lĩnh vực / Tiêu đề đang hiển thị trên màn không?

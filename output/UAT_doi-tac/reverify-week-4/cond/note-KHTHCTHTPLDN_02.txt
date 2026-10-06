@@ -1,0 +1,29 @@
+✅ Là bug — chuyển dev
+
+Tái hiện đúng như phiếu phản ánh, đã chuyển dev.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), sau đó kiểm lại bằng cbpd_tw (CB Phê duyệt - Trung ương) để chắc không phải khác biệt do phân quyền.
+
+✅ 1) Kết quả đo: thanh lọc màn Chương trình HTPLDN thiếu đúng 2 tiêu chí phiếu nêu.
+- Hiện chỉ có: ô tìm theo tên hoặc mã CT, một danh sách chọn, Từ ngày, Đến ngày.
+- Không có tiêu chí Đơn vị. Không có tiêu chí Trạng thái.
+- Đã đọc toàn bộ thành phần trên màn bằng mã lệnh chứ không chỉ nhìn ảnh, để chắc chắn không có ô nào nằm ngoài khung nhìn.
+- Bug ID: BUG-CT-LOC-THIEU-DONVI-TRANGTHAI.
+
+2) Đã loại khả năng danh sách chọn duy nhất chính là Trạng thái nhưng đặt nhãn khác.
+- Danh sách chọn đó mang nhãn Công bố. Mở ra chỉ có 2 lựa chọn: Đã công bố và Chưa công bố.
+- Đây là lọc theo cờ công khai, không thay thế được lọc theo trạng thái vòng đời.
+
+3) Hàng thẻ phân loại phía dưới có lọc được trạng thái nhưng không đủ.
+- Hàng thẻ có 6 trạng thái cộng thẻ Tất cả. Trong khi vòng đời chương trình có 8 trạng thái.
+- Thiếu Tạm dừng và Đã hủy. Nghĩa là chương trình đang tạm dừng hoặc đã hủy hiện không có đường nào lọc ra từ giao diện.
+
+4) Phần xử lý dữ liệu phía sau đã sẵn sàng, chỉ thiếu phần dựng giao diện.
+- Gọi trực tiếp dịch vụ dữ liệu của màn: không lọc trả 8 chương trình, lọc theo một đơn vị trả 7, lọc theo trạng thái Đã duyệt trả 5.
+- Cả hai tiêu chí đều được xử lý đúng ở phía sau. Việc còn thiếu nằm ở phần giao diện.
+
+5) Một điểm cần đối tác đính chính giúp.
+- Ảnh đính kèm case này là màn Tư vấn nhanh, không phải màn Chương trình HTPLDN.
+- QA không lấy đó làm lý do bác case, vì nội dung phản ánh vẫn đúng khi kiểm trên đúng màn. Nhưng nhờ đối tác gắn lại ảnh đúng màn để lần sau dev đối chiếu nhanh hơn.
+
+6) Bằng chứng.
+- Ảnh toàn cảnh thanh lọc và hàng thẻ phân loại. Ảnh danh sách chọn Công bố đang mở, thấy rõ chỉ có 2 lựa chọn. Kèm trong hồ sơ lỗi.

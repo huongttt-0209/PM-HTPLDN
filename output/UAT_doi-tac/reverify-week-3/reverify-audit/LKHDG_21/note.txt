@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: màn chỉnh sửa đợt KHÔNG có nút "Lưu nháp". Nguyên nhân gốc: bấm "Sửa" không mở form chỉnh sửa mà mở màn chi tiết read-only nên không có thanh hành động của form (trong đó có nút Lưu nháp).
+- Đã verify env test (tài khoản CB Nghiệp vụ TW): bấm Sửa đợt DG-20260720-0002 (Lập kế hoạch) → màn chi tiết read-only, chỉ có "Quay lại danh sách", "Hủy đợt", và các nút của tab Tiêu chí ("Thêm tiêu chí", "Nhập từ danh mục", "Lưu"). Không có nút "Lưu nháp" cho việc chỉnh sửa thông tin đợt.
+- Chuẩn: SRS SCR-VI-01 thanh hành động form (#27): "[Hủy] [Lưu nháp] (→ trạng thái Lập kế hoạch) [Lưu & Chuyển tiêu chí]" — form sửa/tạo phải có nút [Lưu nháp].
+- Mã lỗi nội bộ: BUG-LKHDG-EDIT (gộp LKHDG_16/20/21/22).

@@ -1,0 +1,5 @@
+- Đã kiểm tra lại ngày 05/08/2026 trên bản mới nhất của môi trường nghiệm thu: nội dung phản ánh đã được khắc phục.
+- Bấm "Xóa bộ lọc" ở Thư viện biểu mẫu, mục Thư mục: danh sách nay trở về đầy đủ bản ghi mặc định, không còn giữ kết quả của lần lọc trước.
+- Số đếm trên thẻ "Tất cả" cũng trở về đúng số mặc định, không còn kẹt ở con số của lần lọc cũ.
+- Đã thử với hai bộ lọc khác nhau (theo từ khóa, và theo lĩnh vực kèm khoảng ngày), cả hai đều cho kết quả đúng.
+- Phần đã sửa trước đó vẫn giữ nguyên: thanh thẻ phân loại tự về "Tất cả" và các ô lọc được xóa trắng.

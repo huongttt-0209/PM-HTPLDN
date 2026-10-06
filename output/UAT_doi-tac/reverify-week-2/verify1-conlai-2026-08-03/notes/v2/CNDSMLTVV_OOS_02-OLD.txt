@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Yêu cầu theo đặc tả: SCR-IV-01 §Thao tác hàng loạt dòng 1464 (công khai hàng loạt mở MD-CONG-KHAI); mẫu MD-CONG-KHAI §3.0b dòng 1406 phần (b) File đính kèm; FR-IV-08 §Trường dữ liệu dòng 657 (file_dinh_kem_cong_khai, CB Nghiệp vụ upload tùy chọn trong modal MD-CONG-KHAI).
+- Bằng chứng đo: hộp thoại hàng loạt có 0 vùng tải tệp / 1 nhãn trường; hộp thoại ở màn hình chi tiết có 2 vùng tải tệp / 2 nhãn trường, đo cùng phiên cùng tài khoản.
+- Mã lỗi nội bộ: BUG-CNDSMLTVV_OOS_02. Tài khoản kiểm tra: cbnv_tw_02 (Cán bộ nghiệp vụ Trung ương, đơn vị Cục Bổ trợ tư pháp) — đúng vai trò mà dòng 657 chỉ định. Bản dựng V1.0.5, kiểm tra ngày 03/08/2026.
+- Lỗi phát hiện ngoài phạm vi các dòng TC có sẵn nên mở dòng mới.

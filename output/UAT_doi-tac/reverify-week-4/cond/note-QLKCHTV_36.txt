@@ -1,0 +1,26 @@
+⚠️ Cần BA xác nhận
+
+Cần BA chốt — hiện tượng tái hiện đúng, nhưng đặc tả v3.5 của Tư vấn nhanh KHÔNG có chức năng lưu nháp.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), trên màn trả lời, đo ở cả 2 tình huống: ô trả lời trống và ô đã có nội dung.
+
+⚠️ 1) Hiện tượng tái hiện đúng.
+- Màn trả lời không có nút "Lưu nháp". Liệt kê toàn bộ nút trong vùng nội dung bằng mã lệnh: chỉ có "Quay lại danh sách", "Tìm kiếm", "Gửi trả lời".
+- Quét chữ toàn màn: không có cụm "Lưu nháp" hay "nháp" ở bất kỳ đâu, ở cả hai tình huống đo.
+
+2) Vì sao chưa chuyển dev được.
+- Đặc tả màn này (srs-fr-13-tv-nhanh.md dòng 572) chỉ khai hai thao tác: "Gửi trả lời" và nút phụ "Đẩy sang Nhóm II". Không có nút nào cho bản nháp.
+- Toàn bộ phần xử lý nghiệp vụ của chức năng trả lời không có bước, đầu ra, trạng thái hay mã lỗi nào liên quan bản nháp.
+- Đặc tả còn nói theo hướng ngược lại: dòng 215 ghi hệ thống "chỉ lưu nội dung trả lời cuối cùng" kèm thông tin cán bộ xử lý và thời điểm trả lời — tức chủ trương là chỉ lưu bản cuối.
+- Tìm cụm "Lưu nháp" trong toàn bộ tệp đặc tả Tư vấn nhanh chỉ ra đúng 1 kết quả, và đó là nút của màn Kho câu hỏi, không phải màn Tư vấn nhanh.
+
+3) Đây nhiều khả năng là lựa chọn thiết kế, không phải sót — có đối chứng.
+- Nhóm Hỏi đáp CÓ đặc tả lưu nháp rất chi tiết (có nút Lưu nháp, tự lưu mỗi 60 giây, hiện chỉ báo "Đã lưu lúc ..."). Việc đặc tả viết kỹ cho Hỏi đáp mà không viết cho Tư vấn nhanh cho thấy khác biệt có chủ ý, phù hợp tính chất luồng trả lời nhanh dựa trên kho câu hỏi có sẵn.
+- Đã kiểm tầng máy chủ để loại trừ khả năng "nút bị ẩn": nhóm tư vấn nhanh có 10 đường dẫn, không đường nào cho bản nháp. Chức năng chưa tồn tại ở cả hai tầng.
+
+⚠️ 4) Rủi ro thực tế xin BA cân nhắc.
+- Cán bộ soạn dở mà rời màn thì mất toàn bộ nội dung. Ngoài ra khi bấm chọn câu hỏi khác từ kho, hệ thống ghi đè ngay không hỏi (đã đo ở QLKCHTV_31).
+- Đề nghị BA chốt: màn trả lời Tư vấn nhanh có cần "Lưu nháp" không? Nếu không thì tối thiểu có cần cảnh báo trước khi mất nội dung đang soạn không? Hai câu hỏi này gắn với nhau, mong BA quyết cùng lúc.
+
+5) Bằng chứng.
+- Ảnh chụp màn trả lời (cả tình huống ô trống và ô đã có nội dung) kèm trong hồ sơ lỗi.
+- Lưu ý nhỏ về hồ sơ: ảnh đính kèm ở case này trùng y hệt ảnh của QLKCHTV_35 (đã đối chiếu mã băm tệp), nên phần ảnh không thể hiện riêng thao tác lưu nháp. QA đã tự dựng lại tình huống và đo trực tiếp, không dựa vào ảnh đó.

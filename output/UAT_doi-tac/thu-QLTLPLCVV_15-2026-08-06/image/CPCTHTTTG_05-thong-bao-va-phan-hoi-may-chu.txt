@@ -1,0 +1,168 @@
+CPCTHTTTG_05 — BC Chi phí theo thời gian · thao tác [Xuất Excel]
+Bằng chứng chữ: thông báo nguyên văn + phản hồi máy chủ của CHÍNH lượt bấm đó
+Env verify : https://18.143.165.120.nip.io      Bản dựng: V1.0.8 (gói assets/index-CNwX9JjX.js)
+Ngày đo    : 2026-08-06
+Cách đo    : cài bộ theo dõi lên document.body TRƯỚC khi bấm (không lọc trùng, đọc innerText,
+             lấy mẫu chữ mỗi 150 ms, đếm request kèm theo, móc cả fetch lẫn XHR, bắt cả blob).
+
+================================================================================
+A. VAI TRÒ `cbnv_tw_03` (CB Nghiệp vụ - Trung ương) — đúng tác nhân đặc tả :62
+================================================================================
+
+Địa chỉ trang khớp đúng chuỗi tham số trên ảnh nghiệm thu:
+    /bao-cao?loai=chi-phi-theo-thoi-gian&kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+
+Màn hình (Kỳ Năm 2026, Đơn vị Toàn quốc):
+    Tổng chi phí toàn kỳ 23.000.000  ·  Tổng hồ sơ toàn kỳ 2  ·  Thời điểm tạo 06/08/2026 14:13
+    Bảng "Theo kỳ": Kỳ | Từ ngày | Đến ngày | Số hồ sơ | Tổng chi phí
+                    Năm 2026 | 01/01/2026 | 31/12/2026 | 2 | 23.000.000 ₫
+    Có biểu đồ đường (nút [Ẩn biểu đồ] hiện) — khớp chart_type = LINE, đặc tả :870.
+
+A1. Biến thể ① — Kỳ "Năm" 01/01/2026 → 31/12/2026 (đúng ảnh đối tác) — bấm [Xuất Excel] 14:13
+    Số khung thông báo mọc lên : 1  (không có 2 thông báo chồng)
+    Chuỗi chữ đo theo thời gian TRONG CÙNG khung đó:
+        +47 ms   : "Đang tạo file..."      khung rộng 1432 px cao 40 px
+        +346 ms  : "Tạo file thành công."  khung rộng 1432 px cao 56 px
+        +2597 ms : ""                      (khung tự tắt)
+    Số request kèm lượt bấm : 1 → XHR POST /api/v1/bao-cao/export → 200 (blob 6.660 B)
+    Tệp hệ thống giao ra    : BaoCaoChiPhiTheoThoiGian_20260806_1413.xlsx
+                              6.660 byte · md5 72857bff74f5955af3b98890dc339e23
+
+A2. Biến thể ② — Kỳ "Khoảng tùy chọn" 01/06/2026 → 30/06/2026 — bấm [Xuất Excel] 14:25
+    Màn hình : Kỳ "01/06/2026 - 30/06/2026" | 2 hồ sơ | 23.000.000 ₫
+    Chuỗi chữ: +43 ms "Đang tạo file..." → +192 ms "Tạo file thành công." → +2593 ms tắt
+    Mã trả về : 200 (blob 6.659 B)
+    Tệp giao ra : BaoCaoChiPhiTheoThoiGian_20260806_1425.xlsx
+                  6.659 byte · md5 d7055b4989367f16d145cb7d8b448ca3
+
+A3. Biến thể ③ — Kỳ "Quý" (hệ thống tự đặt 01/07/2026 → 30/09/2026, quý không có dữ liệu)
+    Màn hình         : "Không có dữ liệu báo cáo cho kỳ và đơn vị đã chọn"
+    Nút [Xuất Excel] : TỰ TẮT (không bấm được) — hợp lý vì không có gì để xuất
+    => Bộ lọc kỳ có tác dụng thật ở tầng dựng báo cáo.
+
+A4. Nội dung tệp .xlsx đọc bằng thư viện đọc bảng tính (openpyxl)
+
+    Tệp ① — sheet "Chi phí theo thời gian":
+        BC Chi phí theo thời gian
+        Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+        Đơn vị: Toàn quốc
+        Ngày tạo: 06/08/2026
+        Tổng chi phí toàn kỳ | Chỉ tiêu | Số tiền (₫) | Tổng chi phí toàn kỳ 23000000
+        Tổng hồ sơ toàn kỳ   | Chỉ tiêu | Số lượng     | Tổng hồ sơ toàn kỳ 2
+        Theo kỳ
+        Kỳ | Từ ngày | Đến ngày | Số hồ sơ | Tổng chi phí (₫)
+        Năm 2026 | 01/01/2026 | 31/12/2026 | 2 | 23000000
+
+    Tệp ② — khác tệp ① đúng ở phần bám bộ lọc:
+        Kỳ báo cáo: KHOANG (từ 01/06/2026 đến 30/06/2026)
+        Theo kỳ → 01/06/2026 - 30/06/2026 | 01/06/2026 | 30/06/2026 | 2 | 23000000
+
+    => Đủ 4 mục header đặc tả :1092 đòi (tên báo cáo · kỳ · đơn vị · ngày tạo).
+    => Dãy theo kỳ có đủ 3 thông tin đặc tả :869 đòi: nhãn kỳ (Kỳ) · tổng chi phí · số hồ sơ.
+    => Số liệu trong tệp khớp đúng từng con số trên màn; đổi kỳ thì nhãn kỳ và khoảng ngày trong
+       tệp đổi theo ⇒ tệp bám bộ lọc, không xuất cứng.
+    => Triệu chứng gốc 16/07 ("Không thể tạo file xuất. Vui lòng thử lại." = ERR-RPT-04, đặc tả
+       :116) KHÔNG còn tái hiện với vai trò này.
+
+    !! Ghi nhận chữ lộ ra người dùng: ô "Kỳ báo cáo" của tệp ② in nguyên mã kỹ thuật "KHOANG"
+       thay vì chữ tiếng Việt. Tệp ① in "Năm" đúng chữ, và lượt gọi thẳng máy chủ với kỳ Tháng
+       in "Tháng" đúng chữ ⇒ chỉ riêng giá trị "Khoảng tùy chọn" bị lộ mã enum. Ngoài phạm vi
+       case này, xem mục D.
+
+================================================================================
+B. VAI TRÒ `admin` (Quản trị viên — QTHT, BTP · TW) — ĐÚNG VAI TRÒ TRONG ẢNH ĐỐI TÁC
+================================================================================
+
+B1. Bước Xem báo cáo — KHÔNG bị chặn
+    Màn hiện đủ số liệu y hệt vai trò cbnv_tw_03 (23.000.000 · 2 hồ sơ · Thời điểm tạo 14:30),
+    có biểu đồ đường, cả hai nút [Xuất Excel] / [Xuất PDF] bấm được (không mờ, không ẩn).
+    Ảnh: image/CPCTHTTTG_05-B1-qtht-xem-duoc-bao-cao-nut-xuat-bam-duoc-V108.png
+
+B2. Bước Xuất Excel — BỊ CHẶN (14:30)
+    Số khung thông báo : 1
+    Chuỗi chữ đo theo thời gian:
+        +89 ms   : "Forbidden"   <-- CHỮ NGƯỜI DÙNG THỰC SỰ ĐỌC ĐƯỢC
+                   khung rộng 1432 px cao 41 px (hiện thật, không phải node ẩn)
+        +3539 ms : ""            (khung tự tắt sau ~3,4 s)
+    Số request : 1 → XHR POST /api/v1/bao-cao/export → 403
+    Số tệp giao ra : 0 · Số blob : 0
+    Nguyên văn phản hồi:
+        {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+         "timestamp":"2026-08-06T07:30:18.775Z",
+         "requestId":"5a47d617-f4c3-4ab3-905e-7d9a592db2d6"}}
+
+    Ảnh khung thông báo "Forbidden" chụp được ở lượt [Xuất PDF] liền sau đó, cùng màn cùng tài
+    khoản: image/CPCTHTTTG_06-B2-qtht-thong-bao-Forbidden-khi-xuat-pdf-V108.png
+
+================================================================================
+C. ĐỐI CHIẾU VỚI ĐẶC TẢ
+================================================================================
+
+- srs-v3.5/srs-fr-11-bao-cao.md:117 — E7 ERR-RPT-05 quy định câu hiện cho người dùng khi thiếu
+  quyền là "Bạn không có quyền xem báo cáo này". Chuỗi "Forbidden" KHÔNG có trong bảng lỗi.
+- :79 — kiểm quyền truy cập báo cáo nằm ở đầu luồng ⇒ bước Xem và bước Xuất phải nhất quán.
+- :1052 — điều kiện hiện nút Xuất Excel chỉ là "sau khi đã Xem báo cáo", không kèm điều kiện vai trò.
+- :62 — tác nhân là CB Nghiệp vụ / CB Phê duyệt; IM LẶNG về vai trò Quản trị viên → phần đó là câu
+  hỏi gửi BA (cau-hoi-BA.md Mục 2), KHÔNG tự chấm.
+- :85 — khuôn tên tệp {TenBaoCao}_{YYYYMMDD_HHmm}.xlsx: tên thực có đủ ngày + giờ-phút, hai lượt
+  xuất khác phút ra tên khác nhau (…_1413 và …_1425).
+- :869 — trend_data[] {ky_label, tong_chi_phi, so_ho_so}: có đủ cả trên màn lẫn trong tệp xuất.
+- :870 — chart_type LINE: màn có biểu đồ đường.
+- :1092 — 4 mục header trong tệp xuất: có đủ.
+
+================================================================================
+D. HAI ĐIỀU GHI NHẬN NGOÀI PHẠM VI CASE (không kéo verdict của case này)
+================================================================================
+
+D1. Không dựng được dãy nhiều điểm kỳ qua giao diện, dù máy chủ làm được.
+    Đặc tả :874 (AC của FR-IX-19): "Given CB chọn 12 tháng When tạo BC Then hiển thị line chart
+    12 điểm trend chi phí".
+    - Trên giao diện: chọn Kỳ = Tháng thì hệ thống TỰ đặt lại khoảng thời gian về đúng tháng hiện
+      tại (01/08 → 31/08/2026) và ô Thời gian là chữ tĩnh, không sửa được. Chọn Quý / Năm cũng
+      vậy. Chỉ "Khoảng tùy chọn" mới cho nhập ngày, nhưng kỳ này gộp cả khoảng thành ĐÚNG MỘT
+      điểm ("01/01/2026 - 31/12/2026"). ⇒ người dùng không có đường nào ra 12 điểm.
+    - Gọi thẳng máy chủ cùng tham số thì máy chủ TRẢ ĐÚNG 12 điểm:
+      GET /api/v1/bao-cao/chi-phi-theo-thoi-gian?kyBaoCao=THANG&tuNgay=2026-01-01&denNgay=2026-12-31
+      → data[] có 12 phần tử "Tháng 1/2026" … "Tháng 12/2026", riêng Tháng 6/2026 có 2 hồ sơ /
+      23.000.000, các tháng khác 0.
+    - Tệp xuất cũng dựng đúng 12 dòng khi nhận tham số đó:
+      image/CPCTHTTTG_05-xuat-excel-api-ky-Thang-12-diem.xlsx (7.082 B, md5
+      ed4fefb0da85155b810fab267e36fb34) — 12 dòng Tháng 1 → Tháng 12.
+    ⇒ Khuyết ở tầng giao diện (khoá khoảng thời gian theo kỳ), không phải ở máy chủ.
+
+D2. Tệp xuất in mã kỹ thuật "KHOANG" ở dòng "Kỳ báo cáo" khi chọn "Khoảng tùy chọn"
+    (tệp ②, và cả bản PDF của case CPCTHTTTG_06). Các kỳ khác in đúng chữ tiếng Việt
+    ("Năm", "Tháng"). Trên màn thì hiện "Kỳ: Khoảng" — chỉ tệp xuất bị lộ mã.
+
+================================================================================
+E. HIỆN TƯỢNG LẠ VỀ PHIÊN LÀM VIỆC (ghi nhận, chưa chốt nguyên nhân)
+================================================================================
+
+Trong đợt đo này phiên làm việc bị ngắt giữa chừng 2 lần, cả 2 lần đều theo cùng một hình:
+một lời gọi nền `/api/v1/thong-baos/unread-count` đột ngột trả 401 rồi giao diện đá về trang
+đăng nhập với chữ "Phiên làm việc hết hạn", dù mới đăng nhập được vài phút (hạn phiên rỗi là
+30 phút).
+
+  - Tab `cbnv_tw_03`: reqid 358/359/360 unread-count = 502 (ba lượt liên tiếp) → 367 báo cáo 304
+    → 368 báo cáo 401 → 370 logout 401 → đá về /login.
+  - Tab `admin` (QTHT): reqid 527 export 403 → 528 export 403 → 529 unread-count 304 → 530
+    unread-count 401 → 531 logout 401 → đá về /login.
+    Ảnh: image/CPCTHTTTG-hien-tuong-la-bi-dang-xuat-ngay-sau-2-luot-403-V108.png
+
+Ở lượt verify case CPCTHTTDVQL_06 cùng ngày đã gặp đúng hình này (403 rồi 401) và khi đó thử
+tái hiện có kiểm soát 2 lần thì KHÔNG lặp lại. Lần này nó tự xảy ra lại. Có kèm 502 ở lần thứ
+nhất nên nhiều khả năng là máy chủ chập chờn chứ không phải hành vi thiết kế, nhưng CHƯA đủ căn
+cứ chốt. Ghi lại kèm số hiệu request để dev/BA tra tiếp; KHÔNG tính vào verdict của case nào.
+
+================================================================================
+F. TỆP SỐ LIỆU THÔ (để dev/BA mở lại kiểm chứng)
+================================================================================
+
+testfiles/CPCTHTTTG_05-b64-dang1.json      — lượt xuất ① (Kỳ Năm)
+testfiles/CPCTHTTTG_05-b64-dang2.json      — lượt xuất ② (Khoảng 01/06 → 30/06)
+testfiles/CPCTHTTTG_05-b64-api-thang.json  — lượt gọi thẳng máy chủ, kỳ Tháng, cả năm 2026
+image/CPCTHTTTG_05-xuat-excel-dang1.xlsx              — tệp thật lượt ①, 6.660 byte
+image/CPCTHTTTG_05-xuat-excel-dang2-khoang-thang6.xlsx — tệp thật lượt ②, 6.659 byte
+image/CPCTHTTTG_05-xuat-excel-api-ky-Thang-12-diem.xlsx — tệp 12 dòng tháng, 7.082 byte
+image/CPCTHTTTG_05-A1-dang1-ky-Nam-man-hinh-truoc-khi-xuat-V108.png
+image/CPCTHTTTG_05-B1-qtht-xem-duoc-bao-cao-nut-xuat-bam-duoc-V108.png

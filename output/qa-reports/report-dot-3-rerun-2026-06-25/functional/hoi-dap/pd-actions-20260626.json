@@ -1,0 +1,45 @@
+{
+  "ts": "2026-06-25T17:22:12.847Z",
+  "loginPdDp": {
+    "username": "cb_pd_dp_01",
+    "status": 429,
+    "body": {
+      "success": false,
+      "error": {
+        "code": "ERR-SYS-00-29-01",
+        "message": "Bạn đã thử quá nhiều lần. Vui lòng đợi khoảng 1 phút rồi thử lại.",
+        "timestamp": "2026-06-25T17:22:12.970Z",
+        "requestId": "19c074a2-4b89-4cae-94cf-d145d8409b09"
+      }
+    }
+  },
+  "publishXss": {},
+  "loginPdTw": {
+    "username": "cb_pd_tw_01",
+    "status": 429,
+    "body": {
+      "success": false,
+      "error": {
+        "code": "ERR-SYS-00-29-01",
+        "message": "Bạn đã thử quá nhiều lần. Vui lòng đợi khoảng 1 phút rồi thử lại.",
+        "timestamp": "2026-06-25T17:22:12.998Z",
+        "requestId": "cb1f22c9-8e86-4029-b763-75c9ce85fba2"
+      }
+    }
+  },
+  "crossClose": {},
+  "loginNvDp": {
+    "username": "cb_nv_dp_01",
+    "status": 429,
+    "body": {
+      "success": false,
+      "error": {
+        "code": "ERR-SYS-00-29-01",
+        "message": "Bạn đã thử quá nhiều lần. Vui lòng đợi khoảng 1 phút rồi thử lại.",
+        "timestamp": "2026-06-25T17:22:13.018Z",
+        "requestId": "3176ab90-048d-4fee-ae73-f47090841cbf"
+      }
+    }
+  },
+  "closeByNvDp": {}
+}

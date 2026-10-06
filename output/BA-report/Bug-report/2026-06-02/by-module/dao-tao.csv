@@ -1,0 +1,18 @@
+STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+8,Kế hoạch ĐT thiếu cột Hành động,✅ Đạt,PASS,TB,"R2 06-02: cột Hành động có (Xem/Sửa/Xóa) trên /ke-hoach/danh-sach"
+11,Ngân sách thiếu dấu ngăn cách,✅ Đạt,PASS,TB,"R2 06-02: ""100.000.000/900.000.000..."" dấu chấm, rỗng→""—"""
+12,CTĐT Dự thảo thiếu nút Sửa,✅ Đạt,PASS,TB,"R2 06-02: row Dự thảo có Xem+Sửa(enabled)+Xóa; row Đã duyệt Sửa vô hiệu (đúng spec)"
+13,Cột Lĩnh vực không hiển thị,✅ Đạt,PASS,Cao,"R2 06-02: cột Lĩnh vực có + populated (Doanh nghiệp...)"
+14,Lịch sử phê duyệt không auto-update,✅ Đạt,PASS,Thấp,Carry-fwd 28/05 (cần cb_pd workflow để trigger)
+15,"Đề xuất ""Đã tiếp nhận"" thiếu nút",✅ Đạt,PASS,Cao,"R2 06-02: tab ""Đề xuất đào tạo"" có (CB NV)"
+16,"Nút Hủy hiện ""Rút bản nháp""",✅ Đạt,PASS,Thấp,"Carry-fwd: đã đổi ""Hủy chương trình"" (06-01 confirm)"
+17,Học viên thiếu thêm + import,✅ Đạt,PASS,Cao,"R2 06-02: tab Học viên có ""Thêm học viên""+""Import Excel"""
+18,Buổi học bắt buộc Địa điểm sai,✅ Đạt,PASS,Cao,"R2 06-02: form Thêm buổi — Địa điểm KHÔNG required (chỉ bắt buộc nếu TRUC_TIEP)"
+19,Định dạng ngày trong báo lỗi,✅ Đạt,PASS,TB,"Carry-fwd: app dùng dd/mm/yyyy nhất quán (cần trigger ERR-LH-01)"
+20,Khóa học không hiện bài giảng,✅ Đạt,PASS,Cao,"R2 06-02: ""Gán bài giảng"" dropdown 10 bài giảng populate"
+21,Cache cũ khi mở Thêm mới,✅ Đạt,PASS,TB,"R2 06-02: form Thêm bài giảng mở rỗng (no cache)"
+22,Mô tả bài giảng bắt buộc sai,✅ Đạt,PASS,Cao,"R-verify 06-02 22:45: CHỐT PASS theo bug gốc (user quyết) — Mô tả bài giảng optional = đúng nghiệp vụ, có record NO MOTA. Lưu ý: SRS line 705 + entity BAI_GIANG §3.4.3.20:2402 vẫn ghi mo_ta=Y → đề xuất BA cập nhật SRS field Y→N cho khớp UI."
+23,Bài giảng thừa cột Khóa học,✅ Đạt,PASS,Cao,"R2 06-02: list [Tên/Loại/Dung lượng/Ngày tạo/Thao tác] — không cột Khóa học"
+24,Không xem preview PDF,✅ Đạt,PASS,TB,"R2 06-02: ""Xem trước"" mở iframe MinIO (:9000/htpldn/...) inline"
+26,Giảng viên thừa cột vai trò,✅ Đạt,PASS,Cao,"Carry-fwd: vai_tro chuyển cấp buổi (LICH_HOC_GIANG_VIEN); cột cấp-khóa đã bỏ"
+27,Lịch sử giảng dạy hiện mã,✅ Đạt,PASS,Cao,"R2 06-02: Lịch sử [Tên khóa/Thời gian/Vai trò/Trạng thái] data thật, no UUID leak"

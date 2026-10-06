@@ -1,0 +1,84 @@
+R4 RE-VERIFY — BUG-CK-MODAL-THIEU-ANH-TEP (QLCKCHTV_02)
+Ngay chay: 29/07/2026 ~16:50  |  Env: https://18.143.165.120.nip.io
+Tai khoan: cbnv_tw_01 (tao + cong khai) · cbpd_tw_01 (duyet)
+Thao tac hoan toan tren giao dien (khong goi API de ket luan).
+================================================================================
+
+PHAN 0 — DU LIEU THU: DUNG BAN GHI MOI, TAO SAU KHI DEV BAO DA SUA
+--------------------------------------------------------------------------------
+ Ly do: loi cu nam o ten tep LUU trong ban ghi. Neu chi mo lai ban ghi cu thi
+ khong tach duoc "da sua" voi "du lieu cu dong bang truoc luc sua".
+
+ Da dung moi trong luot 4:
+   Ma          : QA-20260729-0002
+   Linh vuc    : Thue
+   Anh dai dien: anh-dai-dien-R4.png   (191 B)
+   Tep dinh kem: tai-lieu-cong-khai-R4.pdf (407 B)
+   Mo ta       : 133 / 2000 ky tu
+   Luong       : [Them cau hoi] -> [Gui duyet] (cbnv_tw_01)
+                 -> [Duyet] (cbpd_tw_01) -> trang thai "Da duyet"
+                 -> mo chi tiet -> [Cong khai]
+
+ Ghi chu tai khoan: tai khoan cbpd_tw dang nhap tra ERR-AUTH-LOGIN-01
+ ("Ten dang nhap hoac mat khau khong dung"). Theo quy tac doi tai khoan cung
+ vai tro + cung cap, da chuyen sang cbpd_tw_01 (CB Phe duyet - Trung uong).
+ Viec doi nay khong doi pham vi du lieu cua phep thu.
+
+PHAN 1 — NOI DUNG HOP THOAI XAC NHAN CONG KHAI
+--------------------------------------------------------------------------------
+ Hang muc dac ta doi hoi          | Luot 3 (sang)              | Luot 4 (chieu)
+ ---------------------------------+----------------------------+-------------------
+ 1. Anh dai dien cong khai        | co muc, ten hien e01b5447- | co muc, ten hien
+                                  | (chuoi dinh danh tho),     | "anh-dai-dien-R4.png
+                                  | khong co anh xem truoc     | (191 B)" + CO anh
+                                  |                            | xem truoc 120x60
+ 2. Mo ta cong khai               | co                         | co (133/2000)
+ 3. Tep dinh kem cong khai        | co muc, ten hien cbb91a0e- | co muc, ten hien
+                                  |                            | "tai-lieu-cong-khai
+                                  |                            | -R4.pdf (407 B)"
+ => Luot 4: du CA 3 hang muc, ten tep hien dung ten that.
+
+PHAN 2 — NUT [XEM] TRONG HOP THOAI
+--------------------------------------------------------------------------------
+ Luot 3: bam [Xem] -> ca man hinh nhay sang trang 403 "Tep chua gan voi doi tuong"
+         (ERR-PERM-FILE-03), hop thoai bien mat.
+
+ Luot 4: bam [Xem] o CA HAI hang muc (anh va tep):
+   - Khong roi trang. URL van la /tv-nhanh/kho-cau-hoi/5223d5b1-...
+   - Hop thoai Cong khai VAN CON mo.
+   - Khong co chu 403 / ERR-PERM-FILE tren trang.
+   - Anh: mo lop xem truoc phong to duoc (co thanh cong cu zoom/xoay).
+   - Tep PDF: mo the lien ket target=_blank toi dia chi tep that,
+     duoi tep giu nguyen ten "tai-lieu-cong-khai-R4.pdf".
+
+ Cac lenh mang phat sinh khi bam [Xem] (doc de doi chung, khong dung de ket luan):
+   GET .../cong-khai-files                                    -> 200
+   GET .../cong-khai-files/fe6d558c-.../download              -> 200   (anh)
+   GET .../2026/07/fe6d558c-.../anh-dai-dien-R4.png?...       -> 200
+   GET .../cong-khai-files/336316a9-.../download              -> 200   (tep pdf)
+ Khong con ma 403 nao.
+
+PHAN 3 — CHAY HET LUONG, KHONG DUNG O CHO NHIN MAN HINH
+--------------------------------------------------------------------------------
+ Bam [Cong khai] trong hop thoai:
+   - Toast: "Da cong khai cau hoi"
+   - So lenh cong-khai gui di: 1  (khong lap)
+   - Bang danh sach sau do: QA-20260729-0002
+        Trang thai = "Cong khai"   |   cot Cong khai = "Cong khai"
+
+PHAN 4 — KIEM THEM BAN GHI CU (xem fix co phu du lieu tao TRUOC luc sua khong)
+--------------------------------------------------------------------------------
+ QA-20260727-0005 (tao luot 1) : ten hien "qa-anh-dai-dien.png (7.7 KB)"  -> DUNG
+ QA-20260728-0013 (tao luot 2) : ten hien "R2-CK-anh-dai-dien.png (204 B)" -> DUNG
+ Ca hai deu tai duoc anh xem truoc.
+ => Ban ghi cu KHONG bi ket ten dinh danh tho. Khong can lam sach du lieu cu.
+
+PHAN 5 — CAN CU DAC TA
+--------------------------------------------------------------------------------
+ Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/srs-fr-13-tv-nhanh.md
+ :538 — SCR-X2-01: click [Cong khai] -> modal xac nhan + hien thi anh dai dien /
+        mo ta cong khai / file dinh kem cong khai sap cong khai; xac nhan ->
+        SET cong_khai = 1 + trang_thai = CONG_KHAI + thoi_gian_dang_tai (BR-PUBLIC-03)
+ Da thoa: hop thoai cho soat du 3 hang muc, va xac nhan xong thi trang thai doi dung.
+
+KET LUAN: DAT — dong bug nay.

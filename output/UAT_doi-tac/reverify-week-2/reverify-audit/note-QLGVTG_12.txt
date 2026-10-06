@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+• Giảng viên được thử xóa thuộc đơn vị khác (An Giang) so với tài khoản kiểm thử (Trung ương) → hệ thống chặn với thông báo "Đơn vị của bạn khác đơn vị của giảng viên" (chốt chặn theo phạm vi đơn vị).
+• Do bị chặn theo đơn vị trước, chưa kiểm chứng được cảnh báo "đang phân công dạy N khóa".
+• SRS FR-III-11 (UC30) Processing (dòng 967) "Xóa: kiểm tra phân công → cảnh báo nếu đang dạy → xóa mềm" không nêu bước kiểm tra đơn vị; AC (dòng 976) "danh sách GV thuộc đơn vị" nhưng CB_NV_TW lại thấy GV đơn vị khác.
+• Verify: CB_NV_TW — xóa giảng viên cùng đơn vị chạy đúng (hiện xác nhận và xóa được).
+→ Đề nghị BA chốt: CB Trung ương có được xóa giảng viên đơn vị khác không; nếu có thì cần hiển thị cảnh báo số khóa đang phân công.

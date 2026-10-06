@@ -1,0 +1,20 @@
+⚠️ Cần BA xác nhận
+
+Cần BA chốt — chưa chuyển dev được vì đặc tả không có quy định để đối chiếu.
+Đã kiểm tra lại bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW) — đúng vai trò đối tác đã dùng. Đã tải file thật về và MỞ ĐỌC nội dung.
+
+⚠️ 1) Ý chính TÁI HIỆN ĐƯỢC nhưng phải để BA chốt.
+- Bảng đang rỗng ("Chưa có câu hỏi nào."), bấm Xuất Excel thì hệ thống vẫn tải về một file; không có thông báo nào chặn lại.
+- Nhưng bản đặc tả FR đang hiệu lực (srs-fr-13-tv-nhanh.md) KHÔNG có mục Xuất Excel cho Kho câu hỏi: phần xử lý chỉ tới bước 7, thanh công cụ chỉ khai 3 nút (Thêm câu hỏi / Nhập Excel / Làm mới). Đã tìm toàn bộ đặc tả v3.5, không có câu "Không có dữ liệu để xuất".
+- Ngược lại, tài liệu ghi nhận thay đổi (CHANGELOG v3 → v3.5, mục 9) lại khẳng định đã bổ sung nút Xuất Excel vào FR-X.2-01. Tức là mô tả đã chốt trong CHANGELOG nhưng chưa được gộp vào FR.
+- Vì vậy chưa có căn cứ để chấm là lỗi. Đề nghị BA chốt: khi không có dữ liệu thì chặn kèm thông báo, hay vẫn xuất file rỗng.
+
+❌ 2) Ý phụ "file xuất ra là file cũ của QLKCHTV_12" — KHÔNG tái hiện trên môi trường đang test.
+- Đã đo 3 lần với 3 phạm vi khác nhau và so kích thước file:
+  · không lọc, 13 bản ghi  → 8.075 byte
+  · lọc Lĩnh vực = Thuế, 6 bản ghi → 7.433 byte
+  · lọc từ khoá không khớp, 0 bản ghi → 6.655 byte
+  Ba kích thước khác nhau đúng theo số bản ghi, và file của lần lọc rỗng khi mở ra chỉ có dòng tiêu đề, không có dữ liệu cũ.
+- Giao diện cũng có truyền bộ lọc lên máy chủ (kiểm ở tầng mạng).
+- Giải thích cho quan sát trong video: tên file mà trình duyệt đề xuất có thêm "(1)", "(2)" là do trình duyệt tự đánh số khi trùng tên — máy chủ luôn đặt cùng một tên "kho-cau-hoi-{ngày}.xlsx" vì thiếu giờ phút (chính là ý (a) của QLKCHTV_12).
+- Đề nghị đối tác kiểm lại giúp: xuất 2 lần với 2 bộ lọc khác nhau rồi so kích thước từng file; nếu vẫn ra file giống hệt, gửi lại kèm kích thước file để bên mình dựng lại đúng tình huống.

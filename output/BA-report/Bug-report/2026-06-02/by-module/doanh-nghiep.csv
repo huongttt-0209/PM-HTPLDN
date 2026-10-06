@@ -1,0 +1,6 @@
+STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+29,Thêm tổ chức báo trùng sai,✅ Đạt,PASS,Cao,"R2 06-02: tạo DN tên TRÙNG ""Sông Hồng BKH"" + MST mới → ""Thêm DN thành công"", không báo trùng tên (chỉ MST unique)"
+30,Tổ chức Chờ duyệt thiếu nút,✅ Đạt,PASS,Cao,"R2 06-02: test đúng role cb_pd_tw_01 (CB Phê duyệt) — Tổ chức tư vấn ở Chờ phê duyệt hiện đủ nút Phê duyệt/Từ chối (danh sách + chi tiết), khớp FR-IV-NEW-04 (SRS:1132 role=CB_PD). DN không lifecycle (SRS:759). Khớp note gốc PD role thấy nút"
+31,Nút Sửa chuyển sang danh sách,✅ Đạt,PASS,TB,"R2 06-02: nút Sửa mở form /sua (không nhảy list); PATCH 200 lưu OK; §H7 redirect áp dụng cho create"
+39,DN không có Thêm mới (bn),✅ Đạt,PASS,Cao,"R2 06-02: cb_nv_bn_01 toolbar có ""Thêm mới"" (primary) — SRS:423 luôn hiển thị"
+40,Loại DN hiển thị id,✅ Đạt,PASS,Cao,"R2 06-02: dropdown Loại DN ""Doanh nghiệp tư nhân""/""Hộ kinh doanh"" — tên, no id/UUID"

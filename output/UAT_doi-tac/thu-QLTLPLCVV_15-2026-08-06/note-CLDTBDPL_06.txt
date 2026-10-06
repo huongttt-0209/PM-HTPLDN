@@ -1,0 +1,54 @@
+🔁 Còn lỗi — chuyển lại dev.
+
+Đo lại ngày 06/08/2026 trên bản dựng V1.0.8, màn Báo cáo thống kê → BC Chất lượng đào tạo.
+
+1) Phần đã hết lỗi: với tài khoản CB Nghiệp vụ Trung ương (cbnv_tw_05), bấm [Xuất Excel] và [Xuất PDF] đều
+   ra tệp bình thường, không còn thông báo "Không thể tạo file xuất. Vui lòng thử lại.". Đã mở tệp đọc nội
+   dung: đủ 4 mục đầu tệp (tên báo cáo · kỳ báo cáo · đơn vị · ngày tạo) theo srs-fr-11-bao-cao.md:1092, số
+   liệu khớp từng con số với màn hình (Tổng khóa học 7 · Tổng học viên 17 · Điểm trung bình 6,35 · Tỷ lệ đạt
+   28,6 %), bảng danh sách khóa học cộng dọc đúng bằng các số tổng (số học viên 2+3+2+3+2+1+4 = 17 · đếm số
+   dòng = 7 khóa học), và điểm trung bình tổng nằm đúng trong khoảng điểm của các khóa học thành phần. Đã đo
+   4 dạng (khóa học để trống · lọc khóa học A · lọc khóa học B · thu hẹp đơn vị = Sở Tư pháp Hà Nội) + 2 lượt
+   lặp + 1 lượt PDF + 3 lượt gọi thẳng máy chủ, tổng cộng 10 lượt xuất đều nhận được tệp.
+
+2) Tên tệp ĐẠT: hệ thống giao ra BaoCaoChatLuongDaoTao_20260806_1605.xlsx — đúng khuôn
+   {TênBáoCáo}_{YYYYMMDD_HHmm} mà đặc tả quy định (srs-fr-11-bao-cao.md:85, :86 và Phụ lục E §H8,
+   srs-v3.5.md:6716), có đủ phần giờ-phút và mang đúng tên loại báo cáo "chất lượng đào tạo". Hai lượt xuất
+   trong cùng ngày, khác phút, ra hai tên khác nhau nên không đè tệp của nhau. Đặc tả chỉ quy định khuôn tên
+   với phần tên là tên loại báo cáo, không ấn định đúng chuỗi "BaoCaoDaoTao"; tên hệ thống dùng chỉ dài hơn
+   chứ vẫn đúng loại báo cáo này, nên phần này không tính là lỗi. Tệp PDF cũng theo đúng khuôn đó.
+
+3) Phần CÒN LỖI (lý do chuyển lại dev): với vai trò Quản trị hệ thống (QTHT) — đúng vai trò trên cả hai ảnh
+   đối tác gửi — bấm [Xem báo cáo] thì hệ thống hiện ĐẦY ĐỦ số liệu (Tổng khóa học 7 · Tổng học viên 17 ·
+   Điểm trung bình 6 · Tỷ lệ đạt 28,6 %) và hai nút [Xuất Excel] / [Xuất PDF] vẫn ở trạng thái bấm được,
+   nhưng bấm [Xuất Excel] thì bị từ chối, không nhận được tệp nào, và chữ hiện ra cho người dùng chỉ là
+   "Forbidden" — chuỗi tiếng Anh thô của máy chủ. Tái hiện 19/19 lượt, cả định dạng Excel lẫn PDF (nhánh PDF
+   mở được hộp thoại tuỳ chọn in rồi mới báo lỗi ở bước cuối).
+
+   Đặc tả yêu cầu:
+   - srs-fr-11-bao-cao.md:117 (E7 / ERR-RPT-05): khi từ chối vì thiếu quyền, hệ thống phải cho người dùng
+     biết bằng tiếng Việt rằng họ không có quyền xem báo cáo.
+   - srs-fr-11-bao-cao.md:79: việc kiểm quyền nằm ở đầu luồng, nên bước Xem và bước Xuất phải nhất quán —
+     không cho xem đủ số liệu rồi mới chặn ở bước xuất.
+   - srs-fr-11-bao-cao.md:1052 và :1053: điều kiện hiển thị nút Xuất Excel / Xuất PDF chỉ là "Sau khi đã Xem
+     báo cáo", không kèm điều kiện vai trò.
+
+4) Ghi nhận thêm trong lúc đo (ngoài phần đối tác nêu, không tính vào kết luận của case): báo cáo này đang
+   thiếu hẳn phần kết quả chia theo đơn vị — đặc tả srs-fr-11-bao-cao.md:548 ghi phần đó có điều kiện hiển
+   thị "Luôn" và mô tả báo cáo ở :524 cũng nói "phân theo khóa học, đơn vị", nhưng cả dữ liệu máy chủ trả về
+   lẫn tệp xuất đều không có bảng tổng hợp nào theo đơn vị. Ngoài ra, hai lượt xuất trong CÙNG một phút đang
+   nhận trùng tên tệp (trình duyệt phải tự thêm đuôi "(1)"), trong khi Phụ lục E §H8 yêu cầu hệ thống tự
+   thêm hậu tố _1, _2 khi trùng tên. Cuối cùng, thẻ "Điểm trung bình" trên màn đang cắt phần thập phân (hiện
+   6 trong khi tệp và máy chủ là 6,35), còn bảng khóa học trên màn thì làm tròn 1 chữ số — ba cách hiển thị
+   khác nhau cho cùng một con số, dễ làm người dùng tưởng tệp lệch màn. Đề nghị dev xem cùng lần sửa.
+
+   Bộ lọc "Khóa học" của màn này chạy đúng: chọn hai khóa học khác nhau cho hai kết quả khác hẳn, và tệp xuất
+   bám đúng bộ lọc đang chọn.
+
+Tài khoản và dữ liệu đã dùng: cbnv_tw_05 (CB Nghiệp vụ - Trung ương, cấp TW) và admin (Quản trị hệ thống,
+cấp TW, cùng đơn vị Cục Bổ trợ tư pháp) — hai tài khoản chỉ khác nhau ở vai trò; kỳ Năm 01/01/2026 -
+31/12/2026, đơn vị Toàn quốc, dữ liệu sẵn có trên môi trường (7 khóa học đã chấm điểm, 17 học viên, trải 3
+đơn vị). Không tạo, sửa hay xoá bản ghi nào.
+
+Người xử lý tiếp: Dev BE (thống nhất quy tắc quyền giữa bước xem và bước xuất, trả thông báo từ chối theo
+:117) và Dev FE (không đẩy nguyên chuỗi kỹ thuật của máy chủ ra màn hình người dùng).

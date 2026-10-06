@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+- Web: màn Chi tiết DN KHÔNG hiển thị mục "Chỉ số tổng hợp" (Nhóm 5) — đúng như đối tác báo. Đã tìm toàn trang tab "Thông tin", không có section này; các chỉ số duy nhất là 3 KPI ở tab "Lịch sử hỗ trợ" (Tổng VV, VV hoàn thành, Tổng chi phí).
+- SRS v3.5 SCR-V.III-02 (FR-V.III-01, UC81, dòng 464–495) KHÔNG có mục "Chỉ số tổng hợp" ở màn Chi tiết DN. Mục này chỉ có trong thiết kế đối tác (HTPLDN-PTYC-CT-v2.0), không có trong SRS.
+- Hỏi BA: màn Chi tiết DN có bắt buộc bổ sung mục "Chỉ số tổng hợp" theo thiết kế đối tác không, hay theo SRS v3.5 (không có mục này) là đạt? Nếu BA chốt cần → thành yêu cầu bổ sung cho dev.
+- Verify: cbnv_tw (CB_NV_TW), DN-SEED-0001.

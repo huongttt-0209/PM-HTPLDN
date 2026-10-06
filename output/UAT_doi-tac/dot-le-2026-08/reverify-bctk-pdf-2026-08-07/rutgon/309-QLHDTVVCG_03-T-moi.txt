@@ -1,0 +1,35 @@
+❌ CÒN LỖI — gõ từ khóa tiếng Việt CÓ DẤU thì không tìm ra hợp đồng nào.
+
+TÁI HIỆN
+Bảng đang có 2 hợp đồng. Tên đầy đủ của HDTV-20260807-0006: "Hợp đồng tư vấn xác lập quyền sở hữu trí tuệ và nhãn hiệu cho doanh nghiệp nhỏ và vừa".
+1) Gõ "sở hữu trí tuệ" — cụm lấy NGUYÊN VĂN từ tên hợp đồng đang hiện ngay trên bảng → 0 kết quả, báo "Không tìm thấy hợp đồng phù hợp".
+2) Cặp đối chứng quyết định — hai từ đứng LIỀN NHAU trong cùng tên đó:
+   · gõ "doanh"  → ra 2 hợp đồng
+   · gõ "nghiệp" → ra 0 hợp đồng
+   Khác nhau duy nhất: "nghiệp" có dấu.
+3) Ô Bên B "Chuyên gia UAT QLNDTVVCG 38": "UAT" → 1 · "QLNDTVVCG" → 1 · "Chuyên" → 0.
+4) Gõ bản không dấu của chính những từ đó ("nghiep", "chuyen", "so huu tri tue") → cũng 0.
+⇒ QUY LUẬT: từ nào trong dữ liệu có dấu thì không tìm được, gõ kiểu nào cũng không ra. Chỉ tìm được bằng từ vốn đã không dấu (mã HĐ, "UAT", "doanh").
+Manh mối: chỉ chữ ASCII sống sót ⇒ nghi khâu xử lý chuỗi có dấu (mã ký tự lúc truyền hoặc lúc so khớp).
+
+VÌ SAO SAI
+Kết quả mong đợi của phiếu: "Có kết quả, hệ thống hiển thị danh sách hợp đồng phù hợp". srs-fr-14-hop-dong-tv.md:226 — tìm toàn văn trên tên HĐ · mã HĐ · bên B; :255 — nhập từ khóa phải trả về danh sách khớp. Chính ô tìm kiếm ghi gợi ý "Tìm theo tên HĐ, mã HĐ, bên B", đúng bằng 3 trường đặc tả. Tên hợp đồng trong hệ thống đều có dấu ⇒ người dùng gõ tên để tìm sẽ luôn rỗng, ô tìm kiếm gần như chỉ dùng được khi gõ trọn mã.
+
+DEV SỬA
+Gõ một từ/cụm tiếng Việt có dấu đang có trong tên HĐ hoặc bên B của hợp đồng xem được → phải trả hợp đồng đó về bảng. Áp thống nhất cho cả 3 trường.
+
+✅ ĐANG ĐÚNG, ĐỪNG PHÁ: gõ mã HĐ → còn đúng 1 dòng, "1-1 / 1 mục" · ghép nhiều từ theo AND (:227) · phân trang (:228).
+
+⚠️ KHÔNG tính lỗi: khớp theo từ trọn vẹn, không khớp mẩu chuỗi ("0007" → 0) · nội dung/ghi chú hợp đồng ngoài vùng tìm (:226) · thanh bên không có menu "Hợp đồng Tư vấn" — ĐÚNG BA chốt 06/08, QA đã vào từ Chi tiết Vụ việc đúng lối BA chỉ định, không tính là lỗi.
+
+KIỂM LẠI SAU FIX — cbnv_tw_03 → Chi tiết vụ việc VV-BTP-TW-20260804-002 → "HĐ tư vấn liên kết"
+1) Gõ cụm có dấu lấy nguyên văn từ tên hợp đồng trên bảng ("sở hữu trí tuệ").
+2) Gõ 1 từ có dấu chỉ khớp 1 hợp đồng ("nghiệp").
+3) Gõ 1 từ có dấu từ ô Bên B ("Chuyên").
+4) Gõ trọn mã HĐ — kiểm phần đang chạy đúng có bị phá không.
+✅ PASS: bước 1-3 ra đúng hợp đồng chứa từ khóa và loại hợp đồng không chứa; bước 4 vẫn ra 1 hợp đồng.
+❌ FAIL: bước 1-3 còn rỗng, hoặc bước 4 mất kết quả.
+
+ĐO: 07/08/2026 15:2x · env nội bộ 18.143.165.120.nip.io · bó mã index-BbPPdate.js · cbnv_tw_03 · 5 lượt tìm kiếm, mỗi lượt đối chiếu số liệu máy chủ (5/5 khớp) · không đổi dữ liệu nào. Phiếu chưa từng chạy ở đợt nghiệm thu nên đây là lượt đo đầu.
+
+ẢNH: "sở hữu trí tuệ" → rỗng https://drive.google.com/file/d/1VCmA9j7KjRNaBmgxRM99IWQR9s-HHrKd/view?usp=drivesdk · "doanh" → 2 dòng https://drive.google.com/file/d/1SdPtfO5oMifK8WknCCuJb2aDvV0Iq0PB/view?usp=drivesdk · "nghiệp" → 0 dòng https://drive.google.com/file/d/1HKYC0s9d8kvmrpeB6be5Q-XdVHvsnCE3/view?usp=drivesdk · mã HĐ → 1 dòng https://drive.google.com/file/d/176lLNuo0jHqY7NgtaWYvnwUGil6aPgvx/view?usp=drivesdk

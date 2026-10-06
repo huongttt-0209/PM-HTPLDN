@@ -202,7 +202,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 6 | `FR-V.I-06` | Kiểm tra hồ sơ yêu cầu | UC56 | SCR-V | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 7 | `FR-V.I-07` | Quản lý hồ sơ vụ việc | UC57 | SCR-V | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 8 | `FR-V.I-08` | Tìm kiếm hồ sơ | UC58 | SCR-V | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `TU_VAN_VIEN` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `PHAN_CONG_VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 10 | `FR-V.I-10` | Xác nhận tham gia hỗ trợ | UC60 | SCR-V | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 11 | `FR-V.I-11` | Trình phê duyệt | UC61 | — | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 12 | `FR-V.I-12` | Thông báo kết quả tiếp nhận | UC62 | SCR-V | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
@@ -210,7 +210,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 14 | `FR-V.I-14` | DN nhận thông báo | UC64 | — | `THONG_BAO` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 15 | `FR-V.I-15` | NHT cập nhật kết quả hỗ trợ | UC65 | SCR-V | `KET_QUA_VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 16 | `FR-V.I-16` | CB NV cập nhật kết quả VV | UC66 | SCR-V | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
-| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
+| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `DANH_GIA_VU_VIEC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 18 | `FR-V.I-NEW-01` | Thiết lập quy trình hỗ trợ TVPLDN | UCmới | — | `CAU_HINH_SLA` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
 
 ### ✅ FR-06 — Chi trả Chi phí
@@ -502,7 +502,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 6 | `FR-V.I-06` | Kiểm tra hồ sơ yêu cầu | UC56 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 7 | `FR-V.I-07` | Quản lý hồ sơ vụ việc | UC57 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 8 | `FR-V.I-08` | Tìm kiếm hồ sơ | UC58 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `TU_VAN_VIEN` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `PHAN_CONG_VU_VIEC` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 10 | `FR-V.I-10` | Xác nhận tham gia hỗ trợ | UC60 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 11 | `FR-V.I-11` | Trình phê duyệt | UC61 | — | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 12 | `FR-V.I-12` | Thông báo kết quả tiếp nhận | UC62 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
@@ -510,7 +510,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 14 | `FR-V.I-14` | DN nhận thông báo | UC64 | — | `THONG_BAO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 15 | `FR-V.I-15` | NHT cập nhật kết quả hỗ trợ | UC65 | SCR-V | `KET_QUA_VU_VIEC` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 16 | `FR-V.I-16` | CB NV cập nhật kết quả VV | UC66 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `DANH_GIA_VU_VIEC` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 18 | `FR-V.I-NEW-01` | Thiết lập quy trình hỗ trợ TVPLDN | UCmới | — | `CAU_HINH_SLA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-06 — Chi trả Chi phí
@@ -593,10 +593,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 19 | `FR-VIII-19` | Quản lý danh mục kênh tiếp nhận | UC117 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 20 | `FR-VIII-20` | Quản lý đăng nhập | UC118 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 21 | `FR-VIII-21` | Quản lý đăng xuất | UC119 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC191 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC192 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC193 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC194 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC120 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC121 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC122 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC123 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 26 | `FR-VIII-29` `[NEW v3.5 GAP-VIII-05]` | Quản lý ngày lễ (CRUD + import Excel + calendar view) | — | SCR-VIII-06 hoặc DM con | `NGAY_LE` | `CRUD` | ✅ F | ✓C+R+U+D / ✗— |
 
 ### ✅ FR-11 — Báo cáo Thống kê
 
@@ -799,7 +800,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 6 | `FR-V.I-06` | Kiểm tra hồ sơ yêu cầu | UC56 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 7 | `FR-V.I-07` | Quản lý hồ sơ vụ việc | UC57 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 8 | `FR-V.I-08` | Tìm kiếm hồ sơ | UC58 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `TU_VAN_VIEN` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `PHAN_CONG_VU_VIEC` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 10 | `FR-V.I-10` | Xác nhận tham gia hỗ trợ | UC60 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 11 | `FR-V.I-11` | Trình phê duyệt | UC61 | — | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 12 | `FR-V.I-12` | Thông báo kết quả tiếp nhận | UC62 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
@@ -807,7 +808,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 14 | `FR-V.I-14` | DN nhận thông báo | UC64 | — | `THONG_BAO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 15 | `FR-V.I-15` | NHT cập nhật kết quả hỗ trợ | UC65 | SCR-V | `KET_QUA_VU_VIEC` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 16 | `FR-V.I-16` | CB NV cập nhật kết quả VV | UC66 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `DANH_GIA_VU_VIEC` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 18 | `FR-V.I-NEW-01` | Thiết lập quy trình hỗ trợ TVPLDN | UCmới | — | `CAU_HINH_SLA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-06 — Chi trả Chi phí
@@ -890,10 +891,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 19 | `FR-VIII-19` | Quản lý danh mục kênh tiếp nhận | UC117 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 20 | `FR-VIII-20` | Quản lý đăng nhập | UC118 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 21 | `FR-VIII-21` | Quản lý đăng xuất | UC119 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC191 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC192 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC193 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC194 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC120 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC121 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC122 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC123 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 26 | `FR-VIII-29` `[NEW v3.5 GAP-VIII-05]` | Xem danh sách ngày lễ (calendar view, không CRUD) | — | SCR-VIII-06 hoặc DM con | `NGAY_LE` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-11 — Báo cáo Thống kê
 
@@ -1096,7 +1098,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 6 | `FR-V.I-06` | Kiểm tra hồ sơ yêu cầu | UC56 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 7 | `FR-V.I-07` | Quản lý hồ sơ vụ việc | UC57 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 8 | `FR-V.I-08` | Tìm kiếm hồ sơ | UC58 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `TU_VAN_VIEN` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `PHAN_CONG_VU_VIEC` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 10 | `FR-V.I-10` | Xác nhận tham gia hỗ trợ | UC60 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 11 | `FR-V.I-11` | Trình phê duyệt | UC61 | — | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
 | 12 | `FR-V.I-12` | Thông báo kết quả tiếp nhận | UC62 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
@@ -1104,7 +1106,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 14 | `FR-V.I-14` | DN nhận thông báo | UC64 | — | `THONG_BAO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 15 | `FR-V.I-15` | NHT cập nhật kết quả hỗ trợ | UC65 | SCR-V | `KET_QUA_VU_VIEC` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 16 | `FR-V.I-16` | CB NV cập nhật kết quả VV | UC66 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
-| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `VU_VIEC` | `CRUD*` | ✅ | ✓C+R*+U+D / ✗— |
+| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `DANH_GIA_VU_VIEC` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 18 | `FR-V.I-NEW-01` | Thiết lập quy trình hỗ trợ TVPLDN | UCmới | — | `CAU_HINH_SLA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-06 — Chi trả Chi phí
@@ -1187,10 +1189,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 19 | `FR-VIII-19` | Quản lý danh mục kênh tiếp nhận | UC117 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 20 | `FR-VIII-20` | Quản lý đăng nhập | UC118 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 21 | `FR-VIII-21` | Quản lý đăng xuất | UC119 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC191 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC192 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC193 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC194 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC120 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC121 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC122 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC123 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 26 | `FR-VIII-29` `[NEW v3.5 GAP-VIII-05]` | Xem danh sách ngày lễ (calendar view, không CRUD) | — | SCR-VIII-06 hoặc DM con | `NGAY_LE` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-11 — Báo cáo Thống kê
 
@@ -1393,7 +1396,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 6 | `FR-V.I-06` | Kiểm tra hồ sơ yêu cầu | UC56 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 7 | `FR-V.I-07` | Quản lý hồ sơ vụ việc | UC57 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 8 | `FR-V.I-08` | Tìm kiếm hồ sơ | UC58 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `TU_VAN_VIEN` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `PHAN_CONG_VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 10 | `FR-V.I-10` | Xác nhận tham gia hỗ trợ | UC60 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 11 | `FR-V.I-11` | Trình phê duyệt | UC61 | — | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 12 | `FR-V.I-12` | Thông báo kết quả tiếp nhận | UC62 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
@@ -1401,7 +1404,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 14 | `FR-V.I-14` | DN nhận thông báo | UC64 | — | `THONG_BAO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 15 | `FR-V.I-15` | NHT cập nhật kết quả hỗ trợ | UC65 | SCR-V | `KET_QUA_VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 16 | `FR-V.I-16` | CB NV cập nhật kết quả VV | UC66 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `DANH_GIA_VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 18 | `FR-V.I-NEW-01` | Thiết lập quy trình hỗ trợ TVPLDN | UCmới | — | `CAU_HINH_SLA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-06 — Chi trả Chi phí
@@ -1484,10 +1487,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 19 | `FR-VIII-19` | Quản lý danh mục kênh tiếp nhận | UC117 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 20 | `FR-VIII-20` | Quản lý đăng nhập | UC118 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 21 | `FR-VIII-21` | Quản lý đăng xuất | UC119 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC191 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC192 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC193 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC194 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC120 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC121 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC122 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC123 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 26 | `FR-VIII-29` `[NEW v3.5 GAP-VIII-05]` | Xem danh sách ngày lễ (calendar view, không CRUD) | — | SCR-VIII-06 hoặc DM con | `NGAY_LE` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-11 — Báo cáo Thống kê
 
@@ -1690,7 +1694,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 6 | `FR-V.I-06` | Kiểm tra hồ sơ yêu cầu | UC56 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 7 | `FR-V.I-07` | Quản lý hồ sơ vụ việc | UC57 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 8 | `FR-V.I-08` | Tìm kiếm hồ sơ | UC58 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `TU_VAN_VIEN` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `PHAN_CONG_VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 10 | `FR-V.I-10` | Xác nhận tham gia hỗ trợ | UC60 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 11 | `FR-V.I-11` | Trình phê duyệt | UC61 | — | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 12 | `FR-V.I-12` | Thông báo kết quả tiếp nhận | UC62 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
@@ -1698,7 +1702,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 14 | `FR-V.I-14` | DN nhận thông báo | UC64 | — | `THONG_BAO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 15 | `FR-V.I-15` | NHT cập nhật kết quả hỗ trợ | UC65 | SCR-V | `KET_QUA_VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 16 | `FR-V.I-16` | CB NV cập nhật kết quả VV | UC66 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `DANH_GIA_VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 18 | `FR-V.I-NEW-01` | Thiết lập quy trình hỗ trợ TVPLDN | UCmới | — | `CAU_HINH_SLA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-06 — Chi trả Chi phí
@@ -1781,10 +1785,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 19 | `FR-VIII-19` | Quản lý danh mục kênh tiếp nhận | UC117 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 20 | `FR-VIII-20` | Quản lý đăng nhập | UC118 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 21 | `FR-VIII-21` | Quản lý đăng xuất | UC119 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC191 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC192 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC193 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC194 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC120 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC121 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC122 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC123 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 26 | `FR-VIII-29` `[NEW v3.5 GAP-VIII-05]` | Xem danh sách ngày lễ (calendar view, không CRUD) | — | SCR-VIII-06 hoặc DM con | `NGAY_LE` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-11 — Báo cáo Thống kê
 
@@ -1987,7 +1992,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 6 | `FR-V.I-06` | Kiểm tra hồ sơ yêu cầu | UC56 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 7 | `FR-V.I-07` | Quản lý hồ sơ vụ việc | UC57 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 8 | `FR-V.I-08` | Tìm kiếm hồ sơ | UC58 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `TU_VAN_VIEN` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `PHAN_CONG_VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 10 | `FR-V.I-10` | Xác nhận tham gia hỗ trợ | UC60 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 11 | `FR-V.I-11` | Trình phê duyệt | UC61 | — | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 12 | `FR-V.I-12` | Thông báo kết quả tiếp nhận | UC62 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
@@ -1995,7 +2000,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 14 | `FR-V.I-14` | DN nhận thông báo | UC64 | — | `THONG_BAO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 15 | `FR-V.I-15` | NHT cập nhật kết quả hỗ trợ | UC65 | SCR-V | `KET_QUA_VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 16 | `FR-V.I-16` | CB NV cập nhật kết quả VV | UC66 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `DANH_GIA_VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 18 | `FR-V.I-NEW-01` | Thiết lập quy trình hỗ trợ TVPLDN | UCmới | — | `CAU_HINH_SLA` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-06 — Chi trả Chi phí
@@ -2078,10 +2083,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 19 | `FR-VIII-19` | Quản lý danh mục kênh tiếp nhận | UC117 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 20 | `FR-VIII-20` | Quản lý đăng nhập | UC118 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 21 | `FR-VIII-21` | Quản lý đăng xuất | UC119 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC191 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC192 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC193 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC194 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC120 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC121 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC122 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC123 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 26 | `FR-VIII-29` `[NEW v3.5 GAP-VIII-05]` | Xem danh sách ngày lễ (calendar view, không CRUD) | — | SCR-VIII-06 hoặc DM con | `NGAY_LE` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ✅ FR-11 — Báo cáo Thống kê
 
@@ -2284,7 +2290,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 6 | `FR-V.I-06` | Kiểm tra hồ sơ yêu cầu | UC56 | SCR-V | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 7 | `FR-V.I-07` | Quản lý hồ sơ vụ việc | UC57 | SCR-V | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 8 | `FR-V.I-08` | Tìm kiếm hồ sơ | UC58 | SCR-V | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `TU_VAN_VIEN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `PHAN_CONG_VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 10 | `FR-V.I-10` | Xác nhận tham gia hỗ trợ | UC60 | SCR-V | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 11 | `FR-V.I-11` | Trình phê duyệt | UC61 | — | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 12 | `FR-V.I-12` | Thông báo kết quả tiếp nhận | UC62 | SCR-V | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
@@ -2292,7 +2298,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 14 | `FR-V.I-14` | DN nhận thông báo | UC64 | — | `THONG_BAO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 15 | `FR-V.I-15` | NHT cập nhật kết quả hỗ trợ | UC65 | SCR-V | `KET_QUA_VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 16 | `FR-V.I-16` | CB NV cập nhật kết quả VV | UC66 | SCR-V | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
-| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `VU_VIEC` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `DANH_GIA_VU_VIEC` | `C†R*` | 🔌 | ✓C†+R* (API inbound Cổng PLQG) / ✗PUT→403/DELETE→403 |
 | 18 | `FR-V.I-NEW-01` | Thiết lập quy trình hỗ trợ TVPLDN | UCmới | — | `CAU_HINH_SLA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-06 — Chi trả Chi phí
@@ -2375,10 +2381,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 19 | `FR-VIII-19` | Quản lý danh mục kênh tiếp nhận | UC117 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 20 | `FR-VIII-20` | Quản lý đăng nhập | UC118 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 21 | `FR-VIII-21` | Quản lý đăng xuất | UC119 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC191 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC192 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC193 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC194 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC120 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC121 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC122 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC123 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 26 | `FR-VIII-29` `[NEW v3.5 GAP-VIII-05]` | Xem danh sách ngày lễ (calendar view, không CRUD) | — | SCR-VIII-06 hoặc DM con | `NGAY_LE` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ❌ FR-11 — Báo cáo Thống kê
 
@@ -2581,7 +2588,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 6 | `FR-V.I-06` | Kiểm tra hồ sơ yêu cầu | UC56 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 7 | `FR-V.I-07` | Quản lý hồ sơ vụ việc | UC57 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 8 | `FR-V.I-08` | Tìm kiếm hồ sơ | UC58 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `TU_VAN_VIEN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `PHAN_CONG_VU_VIEC` | `R*` (own) | 👁️ | ✓R* scope own / ✗POST→403/PUT→403/DELETE→403 |
 | 10 | `FR-V.I-10` | Xác nhận tham gia hỗ trợ | UC60 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 11 | `FR-V.I-11` | Trình phê duyệt | UC61 | — | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
 | 12 | `FR-V.I-12` | Thông báo kết quả tiếp nhận | UC62 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
@@ -2589,7 +2596,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 14 | `FR-V.I-14` | DN nhận thông báo | UC64 | — | `THONG_BAO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 15 | `FR-V.I-15` | NHT cập nhật kết quả hỗ trợ | UC65 | SCR-V | `KET_QUA_VU_VIEC` | `CRU*` | ✅ | ✓C+R*+U / ✗DELETE→403 |
 | 16 | `FR-V.I-16` | CB NV cập nhật kết quả VV | UC66 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
-| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `VU_VIEC` | `RU*` | 📝 | ✓R*+U / ✗POST→403/DELETE→403 |
+| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `DANH_GIA_VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 18 | `FR-V.I-NEW-01` | Thiết lập quy trình hỗ trợ TVPLDN | UCmới | — | `CAU_HINH_SLA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-06 — Chi trả Chi phí
@@ -2672,10 +2679,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 19 | `FR-VIII-19` | Quản lý danh mục kênh tiếp nhận | UC117 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 20 | `FR-VIII-20` | Quản lý đăng nhập | UC118 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 21 | `FR-VIII-21` | Quản lý đăng xuất | UC119 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC191 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC192 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC193 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC194 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC120 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC121 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC122 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC123 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 26 | `FR-VIII-29` `[NEW v3.5 GAP-VIII-05]` | Xem danh sách ngày lễ (calendar view, không CRUD) | — | SCR-VIII-06 hoặc DM con | `NGAY_LE` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ❌ FR-11 — Báo cáo Thống kê
 
@@ -2878,7 +2886,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 6 | `FR-V.I-06` | Kiểm tra hồ sơ yêu cầu | UC56 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 7 | `FR-V.I-07` | Quản lý hồ sơ vụ việc | UC57 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 8 | `FR-V.I-08` | Tìm kiếm hồ sơ | UC58 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `PHAN_CONG_VU_VIEC` | `—` | ❌ | ✓Không quyền (matrix v3.5:1289; SRS-C-005 narrative R* chờ BA) / ✗Truy cập = 403 / UI ẩn |
 | 10 | `FR-V.I-10` | Xác nhận tham gia hỗ trợ | UC60 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 11 | `FR-V.I-11` | Trình phê duyệt | UC61 | — | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 12 | `FR-V.I-12` | Thông báo kết quả tiếp nhận | UC62 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
@@ -2886,7 +2894,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 14 | `FR-V.I-14` | DN nhận thông báo | UC64 | — | `THONG_BAO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 15 | `FR-V.I-15` | NHT cập nhật kết quả hỗ trợ | UC65 | SCR-V | `KET_QUA_VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 16 | `FR-V.I-16` | CB NV cập nhật kết quả VV | UC66 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `DANH_GIA_VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 18 | `FR-V.I-NEW-01` | Thiết lập quy trình hỗ trợ TVPLDN | UCmới | — | `CAU_HINH_SLA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-06 — Chi trả Chi phí
@@ -2969,10 +2977,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 19 | `FR-VIII-19` | Quản lý danh mục kênh tiếp nhận | UC117 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 20 | `FR-VIII-20` | Quản lý đăng nhập | UC118 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 21 | `FR-VIII-21` | Quản lý đăng xuất | UC119 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC191 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC192 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC193 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC194 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC120 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC121 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC122 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC123 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 26 | `FR-VIII-29` `[NEW v3.5 GAP-VIII-05]` | Xem danh sách ngày lễ (calendar view, không CRUD) | — | SCR-VIII-06 hoặc DM con | `NGAY_LE` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ❌ FR-11 — Báo cáo Thống kê
 
@@ -3175,7 +3184,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 6 | `FR-V.I-06` | Kiểm tra hồ sơ yêu cầu | UC56 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 7 | `FR-V.I-07` | Quản lý hồ sơ vụ việc | UC57 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 8 | `FR-V.I-08` | Tìm kiếm hồ sơ | UC58 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `TU_VAN_VIEN` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
+| 9 | `FR-V.I-09` | Lựa chọn người hỗ trợ | UC59 | SCR-V | `PHAN_CONG_VU_VIEC` | `—` | ❌ | ✓Không quyền (matrix v3.5:1289; SRS-C-005 narrative R* chờ BA) / ✗Truy cập = 403 / UI ẩn |
 | 10 | `FR-V.I-10` | Xác nhận tham gia hỗ trợ | UC60 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 11 | `FR-V.I-11` | Trình phê duyệt | UC61 | — | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 12 | `FR-V.I-12` | Thông báo kết quả tiếp nhận | UC62 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
@@ -3183,7 +3192,7 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 14 | `FR-V.I-14` | DN nhận thông báo | UC64 | — | `THONG_BAO` | `R*` | 👁️ | ✓R* / ✗POST→403/PUT→403/DELETE→403 |
 | 15 | `FR-V.I-15` | NHT cập nhật kết quả hỗ trợ | UC65 | SCR-V | `KET_QUA_VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 16 | `FR-V.I-16` | CB NV cập nhật kết quả VV | UC66 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 17 | `FR-V.I-17` | Đánh giá kết quả hỗ trợ vụ việc | UC67 | SCR-V | `DANH_GIA_VU_VIEC` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 18 | `FR-V.I-NEW-01` | Thiết lập quy trình hỗ trợ TVPLDN | UCmới | — | `CAU_HINH_SLA` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 
 ### ✅ FR-06 — Chi trả Chi phí
@@ -3266,10 +3275,11 @@ Ví dụ: `QTHT` login → mở menu `Quản trị hệ thống > Danh mục dù
 | 19 | `FR-VIII-19` | Quản lý danh mục kênh tiếp nhận | UC117 | SCR-VIII-01: Quản lý Danh mục | `DANH_MUC` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 | 20 | `FR-VIII-20` | Quản lý đăng nhập | UC118 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
 | 21 | `FR-VIII-21` | Quản lý đăng xuất | UC119 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC191 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC192 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC193 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
-| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC194 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 22 | `FR-VIII-22` | Đăng ký tài khoản — Self-registration | UC120 | SCR-VIII-08: Dang ky Tai khoan | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 23 | `FR-VIII-23` | Đăng nhập bằng VNeID | UC121 | SCR-VIII-07: Dang nhap | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 24 | `FR-VIII-24` | Đăng xuất VNeID | UC122 | SCR-VIII-09: Dang xuat | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 25 | `FR-VIII-25` | Đồng bộ tài khoản VNeID | UC123 | — | `TAI_KHOAN` | `—` | ❌ | ✓Không quyền / ✗Truy cập = 403 / UI ẩn |
+| 26 | `FR-VIII-29` `[NEW v3.5 GAP-VIII-05]` | Xem danh sách ngày lễ (calendar view, không CRUD) | — | SCR-VIII-06 hoặc DM con | `NGAY_LE` | `R` | 👁️ | ✓R / ✗POST→403/PUT→403/DELETE→403 |
 
 ### ❌ FR-11 — Báo cáo Thống kê
 

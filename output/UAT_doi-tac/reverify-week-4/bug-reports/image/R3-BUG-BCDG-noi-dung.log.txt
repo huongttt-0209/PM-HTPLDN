@@ -1,0 +1,65 @@
+R3 RE-VERIFY — BUG-BCDG-XLSX-KHONG-THEO-MAU-TT17 (DGHQ_OOS_12)
+Ngay chay: 29/07/2026  |  Env: https://18.143.165.120.nip.io  |  Tai khoan: cbnv_tw_01
+Dot danh gia: DG-20260722-0001 'QA-THDG05-partial-save-test' > tab Bao cao
+Cach lay tep: bam nut [Xuat XLSX] va [Xuat DOCX] tren giao dien, doc Blob do chinh UI sinh ra.
+====================================================================================
+
+[1/3] KHUNG BIEU MAU TT17 — truoc day CHI co o ban Word
+------------------------------------------------------------------------------------
+   Thanh phan                                         .docx    .xlsx   
+   Quoc hieu (CONG HOA XA HOI CHU NGHIA VIET NAM)     CO       CO      
+   Tieu ngu (Doc lap - Tu do - Hanh phuc)             CO       CO      
+   Dong '(Theo mau Thong tu so 17/2025/TT-BTP)'       CO       CO      
+   Ten dot danh gia                                   CO       CO      
+   Ma ke hoach                                        CO       CO      
+   Muc I. SO LIEU TONG HOP                            CO       CO      
+   Muc II. CHI TIET KET QUA DANH GIA                  CO       CO      
+   Muc III. CHI TIEU HOAT DONG HTPLDN                 CO       CO      
+   Muc IV. NHAN XET TONG THE                          CO       CO      
+   Muc V. KIEN NGHI                                   CO       CO      
+   Dong 'Phan bo xep loai'                            CO       CO      
+   Bang ky — NGUOI LAP BAO CAO                        CO       CO      
+   Bang ky — THU TRUONG DON VI                        CO       CO      
+   => Lan truoc cot .xlsx toan bo la KHONG. Lan nay CO du.
+
+[2/3] O 'CHUA CO SO LIEU' — truoc day ban Excel ghi thanh so 0
+------------------------------------------------------------------------------------
+   Chi tieu                        Man hinh    .docx    .xlsx (lan truoc)   .xlsx (lan nay)
+   ------------------------------- ----------- -------- ------------------- ---------------
+   KP chi HĐ khác (NSNN)           --          —        0 (so nguyen)       —  [r36]
+   KP xã hội hóa                   --          —        0 (so nguyen)       —  [r37]
+   => Ca 3 noi nay deu the hien 'chua co so lieu', khong con o nao ghi so 0.
+
+[3/3] BANG CHI TIET KET QUA — truoc day thieu 3 cot so voi dac ta
+------------------------------------------------------------------------------------
+   Dac ta (srs-fr-08-danh-gia.md:882): Vu viec / DN / Linh vuc / Diem tung tieu chi / Diem tong / Xep loai
+   Lan truoc — ca 2 tep : Vu viec | Diem tong | Xep loai | Trang thai   (thieu DN, Linh vuc, Diem tung tieu chi)
+   Lan nay  — .xlsx     : STT | Vụ việc | Doanh nghiệp | Lĩnh vực | Điểm từng tiêu chí | Điểm tổng | Xếp loại
+   Lan nay  — .docx     : STT | Vụ việc | Doanh nghiệp | Lĩnh vực | Điểm từng tiêu chí | Điểm tổng | Xếp loại
+   => Ca 3 cot tung thieu (Doanh nghiep, Linh vuc, Diem tung tieu chi) nay deu co o CA HAI tep.
+
+   Noi dung bang trong .xlsx:
+     STT | Vụ việc | Doanh nghiệp | Lĩnh vực | Điểm từng tiêu chí | Điểm tổng | Xếp loại
+     1 | VV-BTP-TW-20260712-001 | Công ty TNHH Seed Publishable | Thương mại | Mức độ hoàn thành vụ việc: 8; Chất | 8.00 | Tốt
+     2 | EEE-VH-012 | Công ty TNHH Seed Publishable | Thương mại | Mức độ hoàn thành vụ việc: 10; Chấ | 8.90 | Tốt
+     3 | EEE-VH-011 | Công ty TNHH Seed Publishable | Thương mại | Mức độ hoàn thành vụ việc: 8; Chất | 7.70 | Tốt
+
+====================================================================================
+TONG KET
+ Diem                                                           Ket qua
+ -------------------------------------------------------------- --------
+ 1. Ban Excel khong co khung bieu mau TT17                       DA SUA
+ 2. Ban Excel ghi 0 cho o chua co so lieu                        DA SUA
+ 3. Bang chi tiet thieu 3 cot so voi dac ta (ca 2 tep)           DA SUA
+
+ => Ca 3 diem cua bug deu dat.
+
+ Khac biet nho con lai giua 2 tep (KHONG nam trong pham vi bug, ghi de dev biet):
+   - Khoi ky ten cua ban .docx co dong dia diem/ngay thang
+     ('..........., ngay 29 thang 7 nam 2026') dat tren 'THU TRUONG DON VI';
+     ban .xlsx chi co 'THU TRUONG DON VI', khong co dong nay.
+   - Tieu de muc III: .xlsx ghi 'III. CHI TIEU HOAT DONG HTPLDN (Nhom VI)',
+     .docx ghi 'III. CHI TIEU HOAT DONG HTPLDN' (khong co '(Nhom VI)').
+   - Bang chi tieu cua .docx co cot STT rieng; ban .xlsx danh so ngay trong nhan chi tieu.
+   Ba diem nay khong lam sai so lieu.
+

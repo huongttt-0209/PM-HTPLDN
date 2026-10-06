@@ -1,0 +1,20 @@
+PCNTHDG_11 — Trình phê duyệt → gửi thông báo CB PD — ACTION LOG (env 18.143)
+
+[cbnv_tw] đợt DG-20260720-0002 (Phân công, 1 người Demo/Trưởng nhóm, criteria 100%)
+- Bấm "Trình phê duyệt" → confirm modal: "Trình phê duyệt phân công? Phân công sẽ được gửi cho cán bộ phê duyệt." [Hủy] [Trình phê duyệt]
+- Xác nhận → POST /api/v1/ke-hoach-danh-gias/{id}/phan-congs/submit [200]
+- Toast: "Đã trình phê duyệt phân công"
+- Trạng thái đợt: Phân công → Chờ duyệt PC (CHO_DUYET_PC)
+- Thời điểm: ~2026-07-20 13:39-13:40
+
+CẦN VERIFY (từ phía cbpd_tw): notification "trình phê duyệt phân công" cho đợt này có xuất hiện trong /api/v1/thong-baos của cbpd_tw không.
+Notification API: GET /api/v1/thong-baos?page=1&pageSize=10 → data[] {title, noiDung, createdAt, read}
+
+=== VERIFY (phía cbpd_tw — CB Phê duyệt TW, cùng đơn vị) ===
+- cbpd_tw: vaiTro=CB_PD_TW, donViId=00000000-0000-4000-8000-000000000001 (TRÙNG donViId của cbnv_tw người tạo đợt → cùng đơn vị).
+- Đợt DG-20260720-0002 XUẤT HIỆN trong danh sách của cbpd_tw, trạng thái CHO_DUYET_PC (id eaf06391-...) → routing hàng đợi phê duyệt ĐÚNG.
+- GET /api/v1/thong-baos (cbpd_tw): 27 thông báo, MỚI NHẤT = 2026-07-16T15:20 (khóa học). KHÔNG có thông báo nào ngày 2026-07-20 (anyToday=false), KHÔNG có thông báo về phân công đánh giá / đợt DG-20260720-0002 (anyDanhGiaPhanCong=false). unread-count=27 không đổi.
+- Re-fetch sau vài phút: vẫn không có thông báo mới → không phải delay async.
+
+KẾT LUẬN: Sau khi cbnv_tw "Trình phê duyệt phân công" (đợt → CHO_DUYET_PC, hiện đúng trong hàng đợi CB PD), hệ thống KHÔNG gửi thông báo cho CB PD cùng đơn vị.
+SRS SCR-VI-01 #38 (dòng 864): "[Trình phê duyệt] (→ SET CHO_DUYET_PC + gửi TB CB PD)". Confirm modal cũng ghi "Phân công sẽ được gửi cho cán bộ phê duyệt". → thiếu thông báo = Open. Khớp báo cáo đối tác.

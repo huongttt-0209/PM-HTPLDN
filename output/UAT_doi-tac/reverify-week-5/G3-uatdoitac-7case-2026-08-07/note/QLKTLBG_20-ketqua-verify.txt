@@ -1,0 +1,15 @@
+✅ Đã hết lỗi.
+
+Đo 07/08/2026 17:22–17:27 trên https://htpldn-uat.ospgroup.vn, bản dựng V1.0.10, tài khoản vai trò Cán bộ Nghiệp vụ cấp Trung ương (đúng tác nhân đặc tả, srs-fr-03-dao-tao.md:751 và :828). Màn "Đào tạo, tập huấn" → "Kho tài liệu / Bài giảng"; mốc đối chứng khi chưa lọc là 7 bản ghi. Dựng bộ lọc không có kết quả ngay trên giao diện: gõ ZZQAKHONGTONTAI20260807 vào ô "Tìm theo tên bài giảng" (:1955) rồi bấm "Tìm kiếm" (:1960).
+
+Màn thật sự về 0 trước khi bấm xuất — kiểm 6 chiều, không kết luận bằng mắt: tổng bản ghi 0 · số trang 0 · dữ liệu trả về rỗng · đếm tay 0 dòng trên bảng · câu trạng thái rỗng nguyên văn "Không có bài giảng nào phù hợp." · vùng phân trang biến mất hoàn toàn.
+
+Triệu chứng "Màn hình không có nút chức năng" không còn tái hiện: thanh công cụ có nút "Xuất Excel" ở trạng thái dùng được; bấm 1 lần, hệ thống xử lý thành công, tạo tệp .xlsx thật và báo "Xuất dữ liệu thành công.".
+
+Tệp phản ánh đúng bộ lọc đang đặt — đã mở tệp đọc nội dung: DanhSachBaiGiang_20260807_1726.xlsx gồm 1 trang tính "Bài giảng", chỉ có dòng tiêu đề và 0 dòng dữ liệu. Đối chiếu 0 với 7 (tổng khi chưa lọc) chính là phép thử phân biệt: nếu chức năng xuất bỏ qua bộ lọc thì tệp phải ra đủ 7 dòng. Đáp ứng srs-fr-03-dao-tao.md:1952 và srs-v3.5.md:5570 (BR-DATA-06). Trùng kỳ vọng của phiếu — "xuất danh sách rỗng hoặc hiển thị thông báo không có dữ liệu" là kỳ vọng dạng "hoặc", hệ thống đã thực hiện nhánh thứ nhất.
+
+Đề nghị BA xác nhận (không chặn bàn giao, không đổi kết quả case này): khi bộ lọc không có kết quả, hệ thống tạo tệp rỗng kèm thông báo "Xuất dữ liệu thành công.", tức không báo cho người dùng biết là không có dữ liệu để xuất. Đặc tả nhóm Đào tạo, tập huấn không quy định tình huống tập kết quả rỗng (srs-fr-03-dao-tao.md:744–818, :821–877, :1941–1984), trong khi phân hệ khác đã chốt và chốt theo hai hướng khác nhau (srs-fr-13-tv-nhanh.md:155 chặn xuất, không tạo tệp rỗng; srs-fr-15-ct-htpldn.md:403 và :409 hiển thị thông báo không có dữ liệu). Đề nghị bổ sung quy định vào màn SCR-III-03 để thống nhất giữa các phân hệ.
+
+Phạm vi hiệu lực: môi trường và bản dựng nêu trên, tại thời điểm đo, trên 7 bài giảng thuộc đơn vị của tài khoản, với bộ lọc 0 kết quả dựng bằng ô tìm theo tên bài giảng. Lượt đo chỉ lọc và xuất; không tạo, sửa hay xóa bản ghi nào.
+
+Ảnh bằng chứng: https://drive.google.com/file/d/1tioBs0sJnBATVxDdsnExW_usnkfYItT_/view?usp=drivesdk (màn sau khi áp bộ lọc không có kết quả — bảng hiển thị "Không có bài giảng nào phù hợp.", không còn vùng phân trang, thanh công cụ có nút "Xuất Excel") · https://drive.google.com/file/d/16tJhTz8udpPxR9dmfvISQCuOBOaizG4W/view?usp=drivesdk (ngay sau khi bấm "Xuất Excel" trong khi màn đang ở trạng thái 0 bản ghi).

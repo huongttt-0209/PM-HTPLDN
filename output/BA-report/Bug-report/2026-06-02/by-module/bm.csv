@@ -1,0 +1,3 @@
+STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+47,Không có menu DS biểu mẫu,✅ Đạt,PASS,Cao,"R2 06-02: menu ""Danh sách biểu mẫu"" → /bieu-mau/danh-sach render SCR-VII-02 ""Biểu mẫu"" + [Thêm biểu mẫu] + list 21 dòng — SRS:632/371"
+48,Preview file biểu mẫu lỗi,✅ Đạt,PASS,TB,"R2 06-02: chi tiết BM PDF → nút ""Xem trước"" mở tab MinIO PDF inline (presigned, disposition=inline) render OK — SRS:654/374"

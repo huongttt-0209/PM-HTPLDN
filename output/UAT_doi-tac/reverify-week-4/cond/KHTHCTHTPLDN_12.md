@@ -1,0 +1,34 @@
+# Bảng đối chiếu điều kiện — KHTHCTHTPLDN_12 (row 31) — Đầu trang Chi tiết chương trình
+
+**Kết luận:** **BA confirm** cho cả 4 điểm — sửa từ `Reject, BA confirm` ngày 27/07/2026 sau audit ([AUDIT-reject-tuan-4.md](../reverify-audit/audit-reject-2026-07-27/AUDIT-reject-tuan-4.md)). Cả 4 điểm phiếu quan sát ĐÚNG; 2 điểm trước đây bị Reject đều dựa trên cùng lỗ hổng căn cứ đã dùng để đẩy 2 điểm kia sang BA.
+
+Phiếu nêu 4 điểm. Đo tách bạch từng điểm:
+
+- **Điểm 3 — "Chờ PD" viết tắt** → **đặc tả CÓ HAI DẠNG NHÃN, phải để BA chốt** (trước đây kết luận "hệ thống làm đúng, dev không sửa" — **rút lại**):
+  - `srs-fr-15-ct-htpldn.md:1120` viết nguyên văn *"[Du thao] -- **[Cho PD]** -- [Da duyet] -- [Cong bo] -- [Thuc hien] -- [Hoan thanh]"* (dạng viết tắt).
+  - **Nhưng `:1169`–`:1174` — `#### Bang nhan trang thai SM-KH-CTHTPL` — quy định nhãn chuẩn: `| CHO_PHE_DUYET | Cho phe duyet | Vang | --color-warning |`** ⇒ có một dòng đặc tả quy định nhãn đầy đủ "Chờ phê duyệt", đúng như kỳ vọng của phiếu.
+  - **Web cũng tự lệch nhau** (re-verify live 27/07 17:40, cùng phiên): thẻ lọc màn danh sách ghi **"Chờ phê duyệt"**, bước 2 thanh tiến trình ghi **"Chờ PD"**.
+  - ⇒ mâu thuẫn nguồn → `BA confirm`. Khuyến nghị "đề nghị dev không sửa" là kết luận vượt căn cứ, có thể khoá sai hướng fix.
+- **Điểm 4 — thiếu khối thông tin nhanh** → **thông tin KHÔNG mất, nhưng vẫn là BA confirm**. Cả 4 mục (Ngân sách, Thời gian, Đơn vị, Đối tượng) đều hiển thị đầy đủ ở phần "Thông tin" ngay bên dưới; `:1124`/`:1125`/`:1126`/`:1127`/`:1129` liệt kê chúng là các **trường** của phần Thông tin, và `grep -rniE "thông tin nhanh|thong tin nhanh" srs-v3.5/` → **0 hit**. Nhưng "khối tóm tắt riêng ở đầu trang" là **bố cục** — cùng loại chi tiết, cùng nguồn căn cứ thiếu (`dac-ta-man-hinh-chuc-nang-v2.md — MH-15.1` ở `:1096`, **không tồn tại trong repo**) như điểm 1–2. Chấm khác nhau trên cùng một lỗ hổng là không nhất quán ⇒ "thông tin không mất" chỉ hạ severity, không biến thành "đối tác báo lỗi không có thật".
+- **Điểm 1 — thanh điều hướng thiếu mã CT** và **điểm 2 — tiêu đề thiếu tên chương trình** → **quan sát đúng, không có căn cứ để chấm**. Đặc tả v3.5 không có dòng nào mô tả thanh điều hướng hay định dạng tiêu đề của **trang chi tiết** (`:1107` chỉ áp cho trang danh sách; bảng thành phần trang chi tiết bắt đầu từ `:1120`). → **BA-20** (đã cập nhật thêm câu hỏi cho điểm 3 + 4).
+
+| Điều kiện có thể đổi kết quả | Đối tác (evidence `partner-evidence/KHTHCTHTPLDN_12.jpg`) | Mình test (env nip.io, 27/07/2026 14:55) | GAP? |
+|---|---|---|:-:|
+| Vai trò / tài khoản | Ảnh cho thấy `CB_NV_TW` ("Cán bộ NV Trung ương"), đơn vị BTP · TW | `cbnv_tw` — CB Nghiệp vụ - Trung ương, BTP · TW; đo lại bằng `cbpd_tw` để chắc đầu trang không đổi theo quyền | Không |
+| Entity + trạng thái (state machine) | Chương trình `CT-20260720-0001` ở trạng thái **Dự thảo** — trang chi tiết mở ở dạng biểu mẫu nhập liệu, có nút Lưu / Đệ trình duyệt / Hủy CT | Chương trình `CT-20260721-0002` ở trạng thái **Đang thực hiện**, và đối chiếu thêm `CT-20260725-0002` (Đã duyệt), `CTHTPL-SEED-0001` (Đã công bố), `CT-20260721-0003` (Hoàn thành). **Khác trạng thái so với đối tác** nhưng 4 điểm phiếu nêu đều thuộc phần đầu trang, hiển thị giống nhau ở mọi trạng thái — đã kiểm chéo trên 4 bản ghi để khẳng định điều đó | Không |
+| Dữ liệu tiền đề | Chương trình có đủ tên, lĩnh vực, mục tiêu | Chương trình có đủ tên, mục tiêu, đối tượng, mốc thời gian, ngân sách — nghĩa là nếu khối thông tin nhanh có tồn tại thì đủ dữ liệu để nó hiện ra, không thể ẩn vì thiếu dữ liệu | Không |
+| Input / filter / giá trị nhập | Mở màn danh sách → bấm Xem chi tiết | Mở màn danh sách → bấm nút Xem trên dòng. Đọc thanh điều hướng, tiêu đề, từng bước của thanh tiến trình và toàn bộ nhãn — giá trị trong phần Thông tin bằng mã lệnh thay vì chỉ nhìn ảnh | Không |
+
+## Artifact real-data (Gate bằng chứng — loại claim: Bố cục / nhãn hiển thị)
+
+- `partner-evidence/KHTHCTHTPLDN_12.jpg` — đã mở đọc: trang chi tiết `CT-20260720-0001`. Thanh điều hướng *"Trang chủ / Chương trình HTPLDN / Chi tiết"*; tiêu đề *"CT-20260720-0001"* kèm nhãn *"Dự thảo"*; thanh tiến trình 6 bước với bước 2 ghi *"Chờ PD"*; ngay dưới là phần Thông tin (Đơn vị, Mã CT, Tên chương trình, Lĩnh vực pháp luật, Mục tiêu...). Trùng khít với môi trường QA.
+- `bug-reports/image/BUG-CT-chi-tiet-dau-trang-va-thanh-tien-trinh.png` — đã mở đọc: trang chi tiết `CT-20260721-0002`. Thanh điều hướng *"Chương trình HTPLDN / Chi tiết"*; tiêu đề *"CT-20260721-0002"* kèm nhãn *"Đang thực hiện"*; thanh tiến trình 6 bước — 4 bước đầu có dấu tích, bước 5 "Thực hiện" đang nổi bật, bước 6 "Hoàn thành" mờ; bước 2 ghi *"Chờ PD"*.
+
+## Phương pháp thứ hai (bắt buộc)
+
+- **Tách 4 điểm ra đo riêng thay vì chấm cả gói.** Gộp lại thì dễ kết luận "phiếu đúng" hoặc "phiếu sai" một cách thô. Tách ra mới thấy 2 điểm hệ thống làm đúng, 2 điểm không có căn cứ.
+- **Đọc chuỗi hiển thị bằng mã lệnh, không suy từ ảnh.** Thanh điều hướng trả về `"Trang chủ / Chương trình HTPLDN / Chi tiết"`; tiêu đề trả về `"CT-20260721-0002"`; 6 bước tiến trình trả về `["Dự thảo","Chờ PD","Đã duyệt","Công bố","5 Thực hiện","6 Hoàn thành"]`. Xác nhận được điểm 1, 2, 3 của phiếu là quan sát đúng.
+- **Phép thử quyết định cho điểm 4 — kiểm thông tin có mất thật không.** Đọc toàn bộ cặp nhãn — giá trị trong phần Thông tin: `Đơn vị: Cục Bổ trợ tư pháp - Bộ Tư pháp` · `Thời gian bắt đầu: 01/02/2026` · `Thời gian kết thúc: 30/11/2026` · `Ngân sách (VNĐ): ₫100.000.000` · `Đối tượng thụ hưởng: Doanh nghiệp nhỏ và vừa`. ⇒ Cả 4 mục phiếu nói "thiếu" đều **đang hiển thị**; khác biệt chỉ là chúng nằm trong phần Thông tin thay vì gom thành một khối tóm tắt riêng.
+- **Kiểm chéo trên nhiều trạng thái để loại giả thuyết "đầu trang đổi theo trạng thái".** Mở thêm 3 chương trình ở Đã duyệt, Đã công bố, Hoàn thành: thanh điều hướng, dạng tiêu đề và thanh tiến trình giữ nguyên cách hiển thị. ⇒ Kết luận không phụ thuộc việc QA test trên bản ghi khác trạng thái với đối tác.
+- **Đối chiếu đặc tả — trích nguyên văn cho điểm quyết định được:** `srs-fr-15-ct-htpldn.md:1120` — *"| 9 | content | Thanh tien trinh (C17) | progress-bar | [Du thao] -- **[Cho PD]** -- [Da duyet] -- [Cong bo] -- [Thuc hien] -- [Hoan thanh] | -- | luon hien thi |"*. Đặc tả tự dùng dạng viết tắt "Cho PD" ⇒ điểm 3 của phiếu không phải lỗi; nếu dev đổi thành "Chờ phê duyệt" thì lại lệch đặc tả.
+- **Nêu rõ giới hạn của căn cứ cho 2 điểm còn lại, không tự suy diễn:** bảng thành phần trang chi tiết bắt đầu từ dòng 9 (`:1120`, thanh tiến trình) — **không có dòng nào cho thanh điều hướng hay tiêu đề**. Mức chi tiết mà phiếu mô tả (tiêu đề dạng `{Mã}: {Tên}`, bước đã xong có dấu tích xanh, bước sau hiển thị mờ) thuộc bản đặc tả màn hình mà chính SRS trỏ tới ở `:1096` — *"**UX-Spec ref:** dac-ta-man-hinh-chuc-nang-v2.md -- MH-15.1"*. **Bản này không có trong bộ SRS v3.5 QA đang dùng**, nên QA không kiểm được và chuyển BA-20 thay vì đoán.

@@ -1,0 +1,5 @@
+☑️ Đã kiểm tra lại trên UAT — không tái hiện.
+- Vị trí kiểm tra: Vụ việc HTPL → Gửi yêu cầu hỗ trợ pháp lý → Loại giấy tờ “Khác” → tải tệp đính kèm.
+- Với tệp `CNKQHT_07.webm` 135.071 KB như bằng chứng đối tác, hệ thống chặn ngay và báo rõ định dạng không được hỗ trợ, kèm danh sách định dạng được chấp nhận; trang và form vẫn hoạt động.
+- Kiểm tra tách riêng bằng tệp PDF lớn hơn 20MB, hệ thống cũng chặn ngay và báo rõ “Kích thước vượt quá giới hạn 20MB”.
+- Cách kiểm tra lại: lặp hai input trên; đạt khi mỗi lần có đúng một cảnh báo cụ thể, tệp không được thêm vào form và trang không chuyển sang “This page couldn’t load”.

@@ -1,0 +1,10 @@
+⚠️ Cần BA xác nhận.
+- Đặc tả đang tự mâu thuẫn về SỐ LƯỢNG thẻ trạng thái của màn danh sách Tổ chức tư vấn.
+- Phần màn hình khẳng định 6 thẻ ở ba chỗ độc lập: dòng 1610 ("Danh sách 6 tab"), dòng 1617 ("Hiển thị 6 tab") và bảng thành phần dòng 1625 đến 1630 liệt kê đủ 6 thẻ.
+- Nhưng Tiêu chí chấp nhận của chính chức năng lại ghi "3 tab trạng thái" (dòng 1129).
+- Thực tế phần mềm: Cán bộ Phê duyệt thấy 6 thẻ; Cán bộ Nghiệp vụ thấy 5 thẻ vì thẻ "Chờ phê duyệt" chỉ hiện với Cán bộ Phê duyệt, đúng như dòng 1628 quy định. Không vai trò nào thấy 3 thẻ.
+⚠️ Câu hỏi gửi BA: số thẻ đúng là 6 hay 3? Đề nghị chốt một con số rồi sửa chỗ còn lại cho khớp, vì chừng nào dòng 1129 còn ghi "3 tab" thì mọi lượt kiểm sau vẫn báo lệch. Tổ kiểm thử nghiêng về 6 vì phần màn hình mô tả chi tiết hơn, nhất quán ở ba chỗ và khớp với phần mềm; nhưng không tự chốt vì đây là hai phần của cùng một tài liệu đã duyệt.
+- Rút lại một ý so với lượt trước: ý "thứ tự các thẻ khác đặc tả" đã được rà lại và rút, vì bảng thành phần màn hình là bảng liệt kê thành phần chứ không phải bản vẽ bố cục, không đủ căn cứ coi thứ tự là ràng buộc bắt buộc. Phần mềm xếp thẻ khác thứ tự liệt kê nhưng đủ thẻ, không thiếu thẻ nào.
+- Ghi chú tham chiếu: chức năng "Quản lý Tổ chức tư vấn" (FR-IV-NEW-01) trong đặc tả không được cấp mã UC (dòng 1029 ghi "chưa có trong CSV"), nên chỉ nêu tên chức năng và số dòng.
+- Đã đưa vào file gửi BA: ba-confirmation-needed-luong4-to-chuc-tu-van-2026-08-03.md, mục 2.
+- Kiểm bằng vai trò Cán bộ Phê duyệt Trung ương (cbpd_tw_04), bản dựng HTPLDN V1.0.5.

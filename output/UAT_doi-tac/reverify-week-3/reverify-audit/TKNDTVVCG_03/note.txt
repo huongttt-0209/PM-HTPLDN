@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web hiện tại (vai trò Cán bộ Nghiệp vụ Trung ương): nhập tên doanh nghiệp vào ô tìm kiếm màn Danh sách Tư vấn chuyên sâu → hệ thống trả "Không có nội dung tư vấn chuyên sâu nào." dù tồn tại bản ghi gắn đúng tên DN đó.
+- Kiểm chứng: có 1 bản ghi gắn DN "Công ty TNHH Seed Publishable". Tìm đúng tên DN này (hoặc phần đặc trưng "Publishable"/"TNHH") đều ra 0 kết quả; trong khi tìm theo mã "TVCS-SEED-0001" hoặc theo nội dung "bảo mật" đều ra 1 kết quả → chỉ phần tìm theo tên DN bị hỏng (không phải do từ khóa quá ngắn: cả tên DN đầy đủ cũng ra 0).
+- Theo SRS FR-X.1-02 (UC148) §Processing (dòng 364) và FR-X.1-01 (UC147), màn SCR-X1-01 §Thành phần màn hình (dòng 1092): ô tìm kiếm toàn văn phải tìm được theo tên DN.
+- Phát hiện thêm: tìm theo tiêu đề cũng không ra kết quả (vd "hợp đồng", "thương mại") — chi tiết trong bug-report.
+- Verify: tài khoản cbnv_tw_01 (CB_NV_TW), đơn vị BTP·TW. API tìm kiếm trả dữ liệu rỗng (total=0) → lỗi phía backend.
+- Bug ID: BUG-TKNDTVVCG_03.

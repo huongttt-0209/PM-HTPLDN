@@ -1,0 +1,4 @@
+✅ Bug đúng – chuyển dev.
+• Thanh tìm kiếm Giảng viên/Trợ giảng có: ô từ khóa (họ tên/chuyên ngành), Lĩnh vực, Trạng thái → thiếu bộ lọc Vai trò.
+• SRS FR-III-12 (UC31 – Inputs, dòng 981–992): tìm kiếm GV phải có bộ lọc Vai trò (Giảng viên / Trợ giảng).
+• Verify: CB_NV_TW, màn Giảng viên/Trợ giảng. Bug ID: BUG-TKGVTG_02.

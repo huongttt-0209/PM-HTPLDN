@@ -1,0 +1,14 @@
+{
+  "Tuần": "Tuần 3",
+  "Mã TC": "BCTK_QA03",
+  "Tên chức năng": "Báo cáo thống kê — BC Vụ việc đang hỗ trợ",
+  "Mô tả": "Báo cáo thống kê — QA phát hiện ngoài phạm vi (không thuộc case nào của đối tác), phát sinh khi verify phiếu VVDHT_01 và VVDHT_06.\n\nBảng \"Thống kê theo người hỗ trợ\" của BC Vụ việc đang hỗ trợ có một dòng không có tên người, giao diện hiển thị thành \"(Không xác định)\" tuy dòng đó đang gánh 2 vụ việc thật. Dữ liệu máy chủ trả về cho dòng này có mã người hỗ trợ nhưng trường tên để rỗng. Cùng với đó, chính người này KHÔNG có trong danh sách chọn của bộ lọc \"NHT phụ trách\" nên người dùng không thể lọc ra 2 vụ việc đó để xem là của ai.",
+  "Điều kiện": "1. Đăng nhập bằng tài khoản cấp Trung ương (để xem được phạm vi Toàn quốc)\n2. Trong kỳ có ít nhất một vụ việc đang hỗ trợ được phân công cho người hỗ trợ nằm ngoài danh sách Tư vấn viên của bộ lọc",
+  "Dữ liệu đầu vào": "Loại báo cáo: BC Vụ việc đang hỗ trợ. Kỳ báo cáo: Năm (01/01/2026 – 31/12/2026). Đơn vị: Toàn quốc.\nTài khoản đo: Cán bộ Phê duyệt Trung ương, cấp TW. Bản dựng V1.0.8, môi trường 18.143.165.120.nip.io. Thời điểm tạo báo cáo: 06/08/2026 14:42.",
+  "Các bước thực hiện": "1. Đăng nhập, vào menu \"Báo cáo thống kê\"\n2. Chọn Loại báo cáo \"BC Vụ việc đang hỗ trợ\", Kỳ báo cáo \"Năm\", Đơn vị \"Toàn quốc\", để trống \"NHT phụ trách\"\n3. Nhấn [Xem báo cáo]\n4. Cuộn xuống bảng \"Thống kê theo người hỗ trợ\", đọc từng dòng\n5. Mở lại danh sách chọn của bộ lọc \"NHT phụ trách\", tìm người tương ứng với dòng không có tên",
+  "Kết quả mong đợi": "Theo đặc tả srs-fr-11-bao-cao.md:261 (FR-IX-03, output đặc thù #5), phần thống kê theo người hỗ trợ luôn phải kèm họ tên của người đó. Người dùng đọc báo cáo phải biết được ai đang phụ trách bao nhiêu vụ việc; và nếu báo cáo đã nêu tên một người thì người dùng phải lọc lại được theo đúng người đó để xem chi tiết.",
+  "Kết quả thực tế": "Bảng \"Thống kê theo người hỗ trợ\" hiện 2 dòng: \"QA TVV Seed28 Active\" (6 vụ việc, 2 quá hạn) và \"(Không xác định)\" (2 vụ việc, 0 quá hạn).\nDữ liệu máy chủ trả về cho dòng thứ hai có mã người hỗ trợ acf00fb8-10a0-46f9-a79c-b6bc40f7372b nhưng trường tên là chuỗi rỗng.\nDanh sách chọn của bộ lọc \"NHT phụ trách\" có 42 mục, không mục nào ứng với mã người này — nên không có cách nào lọc ra 2 vụ việc đó từ màn báo cáo.\n\nẢnh hưởng người dùng: 2 trong tổng số 22 vụ việc đang hỗ trợ không quy được về ai, và cũng không tra tiếp được — báo cáo mất khả năng dùng để theo dõi trách nhiệm xử lý.",
+  "Ảnh/vieo 1": "https://drive.google.com/file/d/1fhdxlqWJr9ouL37GHXA4mFyUdPVq-BQh/view?usp=drivesdk",
+  "Trạng thái": "Fail",
+  "Dopai": "bug"
+}

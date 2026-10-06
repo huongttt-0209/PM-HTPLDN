@@ -1,0 +1,26 @@
+✅ ĐÃ HẾT LỖI. Đo lại 07/08/2026 lúc 16:57–17:06 trên bản dựng mới nhất (nhãn HTPLDN · V1.0.10), trên đúng bản ghi mà phiếu nêu: TVCS-20260803-0003. Vì bản ghi đang ở trạng thái "Tiếp nhận", đã dựng lại đúng bối cảnh của phiếu bằng thao tác thật trên giao diện: Cán bộ Nghiệp vụ Trung ương bấm [Phân công] giao cho chuyên gia QA TVV Seed28 Active, rồi đăng nhập chính tài khoản chuyên gia đó bấm [Từ chối nhiệm vụ]. Sau khi từ chối, hồ sơ tự quay về đúng trạng thái "Tiếp nhận" và không còn gắn chuyên gia — tức không để lại thay đổi nào cho dữ liệu nghiệp vụ.
+
+LÝ DO TỪ CHỐI ĐÃ NHẬP (có dấu nhận dạng riêng để không lẫn với lượt đo cũ)
+"QA G2 OOS04 - ly do tu choi luot moi luc 20260807-1700 - ma nhan dang RJ7A9K"
+
+ĐO BẰNG HAI ĐƯỜNG, ĐÚNG HAI ĐƯỜNG MÀ PHIẾU ĐÃ DÙNG
+1) Khối "Nhật ký thao tác" trên màn chi tiết (đã bấm mở khối này ra, vì mặc định nó ở dạng thu gọn), đọc bằng vai trò Cán bộ Nghiệp vụ Trung ương: dòng mới nhất ghi "07/08/2026 16:59 · Từ chối phân công · QA TVV Seed28 Active (qa_tvvseed28)" và khối nhật ký nay có hẳn cột "Lý do", hiển thị đúng nguyên văn chuỗi đã nhập ở trên.
+2) Bản ghi nhật ký đọc trực tiếp từ hệ thống: trước đây có 18 trường và không trường nào mang lý do; nay có 19 trường, bổ sung đúng trường còn thiếu là trường lý do, và trường này chứa đúng nguyên văn chuỗi đã nhập.
+
+BA TRIỆU CHỨNG PHIẾU NÊU ĐỀU KHÔNG CÒN
+- Nhãn hành động không còn bị gộp thành "Cập nhật": nay là "Từ chối phân công", đứng riêng và phân biệt rõ với "Cập nhật", "Phân công", "Tạo mới", "Xem tư liệu pháp lý".
+- Giao diện đã có chỗ chứa lý do: cột "Lý do" trong bảng nhật ký.
+- Tầng dữ liệu đã có trường mang lý do.
+
+LÝ DO KHÔNG BỊ MẤT HAY GHI ĐÈ VỀ SAU
+Trên cùng hồ sơ này còn một lượt từ chối cũ ngày 07/08/2026 lúc 00:45 với lý do khác. Sau khi hồ sơ được phân công lại lúc 16:57 và bị từ chối lần nữa lúc 16:59 với lý do mới, lượt từ chối cũ vẫn giữ nguyên lý do riêng của nó. Nghĩa là lý do được lưu theo từng dòng nhật ký, không phải một ô dùng chung bị đè mỗi lần thao tác.
+
+PHẦN HIỂN THỊ CÓ KIỂM SOÁT THEO VAI TRÒ CŨNG ĐÚNG
+Mở đúng hồ sơ đó bằng chính tài khoản chuyên gia: vẫn thấy đủ các dòng nhật ký và vẫn thấy nhãn "Từ chối phân công", nhưng cột "Lý do" hiển thị dấu gạch ở tất cả các dòng — chuyên gia không đọc được nội dung lý do. Đây đúng yêu cầu mà BA đã chốt ngày 06/08/2026 khi phê phần cải tiến "hiện lý do có kiểm soát".
+
+MỘT ĐIỂM GHI NHẬN, KHÔNG TÍNH LÀ LỖI
+Đặc tả mô tả phần lý do như một dòng phụ nằm dưới dòng nhật ký, còn hệ thống trình bày thành một cột "Lý do" trong bảng. Đây là khác biệt về cách trình bày của cả khối nhật ký, không thuộc triệu chứng mà phiếu phản ánh, và nội dung bắt buộc thì đã hiện đủ và đúng phân quyền, nên không giữ phiếu ở trạng thái còn lỗi vì điểm này.
+
+ĐÃ HẾT LỖI — ĐỪNG ĐỤNG LẠI: việc ghi nhật ký kèm lý do cho thao tác chuyên gia từ chối phân công, gồm cả nhãn hành động riêng và quy tắc chỉ vai trò nội bộ mới đọc được lý do.
+
+GIỚI HẠN HIỆU LỰC: kết quả trên ứng với bản dựng đã đo ngày 07/08/2026. Đề nghị xác nhận lại khi chính bản dựng này được đưa lên môi trường nghiệm thu.

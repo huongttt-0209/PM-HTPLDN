@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: ô tìm kiếm màn danh sách đợt đánh giá trả 0 kết quả khi từ khóa có dấu tiếng Việt. Gõ đúng tên đầy đủ một đợt đang tồn tại vẫn báo "Không có kế hoạch đánh giá nào phù hợp"; chỉ ra kết quả khi từ khóa không dấu.
+- Đã kiểm (tài khoản CB Nghiệp vụ, danh sách có 2 đợt): "Đợt đánh giá seed 2026" → 0 kết quả; "Đợt" → 0; "seed" → 1.
+- Đúng theo SRS FR-VI-01 (UC83), màn SCR-VI-01 (ô tìm kiếm theo tên đợt / mã đợt, dòng 812): gõ tên đợt đang tồn tại phải trả về đúng đợt đó.
+- Mã lỗi nội bộ: BUG-LKHDG_04.

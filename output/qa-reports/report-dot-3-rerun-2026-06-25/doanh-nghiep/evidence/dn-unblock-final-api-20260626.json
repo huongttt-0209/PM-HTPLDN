@@ -1,0 +1,226 @@
+{
+  "base": "http://103.172.236.130:3000/api/v1",
+  "started_at": "2026-06-26T00:36:26+0700",
+  "steps": {
+    "login_qtht_01": {
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/auth/login",
+      "body": {
+        "username": "qtht_01",
+        "password": "Secret@123"
+      },
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "190"
+      },
+      "json": {
+        "success": true,
+        "data": {
+          "otpToken": "9c7ff565-e5f4-47db-8e36-1333982a38f8",
+          "otpExpiresIn": 300,
+          "maskedEmail": "qth***@htpldn.test",
+          "message": "Mã xác thực đã gửi qua email"
+        },
+        "meta": null
+      }
+    },
+    "otp_qtht_01": {
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/auth/verify-otp",
+      "body": {
+        "username": "qtht_01",
+        "otpCode": "666666"
+      },
+      "status": 422,
+      "headers": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "337"
+      },
+      "json": {
+        "success": false,
+        "error": {
+          "code": "ERR-VAL-SYS-00-01",
+          "field": "otpToken",
+          "message": "otpToken should not be empty",
+          "details": [
+            {
+              "field": "otpToken",
+              "message": "otpToken should not be empty"
+            },
+            {
+              "field": "otpToken",
+              "message": "otpToken must be a string"
+            }
+          ],
+          "timestamp": "2026-06-25T17:36:26.662Z",
+          "requestId": "92c5c407-8f28-4f9a-a733-33ff1a90cdd3"
+        }
+      }
+    },
+    "login_cb_nv_tw_01": {
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/auth/login",
+      "body": {
+        "username": "cb_nv_tw_01",
+        "password": "Secret@123"
+      },
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "190"
+      },
+      "json": {
+        "success": true,
+        "data": {
+          "otpToken": "49abd6aa-badd-4e4b-a476-66653a7e7e59",
+          "otpExpiresIn": 300,
+          "maskedEmail": "cb_***@htpldn.test",
+          "message": "Mã xác thực đã gửi qua email"
+        },
+        "meta": null
+      }
+    },
+    "otp_cb_nv_tw_01": {
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/auth/verify-otp",
+      "body": {
+        "username": "cb_nv_tw_01",
+        "otpCode": "666666"
+      },
+      "status": 422,
+      "headers": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "337"
+      },
+      "json": {
+        "success": false,
+        "error": {
+          "code": "ERR-VAL-SYS-00-01",
+          "field": "otpToken",
+          "message": "otpToken should not be empty",
+          "details": [
+            {
+              "field": "otpToken",
+              "message": "otpToken should not be empty"
+            },
+            {
+              "field": "otpToken",
+              "message": "otpToken must be a string"
+            }
+          ],
+          "timestamp": "2026-06-25T17:36:28.227Z",
+          "requestId": "7f45e208-dd91-42ad-9b1e-5d48651276a1"
+        }
+      }
+    },
+    "login_cb_nv_dp_01": {
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/auth/login",
+      "body": {
+        "username": "cb_nv_dp_01",
+        "password": "Secret@123"
+      },
+      "status": 200,
+      "headers": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "190"
+      },
+      "json": {
+        "success": true,
+        "data": {
+          "otpToken": "7bdd0d97-0c42-44a3-b029-77392c8b243a",
+          "otpExpiresIn": 300,
+          "maskedEmail": "cb_***@htpldn.test",
+          "message": "Mã xác thực đã gửi qua email"
+        },
+        "meta": null
+      }
+    },
+    "otp_cb_nv_dp_01": {
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/auth/verify-otp",
+      "body": {
+        "username": "cb_nv_dp_01",
+        "otpCode": "666666"
+      },
+      "status": 422,
+      "headers": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "337"
+      },
+      "json": {
+        "success": false,
+        "error": {
+          "code": "ERR-VAL-SYS-00-01",
+          "field": "otpToken",
+          "message": "otpToken should not be empty",
+          "details": [
+            {
+              "field": "otpToken",
+              "message": "otpToken should not be empty"
+            },
+            {
+              "field": "otpToken",
+              "message": "otpToken must be a string"
+            }
+          ],
+          "timestamp": "2026-06-25T17:36:29.776Z",
+          "requestId": "a4d03ba4-c68a-46d6-9559-d402e3d30e1e"
+        }
+      }
+    },
+    "login_nht_01": {
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/auth/login",
+      "body": {
+        "username": "nht_01",
+        "password": "Secret@123"
+      },
+      "status": 429,
+      "headers": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "245"
+      },
+      "json": {
+        "success": false,
+        "error": {
+          "code": "ERR-SYS-00-29-01",
+          "message": "Bạn đã thử quá nhiều lần. Vui lòng đợi khoảng 1 phút rồi thử lại.",
+          "timestamp": "2026-06-25T17:36:31.004Z",
+          "requestId": "1941b031-36bc-4ba7-84fd-f7885a7dbb29"
+        }
+      }
+    },
+    "login_tvv_01": {
+      "method": "POST",
+      "url": "http://103.172.236.130:3000/api/v1/auth/login",
+      "body": {
+        "username": "tvv_01",
+        "password": "Secret@123"
+      },
+      "status": 429,
+      "headers": {
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "245"
+      },
+      "json": {
+        "success": false,
+        "error": {
+          "code": "ERR-SYS-00-29-01",
+          "message": "Bạn đã thử quá nhiều lần. Vui lòng đợi khoảng 1 phút rồi thử lại.",
+          "timestamp": "2026-06-25T17:36:32.223Z",
+          "requestId": "f61d0567-e086-4698-b763-a7c29d00ffc6"
+        }
+      }
+    }
+  },
+  "tokens_ok": {
+    "qtht_01": false,
+    "cb_nv_tw_01": false,
+    "cb_nv_dp_01": false,
+    "nht_01": false,
+    "tvv_01": false
+  },
+  "finished_at": "2026-06-26T00:36:33+0700"
+}

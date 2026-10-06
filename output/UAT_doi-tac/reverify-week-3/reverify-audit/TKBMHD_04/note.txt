@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Màn tìm kiếm biểu mẫu (Biểu mẫu → Danh sách biểu mẫu): khi tìm không có kết quả, hệ thống hiển thị thông báo "Trống".
+- Theo SRS FR-VII-05 (UC96) §Error Handling E1 (dòng 435), mã INF-BM-TK-01: thông báo phải là "Không tìm thấy biểu mẫu phù hợp".
+- Verify: đăng nhập CB Nghiệp vụ Trung ương (CB_NV_TW), tìm từ khóa "zzzqa123khongtontai" → 0 kết quả → màn hiện "Trống".
+- Bug ID: BUG-TKBMHD_04.

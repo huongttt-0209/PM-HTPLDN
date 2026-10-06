@@ -1,0 +1,22 @@
+✅ Bug ĐÚNG – chuyển dev. Đã đo lại 27/07/2026 15:35 (lần đo gần nhất, sau khi ô trạng thái được chuyển sang "dev done"): LỖI VẪN CÒN NGUYÊN, số liệu trùng khít lần đo 14:14 cùng ngày — chưa thấy dấu hiệu được sửa. Nhờ dev xác nhận bản sửa đã triển khai lên môi trường đối tác chưa trước khi chuyển trạng thái.
+
+Kiểm tra bằng tài khoản cbnv_tw (Cán bộ NV Trung ương, đơn vị BTP · TW) — đúng vai trò đối tác đã dùng, đúng thẻ "Đang xử lý", đúng bộ lọc Trạng thái = "Tiếp nhận", trên chính môi trường đối tác. Tái hiện đúng như phản ánh.
+
+Web sai gì:
+- Chọn ô lọc Trạng thái = "Tiếp nhận" rồi bấm Tìm kiếm: hệ thống chuyển sang thẻ "Đang xử lý" và trả về 22 bản ghi gồm cả "Tiếp nhận" (4) lẫn "Đang xử lý" (18) — đúng như đối tác phản ánh. Chân bảng ghi "Hiển thị 1-20 / 22 kết quả".
+- Lỗi lặp lại ở một chỗ nữa: chọn Trạng thái = "Hủy" thì hệ thống chuyển sang thẻ "Hoàn thành" và trả về 10 bản ghi gồm 6 "Hoàn thành" + 4 "Hủy". Chọn "Hoàn thành" cũng ra đúng 10 bản ghi đó — hai lựa chọn khác nhau cho ra cùng một kết quả.
+- Đo tách bạch để loại trừ nhầm lẫn: khi chỉ lọc "Tiếp nhận" mà không kèm thẻ nào thì đúng 4 bản ghi, tất cả đều "Tiếp nhận". Nhưng khi kèm thẻ "Đang xử lý" thì kết quả trùng khít với trường hợp KHÔNG đặt bộ lọc nào (cùng 22 bản ghi, cùng phân bố) — tức điều kiện trạng thái người dùng chọn bị bỏ qua hoàn toàn, chứ không phải hiển thị nhầm nhãn.
+- Bản chất: mỗi thẻ có sẵn một điều kiện trạng thái riêng; hệ thống chỉ áp điều kiện của thẻ, bỏ qua giá trị người dùng chọn ở ô lọc. Hai thẻ "Đang xử lý" và "Hoàn thành" gộp 2 trạng thái nên lỗi lộ ra; các thẻ chỉ chứa 1 trạng thái thì kết quả tình cờ vẫn đúng nên dễ bị bỏ sót.
+- Đã kiểm bằng 2 cách độc lập và cho kết quả như nhau: thao tác trực tiếp trên giao diện (đọc bảng hiển thị) và đối chiếu số liệu trả về của chính lần bấm Tìm kiếm đó.
+
+Kết quả mong đợi theo đặc tả:
+- FR-II-05 (UC 14) — Tiêu chí chấp nhận (srs-fr-02-hoi-dap.md dòng 466): "Given CB kết hợp nhiều điều kiện When tìm kiếm Then kết quả AND logic". Thẻ "Đang xử lý" là điều kiện cứng trang_thai IN (TIEP_NHAN, DANG_XU_LY) (dòng 436, 440); kết hợp AND với lựa chọn "Tiếp nhận" phải ra đúng 4 bản ghi trạng thái "Tiếp nhận".
+- SCR-II-01 §3 thành phần 17 — nút Tìm kiếm (dòng 1032): "AND logic, đồng bộ URL".
+- SCR-II-01 §3 thành phần 14 — ô lọc Trạng thái (dòng 1028): TIEP_NHAN → "Tiếp nhận", DANG_XU_LY → "Đang xử lý", HOAN_THANH → "Hoàn thành", HUY → "Đã hủy" là các lựa chọn tách biệt, nên chọn một giá trị không được kéo theo giá trị khác.
+- Thẻ "Hoàn thành" theo dòng 1025 cũng là điều kiện cứng trang_thai IN (HOAN_THANH, HUY) — cùng cơ chế với thẻ "Đang xử lý".
+
+Phạm vi để dev không sửa nhầm: bản thân các thẻ đang trả đúng tập trạng thái của mình (thẻ "Đang xử lý" đúng 22 bản ghi, thẻ "Hoàn thành" đúng 10 bản ghi), và ô lọc cũng liệt kê đủ 8 trạng thái. Sai lệch nằm ở chỗ điều kiện của thẻ và điều kiện của ô lọc không được kết hợp theo AND.
+
+Ghi nhận thêm khi kiểm tra ô lọc này (đo lại 27/07 vẫn còn): nhãn của trạng thái HUY trên web đang là "Hủy", trong khi đặc tả (dòng 1028) quy định nhãn hiển thị là "Đã hủy".
+
+Bug ID: BUG-TKHDVMTH_07.

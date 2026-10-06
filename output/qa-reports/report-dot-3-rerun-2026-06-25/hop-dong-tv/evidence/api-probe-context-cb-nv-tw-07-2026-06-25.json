@@ -1,0 +1,238 @@
+{
+  "GET /hop-dong-tu-vans?tuVanVienId=978354d7-feac-4330-a750-6b8c07b46c24&page=1&pageSize=20": {
+    "status": 200,
+    "data": {
+      "success": true,
+      "data": [
+        {
+          "id": "2a760d3b-d643-49f4-928f-d0e436974d75",
+          "maHopDong": "HDTV-20260512-0001",
+          "tenHopDong": "HDTV-MultiRow-TVV0035-Test-20260512",
+          "soHopDong": null,
+          "benA": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+          "benB": "Cty CP Test Multi-Row R7",
+          "tuVanVienId": "978354d7-feac-4330-a750-6b8c07b46c24",
+          "toChucTuVanId": null,
+          "tenToChuc": null,
+          "giaTriHopDong": "50000000.00",
+          "ngayKy": null,
+          "ngayBatDau": "2026-05-11",
+          "ngayKetThuc": "2026-08-11",
+          "noiDung": null,
+          "trangThai": "DANG_THUC_HIEN",
+          "ghiChu": null,
+          "tienDoTt": 0,
+          "soVuViecLienKet": 1,
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "nguoiTaoId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "ngayTao": "2026-05-11T18:59:44.812Z",
+          "ngayCapNhat": "2026-05-11T18:59:44.812Z",
+          "version": 1
+        },
+        {
+          "id": "9054a0a9-3139-42e3-b817-e7d8a0edb4b2",
+          "maHopDong": "HDTV-20260510-0001",
+          "tenHopDong": "HDTV-Retest3-018-1778423919097",
+          "soHopDong": null,
+          "benA": "Bộ Tư pháp - Cục Bổ trợ tư pháp",
+          "benB": "Cty CP Test Retest3",
+          "tuVanVienId": "978354d7-feac-4330-a750-6b8c07b46c24",
+          "toChucTuVanId": null,
+          "tenToChuc": null,
+          "giaTriHopDong": "100000000.00",
+          "ngayKy": null,
+          "ngayBatDau": "2026-05-09",
+          "ngayKetThuc": "2026-08-09",
+          "noiDung": null,
+          "trangThai": "DANG_THUC_HIEN",
+          "ghiChu": null,
+          "tienDoTt": 50,
+          "soVuViecLienKet": 1,
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "nguoiTaoId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "ngayTao": "2026-05-10T14:38:39.151Z",
+          "ngayCapNhat": "2026-05-10T14:43:33.164Z",
+          "version": 5
+        }
+      ],
+      "meta": {
+        "page": 1,
+        "pageSize": 20,
+        "total": 2,
+        "totalPages": 1
+      }
+    }
+  },
+  "GET /hop-dong-tu-vans?tuVanVienId=978354d7-feac-4330-a750-6b8c07b46c24&keyword=HDTV&page=1&pageSize=20": {
+    "status": 200,
+    "data": {
+      "success": true,
+      "data": [
+        {
+          "id": "2a760d3b-d643-49f4-928f-d0e436974d75",
+          "maHopDong": "HDTV-20260512-0001",
+          "tenHopDong": "HDTV-MultiRow-TVV0035-Test-20260512",
+          "soHopDong": null,
+          "benA": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+          "benB": "Cty CP Test Multi-Row R7",
+          "tuVanVienId": "978354d7-feac-4330-a750-6b8c07b46c24",
+          "toChucTuVanId": null,
+          "tenToChuc": null,
+          "giaTriHopDong": "50000000.00",
+          "ngayKy": null,
+          "ngayBatDau": "2026-05-11",
+          "ngayKetThuc": "2026-08-11",
+          "noiDung": null,
+          "trangThai": "DANG_THUC_HIEN",
+          "ghiChu": null,
+          "tienDoTt": 0,
+          "soVuViecLienKet": 1,
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "nguoiTaoId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "ngayTao": "2026-05-11T18:59:44.812Z",
+          "ngayCapNhat": "2026-05-11T18:59:44.812Z",
+          "version": 1
+        },
+        {
+          "id": "9054a0a9-3139-42e3-b817-e7d8a0edb4b2",
+          "maHopDong": "HDTV-20260510-0001",
+          "tenHopDong": "HDTV-Retest3-018-1778423919097",
+          "soHopDong": null,
+          "benA": "Bộ Tư pháp - Cục Bổ trợ tư pháp",
+          "benB": "Cty CP Test Retest3",
+          "tuVanVienId": "978354d7-feac-4330-a750-6b8c07b46c24",
+          "toChucTuVanId": null,
+          "tenToChuc": null,
+          "giaTriHopDong": "100000000.00",
+          "ngayKy": null,
+          "ngayBatDau": "2026-05-09",
+          "ngayKetThuc": "2026-08-09",
+          "noiDung": null,
+          "trangThai": "DANG_THUC_HIEN",
+          "ghiChu": null,
+          "tienDoTt": 50,
+          "soVuViecLienKet": 1,
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "nguoiTaoId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "ngayTao": "2026-05-10T14:38:39.151Z",
+          "ngayCapNhat": "2026-05-10T14:43:33.164Z",
+          "version": 5
+        }
+      ],
+      "meta": {
+        "page": 1,
+        "pageSize": 20,
+        "total": 2,
+        "totalPages": 1
+      }
+    }
+  },
+  "GET /tu-van-viens/978354d7-feac-4330-a750-6b8c07b46c24/hop-dong-tu-vans?page=1&pageSize=20": {
+    "status": 404,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-SYS-00-04-01",
+        "message": "Cannot GET /api/v1/tu-van-viens/978354d7-feac-4330-a750-6b8c07b46c24/hop-dong-tu-vans?page=1&pageSize=20",
+        "timestamp": "2026-06-25T15:27:44.966Z",
+        "requestId": "e43619f7-403a-4f01-8bdc-7a0c4f6e3795"
+      }
+    }
+  },
+  "GET /vu-viecs/aaff0000-0000-4000-8000-000000000001/hop-dong-tu-vans?page=1&pageSize=20": {
+    "status": 404,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-SYS-00-04-01",
+        "message": "Cannot GET /api/v1/vu-viecs/aaff0000-0000-4000-8000-000000000001/hop-dong-tu-vans?page=1&pageSize=20",
+        "timestamp": "2026-06-25T15:27:44.994Z",
+        "requestId": "eacd1c9f-9a28-427d-aefe-bb4577105dd4"
+      }
+    }
+  },
+  "GET /vu-viec/aaff0000-0000-4000-8000-000000000001/hop-dong-tu-vans?page=1&pageSize=20": {
+    "status": 404,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-SYS-00-04-01",
+        "message": "Cannot GET /api/v1/vu-viec/aaff0000-0000-4000-8000-000000000001/hop-dong-tu-vans?page=1&pageSize=20",
+        "timestamp": "2026-06-25T15:27:45.025Z",
+        "requestId": "ab78e6fd-f37b-424e-bae2-497207c67931"
+      }
+    }
+  },
+  "POST create_with_tvv_same_day": {
+    "status": 201,
+    "data": {
+      "success": true,
+      "data": {
+        "id": "062c1978-b400-4961-bbe6-5cad6249f0b2",
+        "maHopDong": "HDTV-20260625-0001",
+        "tenHopDong": "QA Dot3 HDTV with TVV 1782401264",
+        "soHopDong": null,
+        "benA": "Bộ Tư pháp - Cục Bổ trợ tư pháp",
+        "benB": "QA Dot3 bên B",
+        "tuVanVienId": "978354d7-feac-4330-a750-6b8c07b46c24",
+        "toChucTuVanId": null,
+        "tenToChuc": null,
+        "giaTriHopDong": "50000000.00",
+        "ngayKy": null,
+        "ngayBatDau": "2026-06-25",
+        "ngayKetThuc": "2026-06-25",
+        "noiDung": "QA bổ sung report-dot-3 2026-06-25",
+        "trangThai": "DANG_THUC_HIEN",
+        "ghiChu": null,
+        "tienDoTt": 0,
+        "soVuViecLienKet": 0,
+        "donViId": "00000000-0000-4000-8000-000000000001",
+        "nguoiTaoId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+        "ngayTao": "2026-06-25T15:27:45.062Z",
+        "ngayCapNhat": "2026-06-25T15:27:45.062Z",
+        "version": 1,
+        "mocTienDos": [],
+        "thanhToans": [],
+        "vuViecLienKets": [],
+        "fileDinhKem": []
+      },
+      "meta": null
+    }
+  },
+  "POST create_with_tvv_happy": {
+    "status": 201,
+    "data": {
+      "success": true,
+      "data": {
+        "id": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+        "maHopDong": "HDTV-20260625-0002",
+        "tenHopDong": "QA Dot3 HDTV happy 1782401264",
+        "soHopDong": null,
+        "benA": "Bộ Tư pháp - Cục Bổ trợ tư pháp",
+        "benB": "QA Dot3 bên B",
+        "tuVanVienId": "978354d7-feac-4330-a750-6b8c07b46c24",
+        "toChucTuVanId": null,
+        "tenToChuc": null,
+        "giaTriHopDong": "50000000.00",
+        "ngayKy": null,
+        "ngayBatDau": "2026-06-25",
+        "ngayKetThuc": "2026-12-31",
+        "noiDung": "QA bổ sung report-dot-3 2026-06-25",
+        "trangThai": "DANG_THUC_HIEN",
+        "ghiChu": null,
+        "tienDoTt": 0,
+        "soVuViecLienKet": 0,
+        "donViId": "00000000-0000-4000-8000-000000000001",
+        "nguoiTaoId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+        "ngayTao": "2026-06-25T15:27:45.116Z",
+        "ngayCapNhat": "2026-06-25T15:27:45.116Z",
+        "version": 1,
+        "mocTienDos": [],
+        "thanhToans": [],
+        "vuViecLienKets": [],
+        "fileDinhKem": []
+      },
+      "meta": null
+    }
+  }
+}

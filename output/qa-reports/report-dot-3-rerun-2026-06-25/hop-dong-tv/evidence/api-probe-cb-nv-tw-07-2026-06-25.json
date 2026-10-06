@@ -1,0 +1,162 @@
+{
+  "GET /hop-dong-tu-vans?page=1&pageSize=20": {
+    "status": 403,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-PERM-SYS-00-01",
+        "message": "Hợp đồng tư vấn chỉ truy cập trong ngữ cảnh vụ việc/tư vấn viên/tổ chức.",
+        "timestamp": "2026-06-25T15:24:56.822Z",
+        "requestId": "4486cfa4-2091-4679-92e1-6d42161ca1b5"
+      }
+    }
+  },
+  "GET /hop-dong-tu-vans?page=1&pageSize=5": {
+    "status": 403,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-PERM-SYS-00-01",
+        "message": "Hợp đồng tư vấn chỉ truy cập trong ngữ cảnh vụ việc/tư vấn viên/tổ chức.",
+        "timestamp": "2026-06-25T15:24:56.854Z",
+        "requestId": "c9557598-3cd2-4937-b11f-350af6fb710e"
+      }
+    }
+  },
+  "GET /hop-dong-tu-vans?keyword=ZZZ_NOT_EXIST&page=1&pageSize=20": {
+    "status": 403,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-PERM-SYS-00-01",
+        "message": "Hợp đồng tư vấn chỉ truy cập trong ngữ cảnh vụ việc/tư vấn viên/tổ chức.",
+        "timestamp": "2026-06-25T15:24:56.887Z",
+        "requestId": "bfd5052c-5977-461d-9256-7164eb96e485"
+      }
+    }
+  },
+  "GET /hop-dong-tu-vans?keyword=%27%20OR%201%3D1%20--&page=1&pageSize=20": {
+    "status": 403,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-PERM-SYS-00-01",
+        "message": "Hợp đồng tư vấn chỉ truy cập trong ngữ cảnh vụ việc/tư vấn viên/tổ chức.",
+        "timestamp": "2026-06-25T15:24:56.921Z",
+        "requestId": "4a7d323b-ce7c-4fbc-83b0-4ddd1b1a9c61"
+      }
+    }
+  },
+  "GET /hop-dong-tu-vans?tuNgay=2026-09-01&denNgay=2026-06-01&page=1&pageSize=20": {
+    "status": 403,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-PERM-SYS-00-01",
+        "message": "Hợp đồng tư vấn chỉ truy cập trong ngữ cảnh vụ việc/tư vấn viên/tổ chức.",
+        "timestamp": "2026-06-25T15:24:56.955Z",
+        "requestId": "73b1e13f-6bff-420f-80a4-1cb9974bc3e0"
+      }
+    }
+  },
+  "POST create_empty_name": {
+    "status": 422,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-VAL-SYS-00-01",
+        "field": "tenHopDong",
+        "message": "tenHopDong should not be empty",
+        "details": [
+          {
+            "field": "tenHopDong",
+            "message": "tenHopDong should not be empty"
+          }
+        ],
+        "timestamp": "2026-06-25T15:24:56.997Z",
+        "requestId": "a6b1cab2-96ee-4af5-8870-99515a3399f0"
+      }
+    }
+  },
+  "POST create_bad_dates": {
+    "status": 400,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-02",
+        "message": "Ngày bắt đầu phải nhỏ hơn hoặc bằng ngày kết thúc",
+        "timestamp": "2026-06-25T15:24:57.067Z",
+        "requestId": "9eaeab46-bcf6-42bb-abb8-70ca59351cfe"
+      }
+    }
+  },
+  "POST create_zero_value": {
+    "status": 422,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-05",
+        "field": "giaTriHopDong",
+        "message": "Giá trị hợp đồng phải lớn hơn 0",
+        "details": [
+          {
+            "field": "giaTriHopDong",
+            "message": "ERR-HDTV-05"
+          }
+        ],
+        "timestamp": "2026-06-25T15:24:57.101Z",
+        "requestId": "d89ef2f6-fdc9-4597-bc3f-34bd95121e52"
+      }
+    }
+  },
+  "POST create_negative_value": {
+    "status": 422,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-05",
+        "field": "giaTriHopDong",
+        "message": "Giá trị hợp đồng phải lớn hơn 0",
+        "details": [
+          {
+            "field": "giaTriHopDong",
+            "message": "ERR-HDTV-05"
+          }
+        ],
+        "timestamp": "2026-06-25T15:24:57.134Z",
+        "requestId": "cd96bdbe-5fdd-49cb-b9a8-e3ea6fcbe190"
+      }
+    }
+  },
+  "POST create_same_day": {
+    "status": 400,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-CHU-THE-01",
+        "message": "Hợp đồng phải gán Tư vấn viên hoặc Tổ chức tư vấn",
+        "timestamp": "2026-06-25T15:24:57.166Z",
+        "requestId": "7823deba-9b88-40ec-bcb4-9dabf58f3b44"
+      }
+    }
+  },
+  "POST create_long_note": {
+    "status": 422,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-VAL-SYS-00-01",
+        "field": "ghiChu",
+        "message": "ghiChu must be shorter than or equal to 2000 characters",
+        "details": [
+          {
+            "field": "ghiChu",
+            "message": "ghiChu must be shorter than or equal to 2000 characters"
+          }
+        ],
+        "timestamp": "2026-06-25T15:24:57.199Z",
+        "requestId": "1985ef77-0780-461c-b881-44fa191a1616"
+      }
+    }
+  }
+}

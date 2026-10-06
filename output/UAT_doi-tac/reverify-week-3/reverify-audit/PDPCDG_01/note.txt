@@ -1,0 +1,4 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: Tại tab Phân công (chế độ phê duyệt), Cán bộ phê duyệt bấm "Phê duyệt phân công" và xác nhận → hệ thống hiển thị "Đã phê duyệt phân công" và chuyển đợt từ "Chờ duyệt phân công" sang "Thực hiện" (ĐÚNG). Tuy nhiên Cán bộ nghiệp vụ (người trình phân công) KHÔNG nhận được thông báo nào về việc phân công đã được duyệt: kiểm tra hộp thông báo của CB nghiệp vụ — không có thông báo về đợt vừa được duyệt.
+- Chuẩn: SRS FR-VI-04 (Phê duyệt phân công) quy định Postconditions "Thông báo gửi CB NV" (dòng 366), bước xử lý "Gửi thông báo CB NV trình" (dòng 349) và business rule "Phê duyệt/Từ chối (cả PC và BC) → gửi thông báo cho CB NV trình" (dòng 901). Hệ thống thiếu bước gửi thông báo cho cán bộ nghiệp vụ.
+- Mã lỗi nội bộ: BUG-PDPCDG_01.

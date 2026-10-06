@@ -1,0 +1,13 @@
+✅ Đã hết lỗi — verify lại 07/08/2026 trên bản dựng V1.0.10, đo bằng hai vai trò trên chính màn Báo cáo thống kê, loại báo cáo "BC Vụ việc đã tiếp nhận".
+
+- Vai trò Cán bộ Nghiệp vụ Trung ương (tài khoản cbnv_tw_04): bấm [Xuất Excel] thật trên giao diện thì nhận được tệp ngay, không còn thông báo từ chối nào. Tệp BaoCaoVuViecTiepNhan_20260807_1458.xlsx đã được MỞ RA ĐỌC NỘI DUNG chứ không chỉ kiểm "tải được": có đủ 4 mục đầu tệp (tên báo cáo "BC Vụ việc đã tiếp nhận"; Kỳ báo cáo: Năm, từ 01/01/2026 đến 31/12/2026; Đơn vị: Toàn quốc; Ngày tạo: 07/08/2026) và đủ 5 chiều số liệu, khớp màn hình từng con số: tổng 55; theo kênh tiếp nhận Trực tiếp 48 và Doanh nghiệp 7; theo lĩnh vực pháp luật Thương mại 21, Dân sự 13, Lao động 12, Thuế 9; theo đơn vị 38 - 8 - 6 - 3; theo kỳ Năm 2026 là 55. Mỗi chiều cộng lại đều bằng đúng số tổng.
+
+- Tệp bám đúng bộ lọc đang chọn chứ không xuất cứng một bảng mẫu: đổi Kênh tiếp nhận sang "Trực tiếp" rồi xem và xuất lại thì tệp BaoCaoVuViecTiepNhan_20260807_1459.xlsx đổi theo - tổng còn 48, bảng kênh chỉ còn một dòng Trực tiếp 48, lĩnh vực đổi thành 19 - 13 - 9 - 7, theo đơn vị đổi thành 38 - 6 - 3 - 1, đúng bằng số đang hiện trên màn sau khi lọc. Hai lần xuất trong cùng một ngày ra hai tên tệp khác nhau nên không đè lên nhau, và tên tệp đúng khuôn đã thống nhất.
+
+- Vai trò Quản trị hệ thống (tài khoản admin): không còn đường nào dẫn tới thao tác xuất tệp nữa. Menu điều hướng không còn mục "Báo cáo thống kê" - đã quét toàn bộ menu, kể cả các nhóm có menu con, và mục này bị ẩn hẳn chứ không phải làm mờ. Gõ thẳng địa chỉ màn báo cáo trong cùng phiên đó thì bị đưa về màn Tổng quan, không xem được số liệu báo cáo nào. Đã đối chứng ngay trong cùng phiên: gõ thẳng địa chỉ màn Doanh nghiệp thì vào được bình thường và phiên vẫn còn hiệu lực, nên đây là chặn theo quyền chứ không phải rớt phiên.
+
+- Chuỗi chữ "Forbidden" ghi ở lần kiểm trước không còn xuất hiện; khi bị từ chối, hệ thống trả câu tiếng Việt cho biết người dùng không có quyền.
+
+Lưu ý khi Quý đơn vị kiểm thử lại: chức năng Báo cáo thống kê được dành cho vai trò Cán bộ Nghiệp vụ và Cán bộ Phê duyệt. Tài khoản quản trị hệ thống không thuộc nhóm vai trò này, nên việc mục "Báo cáo thống kê" không còn hiện trong menu của tài khoản quản trị là thay đổi có chủ đích ở lần cập nhật này, không phải chức năng bị mất. Kính đề nghị Quý đơn vị kiểm thử lại chức năng này bằng tài khoản Cán bộ Nghiệp vụ hoặc Cán bộ Phê duyệt.
+
+Kết quả này ứng với bản dựng V1.0.10 đã kiểm; đề nghị xác nhận lại khi bản dựng này được đưa lên môi trường nghiệm thu.

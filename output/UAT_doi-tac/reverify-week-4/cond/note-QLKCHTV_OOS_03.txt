@@ -1,0 +1,6 @@
+✅ Là bug — chuyển dev
+Dòng này do QA mở thêm, không thuộc case nào của phiếu đối tác. Phát sinh khi verify QLKCHTV_31.
+
+Chọn câu trả lời từ kho nạp vào ô soạn vượt giới hạn ký tự; bộ đếm báo đỏ "5007 / 5000" nhưng vẫn gửi được. Giới hạn hiển thị và giới hạn thực tế không khớp nhau.
+
+Mã bug trong báo cáo: BUG-TVN-VUOT-GIOI-HAN-5000. Các bước tái hiện, kết quả mong đợi và bằng chứng đã ghi đầy đủ ở các cột bên trái của chính dòng này.

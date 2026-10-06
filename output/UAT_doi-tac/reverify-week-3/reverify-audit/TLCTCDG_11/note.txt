@@ -1,0 +1,4 @@
+Không phải bug.
+- Kiểm tra: Đợt có tổng trọng số tiêu chí = 10% (khác 100%). Bên cạnh nhãn "Tổng trọng số: 10%" hệ thống ĐÃ hiển thị cảnh báo "(Tổng trọng số phải bằng 100%)". Bấm "Lưu" → lưu thành công VÀ cảnh báo vẫn hiển thị.
+- Chuẩn: SRS quy định Tab Tiêu chí "cho lưu nếu ≠ 100% nhưng có WARNING" và "cảnh báo nếu khác, cho phép lưu". Ràng buộc bắt buộc = 100% chỉ áp dụng khi chuyển sang bước Phân công người đánh giá / trình phê duyệt, không phải khi lưu tiêu chí.
+- Kết luận: Lưu được kèm cảnh báo là ĐÚNG thiết kế. Không phải lỗi.

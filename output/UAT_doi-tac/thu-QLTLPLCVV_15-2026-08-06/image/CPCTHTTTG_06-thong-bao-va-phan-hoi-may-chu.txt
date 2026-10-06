@@ -1,0 +1,162 @@
+CPCTHTTTG_06 — BC Chi phí theo thời gian · thao tác [Xuất PDF]
+Bằng chứng chữ: thông báo nguyên văn + phản hồi máy chủ + nội dung tệp PDF đọc bằng máy
+Env verify : https://18.143.165.120.nip.io      Bản dựng: V1.0.8 (gói assets/index-CNwX9JjX.js)
+Ngày đo    : 2026-08-06
+Cách đo    : cài bộ theo dõi lên document.body TRƯỚC khi bấm (không lọc trùng, đọc innerText,
+             lấy mẫu chữ mỗi 150 ms, đếm request kèm theo, móc cả fetch lẫn XHR, bắt cả blob).
+
+⚠️ Lưu ý luồng: nút [Xuất PDF] chỉ MỞ HỘP THOẠI "Tùy chọn in báo cáo PDF". Lượt xuất thật là nút
+   [Xuất file] BÊN TRONG hộp thoại. Ai đo mà dừng ở nút [Xuất PDF] sẽ thấy 0 request và dễ kết
+   luận nhầm là hệ thống im lặng.
+   Hộp thoại: Khổ giấy A4 / A3 / Letter — mặc định A4 · Hướng giấy Dọc / Ngang — mặc định Dọc.
+   Ảnh: image/CPCTHTTTG_06-A1-hop-thoai-tuy-chon-in-PDF-V108.png
+
+================================================================================
+A. VAI TRÒ `cbnv_tw_03` (CB Nghiệp vụ - Trung ương) — đúng tác nhân đặc tả :62
+================================================================================
+
+Địa chỉ trang khớp đúng chuỗi tham số trên ảnh nghiệm thu:
+    /bao-cao?loai=chi-phi-theo-thoi-gian&kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+Màn hình: Tổng chi phí toàn kỳ 23.000.000 · Tổng hồ sơ toàn kỳ 2 · Thời điểm tạo 06/08/2026 14:26
+    Bảng "Theo kỳ": Năm 2026 | 01/01/2026 | 31/12/2026 | 2 | 23.000.000 ₫
+
+A1. Biến thể ① — Kỳ "Năm" 01/01/2026 → 31/12/2026, khổ A4 hướng Dọc — bấm [Xuất file] 14:26
+    Số khung thông báo mọc lên : 1
+    Chuỗi chữ đo theo thời gian TRONG CÙNG khung đó:
+        +115 ms  : "Đang tạo file..."      khung rộng 1440 px cao 42 px
+        +715 ms  : "Tạo file thành công."  khung rộng 1432 px cao 56 px
+        +3116 ms : ""                      (khung tự tắt)
+    Số request kèm lượt bấm : 1 → XHR POST /api/v1/bao-cao/export → 200 (blob 31.915 B)
+    Tệp hệ thống giao ra    : BaoCaoChiPhiTheoThoiGian_20260806_1426.pdf
+                              31.915 byte · md5 0e9d213a53dda33ca64eebed0f38b1b6
+
+A2. Biến thể ② — Kỳ "Khoảng tùy chọn" 01/06/2026 → 30/06/2026, A4 Dọc — bấm [Xuất file] 14:28
+    Chuỗi chữ: +2134 ms "Đang tạo file..." → +2734 ms "Tạo file thành công." → +5135 ms tắt
+    Mã trả về : 200 (blob 32.169 B)
+    Tệp giao ra : BaoCaoChiPhiTheoThoiGian_20260806_1428.pdf
+                  32.169 byte · md5 d1aa72f77047f13da35e80750befd803
+
+A3. Nội dung tệp PDF đọc bằng thư viện đọc PDF (PyMuPDF)
+
+    Tệp ① — 1 trang, khổ 595,3 × 841,9 pt = ĐÚNG A4 dọc.
+    Nguyên văn chữ trong tệp, theo thứ tự từ trên xuống:
+
+        CỤC BỔ TRỢ TƯ PHÁP - BỘ TƯ PHÁP        <- tên cơ quan ban hành (đầu trang, trái)
+        CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM      <- quốc hiệu (đầu trang, phải)
+        Độc lập - Tự do - Hạnh phúc             <- tiêu ngữ
+        BC CHI PHÍ THEO THỜI GIAN
+        Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+        Đơn vị: Toàn quốc
+        Ngày tạo: 06/08/2026
+        Tổng chi phí toàn kỳ | Chỉ tiêu | Số tiền (₫) | Tổng chi phí toàn kỳ 23.000.000
+        Tổng hồ sơ toàn kỳ   | Chỉ tiêu | Số lượng     | Tổng hồ sơ toàn kỳ 2
+        Theo kỳ
+        Kỳ | Từ ngày | Đến ngày | Số hồ sơ | Tổng chi phí (₫)
+        Năm 2026 | 01/01/2026 | 31/12/2026 | 2 | 23.000.000
+        Ngày 06 tháng 08 năm 2026               <- cuối trang: ngày ký
+        NGƯỜI XUẤT BÁO CÁO
+        (Ký, ghi rõ họ tên và đóng dấu)         <- chỗ trống cho con dấu khi in chính thức
+        CB Nghiệp vụ - Trung ương #03           <- họ tên cán bộ xuất báo cáo
+
+    KHÔNG có dòng chức danh người ký — ĐÚNG như nghiệp vụ đã chốt 04/08/2026 (đặc tả :86:
+    "Không in dòng chức danh người ký — hồ sơ tài khoản không lưu chức vụ"). Đối tác kỳ vọng có
+    dòng này, nhưng đó là kỳ vọng đã bị quyết định nghiệp vụ thay thế, KHÔNG phải khuyết tật.
+
+    Tệp ② — 1 trang, cũng đúng A4 (595,3 × 841,9 pt), khác tệp ① đúng ở phần bám bộ lọc:
+        Kỳ báo cáo: KHOANG (từ 01/06/2026 đến 30/06/2026)
+        Theo kỳ → 01/06/2026 - 30/06/2026 | 01/06/2026 | 30/06/2026 | 2 | 23.000.000
+    ⇒ tệp bám bộ lọc, không xuất cứng.
+
+A4. Phông chữ nhúng trong tệp (đọc bằng máy)
+        Tinos-Regular · Tinos-Bold · Tinos-Italic
+    Tinos là bản tương thích số đo của Times New Roman (cùng bề rộng ký tự, cùng chiều cao dòng)
+    — theo tiêu chí đã chốt trước khi đo thì KHÔNG chấm Fail vì tên phông này.
+
+    Cỡ chữ đo được, theo lượng ký tự:
+        cỡ 13 (đậm)   — 182 ký tự — quốc hiệu, tiêu ngữ, tên cơ quan, "NGƯỜI XUẤT BÁO CÁO"
+        cỡ 13 (nghiêng) — 56 ký tự — "Ngày 06 tháng 08 năm 2026", "(Ký, ghi rõ họ tên và đóng dấu)"
+        cỡ 12         —  83 ký tự — dòng kỳ báo cáo / đơn vị / ngày tạo
+        cỡ 11         — 164 ký tự — nội dung các bảng
+        cỡ 14 (đậm)   —  25 ký tự — tên báo cáo "BC CHI PHÍ THEO THỜI GIAN"
+
+    Nhận định (ghi rõ để BA soát lại nếu muốn siết): đặc tả :86 viết gọn "khổ A4, font Times New
+    Roman cỡ 13". Các thành phần mà chính câu đặc tả đó gọi tên — quốc hiệu, tiêu ngữ, tên cơ
+    quan (đầu trang) và ngày ký, họ tên, chỗ con dấu (cuối trang) — đều đang ở cỡ 13. Tên báo cáo
+    lớn hơn (14) và nội dung bảng nhỏ hơn (11-12) là cách trình bày thường thấy của văn bản hành
+    chính. QA KHÔNG chấm Fail ở điểm này vì đó là cách hiểu chặt hơn câu chữ đặc tả; nếu nghiệp vụ
+    muốn ép mọi chữ về đúng cỡ 13 thì cần BA nói rõ.
+
+================================================================================
+B. VAI TRÒ `admin` (Quản trị viên — QTHT, BTP · TW) — ĐÚNG VAI TRÒ TRONG ẢNH ĐỐI TÁC
+================================================================================
+
+B1. Bước Xem báo cáo — KHÔNG bị chặn
+    Màn hiện đủ số liệu y hệt vai trò cbnv_tw_03 (23.000.000 · 2 hồ sơ · Thời điểm tạo 14:30),
+    cả hai nút [Xuất Excel] / [Xuất PDF] bấm được.
+    Ảnh: image/CPCTHTTTG_05-B1-qtht-xem-duoc-bao-cao-nut-xuat-bam-duoc-V108.png
+
+B2. Bước Xuất PDF — hộp thoại MỞ ĐƯỢC, nhưng lượt xuất thật BỊ CHẶN (14:30)
+    Bấm [Xuất PDF] : hộp thoại "Tùy chọn in báo cáo PDF" mở bình thường, 0 request
+                     (khẳng định lại: nút này chỉ mở hộp thoại)
+    Bấm [Xuất file] trong hộp thoại:
+        Số khung thông báo : 1
+        Chuỗi chữ đo theo thời gian:
+            +2565 ms : "Đang tạo file..."   khung rộng 1440 px cao 40 px
+            +2715 ms : "Forbidden"          <-- CHỮ NGƯỜI DÙNG THỰC SỰ ĐỌC ĐƯỢC
+                       khung rộng 1440 px cao 53 px (hiện thật, không phải node ẩn)
+            +6015 ms : ""                   (khung tự tắt sau ~3,3 s)
+        Số request : 1 → XHR POST /api/v1/bao-cao/export → 403
+        Số tệp giao ra : 0 · Số blob : 0
+        Nguyên văn phản hồi:
+            {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+             "timestamp":"2026-08-06T07:30:41.143Z",
+             "requestId":"f99880a3-1dad-4429-bc8f-50c1a2a90cd1"}}
+
+    📸 ẢNH CHỤP ĐƯỢC ĐÚNG KHUNG THÔNG BÁO:
+       image/CPCTHTTTG_06-B2-qtht-thong-bao-Forbidden-khi-xuat-pdf-V108.png
+       Trong ảnh thấy rõ: khung đỏ chữ "Forbidden" ở đỉnh màn, góc phải là tài khoản "Quản trị
+       hệ thống · BTP · TW", bên dưới là báo cáo vẫn hiện đủ 23.000.000 / 2 hồ sơ và hai nút
+       Xuất vẫn ở trạng thái bấm được. Cách chụp: hẹn giờ bấm nút sau 2500 ms RỒI mới gọi lệnh
+       chụp (đảo thứ tự) — chụp theo lối thường sẽ trượt vì khung chỉ sống ~3,3 giây.
+
+================================================================================
+C. ĐỐI CHIẾU VỚI ĐẶC TẢ
+================================================================================
+
+- srs-v3.5/srs-fr-11-bao-cao.md:117 — E7 ERR-RPT-05 quy định câu hiện cho người dùng khi thiếu
+  quyền là "Bạn không có quyền xem báo cáo này". Chuỗi "Forbidden" KHÔNG có trong bảng lỗi.
+- :79 — kiểm quyền truy cập báo cáo nằm ở đầu luồng ⇒ bước Xem và bước Xuất phải nhất quán.
+- :1053 — nút Xuất PDF hiện sau khi đã Xem báo cáo, không kèm điều kiện vai trò; xuất theo khung
+  trình bày TT17/2025 (không dùng Mẫu 21a/21b).
+- :86 — khung văn bản hành chính TT17/2025: khổ A4 ✔ · đầu trang có quốc hiệu + tiêu ngữ + tên
+  cơ quan ✔ · cuối trang có ngày ký + họ tên cán bộ xuất báo cáo + chỗ trống cho con dấu ✔ ·
+  không in dòng chức danh ✔ · tên tệp {TenBaoCao}_{YYYYMMDD_HHmm}.pdf ✔ (hai lượt khác phút ra
+  hai tên khác nhau: …_1426 và …_1428).
+- :124 — AC thao tác Xuất PDF: các mục bắt buộc đều có mặt.
+- :62 — tác nhân là CB Nghiệp vụ / CB Phê duyệt; IM LẶNG về vai trò Quản trị viên → phần đó là
+  câu hỏi gửi BA (cau-hoi-BA.md Mục 2), KHÔNG tự chấm.
+- :869 — trend_data[] {ky_label, tong_chi_phi, so_ho_so}: có đủ trong tệp PDF.
+
+================================================================================
+D. GHI NHẬN NGOÀI PHẠM VI CASE (không kéo verdict của case này)
+================================================================================
+
+D1. Tệp PDF cũng in mã kỹ thuật "KHOANG" ở dòng "Kỳ báo cáo" khi chọn "Khoảng tùy chọn"
+    (tệp ②). Kỳ "Năm" in đúng chữ tiếng Việt. Trên màn hiện "Kỳ: Khoảng".
+D2. Không dựng được dãy nhiều điểm kỳ qua giao diện dù máy chủ làm được — xem chi tiết ở
+    image/CPCTHTTTG_05-thong-bao-va-phan-hoi-may-chu.txt mục D1.
+D3. Bấm [Xem báo cáo] lần thứ hai thì hai nút Xuất bị khoá và không mở lại được trong cùng
+    phiên xem — xem image/CPCTHTTTG_QA01-bam-xem-bao-cao-lan-2-nut-xuat-bi-khoa-V108.png.
+D4. Hiện tượng lạ về phiên làm việc (403 rồi 401 rồi bị đá về trang đăng nhập) — xem
+    image/CPCTHTTTG_05-thong-bao-va-phan-hoi-may-chu.txt mục E.
+
+================================================================================
+E. TỆP SỐ LIỆU THÔ (để dev/BA mở lại kiểm chứng)
+================================================================================
+
+testfiles/CPCTHTTTG_06-b64-dang1.json — lượt xuất ① (Kỳ Năm)
+testfiles/CPCTHTTTG_06-b64-dang2.json — lượt xuất ② (Khoảng 01/06 → 30/06)
+image/CPCTHTTTG_06-xuat-pdf-dang1.pdf                 — tệp thật lượt ①, 31.915 byte
+image/CPCTHTTTG_06-xuat-pdf-dang2-khoang-thang6.pdf   — tệp thật lượt ②, 32.169 byte
+image/CPCTHTTTG_06-A1-hop-thoai-tuy-chon-in-PDF-V108.png
+image/CPCTHTTTG_06-B2-qtht-thong-bao-Forbidden-khi-xuat-pdf-V108.png

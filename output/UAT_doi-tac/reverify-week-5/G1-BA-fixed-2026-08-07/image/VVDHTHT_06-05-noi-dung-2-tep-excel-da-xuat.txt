@@ -1,0 +1,87 @@
+NOI DUNG THUC DOC DUOC TU 2 TEP EXCEL DA XUAT — case VVDHTHT_06 (dong 189)
+Doc bang openpyxl, khong phai chi kiem 'tai duoc'. Thoi diem doc: 2026-08-07 15:32:22
+====================================================================================================
+
+### TEP: BaoCaoVuViecHoanThanh_20260807_1530.xlsx
+Kich thuoc: 7132 byte
+Sheet: ['BC Vụ việc đã hoàn thành']
+----------------------------------------------------------------------------------------------------
+[Sheet] BC Vụ việc đã hoàn thành  dim: A1:B38  max_row: 38  max_col: 2
+BC Vụ việc đã hoàn thành
+Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+Đơn vị: Toàn quốc
+Ngày tạo: 07/08/2026
+
+Tổng số vụ việc hoàn thành
+Chỉ tiêu | Số lượng
+Tổng số vụ việc hoàn thành | 21
+
+Thành công
+Chỉ tiêu | Số lượng
+Thành công | 6
+
+Không thành công
+Chỉ tiêu | Số lượng
+Không thành công | 0
+
+Tỷ lệ thành công (%)
+Chỉ tiêu | Tỷ lệ (%)
+Tỷ lệ thành công (%) | 28.6
+
+Theo lĩnh vực pháp luật
+Lĩnh vực pháp luật | Số lượng
+Dân sự | 11
+Thương mại | 8
+Thuế | 2
+
+Theo kết quả
+Kết quả | Số lượng
+Chưa xác định | 15
+Thành công | 6
+
+Theo đơn vị
+Đơn vị | Số lượng
+Cục Bổ trợ tư pháp - Bộ Tư pháp | 17
+Bộ Kế hoạch và Đầu tư | 2
+Sở Tư pháp Hà Nội | 1
+Sở Tư pháp An Giang | 1
+====================================================================================================
+
+### TEP: BaoCaoVuViecHoanThanh_20260807_1531.xlsx
+Kich thuoc: 6950 byte
+Sheet: ['BC Vụ việc đã hoàn thành']
+----------------------------------------------------------------------------------------------------
+[Sheet] BC Vụ việc đã hoàn thành  dim: A1:B32  max_row: 32  max_col: 2
+BC Vụ việc đã hoàn thành
+Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+Đơn vị: Toàn quốc
+Ngày tạo: 07/08/2026
+
+Tổng số vụ việc hoàn thành
+Chỉ tiêu | Số lượng
+Tổng số vụ việc hoàn thành | 11
+
+Thành công
+Chỉ tiêu | Số lượng
+Thành công | 0
+
+Không thành công
+Chỉ tiêu | Số lượng
+Không thành công | 0
+
+Tỷ lệ thành công (%)
+Chỉ tiêu | Tỷ lệ (%)
+Tỷ lệ thành công (%) | 0
+
+Theo lĩnh vực pháp luật
+Lĩnh vực pháp luật | Số lượng
+Dân sự | 11
+
+Theo kết quả
+Kết quả | Số lượng
+Chưa xác định | 11
+
+Theo đơn vị
+Đơn vị | Số lượng
+Cục Bổ trợ tư pháp - Bộ Tư pháp | 11
+====================================================================================================

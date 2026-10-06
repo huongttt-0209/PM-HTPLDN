@@ -1,0 +1,77 @@
+QLDKTK_10 — ĐỐI CHỨNG TRẠNG THÁI TÀI KHOẢN (cho vế C2)
+======================================================
+Mục đích: KHÔNG tin một mình thông báo trên màn. Đọc lại trạng thái từ bản ghi tài khoản.
+
+KHAI RÕ VỀ TÀI KHOẢN DÙNG ĐỂ ĐỌC
+--------------------------------
+Đã dùng tài khoản `admin` (mật khẩu Secret@123) CHỈ ĐỂ ĐỌC đối chứng ở bước này.
+- Đăng nhập admin trong một browser context RIÊNG BIỆT (tên "adminreadonly"), cookie + localStorage
+  tách hoàn toàn khỏi tab đang đo vai trò DN ⇒ không nhiễm phiên, không che lỗi phân quyền của DN.
+- Đăng nhập UI thật: admin + mật khẩu → bước mã xác thực 6 số (OTP 228979 lấy ở MailHog
+  mailbox admin@htpldn.gov.vn) → vào /dashboard.
+- Đọc xong ĐĂNG XUẤT NGAY: POST /api/v1/auth/logout → 200, kèm clear localStorage/sessionStorage.
+- admin KHÔNG được dùng để ra verdict cho bất kỳ vế C1/C2/C3/C4. Verdict chỉ dựa trên hành vi
+  quan sát bằng chính tài khoản DN tự dựng.
+
+CÁCH ĐỌC
+--------
+Thời điểm đọc: 2026-08-07 ~03:29 giờ VN.
+Chạy trong trang (JavaScript, gửi kèm cookie phiên admin):
+
+    for (const u of ['9908070101','9908070102']) {
+      const r = await fetch('/api/v1/tai-khoan?page=1&pageSize=20&search=' + u,
+                            { credentials: 'include' });
+      const j = await r.json();
+    }
+
+HTTP status cả 2 lượt: 200. meta.total = 1 cho mỗi mã số thuế (khớp đúng 1 bản ghi, không nhầm record).
+Bản JSON đầy đủ chưa cắt: QLDKTK_10-doi-chung-raw.json (cùng thư mục).
+
+GIÁ TRỊ ENUM THẬT ĐỌC ĐƯỢC (ghi nguyên trạng, KHÔNG dịch sang tiếng Việt)
+------------------------------------------------------------------------
+Bản ghi #1
+  "id":               "dcd3fb30-e5be-40cf-9b2e-48fb928cd8e1"
+  "username":         "9908070101"
+  "hoTen":            "Nguyen Van QA"
+  "email":            "qa.w5.qldktk10.01@htpldn.test"
+  "trangThai":        "HOAT_DONG"          <-- GIÁ TRỊ CẦN ĐỐI CHỨNG
+  "loaiTaiKhoanTen":  "Doanh nghiệp"
+  "vaiTros":          [ { "maVaiTro": "DN", "tenVaiTro": "Doanh nghiep" } ]
+  "donViTen":         "Sở Tư pháp Hà Nội"
+  "lanDangNhapCuoi":  null
+  "ngayTao":          "2026-08-06T20:21:04.218Z"
+  "ngayCapNhat":      "2026-08-06T20:21:59.946Z"
+  "version":          3
+
+Bản ghi #2 (bản ghi chính của case)
+  "id":               "0675c1d7-0bd9-4d39-af03-d07516d7071a"
+  "username":         "9908070102"
+  "hoTen":            "Nguyen Van QA Hai"
+  "email":            "qa.w5.qldktk10.02@htpldn.test"
+  "trangThai":        "HOAT_DONG"          <-- GIÁ TRỊ CẦN ĐỐI CHỨNG
+  "loaiTaiKhoanTen":  "Doanh nghiệp"
+  "vaiTros":          [ { "maVaiTro": "DN", "tenVaiTro": "Doanh nghiep" } ]
+  "donViTen":         "Sở Tư pháp Hà Nội"
+  "lanDangNhapCuoi":  null
+  "ngayTao":          "2026-08-06T20:24:39.270Z"
+  "ngayCapNhat":      "2026-08-06T20:25:24.582Z"
+  "version":          3
+
+ĐỌC GÌ TỪ CON SỐ NÀY
+--------------------
+1. Ngay sau khi đăng ký, phản hồi của bước đăng ký ghi "trangThai":"CHO_KICH_HOAT".
+   Sau khi mở liên kết kích hoạt, đọc lại bản ghi thì "trangThai":"HOAT_DONG".
+   `ngayCapNhat` của mỗi bản ghi lệch so với `ngayTao` đúng bằng khoảng thời gian giữa lúc đăng ký và
+   lúc mở liên kết (#1: 20:21:04 → 20:21:59 ≈ 55 giây; #2: 20:24:39 → 20:25:24 ≈ 45 giây)
+   ⇒ chính lần mở liên kết đã ghi lại bản ghi, không phải trùng hợp.
+2. "lanDangNhapCuoi": null ở CẢ HAI bản ghi tại thời điểm đọc — tức trạng thái đã sang HOAT_DONG
+   TRƯỚC khi có bất kỳ lần đăng nhập nào. Việc chuyển trạng thái do bước kích hoạt làm, không phải
+   do lần đăng nhập sau đó.
+3. "vaiTros" đã có "DN" ngay từ lúc tạo ⇒ không có bước phân quyền chờ ở giữa.
+
+LƯU Ý CHỐNG CHẤM SAI CÂU CHỮ
+----------------------------
+Phiếu UAT viết trạng thái mong đợi là "Đang hoạt động". Trong hệ thống, giá trị enum là HOAT_DONG và
+nhãn tiếng Việt tương ứng của tài khoản là "Hoạt động". Đây là khác biệt cách gọi, KHÔNG phải sai
+yêu cầu — điều cần đúng là tài khoản đã ở trạng thái dùng được, và điều đó đã được chứng minh thêm
+bằng việc đăng nhập thành công ở vế C3.

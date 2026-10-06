@@ -1,0 +1,16 @@
+⚠️ Cần BA xác nhận. (Kèm 1 lỗi phụ khác đã chuyển dev — xem mục [5].)
+
+[1] Quan sát của đối tác ĐÚNG SỰ THẬT: QA dựng lại đúng điều kiện (hồ sơ do chính tài khoản Người hỗ trợ tạo, Cán bộ Nghiệp vụ cùng đơn vị kết luận "Không đạt" + có lý do, bấm "Gửi KQ") thì màn Thông báo của Người hỗ trợ vẫn y nguyên 1 mục cũ, không có thông báo từ chối.
+
+[2] NHƯNG hệ thống KHÔNG bỏ sót thông báo: đúng thời điểm bấm "Gửi KQ", hệ thống đã gửi thư báo "Hồ sơ bị từ chối" KÈM NGUYÊN VĂN LÝ DO tới địa chỉ email khai trên hồ sơ ứng viên. Hồ sơ cũng chuyển đúng sang trạng thái "Từ chối" và lưu lại lý do + thời điểm thẩm định.
+
+[3] Điểm cần BA chốt: SRS FR-IV-06 (srs-fr-04-chuyen-gia-tvv.md:522, :548) và bảng chuyển trạng thái (:2325) đều ghi người nhận thông báo là "TVV/CG (chủ hồ sơ)", còn kênh gửi được nêu ở :595 là "email đã khai". SRS KHÔNG nhắc Người hỗ trợ ở luồng này. Kỳ vọng trong phiếu ("gửi thông báo đến Người hỗ trợ") là kỳ vọng nằm ngoài SRS.
+
+[4] Câu hỏi gửi BA:
+- a) Người hỗ trợ đã nộp hồ sơ có phải nhận thông báo kèm lý do khi hồ sơ bị kết luận Không đạt không? Nếu có thì đi kênh nào (thông báo trong ứng dụng, email, hay cả hai)?
+- b) Ứng viên bị từ chối ở bước thẩm định CHƯA CÓ tài khoản trong hệ thống (SRS :2326 — tài khoản chỉ được cấp sau khi Cán bộ Phê duyệt duyệt), nên trong ứng dụng hiện không vai trò nào thấy kết quả từ chối. Có cần hiện thông báo trong ứng dụng cho một vai trò nào đó để theo dõi không?
+- c) Thông báo hiện sau khi bấm "Gửi KQ" với kết luận Không đạt đang là "Đã lưu kết quả thẩm định", trong khi phiếu mong đợi câu phản ánh đúng việc hồ sơ đã bị từ chối. SRS không quy định câu chữ này — BA chốt theo hướng nào?
+
+[5] Lỗi phụ QA phát hiện kèm, đã chuyển dev: thư báo TỪ CHỐI lại mang tiêu đề trong thân thư là "✅ Phê duyệt: Hồ sơ bị từ chối" — có chữ "Phê duyệt" và dấu tích xanh, mâu thuẫn với chính nội dung bên dưới. Người nhận dễ hiểu nhầm là hồ sơ được duyệt.
+
+[6] Hồ sơ để dev/BA đối chiếu: TVV-BTP-TW-0021 (Cục Bổ trợ tư pháp, trạng thái Từ chối, đã lưu lý do).

@@ -1,0 +1,16 @@
+{
+  "STT": "03/08/2026",
+  "Tuần": "Tuần 3",
+  "Mã TC": "QLDMTCTV_OOS_04",
+  "Mô tả": "Danh sách Tổ chức tư vấn — thẻ trạng thái không có bản ghi thì không hiển thị số đếm \"0\"",
+  "Điều kiện": "1. Đăng nhập tài khoản Cán bộ Nghiệp vụ cấp Trung ương (cbnv_tw_04), đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp.\n2. Chọn menu \"Mạng lưới Tư vấn viên\" -> \"Tổ chức tư vấn\".",
+  "Dữ liệu đầu vào": "Các thẻ \"Đã từ chối\", \"Tạm dừng\", \"Vô hiệu hóa\" hiện chưa có tổ chức nào.",
+  "Các bước thực hiện": "1. Quan sát thanh thẻ trạng thái.\n2. Đọc huy hiệu số đếm của từng thẻ.\n3. Đối chiếu thẻ có bản ghi với thẻ chưa có bản ghi.",
+  "Kết quả mong đợi": "Màn hình SCR-IV-NEW-01 quy định mọi thẻ trạng thái đều thuộc loại \"tab + số đếm\" (dòng 1625 đến 1630), và dòng 1650 ghi rõ phần phân trang phải \"hiển thị tổng mỗi tab\". Vậy thẻ chưa có bản ghi vẫn phải hiển thị số 0.",
+  "Kết quả thực tế": "Các thẻ chưa có bản ghi (\"Đã từ chối\", \"Tạm dừng\", \"Vô hiệu hóa\") không hiển thị huy hiệu nào, kể cả số 0. Chỉ thẻ có bản ghi mới hiện số.\nHệ quả: người dùng không phân biệt được \"mục này đang có 0 hồ sơ\" với \"phần mềm chưa làm số đếm cho thẻ này\".",
+  "Ảnh/vieo 1": "QLDMTCTV_05-cbpd-tw-04-thanh-the-co-cho-phe-duyet.png",
+  "Trạng thái 1": "Fail",
+  "Verify": "BA confirm",
+  "DEV phản hồi lần 1": "⚠️ Cần BA xác nhận.\n- Thẻ trạng thái nào chưa có hồ sơ thì không hiển thị số đếm, kể cả số 0.\n- Theo màn hình SCR-IV-NEW-01, tất cả các thẻ đều thuộc loại \"tab + số đếm\" (dòng 1625 đến 1630), và dòng 1650 quy định phải hiển thị tổng của mỗi thẻ.\n- Hệ quả: người dùng không phân biệt được mục đang trống thật với mục chưa được làm số đếm.\n⚠️ Câu hỏi gửi BA: đặc tả chỉ ghi \"hiển thị tổng mỗi tab\" (dòng 1650) mà KHÔNG nói rõ thẻ có 0 hồ sơ thì phải hiện số \"0\" hay được phép ẩn huy hiệu. Đề nghị BA chốt một trong hai: (a) thẻ 0 hồ sơ vẫn hiện số 0 — khi đó đây là lỗi cần dev sửa; (b) thẻ 0 hồ sơ được phép ẩn huy hiệu — khi đó web đang đúng và xin bổ sung câu này vào đặc tả.\n- Ghi chú tham chiếu: chức năng \"Quản lý Tổ chức tư vấn\" (FR-IV-NEW-01) trong đặc tả KHÔNG được cấp mã UC (dòng 1029 ghi \"chưa có trong CSV\"), nên chỉ nêu tên chức năng và số dòng, không có mã UC để dẫn.\n- Lỗi do QA phát hiện thêm khi kiểm 4 phiếu QLDMTCTV_02 / _05 / _06 / _09 ngày 03/08/2026, không nằm trong phạm vi 4 phiếu đó nên mở dòng riêng để chuyển dev.\n- Môi trường kiểm: bản dựng HTPLDN V1.0.5.",
+  "Trạng thái dev fix 1": "BA confirm"
+}

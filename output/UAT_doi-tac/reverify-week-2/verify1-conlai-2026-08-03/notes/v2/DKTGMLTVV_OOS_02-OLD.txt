@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Yêu cầu theo đặc tả: SCR-IV-02 "Thêm mới / Chỉnh sửa Tư vấn viên" §Danh sách trường — dòng 1500 "Thông tin nghề nghiệp"; dòng 1495 mục 2.7 "Số Căn cước công dân *"; dòng 1503 mục 3.1 "Trình độ *".
+- Đề nghị BA xác nhận riêng điểm 2: nhãn "Số CMND/CCCD" có phải là thay đổi phạm vi giấy tờ được chấp nhận hay chỉ là sai khác câu chữ. Nếu là thay đổi phạm vi thì cần cập nhật đặc tả; nếu không thì sửa nhãn về đúng đặc tả.
+- Mã lỗi nội bộ: BUG-DKTGMLTVV_OOS_02. Tài khoản kiểm tra: nht_qa_tw (Người hỗ trợ pháp lý, cấp Trung ương, đơn vị Cục Bổ trợ tư pháp). Bản dựng V1.0.5, kiểm tra ngày 03/08/2026.
+- Lỗi phát hiện ngoài phạm vi các dòng TC có sẵn nên mở dòng mới.

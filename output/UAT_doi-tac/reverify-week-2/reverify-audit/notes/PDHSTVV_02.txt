@@ -1,0 +1,6 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Thẻ "Hồ sơ": mục "File đính kèm" hiển thị "Chưa có file đính kèm" dù hồ sơ đang có tệp thẻ hành nghề đã lưu. Theo FR-IV-05 (UC43) §Outputs (srs-fr-04 dòng 468) và SCR-IV-03 thẻ Hồ sơ nhóm File đính kèm (dòng 1554), thẻ Hồ sơ phải liệt kê tệp kèm tên + dung lượng + nút "Xem" / "Tải xuống".
+- Thẻ "Năng lực": trường "Bằng cấp" in nguyên chuỗi dữ liệu thô ra màn hình thay vì hiển thị Tên trường / Chuyên ngành / Năm tốt nghiệp (SCR-IV-03 thẻ Năng lực, dòng 1566).
+- Thẻ "Đánh giá": trên môi trường kiểm thử đang hiển thị đúng thang 1–5 ("—/5", "0.0/5") theo SCR-IV-03 (dòng 1570-1572) — riêng ý "thang điểm 10" KHÔNG tái hiện.
+- Verify: tài khoản cbpd_tw (CB Phê duyệt - Trung ương), hồ sơ TVV-BTP-TW-0005 ở trạng thái "Chờ phê duyệt", đã có sẵn tệp thẻ hành nghề + bằng cấp chi tiết.
+- Bug ID: BUG-PDHSTVV_02.

@@ -1,0 +1,20 @@
+Traceback (most recent call last):
+  File "/Users/huongttt/Downloads/antigravity/PM HTPLDN/skilkk/output/UAT_doi-tac/tools/sheet_read.py", line 155, in <module>
+    main()
+  File "/Users/huongttt/Downloads/antigravity/PM HTPLDN/skilkk/output/UAT_doi-tac/tools/sheet_read.py", line 48, in main
+    ws = get_ws()
+  File "/Users/huongttt/Downloads/antigravity/PM HTPLDN/skilkk/output/UAT_doi-tac/tools/sheet_read.py", line 43, in get_ws
+    sh = gc.open_by_key(SPREADSHEET_ID)
+  File "/Users/huongttt/Library/Python/3.9/lib/python/site-packages/gspread/client.py", line 174, in open_by_key
+    raise ex
+  File "/Users/huongttt/Library/Python/3.9/lib/python/site-packages/gspread/client.py", line 168, in open_by_key
+    spreadsheet = Spreadsheet(self.http_client, {"id": key})
+  File "/Users/huongttt/Library/Python/3.9/lib/python/site-packages/gspread/spreadsheet.py", line 29, in __init__
+    metadata = self.fetch_sheet_metadata()
+  File "/Users/huongttt/Library/Python/3.9/lib/python/site-packages/gspread/spreadsheet.py", line 230, in fetch_sheet_metadata
+    return self.client.fetch_sheet_metadata(self.id, params=params)
+  File "/Users/huongttt/Library/Python/3.9/lib/python/site-packages/gspread/http_client.py", line 305, in fetch_sheet_metadata
+    r = self.request("get", url, params=params)
+  File "/Users/huongttt/Library/Python/3.9/lib/python/site-packages/gspread/http_client.py", line 128, in request
+    raise APIError(response)
+gspread.exceptions.APIError: APIError: [429]: Quota exceeded for quota metric 'Read requests' and limit 'Read requests per minute per user' of service 'sheets.googleapis.com' for consumer 'project_number:20234855209'.

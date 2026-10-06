@@ -1,0 +1,15 @@
+CPCTHTTDVQL_06 — Xuất Excel BC Chi phí theo đơn vị (verify cbnv_tw_02, kỳ Năm 2026, Toàn quốc)
+Thao tác thật (click nút Xuất Excel):
+  - Toast quan sát (toast-capture.js): "Đang tạo file..." (không có toast lỗi ERR-RPT-04)
+  - Network: POST /api/v1/bao-cao/export -> 200
+  - content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+  - content-disposition: attachment; filename="bao-cao-chi-phi-theo-don-vi-2026-07-21.xlsx" (6594 bytes)
+  - reqBody: {"loaiBaoCao":"BC_CHI_PHI_THEO_DON_VI","kyBaoCao":"NAM","tuNgay":"2026-01-01","denNgay":"2026-12-31","formatXuat":"XLSX"}
+Nội dung file .xlsx (openpyxl), sheet "Chi phí theo đơn vị":
+  A1: BC Chi phí theo đơn vị
+  A2: Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+  A3: Đơn vị: Toàn quốc
+  A4: Ngày tạo: 21/07/2026
+  A6..D6: Đơn vị | Số hồ sơ | Tổng chi phí (₫) | Trung bình chi phí (₫)
+  A7..D7: Cục Bổ trợ tư pháp - Bộ Tư pháp | 1 | 8000000 | 8000000
+=> Header TT17 đủ 4/4 + bảng khớp số liệu web (Tổng hồ sơ 1, Tổng chi phí 8.000.000). Xuất thành công, KHÔNG tái hiện ERR-RPT-04.

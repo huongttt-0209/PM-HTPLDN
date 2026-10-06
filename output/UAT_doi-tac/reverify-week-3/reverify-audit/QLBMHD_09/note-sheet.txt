@@ -1,0 +1,6 @@
+Cần BA xác nhận wording thông báo.
+- Tái hiện: mô phỏng mất mạng (Chrome DevTools Offline) khi upload → web báo "Không kết nối được máy chủ.", upload chuyển trạng thái lỗi, file không đính kèm. App CÓ xử lý + báo lỗi khi upload không tới được server.
+- Đối chiếu SRS EC-01 (srs-fr-09 dòng 381) → ERR-BM-06 "Upload bị gián đoạn, vui lòng thử lại": app truyền tải đúng ý (không kết nối được / mất mạng), khác cách diễn đạt.
+- Caveat: mình test Offline TRƯỚC khi upload bắt đầu (chưa phải ngắt GIỮA CHỪNG khi 1 phần đã lên); vế "dọn blob mồ côi" không kiểm được ở tầng UI.
+- Đề nghị BA quyết wording ERR-BM-06; Dev xác nhận xử lý ngắt-giữa-chừng + dọn blob mồ côi.
+- Verify: cbnv_tw (CB Nghiệp vụ - TW), form Thêm biểu mẫu, 20/07/2026.

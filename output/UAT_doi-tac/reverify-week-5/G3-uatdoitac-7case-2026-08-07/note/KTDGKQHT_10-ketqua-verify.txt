@@ -1,0 +1,28 @@
+✅ Đã hết lỗi.
+
+Phạm vi lượt kiểm: phản hồi cần xử lý là "Màn hình không có nút chức năng", nên lượt này chỉ kiểm chức năng đưa tệp Excel kết quả kiểm tra CÓ hiện diện trên màn và có gọi được hay không; không kết luận gì về phần xử lý tệp phía sau (ghi dữ liệu vào bảng kết quả, nội dung sau khi nạp, ứng xử với điểm ngoài thang).
+
+Đo 07/08/2026 18:00–18:15 trên https://htpldn-uat.ospgroup.vn, bản dựng V1.0.10, tài khoản vai trò Cán bộ Nghiệp vụ cấp Trung ương (đúng tác nhân và quyền đặc tả, srs-fr-03-dao-tao.md:526 và :534).
+
+Tiền đề do chúng tôi tự dựng vì ô "Kết quả thực tế" và ô Ảnh/video của phiếu đều trống — xin khai đủ để quý đơn vị kiểm chứng lại: khóa KH-20260509-006 "Luật đất đai cập nhật 2024 - R9", 6 học viên, trạng thái "Đang diễn ra" (đúng điều kiện :537), đã gán 1 đề kiểm tra, và chưa trình duyệt kết quả nên bảng chưa chuyển sang chỉ đọc (:1929). Phiếu ghi tab "Kết quả kiểm tra", nhãn trên bản dựng là "Kết quả" — cùng là tab thứ 5 (:522, :1924), chỉ khác tên nhãn.
+
+Nguồn gốc nhiều khả năng của phản hồi: theo :578, chức năng nạp tệp chỉ mở sau khi đã chọn đề kiểm tra thuộc khóa. Mở tab kết quả của khóa chưa gán đề thì các nút vẫn nằm trên màn nhưng mờ và không bấm được — nhìn rất giống "màn hình không có nút chức năng". Đã đo hai lượt đối chứng khác nhau đúng một biến số, rà bằng cách liệt kê mọi phần tử bấm được trong vùng tab (đọc cả chữ gợi ý, nhãn trợ năng, tên biểu tượng, trạng thái vô hiệu hoá), không kết luận qua ảnh chụp:
+- Lượt A — khóa KH-2026-001 chưa gán đề: "Tải mẫu điểm kiểm tra", "Import Excel", "Lưu kết quả" đều MỜ; "Xuất DOCX" bật bình thường.
+- Lượt B — khóa đã gán đề: "Tải mẫu điểm kiểm tra" và "Import Excel" đều BẬT.
+Cùng tài khoản, cùng tab, cùng trạng thái khóa hợp lệ, hai nút nạp tệp chuyển từ mờ sang bật đúng khi có đề ⇒ chức năng vẫn hiện diện đầy đủ, cái quyết định là điều kiện mở khoá mà đặc tả đã quy định. Triệu chứng không tái hiện khi tiền đề được dựng đủ.
+
+Không dừng ở mức "nhìn thấy nút đã bật" mà bấm thật:
+- "Tải mẫu điểm kiểm tra" → nhận tệp thật 8.278 byte. Mở tệp đọc: trang "Mẫu điểm kiểm tra" có bộ cột khớp :582 và đã điền sẵn đúng 6 học viên của khóa, cột điểm để trống.
+- "Import Excel" → mở màn nhập tệp, nhận đuôi .xlsx.
+- Đưa tệp lên rồi bấm "Kiểm tra tệp" → hệ thống nhận và xử lý được. Đây là bằng chứng mạnh nhất cho vế "gọi được": không chỉ mở được hộp thoại mà cả đường đi lên máy chủ cũng thông.
+Không có mã lỗi 4xx/5xx nào trong toàn lượt đo; 0 thông báo lỗi (bộ theo dõi thông báo cài TRƯỚC khi thao tác, không lọc trùng, đã tự kiểm chỉ có một bộ đang chạy để tránh đếm bội).
+
+Không có thay đổi dữ liệu nào: dừng TRƯỚC bước xác nhận ghi. Đã ghi lại điểm của cả 6 học viên trước khi thao tác và đọc lại sau khi đóng màn — khớp 6/6 (tester 1 = 9,0 · tester 2 = 4,0 · bốn học viên còn lại chưa có điểm). Không tạo học viên, không xóa bản ghi, không trình duyệt kết quả, không kết thúc khóa.
+
+Đối chiếu đặc tả (đã mở file xác minh số dòng): srs-fr-03-dao-tao.md:524 (hỗ trợ nhập thủ công + import Excel) · :537 · :578 · :582 · :589 (bước đầu của trình tự nhập bằng tệp là đưa .xlsx lên ⇒ phải tồn tại đường đưa tệp lên, không chỉ đường tải mẫu về) · :1924 · :1929.
+
+Đề nghị xem xét (không chặn bàn giao, không đổi kết quả case này): hệ thống khai tên tệp mẫu theo mã khóa học ("mau-diem-kiem-tra-KH-20260509-006.xlsx") nhưng tệp lưu xuống máy người dùng lại mang tên theo mã định danh nội bộ, nên khó nhận ra tệp thuộc khóa nào khi thư mục có nhiều tệp mẫu. Đây là điểm trải nghiệm, không phải lỗi chức năng.
+
+Phạm vi hiệu lực: môi trường và bản dựng nêu trên, tại thời điểm đo, trên khóa KH-20260509-006 đang "Đang diễn ra" với 6 học viên và 1 đề kiểm tra đã gán. Kết luận chỉ nói về sự hiện diện và khả năng gọi được của chức năng đưa tệp Excel kết quả lên.
+
+Ảnh bằng chứng: https://drive.google.com/file/d/1-_vUGVO8SYFYytpYqXcWJLTBZs9gEUY3/view?usp=drivesdk (khóa KH-20260509-006 đang ở bước "Đang diễn ra" — chứng minh Điều kiện 2 của phiếu) · https://drive.google.com/file/d/1NiMCcP_ACzKAFaCQCncyZ0VRmZAny9DO/view?usp=drivesdk (lượt A — khóa chưa gán đề: ô "Chọn đề kiểm tra" trống, ba nút đều mờ; đây là cảnh dễ bị hiểu là "màn hình không có nút chức năng") · https://drive.google.com/file/d/19nIg3KXOM-yB5i2tF6DKnpaEk7SXpsCL/view?usp=drivesdk (lượt B — cùng tab trên khóa đã gán đề: hai nút "Tải mẫu điểm kiểm tra" và "Import Excel" đã bật rõ) · https://drive.google.com/file/d/13Jz6yNTwN36NHjSZAtCzLAQ_rshCCPQ3/view?usp=drivesdk (màn "Import điểm kiểm tra từ Excel" đã mở và hệ thống xử lý xong tệp được đưa lên).

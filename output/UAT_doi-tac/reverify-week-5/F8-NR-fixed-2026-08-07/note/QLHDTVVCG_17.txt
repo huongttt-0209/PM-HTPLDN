@@ -1,0 +1,93 @@
+[!] BẢN NHÁP ĐÃ HẾT HIỆU LỰC — KHÔNG GHI VÀO BẢNG.
+Nội dung dưới đây soạn cho ô "Kết quả verify" khi verdict còn là Reopen (07/08/2026 18:4x).
+User chốt lại tiêu chí lúc 18:3x: "verify theo bug gốc + nội dung BA chốt; phần mềm đúng ý BA chốt là được rồi".
+Chiếu theo đó, QLHDTVVCG_17 = Test done, và ô "Kết quả verify" đã hoàn nguyên về RỖNG.
+Giữ tệp này chỉ để lưu vết phần đo; phần "còn lỗi" bên dưới nay là GHI NHẬN, không phải lý do lật ô R.
+Bản đo chuẩn: ../do/QLHDTVVCG_17.md
+================================================================================
+
+📌 KẾT QUẢ CHUNG: CÒN LỖI (REOPEN) — thao tác xóa CHẠY ĐƯỢC và có thông báo "Đã xóa hợp đồng" đúng nguyên văn phiếu, NHƯNG ngay sau đó hệ thống hiện thêm một thông báo LỖI "Hợp đồng tư vấn không tồn tại" cho chính bản ghi vừa xóa; và hai yêu cầu cốt lõi của phiếu (xóa mềm - không xóa vật lý, và lưu vết thao tác) hiện KHÔNG có cách nào kiểm chứng được với vai trò mà phiếu yêu cầu.
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-BbPPdate.js (bản lên lúc 13:47 ngày 07/08/2026), đo lúc 18:08-18:12 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_04. Đây là phiếu chạy CUỐI CÙNG của lượt vì nó xóa dữ liệu thật.
+
+ĐƯỜNG VÀO THỰC TẾ VÀ BẢN GHI ĐÃ ĐO
+
+Bản ghi đo là hợp đồng HDTV-20260807-0001 (số HĐ QAF8/2026/HD-02), do đội kiểm thử tự dựng lúc 13:14 cùng ngày, ghi chú rõ "CỐ Ý không gắn vụ việc (phục vụ phiếu _17)". KHÔNG phải dữ liệu của bên nghiệm thu.
+
+Đã ghi lại định danh của bản ghi TRƯỚC khi bấm xóa để còn tra ngược được, và đã xác nhận trước khi bấm: máy chủ trả bản ghi tồn tại, 0 vụ việc liên kết, đang ở trạng thái Đang thực hiện; danh sách hợp đồng theo tư vấn viên có 4 hợp đồng trong đó có bản ghi này; và nhật ký hoạt động CỦA CHÍNH bản ghi này đọc được bình thường (2 dòng Tạo mới lúc 06:14 ngày 07/08).
+
+Ghi nhận về đường vào: thanh bên không có mục "Hợp đồng Tư vấn" (bỏ theo quyết định nghiệp vụ 11/05/2026). Ô DEV phản hồi lần 1 nói lối vào là "từ Chi tiết Vụ việc / Lịch sử TVV". Đã thử cả hai: lối "Chi tiết Vụ việc" có thật, nhưng hợp đồng này CỐ Ý không gắn vụ việc nào nên không dùng được; còn màn chi tiết Tư vấn viên/Chuyên gia hiện chỉ có 4 thẻ Hồ sơ, Năng lực, Lịch sử hỗ trợ, Đánh giá - KHÔNG có mục hợp đồng. Nên đã vào thẳng trang chi tiết hợp đồng bằng điều hướng nội bộ của ứng dụng (không tải lại trang, phiên đăng nhập giữ nguyên). Đây là đường đi, không phải điểm chấm, không tính là lỗi - nhưng xem mục cần nghiệp vụ chốt ở dưới.
+
+❌ CÒN LỖI 1 - Xóa thành công nhưng người dùng vẫn nhận được một thông báo lỗi
+
+Bấm nút Xóa, hộp xác nhận hiện "Xóa hợp đồng? / Hợp đồng sẽ được gỡ khỏi danh sách và lưu vết trong nhật ký", bấm Xóa xác nhận. Bộ theo dõi cài TRƯỚC thao tác, không lọc trùng, ghi lại đúng chuỗi sự kiện sau, tất cả cùng thời điểm 18:10:36:
+
+1) Lời gọi xóa được máy chủ chấp nhận (mã 204), đúng MỘT lời gọi - không gửi trùng.
+2) Hiện thông báo thành công "Đã xóa hợp đồng" - đúng nguyên văn phiếu mong đợi.
+3) Ứng dụng TỰ GỌI LẠI chính bản ghi vừa xóa, hai lần: đọc lại hợp đồng và đọc lại nhật ký của hợp đồng. Cả hai đều trả về lỗi 404 "Hợp đồng tư vấn không tồn tại".
+4) Vì thế màn hiện THÊM một thông báo lỗi thứ hai "Hợp đồng tư vấn không tồn tại", ngay sau thông báo thành công.
+5) Màn rời trang chi tiết và dừng ở Trang tổng quan.
+
+Vì sao thuộc phạm vi phiếu: lỗi này tự lộ ra trong đúng bước bắt buộc của phiếu (bấm xác nhận xóa), không phải do đổi màn, đổi vai trò, đổi bộ lọc hay dựng thêm dữ liệu.
+
+Dev cần sửa: sau khi xóa thành công, hệ thống không được báo lỗi cho người dùng về chính bản ghi vừa xóa. Người dùng làm đúng một thao tác hợp lệ mà nhận cùng lúc một thông báo thành công và một thông báo lỗi thì không biết thao tác của mình có kết quả hay không. Cách làm cụ thể do bộ phận phát triển tự chọn.
+
+❌ CÒN LỖI 2 - Không kiểm chứng được "xóa mềm" và "lưu vết thao tác", là hai yêu cầu chính của phiếu
+
+Kết quả mong đợi của phiếu ghi nguyên văn: "Hệ thống thực hiện xóa mềm (đánh dấu đã xóa, không xóa vật lý), lưu vết thao tác theo quy định...". Đặc tả cũng quy định như vậy (srs-fr-14-hop-dong-tv.md:124, :299, :182 và quy tắc dữ liệu BR-DATA-01 dòng :505 ghi rõ "đánh dấu đã xóa, không xóa vật lý"; lưu vết ở :125, :162, BR-DATA-05 dòng :522).
+
+Đo được đến đâu:
+- Phần đo được: thao tác được chấp nhận và bản ghi biến khỏi danh sách - danh sách hợp đồng theo tư vấn viên từ 4 còn 3, không còn HDTV-20260807-0001.
+- Phần KHÔNG đo được, và đó đúng là phần phiếu đòi: tra lại đúng định danh của bản ghi thì nhận 404 "Hợp đồng tư vấn không tồn tại" (đo lại lần hai lúc 18:12 vẫn vậy). Không có bề mặt nào cho người kiểm thử thấy bản ghi vẫn còn tồn tại và đang mang dấu đã xóa. Đã tìm hết đường hợp lệ: toàn bộ danh mục giao tiếp của hệ thống (549 đường) KHÔNG có chức năng tra bản ghi đã xóa, không có thùng rác, không có khôi phục, và không có tùy chọn kiểu "gồm cả bản ghi đã xóa" trên nhóm hợp đồng.
+- Nhật ký: TRƯỚC khi xóa, nhật ký của bản ghi đọc được bình thường (2 dòng Tạo mới). SAU khi xóa, cùng đường đó trả 404 cùng mã lỗi - tức hệ thống kiểm tra bản ghi còn tồn tại trước rồi mới trả nhật ký, nên khi bản ghi đã xóa thì không còn đọc được dòng nhật ký nào, kể cả dòng của chính thao tác xóa. Nhật ký toàn hệ thống thì vai trò Cán bộ Nghiệp vụ (vai trò mà phiếu yêu cầu) KHÔNG được phép xem - trả 403.
+
+Nói rõ để không hiểu nhầm: đội KHÔNG kết luận hệ thống đã xóa vật lý. Nhận 404 là hành vi bình thường của cả xóa mềm lẫn xóa vật lý, nên không đủ căn cứ đánh trượt. Nhưng cũng KHÔNG được ghi "hết lỗi", vì không có bằng chứng nào cho thấy bản ghi còn tồn tại kèm dấu đã xóa, và không có bằng chứng nào cho thấy thao tác xóa được lưu vết. Câu hứa "lưu vết trong nhật ký" trên hộp xác nhận là lời của giao diện, không phải bằng chứng.
+
+Dev cần sửa: cần một cách hợp lệ để người kiểm thử với vai trò Cán bộ Nghiệp vụ xác nhận được hai điều mà phiếu và đặc tả đòi - (a) bản ghi sau khi xóa vẫn tồn tại và đang mang dấu đã xóa, và (b) thao tác xóa có để lại dòng lưu vết. Hiện nhật ký của hợp đồng bị chặn ngay khi hợp đồng đã xóa, còn nhật ký toàn hệ thống thì vai trò này không được xem, nên không còn cửa nào. Cách làm cụ thể do bộ phận phát triển tự chọn.
+
+✅ NHỮNG PHẦN ĐÃ CHẠY ĐÚNG (ghi rõ để lần sửa sau không phá vỡ)
+
+- Có hộp xác nhận trước khi xóa, không xóa thẳng.
+- Lời gọi xóa được gửi đúng MỘT lần, không gửi trùng.
+- Thông báo thành công hiện đúng nguyên văn phiếu mong đợi: "Đã xóa hợp đồng".
+- Bản ghi biến khỏi danh sách ngay sau khi xóa (danh sách theo tư vấn viên từ 4 còn 3 hợp đồng).
+- Nhật ký hoạt động của hợp đồng đọc được bình thường khi hợp đồng CHƯA bị xóa.
+
+❓ CẦN NGHIỆP VỤ CHỐT (KHÔNG tính là lỗi, KHÔNG dùng để đánh trượt)
+
+1) Phiếu mong đợi sau khi xóa thì "làm mới danh sách". Đặc tả không quy định điểm này, và dòng :175 còn khẳng định nhóm chức năng này không có màn danh sách độc lập, nên chưa xác định được "danh sách" là màn nào. Thực tế: sau khi xác nhận, ứng dụng rời trang chi tiết và dừng ở Trang tổng quan. Đề nghị nghiệp vụ chốt màn cần quay về.
+
+2) Thông báo "Đã xóa hợp đồng": đặc tả im lặng về câu chữ thông báo khi xóa THÀNH CÔNG (bảng mã thông báo chỉ có mã cho xóa thất bại và cho lưu thành công). Web hiện đang hiện đúng như phiếu mong đợi, chỉ ghi nhận để nghiệp vụ bổ sung mã thông báo cho đầy đủ.
+
+3) Lối vào cho hợp đồng chưa gắn vụ việc: đo được lối "Chi tiết Vụ việc" có thật, nhưng màn chi tiết Tư vấn viên/Chuyên gia hiện không có mục hợp đồng. Hệ quả: một hợp đồng không gắn vụ việc nào thì người dùng KHÔNG có lối vào nào để xem, sửa hay xóa nó. Đề nghị nghiệp vụ chốt lối vào cho nhóm hợp đồng này. Không tính là lỗi vì lối vào là điều kiện đi trước, nằm ngoài phạm vi chấm của phiếu theo quyết định nghiệp vụ 11/05/2026.
+
+🔎 PHẠM VI ĐÃ ĐO: môi trường nội bộ · 07/08/2026 18:08-18:12 · Cán bộ Nghiệp vụ Trung ương · trang chi tiết hợp đồng HDTV-20260807-0001 · đúng MỘT thao tác xóa · thông báo nổi và lời gọi mạng bắt bằng bộ theo dõi cài TRƯỚC thao tác, không lọc trùng · tra ngược bản ghi 2 lần sau khi xóa (18:10 và 18:12) · đã rà toàn bộ danh mục giao tiếp của hệ thống để tìm đường xem bản ghi đã xóa. KHÔNG dùng tài khoản quản trị để kết luận (chuẩn chấm cấm), vì phiếu quy định vai trò Cán bộ Nghiệp vụ.
+
+Vì sao KHÔNG có ảnh: cả hai thông báo đều tự tắt sau vài giây. Bằng chứng đang dùng mạnh hơn ảnh - đó là nhật ký lời gọi mạng (mã 204 và 404, mã lỗi, mốc thời gian) cùng nguyên văn chuỗi sự kiện do bộ theo dõi cài trước thao tác ghi lại. Dựng lại cảnh để chụp sẽ phải xóa thêm một hợp đồng thật nữa, vượt phạm vi phiếu và làm bẩn môi trường dùng chung.
+
+DỮ LIỆU ĐÃ THAY ĐỔI: đã xóa hợp đồng HDTV-20260807-0001 (số HĐ QAF8/2026/HD-02) - đây là thao tác xóa CÓ CHỦ ĐÍCH của phiếu, và bản ghi này do đội kiểm thử tự dựng cùng ngày để phục vụ đúng phiếu này, không phải dữ liệu của bên nghiệm thu. Sau khi xóa: không tra được bằng định danh nữa, danh sách theo tư vấn viên từ 4 còn 3 hợp đồng. KHÔNG khôi phục được bằng giao diện (hệ thống không có chức năng khôi phục). Không đụng hợp đồng khác - HDTV-20260807-0006 giữ nguyên 3 vụ việc liên kết, 2 mốc tiến độ, 1 giai đoạn thanh toán.
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+---
+── CÁCH VERIFY sau Dev fix ──
+Phạm vi: kiểm 3 điểm - (a) sau khi xóa thành công không còn thông báo lỗi nào cho người dùng; (b) xác nhận được bản ghi vẫn tồn tại và đang mang dấu đã xóa; (c) đọc được dòng lưu vết của chính thao tác xóa. KHÔNG đo lại câu chữ hộp xác nhận, KHÔNG đo lại việc màn quay về đâu (đang chờ nghiệp vụ chốt).
+Precondition: đăng nhập cbnv_tw_04 (vai trò Cán bộ Nghiệp vụ - đúng vai phiếu yêu cầu, KHÔNG dùng tài khoản quản trị để kết luận). Dựng MỘT hợp đồng mới của đội kiểm thử để xóa - KHÔNG xóa dữ liệu có sẵn. GHI LẠI định danh và mã hợp đồng TRƯỚC khi bấm xóa, nếu không thì sau khi xóa không tra ngược được. Trước khi bấm, đọc nhật ký hoạt động của chính bản ghi đó để có mốc so (đếm số dòng).
+1) Cài bộ theo dõi thông báo và lời gọi mạng TRƯỚC khi bấm, không lọc trùng, đọc phần chữ hiển thị (không đọc phần chữ của node ẩn).
+2) Bấm Xóa, xác nhận. Ghi lại TOÀN BỘ thông báo hiện ra và toàn bộ lời gọi mạng kèm mã trả về, theo thứ tự thời gian.
+3) Tra lại bản ghi bằng đúng định danh đã ghi ở bước chuẩn bị.
+4) Đọc nhật ký của bản ghi đó và tìm dòng ứng với thao tác xóa vừa làm (đúng người, đúng thời điểm).
+5) Mở lại danh sách mà bản ghi từng xuất hiện, kiểm nó đã biến mất khỏi danh sách của người dùng thường.
+✅ PASS khi: bước 2 chỉ có thông báo thành công, KHÔNG có thông báo lỗi nào và không có lời gọi nào trả 404 về chính bản ghi vừa xóa; bước 3 cho thấy bản ghi vẫn tồn tại và đang mang dấu đã xóa (hoặc có một cách hợp lệ khác cho vai trò này thấy điều đó); bước 4 đọc được đúng dòng lưu vết của thao tác xóa; bước 5 bản ghi không còn hiện trong danh sách thường.
+❌ FAIL nếu: bước 2 vẫn hiện thông báo lỗi về bản ghi vừa xóa, hoặc ứng dụng vẫn tự gọi lại bản ghi vừa xóa và nhận 404.
+⏸ CHƯA CHỐT khi: bước 3 hoặc bước 4 vẫn không có bề mặt nào cho vai trò Cán bộ Nghiệp vụ kiểm chứng - lúc đó ghi rõ "chưa chốt", KHÔNG được ghi PASS bằng lý do "bản ghi đã biến khỏi danh sách", và cũng KHÔNG được ghi FAIL "đã xóa vật lý".
+⚠️ Bẫy số 1: bản ghi biến khỏi danh sách KHÔNG chứng minh được là xóa mềm - xóa vật lý cũng cho đúng hiện tượng đó.
+⚠️ Bẫy số 2: tra lại nhận 404 KHÔNG chứng minh được là xóa vật lý - xóa mềm cũng thường trả 404 cho người dùng thường.
+⚠️ Bẫy số 3: "nhật ký có dòng nào đó" chưa đủ - dòng cần tìm là dòng CỦA CHÍNH thao tác xóa vừa làm, không phải dòng tạo mới cũ.
+⚠️ Bẫy số 4: KHÔNG kết luận bằng tài khoản quản trị. Phiếu quy định vai trò Cán bộ Nghiệp vụ; nếu chỉ quản trị mới thấy được thì vẫn là chưa đạt đối với phiếu này.
+⚠️ Bẫy số 5: một thông báo có thể sinh ra 2 node trên màn cùng một thời điểm (vỏ và ruột) - đếm theo mốc thời gian, đừng đếm theo số node, kẻo báo nhầm "hiện 2 thông báo".
+Artifact lỗi lần này: do/QLHDTVVCG_17.md - mục "Lỗi tự lộ trong bước bắt buộc" và bảng Kết quả từng vế (C1, C2).
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.

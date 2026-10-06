@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Web: màn Chi tiết DN, tab "Thông tin" — trường "Người đại diện" + "Chức vụ đại diện" hiển thị đủ (trong khối "Thông tin chung"), đúng định dạng.
+- SRS v3.5 SCR-V.III-02 (FR-V.III-01, UC81, dòng 483–484) liệt kê "Người đại diện" + "Chức vụ ĐD" trong danh sách trường phẳng, KHÔNG tách thành "Nhóm 2 — Người đại diện" riêng như thiết kế đối tác.
+- Đối tác chấm theo thiết kế "Nhóm 2" (HTPLDN-PTYC-CT-v2.0); không chỉ ra trường nào thiếu, chỉ khác cách gom nhóm.
+- Hỏi BA: có bắt buộc tách khối "Người đại diện" riêng theo thiết kế đối tác không, hay gộp chung như hiện tại (đủ trường) là đạt?
+- Verify: cbnv_tw (CB_NV_TW), DN-SEED-0001.

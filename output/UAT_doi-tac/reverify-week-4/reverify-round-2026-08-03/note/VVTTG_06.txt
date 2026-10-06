@@ -1,0 +1,6 @@
+- Đã chạy lại luồng xuất PDF của BC Vụ việc theo thời gian: hệ thống xuất và tải tệp về máy bình thường, không còn thông báo "Forbidden".
+- Tệp nhận được: khổ A4, phông chữ Times New Roman, đầu tệp ghi tên báo cáo, kỳ báo cáo, đơn vị và ngày tạo; số liệu trong tệp khớp số liệu trên màn hình.
+- Còn lệch so với "Kết quả mong đợi" của phiếu: tệp chưa có quốc hiệu và tên cơ quan ở đầu trang, chưa có ngày ký và chức danh người ký ở cuối trang; tên tệp đang là bao-cao-vu-viec-theo-thoi-gian-2026-08-03.pdf.
+- Chỗ này đang vướng ở đặc tả chứ không phải ở phiếu: đặc tả vừa yêu cầu tệp PDF trình bày theo Thông tư 17/2025 (kèm quốc hiệu, ngày ký, chức danh), vừa mô tả riêng phần đầu tệp của báo cáo thống kê chỉ gồm tên báo cáo, kỳ, đơn vị và ngày tạo. Chính đặc tả cũng đang ghi chú rằng phần trích dẫn Thông tư 17/2025 chưa được tra cứu lại.
+- Kính đề nghị BA chốt giúp: báo cáo thống kê có phải trình bày theo khung văn bản hành chính (quốc hiệu, khối ký) hay không. Hai điểm còn lại trong "Kết quả mong đợi" là quy ước đặt tên tệp và hỗ trợ ký số hiện không có trong đặc tả của nhóm báo cáo thống kê, cũng xin BA xác nhận là bổ sung hay bỏ.
+- Sau khi BA chốt, chúng tôi sẽ cập nhật lại kết quả kiểm thử cho các phiếu xuất PDF.

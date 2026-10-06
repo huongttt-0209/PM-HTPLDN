@@ -1,0 +1,167 @@
+================================================================================
+QLDX_06 — NGUYEN VAN MOI THONG BAO BAT DUOC O CA HAI NHANH
+Ngay do 2026-08-07 · gio VN · bo ma FE /assets/index-D4Buvu4S.js
+================================================================================
+
+PHUONG PHAP DOC (khai truoc, de nguoi kiem chung danh gia do tin)
+--------------------------------------------------------------------------------
+  1. MutationObserver tren document.documentElement (childList + subtree),
+     cai o document-start qua initScript cua navigate_page.
+  2. Doc chu bang **innerText** cua chinh phan tu. TUYET DOI KHONG dung
+     textContent (textContent doc ca node an => sinh "bug ma").
+  3. **KHONG lam gon trung (no dedupe)**: moi lan mot phan tu khop selector la
+     mot ban ghi. Moi ban ghi co `elemId` rieng cho tung PHAN TU DOM va co moc
+     gio ms => phan biet duoc "1 thong bao ghi 2 lan cung moc gio" voi
+     "2 thong bao that".
+  4. Moi ban ghi co co `vis` (true/false) tinh bang getClientRects().length>0 +
+     display/visibility/opacity + (offsetParent | position:fixed).
+  5. Kenh luu ben: moi ban ghi duoc console.error ra ngoai voi tien to
+     "QLDX06NOTI ". Ly do: cu dang xuat gay HARD RELOAD, xoa sach bien trong
+     trang + xoa localStorage; chi console message la con sau khi dieu huong
+     (doc lai bang list_console_messages includePreservedMessages=true).
+  6. Selector quet: .ant-message-notice-wrapper, .ant-message-notice,
+     .ant-message, .ant-notification-notice, .ant-notification,
+     [role="alert"], [role="status"], .ant-alert
+     + mot nhanh phu "textmatch" bat ca phan tu khong khop selector nhung co
+     chu thuoc nhom /het han|thanh cong|thao tac|dang nhap lai/ — de khong bo
+     sot thong bao tu ve (khong dung component AntD).
+  7. SELF-TEST BO BAT truoc khi tin ket qua: chen 1 node gia
+     (.ant-message-notice-wrapper / .ant-alert) roi xoa.
+       02:47:58.378  self-test LAN B  => GHI DUOC (fired=true)
+       02:52:30.552  self-test LAN C  => GHI DUOC (fired=true)
+     Lan do A (nhanh 1 lan 1): bo bat KHONG attach duoc (MutationObserver.observe
+     nem "parameter 1 is not of type 'Node'" vi documentElement con null o
+     document-start) => da HUY lan do A, khong bao cao "khong co thong bao" oan.
+
+--------------------------------------------------------------------------------
+GIOI HAN DA BIET CUA PHEP DO (ghi ro, khong suy qua so do)
+--------------------------------------------------------------------------------
+  Thong bao cua CA HAI nhanh KHONG nam tren trang goc — no nam tren trang DICH
+  /login sau khi hard reload. initScript cua chrome-devtools-mcp chi ap cho
+  DUNG mot lan dieu huong (da kiem: sau reload, window.__qldx2 / __qldx3 /
+  __qldx4 deu = false) => KHONG cai duoc bo bat vao document /login moi.
+  Vi vay chuoi thong bao duoc do bang ANH CHUP VIEWPORT dung cua so song cua
+  thong bao, con so luong dem tren anh. Doc DOM sau do (+13 s / +16 s) deu tra
+  0 node => thong bao tu tat, tuoi tho khoang [6 s, 13 s].
+  Bo bat tren trang GOC van chay va cho ket qua co nghia: 0 emission tu luc
+  bam/tu dang xuat den luc document chet => KHONG co toast nao tren trang goc,
+  khong co double-toast o phia trang goc.
+
+================================================================================
+NHANH 1 — BAM [Dang xuat] TREN HOP THOAI (vế C1a / C1b) — LAN DO B
+================================================================================
+Thoi diem bam : 2026-08-07 02:49:37.177 (idle ~25.49' => PHIEN CHUA HET HAN)
+Trang dich    : https://18.143.165.120.nip.io/login
+
+SO LUONG THONG BAO BAT DUOC: **1**
+  #1 — moc gio 2026-08-07 02:49:43 (anh QLDX_06-C1a-sau-khi-bam-ve-login.png)
+       loai   : bang thong bao mau XANH LA, icon dau tich, co nut dong (x)
+                => kieu "success", dat trong the dang nhap, duoi tieu de
+                "Phan mem Ho tro phap ly doanh nghiep"
+       NGUYEN VAN:
+
+            Dang xuat thanh cong
+
+       (co dau: "Đăng xuất thành công")
+
+BO BAT TREN TRANG GOC (console preserved, tu luc bam den luc document chet):
+  0 ban ghi QLDX06NOTI.  => khong co thong bao nao tren trang goc.
+BAN GHI DUY NHAT truoc do la cua HOP THOAI CANH BAO luc 02:49:07.769 — ghi
+2 lan CUNG MOC GIO cho CUNG 1 hop thoai:
+  QLDX06NOTI {"t":"2026-08-07 02:49:07.769","origin":"textmatch","elemId":"E6",
+    "cls":"","role":null,"vis":true,"innerText":"Phien lam viec sap het han
+    Phien lam viec sap het han trong 5 phut do khong co thao tac. Vui long gia
+    han de tiep tuc lam viec. Phien se tu dang xuat sau 5:00. Dang xuat Gia han
+    phien","url":"/chuyen-gia-tvv/danh-sach"}
+  QLDX06NOTI {"t":"2026-08-07 02:49:07.769","origin":"textmatch","elemId":"E7",
+    "cls":"ant-modal css-ch9ese ant-zoom-appear ant-zoom-appear-prepare ant-zoom",
+    "role":"dialog","vis":false, ... }
+  ==> 2 ban ghi, 2 elemId khac nhau, CUNG moc gio ms, 1 cai vis=true 1 cai
+      vis=false: day la MOT hop thoai (wrapper + .ant-modal), KHONG phai 2
+      thong bao. Ghi ra day dung theo yeu cau "khong lam gon trung".
+
+DOC DOM tren /login luc 02:49:50 (+13 s sau khi bam): 0 node thong bao.
+
+DOI CHIEU voi expected DOI TAC — CHI GHI LAI, KHONG CHAM
+  Expected doi tac (ca nhanh bam nut): "Phien lam viec da het han do khong co
+  thao tac"
+  App that (nhanh bam nut)           : "Dang xuat thanh cong"
+  ==> LECH. Nhung o phut 25 phien VAN CON HIEU LUC (idle 25.49', moc het han la
+      phut 30), nen bao "Dang xuat thanh cong" la DUNG BAN CHAT TRANG THAI va
+      dung srs-fr-10-quan-tri.md:1011 (Outputs message = "Dang xuat thanh cong"
+      / "Phien het han") + :1958 ("Dang xuat chu dong").
+      => Ve C1b la DIFF -> BA (cau hoi Q5). CAM cham Fail.
+
+================================================================================
+NHANH 2 — DE IDLE TOI PHUT 30 (vế C2a / C2b / C2c)
+================================================================================
+LAN DO C (dong ho that chay du 5 phut) — thoi diem tu dang xuat 02:58:55
+  KHONG BAT DUOC chuoi thong bao: lenh doc DOM dau tien cham 11 s
+  (02:59:09.95), dai hon tuoi tho thong bao. Anh chup luc 03:00:09 (moc + 74 s)
+  cho thay /login KHONG con thong bao.
+  ==> KHONG ket luan "khong co thong bao" tu lan do C (day chinh la bay
+      "im lang gia" ma chuan cham canh bao o Bay do #4).
+
+LAN DO D (moc ep chu dong, cung duong idle-watcher, khong bam nut nao)
+Thoi diem ep moc      : 03:04:28.144
+Thoi diem tu dang xuat: ~03:04:29.0 (mau song cuoi idle 30.019')
+Trang dich            : https://18.143.165.120.nip.io/login
+
+SO LUONG THONG BAO BAT DUOC: **1**
+  #1 — moc gio 2026-08-07 03:04:33 (anh QLDX_06-C2b-thongbao-idle-cap2.png)
+       loai   : bang thong bao mau XANH DUONG NHAT, icon chu "i", co nut dong (x)
+                => kieu "info" (KHONG phai bang loi mau do)
+                dat trong the dang nhap, duoi tieu de, tren o "Ten dang nhap"
+       NGUYEN VAN (hien tren 2 dong trong the):
+
+            Phien lam viec da het han do khong co thao tac
+
+       (co dau: "Phiên làm việc đã hết hạn do không có thao tác")
+
+BO BAT TREN TRANG GOC (ca lan C va lan D): 0 ban ghi QLDX06NOTI sau moc 25'
+=> khong co toast nao tren trang goc o nhanh idle.
+DOC DOM tren /login luc 03:04:44.3 (+16 s): 0 node thong bao.
+
+DOI CHIEU voi expected DOI TAC — CHI GHI LAI, KHONG CHAM (vế C2c)
+  Expected doi tac : "Phien lam viec da het han do khong co thao tac"
+  App that         : "Phien lam viec da het han do khong co thao tac"
+  ==> TRUNG KHOP TUNG KY TU.
+  Nhung khong chuoi nao trong SRS v3.5 chua cum "do khong co thao tac":
+    srs-fr-10-quan-tri.md:964  "Phien lam viec het han"            (ERR-DN-07, INFO)
+    srs-fr-10-quan-tri.md:1011 "Dang xuat thanh cong" / "Phien het han"
+    srs-fr-05-vu-viec.md:1593  "Phien lam viec da het han. Vui long dang nhap lai."
+    srs-fr-02-hoi-dap.md:1135  "Phien dang nhap da het han"
+  => Ve C2c van la DIFF/MAU THUAN -> BA (cau hoi Q2), CAM cham Pass va CAM
+     cham Fail vi lech cau chu, dung chuan cham §4.
+
+Ghi chu ve severity (Bay do #5 cua chuan cham): thong bao hien duoi dang bang
+thong tin nhe mau xanh duong (info), KHONG phai hop thoai loi mau do. Dieu nay
+VAN KHOP srs-fr-10-quan-tri.md:964 vi ERR-DN-07 co severity = INFO.
+
+================================================================================
+DOI CHUNG BO SUNG TU CHINH BO MA FE (chi la manh moi, khong dung lam verdict)
+================================================================================
+Tai va grep bo ma dang chay /assets/index-D4Buvu4S.js (1 124 347 byte) tim ra
+bang anh xa ly do dang xuat -> thong bao, o offset ~1 069 959:
+
+  const H2 = "logout-notice", Aw = "logout-success",
+  Tw = {
+    user:    { type:"success", title:"Đăng xuất thành công" },
+    idle:    { type:"info",    title:"Phiên làm việc đã hết hạn do không có thao tác" },
+    expired: { type:"info",    title:"Phiên làm việc hết hạn" }
+  };
+  function Ate(e){ try{ window.sessionStorage.setItem(H2, e) }catch{} }
+  function Cae(){ ... sessionStorage.getItem(H2) ... removeItem(H2) ... }
+
+Va tai offset ~1 085 964, chinh hop thoai canh bao:
+  title:"Phiên làm việc sắp hết hạn", okText:"Gia hạn phiên",
+  cancelText:"Đăng xuất", onCancel: () => void Nr.getState().logout("user")
+
+=> Co che: FE ghi ly do dang xuat vao sessionStorage["logout-notice"], reload,
+   trang /login doc roi XOA khoa do va hien thong bao tuong ung 1 lan duy nhat.
+=> Nut [Dang xuat] tren hop thoai canh bao goi logout("user") => "Dang xuat
+   thanh cong". Dung y chuoi da do duoc live o NHANH 1.
+=> Nhanh idle 30' => logout("idle") => "Phien lam viec da het han do khong co
+   thao tac". Dung y chuoi da do duoc live o NHANH 2 (lan do D).
+=> Hai chuoi do live khop hoan toan voi bang anh xa trong bo ma. Day la doi
+   chung phu; verdict van dua tren so do live o tren.

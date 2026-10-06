@@ -1,0 +1,162 @@
+================================================================================
+SỐ ĐO ĐẦY ĐỦ — QLTVV_02 (tab `bug` dòng 32) — "Kiểm tra hiển thị bảng danh sách"
+Màn: /chuyen-gia-tvv/danh-sach   ·  Tài khoản đo: cbnv_tw_02 (CB_NV_TW, cấp TW,
+đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp)
+Env: https://18.143.165.120.nip.io (NỘI BỘ — không phải env nghiệm thu đối tác)
+Bản dựng: chuỗi trên màn "HTPLDN · V1.0.8" · gói mã /assets/index-DIABnbIr.js
+          + /assets/index-DVlgOkLg.css · GET / last-modified Thu, 06 Aug 2026
+          07:13:15 GMT (14:13:15 giờ VN) · etag W/"6a74340b-428"
+Thời điểm đo: 2026-08-06 15:45 → 16:25
+Cách đo: toạ độ thật getBoundingClientRect() của TỪNG ô trên TỪNG hàng, lấy qua
+         evaluate_script (không dùng a11y tree vì tree giấu phần tử display:none)
+================================================================================
+
+[ĐỊNH NGHĨA PHÉP ĐO]
+  overlapPx        = right(ô Điểm ĐG) − left(ô Trạng thái).  > 0 ⇒ hai ô chồng lên nhau.
+  dgContentSpillPx = max(right của MỌI phần tử con + MỌI Range của nút văn bản trong ô
+                     Điểm ĐG) − right(ô Điểm ĐG).  > 0 ⇒ nội dung tràn ra ngoài ô.
+  dgOverflowX      = scrollWidth − clientWidth của phần tử trong ô Điểm ĐG.
+  ctrlTopSpread    = max(top) − min(top) của CÁC CON TRỰC TIẾP của khung ô Hành động.
+                     (chỉ lấy con trực tiếp — lấy cả cháu sẽ ra 4.3px giả do <a> bọc <button>)
+  wrapH / singleH  = offsetHeight của khung ô Hành động / của một điều khiển đơn trong ô.
+  maxLineBoxes     = getClientRects().length lớn nhất của nhãn điều khiển. 1 ⇒ không ngắt dòng.
+  starEls          = số phần tử .ant-rate-star (CHỈ lớp này — đếm cả thẻ bọc lẫn thẻ trong
+                     sẽ ra 25/ô, là số ma).
+
+================================================================================
+A. VẾ (a) — Điểm ĐG có tràn/đè lên Trạng thái không
+================================================================================
+Tab "Đang hoạt động", 6/6 hàng trang 1 (ĐO HẾT, không lấy mẫu), 4 bề rộng:
+
+  bề rộng | bảng cuộn ngang       | maxOverlapPx | maxSpillPx | maxOverflowX
+  --------|-----------------------|--------------|------------|-------------
+   1920   | sw 1601 = cw 1601 (không cuộn) |   0  |  −35.4     |  0
+   1440   | sw 1530 > cw 1121     |     0        |  −27.1     |  0
+   1280   | sw 1530 > cw  953     |     0        |  −27.1     |  0
+   1024   | sw 1530 > cw  889     |     0        |  −27.1     |  0
+
+Chi tiết từng hàng @1024 (bề rộng chật nhất đặc tả cam kết — srs-fr-05:1601):
+  mã TVV            | Điểm ĐG | dgL..dgR   | ttL..ttR   | overlap | spill  | sao(hiện/vàng)
+  CG-QLND38-UAT     |  —/5    | 277..457   | 457..607   |   0     | −36.6  | 5/0
+  TVV-STP-AG-0001   |  —/5    | 277..457   | 457..607   |   0     | −36.6  | 5/0
+  TVV-BTP-TW-0002   |  4.1/5  | 277..457   | 457..607   |   0     | −29.9  | 5/4
+  TVV-SEED-0001     |  3.3/5  | 277..457   | 457..607   |   0     | −27.1  | 5/3
+  DDD-TVV-022       |  —/5    | 277..457   | 457..607   |   0     | −36.6  | 5/0
+  DDD-TVV-021       |  —/5    | 277..457   | 457..607   |   0     | −36.6  | 5/0
+  ⇒ right(Điểm ĐG) = left(Trạng thái) = 457 ở mọi hàng: hai ô KỀ NHAU (dùng chung
+    đường viền), overlap đúng 0, không phải "gần bằng 0".
+  ⇒ spill âm 27.1–36.6 px: chữ "4.1/5" / "—/5" + dãy sao còn nằm SÂU TRONG ô,
+    cách mép phải của ô ít nhất 27 px.
+
+Tab khác @1024:  "Mới đăng ký" 7/7 hàng → overlap 0, spill −36.6
+                 "Yêu cầu bổ sung" 6/6 hàng → overlap 0, spill −36.6
+                 "Vô hiệu hóa" 1/1 hàng (lúc còn bản ghi seed, @1440) → overlap 0
+⇒ 26 lượt đo hàng × 4 bề rộng, KHÔNG hàng nào có overlap > 0.
+
+================================================================================
+B. VẾ (b) — Điểm ĐG hiển thị có đồng nhất giữa 2 ca dữ liệu không  (cần BA → chỉ ghi nhận)
+================================================================================
+  D1 chưa có đánh giá (diem_danh_gia_tb = NULL):
+     4 hàng — CG-QLND38-UAT · TVV-STP-AG-0001 · DDD-TVV-022 · DDD-TVV-021
+     hiển thị: 5 phần tử sao (0 sao tô vàng, 5 sao xám) + chữ "—/5"
+     a11y tree: 5 × radio "star star" (KHÔNG có checked) + "—" + "/5"
+  D2 đã có đánh giá:
+     TVV-BTP-TW-0002 → 5 sao, 4 tô vàng, chữ "4.1/5"  (a11y: 4 radio checked)
+     TVV-SEED-0001   → 5 sao, 3 tô vàng, chữ "3.3/5"  (a11y: 3 radio checked)
+  ⇒ CẢ HAI ca đều dựng đủ 5 sao + chuỗi "x/5"; khác nhau duy nhất ở phần số và
+    số sao được tô — đây là chênh lệch DỮ LIỆU, không phải chênh lệch KIỂU HIỂN THỊ.
+  ⇒ Giá trị đo được đều nằm trong thang 1–5 và 1 chữ số thập phân (4.1 · 3.3),
+    đúng BR-CALC-06 (srs-fr-04:2538). KHÔNG gặp lại giá trị 8.3/5 như ảnh đối tác.
+
+================================================================================
+C. VẾ (c) — Nút thao tác có xuống dòng không
+================================================================================
+  bề rộng | ctrlN | ctrlTopSpread | wrapH | singleCtrlH | maxLineBoxes | có chữ?
+   1920   |   3   |      0 px     | 24 px |    24 px    |      1       | không
+   1440   |   3   |      0 px     | 24 px |    24 px    |      1       | không
+   1280   |   3   |      0 px     | 24 px |    24 px    |      1       | không
+   1024   |   3   |      0 px     | 24 px |    24 px    |      1       | không
+  ⇒ wrapH 24 = singleCtrlH 24 ⇒ đúng MỘT dòng (hai dòng phải ≥ 48).
+  ⇒ ctrlTopSpread 0 ⇒ 3 điều khiển thẳng hàng tuyệt đối.
+  Toạ độ 3 điều khiển @1024 (mọi hàng): x = 873 · 905 · 937, mỗi cái 24×24.
+  Không còn nhãn chữ: anyText = false, totalSvg = 3/ô (3 hình vẽ).
+  aria-label đủ theo Phụ lục E §H6: "Xem chi tiết <tên>" · "Sửa <tên>" · "Xóa <tên>".
+  Tab "Mới đăng ký" (7 hàng) · "Yêu cầu bổ sung" (6 hàng) @1024: y hệt — 3 điều
+  khiển, spread 0, wrapH 24, lineBoxes 1, không chữ.
+  D4 (ô Hành động bị ẩn bớt điều khiển — trạng thái Vô hiệu hóa, srs-fr-04:1455):
+  đo lúc 16:02 @1440 khi CG-QLND38-UAT đang ở Vô hiệu hóa → ô Hành động còn
+  ĐÚNG 2 icon (mắt xanh + thùng rác đỏ) trên MỘT dòng, icon Sửa đã ẩn đúng :1455.
+  Ảnh: image/QLTVV_02-04-1440-tab-VoHieuHoa-o-HanhDong-2-icon-1-dong.png
+
+================================================================================
+D. VẾ (d) — Thứ tự sắp xếp mặc định  (cần BA → chỉ ghi nhận)
+================================================================================
+Đọc cột "Ngày công nhận" của TOÀN BỘ 6/6 hàng trang 1 (không nhìn 2-3 hàng đầu):
+
+  #  mã TVV            ngày công nhận trên màn
+  1  CG-QLND38-UAT     —
+  2  TVV-STP-AG-0001   17/07/2026
+  3  TVV-BTP-TW-0002   12/07/2026
+  4  TVV-SEED-0001     —
+  5  DDD-TVV-022       —
+  6  DDD-TVV-021       —
+  ⇒ KHÔNG giảm dần theo ngày công nhận: hàng trống nằm xen kẽ (vị trí 1, rồi 4-5-6),
+    không phải kiểu "trống dồn đầu" hay "trống dồn cuối" nào cả.
+
+Đường đo thứ hai — đọc lại chính lời gọi danh sách mà giao diện dùng
+(GET /api/v1/tu-van-viens?page=1&pageSize=20&trangThai=HOAT_DONG → 200,
+ lưu tại tvv-list.network-response), thứ tự máy chủ trả về:
+
+  mã TVV            ngayCongNhan   ngayTao
+  CG-QLND38-UAT     null           2026-08-05T05:33:14
+  TVV-STP-AG-0001   2026-07-17     2026-07-12T09:55:44
+  TVV-BTP-TW-0002   2026-07-12     2026-07-12T00:11:49
+  TVV-SEED-0001     null           2026-06-30T12:28:23
+  DDD-TVV-022       null           2026-03-01T00:00:00
+  DDD-TVV-021       null           2024-02-01T00:00:00
+  meta: {page 1, pageSize 20, total 6, totalPages 1}
+  ⇒ TRÙNG KHÍT thứ tự trên màn ⇒ thứ tự do máy chủ quyết, không phải giao diện xáo.
+  ⇒ Cột ngayTao giảm dần TUYỆT ĐỐI (05/08 → 12/07 09:55 → 12/07 00:11 → 30/06 →
+    01/03 → 01/02/2024) ⇒ danh sách đang sắp theo NGÀY TẠO mới nhất trước,
+    không phải ngày công nhận.
+
+================================================================================
+E. VẾ (e) — 20 bản ghi mỗi trang
+================================================================================
+  Vào màn không đụng tay vào bộ chọn: URL /chuyen-gia-tvv/danh-sach?...&pageSize=20,
+  chân bảng hiện "20 / trang" ở CẢ 4 tab đã mở (Đang hoạt động · Mới đăng ký ·
+  Yêu cầu bổ sung · Vô hiệu hóa) và ở cả 4 bề rộng.
+  Bộ chọn có 4 lựa chọn: 10 / 20 / 50 / 100 — đang chọn 20 (aria-selected="true").
+  Tổng mỗi tab hiển thị đúng: "1-6 / 6 mục" · "1-7 / 7 mục" · "1-6 / 6 mục" · "1-1 / 1 mục".
+  Đếm thô .ant-table-tbody tr.ant-table-row: 6 · 7 · 6 · 1 — khớp con số ở chân bảng.
+  GIỚI HẠN: tab đông nhất chỉ 7 bản ghi (< 21) nên KHÔNG dựng được cảnh trang bị cắt;
+  bộ chọn nhỏ nhất là 10/trang nên cũng không ép cắt được. Muốn chứng minh việc cắt
+  trang phải seed thêm ≥ 14 bản ghi vào cùng một tab. (Ảnh của đối tác cũng chỉ có
+  10 bản ghi — phía đối tác cũng chưa chạm cảnh này.)
+
+================================================================================
+F. DỮ LIỆU QA ĐÃ ĐỔI TRÊN ENV (để dựng dạng D4) — đã khôi phục
+================================================================================
+  CG-QLND38-UAT (38383838-0000-4000-8000-000000000038, đơn vị Cục Bổ trợ tư pháp -
+  Bộ Tư pháp): Đang hoạt động → Vô hiệu hóa (16:00) → Đang hoạt động (16:04).
+  Mỗi bước: 1 request / 1 thông báo "Cập nhật trạng thái thành công"
+  (tools/toast-capture.js, tự kiểm soObserverDangSong = 1).
+  Đã đọc lại đầu bảng xác nhận bản ghi về đúng trạng thái cũ.
+  Ghi chú: lượt đầu thử trên DDD-TVV-021 bị máy chủ từ chối (đơn vị quản lý của bản
+  ghi đó là "Bộ Kế hoạch và Đầu tư", ngoài phạm vi đơn vị của tài khoản đo — đúng
+  BR-AUTH-08) nên đổi sang bản ghi cùng đơn vị. Lượt bị từ chối đó KHÔNG sinh thông
+  báo trên màn, nhưng đây là lời gọi seed gọi thẳng máy chủ, KHÔNG phải một thao tác
+  bấm trên giao diện — không có luồng giao diện thì không thể đòi thông báo giao diện,
+  nên KHÔNG kết luận đây là lỗi "im lặng". Muốn kết luận phải dựng lại bằng thao tác
+  bấm thật trên bản ghi ngoài đơn vị (chưa làm — ngoài phạm vi case này).
+
+================================================================================
+G. KẾT LUẬN TỪNG VẾ
+================================================================================
+  (a) tràn/đè        → ĐẠT   (0 px chồng lấn trên 26 lượt đo hàng × 4 bề rộng)
+  (b) đồng nhất      → hết bất đồng, KHÔNG cần hỏi BA (cả 2 ca đều 5 sao + "x/5")
+  (c) xuống dòng     → ĐẠT   (wrapH 24 = 1 dòng, spread 0, không còn nhãn chữ)
+  (d) sắp xếp        → VẪN KHÁC kỳ vọng đối tác; đặc tả IM LẶNG ⇒ CẦN BA CHỐT
+  (e) 20 bản ghi/trang → ĐẠT phần đặc tả nêu (mặc định 20 + hiển thị tổng mỗi tab);
+                         cảnh cắt trang chưa dựng được, đã ghi rõ ở mục E
+  VERDICT CASE: **cần BA** (không vế nào lỗi, còn 1 vế phải để BA chốt)

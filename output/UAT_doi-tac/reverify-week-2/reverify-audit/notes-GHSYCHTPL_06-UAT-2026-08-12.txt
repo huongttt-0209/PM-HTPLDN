@@ -1,0 +1,5 @@
+❌ Vẫn còn lỗi thông báo trên UAT.
+- QA đã tạo thành công hồ sơ “QA GHSYCHTPL_06 UAT 20260812 2157”, mã VV-STP-HN-20260812-001. Tệp đính kèm, mức ưu tiên và lịch sử “Tạo vụ việc” của doanh nghiệp đều đã được lưu đúng; vì vậy phần lỗi lịch sử đối tác báo trước đây đã được sửa.
+- Sau đó QA đăng nhập tài khoản cbnv_dp (Cán bộ Nghiệp vụ Địa phương — Sở Tư pháp Hà Nội). Trang Thông báo không có thông báo cho hồ sơ vừa tạo; dữ liệu thông báo cũng không có bản ghi gắn với mã vụ việc trên.
+- Kết luận: hệ thống vẫn chưa đáp ứng FR-V.I-02 (UC52) dòng 200 và Postcondition dòng 206 về việc gửi thông báo cho CB NV phụ trách.
+- Khi verify lại sau dev fix: tạo một hồ sơ mới bằng tài khoản doanh nghiệp 0151554887, ghi lại mã và thời điểm tạo; đăng nhập cbnv_dp và mở Thông báo. PASS khi có đúng một thông báo mới gắn với mã hồ sơ vừa tạo, đồng thời chi tiết vụ việc vẫn có lịch sử “Tạo vụ việc” của doanh nghiệp. FAIL nếu thiếu thông báo hoặc chỉ có lịch sử mà không có thông báo.

@@ -1,0 +1,6 @@
+❌ Không phải bug.
+• Hệ thống nhận diện đúng: file nhập có 1 dòng đúng định dạng mã → báo "Hợp lệ 1, Lỗi 2" và cho import dòng hợp lệ.
+• Các dòng lỗi là do file dùng nhãn tiếng Việt ("Khó", "Tự luận") thay vì mã quy định, và có dòng thiếu trường bắt buộc → lỗi thật; hệ thống không bỏ sót dòng hợp lệ và ghi rõ lý do lỗi từng dòng.
+• File mẫu có sheet "Hướng dẫn" ghi rõ mã cần nhập (ví dụ: Mức độ nhập "KHO" thay cho "Khó", Loại câu hỏi nhập "TU_LUAN" thay cho "Tự luận").
+• Verify: CB_NV_TW, Ngân hàng câu hỏi > Nhập Excel.
+→ Đối tác nhập đúng mã theo sheet "Hướng dẫn" trong file mẫu rồi nhập lại.

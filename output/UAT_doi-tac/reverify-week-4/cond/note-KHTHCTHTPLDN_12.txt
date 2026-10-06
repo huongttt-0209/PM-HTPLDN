@@ -1,0 +1,26 @@
+❌ Không phải bug · ⚠️ Có ý cần BA xác nhận
+
+Phiếu nêu 4 điểm, QA đo tách riêng từng điểm. Kết quả: 2 điểm hệ thống làm đúng, 2 điểm còn lại quan sát đúng nhưng chưa có căn cứ để chấm nên QA gửi BA chốt.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), có kiểm lại bằng cbpd_tw để chắc đầu trang không đổi theo quyền.
+
+❌ 1) Điểm hiển thị viết tắt Chờ PD: hệ thống làm ĐÚNG, đề nghị dev không sửa.
+- Bản đặc tả viết thanh tiến trình theo đúng dạng viết tắt này. Nếu dev đổi thành Chờ phê duyệt thì lại lệch với đặc tả.
+- Đây là điểm cần phản hồi rõ cho đối tác để tránh sửa nhầm.
+
+❌ 2) Điểm thiếu khối thông tin nhanh: thông tin KHÔNG bị mất.
+- Cả 4 mục phiếu nói thiếu đều đang hiển thị đầy đủ ngay bên dưới, trong phần Thông tin: đơn vị chủ trì, thời gian bắt đầu và kết thúc, ngân sách, đối tượng thụ hưởng.
+- QA đã đọc từng cặp nhãn và giá trị bằng mã lệnh để chắc chắn, không chỉ nhìn ảnh.
+- Đặc tả liệt kê 4 thông tin này là các trường của phần Thông tin, không có thành phần nào tên khối thông tin nhanh. Khác biệt chỉ là chúng không được gom thành một khối tóm tắt riêng, chứ cán bộ vẫn xem được đầy đủ.
+
+⚠️ 3) Hai điểm còn lại: quan sát đúng nhưng chưa có căn cứ để chấm.
+- Thanh điều hướng hiện là Trang chủ / Chương trình HTPLDN / Chi tiết, đúng là không kèm mã chương trình.
+- Tiêu đề trang hiện chỉ là mã chương trình kèm nhãn trạng thái, tên chương trình nằm ở dòng dưới trong phần Thông tin.
+- Nhưng bản đặc tả đang dùng không có dòng nào mô tả thanh điều hướng hay định dạng tiêu đề của trang chi tiết. Mức chi tiết mà phiếu mô tả thuộc về bản đặc tả màn hình giao diện, mà bản này hiện QA chưa có trong bộ tài liệu đối chiếu.
+- Vì vậy QA gửi BA hai câu hỏi: bản đặc tả màn hình có quy định các điểm này không, và nếu không thì đề nghị bổ sung mô tả đầu trang chi tiết vào đặc tả để đối tác không mở lại case ở vòng sau.
+
+4) Về việc QA kiểm trên chương trình khác trạng thái với ảnh của đối tác.
+- Ảnh đối tác chụp chương trình ở Dự thảo, QA đo trên chương trình Đang thực hiện.
+- Để chắc kết luận không phụ thuộc điều đó, QA mở thêm 3 chương trình ở Đã duyệt, Đã công bố và Hoàn thành: thanh điều hướng, dạng tiêu đề và thanh tiến trình đều giữ nguyên cách hiển thị.
+
+5) Bằng chứng.
+- Ảnh đầu trang chi tiết gồm thanh điều hướng, tiêu đề kèm nhãn trạng thái và thanh tiến trình 6 bước. Kèm trong hồ sơ lỗi.

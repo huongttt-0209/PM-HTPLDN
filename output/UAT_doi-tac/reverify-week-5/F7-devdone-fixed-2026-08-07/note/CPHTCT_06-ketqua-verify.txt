@@ -1,0 +1,15 @@
+✅ Đã hết lỗi.
+
+VAI TRÒ QUẢN TRỊ HỆ THỐNG — nay chặn ngay ở cửa vào
+- Mục "Báo cáo thống kê" đã ẩn hẳn khỏi thanh điều hướng của tài khoản quản trị (đếm 33 mục, không còn mục này) — ẩn chứ không làm mờ, đúng srs-v3.5.md:684 (M-05). Tài khoản Cán bộ Nghiệp vụ vẫn thấy mục này ở vị trí cũ ⇒ ẩn theo vai trò, không phải gỡ chức năng.
+- Gõ thẳng địa chỉ màn báo cáo cũng không vào được. Việc chặn nay nằm ở BƯỚC XEM chứ không phải bước xuất: cả yêu cầu lấy danh sách loại báo cáo lẫn yêu cầu lấy số liệu đều bị từ chối, kèm câu tiếng Việt "Bạn không có quyền xem báo cáo này" (srs-fr-11-bao-cao.md:117). Hết chữ "Forbidden" và mã kỹ thuật.
+⇒ Đúng hướng nghiệp vụ chốt 06/08/2026, nay đã ghi vào đặc tả (srs-fr-11-bao-cao.md:79): quản trị hệ thống không phải tác nhân của báo cáo thống kê nên không vào màn và không xuất tệp.
+
+CÁN BỘ NGHIỆP VỤ TRUNG ƯƠNG KHÔNG HỎNG THEO — BC Chi phí chi trả hỗ trợ
+- Xem báo cáo ra đủ số liệu: Tổng chi phí 23.000.000 ₫ · Tổng hồ sơ 2 · Trung bình mỗi hồ sơ 11.500.000 ₫.
+- Xuất được tệp BaoCaoChiPhiChiTra_20260807_1003.xlsx; hết câu "Không thể tạo file xuất. Vui lòng thử lại." mà đối tác báo 16/07.
+- Đã mở tệp ra đọc, không dừng ở "tải được tệp": đủ 4 mục đầu tệp; ba số quyết định khớp màn (2 · 23.000.000 ₫ · 11.500.000 ₫), bảng theo đơn vị khớp, khối theo quy mô doanh nghiệp cộng lại đúng tổng (15.000.000 + 8.000.000 = 23.000.000 ₫).
+
+Phạm vi: chạy lại 1 cấu hình lọc (Kỳ Năm 2026, Toàn quốc) làm phép chống hồi quy. Các cấu hình lọc còn lại vòng 06/08 đã ghi là đạt nên không chạy lại.
+Số liệu khác ảnh nghiệm thu là do khác dữ liệu môi trường, không phải lỗi.
+Chi tiết: do/CPHTCT_06.md

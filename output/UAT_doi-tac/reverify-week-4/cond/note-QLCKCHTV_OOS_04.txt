@@ -1,0 +1,6 @@
+✅ Là bug — chuyển dev
+Dòng này do QA mở thêm, không thuộc case nào của phiếu đối tác. Phát sinh khi verify QLCKCHTV_02.
+
+Cột "Hành động" thiếu nút [Công khai] ở dòng Đã duyệt và [Hủy công khai] ở dòng Công khai. Muốn công khai phải vào màn chi tiết, không làm được ngay trên dòng.
+
+Mã bug trong báo cáo: BUG-CK-HANH-DONG-DONG. Các bước tái hiện, kết quả mong đợi và bằng chứng đã ghi đầy đủ ở các cột bên trái của chính dòng này.

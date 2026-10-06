@@ -1,0 +1,6 @@
+✅ Bug ĐÚNG – chuyển dev. (Bug ID: BUG-CNTTTVV_07)
+- Web sai: ở màn Chỉnh sửa hồ sơ tư vấn viên, khi có thay đổi chưa lưu mà bấm "Hủy", dữ liệu đang nhập bị đưa về giá trị cũ NGAY khi hộp thoại xác nhận vừa hiện — tức là trước khi người dùng kịp chọn. Do đó chọn "Ở lại" cũng không giữ lại được thông tin vừa nhập, đúng như phản ánh.
+- Số liệu kiểm chứng: sửa Số điện thoại 0912280028 → 0909111222 và Địa chỉ "28 QA Test, Ha Noi" → "99 Pho Moi, Ha Noi"; ngay lúc hộp thoại hiện (chưa bấm gì) hai trường đã quay về 0912280028 và "28 QA Test, Ha Noi"; sau khi bấm "Ở lại" vẫn là giá trị cũ.
+- Expected theo SRS: SCR-IV-02 cell 7 (srs-fr-04 dòng 1512) quy định "Hủy: nếu có thay đổi chưa lưu → hộp thoại xác nhận"; quy ước cùng loại ở SCR-IV-03 cell 20a (dòng 1562) nêu rõ chỉ bỏ thay đổi KHI người dùng đồng ý. Vì vậy khi hộp thoại đang mở và khi người dùng chọn ở lại màn nhập liệu, dữ liệu đang nhập phải được giữ nguyên.
+- Verify: tài khoản Cán bộ nghiệp vụ Trung ương, hồ sơ tư vấn viên TVV-BTP-TW-0002 (Đang hoạt động) — đúng điều kiện đối tác.
+- Ghi chú: cùng nguyên nhân với 2 lỗi đã gửi trước đó ở màn Thêm mới tư vấn viên và màn Đăng ký tham gia mạng lưới; đề nghị dev xử lý chung.

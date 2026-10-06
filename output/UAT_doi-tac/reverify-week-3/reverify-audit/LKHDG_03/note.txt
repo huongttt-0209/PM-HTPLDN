@@ -1,0 +1,7 @@
+⚠️ Cần BA xác nhận.
+Đối tác nêu 3 ý về bộ lọc màn danh sách đợt đánh giá; đã verify trên web (CB Nghiệp vụ TW):
+1) "Tần suất hiển thị 'Tròn năm' thay vì 'Trọn năm'": web hiện tại đã hiển thị ĐÚNG "Trọn năm" (cả trong dropdown lọc lẫn cột danh sách) → lỗi này KHÔNG còn tái hiện. (SRS FR-VI-01/SCR-VI-01 dòng 821 ghi "Tròn năm" — có thể là lỗi chính tả trong SRS; app đang dùng "Trọn năm".)
+2) "Dropdown không mặc định 'Tất cả'": đúng — dropdown Tần suất và Đối tượng chỉ hiện chữ mờ (placeholder), không có mục "Tất cả". SRS SCR-VI-01 (lọc Tần suất/Đối tượng, dòng 813-814) liệt kê "Tất cả" là một lựa chọn. App đang dùng cơ chế "không chọn = hiện tất cả" thay cho mục "Tất cả".
+   → BA xác nhận: chấp nhận cơ chế placeholder, hay phải thêm mục "Tất cả" và đặt làm mặc định?
+3) "Thiếu lọc theo Trạng thái": thanh bộ lọc không có ô Trạng thái, nhưng hệ thống CÓ lọc trạng thái dạng tab (Tất cả / Lập kế hoạch / ... / Hủy) ngay trên bảng. SRS SCR-VI-01 (lọc trạng thái, dòng 815) quy định là dropdown trong thanh lọc.
+   → BA xác nhận: bộ tab trạng thái có được chấp nhận thay cho dropdown lọc trạng thái không?

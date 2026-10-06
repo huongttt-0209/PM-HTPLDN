@@ -1,0 +1,47 @@
+[
+ {
+  "row": 9,
+  "Mã TC": "PDHSVV_04",
+  "Tên chức năng": "",
+  "Mô tả": "Từ chối",
+  "Điều kiện": "1. Đăng nhập tài khoản Cán bộ phê duyệt cùng đơn vị với đơn vị tạo hồ sơ.\n2. Hồ sơ vụ việc đang ở trạng thái \"Chờ phê duyệt\".",
+  "Dữ liệu đầu vào": "",
+  "Các bước thực hiện": "1. Chọn menu \"Vụ việc HTPL\"\n2. Tìm kiếm và nhấn Xem chi tiết\n3. Bấm nút \"Từ chối \"",
+  "Kết quả mong đợi": "- Hệ thống mở cửa sổ \"Từ chối hồ sơ\" yêu cầu nhập lý do.\n- Tối thiểu 10 ký tự, tối đa 2.000 ký tự.",
+  "Kết quả thực tế": "Hệ thống cho phép tối đa 1.000 ký tự",
+  "Trạng thái dev fix 1": "dev done",
+  "Verify": "Open",
+  "DEV phản hồi lần 1": "✅ Bug đúng (BA 24/07/2026). Loại 2 — BA chốt nâng giới hạn theo đề nghị đối tác rồi Dev làm theo đặc tả mới: ô Lý do từ chối phê duyệt nhận tối thiểu 10 — tối đa 2.000 ký tự (app đang chặn ở 1.000). Căn cứ: quy ước chung trường Lý do từ chối của hệ thống \"Max 2000 ký, ≥ 10 ký nếu có\" (srs-v3.5.md:1742, :1820) và mốc 2.000 đã ghi kèm dấu [PDHSVV_04 chốt 2026-07-24] (srs-fr-05-vu-viec.md:815, srs-v3.5.md:1989); §Inputs bước từ chối FR-V.I-13 (:988) và các câu chấp nhận :1019/:1749/:1778 hiện mới nêu mức tối thiểu 10 ký tự — BA đồng bộ nốt câu chữ. Mức Minor.\n\n── CÁCH VERIFY sau Dev fix ──\nPrecondition: cbpd_tw / Test@1234 (CB Phê duyệt TW) + ít nhất 1 vụ việc đang ở trạng thái \"Chờ phê duyệt\" thuộc cùng cấp TW; mở màn Chi tiết vụ việc đó.\n1) Bấm [Từ chối] để mở ô nhập lý do. Nhập 9 ký tự → xác nhận.\n2) Dán đúng 2.000 ký tự → xác nhận.\n3) Thử nhập/dán 2.001 ký tự.\n4) Mở lại vụ việc vừa từ chối, đọc lý do đã lưu trong lịch sử xử lý.\n✅ PASS khi: bước 1 bị từ chối kèm thông báo yêu cầu tối thiểu 10 ký tự; bước 2 nhận đủ 2.000 ký tự và lưu thành công, vụ việc quay về Đang xử lý; bước 3 bị chặn ở mốc 2.000; bước 4 lý do đọc lại đủ 2.000 ký tự không bị cắt cụt.\n❌ FAIL nếu: còn bị chặn/cắt ở 1.000 ký tự, hoặc nhận quá 2.000 ký tự, hoặc nhập được 2.000 nhưng lưu xuống chỉ còn một phần.\n⚠️ Mức tối thiểu 10 ký tự GIỮ NGUYÊN theo đặc tả — hệ thống vẫn chặn lý do quá ngắn là đúng, đừng tính FAIL.",
+  "Tác nhân": ""
+ },
+ {
+  "row": 11,
+  "Mã TC": "CNKQHT_03",
+  "Tên chức năng": "",
+  "Mô tả": "Kiểm tra hiển thị các trường thông tin Nhóm 6 – Kết quả hỗ trợ",
+  "Điều kiện": "1. Đăng nhập tài khoản\n2. Hồ sơ vụ việc đang ở trạng thái \"Đang xử lý\".",
+  "Dữ liệu đầu vào": "",
+  "Các bước thực hiện": "1. Chọn menu \"Vụ việc HTPL\"\n2. Tìm kiếm và nhấn Xem chi tiết",
+  "Kết quả mong đợi": "- Hệ thống hiển thị các trường thông tin giống với thiết kế\n- Dữ liệu hiển thị đúng định dạng và trường thông tin\n- Dữ liệu hiển thị không bị tràn/đè lên nhau, đồng nhất ngôn ngữ hiển thị",
+  "Kết quả thực tế": "Các trường thông tin không giống với thiết kế: thiếu Tệp kết quả hỗ trợ, thừa trường thông tin Kết luận, nội dung chỉ cho phép tối đa 5000 ký tự (SRS yêu cầu cho phép tối đa 10.000 ký tự)",
+  "Trạng thái dev fix 1": "dev done",
+  "Verify": "Open",
+  "DEV phản hồi lần 1": "✅ Bug đúng (BA 24/07/2026) — gồm 2 lỗi cấu trúc (Loại 1) + 1 điểm cập nhật đặc tả (Loại 2).\n- Loại 1, Dev sửa theo đặc tả: bước cập nhật kết quả hỗ trợ FR-V.I-15 chỉ có 3 ô nhập — Nội dung kết quả hỗ trợ, Tệp kết quả hỗ trợ (srs-fr-05-vu-viec.md:1095, file_ket_qua) và Ghi chú. App đang THIẾU ô đính kèm tệp kết quả (mất chứng cứ đầu vào của hồ sơ chi trả) và THỪA ô \"Kết luận\" vốn thuộc bước sau do CB nghiệp vụ thực hiện (:1150).\n- Loại 2, BA chấp thuận đề nghị đối tác và đã cập nhật đặc tả: ô Nội dung kết quả hỗ trợ tối đa 10.000 ký tự (:1094) thay cho mốc 5.000 đang chạy — Dev nâng theo đặc tả mới. Mức Major (mất ô đính kèm) + Minor (giới hạn ký tự).\n\n── CÁCH VERIFY sau Dev fix ──\nPrecondition: tài khoản người được phân công xử lý vụ việc (qa_tvvseed28 hoặc nht_qa_tw / Test@1234) hoặc cbnv_tw; cần 1 vụ việc đang ở trạng thái \"Đang xử lý\" (đã chấp nhận phân công). Mở Chi tiết vụ việc → phần Kết quả hỗ trợ → bấm [Cập nhật kết quả] để mở màn nhập.\n1) Liệt kê các ô có trong màn nhập.\n2) Dán 10.000 ký tự vào ô Nội dung kết quả hỗ trợ, xem bộ đếm; rồi thử 10.001 ký tự.\n3) Đính kèm 1 tệp kết quả (pdf hoặc docx) rồi Lưu.\n4) Thoát ra, mở lại vụ việc đó xem phần Kết quả hỗ trợ.\n✅ PASS khi: màn nhập có ô đính kèm Tệp kết quả hỗ trợ và KHÔNG còn ô \"Kết luận\"; ô Nội dung nhận đủ 10.000 ký tự (bộ đếm lấy mốc 10.000) và chặn khi vượt; tệp đính kèm lưu thành công và mở lại vẫn thấy, tải về đúng tệp đã nộp.\n❌ FAIL nếu: vẫn không có ô đính kèm; vẫn còn ô \"Kết luận\"; nội dung vẫn bị chặn ở 5.000 ký tự; hoặc đính kèm được nhưng sau khi lưu mở lại mất tệp.\n⚠️ Ô \"Kết luận cuối cùng\" ở bước KHÁC (CB nghiệp vụ cập nhật kết quả cuối khi vụ việc Đã duyệt) là ĐÚNG đặc tả — chỉ chấm màn nhập kết quả hỗ trợ ở trạng thái Đang xử lý, đừng nhầm sang bước kia rồi báo FAIL.\nẢnh lỗi cũ: CNKQHT_03.jpg (ảnh UAT đối tác — màn \"Cập nhật kết quả hỗ trợ\": Nội dung 0/5000, có ô \"Kết luận\" thừa, không có ô đính kèm Tệp kết quả hỗ trợ).",
+  "Tác nhân": ""
+ },
+ {
+  "row": 13,
+  "Mã TC": "CNKQVV_02",
+  "Tên chức năng": "",
+  "Mô tả": "Kiểm tra hiển thị các trường thông tin Nhóm 6 – Kết luận cuối",
+  "Điều kiện": "1. Đăng nhập tài khoản\n2. Hồ sơ vụ việc đang ở trạng thái \"Đã duyệt\" và đã có kết quả hỗ trợ của người hỗ trợ (Nhóm 6).",
+  "Dữ liệu đầu vào": "",
+  "Các bước thực hiện": "1. Chọn menu \"Vụ việc HTPL\"\n2. Tìm kiếm và nhấn Xem chi tiết\n3. Mở Nhóm 6 – Kết luận cuối",
+  "Kết quả mong đợi": "- Hệ thống hiển thị các trường thông tin giống với thiết kế\n- Dữ liệu hiển thị đúng định dạng và trường thông tin\n- Dữ liệu hiển thị không bị tràn/đè lên nhau, đồng nhất ngôn ngữ hiển thị",
+  "Kết quả thực tế": "Tên nút chức năng và các trường thông tin không giống với thiết kế",
+  "Trạng thái dev fix 1": "dev done",
+  "Verify": "Open",
+  "DEV phản hồi lần 1": "✅ Bug đúng (BA 24/07/2026) — Loại 1, app sai đặc tả, đối tác đúng. Dev sửa 2 điểm ở bước hoàn thành vụ việc (FR-V.I-16, vụ việc ở trạng thái Đã duyệt):\n- Nhãn nút mở màn nhập đang là \"Hoàn thành\"; đặc tả gọi thao tác này là \"Cập nhật kết quả cuối\" nhất quán 3 chỗ — srs-fr-05-vu-viec.md:1178 (câu chấp nhận), :1750 (bảng nút theo trạng thái DA_DUYET), :1782 (thông báo sau khi hoàn thành).\n- Màn nhập đang thừa ô \"Kết quả xử lý\" (Thành công / Không thành công); §Inputs của bước này chỉ có ô Kết luận cuối cùng (:1150) → gỡ ô thừa. Nếu sau này chủ đầu tư cần trường này để thống kê hiệu quả hỗ trợ thì chốt riêng và bổ sung vào đặc tả trước. Mức Minor.\n\n── CÁCH VERIFY sau Dev fix ──\nPrecondition: cbnv_tw / Test@1234 + 1 vụ việc đang ở trạng thái \"Đã duyệt\" (đã qua bước CB phê duyệt duyệt kết quả, chưa hoàn thành). Mở Chi tiết vụ việc đó.\n1) Đọc nhãn nút thao tác ở khu vực hành động của vụ việc.\n2) Bấm nút đó, liệt kê các ô trong màn nhập hiện ra.\n3) Nhập kết luận cuối cùng rồi xác nhận.\n✅ PASS khi: nhãn nút thể hiện đúng thao tác cập nhật kết quả cuối theo đặc tả (không còn nhãn \"Hoàn thành\"); màn nhập chỉ còn ô Kết luận cuối cùng, KHÔNG còn ô \"Kết quả xử lý\"; xác nhận xong vụ việc chuyển sang trạng thái Hoàn thành, ghi ngày hoàn thành và kết luận vừa nhập đọc lại đúng.\n❌ FAIL nếu: nút vẫn nhãn \"Hoàn thành\"; hoặc màn nhập vẫn còn ô \"Kết quả xử lý\"; hoặc gỡ ô xong nhưng không lưu được kết luận / vụ việc không chuyển trạng thái.\n⚠️ Chữ \"Hoàn thành\" hiển thị ở badge trạng thái, tab danh sách và thanh tiến trình là TÊN TRẠNG THÁI, đúng đặc tả — chỉ chấm nhãn NÚT, đừng báo FAIL vì còn thấy chữ Hoàn thành ở các chỗ đó.\nẢnh lỗi cũ: CNKQVV_02.jpg (ảnh UAT đối tác — nút \"Hoàn thành\", màn \"Hoàn thành vụ việc\" có ô Kết luận cuối cùng kèm ô \"Kết quả xử lý\" Thành công/Không thành công).",
+  "Tác nhân": ""
+ }
+]

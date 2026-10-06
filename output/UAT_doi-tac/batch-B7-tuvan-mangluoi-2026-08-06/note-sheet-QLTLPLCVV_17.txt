@@ -1,0 +1,12 @@
+Verify 06/08/2026, bản dựng V1.0.8 (bó mã index-DIABnbIr.js, phát hành 06/08/2026 14:13), tài khoản Cán bộ Nghiệp vụ Trung ương — trùng khít vai trò đọc được trên ảnh của đối tác. Không tái hiện: nút Xem của tệp đính kèm KHÔNG còn bị vô hiệu hoá.
+
+Đã dựng lại đúng bối cảnh trong ảnh: tư liệu Loại "Tài liệu", Lĩnh vực "Sở hữu trí tuệ", mở qua nút Xem tệp trên hàng để vào đúng hộp thoại xem tư liệu (hộp thoại chỉ có nút Đóng), và đo ở CẢ hai trạng thái tư liệu — Nháp và Đã công khai (hàng có đủ Xem tệp / Hủy công khai / Xóa như trong ảnh). Phủ đủ 3 định dạng tệp, tổng 6 lượt bấm thật:
+- PDF: mở trình xem trực tuyến, đọc được đúng nội dung đã nạp trong tệp.
+- Hình ảnh (PNG): mở khung xem ảnh, ảnh hiện ra đúng, kích thước 240x90 khớp tệp gốc.
+- DOCX (đúng định dạng tệp trong ảnh của đối tác): hệ thống tải tệp về máy người dùng; tệp nhận được đúng tên, 964 byte, mã băm md5 trùng khít tệp gốc, mở ra đọc được đúng nội dung bên trong. Đây đúng là hành vi mong đợi cho định dạng không xem trực tuyến được.
+
+Ở cả 6 lượt, nút đo được ở trạng thái bật: không có thuộc tính vô hiệu, nhận được thao tác chuột, chữ màu xanh — khác hẳn ảnh của đối tác nơi chữ Xem màu xám. Kiểm chứng thêm bằng đường đo thứ hai: gọi thẳng dịch vụ tải tệp trong cùng phiên đều trả về 200, số byte 629 / 45.802 / 964 và đúng chữ ký định dạng của PDF / PNG / DOCX, khớp tệp gốc. Hai cách đo cho cùng một kết quả.
+
+Ghi chú nhỏ khi thao tác: chữ tên tệp là chữ hiển thị thường, chỗ bấm là nút Xem nằm ngay cạnh tên tệp trên cùng một hàng.
+
+Lưu ý hiệu lực: đo trên môi trường kiểm thử nội bộ bản V1.0.8, chưa phải môi trường nghiệm thu. Đề nghị đối tác mở lại đúng màn này sau khi bản dựng nêu trên được cập nhật sang môi trường nghiệm thu.

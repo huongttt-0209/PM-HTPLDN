@@ -1,0 +1,10 @@
+{
+  "checkedAt": "2026-08-07T15:05:00Z",
+  "scope": "GET /api/v1/tu-van-viens, all 44 visible records",
+  "matchCriteria": {
+    "hoTen": "QA Reverify OOS03 Row349 20260807",
+    "email": "qa.reverify349.20260807@htpldn.test",
+    "dienThoai": "0912340507"
+  },
+  "matches": []
+}

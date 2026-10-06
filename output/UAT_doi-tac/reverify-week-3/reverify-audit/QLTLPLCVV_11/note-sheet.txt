@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Xóa tư liệu đang "Công khai" (vai trò CB Nghiệp vụ): nút "Xóa" bị khóa (disable), không xóa được trực tiếp.
+- Theo SRS FR-X.1-06 (UC152) §Xóa mềm tư liệu (dòng 899, 901): tư liệu công khai vẫn được xóa — hệ thống tự hủy công khai trước rồi xóa mềm, không được khóa nút Xóa.
+- Thực tế: hàng tư liệu "Đã công khai" có nút Xóa xám/disable; cùng tư liệu khi ở "Nháp" thì nút Xóa bật bình thường.
+- Verify: tài khoản cbnv_tw (CB_NV_TW), tư liệu TL-BF-0721-CK. Bug ID: BUG-QLTLPLCVV_11.

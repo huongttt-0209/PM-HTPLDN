@@ -1,0 +1,1125 @@
+
+
+====================================================================================================
+===== ROW 178 — Mã TC = VVDTN_04 =====
+====================================================================================================
+
+--- [Tên] ---
+(RỖNG)
+
+--- [STT] ---
+15/07/2026
+
+--- [Tuần] ---
+Tuần 3
+
+--- [Mã TC] ---
+VVDTN_04
+
+--- [Tên chức năng] ---
+(RỖNG)
+
+--- [Tác nhân
+"cbnv_tw        Test@1234
+cbnv_] ---
+(RỖNG)
+
+--- [Mô tả] ---
+Kiểm tra hiển thị Biểu đồ và bảng kết quả
+
+--- [Điều kiện] ---
+1. Đăng nhập hệ thống thành công
+2. Có dữ liệu thống kê
+
+--- [Dữ liệu đầu vào] ---
+(RỖNG)
+
+--- [Các bước thực hiện] ---
+1. Chọn menu "Báo cáo thống kê"
+2. Nhập tiêu chí/điều kiện hợp lệ
+3. Nhấn Xem báo cáo
+
+--- [Kết quả mong đợi] ---
+- Hệ thống hiển thị các trường thông tin giống với thiết kế
+- Dữ liệu hiển thị đúng định dạng và trường thông tin
+- Dữ liệu hiển thị không bị tràn/đè lên nhau, đồng nhất ngôn ngữ hiển thị
+
+--- [Kết quả thực tế] ---
+- Không hiển thị biểu đồ tròn theo lĩnh vực
+- Bảng tổng hợp thiếu các cột: Theo kênh, Theo lĩnh vực
+
+--- [Ảnh/vieo 1] ---
+VVDTN_04.webm
+
+--- [Trạng thái] ---
+Fail
+
+--- [Dopai] ---
+BA
+
+--- [Loại vấn đề] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 1] ---
+TKM retest 31/7: Không hiển thị biểu đồ tròn theo lĩnh vực
+VVDTN_04_v2.jpg
+
+--- [Trạng thái dev fix] ---
+Fixed
+
+--- [DEV phản hồi lần 1] ---
+(RỖNG)
+
+--- [Kết quả verify] ---
+Verify 06/08/2026, bản dựng V1.0.8 (đối tác đo trên V1.0/V1.0.2), tài khoản cbnv_tw (CB Nghiệp vụ TW — đúng tác nhân), đối chứng thêm chính vai trò QTHT của đối tác.
+
+- Vế "bảng thiếu cột Theo kênh / Theo lĩnh vực": KHÔNG còn tái hiện. Màn hiện đủ bảng "Kênh tiếp nhận" (Trực tiếp 41, Doanh nghiệp 3) và bảng "Thống kê theo lĩnh vực pháp luật" (Thương mại 16, Dân sự 13, Lao động 12, Thuế 3). Hai chiều cộng khớp tổng 44; đếm lại độc lập từ danh sách vụ việc (45 bản ghi trừ 1 từ chối = 44, đúng công thức SRS) ra y hệt từng con số. Vai trò QTHT gọi trực tiếp API báo cáo cũng nhận đủ 2 chiều này.
+
+- Vế "không có biểu đồ tròn theo lĩnh vực": hiện trạng đúng là KHÔNG có biểu đồ tròn — màn render biểu đồ cột theo kênh + biểu đồ đường theo kỳ. Điểm này QA không tự chốt được vì kỳ vọng của đối tác NGƯỢC với đặc tả: SRS v3.5 (srs-fr-11-bao-cao.md:1065) chốt loại BC này dùng "Bar + Trend", trong khi cùng bảng đó lại gán Donut cho UC124 (:1064) và UC127 (:1067) — tức đặc tả cố ý không gán biểu đồ tròn cho báo cáo này. Đặc tả chỉ bắt buộc CÓ dữ liệu theo lĩnh vực (:215, điều kiện "Luôn"), không quy định phải trình bày bằng biểu đồ hay bảng.
+
+=> Cần BA chốt: giữ đặc tả (trả lời đối tác rằng bảng theo lĩnh vực là đủ) hay sửa đặc tả để bổ sung biểu đồ tròn. Chi tiết đối chiếu + đề xuất câu trả lời cho đối tác: cau-hoi-BA.md mục VVDTN_04.
+
+Lưu ý hiệu lực: đo trên môi trường nội bộ 18.143.165.120.nip.io bản V1.0.8, chưa phải môi trường đối tác.
+
+--- [Ảnh/video verify] ---
+(RỖNG)
+
+--- [Trạng thái 2] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 2] ---
+(RỖNG)
+
+--- [Trạng thái dev fix 2] ---
+(RỖNG)
+
+--- [DEV phản hồi lần 2] ---
+(RỖNG)
+
+
+====================================================================================================
+===== ROW 179 — Mã TC = VVDTN_06 =====
+====================================================================================================
+
+--- [Tên] ---
+(RỖNG)
+
+--- [STT] ---
+15/07/2026
+
+--- [Tuần] ---
+Tuần 3
+
+--- [Mã TC] ---
+VVDTN_06
+
+--- [Tên chức năng] ---
+(RỖNG)
+
+--- [Tác nhân
+"cbnv_tw        Test@1234
+cbnv_] ---
+(RỖNG)
+
+--- [Mô tả] ---
+Kiểm tra chức năng Xuất excel
+
+--- [Điều kiện] ---
+1. Đăng nhập hệ thống thành công
+2. Có dữ liệu thống kê
+
+--- [Dữ liệu đầu vào] ---
+(RỖNG)
+
+--- [Các bước thực hiện] ---
+1. Chọn menu "Báo cáo thống kê"
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel
+
+--- [Kết quả mong đợi] ---
+Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng.
+
+--- [Kết quả thực tế] ---
+Hệ thống hiển thị thông báo "Không thể tạo file xuất. Vui lòng thử lại.".
+
+--- [Ảnh/vieo 1] ---
+VVDTN_06.jpg
+
+--- [Trạng thái] ---
+Fail
+
+--- [Dopai] ---
+BA
+
+--- [Loại vấn đề] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 1] ---
+TKM retest 31/7: Hệ thống hiển thị thông báo "Forbidden"
+VVDTN_06_v2.jpg
+
+--- [Trạng thái dev fix] ---
+Fixed
+
+--- [DEV phản hồi lần 1] ---
+Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.
+
+--- [Kết quả verify] ---
+Verify 06/08/2026, bản dựng V1.0.8 (đối tác đo trên V1.0/V1.0.2). Đo cả hai vai trò, kết quả TRÁI NGƯỢC nhau nên chưa chốt được, cần BA xác nhận phạm vi vai trò.
+
+- Với CB Nghiệp vụ TW (cbnv_tw — đúng tác nhân theo SRS): XUẤT ĐƯỢC bình thường. Bấm nút Xuất Excel thật trên giao diện, tệp BaoCaoVuViecTiepNhan_20260806_1254.xlsx tải về và MỞ ĐỌC được: đủ tiêu đề báo cáo, kỳ, khoảng thời gian, đơn vị, ngày tạo; số liệu khớp màn từng con số (tổng 44; theo kênh 41+3; theo lĩnh vực 16+13+12+3; theo đơn vị 34+3+4+3). Đổi bộ lọc sang kênh Trực tiếp rồi xuất lại thì tệp bám đúng bộ lọc mới (tổng 41). Tên tệp đúng khuôn quy định.
+
+- Với Quản trị viên QTHT (admin — ĐÚNG vai trò đối tác đã dùng khi báo lỗi): TÁI HIỆN y hệt triệu chứng vòng 2 của đối tác. Cùng một phiên: xem báo cáo trả về bình thường (HTTP 200, tổng 34) nhưng xuất tệp bị chặn HTTP 403 với thông báo "Forbidden". Đã gọi kiểm tra phiên ngay sau đó và phiên vẫn còn sống, nên đây là chặn quyền thật chứ không phải hết phiên. Trên giao diện nút Xuất vẫn hiện và bấm được với vai trò này.
+
+- Vì sao Dev không tái hiện được: nhiều khả năng Dev test bằng vai trò CB Nghiệp vụ (luồng đó đúng là chạy tốt), còn đối tác test bằng QTHT.
+
+=> Cần BA chốt: vai trò QTHT có được dùng chức năng Báo cáo thống kê không? SRS mâu thuẫn — mục Tác nhân của báo cáo này không liệt kê QTHT (srs-fr-11-bao-cao.md:192), nhưng quy tắc phân quyền BR-AUTH-08 (:1268) lại ghi ngoại lệ "QTHT bypass" áp cho toàn bộ nhóm báo cáo, và luồng xử lý chỉ có một bước kiểm quyền chung cho cả xem lẫn xuất (:79). Hiện trạng cho xem mà chặn xuất thì không khớp cách hiểu nào. Chi tiết 2 hướng xử lý + đề xuất trả lời đối tác: cau-hoi-BA.md mục VVDTN_06.
+
+Ghi chú: thông báo chặn quyền đang trả "Forbidden" (tiếng Anh, mã ERR-PERM-SYS-00-01) trong khi đặc tả (:117) quy định phải là "Bạn không có quyền xem báo cáo này" — điểm này đã tách thành dòng lỗi riêng VVDTN_QA01, không phụ thuộc BA chọn hướng nào.
+
+Lưu ý hiệu lực: đo trên môi trường nội bộ 18.143.165.120.nip.io bản V1.0.8, chưa phải môi trường đối tác.
+
+--- [Ảnh/video verify] ---
+(RỖNG)
+
+--- [Trạng thái 2] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 2] ---
+(RỖNG)
+
+--- [Trạng thái dev fix 2] ---
+(RỖNG)
+
+--- [DEV phản hồi lần 2] ---
+(RỖNG)
+
+
+====================================================================================================
+===== ROW 185 — Mã TC = VVDHT_06 =====
+====================================================================================================
+
+--- [Tên] ---
+(RỖNG)
+
+--- [STT] ---
+15/07/2026
+
+--- [Tuần] ---
+Tuần 3
+
+--- [Mã TC] ---
+VVDHT_06
+
+--- [Tên chức năng] ---
+(RỖNG)
+
+--- [Tác nhân
+"cbnv_tw        Test@1234
+cbnv_] ---
+(RỖNG)
+
+--- [Mô tả] ---
+Kiểm tra chức năng Xuất excel
+
+--- [Điều kiện] ---
+1. Đăng nhập hệ thống thành công
+2. Có dữ liệu thống kê
+
+--- [Dữ liệu đầu vào] ---
+(RỖNG)
+
+--- [Các bước thực hiện] ---
+1. Chọn menu "Báo cáo thống kê"
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel
+
+--- [Kết quả mong đợi] ---
+Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng.
+
+--- [Kết quả thực tế] ---
+Hệ thống hiển thị thông báo "Không thể tạo file xuất. Vui lòng thử lại.".
+
+--- [Ảnh/vieo 1] ---
+VVDHT_06.jpg
+
+--- [Trạng thái] ---
+Fail
+
+--- [Dopai] ---
+BA
+
+--- [Loại vấn đề] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 1] ---
+TKM retest 31/7: Hệ thống hiển thị thông báo "Forbidden"
+VVDHT_06_v2.jpg
+
+--- [Trạng thái dev fix] ---
+Fixed
+
+--- [DEV phản hồi lần 1] ---
+Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.
+
+--- [Kết quả verify] ---
+Verify 06/08/2026, bản dựng V1.0.8 (đối tác đo trên V1.0/V1.0.2). Đo cả hai vai trò trên chính màn BC Vụ việc đang hỗ trợ, kết quả TRÁI NGƯỢC nhau nên chưa chốt được, cần BA xác nhận phạm vi vai trò. Đây là cùng một câu hỏi vai trò với VVDTN_06 nhưng đã đo lại độc lập trên màn này, không suy từ case kia.
+
+- Với CB Nghiệp vụ TW (cbnv_tw — đúng tác nhân theo SRS): XUẤT ĐƯỢC bình thường. Bấm nút Xuất Excel thật trên giao diện, tệp BaoCaoVuViecDangHoTro_20260806_1417.xlsx tải về và MỞ ĐỌC được: đủ tiêu đề báo cáo, kỳ, đơn vị, ngày tạo; số liệu khớp màn từng con số (tổng 14; theo mức SLA 12/0/2/0; theo người hỗ trợ QA TVV Seed28 Active 4 vụ, 2 quá hạn). Đặt thêm bộ lọc Mức SLA = Quá hạn rồi xuất lại thì tệp bám đúng bộ lọc mới (tổng 2). Tên tệp đúng khuôn quy định.
+
+- Với Quản trị viên QTHT (admin — ĐÚNG vai trò đối tác đã dùng khi báo lỗi): TÁI HIỆN y hệt triệu chứng vòng 2 của đối tác. Cùng một phiên, cùng bộ lọc: xem báo cáo trả về bình thường (HTTP 200, tổng 14) nhưng bấm Xuất Excel thì bị chặn HTTP 403 và trên màn hiện đúng thông báo "Forbidden" (đã chụp được ảnh thông báo trên nền màn đang có dữ liệu). Gọi kiểm tra phiên ngay sau đó vẫn còn sống, nên đây là chặn quyền thật chứ không phải hết phiên. Nút Xuất vẫn hiện và bấm được với vai trò này.
+
+- Vì sao Dev không tái hiện được: nhiều khả năng Dev test bằng vai trò CB Nghiệp vụ (luồng đó đúng là chạy tốt), còn đối tác test bằng QTHT. Lượt đo này cũng loại trừ được giả thuyết "chức năng xuất của màn này hỏng": cùng màn, cùng bộ lọc, chỉ đổi vai trò thì kết quả đảo chiều.
+
+=> Cần BA chốt: vai trò QTHT có được dùng chức năng Báo cáo thống kê (xem VÀ xuất tệp) không? SRS mâu thuẫn — mục Tác nhân của báo cáo này không liệt kê QTHT (srs-fr-11-bao-cao.md:236), nhưng quy tắc phân quyền BR-AUTH-08 (:1268) lại ghi ngoại lệ "QTHT bypass" áp cho toàn bộ nhóm báo cáo, và luồng xử lý chỉ có một bước kiểm quyền chung cho cả xem lẫn xuất (:79). Hiện trạng cho xem mà chặn xuất thì không khớp cách hiểu nào. Đây là MỘT quyết định áp cho cả nhóm báo cáo (VVDTN_06, VVDHT_06, VVTTG_05), không phải nhiều quyết định riêng. Chi tiết 2 hướng xử lý + đề xuất trả lời đối tác: ba-confirmation-needed-BCTK-B1-2026-08-06.md mục VVDHT_06.
+
+Ghi chú: thông báo chặn quyền đang trả "Forbidden" (tiếng Anh, mã ERR-PERM-SYS-00-01) trong khi đặc tả (:117) quy định phải là "Bạn không có quyền xem báo cáo này" — điểm này đã tách thành dòng lỗi riêng, không phụ thuộc BA chọn hướng nào.
+
+Ghi nhận thêm khi đo (không ảnh hưởng kết luận case này): cả trên màn lẫn trong tệp Excel, mục "Theo đơn vị" chỉ có dòng tiêu đề mà không có dữ liệu, trong khi đặc tả quy định phần này luôn phải có.
+
+Lưu ý hiệu lực: đo trên môi trường nội bộ 18.143.165.120.nip.io bản V1.0.8, chưa phải môi trường đối tác.
+
+--- [Ảnh/video verify] ---
+(RỖNG)
+
+--- [Trạng thái 2] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 2] ---
+(RỖNG)
+
+--- [Trạng thái dev fix 2] ---
+(RỖNG)
+
+--- [DEV phản hồi lần 2] ---
+(RỖNG)
+
+
+====================================================================================================
+===== ROW 189 — Mã TC = VVDHTHT_06 =====
+====================================================================================================
+
+--- [Tên] ---
+(RỖNG)
+
+--- [STT] ---
+15/07/2026
+
+--- [Tuần] ---
+Tuần 3
+
+--- [Mã TC] ---
+VVDHTHT_06
+
+--- [Tên chức năng] ---
+(RỖNG)
+
+--- [Tác nhân
+"cbnv_tw        Test@1234
+cbnv_] ---
+(RỖNG)
+
+--- [Mô tả] ---
+Kiểm tra chức năng Xuất excel
+
+--- [Điều kiện] ---
+1. Đăng nhập hệ thống thành công
+2. Có dữ liệu thống kê
+
+--- [Dữ liệu đầu vào] ---
+(RỖNG)
+
+--- [Các bước thực hiện] ---
+1. Chọn menu "Báo cáo thống kê"
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel
+
+--- [Kết quả mong đợi] ---
+Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng.
+
+--- [Kết quả thực tế] ---
+Hệ thống hiển thị thông báo "Không thể tạo file xuất. Vui lòng thử lại.".
+
+--- [Ảnh/vieo 1] ---
+VVDHTHT_06.jpg
+
+--- [Trạng thái] ---
+Fail
+
+--- [Dopai] ---
+BA
+
+--- [Loại vấn đề] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 1] ---
+TKM retest 31/7: Hệ thống hiển thị thông báo "Forbidden"
+VVDHTHT_06_v2.jpg
+
+--- [Trạng thái dev fix] ---
+Fixed
+
+--- [DEV phản hồi lần 1] ---
+Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.
+
+--- [Kết quả verify] ---
+Đo lại 06/08/2026 trên bản dựng V1.0.8, tách riêng 2 vai trò.
+
+1) Vai trò trong cả 10 ảnh đối tác gửi (2 vòng x 5 phiếu) đều là "Quản trị viên - QTHT". Với vai trò này, bấm [Xuất Excel] vẫn bị máy chủ từ chối: HTTP 403, mã ERR-PERM-SYS-00-01, màn hiện chữ "Forbidden", không có tệp nào về máy. Triệu chứng đối tác phản ánh còn nguyên.
+
+2) Với vai trò mà đặc tả nêu đích danh (CB Nghiệp vụ TW - srs-fr-11-bao-cao.md:62), cùng bộ lọc thì xuất bình thường: tải về BaoCaoVuViecHoanThanh_20260806_1301.xlsx (6.990 byte), không có thông báo lỗi nào. Đã mở tệp đọc nội dung chứ không chỉ kiểm tệp tạo được: đủ 4 mục đầu tệp (tên báo cáo / kỳ + khoảng thời gian / đơn vị / ngày tạo), số liệu khớp màn hình 7/7 (Tổng 15, Thành công 3, Không thành công 0, Tỷ lệ 20, Dân sự 11, Thương mại 4, Chưa xác định 12). Đổi bộ lọc Kết quả = Thành công rồi xuất lại thì tệp đổi theo (Tổng 3, Tỷ lệ 100) - đúng yêu cầu tệp bám bộ lọc hiện tại.
+
+3) Vướng cần BA chốt: đặc tả không nói vai trò QTHT có được xuất tệp báo cáo hay không. Dòng :62 chỉ liệt kê CB Nghiệp vụ / CB Phê duyệt; nhưng ma trận quyền srs-v3.5.md:1335 lại cho QTHT quyền R trên thực thể BAO_CAO, và nút Xuất tại :1052 chỉ đặt điều kiện "sau khi đã Xem báo cáo", không đặt điều kiện vai trò. Hai cách hiểu cho hai kết luận trái ngược nên chưa chốt được Pass hay Reopen. Câu hỏi đầy đủ kèm 2 nhánh xử lý: cau-hoi-BA.md.
+
+4) Phát hiện thêm trong lúc đo: khi bị từ chối quyền, màn chỉ hiện đúng chữ tiếng Anh "Forbidden", trong khi đặc tả srs-fr-11-bao-cao.md:117 quy định tình huống không có quyền phải báo bằng tiếng Việt cho biết người dùng không có quyền xem báo cáo. Đã log BUG-BCTK-QA01.
+
+--- [Ảnh/video verify] ---
+(RỖNG)
+
+--- [Trạng thái 2] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 2] ---
+(RỖNG)
+
+--- [Trạng thái dev fix 2] ---
+(RỖNG)
+
+--- [DEV phản hồi lần 2] ---
+(RỖNG)
+
+
+====================================================================================================
+===== ROW 195 — Mã TC = VVTTG_05 =====
+====================================================================================================
+
+--- [Tên] ---
+(RỖNG)
+
+--- [STT] ---
+15/07/2026
+
+--- [Tuần] ---
+Tuần 3
+
+--- [Mã TC] ---
+VVTTG_05
+
+--- [Tên chức năng] ---
+(RỖNG)
+
+--- [Tác nhân
+"cbnv_tw        Test@1234
+cbnv_] ---
+(RỖNG)
+
+--- [Mô tả] ---
+Kiểm tra chức năng Xuất excel
+
+--- [Điều kiện] ---
+1. Đăng nhập hệ thống thành công
+2. Có dữ liệu thống kê
+
+--- [Dữ liệu đầu vào] ---
+(RỖNG)
+
+--- [Các bước thực hiện] ---
+1. Chọn menu "Báo cáo thống kê"
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel
+
+--- [Kết quả mong đợi] ---
+Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng.
+
+--- [Kết quả thực tế] ---
+Hệ thống hiển thị thông báo "Không thể tạo file xuất. Vui lòng thử lại.".
+
+--- [Ảnh/vieo 1] ---
+VVTTG_05.jpg
+
+--- [Trạng thái] ---
+Fail
+
+--- [Dopai] ---
+BA
+
+--- [Loại vấn đề] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 1] ---
+TKM retest 31/7: Hệ thống hiển thị thông báo "Forbidden"
+VVTTG_05_v2.jpg
+
+--- [Trạng thái dev fix] ---
+Fixed
+
+--- [DEV phản hồi lần 1] ---
+Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.
+
+--- [Kết quả verify] ---
+Verify 06/08/2026, bản dựng V1.0.8 (đối tác đo trên V1.0/V1.0.3). Đo cả hai vai trò trên chính màn BC Vụ việc theo thời gian, kết quả TRÁI NGƯỢC nhau nên chưa chốt được, cần BA xác nhận phạm vi vai trò. Đã đo lại độc lập trên màn này, không suy từ VVDTN_06 / VVDHT_06.
+
+- Với vai trò thuộc đúng nhóm tác nhân của đặc tả (Cán bộ Phê duyệt Trung ương): XUẤT ĐƯỢC bình thường. Bấm nút Xuất Excel thật trên giao diện, tệp BaoCaoVuViecTheoThoiGian_20260806_1432.xlsx tải về và MỞ ĐỌC được: đủ tiêu đề báo cáo, kỳ, đơn vị, ngày tạo; có bảng "Theo kỳ" ghi rõ từng mốc thời gian (Năm 2026, từ 01/01/2026 đến 31/12/2026, tiếp nhận 50, hoàn thành 18) và bảng "Theo đơn vị" cộng lại đúng 50 — khớp màn từng con số. Đổi Kỳ báo cáo từ Năm sang Tháng rồi xuất lại thì mốc trong tệp đổi theo đúng kỳ mới (Tháng 8/2026, tổng 20). Tên tệp đúng khuôn quy định.
+
+- Với Quản trị viên QTHT (ĐÚNG vai trò đối tác đã dùng khi báo lỗi): TÁI HIỆN y hệt triệu chứng vòng 2. Cùng một phiên, cùng bộ lọc: xem báo cáo trả về bình thường (HTTP 200, tổng toàn kỳ 50) nhưng bấm Xuất Excel thì bị chặn HTTP 403 và trên màn hiện đúng thông báo "Forbidden" (đã chụp được ảnh thông báo trên nền màn đang có dữ liệu). Kiểm tra phiên cả trước lẫn sau cú chặn đều còn sống, nên đây là chặn quyền thật chứ không phải hết phiên. Nút Xuất vẫn hiện và bấm được với vai trò này.
+
+=> Cần BA chốt: vai trò QTHT có được dùng chức năng Báo cáo thống kê (xem VÀ xuất tệp) không? SRS mâu thuẫn — mục Tác nhân của báo cáo này không liệt kê QTHT (srs-fr-11-bao-cao.md:325), nhưng quy tắc phân quyền BR-AUTH-08 (:1268) ghi ngoại lệ "QTHT bypass" áp cho toàn bộ nhóm báo cáo, và luồng xử lý chỉ có một bước kiểm quyền chung cho cả xem lẫn xuất (:79). Hiện trạng cho xem mà chặn xuất thì không khớp cách hiểu nào.
+
+Quan trọng: cả BA case xuất tệp (VVDTN_06, VVDHT_06, VVTTG_05) đã được đo độc lập trên BA màn khác nhau và cho kết quả GIỐNG HỆT — vai trò đúng tác nhân thì xuất được, vai trò QTHT thì bị chặn. Vậy đây là MỘT quyết định phạm vi vai trò áp cho cả nhóm, và nếu BA chọn mở quyền thì sửa một chỗ ở tầng phân quyền là đóng cả ba. Chi tiết 2 hướng xử lý + đề xuất trả lời đối tác: ba-confirmation-needed-BCTK-B1-2026-08-06.md mục VVTTG_05.
+
+Ghi chú: thông báo chặn quyền đang trả "Forbidden" (tiếng Anh, mã ERR-PERM-SYS-00-01) trong khi đặc tả (:117) quy định phải là "Bạn không có quyền xem báo cáo này" — điểm này đã tách thành dòng lỗi riêng, không phụ thuộc BA chọn hướng nào.
+
+Lưu ý hiệu lực: đo trên môi trường nội bộ 18.143.165.120.nip.io bản V1.0.8, chưa phải môi trường đối tác.
+
+--- [Ảnh/video verify] ---
+(RỖNG)
+
+--- [Trạng thái 2] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 2] ---
+(RỖNG)
+
+--- [Trạng thái dev fix 2] ---
+(RỖNG)
+
+--- [DEV phản hồi lần 2] ---
+(RỖNG)
+
+
+====================================================================================================
+===== ROW 222 — Mã TC = VVTDVQL_06 =====
+====================================================================================================
+
+--- [Tên] ---
+(RỖNG)
+
+--- [STT] ---
+16/07/2026
+
+--- [Tuần] ---
+Tuần 3
+
+--- [Mã TC] ---
+VVTDVQL_06
+
+--- [Tên chức năng] ---
+(RỖNG)
+
+--- [Tác nhân
+"cbnv_tw        Test@1234
+cbnv_] ---
+(RỖNG)
+
+--- [Mô tả] ---
+Kiểm tra chức năng Xuất excel
+
+--- [Điều kiện] ---
+1. Đăng nhập hệ thống thành công
+2. Có dữ liệu thống kê
+
+--- [Dữ liệu đầu vào] ---
+(RỖNG)
+
+--- [Các bước thực hiện] ---
+1. Chọn menu "Báo cáo thống kê"
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel
+
+--- [Kết quả mong đợi] ---
+Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoVuViec_{YYYYMMDD_HHmm}.xlsx 
+
+--- [Kết quả thực tế] ---
+Hệ thống hiển thị thông báo "Không thể tạo file xuất. Vui lòng thử lại.".
+
+--- [Ảnh/vieo 1] ---
+VVTDVQL_06.jpg
+
+--- [Trạng thái] ---
+Fail
+
+--- [Dopai] ---
+BA
+
+--- [Loại vấn đề] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 1] ---
+TKM retest 31/7: Hệ thống hiển thị thông báo "Forbidden"VVTDVQL_06_v2.jpg
+
+--- [Trạng thái dev fix] ---
+Fixed
+
+--- [DEV phản hồi lần 1] ---
+Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.
+
+--- [Kết quả verify] ---
+Đo lại 06/08/2026 trên bản dựng V1.0.8, tách riêng 2 vai trò.
+
+1) Vai trò trong cả 10 ảnh đối tác gửi (2 vòng x 5 phiếu) đều là "Quản trị viên - QTHT". Với vai trò này, bấm [Xuất Excel] vẫn bị máy chủ từ chối: HTTP 403, mã ERR-PERM-SYS-00-01, màn hiện chữ "Forbidden", không có tệp nào về máy. Triệu chứng đối tác phản ánh còn nguyên.
+
+2) Với vai trò mà đặc tả nêu đích danh (CB Nghiệp vụ TW - srs-fr-11-bao-cao.md:62), cùng bộ lọc thì xuất bình thường: tải về BaoCaoVuViecTheoDonVi_20260806_1305.xlsx (6.834 byte), không có thông báo lỗi nào. Tên tệp đúng khuôn {TenBaoCao}_{YYYYMMDD_HHmm}.xlsx như Kết quả mong đợi của phiếu yêu cầu (srs-fr-11-bao-cao.md:85 và :1092, BA chốt 04/08). Đã mở tệp đọc nội dung chứ không chỉ kiểm tệp tạo được: đủ 4 mục đầu tệp (tên báo cáo / kỳ + khoảng thời gian / đơn vị / ngày tạo), số liệu khớp màn hình 17/17 (Tổng 48; Bộ Kế hoạch và Đầu tư 0/0/2/2/4; Cục Bổ trợ tư pháp 2/10/5/15/36; Sở Tư pháp An Giang 0/1/1/0/3; Sở Tư pháp Hà Nội 0/3/1/1/5). Đổi Kỳ báo cáo sang Tháng rồi xuất lại thì tệp đổi theo (Tổng 15, chỉ còn 2 đơn vị) - đúng yêu cầu tệp bám bộ lọc hiện tại.
+
+3) Vướng cần BA chốt: đặc tả không nói vai trò QTHT có được xuất tệp báo cáo hay không. Dòng :62 chỉ liệt kê CB Nghiệp vụ / CB Phê duyệt; nhưng ma trận quyền srs-v3.5.md:1335 lại cho QTHT quyền R trên thực thể BAO_CAO, và nút Xuất tại :1052 chỉ đặt điều kiện "sau khi đã Xem báo cáo", không đặt điều kiện vai trò. Hai cách hiểu cho hai kết luận trái ngược nên chưa chốt được Pass hay Reopen. Câu hỏi đầy đủ kèm 2 nhánh xử lý: cau-hoi-BA.md.
+
+4) Phát hiện thêm trong lúc đo: khi bị từ chối quyền, màn chỉ hiện đúng chữ tiếng Anh "Forbidden", trong khi đặc tả srs-fr-11-bao-cao.md:117 quy định tình huống không có quyền phải báo bằng tiếng Việt cho biết người dùng không có quyền xem báo cáo. Đã log BUG-BCTK-QA01.
+
+--- [Ảnh/video verify] ---
+(RỖNG)
+
+--- [Trạng thái 2] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 2] ---
+(RỖNG)
+
+--- [Trạng thái dev fix 2] ---
+(RỖNG)
+
+--- [DEV phản hồi lần 2] ---
+(RỖNG)
+
+
+====================================================================================================
+===== ROW 226 — Mã TC = VVTLV_05 =====
+====================================================================================================
+
+--- [Tên] ---
+(RỖNG)
+
+--- [STT] ---
+16/07/2026
+
+--- [Tuần] ---
+Tuần 3
+
+--- [Mã TC] ---
+VVTLV_05
+
+--- [Tên chức năng] ---
+(RỖNG)
+
+--- [Tác nhân
+"cbnv_tw        Test@1234
+cbnv_] ---
+(RỖNG)
+
+--- [Mô tả] ---
+Kiểm tra chức năng Xuất excel
+
+--- [Điều kiện] ---
+1. Đăng nhập hệ thống thành công
+2. Có dữ liệu thống kê
+
+--- [Dữ liệu đầu vào] ---
+(RỖNG)
+
+--- [Các bước thực hiện] ---
+1. Chọn menu "Báo cáo thống kê"
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel
+
+--- [Kết quả mong đợi] ---
+Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoVuViec_{YYYYMMDD_HHmm}.xlsx 
+
+--- [Kết quả thực tế] ---
+Hệ thống hiển thị thông báo "Không thể tạo file xuất. Vui lòng thử lại.".
+
+--- [Ảnh/vieo 1] ---
+VVTLV_05.jpg
+
+--- [Trạng thái] ---
+Fail
+
+--- [Dopai] ---
+BA
+
+--- [Loại vấn đề] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 1] ---
+TKM retest 31/7: Hệ thống hiển thị thông báo "Forbidden"
+VVTLV_05_v2.jpg
+
+--- [Trạng thái dev fix] ---
+Fixed
+
+--- [DEV phản hồi lần 1] ---
+Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.
+
+--- [Kết quả verify] ---
+Đo lại 06/08/2026 trên bản dựng V1.0.8, tách riêng 2 vai trò.
+
+1) Vai trò trong cả 10 ảnh đối tác gửi (2 vòng x 5 phiếu) đều là "Quản trị viên - QTHT". Với vai trò này, bấm [Xuất Excel] vẫn bị máy chủ từ chối: HTTP 403, mã ERR-PERM-SYS-00-01, màn hiện chữ "Forbidden", không có tệp nào về máy. Triệu chứng đối tác phản ánh còn nguyên.
+
+2) Với vai trò mà đặc tả nêu đích danh (CB Nghiệp vụ TW - srs-fr-11-bao-cao.md:62), cùng bộ lọc thì xuất bình thường: tải về BaoCaoVuViecTheoLinhVuc_20260806_1306.xlsx (6.826 byte), không có thông báo lỗi nào. Tên tệp đúng khuôn {TenBaoCao}_{YYYYMMDD_HHmm}.xlsx như Kết quả mong đợi của phiếu yêu cầu (srs-fr-11-bao-cao.md:85 và :1092, BA chốt 04/08). Đã mở tệp đọc nội dung chứ không chỉ kiểm tệp tạo được: đủ 4 mục đầu tệp (tên báo cáo / kỳ + khoảng thời gian / đơn vị / ngày tạo), số liệu khớp màn hình 21/21 (Tổng 48; Dân sự 13/0/0/0/13; Lao động 9/3/0/0/12; Thuế 5/0/0/0/5; Thương mại 9/2/4/3/18). Đổi Kỳ báo cáo sang Tháng rồi xuất lại thì tệp đổi theo (Tổng 15, còn 3 lĩnh vực) - đúng yêu cầu tệp bám bộ lọc hiện tại.
+
+3) Vướng cần BA chốt: đặc tả không nói vai trò QTHT có được xuất tệp báo cáo hay không. Dòng :62 chỉ liệt kê CB Nghiệp vụ / CB Phê duyệt; nhưng ma trận quyền srs-v3.5.md:1335 lại cho QTHT quyền R trên thực thể BAO_CAO, và nút Xuất tại :1052 chỉ đặt điều kiện "sau khi đã Xem báo cáo", không đặt điều kiện vai trò. Hai cách hiểu cho hai kết luận trái ngược nên chưa chốt được Pass hay Reopen. Câu hỏi đầy đủ kèm 2 nhánh xử lý: cau-hoi-BA.md.
+
+4) Phát hiện thêm trong lúc đo: khi bị từ chối quyền, màn chỉ hiện đúng chữ tiếng Anh "Forbidden", trong khi đặc tả srs-fr-11-bao-cao.md:117 quy định tình huống không có quyền phải báo bằng tiếng Việt cho biết người dùng không có quyền xem báo cáo. Đã log BUG-BCTK-QA01.
+
+--- [Ảnh/video verify] ---
+(RỖNG)
+
+--- [Trạng thái 2] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 2] ---
+(RỖNG)
+
+--- [Trạng thái dev fix 2] ---
+(RỖNG)
+
+--- [DEV phản hồi lần 2] ---
+(RỖNG)
+
+
+====================================================================================================
+===== ROW 230 — Mã TC = VVTLHDN_05 =====
+====================================================================================================
+
+--- [Tên] ---
+(RỖNG)
+
+--- [STT] ---
+16/07/2026
+
+--- [Tuần] ---
+Tuần 3
+
+--- [Mã TC] ---
+VVTLHDN_05
+
+--- [Tên chức năng] ---
+(RỖNG)
+
+--- [Tác nhân
+"cbnv_tw        Test@1234
+cbnv_] ---
+(RỖNG)
+
+--- [Mô tả] ---
+Kiểm tra chức năng Xuất excel
+
+--- [Điều kiện] ---
+1. Đăng nhập hệ thống thành công
+2. Có dữ liệu thống kê
+
+--- [Dữ liệu đầu vào] ---
+(RỖNG)
+
+--- [Các bước thực hiện] ---
+1. Chọn menu "Báo cáo thống kê"
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel
+
+--- [Kết quả mong đợi] ---
+Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoVuViec_{YYYYMMDD_HHmm}.xlsx 
+
+--- [Kết quả thực tế] ---
+Hệ thống hiển thị thông báo "Không thể tạo file xuất. Vui lòng thử lại.".
+
+--- [Ảnh/vieo 1] ---
+VVTLHDN_05.jpg
+
+--- [Trạng thái] ---
+Fail
+
+--- [Dopai] ---
+BA
+
+--- [Loại vấn đề] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 1] ---
+TKM retest 31/7: Hệ thống hiển thị thông báo "Forbidden"
+VVTLHDN_05_v2.jpg
+
+--- [Trạng thái dev fix] ---
+Fixed
+
+--- [DEV phản hồi lần 1] ---
+Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.
+
+--- [Kết quả verify] ---
+Đo lại 06/08/2026 trên bản dựng V1.0.8, tách riêng 2 vai trò.
+
+1) Vai trò trong cả 10 ảnh đối tác gửi (2 vòng x 5 phiếu) đều là "Quản trị viên - QTHT". Với vai trò này, bấm [Xuất Excel] vẫn bị máy chủ từ chối: HTTP 403, mã ERR-PERM-SYS-00-01, màn hiện chữ "Forbidden", không có tệp nào về máy. Triệu chứng đối tác phản ánh còn nguyên.
+
+2) Với vai trò mà đặc tả nêu đích danh (CB Nghiệp vụ TW - srs-fr-11-bao-cao.md:62), cùng bộ lọc thì xuất bình thường: tải về BaoCaoVuViecTheoLoaiDn_20260806_1306.xlsx (6.801 byte), không có thông báo lỗi nào. Tên tệp đúng khuôn {TenBaoCao}_{YYYYMMDD_HHmm}.xlsx như Kết quả mong đợi của phiếu yêu cầu (srs-fr-11-bao-cao.md:85 và :1092, BA chốt 04/08). Đã mở tệp đọc nội dung chứ không chỉ kiểm tệp tạo được: đủ 4 mục đầu tệp (tên báo cáo / kỳ + khoảng thời gian / đơn vị / ngày tạo), số liệu khớp màn hình 16/16 (Tổng 35; Nhỏ 10/3/3/0/16; Siêu nhỏ 12/2/0/4/18; Không phân loại 1/0/0/0/1). Đặt bộ lọc Loại DN = Siêu nhỏ rồi xuất lại thì tệp đổi theo (Tổng 18, chỉ còn dòng Siêu nhỏ) - đúng yêu cầu tệp bám bộ lọc hiện tại.
+
+3) Vướng cần BA chốt: đặc tả không nói vai trò QTHT có được xuất tệp báo cáo hay không. Dòng :62 chỉ liệt kê CB Nghiệp vụ / CB Phê duyệt; nhưng ma trận quyền srs-v3.5.md:1335 lại cho QTHT quyền R trên thực thể BAO_CAO, và nút Xuất tại :1052 chỉ đặt điều kiện "sau khi đã Xem báo cáo", không đặt điều kiện vai trò. Hai cách hiểu cho hai kết luận trái ngược nên chưa chốt được Pass hay Reopen. Câu hỏi đầy đủ kèm 2 nhánh xử lý: cau-hoi-BA.md.
+
+4) Phát hiện thêm trong lúc đo: khi bị từ chối quyền, màn chỉ hiện đúng chữ tiếng Anh "Forbidden", trong khi đặc tả srs-fr-11-bao-cao.md:117 quy định tình huống không có quyền phải báo bằng tiếng Việt cho biết người dùng không có quyền xem báo cáo. Đã log BUG-BCTK-QA01.
+
+--- [Ảnh/video verify] ---
+(RỖNG)
+
+--- [Trạng thái 2] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 2] ---
+(RỖNG)
+
+--- [Trạng thái dev fix 2] ---
+(RỖNG)
+
+--- [DEV phản hồi lần 2] ---
+(RỖNG)
+
+
+====================================================================================================
+===== ROW 234 — Mã TC = VVTTGCT_05 =====
+====================================================================================================
+
+--- [Tên] ---
+(RỖNG)
+
+--- [STT] ---
+16/07/2026
+
+--- [Tuần] ---
+Tuần 3
+
+--- [Mã TC] ---
+VVTTGCT_05
+
+--- [Tên chức năng] ---
+(RỖNG)
+
+--- [Tác nhân
+"cbnv_tw        Test@1234
+cbnv_] ---
+(RỖNG)
+
+--- [Mô tả] ---
+Kiểm tra chức năng Xuất excel
+
+--- [Điều kiện] ---
+1. Đăng nhập hệ thống thành công
+2. Có dữ liệu thống kê
+
+--- [Dữ liệu đầu vào] ---
+(RỖNG)
+
+--- [Các bước thực hiện] ---
+1. Chọn menu "Báo cáo thống kê"
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel
+
+--- [Kết quả mong đợi] ---
+Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoVuViec_{YYYYMMDD_HHmm}.xlsx 
+
+--- [Kết quả thực tế] ---
+Hệ thống hiển thị thông báo "Không thể tạo file xuất. Vui lòng thử lại.".
+
+--- [Ảnh/vieo 1] ---
+VVTTGCT_05.jpg
+
+--- [Trạng thái] ---
+Fail
+
+--- [Dopai] ---
+BA
+
+--- [Loại vấn đề] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 1] ---
+TKM retest 31/7: Hệ thống hiển thị thông báo "Forbidden"
+VVTTGCT_05_v2.jpg
+
+--- [Trạng thái dev fix] ---
+Fixed
+
+--- [DEV phản hồi lần 1] ---
+Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.
+
+--- [Kết quả verify] ---
+Đo lại 06/08/2026 trên bản dựng V1.0.8, tách riêng 2 vai trò.
+
+1) Vai trò trong cả 10 ảnh đối tác gửi (2 vòng x 5 phiếu) đều là "Quản trị viên - QTHT". Với vai trò này, bấm [Xuất Excel] vẫn bị máy chủ từ chối: HTTP 403, mã ERR-PERM-SYS-00-01, màn hiện chữ "Forbidden", không có tệp nào về máy. Triệu chứng đối tác phản ánh còn nguyên.
+
+2) Với vai trò mà đặc tả nêu đích danh (CB Nghiệp vụ TW - srs-fr-11-bao-cao.md:62), cùng bộ lọc thì xuất bình thường: tải về BaoCaoVuViecTheoTgChiTiet_20260806_1307.xlsx (6.638 byte), không có thông báo lỗi nào. Tên tệp đúng khuôn {TenBaoCao}_{YYYYMMDD_HHmm}.xlsx như Kết quả mong đợi của phiếu yêu cầu (srs-fr-11-bao-cao.md:85 và :1092, BA chốt 04/08). Đã mở tệp đọc nội dung chứ không chỉ kiểm tệp tạo được: đủ 4 mục đầu tệp (tên báo cáo / kỳ + khoảng thời gian / đơn vị / ngày tạo), số liệu khớp màn hình 6/6 (Tổng 48; Năm 2026: Mới 2, Tiếp nhận 14, Đang hỗ trợ 9, Hoàn thành 18, Tổng số 48). Đổi Kỳ báo cáo sang Tháng rồi xuất lại thì tệp đổi theo (Tháng 8/2026: 0/12/3/0, Tổng 15) - đúng yêu cầu tệp bám bộ lọc hiện tại.
+
+3) Vướng cần BA chốt: đặc tả không nói vai trò QTHT có được xuất tệp báo cáo hay không. Dòng :62 chỉ liệt kê CB Nghiệp vụ / CB Phê duyệt; nhưng ma trận quyền srs-v3.5.md:1335 lại cho QTHT quyền R trên thực thể BAO_CAO, và nút Xuất tại :1052 chỉ đặt điều kiện "sau khi đã Xem báo cáo", không đặt điều kiện vai trò. Hai cách hiểu cho hai kết luận trái ngược nên chưa chốt được Pass hay Reopen. Câu hỏi đầy đủ kèm 2 nhánh xử lý: cau-hoi-BA.md.
+
+4) Phát hiện thêm trong lúc đo: khi bị từ chối quyền, màn chỉ hiện đúng chữ tiếng Anh "Forbidden", trong khi đặc tả srs-fr-11-bao-cao.md:117 quy định tình huống không có quyền phải báo bằng tiếng Việt cho biết người dùng không có quyền xem báo cáo. Đã log BUG-BCTK-QA01.
+
+--- [Ảnh/video verify] ---
+(RỖNG)
+
+--- [Trạng thái 2] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 2] ---
+(RỖNG)
+
+--- [Trạng thái dev fix 2] ---
+(RỖNG)
+
+--- [DEV phản hồi lần 2] ---
+(RỖNG)
+
+
+====================================================================================================
+===== ROW 263 — Mã TC = CPCTHTTTG_05 =====
+====================================================================================================
+
+--- [Tên] ---
+(RỖNG)
+
+--- [STT] ---
+16/07/2026
+
+--- [Tuần] ---
+Tuần 3
+
+--- [Mã TC] ---
+CPCTHTTTG_05
+
+--- [Tên chức năng] ---
+(RỖNG)
+
+--- [Tác nhân
+"cbnv_tw        Test@1234
+cbnv_] ---
+(RỖNG)
+
+--- [Mô tả] ---
+Kiểm tra chức năng Xuất excel
+
+--- [Điều kiện] ---
+1. Đăng nhập hệ thống thành công
+2. Có dữ liệu thống kê
+
+--- [Dữ liệu đầu vào] ---
+(RỖNG)
+
+--- [Các bước thực hiện] ---
+1. Chọn menu "Báo cáo thống kê"
+2. Nhập tiêu chí/điều kiện
+3. Nhấn Xem báo cáo
+4. Nhấn Xuất excel
+
+--- [Kết quả mong đợi] ---
+Hệ thống xuất toàn bộ và tự động tải tệp về máy người dùng. Tên tệp xuất: : BaoCaoChiPhi_{YYYYMMDD_HHmm}.xlsx 
+
+--- [Kết quả thực tế] ---
+Hệ thống hiển thị thông báo "Không thể tạo file xuất. Vui lòng thử lại.".
+
+--- [Ảnh/vieo 1] ---
+CPCTHTTTG_05.jpg
+
+--- [Trạng thái] ---
+Fail
+
+--- [Dopai] ---
+BA
+
+--- [Loại vấn đề] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 1] ---
+TKM retest 31/7: Hệ thống hiển thị thông báo "Forbidden"
+CPCTHTTTG_05_v2.jpg
+
+--- [Trạng thái dev fix] ---
+Fixed
+
+--- [DEV phản hồi lần 1] ---
+Đã kiểm tra trên môi trường DEV nhưng chưa tái hiện được lỗi; chức năng hiện hoạt động đúng theo thiết kế.
+
+--- [Kết quả verify] ---
+🔁 CÒN LỖI — chuyển lại dev.
+
+■ CÒN LỖI Ở ĐÂU
+Vai trò Quản trị hệ thống (tài khoản admin) — đúng vai trò trong ảnh nghiệm thu:
+   [Xem báo cáo] → OK. Hiện đủ số liệu và biểu đồ, hai nút Xuất bật sáng.
+   [Xuất Excel]  → KHÔNG ra tệp. Màn hiện đúng một chữ "Forbidden"
+                   (máy chủ trả 403 · mã ERR-PERM-SYS-00-01)
+Đúng hiện tượng ô "TKM phản hồi lần 1" đã ghi. Lần này đã CHỤP ĐƯỢC ẢNH khung thông báo đó.
+
+■ VÌ SAO LÀ LỖI (đặc tả srs-fr-11-bao-cao.md)
+1. Dòng :79 — kiểm quyền phải nằm ở ĐẦU luồng, nên bước Xem và bước Xuất phải cùng một quy
+   tắc quyền. Hiện đang cho xem đủ số liệu rồi mới chặn ở bước xuất.
+2. Dòng :117 — khi từ chối phải hiện câu tiếng Việt báo người dùng không có quyền xem báo
+   cáo. Hiện đang ném thẳng chuỗi kỹ thuật tiếng Anh của máy chủ ra cho người dùng cuối.
+KHÔNG phải chờ BA mới sửa được: câu hỏi "QTHT có được xuất báo cáo không" đã gửi BA, nhưng
+trả lời hướng nào thì vẫn là lỗi — nếu không được xuất thì phải chặn từ bước Xem và báo bằng
+tiếng Việt; nếu được xuất thì đang chặn nhầm.
+
+■ ĐÃ HẾT LỖI — ĐỪNG ĐỤNG LẠI
+Cán bộ Nghiệp vụ Trung ương xuất Excel tốt: tệp mở đọc được, đầu tệp đủ tên báo cáo + kỳ +
+đơn vị + ngày tạo, bảng "Theo kỳ" đủ 3 thông tin nghiệp vụ đòi (nhãn kỳ · số hồ sơ · tổng chi
+phí), số khớp đúng số trên màn. Đổi kỳ sang Khoảng tùy chọn 01/06–30/06/2026 thì nhãn kỳ và
+khoảng ngày trong tệp đổi theo — tệp bám bộ lọc, không xuất cứng. Chọn kỳ Quý (quý không có
+dữ liệu) thì màn ra rỗng và nút Xuất tự tắt, đúng mong đợi. Hai lượt xuất ra hai tên tệp khác
+nhau. Hết câu "Không thể tạo file xuất. Vui lòng thử lại." (đối tác báo 16/07).
+
+■ AI SỬA
+Dev BE — cho bước Xem và bước Xuất dùng chung quy tắc quyền; từ chối thì trả thông báo theo :117.
+Dev FE — không đẩy chuỗi máy chủ trả về ra thẳng màn hình người dùng.
+BA     — chốt "QTHT có được xuất báo cáo không" để dev chọn hướng sửa.
+
+■ ĐÃ ĐO
+06/08/2026 · bản dựng V1.0.8 · admin (QTHT/TW) + cbnv_tw_03 (CB Nghiệp vụ/TW) · BC Chi phí
+theo thời gian · Kỳ Năm 2026 · Toàn quốc · thêm 2 cấu hình kỳ (Khoảng tùy chọn tháng 6; Quý
+không có dữ liệu) · 3 lượt bấm xuất · không tạo/sửa/xoá bản ghi nào. Bằng chứng: ô "Ảnh/video
+verify" cùng dòng.
+Ba lỗi khác gặp lúc đo, đã tách phiếu riêng, KHÔNG tính vào phiếu này:
+   · BCTK_QA07 (dòng 370) — bấm [Xem báo cáo] lần 2 thì hai nút Xuất bị khoá cả phiên
+   · BCTK_QA08 (dòng 371) — giao diện không chọn được nhiều điểm kỳ, biểu đồ đường luôn 1 điểm
+   · BCTK_QA09 (dòng 372) — tệp xuất in mã kỹ thuật "KHOANG" thay cho chữ tiếng Việt
+
+────────── CÁCH VERIFY SAU KHI DEV FIX ──────────
+Cần trước: tài khoản admin (QTHT, cấp TW) · màn Báo cáo thống kê (/bao-cao) · kỳ báo cáo phải
+CÓ dữ liệu (báo cáo trống thì nút Xuất tự tắt, đo vô nghĩa).
+
+B1. admin → BC Chi phí theo thời gian · Kỳ Năm 01/01–31/12/2026 · Toàn quốc → [Xem báo cáo]
+    (bấm đúng 1 lần). Ghi lại Tổng chi phí · Tổng hồ sơ và các dòng bảng "Theo kỳ".
+B2. [Xuất Excel] → chép nguyên văn chữ hiện ra; kiểm có tệp về máy không.
+B3. Đối chiếu bằng đường thứ 2: tab Network xem lời gọi xuất trả mã gì. Có tệp thì MỞ RA ĐỌC,
+    so với số ở B1.
+B4. Lặp B1–B3 bằng cbnv_tw_03; thêm 1 lượt đổi kỳ (vd Khoảng tùy chọn 01/06–30/06/2026) để
+    chắc nhãn kỳ trong tệp đổi theo bộ lọc.
+
+✅ PASS — đạt 1 trong 2:
+   a) admin xuất được tệp .xlsx mở đọc được, số khớp màn, không thông báo từ chối; HOẶC
+   b) nếu BA chốt QTHT không được xuất → chặn NGAY ở bước [Xem báo cáo], kèm câu tiếng Việt.
+❌ FAIL nếu: còn "Forbidden" hay bất kỳ chuỗi tiếng Anh / mã kỹ thuật nào cho người dùng cuối ·
+   vẫn cho xem đủ rồi mới chặn ở bước Xuất · chỉ ẩn/làm mờ nút Xuất mà bước Xem vẫn vào được ·
+   Cán bộ Nghiệp vụ bị chặn theo · tệp xuất thiếu thông tin so với màn.
+
+⚠️ BẪY
+1. Cán bộ Nghiệp vụ xuất được KHÔNG chứng minh đã fix — vai trò đó vốn đã tốt từ 06/08. Phép đo
+   quyết định là chạy bằng chính tài khoản admin.
+2. Tải được tệp chưa đủ — phải MỞ TỆP RA ĐỌC mới chốt.
+3. Nút Xuất bị mờ dù báo cáo đang hiện số liệu = do đã bấm [Xem báo cáo] từ 2 lần trở lên (lỗi
+   riêng BCTK_QA07). Tải lại trang, chọn lại bộ lọc, bấm đúng 1 lần.
+4. Đừng chấm Fail vì tên tệp BaoCaoChiPhiTheoThoiGian_… (khuôn tên đã chốt 04/08/2026); vì số
+   liệu khác ảnh nghiệm thu (25 hồ sơ / 226.308.268 đ); hay vì bảng chỉ có một dòng kỳ — điều
+   phải đúng là TỆP KHỚP MÀN.
+5. Khung thông báo sống ~3 giây và đổi chữ NGAY TRONG khung cũ, không mọc khung mới → công cụ
+   đếm "khung mới" chỉ thấy "Đang tạo file..." rồi báo nhầm là im lặng. Phải theo dõi nội dung
+   khung theo thời gian; muốn chụp ảnh thì hẹn giờ bấm nút sau ~2500 mili-giây rồi mới gọi lệnh
+   chụp. Ứng dụng gửi lời gọi xuất qua XHR chứ không qua fetch. Tải lại trang trước khi đo.
+
+--- [Ảnh/video verify] ---
+CPCTHTTTG_06-B2-qtht-thong-bao-Forbidden-khi-xuat-pdf-V108.png — Vai trò Quản trị hệ thống: ẢNH CHỤP ĐƯỢC khung thông báo "Forbidden" khi bấm Xuất (cùng màn, cùng tài khoản, cùng mã lỗi với lượt Xuất Excel)
+CPCTHTTTG_05-B1-qtht-xem-duoc-bao-cao-nut-xuat-bam-duoc-V108.png — Vai trò Quản trị hệ thống: báo cáo hiện đủ số liệu và nút Xuất đang bấm được (trạng thái ngay trước khi bị từ chối)
+CPCTHTTTG_05-thong-bao-va-phan-hoi-may-chu.txt — Nguyên văn chữ hiện cho người dùng + phản hồi 403 của máy chủ, có mốc giờ và số hiệu request; kèm kết quả đọc nội dung tệp Excel
+CPCTHTTTG_05-xuat-excel-dang1.xlsx — Tệp Excel hệ thống giao ra cho Cán bộ Nghiệp vụ, kỳ Năm (mở đọc được, số khớp màn)
+CPCTHTTTG_05-xuat-excel-dang2-khoang-thang6.xlsx — Tệp Excel lượt thứ hai, kỳ Khoảng 01/06-30/06 (nhãn kỳ đổi theo bộ lọc)
+
+--- [Trạng thái 2] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 2] ---
+(RỖNG)
+
+--- [Trạng thái dev fix 2] ---
+(RỖNG)
+
+--- [DEV phản hồi lần 2] ---
+(RỖNG)
+
+
+====================================================================================================
+===== ROW 362 — Mã TC = QLNDTVVCG_OOS_04 =====
+====================================================================================================
+
+--- [Tên] ---
+(RỖNG)
+
+--- [STT] ---
+(RỖNG)
+
+--- [Tuần] ---
+Tuần 3
+
+--- [Mã TC] ---
+QLNDTVVCG_OOS_04
+
+--- [Tên chức năng] ---
+(RỖNG)
+
+--- [Tác nhân
+"cbnv_tw        Test@1234
+cbnv_] ---
+(RỖNG)
+
+--- [Mô tả] ---
+Tư vấn chuyên sâu — QA phát hiện ngoài phạm vi (không thuộc case nào của đối tác), phát sinh khi verify QLNDTVVCG_26: thao tác chuyên gia từ chối phân công có sinh dòng nhật ký, nhưng dòng nhật ký không lưu lý do từ chối, trong khi đặc tả đòi ghi nhật ký kèm lý do.
+
+--- [Điều kiện] ---
+1. Có một nội dung tư vấn chuyên sâu ở trạng thái "Phân công"
+2. Đăng nhập bằng chính tài khoản chuyên gia được phân công
+
+--- [Dữ liệu đầu vào] ---
+Bản ghi TVCS-20260803-0003, chuyên gia được phân công là qa_tvvseed28.
+Lý do từ chối đã nhập (chuỗi 61 ký tự có dấu nhận dạng riêng): "QA FLOW04 QLNDTVVCG_26 - ly do tu choi ban ghi B luc 20260806".
+
+--- [Các bước thực hiện] ---
+1. Đăng nhập tài khoản chuyên gia được phân công, mở chi tiết bản ghi ở trạng thái "Phân công"
+2. Bấm [Từ chối nhiệm vụ], nhập lý do từ chối rồi xác nhận
+3. Mở lại màn chi tiết của bản ghi, mở khối "Nhật ký thao tác", đọc dòng mới nhất
+4. Đối chiếu bằng đường thứ hai: đọc bản ghi nhật ký của chính bản ghi đó từ hệ thống, liệt kê các trường xem có trường nào mang lý do không
+
+--- [Kết quả mong đợi] ---
+Theo srs-fr-12-tv-chuyen-sau.md dòng 198 — bước 6 của luồng xử lý "CG từ chối": "Ghi nhật ký thao tác (kèm lý do từ chối) | BR-DATA-05" — dòng nhật ký của thao tác từ chối phải mang theo lý do người dùng đã nhập, để tra cứu được về sau.
+
+--- [Kết quả thực tế] ---
+Nhật ký có ghi thao tác nhưng mất lý do, đo bằng 2 đường:
+- Bảng "Nhật ký thao tác" trên màn chi tiết hiển thị "06/08/2026 09:31 · Cập nhật · QA TVV Seed28 Active (qa_tvvseed28) · Chuyên gia tư vấn, Tư vấn viên" — hành động ghi chung chung là "Cập nhật", không có cột hay dòng nào chứa lý do; bảng cũng không phân biệt được thao tác từ chối với thao tác chấp nhận.
+- Bản ghi nhật ký đọc trực tiếp từ hệ thống có 18 trường (loại thực thể, mã thực thể, hành động, người thực hiện, thời gian, địa chỉ IP, điểm gọi, mã phản hồi, phiên, phân hệ, họ tên, vai trò, đơn vị...) — không có trường nào mang lý do hay nội dung thay đổi. Giá trị hành động là UPDATE.
+Đối chứng cho thấy lý do CÓ được hệ thống lưu ở nơi khác: nội dung thông báo gửi Cán bộ Nghiệp vụ có đoạn "Lý do: QA FLOW04 QLNDTVVCG_26 - ly do tu choi ban ghi B luc 20260806". Nghĩa là dữ liệu không mất ngay, nhưng nhật ký — nơi đặc tả chỉ định để tra cứu về sau — thì không giữ, còn thông báo và trường ghi chú của bản ghi đều có thể bị ghi đè bởi lượt phân công / từ chối kế tiếp.
+Đo trên bản dựng nhãn HTPLDN · V1.0.8, ngày 06/08/2026.
+
+--- [Ảnh/vieo 1] ---
+https://drive.google.com/file/d/1Xy94FnjPR3VFZYE7ht1vSHxxNntkDs4h/view?usp=drivesdk
+
+--- [Trạng thái] ---
+Fail
+
+--- [Dopai] ---
+BA
+
+--- [Loại vấn đề] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 1] ---
+(RỖNG)
+
+--- [Trạng thái dev fix] ---
+Fixed
+
+--- [DEV phản hồi lần 1] ---
+BA chốt 06/08/2026: yêu cầu "ghi nhật ký kèm lý do từ chối" là ĐẠT — không phải lỗi. Nhưng BA chốt thêm phần cải tiến: HIỆN LÝ DO CÓ KIỂM SOÁT trên khối nhật ký của hồ sơ (Dev action: Có · Sửa đặc tả: Có · Sheet: giữ xử lý).
+Dev đã tách nhãn thao tác "Từ chối" khỏi thao tác cập nhật chung và hiển thị lý do có kiểm soát trên nhật ký.
+
+--- [Kết quả verify] ---
+(RỖNG)
+
+--- [Ảnh/video verify] ---
+(RỖNG)
+
+--- [Trạng thái 2] ---
+(RỖNG)
+
+--- [TKM phản hồi lần 2] ---
+(RỖNG)
+
+--- [Trạng thái dev fix 2] ---
+(RỖNG)
+
+--- [DEV phản hồi lần 2] ---
+(RỖNG)

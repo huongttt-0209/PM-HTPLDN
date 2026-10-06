@@ -1,0 +1,13 @@
+✅ Bug ĐÚNG (một phần) – chuyển dev. Case gồm 3 ý, QA tách verdict từng ý:
+
+1) Cột "Vụ việc" hiển thị sai → ĐÚNG, chuyển dev (Bug ID: BUG-DGTVV_03).
+- Web sai: trong Danh sách đánh giá (thẻ "Đánh giá", chi tiết tư vấn viên), cột "Vụ việc" in ra mã định danh nội bộ dạng "8e259653-e0a5-49e8-ae7c-5fb07734ce09", không hiển thị mã vụ việc (VV-BTP-TW-20260712-001) hay tên vụ việc, cũng không phải đường liên kết.
+- Expected theo SRS: FR-IV-09 (UC47) · SCR-IV-03 cell 23c (srs-fr-04 dòng 1570) — danh sách gồm Người đánh giá + Vụ việc + Ngày + 3 điểm thành phần + Nhận xét; cách nhận dạng vụ việc của hệ thống là "Mã vụ việc (đường liên kết) + Tên vụ việc" (cell 22, dòng 1567).
+- Verify: tài khoản Cán bộ nghiệp vụ Trung ương, tư vấn viên TVV-BTP-TW-0002 (Đang hoạt động), đã tạo sẵn 1 đánh giá liên kết vụ việc VV-BTP-TW-20260712-001 đúng như điều kiện đối tác.
+
+2) "Thiếu trường thông tin Điểm tổng" → cần BA xác nhận (không phải lỗi dev).
+- SRS (SCR-IV-03 cell 23c, dòng 1570) chỉ quy định danh sách gồm 7 thành phần và KHÔNG có cột "Điểm tổng". Web đang hiển thị đúng 7 cột theo SRS; "Điểm tổng" chỉ có trong biểu mẫu Gửi đánh giá (cell 24, dòng 1573).
+- Đã chuyển BA quyết định có bổ sung cột này vào danh sách hay không.
+
+3) "Điểm đánh giá thang 1-10" → không tái hiện trên môi trường được giao.
+- Web hiển thị đúng thang 1-5: khối tổng hợp "4.2/5", ba tiêu chí 4.5/5 - 4.0/5 - 4.0/5, tất cả đều chấm trên 5 sao.

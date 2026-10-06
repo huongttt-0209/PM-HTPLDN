@@ -1,0 +1,17 @@
+⚠️ Cần BA xác nhận.
+
+Quan sát của phiếu là đúng: cột "Hành động" trên dòng danh sách chỉ có nút Xem, không có Tạm dừng / Kích hoạt / Sửa. QA đã kiểm lại ngày 27/07/2026 bằng cả hai tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương) và cbpd_tw (CB Phê duyệt - Trung ương), vì đặc tả phân quyền khác nhau cho từng nút.
+
+❌ 1) Về chức năng nghiệp vụ: không thiếu.
+- Các nút vòng đời có đủ ở thanh hành động của trang chi tiết chương trình, đúng theo từng trạng thái: Đã duyệt có [Công bố lên Cổng PLQG] và [Bắt đầu thực hiện]; Đã công bố có [Hủy công bố] và [Bắt đầu thực hiện]; Đang thực hiện có [Tạm dừng], với tài khoản Cán bộ phê duyệt thì thêm [Hoàn thành]; Hoàn thành không có nút vì là trạng thái kết thúc.
+- FR-XI-01 (UC160) — SCR-XI-01 mô tả các nút này ở thanh hành động trang chi tiết: dòng 1132 (nhóm nút khi Dự thảo), dòng 1136 ([Kích hoạt], nhãn nguyên văn "Bắt đầu thực hiện"), dòng 1138 ([Tạm dừng]). Riêng [Hoàn thành] chỉ dành cho Cán bộ phê duyệt (dòng 264 và dòng 274).
+- Lưu ý khi kiểm lại: các nút nằm ở thanh cố định đáy màn hình, ngoài vùng nội dung chính — quét trong vùng nội dung sẽ không thấy.
+
+⚠️ 2) Vì sao vẫn phải để BA chốt, không kết luận phiếu sai.
+- Kỳ vọng của phiếu trùng với bảng "Hành động theo trạng thái CT" trong chính bản đặc tả: dòng 1202 và 1204 ([Kích hoạt] khi Đã duyệt / Đã công bố), dòng 1205 ([Tạm dừng] khi Đang thực hiện), dòng 1211 (Sửa/Xóa chỉ khi Dự thảo). Bảng này nêu trạng thái nào có nút nào nhưng KHÔNG quy định nút nằm trên dòng danh sách hay ở trang chi tiết.
+- Cột Hành động của bảng danh sách chỉ được mô tả là "Hành động (tùy điều kiện)" ở dòng 1113, không liệt kê tập nút. Ảnh của chính đối tác cho thấy cột này đã đổi theo trạng thái: dòng Dự thảo có thêm biểu tượng xóa, các dòng khác thì không.
+- Câu hỏi cho BA: cột Hành động trên dòng danh sách có phải hiển thị thêm các nút theo trạng thái (Kích hoạt / Tạm dừng / Sửa) không, hay chỉ giữ nút Xem và mọi hành động thực hiện ở trang chi tiết? Nếu chốt phương án chỉ có Xem, đề nghị BA ghi rõ tập nút của cột này vào dòng 1113 để đối tác không mở lại case ở vòng sau.
+- Một điểm liên quan xin chốt cùng lúc: dòng 1211 gộp "Sửa/Xóa CT: chỉ khi Dự thảo", nhưng dòng Dự thảo hiện chỉ có biểu tượng xóa, không có Sửa (việc sửa thực hiện trong biểu mẫu ở trang chi tiết). Đề nghị BA xác nhận cách bày này đúng ý.
+
+3) Bằng chứng.
+- Ảnh cột Hành động ở màn danh sách và ảnh trang chi tiết chương trình Đang thực hiện, thấy rõ nút [Tạm dừng] ở thanh cố định góc dưới bên phải. Kèm trong hồ sơ lỗi.

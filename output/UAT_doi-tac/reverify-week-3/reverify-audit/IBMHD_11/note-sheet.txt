@@ -1,0 +1,19 @@
+IBMHD_11 (dòng 121) — Verdict: BA confirm — 2026-07-20
+Verify: Chrome DevTools MCP, tài khoản cbnv_bn (CB Nghiệp vụ - Bộ ngành), URL /bieu-mau/nhap-hang-loat.
+
+Claim đối tác: nút "Hủy" trên màn Import không hiện cửa sổ xác nhận.
+
+Quan sát: TÁI HIỆN ĐÚNG. Đã chọn thư mục + tải 1 tệp (có thay đổi chưa lưu) → bấm "Hủy" → điều hướng NGAY
+sang /bieu-mau/danh-sach, KHÔNG có modal xác nhận (điều hướng tức thì = không có modal chặn).
+
+SRS: FR-VII-06 (:444-508) và SCR-VII-03 §Thành phần màn hình (:670-677) KHÔNG liệt kê nút "Hủy" lẫn yêu cầu
+xác nhận khi hủy. Kỳ vọng "Hủy phải confirm" chưa có cơ sở SRS → gap yêu cầu, không phải app sai SRS hiện có.
+→ BA chốt: có bổ sung yêu cầu hộp xác nhận trước khi hủy (chống mất tệp đã tải) không.
+
+Vai trò: case "CB Nghiệp vụ"; dùng cbnv_bn do cbnv_tw bị chiếm session. Hành vi nút Hủy (điều hướng client-side)
+không phụ thuộc đơn vị.
+
+Evidence web: ../../bug-reports/image/BUG-IBMHD_11-huy-navigated-no-confirm.png
+Condition table: ../../cond/IBMHD_11.md
+BA doc: ../../ba-confirmation-needed-week-3-bieu-mau-batch6.md
+Sheet: dòng 121, P="BA confirm".

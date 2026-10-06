@@ -1,0 +1,20 @@
+IBMHD_10 (dòng 120) — Verdict: Reject (không tái hiện) — 2026-07-20
+Verify: Chrome DevTools MCP, tài khoản cbnv_bn (CB Nghiệp vụ - Bộ ngành), URL /bieu-mau/nhap-hang-loat.
+
+Claim đối tác: import vượt tổng dung lượng → không hiện "Tổng dung lượng tối đa 500 MB".
+
+Quan sát: KHÔNG TÁI HIỆN. Upload 27 tệp .docx ~19MB (tổng ~514 MiB), chọn thư mục → bấm "Kiểm tra và tiếp tục"
+→ hệ thống HIỆN "Tổng dung lượng tối đa 500MB mỗi lần import" + chặn sang bước sau (đo qua MutationObserver,
+lặp 3 lần thao tác). Khớp SRS ERR-IMP-03 (:481) / EC-01 (:505).
+
+Chẩn đoán vì sao đối tác không thấy: kiểm tra tổng dung lượng chạy ở bước "Kiểm tra và tiếp tục"; nút này chỉ
+enabled sau khi ĐÃ chọn "Thư mục đích". Video đối tác cho thấy đã upload nhiều tệp nhưng chưa chọn thư mục →
+nút disabled → chưa tới điểm kiểm tra → không có message. Là luồng chưa hoàn tất phía đối tác, không phải app
+thiếu message.
+
+Vai trò: case "CB Nghiệp vụ"; dùng cbnv_bn do cbnv_tw bị chiếm session. Kiểm tra tổng dung lượng là validate
+client-side, không phụ thuộc đơn vị.
+
+Evidence web: ../../bug-reports/image/BUG-IBMHD_10-toast-500mb.png (bắt đúng toast 500MB — thao tác đúng/thành công)
+Condition table: ../../cond/IBMHD_10.md
+Sheet: dòng 120, P="Reject", R=note "Không phải bug (bản hiện tại)..." + hướng dẫn chọn thư mục rồi bấm kiểm tra.

@@ -1,0 +1,4 @@
+⚠️ Cần BA xác nhận.
+- Web hiện ĐÚNG SRS FR-IX-01 (UC124): đủ 4 chỉ số Tổng hỏi đáp/Đã trả lời/Chờ trả lời/Tỷ lệ (11/9/2/81,8%), có biểu đồ tròn theo lĩnh vực + biểu đồ xu hướng, bảng "Theo lĩnh vực" và "Theo đơn vị" đều gồm cột Tên + Số lượng.
+- Đối tác kỳ vọng (theo thiết kế PTYC-CT v2.0) bảng "Tổng hợp theo đơn vị" có thêm cột: Tổng hỏi đáp, Đã trả lời, Tỷ lệ (%). SRS §Output FR-IX-01 (dòng 165-166) chỉ quy định theo_don_vi = {đơn vị, số lượng}, KHÔNG có các cột này.
+- Câu hỏi BA: có bổ sung cột "Đã trả lời" + "Tỷ lệ" vào bảng thống kê theo đơn vị (theo thiết kế PTYC) hay giữ nguyên theo SRS hiện tại? Verdict QA: web đúng SRS, khác biệt nằm ở đặc tả PTYC vs SRS.

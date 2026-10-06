@@ -1,0 +1,85 @@
+🔁 CÒN LỖI — chuyển lại dev.
+
+[1] CÒN LỖI Ở ĐÂU
+Vai trò : Quản trị hệ thống (tài khoản admin).
+Màn     : Báo cáo thống kê → loại "BC Chương trình theo thời gian".
+Bấm [Xem báo cáo] → hiện đủ số liệu: Tổng chương trình toàn kỳ 6 · Tổng ngân sách toàn kỳ
+                    250.000.000, kèm biểu đồ và bảng theo kỳ.
+Bấm [Xuất Excel]  → KHÔNG có tệp nào về máy.
+                    Chữ hiện ra cho người dùng chỉ là một từ tiếng Anh: "Forbidden".
+                    Máy chủ trả 403, mã ERR-PERM-SYS-00-01.
+Tái hiện 2 lần. Đúng triệu chứng đã ghi ở ô TKM phản hồi lần 1.
+
+[2] PHẦN NÀO ĐÃ HẾT LỖI
+Chạy lại đúng màn đó bằng vai trò Cán bộ Nghiệp vụ Trung ương thì xuất tệp bình thường:
+ · Tệp BaoCaoCtTheoThoiGian_20260806_1430.xlsx tải về được và mở đọc được.
+ · Phần đầu tệp có đủ: tên báo cáo, kỳ, khoảng thời gian, đơn vị, ngày tạo.
+ · Bảng trong tệp: mỗi hàng là một kỳ thời gian kèm nhãn kỳ và số chương trình, khớp đúng từng
+   hàng với màn, cộng dọc bằng đúng số tổng.
+ · Đổi bộ lọc thì nội dung tệp đổi theo — chọn kỳ Tháng phủ cả năm thì tệp ra đủ 12 hàng, từ
+   Tháng 1 đến Tháng 12/2026.
+ · Câu lỗi cũ "Không thể tạo file xuất. Vui lòng thử lại." KHÔNG còn xuất hiện.
+
+[3] VÌ SAO VẪN CHƯA ĐÓNG ĐƯỢC — 2 điểm, còn 1 điểm là chưa đóng
+(a) Câu báo lỗi sai. Khi từ chối vì thiếu quyền, hệ thống phải cho người dùng biết bằng tiếng
+    Việt rằng họ không có quyền xem báo cáo. Hiện đang đẩy thẳng chuỗi kỹ thuật của máy chủ ra
+    màn hình.  →  srs-fr-11-bao-cao.md dòng 117 (E7 ERR-RPT-05).
+(b) Chặn không nhất quán. Việc kiểm quyền nằm ở ĐẦU luồng báo cáo. Nếu vai trò này thật sự
+    không được phép thì phải chặn ngay từ [Xem báo cáo], chứ không cho xem hết số liệu rồi mới
+    chặn lúc xuất.  →  srs-fr-11-bao-cao.md dòng 79 (Processing bước 1).
+Ghi chú: đặc tả dòng 1268 (BR-AUTH-08) ghi ngoại lệ "QTHT bypass" cho toàn nhóm FR-IX, tức
+đang nghiêng về hướng vai trò này ĐƯỢC xuất. Cần nghiệp vụ chốt — xem mục [6].
+
+[4] KHÔNG PHẢI LỖI — đã kiểm, ghi ra để khỏi tranh luận lại
+Tên tệp. Ô Kết quả mong đợi ghi "BaoCaoChuongTrinh_...", hệ thống đang đặt
+"BaoCaoCtTheoThoiGian_20260806_1430.xlsx". Khuôn tên tệp nghiệp vụ chốt ngày 04/08/2026 là
+{TênBáoCáo}_{YYYYMMDD_HHmm}.xlsx, trong đó phần tên suy từ tên loại báo cáo (viết liền, bỏ
+dấu). Tên hệ thống đang dùng khớp khuôn này.
+
+[5] ĐÃ TEST BẰNG GÌ
+Tài khoản : admin (Quản trị hệ thống, cấp TW) · cbnv_tw_04 (CB Nghiệp vụ, cấp TW)
+Dữ liệu   : 6 chương trình lọt bộ đếm trong kỳ Năm 2026, rải trên 2 tháng (Tháng 1 có 5,
+            Tháng 3 có 1)
+Bộ lọc    : 4 cấu hình — kỳ Năm + Toàn quốc · kỳ Năm + lọc đơn vị Cục Bổ trợ tư pháp (Bộ Tư
+            pháp) · kỳ Tháng phủ 12 tháng · đơn vị Bộ Công an (không có dữ liệu)
+Bản dựng  : V1.0.8
+Không tạo, sửa hay xoá bản ghi nào.
+
+[6] AI LÀM GÌ TIẾP
+BA     : chốt giúp câu "Vai trò Quản trị hệ thống có được xuất báo cáo không?". Dev cần câu
+         trả lời này TRƯỚC, vì hai hướng sửa khác hẳn nhau.
+Dev BE : cho bước Xem và bước Xuất dùng chung một quy tắc quyền; khi từ chối thì trả thông báo
+         theo đặc tả dòng 117.
+Dev FE : không hiển thị nguyên chuỗi lỗi kỹ thuật của máy chủ ra màn hình.
+
+── CÁCH VERIFY sau Dev fix ──
+CẦN CÓ TRƯỚC: tài khoản admin (Quản trị hệ thống, cấp TW); màn Báo cáo thống kê (/bao-cao);
+  ≥1 chương trình HTPLDN đã duyệt / đang thực hiện / hoàn thành nằm trong năm 2026. Báo cáo
+  trống thì phép thử không có giá trị — tạo chương trình mới ở màn Chương trình HTPLDN và đưa
+  lên trạng thái đã duyệt trở đi.
+Bước 1. Chọn loại báo cáo "BC Chương trình theo thời gian", Kỳ "Năm", Đơn vị "Toàn quốc". Bấm
+  [Xem báo cáo]. Ghi lại số Tổng chương trình toàn kỳ và toàn bộ bảng "Theo kỳ" (mỗi hàng:
+  nhãn kỳ + từ ngày + đến ngày + số chương trình).
+Bước 2. Bấm [Xuất Excel]. Chép lại NGUYÊN VĂN chữ hiện ra và kiểm có tệp về máy không.
+Bước 3. Kiểm bằng đường thứ hai: mở tab Network xem lời gọi xuất báo cáo trả mã gì, thân phản
+  hồi ghi gì. Có tệp thì MỞ TỆP RA ĐỌC, đối chiếu số tổng và TỪNG HÀNG kỳ ở bước 1 với số
+  trong tệp, và kiểm cộng dọc cột số chương trình bằng đúng số tổng.
+✅ ĐẠT khi một trong hai:
+  · Vai trò Quản trị hệ thống bấm [Xuất Excel] thì nhận được tệp .xlsx mở đọc được, bên trong
+    có bảng mỗi hàng một kỳ thời gian kèm nhãn kỳ và số chương trình, khớp đúng bảng trên màn,
+    và không hiện thông báo từ chối nào.
+  · Hoặc — nếu nghiệp vụ chốt vai trò này KHÔNG được xuất — hệ thống chặn ngay từ bước
+    [Xem báo cáo], và chữ hiện ra là câu tiếng Việt cho người dùng biết họ không có quyền xem
+    báo cáo này.
+❌ CHƯA ĐẠT nếu: còn thấy "Forbidden" hay bất kỳ chuỗi tiếng Anh / mã kỹ thuật nào; hoặc vẫn
+  cho Xem đủ số liệu rồi mới chặn ở bước Xuất. Đúng một nửa cũng tính là chưa đạt.
+⚠️ 3 bẫy hay mắc khi đo:
+  1. Chỉ thử bằng vai trò Cán bộ Nghiệp vụ rồi kết luận "đã fix". Vai trò đó vốn đã chạy tốt từ
+     lượt đo 06/08/2026 — phép đo quyết định phải chạy bằng chính vai trò Quản trị hệ thống.
+  2. Dừng ở "tải được tệp". Phải mở tệp ra đọc mới chốt được.
+  3. Ghi kèm dấu vân tay bản dựng (tên bó mã assets/index-XXXX.js), đừng chỉ ghi chuỗi phiên
+     bản: ngày 06/08/2026 bó mã đã đổi index-CNwX9JjX.js → index-DIABnbIr.js mà chuỗi phiên
+     bản vẫn in V1.0.8. Hai vai trò phải đo trên CÙNG một bó mã thì mới so sánh được.
+⚠️ Đừng chấm hỏng vì tên sheet, thứ tự cột, cách viết nhãn kỳ, màu sắc, dòng tổng cuối bảng,
+  kỳ không có chương trình nào hiện thành 0 hay bị bỏ, tệp không nhúng biểu đồ, hay vì tên tệp
+  không đúng chữ "BaoCaoChuongTrinh" — đặc tả không quy định những thứ đó. Xem mục [4].

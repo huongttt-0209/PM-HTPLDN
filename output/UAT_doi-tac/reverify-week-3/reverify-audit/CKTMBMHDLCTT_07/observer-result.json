@@ -1,0 +1,25 @@
+{
+  "case": "CKTMBMHDLCTT_07 (row 93) — Selection không xóa sau công khai hàng loạt",
+  "env": "https://18.143.165.120.nip.io",
+  "account": "cbnv_tw (CB_NV_TW)",
+  "timestamp": "2026-07-20 ~22:58",
+  "action": "Tab 'Tất cả' → chọn 2 thư mục Đã ẩn có biểu mẫu [QA Hidden Folder 715 (1 BM) + Thư mục biểu mẫu seed (3 BM)] → Công khai hàng loạt",
+  "rows_before": "715 = Đã ẩn/1 BM (đủ đk); seed = Đã ẩn/3 BM (đủ đk)",
+  "selection_before": "Đã chọn 2 thư mục + [Công khai/Ẩn/Xóa hàng loạt][Bỏ chọn]",
+  "confirm_modal": "Công khai 2 thư mục? Các thư mục sẽ được đồng bộ lên Cổng PLQG. [Hủy] [Công khai]",
+  "clicked_confirm": "Công khai",
+  "toast_observer": { "so_toast": 1, "chu": ["Đã công khai 2 thư mục."], "note": "1 toast, không nhân đôi." },
+  "network": { "so_request_non_get": 1, "requests": ["POST /api/v1/thu-muc-bieu-maus/batch-cong-khai"] },
+  "after_state": {
+    "QA Hidden Folder 715": "Đã công khai (CONG_KHAI) — action đổi thành Ẩn",
+    "Thư mục biểu mẫu seed": "Đã công khai (CONG_KHAI) — action đổi thành Ẩn"
+  },
+  "SELECTION_AFTER": {
+    "selBar": "Đã chọn 2 thư mục",
+    "bulkButtons": ["Công khai hàng loạt", "Ẩn hàng loạt", "Xóa hàng loạt", "Bỏ chọn"],
+    "anyRowChecked": true,
+    "note": "BUG: selection KHÔNG xóa sau công khai hàng loạt hoàn tất."
+  },
+  "verdict": "BA confirm",
+  "ly_do_verdict": "Công khai hàng loạt THÀNH CÔNG (không chặn luồng, cả 2 thư mục đủ đk). SRS im lặng về deselect sau bulk (row 14 chỉ định điều kiện hiển thị; Postconditions UC94 không nhắc UI). Kỳ vọng đối tác = chuẩn UX nhưng SRS không quy định → BA confirm, không Open."
+}

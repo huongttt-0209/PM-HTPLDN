@@ -1,0 +1,66 @@
+⚠️ ĐẠT PHẦN ĐO ĐƯỢC — còn hai ý cần nghiệp vụ chốt (KHÔNG chặn bàn giao).
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, đo lúc 13:56-13:57 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_05 - đúng vai trò và đúng cấp Trung ương mà phiếu yêu cầu, không dùng tài khoản quản trị.
+
+LƯU Ý VỀ BẢN DỰNG: trong lúc đội chạy lô này, hệ thống có một lượt lên bản mới vào 13:47:57 ngày 07/08/2026 (bó mã giao diện đổi từ index-eWHwDgt2.js sang index-BbPPdate.js). Ba phiếu đo trước đó (12:55-13:45) chạy trên bản cũ; riêng phiếu này chạy trên bản MỚI. Đội đã kiểm chéo: tệp Excel xuất lúc 13:32 trên bản cũ và tệp xuất lúc 13:56 trên bản mới trùng khít từng ô nội dung, nên lượt lên bản không làm đổi kết quả của phiếu này.
+
+TIỀN ĐỀ (kiểm sống lúc 13:55)
+
+Điều kiện của phiếu đòi "đã hoàn thành tổng hợp báo cáo toàn quốc". Bản tổng hợp toàn quốc lưu ở phiếu THBCTHCT_01 vẫn còn nguyên trên máy chủ: hai báo cáo của Bộ Kế hoạch và Đầu tư và Sở Tư pháp An Giang (cùng đợt DOT-THBC01-UAT, kỳ Sơ bộ 6 tháng) đọc lại được ở trạng thái "Đã tổng hợp". Chọn hai báo cáo này thì nút "Tổng hợp" mờ đi (đã tổng hợp rồi) còn hai nút "Xuất Excel" và "Xuất Word" bật sáng ngay, không bị chặn.
+
+CÁCH ĐO: đội bấm nút trên giao diện thật - "Xuất Excel" lúc 13:56:30 và "Xuất Word" lúc 13:57:08 - rồi lấy đúng tệp mà hai lượt bấm đó sinh ra và MỞ NỘI DUNG TỆP bằng thư viện đọc tệp (openpyxl cho Excel, python-docx cho Word). Không kết luận bằng ảnh chụp màn hình, không kết luận bằng việc "tải được tệp". Mốc giờ trong tên tệp (…_1356 và …_1357) trùng khít mốc giờ bấm, tức đúng tệp của lượt này chứ không phải tệp cũ.
+
+ĐÃ ĐẠT - 6 phần, đúng trên CẢ HAI định dạng
+
+1) Tạo được tệp và mở đúng định dạng. Excel: mở được, có 1 trang tính tên "Biểu mẫu 21a TP HTPLDN". Word: mở được, có 9 đoạn văn và 2 bảng. Yêu cầu của đặc tả tại srs-fr-15-ct-htpldn.md:1006 và mô tả màn hình :1175.
+
+2) Khổ giấy A4. Excel khai mã khổ giấy 9 - đúng mã A4 theo chuẩn định dạng tệp, hướng dọc. Word khai chiều rộng trang 21,00 cm và chiều cao 29,70 cm - đúng khổ A4. Yêu cầu tại srs-v3.5.md:6719.
+
+3) Phông chữ Times New Roman cỡ 13 ở thân tệp. Excel: đội đọc 42 ô của bảng chỉ tiêu (hàng tiêu đề và 13 hàng chỉ tiêu), cả 42/42 ô đều khai Times New Roman cỡ 13, không ô nào lệch. Word: khai báo phông mặc định của tệp là Times New Roman cỡ 13, và cả 42 ô của bảng chỉ tiêu đều dùng Times New Roman không đặt cỡ riêng nên thừa hưởng đúng cỡ 13. Yêu cầu tại srs-v3.5.md:6720. (Dòng tiêu đề lớn và dòng ghi tên biểu mẫu có cỡ chữ khác - đặc tả chỉ quy định phông chung cho thân tệp, không quy định riêng cho tiêu đề, nên đội không tính là sai.)
+
+4) Đầu tệp có quốc hiệu. Cả hai tệp đều ghi "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM" và "Độc lập - Tự do - Hạnh phúc" ở phần đầu. Yêu cầu tại srs-v3.5.md:6721.
+
+5) Đầu tệp có tên cơ quan. Cả hai tệp đều ghi "BỘ TƯ PHÁP" ở góc trái phần đầu. Cùng căn cứ trên.
+
+6) Cuối tệp có ngày ký. Cả hai tệp đều ghi "Ngày 07 tháng 08 năm 2026". Yêu cầu tại srs-fr-15-ct-htpldn.md:1017 và srs-v3.5.md:6722.
+
+7) Nội dung tệp đúng theo biểu mẫu Thông tư 17/2025/TT-BTP và khớp số liệu đã tổng hợp. Tệp ghi rõ "Biểu mẫu 21a/TP/HTPLDN (Theo Thông tư số 17/2025/TT-BTP)", đúng đợt và đúng kỳ báo cáo, kèm bảng 13 chỉ tiêu. Đối chiếu từng chỉ tiêu với số liệu bản tổng hợp toàn quốc đã lưu: 12, 4, 3, 7, 7, 37, 29, 7, 14, 8, 680.000.000, 160.000.000, 30.000.000 - khớp 13/13 ở CẢ HAI tệp.
+
+CẦN NGHIỆP VỤ CHỐT - hai ý
+
+Ý thứ nhất: cuối tệp có phải in sẵn dòng chức danh người ký không.
+
+CẦN BA CONFIRM: phiếu kỳ vọng "cuối trang có ngày ký và chức danh người ký". Đặc tả lại quy định ngược lại: srs-fr-15-ct-htpldn.md:1017 khai khối ký cuối trang gồm "ngày ký + họ tên cán bộ xuất báo cáo + chỗ trống cho chữ ký, chức vụ và con dấu khi in chính thức - không in sẵn dòng chức danh"; srs-v3.5.md:6723 nêu đây là ngoại lệ chung cho mọi tệp xuất (BA chốt 04/08/2026, mở rộng phạm vi 06/08/2026), với hai căn cứ: hồ sơ tài khoản không lưu chức vụ nên không có nguồn dữ liệu, và biểu mẫu gốc 21a/21b để trống chỗ này cho người ký tự ghi khi ký tay.
+
+Hiện trạng đo được (giống nhau ở cả hai tệp): khối cuối tệp gồm ngày ký, rồi dòng "NGƯỜI XUẤT BÁO CÁO", rồi dòng "(Ký, ghi rõ họ tên và đóng dấu)", rồi họ tên cán bộ xuất báo cáo. Không có dòng chức danh/chức vụ in sẵn - tức làm đúng ngoại lệ của đặc tả, nhưng lệch kỳ vọng ghi trong phiếu.
+
+Câu hỏi cho nghiệp vụ: phiếu UAT này viết trước hay sau lần chốt ngày 06/08/2026? Tệp xuất có phải in sẵn dòng chức danh người ký không, hay giữ đúng ngoại lệ (chỉ chừa chỗ trống để người ký tự ghi)? Nếu giữ ngoại lệ, xin xác nhận để cập nhật lại kỳ vọng của phiếu.
+
+Ý thứ hai: khuôn tên tệp lệch nhau đúng một dấu gạch dưới.
+
+CẦN BA CONFIRM: phiếu kỳ vọng tên tệp dạng BaoCaoTongHop_CTHTPL_{YYYYMMDD_HHmm}. Đặc tả quy định BaoCaoTongHopCTHTPL_{YYYYMMDD_HHmm} viết liền (srs-fr-15-ct-htpldn.md:1017, BA chốt 06/08/2026), theo khuôn đặt tên tệp chung ở srs-v3.5.md:6760 - phần tên viết liền kiểu chữ hoa đầu từ, dấu gạch dưới chỉ dùng để ngăn các đoạn, và "CTHTPL" không phải một trường dữ liệu đã khai nên không thể đứng làm đoạn định danh riêng.
+
+Hiện trạng đo được: tên tệp thực tế là BaoCaoTongHopCTHTPL_20260807_1356.xlsx và BaoCaoTongHopCTHTPL_20260807_1357.docx - viết liền, tức đúng đặc tả và lệch phiếu đúng một dấu gạch dưới.
+
+Câu hỏi cho nghiệp vụ: chốt một khuôn tên tệp duy nhất - BaoCaoTongHopCTHTPL_… (theo đặc tả) hay BaoCaoTongHop_CTHTPL_… (theo phiếu)? Chốt xong xin sửa cho khớp giữa hai bên. Đây là đề nghị làm rõ, KHÔNG phải lỗi chặn bàn giao.
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Bấm xuất tệp xong hệ thống không hiện thông báo nào. Đặc tả không quy định thông báo cho thao tác xuất tệp nên đội không chấm; nêu để nghiệp vụ cân nhắc bổ sung.
+- Tệp Word không dùng phần đầu trang/chân trang của văn bản; quốc hiệu, tên cơ quan và khối ký nằm trong thân văn bản. Khi tệp dài sang nhiều trang thì quốc hiệu sẽ không lặp lại ở các trang sau. Đặc tả không quy định chỗ đặt nên đội không chấm.
+- Lề trang của cả hai tệp là trái 3 cm, phải 2 cm, trên 2 cm, dưới 2 cm - khớp quy định tại srs-v3.5.md:6724 (phiếu không nhắc lề nên đội chỉ ghi nhận).
+- Số liệu trong tệp khớp bản tổng hợp đã lưu, nhưng cần nói rõ: hệ thống chưa có chức năng mở lại bản ghi tổng hợp để xem, nên không phân biệt được tệp đang lấy số từ bản ghi đã lưu hay cộng lại từ danh sách báo cáo được chọn. Với yêu cầu của phiếu thì điều này không đổi kết quả.
+
+Bằng chứng:
+- Màn "Tổng hợp báo cáo toàn quốc": hai báo cáo "Đã tổng hợp" được chọn, nút "Xuất Excel" và "Xuất Word" bật sáng: https://drive.google.com/file/d/1B6sNDKhHrkbDvMcnt3vbDzWN9TVlhgTm/view?usp=drivesdk
+- Ngay sau hai lượt bấm xuất tệp: https://drive.google.com/file/d/1LZrn-4tBkcpgxb-YlhCAPRkxMQtD5xOQ/view?usp=drivesdk
+- Tệp Excel do chính lượt bấm sinh ra (BaoCaoTongHopCTHTPL_20260807_1356.xlsx): https://docs.google.com/spreadsheets/d/1SUjjrvUrzskgsQ4_vJF9askXGYhttDOh/edit?usp=drivesdk&rtpof=true&sd=true
+- Tệp Word do chính lượt bấm sinh ra (BaoCaoTongHopCTHTPL_20260807_1357.docx): https://docs.google.com/document/d/14sOcHh5IytqiSChEwqtvY-InH0kKsw-a/edit?usp=drivesdk&rtpof=true&sd=true
+
+Lưu ý về dữ liệu: phép đo của phiếu này KHÔNG ghi gì xuống môi trường - hai lượt bấm chỉ sinh tệp, không tạo và không sửa bản ghi nào. Kiểm lại sau khi đo: đợt và các báo cáo giữ nguyên trạng thái cũ.
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.

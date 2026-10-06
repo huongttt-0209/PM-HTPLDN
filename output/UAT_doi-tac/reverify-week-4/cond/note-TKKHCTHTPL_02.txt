@@ -1,0 +1,32 @@
+✅ Là bug — chuyển dev
+
+Tái hiện đúng như phiếu phản ánh, đã chuyển dev. Đo thêm còn phát hiện một điểm nữa cùng nguyên nhân.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW).
+
+✅ 1) Kết quả đo: đúng như phiếu.
+- Danh sách đang có 8 chương trình. Nhập từ khóa chắc chắn không khớp rồi bấm Tìm kiếm: bảng còn 0 dòng, phần thân chỉ hiện hình hộp rỗng kèm chữ Trống.
+- Đã đọc toàn bộ chữ trên màn bằng mã lệnh chứ không chỉ nhìn ảnh: câu Không tìm thấy chương trình phù hợp không xuất hiện ở bất kỳ đâu.
+- Bug ID: BUG-CT-TIM-KHONG-KET-QUA-TRONG.
+
+2) Đặc tả đứng về phía đối tác ở case này.
+- Đặc tả quy định khi tìm kiếm không có kết quả thì hệ thống phải báo đúng câu Không tìm thấy chương trình phù hợp.
+- QA đã kiểm phạm vi của quy định này chứ không chỉ tra câu chữ: nó nằm trong mục Tìm kiếm chương trình HTPL, khai báo đúng màn danh sách đang đo. Vì vậy áp dụng trực tiếp, không phải suy luận.
+
+✅ 3) Phát hiện thêm khi đo: hệ thống không phân biệt hai loại rỗng.
+- Bấm Xóa bộ lọc rồi chuyển sang thẻ Dự thảo, thẻ này có 0 bản ghi và ô tìm kiếm đã rỗng, tức là trường hợp chưa có dữ liệu chứ không phải lọc không khớp.
+- Phần thân bảng hiện y hệt chữ Trống.
+- Hai tình huống này dẫn tới hành động khác nhau của cán bộ: một bên nên nới bộ lọc, một bên nên tạo mới. Hiển thị giống nhau nên cán bộ không phân biệt được.
+- Thuộc cùng lỗi BUG-CT-TIM-KHONG-KET-QUA-TRONG.
+
+4) Đây là lỗi câu thông báo, KHÔNG phải lỗi tìm kiếm. Đề nghị dev sửa đúng chỗ.
+- Đã loại khả năng tìm kiếm hỏng: gọi thẳng dịch vụ dữ liệu của màn thì từ khóa không khớp trả về tổng 0, từ khóa khớp thật trả về tổng 1, không lọc trả về tổng 8. Số liệu khớp đúng những gì màn hình hiển thị.
+- Phía máy chủ trả về trường thông báo rỗng khi không có kết quả, nên câu chữ cần bổ sung ở lớp hiển thị.
+
+❌ 5) Một điểm hệ thống làm hợp lý, QA không chấm lỗi.
+- Khi không có kết quả, nút Xuất Excel tự bị làm mờ. Đặc tả yêu cầu trường hợp không có dữ liệu để xuất thì phải báo cho người dùng biết; việc chặn trước bằng cách làm mờ nút đạt được cùng mục đích là không cho xuất tệp rỗng.
+
+6) Mức độ.
+- Xếp nhẹ vì không chặn nghiệp vụ. Nhưng nên sửa cùng đợt và sửa cả hai loại rỗng một lượt, vì cùng một chỗ hiển thị.
+
+7) Bằng chứng.
+- Ảnh màn tìm kiếm không ra kết quả: thẻ Tất cả vẫn đếm 8 chứng tỏ dữ liệu có sẵn, thân bảng 0 dòng chỉ có chữ Trống. Kèm trong hồ sơ lỗi.

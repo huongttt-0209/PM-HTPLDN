@@ -1,0 +1,63 @@
+BẰNG CHỨNG — NỘI DUNG ĐỌC ĐƯỢC TRONG TỆP PDF (phiếu CPCTHTTTG_06, dòng 264)
+============================================================================
+Tệp     : BaoCaoChiPhiTheoThoiGian_20260807_1012.pdf  ·  32.088 byte
+Đo lúc  : 2026-08-07 10:12 giờ VN
+Env     : https://18.143.165.120.nip.io (nội bộ)  ·  bó mã FE assets/index-eWHwDgt2.js
+Tài khoản: cbnv_tw_03 (CB Nghiệp vụ / Trung ương) — vế chống hồi quy
+Đường đi: [Xem báo cáo] → [Xuất PDF] → hộp thoại "Tùy chọn in báo cáo PDF" để MẶC ĐỊNH
+          (A4 + Dọc) → [Xuất file]   ← đúng bẫy số 1: nút xuất thật nằm TRONG hộp thoại
+
+--- Khổ giấy và số trang (đọc từ cấu trúc tệp) --------------------------------
+/MediaBox  595.28 x 841.89 pt  =  210 x 297 mm  =  khổ A4, hướng Dọc   ✅ đúng mặc định
+/Count 1                        =  1 trang                             ✅
+Chữ ký tệp: %PDF-1.3 · kiểu application/pdf · bộ sinh: pdfmake
+Phông: Tinos-Regular / Tinos-Bold / Tinos-Italic (bản tương thích số đo của Times New Roman
+       — đúng bẫy số 4, KHÔNG chấm Fail vì tên phông này)
+
+--- Chữ đọc được trong trang, theo đúng thứ tự in ------------------------------
+(giải nén luồng nội dung ngay trong trình duyệt rồi tra bảng ToUnicode của từng phông)
+
+[ĐẦU TRANG — khung văn bản hành chính]
+  CỤC BỔ TRỢ TƯ PHÁP - BỘ TƯ PHÁP              ← tên cơ quan            ✅
+  CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM           ← quốc hiệu              ✅
+  Độc lập - Tự do - Hạnh phúc                  ← tiêu ngữ               ✅
+
+[GIỮA TRANG — nhận dạng báo cáo]
+  BC CHI PHÍ THEO THỜI GIAN                                             ✅
+  Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)                        ✅
+  Đơn vị: Toàn quốc                                                     ✅
+  Ngày tạo: 07/08/2026                                                  ✅
+
+[GIỮA TRANG — số liệu]
+  Tổng chi phí toàn kỳ | Chỉ tiêu | Số tiền (₫) | Tổng chi phí toàn kỳ | 23.000.000
+  Tổng hồ sơ toàn kỳ   | Chỉ tiêu | Số lượng    | Tổng hồ sơ toàn kỳ   | 2
+  Theo kỳ | Kỳ | Từ ngày | Đến ngày | Số hồ sơ | Tổng chi phí (₫)
+          | Năm 2026 | 01/01/2026 | 31/12/2026 | 2 | 23.000.000
+
+[CUỐI TRANG — phần ký]
+  Ngày 07 tháng 08 năm 2026                    ← ngày ký                ✅
+  NGƯỜI XUẤT BÁO CÁO                                                    ✅
+  (Ký, ghi rõ họ tên và đóng dấu)              ← chỗ trống cho con dấu  ✅
+  CB Nghiệp vụ - Trung ương #03                ← họ tên người xuất      ✅
+
+  KHÔNG có dòng chức danh người ký — ĐÚNG quyết định nghiệp vụ ngày 04/08/2026
+  (hồ sơ tài khoản không lưu chức vụ). Đây là bẫy số 4, KHÔNG chấm Fail.
+
+--- Đối chiếu tệp với màn (cùng lần đo) ---------------------------------------
+Trên màn : Tổng chi phí toàn kỳ 23,000,000 · Tổng hồ sơ toàn kỳ 2
+           bảng "Theo kỳ": Năm 2026 | 01/01/2026 | 31/12/2026 | 2 | 23.000.000 ₫
+Trong tệp: 23.000.000 · 2 · Năm 2026 | 01/01/2026 | 31/12/2026 | 2 | 23.000.000
+=> Khớp từng ô.
+
+--- Phía máy chủ -------------------------------------------------------------
+GET  /api/v1/bao-cao/chi-phi-theo-thoi-gian?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+     -> 200
+POST /api/v1/bao-cao/export  -> 200
+     thân yêu cầu: {"loaiBaoCao":"BC_CHI_PHI_THEO_THOI_GIAN","kyBaoCao":"NAM",
+     "tuNgay":"2026-01-01","denNgay":"2026-12-31","formatXuat":"PDF",
+     "khoGiay":"A4","huongGiay":"portrait"}
+
+--- Khung thông báo (theo dõi nội dung theo thời gian, không đếm khung mới) ----
+"Đang tạo file..."  ->  "Tạo file thành công."
+Không có chữ "Forbidden", không có mã kỹ thuật, không có câu
+"Không thể tạo file xuất. Vui lòng thử lại."

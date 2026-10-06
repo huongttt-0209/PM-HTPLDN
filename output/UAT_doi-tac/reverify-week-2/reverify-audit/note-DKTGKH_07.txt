@@ -1,0 +1,5 @@
+❌ Không phải bug.
+• Thêm học viên thủ công (CB_NV_TW): hệ thống báo "Đã thêm học viên", bản ghi tạo ở trạng thái "Chờ duyệt", nguồn "Nhập tay".
+• Danh sách tab "Học viên" hiển thị đủ các cột Họ tên / Email / SĐT / Đơn vị của bản ghi vừa thêm — đã tái hiện bằng thao tác thêm mới, dữ liệu lên đúng.
+• Theo đặc tả Đăng ký tham gia khóa học (UC23), danh sách học viên hiển thị các cột này; hệ thống đáp ứng đúng.
+→ Đối tác kiểm tra lại.

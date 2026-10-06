@@ -1,0 +1,13 @@
+Verify 06/08/2026, bản dựng V1.0.8 (đối tác đo trên V1.0/V1.0.2). Đo cả hai vai trò, kết quả TRÁI NGƯỢC nhau nên chưa chốt được, cần BA xác nhận phạm vi vai trò.
+
+- Với CB Nghiệp vụ TW (cbnv_tw — đúng tác nhân theo SRS): XUẤT ĐƯỢC bình thường. Bấm nút Xuất Excel thật trên giao diện, tệp BaoCaoVuViecTiepNhan_20260806_1254.xlsx tải về và MỞ ĐỌC được: đủ tiêu đề báo cáo, kỳ, khoảng thời gian, đơn vị, ngày tạo; số liệu khớp màn từng con số (tổng 44; theo kênh 41+3; theo lĩnh vực 16+13+12+3; theo đơn vị 34+3+4+3). Đổi bộ lọc sang kênh Trực tiếp rồi xuất lại thì tệp bám đúng bộ lọc mới (tổng 41). Tên tệp đúng khuôn quy định.
+
+- Với Quản trị viên QTHT (admin — ĐÚNG vai trò đối tác đã dùng khi báo lỗi): TÁI HIỆN y hệt triệu chứng vòng 2 của đối tác. Cùng một phiên: xem báo cáo trả về bình thường (HTTP 200, tổng 34) nhưng xuất tệp bị chặn HTTP 403 với thông báo "Forbidden". Đã gọi kiểm tra phiên ngay sau đó và phiên vẫn còn sống, nên đây là chặn quyền thật chứ không phải hết phiên. Trên giao diện nút Xuất vẫn hiện và bấm được với vai trò này.
+
+- Vì sao Dev không tái hiện được: nhiều khả năng Dev test bằng vai trò CB Nghiệp vụ (luồng đó đúng là chạy tốt), còn đối tác test bằng QTHT.
+
+=> Cần BA chốt: vai trò QTHT có được dùng chức năng Báo cáo thống kê không? SRS mâu thuẫn — mục Tác nhân của báo cáo này không liệt kê QTHT (srs-fr-11-bao-cao.md:192), nhưng quy tắc phân quyền BR-AUTH-08 (:1268) lại ghi ngoại lệ "QTHT bypass" áp cho toàn bộ nhóm báo cáo, và luồng xử lý chỉ có một bước kiểm quyền chung cho cả xem lẫn xuất (:79). Hiện trạng cho xem mà chặn xuất thì không khớp cách hiểu nào. Chi tiết 2 hướng xử lý + đề xuất trả lời đối tác: cau-hoi-BA.md mục VVDTN_06.
+
+Ghi chú: thông báo chặn quyền đang trả "Forbidden" (tiếng Anh, mã ERR-PERM-SYS-00-01) trong khi đặc tả (:117) quy định phải là "Bạn không có quyền xem báo cáo này" — điểm này đã tách thành dòng lỗi riêng VVDTN_QA01, không phụ thuộc BA chọn hướng nào.
+
+Lưu ý hiệu lực: đo trên môi trường nội bộ 18.143.165.120.nip.io bản V1.0.8, chưa phải môi trường đối tác.

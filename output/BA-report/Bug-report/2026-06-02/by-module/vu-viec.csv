@@ -1,0 +1,9 @@
+STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+3,Popup tiếp nhận đè text,✅ Đạt,PASS,Thấp,"Carry-fwd: counter 0/1000 + nút riêng (06-01); R2 06-02 action bar context-sensitive OK"
+4,Popup cập nhật thời hạn hiện mã,✅ Đạt,PASS,Thấp,"Carry-fwd: popup hiện chữ trạng thái không mã (06-01)"
+5,Phân công thiếu người,✅ Đạt,PASS,TB,"Carry-fwd: modal 10 CB + workload + chặn empty (06-01, cần VV DA_PHAN_CONG)"
+32,Mới tạo→Tiếp nhận lỗi,✅ Đạt,PASS,Cao,"R2 06-02: Timeline + Stepper render đúng trên VV detail"
+33,Không phân công ngoài đơn vị,✅ Đạt,PASS,Cao,"Carry-fwd 28/05 (lọc người theo đơn vị)"
+34,"""Đã phân công"" còn nút Phân công",✅ Đạt,PASS,Thấp,"R2 06-02: action bar context-sensitive (Đã tiếp nhận→Kiểm tra hồ sơ; Đã phân công không có Phân công)"
+61,Trạng thái VV liên kết mã,✅ Đạt,PASS,Thấp,"R2 06-02: header mã+badge khớp (VV-BKH ""Đã phân công"")"
+62,Section KQ hỗ trợ không update,✅ Đạt,PASS,Cao,"Carry-fwd 28/05 (workflow-heavy, cần VV assigned + chấp nhận)"

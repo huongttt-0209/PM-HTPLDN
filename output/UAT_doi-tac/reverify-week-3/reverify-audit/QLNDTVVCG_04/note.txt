@@ -1,0 +1,6 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web hiện tại (vai trò Cán bộ Nghiệp vụ Trung ương): thanh phân loại có 4 tab "Tất cả / Tiếp nhận / Đang tư vấn / Đã duyệt", KHÔNG tab nào hiển thị số đếm; tab mặc định khi mở màn là "Tất cả".
+- Theo SRS FR-X.1-01 (UC147), màn SCR-X1-01 §Thành phần màn hình (dòng 1091): phải có đúng 3 tab CÓ số đếm là "Chờ xử lý / Đang tư vấn / Hoàn thành"; §Quy tắc tương tác (dòng 1117) tab mặc định là "Chờ xử lý".
+- Sai so với SRS: (1) thiếu số đếm ở mọi tab; (2) nhãn tab đầu là "Tiếp nhận" (bản đối tác quay hiển thị "Mới tiếp nhận") thay vì "Chờ xử lý", nhãn "Đã duyệt" thay vì "Hoàn thành", và thừa tab "Tất cả"; (3) tab mặc định là "Tất cả" thay vì "Chờ xử lý".
+- Verify: tài khoản cbnv_tw_01 (CB_NV_TW), đơn vị BTP·TW.
+- Bug ID: BUG-QLNDTVVCG_04.

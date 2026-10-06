@@ -1,0 +1,6 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Đã nhập đúng giá trị đối tác dùng: số quyết định công nhận "A1000@" (không đúng mẫu). Hệ thống hiển thị thông báo "Phê duyệt TVV thành công", không có bất kỳ thông báo lỗi nào.
+- Hồ sơ chuyển sang "Chờ kích hoạt tài khoản", ghi Ngày công nhận 12/07/2026 và lưu luôn giá trị sai vào hồ sơ (thẻ Hồ sơ hiển thị Số quyết định: A1000@).
+- Theo FR-IV-07 (UC45) §Inputs (srs-fr-04 dòng 581), Số quyết định công nhận phải theo mẫu QĐ-{số}/QĐ-{đơn vị} (tối đa 100 ký tự) → hệ thống phải từ chối giá trị sai mẫu và báo lỗi, không được phê duyệt.
+- Verify: tài khoản cbpd_tw (CB Phê duyệt - Trung ương), hồ sơ TVV-BTP-TW-0005 ở trạng thái "Chờ phê duyệt" trước thao tác.
+- Bug ID: BUG-PDHSTVV_05.

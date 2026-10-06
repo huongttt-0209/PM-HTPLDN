@@ -1,0 +1,170 @@
+ARTIFACT — noi dung tep Excel xuat tu man Chuong trinh HTPLDN
+Case: KHTHCTHTPLDN_07 (row 29) + KHTHCTHTPLDN_OOS_06 (ngay lech 1 ngay)
+Nguon: bam nut [Xuat Excel] tren man /ct-htpldn/danh-sach, tai khoan cbnv_tw
+Moi truong: 18.143.165.120.nip.io — 27/07/2026 14:01
+====================================================================================================
+
+[1] TEN TEP + KICH THUOC (lenh: ls -l ~/Downloads/ct-htpldn-*.xlsx)
+    -rw-r--r--@ 1 huongttt  staff  7942 Jul 27 14:01 /Users/huongttt/Downloads/ct-htpldn-2026-07-27.xlsx
+    -> TEN TEP THUC TE : ct-htpldn-2026-07-27.xlsx
+    -> PHIEU MONG DOI  : DanhSachChuongTrinh_{YYYYMMDD_HHmm}.xlsx
+
+[2] CAU TRUC
+    So sheet      : 1   | Ten sheet: ['Chương trình HTPL']
+    Kich thuoc    : 9 dong x 13 cot (gom 1 dong tieu de)
+
+[3] HANG TIEU DE (13 cot)
+     1. Mã CT
+     2. Tên CT
+     3. Mục tiêu
+     4. Đối tượng
+     5. Trạng thái
+     6. Lĩnh vực
+     7. Đơn vị
+     8. Thời gian bắt đầu
+     9. Thời gian kết thúc
+    10. Ngân sách
+    11. Là công bố
+    12. Số đợt BC
+    13. Ngày tạo
+
+[4] DOI CHIEU 10 COT BAT BUOC (SRS srs-fr-15-ct-htpldn.md:396)
+    Ket qua: DU CA 10 COT. Cot 'Thoi gian' duoc tach lam 2 cot bat dau/ket thuc.
+    Cot ngoai danh sach: 'La cong bo', 'Ngay tao'.
+    [co] Ma CT
+    [co] Ten CT
+    [co] Muc tieu
+    [co] Doi tuong
+    [co] Linh vuc phap ly
+    [co] Thoi gian (bat dau - ket thuc)
+    [co] Ngan sach
+    [co] Don vi
+    [co] Trang thai
+    [co] So dot BC
+
+[5] TOAN BO DU LIEU (8 dong)
+    --- dong 1 ---
+        Mã CT                    : CT-20260725-0002
+        Tên CT                   : QA CTTLV 25/07 B - Kiem tra linh vuc bat buoc
+        Mục tiêu                 : Kiem thu bao cao CT theo linh vuc
+        Đối tượng                : Doanh nghiep nho va vua
+        Trạng thái               : Đã duyệt
+        Lĩnh vực                 : Đất đai
+        Đơn vị                   : Cục Bổ trợ tư pháp - Bộ Tư pháp
+        Thời gian bắt đầu        : 2025-12-31 17:00:00
+        Thời gian kết thúc       : 
+        Ngân sách                : 
+        Là công bố               : Không
+        Số đợt BC                : 0
+        Ngày tạo                 : 2026-07-25 02:26:11.646000
+    --- dong 2 ---
+        Mã CT                    : CT-20260725-0001
+        Tên CT                   : QA CTTLV 25/07 A - Kiem tra linh vuc bat buoc
+        Mục tiêu                 : Kiem thu bao cao CT theo linh vuc
+        Đối tượng                : Doanh nghiep nho va vua
+        Trạng thái               : Đã duyệt
+        Lĩnh vực                 : Thuế
+        Đơn vị                   : Cục Bổ trợ tư pháp - Bộ Tư pháp
+        Thời gian bắt đầu        : 2025-12-31 17:00:00
+        Thời gian kết thúc       : 
+        Ngân sách                : 
+        Là công bố               : Không
+        Số đợt BC                : 0
+        Ngày tạo                 : 2026-07-25 02:25:48.795000
+    --- dong 3 ---
+        Mã CT                    : CT-20260724-0001
+        Tên CT                   : QA CTTLV 01 - Chương trình Lao động 2026
+        Mục tiêu                 : Dữ liệu kiểm thử báo cáo chương trình theo lĩnh vực
+        Đối tượng                : Doanh nghiệp nhỏ và vừa
+        Trạng thái               : Đã duyệt
+        Lĩnh vực                 : Lao động
+        Đơn vị                   : Cục Bổ trợ tư pháp - Bộ Tư pháp
+        Thời gian bắt đầu        : 2025-12-31 17:00:00
+        Thời gian kết thúc       : 2026-12-30 17:00:00
+        Ngân sách                : 50000000
+        Là công bố               : Không
+        Số đợt BC                : 0
+        Ngày tạo                 : 2026-07-23 18:29:59.348000
+    --- dong 4 ---
+        Mã CT                    : CT-20260721-0004
+        Tên CT                   : BCTK-B4 CT khong linh vuc test Khong xac dinh
+        Mục tiêu                 : Seed test nhom Khong xac dinh - CT khong gan linh vuc
+        Đối tượng                : Doanh nghiep
+        Trạng thái               : Đã duyệt
+        Lĩnh vực                 : 
+        Đơn vị                   : Cục Bổ trợ tư pháp - Bộ Tư pháp
+        Thời gian bắt đầu        : 2025-12-31 17:00:00
+        Thời gian kết thúc       : 2026-12-30 17:00:00
+        Ngân sách                : 50000000
+        Là công bố               : Không
+        Số đợt BC                : 0
+        Ngày tạo                 : 2026-07-21 08:45:05.680000
+    --- dong 5 ---
+        Mã CT                    : CT-20260721-0003
+        Tên CT                   : CT Seed QA-B (verify SLCTHT)
+        Mục tiêu                 : Seed phục vụ QA verify - dự kiến HOAN_THANH
+        Đối tượng                : Doanh nghiệp siêu nhỏ
+        Trạng thái               : Hoàn thành
+        Lĩnh vực                 : 
+        Đơn vị                   : Cục Bổ trợ tư pháp - Bộ Tư pháp
+        Thời gian bắt đầu        : 2026-03-01 00:00:00
+        Thời gian kết thúc       : 2026-10-31 00:00:00
+        Ngân sách                : 50000000
+        Là công bố               : Có
+        Số đợt BC                : 0
+        Ngày tạo                 : 2026-07-21 08:44:35.713000
+    --- dong 6 ---
+        Mã CT                    : CT-20260721-0002
+        Tên CT                   : CT Seed QA-A (verify SLCTHT)
+        Mục tiêu                 : Seed phục vụ QA verify báo cáo Số lượng CT hỗ trợ
+        Đối tượng                : Doanh nghiệp nhỏ và vừa
+        Trạng thái               : Đang thực hiện
+        Lĩnh vực                 : 
+        Đơn vị                   : Cục Bổ trợ tư pháp - Bộ Tư pháp
+        Thời gian bắt đầu        : 2026-02-01 00:00:00
+        Thời gian kết thúc       : 2026-11-30 00:00:00
+        Ngân sách                : 100000000
+        Là công bố               : Có
+        Số đợt BC                : 0
+        Ngày tạo                 : 2026-07-21 08:42:36.538000
+    --- dong 7 ---
+        Mã CT                    : CT-20260721-0001
+        Tên CT                   : BCTK-B4 CT verify bao cao Thuong mai
+        Mục tiêu                 : Seed verify bao cao CT theo don vi/linh vuc - batch 4
+        Đối tượng                : Doanh nghiep nho va vua
+        Trạng thái               : Đã duyệt
+        Lĩnh vực                 : Thương mại
+        Đơn vị                   : Cục Bổ trợ tư pháp - Bộ Tư pháp
+        Thời gian bắt đầu        : 2025-12-31 17:00:00
+        Thời gian kết thúc       : 2026-12-30 17:00:00
+        Ngân sách                : 100000000
+        Là công bố               : Không
+        Số đợt BC                : 0
+        Ngày tạo                 : 2026-07-21 08:36:47.949000
+    --- dong 8 ---
+        Mã CT                    : CTHTPL-SEED-0001
+        Tên CT                   : Chương trình HTPL doanh nghiệp seed 2026
+        Mục tiêu                 : Nâng cao nhận thức pháp luật cho doanh nghiệp nhỏ và vừa.
+        Đối tượng                : Doanh nghiệp nhỏ và vừa toàn quốc.
+        Trạng thái               : Đã công bố
+        Lĩnh vực                 : Thương mại
+        Đơn vị                   : 
+        Thời gian bắt đầu        : 2025-12-31 17:00:00
+        Thời gian kết thúc       : 2026-12-31 16:59:59
+        Ngân sách                : 
+        Là công bố               : Có
+        Số đợt BC                : 0
+        Ngày tạo                 : 2026-06-30 12:28:23.186000
+
+[6] LECH NGAY — doi chieu man hinh vs tep (phat hien ngoai phieu)
+    Cot 'Thoi gian bat dau' / 'Thoi gian ket thuc' trong tep lech 1 NGAY VE TRUOC
+    so voi gia tri hien tren bang danh sach:
+
+      Ma CT              | Man hinh hien thi        | Trong tep Excel
+      -------------------+--------------------------+----------------------------------
+      CT-20260724-0001   | 1/1/2026 - 31/12/2026    | 2025-12-31 17:00 / 2026-12-30 17:00
+
+    Du lieu goc phia may chu tra ve cho CT-20260725-0002:
+      thoiGianBatDau = "2025-12-31T17:00:00.000Z"
+      2025-12-31 17:00 UTC + 7 gio = 01/01/2026 00:00 gio Viet Nam  -> man hinh quy doi DUNG
+    => Du lieu luu dung, man hinh quy doi dung, chi khau ghi ra tep KHONG quy doi mui gio.

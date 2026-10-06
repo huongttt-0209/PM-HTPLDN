@@ -1,0 +1,4 @@
+Có lỗi (khác lỗi ban đầu báo).
+- Thao tác Xuất PDF: file VẪN tạo và tải về được — không gặp thông báo "Không thể tạo file xuất".
+- Kiểm tra nội dung file PDF: THIẾU header bắt buộc gồm Kỳ báo cáo, Đơn vị, Ngày tạo (bản Excel cùng báo cáo có đủ 4 trường) — chưa đúng chuẩn định dạng báo cáo. Số liệu trong bảng thì đúng.
+- Đề nghị dev bổ sung khối header cho file PDF (đồng bộ với Excel). Bug: BUG-EXPORT-PDF-HEADER.

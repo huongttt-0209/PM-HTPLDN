@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Quan sát của đối tác là ĐÚNG và tái hiện được: khi mất kết nối rồi bấm "Lưu nháp", hệ thống không hiển thị bất kỳ thông báo lỗi nào; 3 nút "Lưu nháp"/"Gửi KQ"/"Trình duyệt" kẹt ở trạng thái đang tải vô hạn. Người dùng không biết bản nháp đã lưu hỏng.
+- Tuy nhiên thông báo mà đối tác kỳ vọng ("Không thể lưu, vui lòng thử lại") KHÔNG có trong đặc tả của chức năng này: FR-IV-06 (UC44) §Error Handling (srs-fr-04-chuyen-gia-tvv.md, dòng 537-541) chỉ quy định 3 lỗi nghiệp vụ (ERR-TD-02/03/04), không quy định thông báo khi mất kết nối / lưu thất bại.
+- Trong khi đó module Vụ việc đã có quy ước này (srs-fr-05-vu-viec.md, dòng 1567 và 1574: "Mất kết nối mạng. Đang thử kết nối lại..." / "Lưu thất bại. Vui lòng kiểm tra kết nối và thử lại." kèm nút Thử lại).
+- Câu hỏi cho BA: có bổ sung yêu cầu hiển thị thông báo lỗi khi lưu thất bại do mất kết nối cho màn Thẩm định hồ sơ tư vấn viên (áp dụng cùng quy ước như module Vụ việc) không? Nếu có, chúng tôi sẽ chuyển thành lỗi để dev sửa.
+- Verify: tài khoản cbnv_tw (Cán bộ Nghiệp vụ - Trung ương), hồ sơ TVV-BTP-TW-0003 ở trạng thái "Đang thẩm định", ngắt kết nối mạng đúng như đối tác.

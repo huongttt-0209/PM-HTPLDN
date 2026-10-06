@@ -1,0 +1,8 @@
+TC-REG-102 baseline created 2026-05-10:
+- MST: 9988776601 (10 digits)
+- Email: test_dn_phaseb_001@example.com
+- Username (auto): 9988776601
+- Activation token: c22d606b-d9e7-4957-8aed-15a832adb199
+- Activation URL: http://103.172.236.130:3000/auth/verify-email?token=c22d606b-d9e7-4957-8aed-15a832adb199
+- Mail subject: Kích hoạt tài khoản doanh nghiệp HTPLDN
+- Mail content nói: 'vĩnh viễn 1 lần dùng' + '7 ngày không hoạt động sẽ bị thu hồi'

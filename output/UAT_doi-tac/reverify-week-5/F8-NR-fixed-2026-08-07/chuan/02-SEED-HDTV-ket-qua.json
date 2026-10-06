@@ -1,0 +1,80 @@
+{
+  "ngay": "2026-08-07",
+  "env": "https://18.143.165.120.nip.io",
+  "taiKhoanSeed": "cbnv_tw_03",
+  "ghiChu": "Seed hop dong NEN cho cum 18 phieu QLHDTVVCG. HD-1 (day du) KHONG seed — do phieu _15 tao bang giao dien that vi tao hop dong la hanh dong dang tranh chap.",
+  "tuVanVienDung": [
+    {
+      "id": "38383838-0000-4000-8000-000000000038",
+      "hoTen": "Chuyên gia UAT QLNDTVVCG 38"
+    },
+    {
+      "id": "aaaa1707-0000-4000-8000-000000000d01",
+      "hoTen": "QA TVV PheDuyet TW R19"
+    }
+  ],
+  "vuViecCoTenDnDai": [
+    {
+      "ma": "VV-BTP-TW-20260804-004",
+      "id": "8204a96a-29b8-4e83-8f69-cb57f378382c",
+      "tenDn": "Cong ty QA R3 kiem trang thai sau dang ky"
+    },
+    {
+      "ma": "VV-BTP-TW-20260804-003",
+      "id": "c43a9e64-8ab7-44e2-8153-0f98cbbbffde",
+      "tenDn": "Cong ty QA R3 kiem trang thai sau dang ky"
+    },
+    {
+      "ma": "VV-BTP-TW-20260804-002",
+      "id": "6bf98a2e-77ee-4c03-8e1f-a51561406a3b",
+      "tenDn": "Cong ty QA R3 kiem trang thai sau dang ky"
+    }
+  ],
+  "hopDongDaTao": [
+    {
+      "nhan": "HĐ-2 (sạch vụ việc — để phiếu _17 xóa mềm)",
+      "id": "fbcb5a7a-27a0-4d49-9712-123ce1ac4eef",
+      "maHopDong": "HDTV-20260807-0001",
+      "tenHopDong": "Hợp đồng tư vấn pháp lý thường xuyên cho doanh nghiệp nhỏ và vừa năm 2026",
+      "trangThai": "DANG_THUC_HIEN",
+      "ngayKetThuc": "2026-12-05",
+      "tuVanVienId": "38383838-0000-4000-8000-000000000038"
+    },
+    {
+      "nhan": "HĐ-3 (để phiếu _22 C5 thử gắn CÙNG một vụ việc vào hai hợp đồng)",
+      "id": "2b57a4af-4e61-4d09-8e63-aa33165ed5a0",
+      "maHopDong": "HDTV-20260807-0002",
+      "tenHopDong": "Hợp đồng tư vấn chuyên sâu lĩnh vực sở hữu trí tuệ và chuyển giao công nghệ",
+      "trangThai": "DANG_THUC_HIEN",
+      "ngayKetThuc": "2027-02-23",
+      "tuVanVienId": "aaaa1707-0000-4000-8000-000000000d01"
+    },
+    {
+      "nhan": "HĐ-4 (nền — SẮP HẾT HẠN ≤30 ngày, đo cột 'thời hạn kết thúc tô đỏ')",
+      "id": "df1648ef-07e7-405d-93d0-e90887833a6b",
+      "maHopDong": "HDTV-20260807-0003",
+      "tenHopDong": "Hợp đồng tư vấn pháp luật lao động và bảo hiểm xã hội cho doanh nghiệp siêu nhỏ",
+      "trangThai": "DANG_THUC_HIEN",
+      "ngayKetThuc": "2026-08-25",
+      "tuVanVienId": "38383838-0000-4000-8000-000000000038"
+    },
+    {
+      "nhan": "HĐ-5 (nền — trạng thái KHÁC để kiểm bộ lọc trạng thái)",
+      "id": "2d1f75a5-564e-43b0-8d57-297547b159aa",
+      "maHopDong": "HDTV-20260807-0004",
+      "tenHopDong": "Hợp đồng tư vấn tái cấu trúc doanh nghiệp giai đoạn hai năm 2025",
+      "trangThai": "HOAN_THANH",
+      "ngayKetThuc": "2026-07-08",
+      "tuVanVienId": "aaaa1707-0000-4000-8000-000000000d01"
+    },
+    {
+      "nhan": "HĐ-6 (nền — khớp CÙNG từ khóa 'sở hữu trí tuệ' với HĐ-3, để _03 chứng minh lọc)",
+      "id": "6163741d-6ce7-4139-92ac-e34720e9cfe0",
+      "maHopDong": "HDTV-20260807-0005",
+      "tenHopDong": "Hợp đồng tư vấn xác lập quyền sở hữu trí tuệ đối với kiểu dáng công nghiệp",
+      "trangThai": "DANG_THUC_HIEN",
+      "ngayKetThuc": "2026-11-05",
+      "tuVanVienId": "38383838-0000-4000-8000-000000000038"
+    }
+  ]
+}

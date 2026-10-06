@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Web: màn Chi tiết DN, tab "Thông tin" — các tiêu chí ưu tiên NĐ55/2019 Điều 4 (Phụ nữ làm chủ, Số LĐ nữ, Số LĐ khuyết tật) hiển thị ĐỦ, cùng khối "Thông tin lao động & tài chính" với Số lao động / Doanh thu / Tổng nguồn vốn.
+- SRS v3.5 SCR-V.III-02 (FR-V.III-01, UC81, dòng 488–490) liệt kê 3 trường NĐ55 trong danh sách trường phẳng, KHÔNG tách "Nhóm 3 — Tiêu chí ưu tiên" riêng. Đối tác phản ánh app gom các trường (Số lao động, Doanh thu, Tổng nguồn vốn) mà thiết kế xếp ở Nhóm 1 vào cùng chỗ.
+- Đối tác chấm theo bố cục nhóm của thiết kế (HTPLDN-PTYC-CT-v2.0); các trường NĐ55 không thiếu, chỉ khác cách gom nhóm.
+- Hỏi BA: có bắt buộc tách "Tiêu chí ưu tiên NĐ55" thành nhóm riêng theo thiết kế đối tác không, hay gộp trong khối lao động & tài chính (đủ trường) là đạt?
+- Verify: cbnv_tw (CB_NV_TW), DN-SEED-0001.

@@ -1,0 +1,5 @@
+GET /api/v1/bao-cao/vu-viec-dang-ho-tro?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31 [200]
+{"success":true,"data":{"tongVuViec":7,"theoMucSla":[{"mucSla":"BINH_THUONG","soLuong":7},{"mucSla":"SAP_HET","soLuong":0},{"mucSla":"QUA_HAN","soLuong":0},{"mucSla":"QUA_HAN_NGHIEM_TRONG","soLuong":0}],"theoNht":[{"nhtId":"5432719c-c542-4a5d-8c3a-db1b8a918bbf","ten":"","soLuong":1}],"theoDonVi":[{"ten":"Cục Bổ trợ tư pháp - Bộ Tư pháp","soLuong":3},{"ten":"Bộ Kế hoạch và Đầu tư","soLuong":2},{"ten":"Sở Tư pháp Hà Nội","soLuong":1},{"ten":"Sở Tư pháp An Giang","soLuong":1}]},"meta":null}
+
+>>> BE TRẢ theoNht (1 NHT, soLuong 1) nhưng UI KHÔNG render bảng/biểu đồ theo người hỗ trợ → FE bug.
+>>> Bảng Đơn vị trên UI chỉ có {ten, soLuong}, thiếu cột qua_han mà SRS §Output theo_don_vi (dòng 262) quy định.

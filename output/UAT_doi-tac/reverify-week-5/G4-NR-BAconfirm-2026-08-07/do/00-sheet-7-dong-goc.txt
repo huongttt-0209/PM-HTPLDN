@@ -1,0 +1,931 @@
+====================================================================================================
+===== DÒNG 10 — Mã TC = KTDGKQHT_05 =====
+
+--- [A] Tên ---
+(TRỐNG)
+
+--- [B] STT ---
+(TRỐNG)
+
+--- [C] Tuần ---
+Tuần 2
+
+--- [D] Mã TC ---
+KTDGKQHT_05
+
+--- [E] Tên chức năng ---
+(TRỐNG)
+
+--- [F] Tác nhân ---
+(TRỐNG)
+
+--- [G] Mô tả ---
+Tải lên tệp Excel điểm danh 
+
+--- [H] Điều kiện ---
+1. Đăng nhập tài khoản
+2. Khóa học ở trạng thái "Đang diễn ra" hoặc "Đã kết thúc" và đã có lịch học.
+
+--- [I] Dữ liệu đầu vào ---
+(TRỐNG)
+
+--- [J] Các bước thực hiện ---
+1. Chọn menu "Đào tạo, tập huấn" -> "Khóa học"
+2. Nhấn xem chi tiết khóa học
+3. Chọn tab "Điểm danh" 
+4. Tải lên tệp Excel 
+
+--- [K] Kết quả mong đợi ---
+- Hiển thị bản xem trước kết quả (số dòng hợp lệ, số dòng lỗi và lý do từng dòng). 
+- Nạp thành công, hệ thống hiển thị thông báo "Đã nạp {số thành công} bản ghi thành công, {số lỗi} bản ghi không hợp lệ".
+
+--- [L] Kết quả thực tế ---
+(TRỐNG)
+
+--- [M] Ảnh/vieo 1 ---
+KTDGKQHT_05.jpg
+
+--- [N] Trạng thái ---
+Fail
+
+--- [O] Dopai ---
+N/R
+
+--- [P] Loại vấn đề ---
+nếu thêm cột MHV có đc ko
+
+--- [Q] TKM phản hồi lần 1 ---
+Màn hình danh sách không hiển thị mã học viên nhưng khi nhập file excel điểm danh hệ thống bắt buộc có mã học viên
+
+--- [R] Trạng thái dev fix ---
+BA confirm
+
+--- [S] DEV phản hồi lần 1 ---
+BA chốt 04/08/2026 — phiếu bàn giao thay đổi SRS (FR-III-05 + SCR-III-02 Tab 4/5): giữ hoc_vien_id làm khóa đối chiếu, KHÔNG thêm trường vào entity HOC_VIEN; bổ sung cơ chế "Tải mẫu → điền → tải lên" áp cho cả điểm danh lẫn điểm kiểm tra; lich_hoc_id/de_kiem_tra_id nhúng ở metadata tệp (không phải cột từng dòng); bổ sung ERR-KQ-09 và đổi câu chữ ERR-KQ-03.
+Dev đã làm theo đặc tả mới: 2 nút Tải mẫu (Tab 4/Tab 5), tệp mẫu điền sẵn danh sách học viên với cột định danh khóa/ẩn, import đối chiếu theo metadata + validate học viên phải thuộc khóa đang thao tác. Đã lên bản v1.0.10.
+
+--- [T] Kết quả verify ---
+⚠️ ĐÃ HẾT LỖI CŨ — còn một ý nhỏ cần nghiệp vụ chốt (KHÔNG chặn bàn giao).
+
+Đo lại trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-eWHwDgt2.js (bản lên lúc 09:11 ngày 07/08/2026), đo lúc 12:04–12:06 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_03. Đã đo dấu vân tay bản dựng cả trước (11:49) và sau (12:40) lượt đo, hai đầu trùng khít nên không có bản mới xen vào giữa. Lượt đo trước lúc 02:20 cùng ngày chạy trên bản cũ hơn 2 lần cập nhật.
+
+Tiền đề: khóa "Hội nghị đối thoại DN 2026" (KH-QAW7-HOINGHI) đang ở trạng thái Đang diễn ra, có 4 buổi học và 4 học viên đã duyệt; đo trên Buổi 4 ngày 11/05/2026 (14:00–16:00). Tệp nạp lấy từ chính nút "Tải mẫu điểm danh" của hệ thống, chỉ điền thêm cột trạng thái, gồm 5 dòng: 3 dòng hợp lệ và 2 dòng cố ý sai (1 dòng dùng học viên của khóa khác, 1 dòng ghi trạng thái "XYZ").
+
+ĐÃ ĐẠT — 3 phần
+
+1) Việc bên nghiệm thu nêu ban đầu (màn hình không hiện mã học viên nhưng nhập Excel lại bắt buộc có mã) đã được giải quyết đúng hướng nghiệp vụ đã chốt. Đặc tả sửa ngày 04/08/2026 ghi đích danh phiếu này (srs-fr-03-dao-tao.md:14) và quyết định KHÔNG thêm trường mã học viên, thay vào đó dùng cơ chế "Tải mẫu - điền - tải lên": hệ thống điền sẵn định danh học viên vào tệp mẫu, cán bộ không phải tự gõ (srs-fr-03-dao-tao.md:573). Kiểm tệp mẫu tải về: đã điền sẵn định danh cho cả 4 học viên, cột định danh được khóa và ẩn, đủ 6 cột đúng như đặc tả quy định (srs-fr-03-dao-tao.md:581), còn định danh buổi học nằm ở vùng thông tin ẩn của tệp chứ không phải cột từng dòng (srs-fr-03-dao-tao.md:583). Vì vậy đề nghị "thêm cột mã học viên" không còn cần thiết; nếu bên nghiệm thu vẫn muốn có cột đó thì đây là thay đổi đặc tả, cần nghiệp vụ quyết lại.
+
+2) Bản xem trước trước khi ghi dữ liệu đã có đúng đặc tả (srs-fr-03-dao-tao.md:593). Sau khi bấm kiểm tệp, hệ thống hiện khối "Kết quả kiểm tra - chưa nhập dữ liệu": Tổng dòng 5, Hợp lệ 3, Bỏ qua 0, Lỗi 2; tách hai thẻ "Hợp lệ (3)" và "Lỗi/Bỏ qua (2)"; mỗi dòng lỗi ghi rõ số dòng kèm lý do riêng - dòng 5 báo ERR-KQ-03 (học viên không thuộc khóa), dòng 6 báo ERR-KQ-04 (giá trị điểm danh không hợp lệ). Câu chữ hai thông báo lỗi này khớp đúng bảng xử lý lỗi trong đặc tả (srs-fr-03-dao-tao.md:637 và :638).
+
+3) Bước ghi dữ liệu - đây chính là chỗ hỏng của lượt đo trước - NAY ĐÃ CHẠY ĐƯỢC. Bấm "Xác nhận import (3 dòng hợp lệ)", hệ thống hiển thị báo cáo kết quả nạp "Import hoàn tất" với Đã nhập 3, Bỏ qua 0, Lỗi 2, kèm bảng chi tiết từng dòng. Không còn thông báo "Lỗi hệ thống, vui lòng thử lại sau" như lượt trước. Kiểm lại bằng đường thứ hai (đọc lại dữ liệu điểm danh của đúng Buổi 4 từ máy chủ, lúc 12:35 cùng ngày): đúng 3 học viên được ghi trạng thái, đúng 3 giá trị đã điền trong tệp (Có mặt, Vắng có phép, Vắng không phép); học viên ở dòng ghi sai trạng thái không được ghi giá trị nào; học viên thuộc khóa khác không xuất hiện. Tức đúng 3/3 dòng hợp lệ được ghi và 0/2 dòng lỗi bị lọt - khớp yêu cầu "chỉ ghi nhận dòng hợp lệ, bỏ qua dòng lỗi" của đặc tả (srs-fr-03-dao-tao.md:594, điều kiện nghiệm thu :652 và :654). Kiểm thêm trên giao diện sau khi tải lại trang: bảng điểm danh Buổi 4 hiện 4 học viên, 3 học viên có trạng thái mới, học viên ở dòng lỗi không có trạng thái nào - khớp với dữ liệu máy chủ.
+
+CẦN NGHIỆP VỤ CHỐT — câu chữ của thông báo kết quả nạp
+
+CẦN BA CONFIRM: bên nghiệm thu kỳ vọng thông báo đúng chuỗi "Đã nạp {số thành công} bản ghi thành công, {số lỗi} bản ghi không hợp lệ"; đặc tả chỉ quy định chung là "Trả về báo cáo import" (srs-fr-03-dao-tao.md:595) và bảng xử lý lỗi của chức năng này (srs-fr-03-dao-tao.md:633 đến :643) không khai bất kỳ thông báo thành công nào; web hiện tại hiển thị "Import hoàn tất" kèm ba chỉ số Đã nhập 3, Bỏ qua 0, Lỗi 2.
+
+Nghĩa là hệ thống ĐÃ cho biết đủ hai con số mà phiếu yêu cầu (số nạp thành công và số không hợp lệ), chỉ khác cách diễn đạt và có thêm một chỉ số "Bỏ qua". Vì đặc tả không quy định câu chữ nên không có căn cứ chấm sai, đồng thời cũng không có căn cứ chấm đạt trọn vẹn.
+
+Câu hỏi cho nghiệp vụ: thông báo kết quả nạp có bắt buộc đúng câu chữ ghi trong phiếu không, hay chỉ cần nêu được số bản ghi nạp thành công và số bản ghi không hợp lệ là đạt? Nếu chỉ cần nêu đủ hai con số thì hiện trạng đã đáp ứng và đề nghị bổ sung câu này vào đặc tả để vòng nghiệm thu sau có mốc đối chiếu. Đây là đề nghị hoàn thiện tài liệu, KHÔNG phải lỗi chặn bàn giao. (Ý này đã được nêu một lần ở lượt đo 02:20 cùng ngày và chưa có phản hồi.)
+
+Ảnh bằng chứng:
+- Bản xem trước trước khi ghi (Tổng 5, Hợp lệ 3, Bỏ qua 0, Lỗi 2, hai dòng lỗi có hai lý do khác nhau): https://drive.google.com/file/d/1rox_5mYNkIuPKMa2xoOLqhFDi6QkXdi7/view?usp=drivesdk
+- Ngay sau khi bấm xác nhận nạp (báo cáo "Import hoàn tất", Đã nhập 3, Bỏ qua 0, Lỗi 2, không còn lỗi hệ thống): https://drive.google.com/file/d/1QZxqaKsncvzztI1jeSLpb4m4BbmpKEWk/view?usp=drivesdk
+- Bảng điểm danh Buổi 4 sau khi nạp (3 học viên có trạng thái, học viên ở dòng lỗi không được ghi): https://drive.google.com/file/d/14mhMuxhAdQeB7HuRp_PMB7pqw1HCIfCM/view?usp=drivesdk
+- Nút "Tải mẫu điểm danh" bật lên sau khi chọn buổi học: https://drive.google.com/file/d/1L2D2CVqyXkjn-WtFTKh7b3Zw54QAUsfX/view?usp=drivesdk
+
+Lưu ý về dữ liệu: thao tác đo lần này đã ghi 3 bản ghi điểm danh vào Buổi 4 của khóa KH-QAW7-HOINGHI trên môi trường nội bộ (đây là hệ quả của chính thao tác đang kiểm, không phải dựng thêm dữ liệu). Sau lượt này khóa đó không còn buổi học nào chưa điểm danh, nên lượt kiểm sau cần tạo buổi học mới hoặc dùng khóa khác đang diễn ra.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.
+
+
+--- [U] Ảnh/video verify ---
+(TRỐNG)
+
+--- [V] Trạng thái 2 ---
+(TRỐNG)
+
+--- [W] TKM phản hồi lần 2 ---
+(TRỐNG)
+
+--- [X] Trạng thái dev fix 2 ---
+(TRỐNG)
+
+--- [Y] DEV phản hồi lần 2 ---
+(TRỐNG)
+
+--- [Z] (cột không tên) ---
+(TRỐNG)
+====================================================================================================
+===== DÒNG 343 — Mã TC = THBCTHCT_01 =====
+
+--- [A] Tên ---
+(TRỐNG)
+
+--- [B] STT ---
+168
+
+--- [C] Tuần ---
+Tuần 4
+
+--- [D] Mã TC ---
+THBCTHCT_01
+
+--- [E] Tên chức năng ---
+Tổng hợp báo cáo thực hiện chương trình hỗ trợ pháp lý
+
+--- [F] Tác nhân ---
+Cán bộ nghiệp vụ TW
+
+--- [G] Mô tả ---
+Tổng hợp báo cáo thực hiện chương trình từ nhiều đơn vị.
+
+--- [H] Điều kiện ---
+1. NSD là cán bộ nghiệp vụ cấp Trung ương và có ít nhất một báo cáo từ Bộ/Ngành hoặc Địa phương đã gửi lên.
+
+--- [I] Dữ liệu đầu vào ---
+(TRỐNG)
+
+--- [J] Các bước thực hiện ---
+1. Chọn menu "Đợt báo cáo"
+2. Chọn các báo cáo cần tổng hợp trong bảng danh sách (ô chọn) và bấm nút "Tổng hợp", 
+3. Bấm nút "Lưu tổng hợp"
+
+--- [K] Kết quả mong đợi ---
+- Lưu bản ghi báo cáo tổng hợp toàn quốc.
++ Chuyển trạng thái các đợt báo cáo đã chọn: Đã gửi Trung ương → Đã tổng hợp.
++ Lưu vết thao tác theo quy định.
+- Tổng hợp thành công, hệ thống hiển thị thông báo "Đã tổng hợp báo cáo toàn quốc".
+
+--- [L] Kết quả thực tế ---
+(TRỐNG)
+
+--- [M] Ảnh/vieo 1 ---
+(TRỐNG)
+
+--- [N] Trạng thái ---
+N/R
+
+--- [O] Dopai ---
+N/R
+
+--- [P] Loại vấn đề ---
+(TRỐNG)
+
+--- [Q] TKM phản hồi lần 1 ---
+Chưa thực hiện được do uc GKQTHCTHTPL_01 lỗi
+
+--- [R] Trạng thái dev fix ---
+BA confirm
+
+--- [S] DEV phản hồi lần 1 ---
+Phiếu 05–06/08/2026: mã này thuộc nhóm Dev tự fix theo căn cứ SRS rõ ràng, BA không phải quyết (chỉ phản đối nếu sai). Căn cứ câu thông báo tổng hợp: INF-XI-09-01.
+Dev đã sửa: danh sách tổng hợp trả đúng bản ghi báo cáo của từng đơn vị (trước đó gộp sai theo đợt).
+
+--- [T] Kết quả verify ---
+⚠️ ĐẠT PHẦN ĐO ĐƯỢC — còn một ý cần nghiệp vụ chốt (KHÔNG chặn bàn giao).
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh; ô phản hồi ghi "Chưa thực hiện được do uc GKQTHCTHTPL_01 lỗi"), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-eWHwDgt2.js (bản lên lúc 09:11 ngày 07/08/2026), đo lúc 13:30-13:45 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_05 - đúng vai trò và đúng cấp Trung ương mà phiếu yêu cầu. Đội dùng tài khoản số 05 thay cho số 03 vì trong lúc đo có một tiến trình khác đăng nhập cùng tài khoản số 03 làm phiên bị ngắt; hai tài khoản cùng vai trò, cùng cấp, cùng đơn vị Cục Bổ trợ tư pháp nên phạm vi dữ liệu không đổi. Riêng phần Nhật ký hệ thống phải dùng tài khoản quản trị để ĐỌC, vì tài khoản nghiệp vụ không có quyền xem nhật ký (hệ thống trả đúng thông báo không đủ quyền - đây là phân quyền đúng, không phải lỗi); mọi thao tác của phiếu đều do tài khoản nghiệp vụ thực hiện.
+
+TIỀN ĐỀ (kiểm sống ngay trước khi đo, lúc 13:14)
+
+Đợt DOT-THBC01-UAT (kỳ Sơ bộ 6 tháng, biểu mẫu 21a) có đúng hai đơn vị đã gửi báo cáo lên Trung ương: Bộ Kế hoạch và Đầu tư (gửi 20/07/2026) và Sở Tư pháp An Giang (gửi 22/07/2026). Trạng thái trước khi bấm: đợt đang ở "Tạo đợt"; hai đơn vị đều "Đã nộp"; hai bản báo cáo đều "Đã gửi TW".
+
+ĐÃ ĐẠT - 3 phần
+
+1) Hệ thống LƯU ĐƯỢC bản ghi báo cáo tổng hợp toàn quốc. Trên màn "Tổng hợp báo cáo toàn quốc", chọn hai báo cáo của hai đơn vị, bấm "Tổng hợp (2)" để hệ thống gợi ý số liệu, nhập câu nhận xét có mốc giờ riêng để không nhìn nhầm bản ghi cũ, rồi bấm "Lưu tổng hợp" lúc 13:30:50. Hệ thống tạo mới một bản báo cáo mã TH-TW-1786084251126, đúng loại "tổng hợp Trung ương", thuộc đúng đợt DOT-THBC01-UAT, đơn vị đứng tên là Cục Bổ trợ tư pháp (cấp Trung ương), mang đủ 13 chỉ tiêu đúng bằng số trên màn lúc bấm (12, 4, 3, 7, 7, 37, 29, 7, 14, 8, 680.000.000, 160.000.000, 30.000.000) và đúng câu nhận xét đã nhập. Kiểm lại bằng đường thứ hai: TẢI LẠI TOÀN BỘ TRANG bằng địa chỉ rồi đọc lại từ máy chủ - đợt đọc lại được ở trạng thái "Đã tổng hợp", hai báo cáo nguồn cũng "Đã tổng hợp"; đọc thêm bằng một phiên đăng nhập khác hẳn cũng cho kết quả y hệt; và tệp Excel do chính máy chủ sinh sau đó chứa đúng 13 con số đã lưu. Tức dữ liệu nằm ở máy chủ, không phải chỉ hiện trên màn. Yêu cầu của đặc tả tại srs-fr-15-ct-htpldn.md:1004.
+
+Xin nói rõ một giới hạn: bản dựng hiện chưa có chức năng mở lại bản báo cáo tổng hợp để xem, nên phép đọc lại được thực hiện gián tiếp qua bốn nguồn độc lập kể trên; không nguồn nào mâu thuẫn.
+
+2) Hệ thống LƯU VẾT thao tác. Nhật ký hệ thống có đúng một mục cho lượt bấm này: hành động "TONG_HOP", đối tượng đúng là bản ghi vừa tạo, thời điểm 13:30:51 ngày 07/08/2026, người thực hiện cbnv_tw_05 - CB Nghiệp vụ - Trung ương #05, vai trò "Cán bộ Nghiệp vụ TW", đơn vị "Cục Bổ trợ tư pháp - Bộ Tư pháp", phân hệ "Đợt báo cáo". Đối chiếu chéo: mã đối tượng và thời điểm trong nhật ký trùng khít với mã bản ghi và thời điểm tạo mà máy chủ trả về ngay lúc bấm. Yêu cầu của đặc tả tại srs-fr-15-ct-htpldn.md:1007.
+
+3) Câu chữ thông báo ĐÚNG NGUYÊN VĂN như phiếu yêu cầu. Người dùng nhìn thấy "Đã tổng hợp báo cáo toàn quốc" - trùng khít từng chữ với chuỗi đặc tả quy định tại srs-fr-15-ct-htpldn.md:1032. Bộ bắt thông báo được cài trước thao tác và không lọc trùng: một lượt bấm sinh đúng một yêu cầu gửi đi và đúng một thông báo (hai nút hiển thị bắt được cách nhau 3 phần nghìn giây là khung ngoài và phần thân của cùng một thông báo), không có hiện tượng thông báo hiện hai lần.
+
+CẦN NGHIỆP VỤ CHỐT - sau khi lưu tổng hợp thì "cái gì" chuyển sang Đã tổng hợp
+
+CẦN BA CONFIRM: phiếu kỳ vọng "chuyển trạng thái các đợt báo cáo đã chọn: Đã gửi Trung ương sang Đã tổng hợp". Đặc tả quy định điều này ở cấp ĐỢT (srs-fr-15-ct-htpldn.md:1005, :1022, :1517) nhưng tự mâu thuẫn: đầu vào của chính chức năng lại là danh sách BÁO CÁO của từng đơn vị (:993); một đợt chỉ có duy nhất một trạng thái (:1368) trong khi phạm vi một đợt là khoảng 70-83 đơn vị (:1367, :1398) - tổng hợp vài đơn vị mà chuyển cả đợt thì các đơn vị chưa nộp bị coi là xong; còn danh sách trạng thái nộp của đơn vị (:1389) lại KHÔNG có giá trị "Đã tổng hợp" để mà chuyển.
+
+Hiện trạng đo được (trước và sau khi bấm Lưu tổng hợp): đợt chuyển từ "Tạo đợt" thẳng sang "Đã tổng hợp" - tức không đi qua bước "Đã gửi TW" như đặc tả mô tả, và cờ "đã gửi TW" của đợt vẫn để không; hai đơn vị giữ nguyên "Đã nộp"; hai bản báo cáo được chọn chuyển từ "Đã gửi TW" sang "Đã tổng hợp", còn báo cáo của đợt khác không bị đụng. Trên màn hình, cán bộ Trung ương thấy đợt dừng ở bước 6 "Đã tổng hợp" và hai dòng báo cáo đổi nhãn sang "Đã tổng hợp"; riêng bảng tiến độ nộp theo đơn vị vẫn ghi "Đã nộp".
+
+Nói cho rõ để không hiểu nhầm thành lỗi: ở phần người dùng quan sát được, hệ thống làm ĐÚNG kỳ vọng của phiếu - báo cáo đã chọn chuyển sang "Đã tổng hợp", đợt khác không bị ảnh hưởng. Điểm chưa khớp là đường đi trạng thái của đợt và việc đặc tả tự mâu thuẫn như trên.
+
+Câu hỏi cho nghiệp vụ: sau khi cán bộ Trung ương lưu tổng hợp, cái gì phải chuyển sang "Đã tổng hợp" - (a) cả đợt, kể cả khi mới tổng hợp một phần số đơn vị; (b) từng bản nộp của các đơn vị được chọn (nếu vậy xin bổ sung giá trị "Đã tổng hợp" vào danh sách trạng thái nộp của đơn vị); hay (c) chỉ bản ghi báo cáo tổng hợp của Trung ương mới mang trạng thái này? Trạng thái mà cán bộ nhìn thấy ở màn chi tiết đợt là của đơn vị mình hay của cả đợt? Và đợt có bắt buộc đi qua "Đã gửi TW" trước khi sang "Đã tổng hợp" không, vì thực tế đợt chưa từng đạt trạng thái đó. Đây là đề nghị làm rõ và bổ sung đặc tả, KHÔNG phải lỗi chặn bàn giao. (Cùng gốc với câu hỏi nghiệp vụ đội đã gửi ở bàn giao lô trước về ba trục trạng thái đợt - đơn vị - báo cáo.)
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Mục nhật ký của thao tác này để trống ba thông tin bối cảnh là địa chỉ máy, đường dẫn chức năng và mã phản hồi. Phiếu và đặc tả không đòi các thông tin này nên đội không chấm, nêu để dev cân nhắc bổ sung cho việc truy vết về sau.
+- Sau khi lưu, không có chức năng nào cho phép mở lại bản báo cáo tổng hợp toàn quốc để xem; màn chi tiết đợt vẫn hiển thị số liệu của một đơn vị (Bộ Kế hoạch và Đầu tư: 8, 3, 2...) chứ không phải số tổng vừa lưu (12, 4, 3...). Cán bộ chỉ thấy được số tổng qua tệp xuất. Phiếu không nhắc việc xem lại nên đội không chấm, đề nghị dev và nghiệp vụ xem lại.
+- Màn "Tổng hợp báo cáo toàn quốc" không có mục nào dẫn tới trên thanh menu bên trái, cũng không có nút dẫn từ màn "Đợt báo cáo" - đã nêu ở phiếu THBCTHCT_02.
+
+Ảnh bằng chứng:
+- Ngay sau khi bấm "Lưu tổng hợp": hai báo cáo được chọn đổi nhãn sang "Đã tổng hợp", báo cáo của đợt khác vẫn giữ "Đã gửi TW": https://drive.google.com/file/d/1S1_DK0Kw4HkBGgXgX3v1ILxc-9EUP57W/view?usp=drivesdk
+- Sau khi tải lại toàn bộ trang bằng địa chỉ: đợt dừng ở bước 6 "Đã tổng hợp", ô Trạng thái ghi "Đã tổng hợp", bảng tiến độ hai đơn vị vẫn "Đã nộp": https://drive.google.com/file/d/1M7omE-bcvFN3JpXqlVzrLHx_-AjELdxy/view?usp=drivesdk
+
+Lưu ý về dữ liệu: lượt đo này CÓ ghi xuống môi trường nội bộ - đợt DOT-THBC01-UAT chuyển từ "Tạo đợt" sang "Đã tổng hợp", hai báo cáo của Bộ Kế hoạch và Đầu tư và Sở Tư pháp An Giang chuyển từ "Đã gửi TW" sang "Đã tổng hợp", và hệ thống tạo mới bản báo cáo tổng hợp TH-TW-1786084251126. Đây là thao tác bắt buộc của chính phiếu này. Không đụng dữ liệu của bên nghiệm thu, không sửa thẳng cơ sở dữ liệu.
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.
+
+
+--- [U] Ảnh/video verify ---
+(TRỐNG)
+
+--- [V] Trạng thái 2 ---
+(TRỐNG)
+
+--- [W] TKM phản hồi lần 2 ---
+(TRỐNG)
+
+--- [X] Trạng thái dev fix 2 ---
+(TRỐNG)
+
+--- [Y] DEV phản hồi lần 2 ---
+(TRỐNG)
+
+--- [Z] (cột không tên) ---
+(TRỐNG)
+====================================================================================================
+===== DÒNG 344 — Mã TC = THBCTHCT_02 =====
+
+--- [A] Tên ---
+(TRỐNG)
+
+--- [B] STT ---
+(TRỐNG)
+
+--- [C] Tuần ---
+Tuần 4
+
+--- [D] Mã TC ---
+THBCTHCT_02
+
+--- [E] Tên chức năng ---
+(TRỐNG)
+
+--- [F] Tác nhân ---
+(TRỐNG)
+
+--- [G] Mô tả ---
+Kiểm tra khi bấm nút "Tổng hợp"
+
+--- [H] Điều kiện ---
+1. NSD là cán bộ nghiệp vụ cấp Trung ương và có ít nhất một báo cáo từ Bộ/Ngành hoặc Địa phương đã gửi lên.
+
+--- [I] Dữ liệu đầu vào ---
+(TRỐNG)
+
+--- [J] Các bước thực hiện ---
+1. Chọn menu "Đợt báo cáo"
+2. Chọn các báo cáo cần tổng hợp trong bảng danh sách (ô chọn) và bấm nút "Tổng hợp", 
+
+--- [K] Kết quả mong đợi ---
+- Hệ thống:
++ Gợi ý số liệu tổng hợp: tính tổng các chỉ tiêu tương ứng theo Biểu 21a và Biểu 21b từ các báo cáo đã chọn.
++ Hiển thị biểu mẫu tổng hợp Biểu 21a, 21b toàn quốc cho phép cán bộ nghiệp vụ cấp Trung ương chỉnh sửa, bổ sung.
+
+
+--- [L] Kết quả thực tế ---
+(TRỐNG)
+
+--- [M] Ảnh/vieo 1 ---
+(TRỐNG)
+
+--- [N] Trạng thái ---
+N/R
+
+--- [O] Dopai ---
+N/R
+
+--- [P] Loại vấn đề ---
+(TRỐNG)
+
+--- [Q] TKM phản hồi lần 1 ---
+(TRỐNG)
+
+--- [R] Trạng thái dev fix ---
+BA confirm
+
+--- [S] DEV phản hồi lần 1 ---
+Phiếu 05–06/08/2026: mã này thuộc nhóm Dev tự fix theo căn cứ SRS rõ ràng, BA không phải quyết.
+Dev đã bổ sung: hệ thống gợi ý số liệu biểu 21a/21b trước khi lưu và xuất Excel/Word theo mẫu Thông tư 17/2025/TT-BTP.
+
+--- [T] Kết quả verify ---
+⚠️ ĐẠT PHẦN ĐO ĐƯỢC — còn một ý cần nghiệp vụ chốt (KHÔNG chặn bàn giao).
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-eWHwDgt2.js (bản lên lúc 09:11 ngày 07/08/2026), đo lúc 13:18-13:29 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_05 - đúng vai trò và đúng cấp Trung ương mà phiếu yêu cầu, không dùng tài khoản quản trị. Đội dùng tài khoản số 05 thay cho số 03 vì trong lúc đo có một tiến trình khác đăng nhập cùng tài khoản số 03 làm phiên bị ngắt hai lần; hai tài khoản cùng vai trò, cùng cấp, cùng đơn vị Cục Bổ trợ tư pháp nên phạm vi dữ liệu không đổi.
+
+TIỀN ĐỀ (kiểm sống ngay trước khi đo, lúc 13:14)
+
+Đợt DOT-THBC01-UAT (kỳ Sơ bộ 6 tháng, biểu mẫu 21a) có đúng hai đơn vị đã nộp và đã gửi lên Trung ương: Bộ Kế hoạch và Đầu tư (gửi 20/07/2026) và Sở Tư pháp An Giang (gửi 22/07/2026). Trước khi bấm, đội đã đọc số liệu gốc của cả hai bản báo cáo này bằng hai phiên đăng nhập khác nhau để làm số hạng tự cộng tay. Mười ba chỉ tiêu của hai đơn vị đều khác nhau và hầu hết khác 0, nên phép cộng phân biệt được thật sự (nếu hai bên trùng nhau hoặc đều bằng 0 thì không kết luận được hệ thống có cộng hay chỉ chép lại).
+
+ĐÃ ĐẠT - 2 phần
+
+1) Hệ thống GỢI Ý SỐ LIỆU BẰNG ĐÚNG TỔNG của các báo cáo được chọn. Trên màn "Tổng hợp báo cáo toàn quốc", tick chọn hai báo cáo của hai đơn vị rồi bấm nút "Tổng hợp (2)": hệ thống hiện bảng gợi ý ghi rõ Số đơn vị: 2, kèm dòng giải thích "Hệ thống đã cộng các chỉ tiêu tương ứng từ báo cáo của những đơn vị được chọn". Đối chiếu từng chỉ tiêu một: Số TVV kiện toàn 8+4=12, Cuộc tập huấn 3+1=4, Hội nghị đối thoại 2+1=3, VB trả lời UBND 5+2=7, VB TV mạng lưới TVV 4+3=7, HS tiếp nhận 25+12=37, HS giải quyết tổng 20+9=29, DN vừa 5+2=7, DN nhỏ 10+4=14, DN siêu nhỏ 5+3=8, KP hỗ trợ TVPL 500.000.000+180.000.000=680.000.000, KP chi HĐ khác 120.000.000+40.000.000=160.000.000, KP xã hội hóa 30.000.000+0=30.000.000. Đủ 13/13 chỉ tiêu khớp khít với phép cộng tay. Kiểm thêm bằng cách đổi bộ chọn: bỏ chọn Bộ Kế hoạch và Đầu tư, chỉ để lại An Giang rồi bấm lại, bảng đổi thành Số đơn vị: 1 và toàn bộ 13 giá trị đổi đúng thành số của riêng An Giang - tức hệ thống cộng thật theo bộ chọn chứ không hiện con số cố định hay số của lượt trước. Yêu cầu của đặc tả tại srs-fr-15-ct-htpldn.md:1002 và điều kiện nghiệm thu :1037.
+
+2) Biểu mẫu tổng hợp CHO CÁN BỘ TRUNG ƯƠNG SỬA VÀ BỔ SUNG ĐƯỢC. Đội gõ thật một giá trị mốc giờ (13250807) vào ô chỉ tiêu 13 "KP xã hội hóa": ô nhận giá trị, mười hai ô còn lại giữ nguyên. Ô "Nhận xét, kiến nghị" cũng nhập được chữ và đọc lại đúng nguyên văn, tức đáp ứng cả vế "bổ sung". Kiểm lại bằng đường thứ hai (đọc thuộc tính của chính ô đó trên trang): ô không bị khóa, không bị vô hiệu hóa. Hai đường đo khớp nhau. Yêu cầu của đặc tả tại srs-fr-15-ct-htpldn.md:1003 và mô tả màn hình :1175. Sau khi đo, đội bấm "Hủy" nên phép đo này KHÔNG ghi gì xuống dữ liệu.
+
+CẦN NGHIỆP VỤ CHỐT - biểu mẫu tổng hợp có bắt buộc hiện đủ cả 21a và 21b không
+
+CẦN BA CONFIRM: phiếu kỳ vọng "hiển thị biểu mẫu tổng hợp Biểu 21a, 21b toàn quốc", tức đủ cả hai biểu. Đặc tả không có dòng nào quy định điều đó: mục Tổng hợp báo cáo toàn quốc (srs-fr-15-ct-htpldn.md:971 đến :1038) chỉ viết gộp "21a/21b" ở dòng :1002, phần mô tả màn hình :1175 cũng chỉ ghi "tự tính tổng hợp mẫu 21a/21b, biểu mẫu sửa được" mà không nêu điều kiện hiển thị; điều kiện hiển thị duy nhất cho hai biểu (:1167 và :1168) lại là của màn LẬP báo cáo ở đơn vị, không phải màn tổng hợp của Trung ương. Trong khi đó mỗi đơn vị được tự chọn dùng mẫu 21a, 21b hay cả hai (:730, :1366).
+
+Hiện trạng đo được: bảng tổng hợp hiển thị "Biểu mẫu 21a/TP/HTPLDN" - chỉ một biểu 21a, đúng bằng biểu mà cả hai báo cáo nguồn và cả đợt báo cáo đang dùng. Hệ thống có sẵn ba lựa chọn biểu mẫu là 21a, 21b và cả hai.
+
+Câu hỏi cho nghiệp vụ: biểu mẫu tổng hợp của cấp Trung ương có bắt buộc hiện cả hai biểu 21a và 21b trong mọi trường hợp không, hay chỉ hiện những biểu mà các báo cáo được chọn thực sự sử dụng? Nếu bắt buộc hiện cả hai thì xin bổ sung điều kiện hiển thị này vào đặc tả để vòng nghiệm thu sau có mốc đối chiếu. Đây là đề nghị làm rõ đặc tả, KHÔNG phải lỗi chặn bàn giao.
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Màn "Tổng hợp báo cáo toàn quốc" chạy đúng và đủ quyền cho tài khoản cấp Trung ương, nhưng KHÔNG có mục nào dẫn tới nó trên thanh menu bên trái, cũng không có nút dẫn từ màn "Đợt báo cáo"; cán bộ chỉ vào được nếu biết sẵn đường dẫn. Phiếu không nhắc lối vào nên đội không chấm, nhưng đề nghị xem lại vì đây là chức năng chính của nghiệp vụ tổng hợp.
+- Có hai nút cùng tên "Tổng hợp" ở hai màn khác nhau nhưng làm việc khác hẳn: nút ở màn chi tiết đợt hỏi xác nhận rồi chuyển trạng thái đợt ngay, không có bước xem trước số liệu; nút ở màn tổng hợp toàn quốc mới là bước gợi ý số liệu cho sửa trước khi lưu. Dễ gây nhầm cho người dùng.
+
+Ảnh bằng chứng:
+- Tiền đề và bảng chọn báo cáo: hai đơn vị của cùng đợt DOT-THBC01-UAT đang ở trạng thái Đã gửi TW, mỗi dòng có ô chọn: https://drive.google.com/file/d/1B7QphhLnSCYozM2972ru418LmBCOa7HP/view?usp=drivesdk
+- Bảng gợi ý số liệu sau khi bấm Tổng hợp (2): ghi rõ Biểu mẫu 21a, Số đơn vị 2 và các con số 12, 4, 3, 7, 7, 37 đúng bằng tổng hai báo cáo nguồn: https://drive.google.com/file/d/1CBqUaRMCna0pmOnbiwV2QadGIZwPIu4z/view?usp=drivesdk
+- Biểu mẫu sửa được: ô chỉ tiêu 13 nhận giá trị vừa gõ, ô nhận xét nhập được chữ, các ô khác giữ nguyên: https://drive.google.com/file/d/1AQVK22gpA0Z7XjIfYLED5rBLQ9fQ9eYP/view?usp=drivesdk
+
+Lưu ý về dữ liệu: phép đo của phiếu này KHÔNG ghi gì xuống môi trường - hai lượt bấm "Tổng hợp" chỉ là bước gợi ý số liệu (chỉ đọc), giá trị gõ thử và câu nhận xét chỉ nằm trên màn rồi đã bấm Hủy. Kiểm lại sau đó: đợt và hai báo cáo giữ nguyên trạng thái cũ.
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.
+
+
+--- [U] Ảnh/video verify ---
+(TRỐNG)
+
+--- [V] Trạng thái 2 ---
+(TRỐNG)
+
+--- [W] TKM phản hồi lần 2 ---
+(TRỐNG)
+
+--- [X] Trạng thái dev fix 2 ---
+(TRỐNG)
+
+--- [Y] DEV phản hồi lần 2 ---
+(TRỐNG)
+
+--- [Z] (cột không tên) ---
+(TRỐNG)
+====================================================================================================
+===== DÒNG 308 — Mã TC = QLHDTVVCG_02 =====
+
+--- [A] Tên ---
+(TRỐNG)
+
+--- [B] STT ---
+(TRỐNG)
+
+--- [C] Tuần ---
+Tuần 4
+
+--- [D] Mã TC ---
+QLHDTVVCG_02
+
+--- [E] Tên chức năng ---
+(TRỐNG)
+
+--- [F] Tác nhân ---
+(TRỐNG)
+
+--- [G] Mô tả ---
+Điều kiện tìm kiếm / bộ lọc
+
+--- [H] Điều kiện ---
+1. Đăng nhập hệ thống thành công
+
+
+--- [I] Dữ liệu đầu vào ---
+(TRỐNG)
+
+--- [J] Các bước thực hiện ---
+1. Chọn menu "Hợp đồng Tư vấn"
+
+--- [K] Kết quả mong đợi ---
+- Hệ thống hiển thị các trường thông tin giống với thiết kế
+- Dữ liệu hiển thị đúng định dạng và trường thông tin
+- Dữ liệu hiển thị không bị tràn/đè lên nhau, đồng nhất ngôn ngữ hiển thị
+
+--- [L] Kết quả thực tế ---
+(TRỐNG)
+
+--- [M] Ảnh/vieo 1 ---
+(TRỐNG)
+
+--- [N] Trạng thái ---
+N/R
+
+--- [O] Dopai ---
+N/R
+
+--- [P] Loại vấn đề ---
+(TRỐNG)
+
+--- [Q] TKM phản hồi lần 1 ---
+(TRỐNG)
+
+--- [R] Trạng thái dev fix ---
+BA confirm
+
+--- [S] DEV phản hồi lần 1 ---
+BA chốt 06/08/2026 — cụm Hợp đồng tư vấn (27 phiếu), Loại 4 hướng A: quyết định BA ngày 11/05/2026 (bỏ menu riêng cho Hợp đồng tư vấn) vẫn giữ nguyên, phần mềm đang đúng bản gốc; vật cản là bộ test case mô tả một lối vào đã hết hiệu lực — hợp đồng truy cập từ Chi tiết Vụ việc hoặc Lịch sử TVV. Không sửa phần mềm theo lối vào cũ.
+Phần nội dung chức năng Dev đã bổ sung theo SRS: bộ lọc ngữ cảnh cho màn danh sách hợp đồng.
+
+--- [T] Kết quả verify ---
+📌 KẾT QUẢ CHUNG: CẦN BA XÁC NHẬN — hai yêu cầu chấm được đều ĐẠT, còn ba điểm chưa có chuẩn để chấm nên không được kết là đạt cũng không được kết là lỗi.
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-BbPPdate.js (bản lên lúc 13:47 ngày 07/08/2026), đo lúc 15:0x-15:2x ngày 07/08/2026, cửa sổ trình duyệt 1440x900. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_03 - bắt buộc dùng vai trò này vì đặc tả :286 nói nút thêm hợp đồng chỉ hiện với cán bộ nghiệp vụ; dùng vai trò tư vấn viên sẽ đánh trượt oan.
+
+ĐƯỜNG VÀO THỰC TẾ VÀ MÀN ĐÃ CHẤM
+
+Bước 1 của phiếu ghi "Chọn menu Hợp đồng Tư vấn". Thanh bên KHÔNG có mục đó - đúng theo quyết định nghiệp vụ ngày 11/05/2026 (bỏ menu riêng), như phản hồi của bộ phận phát triển. Đây là đường đi, không phải điểm chấm, nên không tính là lỗi.
+
+Đã chấm trên MÀN 1: Chi tiết vụ việc VV-BTP-TW-20260804-002 > mục "HĐ tư vấn liên kết". Chọn màn này vì thanh lọc của nó khớp từng ý với đặc tả :287, và đây là nơi DUY NHẤT có nút mở biểu mẫu thêm hợp đồng. Bảng lúc đo có 2 hợp đồng thật, cố ý dựng lệch nhau để đo được cả hai chiều của quy tắc (một cái kết thúc trong 30 ngày, một cái ngoài 30 ngày; một cái đã thanh toán một phần, một cái chưa).
+
+ĐÃ ĐẠT - 2 phần
+
+1) Dữ liệu hiển thị ĐÚNG ĐỊNH DẠNG và đủ trường thông tin. Đọc từng ô trên 2 dòng thật: Giá trị hiện "200.000.000 VNĐ" và "250.000.000 VNĐ" (đúng cách viết tiền Việt, có dấu chấm ngăn nghìn và đơn vị); Ngày bắt đầu / kết thúc hiện dạng ngày/tháng/năm; Số vụ việc liên kết hiện dạng huy hiệu tròn (1 và 3); Tiến độ thanh toán hiện dạng thanh tiến trình kèm phần trăm (25% và 0%); cột Hành động là ba nút biểu tượng Xem chi tiết / Sửa / Xóa.
+   Riêng vế QUAN TRỌNG NHẤT - ngày kết thúc còn dưới 30 ngày phải tô đỏ - đã đo được CẢ HAI CHIỀU: hợp đồng kết thúc 25/08/2026 (còn 18 ngày) hiển thị ĐỎ và in đậm; hợp đồng kết thúc 30/12/2026 (còn 145 ngày) hiển thị màu chữ thường. Tức quy tắc chạy CÓ ĐIỀU KIỆN đúng, không phải tô đỏ tất cả.
+   Kiểm lại bằng đường thứ hai: đọc giá trị thô của chính hai bản ghi đó từ máy chủ, từng con số khớp với chuỗi đang hiển thị, và ngày thô lưu dạng năm-tháng-ngày được giao diện đổi sang ngày/tháng/năm - chứng minh có lớp định dạng thật chứ không in thẳng dữ liệu. Yêu cầu của đặc tả tại srs-fr-14-hop-dong-tv.md:288 và bảng dữ liệu ra :147 đến :155.
+
+2) ĐỒNG NHẤT NGÔN NGỮ hiển thị. Đọc toàn bộ chữ trên màn: 11 tiêu đề cột, nhãn các ô lọc, nhãn nút, nội dung ô Trạng thái và dòng phân trang - tất cả đều tiếng Việt, không chỗ nào lộ mã kỹ thuật, không chỗ nào lẫn tiếng Anh. Đã quét chủ động 8 mã dữ liệu hay lộ và 14 từ tiếng Anh hay lọt: không có kết quả nào. Đặc biệt kiểm kỹ ô Trạng thái vì đây là chỗ hay lộ mã nhất - màn hiện "Đang thực hiện". Kiểm lại bằng đường thứ hai: giá trị thô lưu trong dữ liệu của chính hai bản ghi đó là mã kỹ thuật, còn màn hiện nhãn tiếng Việt, tức CÓ lớp dịch nhãn - đúng quy ước của đặc tả (srs-fr-05-vu-viec.md:1492: mã dữ liệu không bao giờ được xuất hiện trên giao diện người dùng).
+
+CẦN NGHIỆP VỤ CHỐT - 3 điểm (chưa được chấm đạt hay lỗi)
+
+Điểm 1: BẢNG THÀNH PHẦN MÀN HÌNH ÁP CHO MÀN NÀO. Đây là điểm quan trọng nhất của phiếu, đề nghị nghiệp vụ đọc kỹ.
+- Đặc tả mô tả một MÀN DANH SÁCH HỢP ĐỒNG ĐỘC LẬP gồm 5 vùng: đường dẫn phụ đề riêng (:285), tiêu đề trang "Quản lý Hợp đồng Tư vấn" kèm 3 nút (:286), thanh lọc (:287), bảng 10 cột (:288), phân trang (:289).
+- NHƯNG chính đặc tả, tại :266 và :268, đã BỎ màn độc lập đó theo quyết định nghiệp vụ ngày 11/05/2026. Hợp đồng nay là một mục nằm BÊN TRONG màn Chi tiết vụ việc.
+- Hệ quả: một mục nằm trong màn khác thì VỀ KIẾN TRÚC không thể có đường dẫn phụ đề riêng, tiêu đề trang riêng hay phân trang riêng của nó. Ba vùng đó thiếu là HỆ QUẢ CỦA CHÍNH QUYẾT ĐỊNH BỎ MÀN, không phải bộ phận phát triển làm thiếu.
+- Đối chiếu thực tế cho nghiệp vụ tham khảo: thanh lọc khớp TỪNG Ý với :287 (ô tìm theo tên hợp đồng / mã hợp đồng / bên B, ô chọn tư vấn viên gõ tìm được, khoảng từ ngày đến ngày). Bảng có ĐỦ 10 cột đặc tả đòi, còn thừa thêm cột Trạng thái - đặc tả liệt kê thành phần bắt buộc có chứ không cấm thêm, nên thừa không tính là lỗi. Phân trang có, mặc định đúng 20 mục một trang. Nút thêm hợp đồng và nút Xuất Excel đều có; riêng nút Làm mới không có, thay bằng nút Xóa bộ lọc.
+- CÂU HỎI CHO NGHIỆP VỤ: bảng thành phần màn hình :278 đến :289 áp cho bề mặt nào? Nếu áp cho mục hợp đồng nằm trong Chi tiết vụ việc thì đề nghị viết lại bảng cho khớp kiến trúc hiện tại (bỏ các vùng chỉ màn độc lập mới có). Nếu vẫn muốn có màn độc lập thì đó là yêu cầu dựng thêm màn, cần quyết định riêng.
+- Dữ kiện thêm: phần mềm hiện VẪN CÒN dấu vết màn độc lập - có màn chi tiết hợp đồng riêng, đường dẫn phụ đề của màn đó có liên kết "Hợp đồng tư vấn"; bấm thử liên kết này thì hệ thống ném người dùng về màn Tổng quan chứ không mở danh sách hợp đồng nào. Có ảnh kèm.
+
+Điểm 2: KHÔNG CÓ BẢN VẼ THIẾT KẾ ĐỂ ĐỐI CHIẾU.
+- Ô Kết quả mong đợi đòi "hiển thị giống với thiết kế". Đặc tả tại :274 trỏ sang một tài liệu bản vẽ màn hình, nhưng tài liệu đó KHÔNG có trong bộ nguồn chuẩn được cấp. Không có bản vẽ thì mọi khác biệt về bố cục, thứ tự, khoảng cách, màu sắc, kiểu điều khiển đều KHÔNG có căn cứ để kết luận đúng hay sai.
+- Hiện trạng đã chụp ảnh đầy đủ để nghiệp vụ tự đối chiếu.
+- CÂU HỎI CHO NGHIỆP VỤ: đề nghị cung cấp bản vẽ màn hình cho nhóm hợp đồng, hoặc xác nhận không dùng bản vẽ làm chuẩn nghiệm thu cho nhóm này.
+
+Điểm 3: TIÊU CHÍ "KHÔNG TRÀN / KHÔNG ĐÈ" CHƯA ĐƯỢC ĐỊNH NGHĨA.
+- Đặc tả chỉ quy định cách CẮT chuỗi dài và độ phân giải tối thiểu (từ 1024x768 trở lên), hoàn toàn IM LẶNG về thế nào là "tràn" hay "đè" bố cục.
+- Hiện trạng đo ở 1440x900: trang KHÔNG bị cuộn ngang; bảng dùng cách cuộn ngang bên trong khung bảng (cách xử lý phổ biến và hợp lý) chứ không đẩy vỡ trang; các ô nằm gọn, không thấy chữ đè lên nhau; tên hợp đồng dài (85 và 79 ký tự) được cắt gọn kèm dấu ba chấm.
+- CÂU HỎI CHO NGHIỆP VỤ: đề nghị chốt tiêu chí nghiệm thu cho vế này - đo ở độ phân giải nào, và có chấp nhận cách cuộn ngang bên trong khung bảng hay không.
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Cột Tên hợp đồng CÓ cắt chuỗi kèm dấu ba chấm nhưng KHÔNG có gợi ý hiện đủ nội dung khi rê chuột. Quy ước chung của đặc tả đòi "cắt + dấu ba chấm + gợi ý khi rê chuột". Tuy nhiên chính quy ước đó tự mâu thuẫn về phạm vi: câu mở đầu nói áp cho MỌI cột chữ trong bảng, câu kết lại nói áp nhất quán cho 5 màn - mà 5 màn đó thuộc nhóm vụ việc chứ không phải nhóm hợp đồng. Vì phạm vi chưa rõ nên chỉ ghi nhận, chưa kết luận là lỗi; đề nghị nghiệp vụ chốt phạm vi rồi mới giao việc cho bộ phận phát triển.
+- Nhãn nút thêm thực tế là "+ Tạo hợp đồng"; đặc tả :286 ghi "+ Thêm hợp đồng"; quy ước chung ở phụ lục lại bắt nhãn "Thêm mới". Ba nguồn lệch nhau về câu chữ; phiếu này không chấm nhãn nút nên không tính là lỗi.
+- Quy tắc tô đỏ ngày kết thúc dưới 30 ngày CÓ chạy trên màn đã chấm, nhưng KHÔNG chạy trên mục "Hợp đồng tư vấn" ở màn Chi tiết tư vấn viên (ở đó hợp đồng kết thúc 25/08/2026 vẫn hiển thị màu thường). Hai bề mặt cùng đọc một loại dữ liệu nhưng khác bộ cột (11 cột so với 6 cột) và khác cả quy tắc tô màu. Ghi nhận làm dữ kiện cho câu hỏi nghiệp vụ ở Điểm 1.
+
+DỮ LIỆU ĐÃ THAY ĐỔI: để đo được phiếu này, lượt đo có TẠO MỚI 1 hợp đồng tư vấn bằng giao diện trên môi trường nội bộ - mã HDTV-20260807-0007, tên "Hợp đồng tư vấn pháp luật lao động và bảo hiểm xã hội cho doanh nghiệp siêu nhỏ", bên B là QA TVV PheDuyet TW R19, giá trị 200.000.000 đồng, thời gian 07/08/2026 đến 30/12/2026, kèm 1 giai đoạn thanh toán 50.000.000 đồng đã thanh toán và 1 vụ việc liên kết. Đây là DỰNG TIỀN ĐỀ, không phải phép đo: cần một bản ghi kết thúc NGOÀI 30 ngày để chứng minh quy tắc tô đỏ chạy có điều kiện, và cần tiến độ thanh toán khác 0% để đo được cột đó. Ghi chú của hợp đồng mang dấu QA-F8-TIEN-DE-20260807 để phân biệt với dữ liệu của đối tác. Không sửa, không xóa bản ghi nào.
+
+Ảnh bằng chứng:
+- Màn đã chấm: thanh lọc, hai nút, bảng, phân trang; tên hợp đồng dài bị cắt kèm dấu ba chấm: https://drive.google.com/file/d/1eFlzIJEB0YPwUw_iYcsxswCDKdMkoHik/view?usp=drivesdk
+- Cột ngày kết thúc: 25/08/2026 tô đỏ, 30/12/2026 màu thường; huy hiệu số vụ việc; thanh tiến độ thanh toán: https://drive.google.com/file/d/18uTE5PffuOdz_3KUpBWuJGIjo0g9X1Xd/view?usp=drivesdk
+- Mục "Hợp đồng tư vấn" trên màn Chi tiết tư vấn viên (6 cột, không có nút thêm, không tô đỏ): https://drive.google.com/file/d/1PsSQDoh5VnVcKSrOcjIXOtHHS8Pkp5lh/view?usp=drivesdk
+- Bấm liên kết "Hợp đồng tư vấn" trên đường dẫn phụ đề thì rơi về màn Tổng quan: https://drive.google.com/file/d/1Pun_QL_0Mr-FTxvgrMWz1bUidGMvnpwD/view?usp=drivesdk
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.
+
+
+--- [U] Ảnh/video verify ---
+(TRỐNG)
+
+--- [V] Trạng thái 2 ---
+(TRỐNG)
+
+--- [W] TKM phản hồi lần 2 ---
+(TRỐNG)
+
+--- [X] Trạng thái dev fix 2 ---
+(TRỐNG)
+
+--- [Y] DEV phản hồi lần 2 ---
+(TRỐNG)
+
+--- [Z] (cột không tên) ---
+(TRỐNG)
+====================================================================================================
+===== DÒNG 319 — Mã TC = QLHDTVVCG_13 =====
+
+--- [A] Tên ---
+(TRỐNG)
+
+--- [B] STT ---
+(TRỐNG)
+
+--- [C] Tuần ---
+Tuần 4
+
+--- [D] Mã TC ---
+QLHDTVVCG_13
+
+--- [E] Tên chức năng ---
+(TRỐNG)
+
+--- [F] Tác nhân ---
+(TRỐNG)
+
+--- [G] Mô tả ---
+ Kiểm tra khi nhấn nút chức năng Thêm hợp đồng
+
+--- [H] Điều kiện ---
+1. Đăng nhập hệ thống thành công
+
+
+--- [I] Dữ liệu đầu vào ---
+(TRỐNG)
+
+--- [J] Các bước thực hiện ---
+1. Chọn menu "Hợp đồng Tư vấn"
+2. Nhấn"+ Thêm hợp đồng"
+
+--- [K] Kết quả mong đợi ---
+- Hệ thống mở màn hình biểu mẫu ở chế độ "Thêm mới" với các trường trống; các trường "Mã hợp đồng" và "Bên A" được hệ thống tự điền.
+
+--- [L] Kết quả thực tế ---
+(TRỐNG)
+
+--- [M] Ảnh/vieo 1 ---
+(TRỐNG)
+
+--- [N] Trạng thái ---
+N/R
+
+--- [O] Dopai ---
+N/R
+
+--- [P] Loại vấn đề ---
+(TRỐNG)
+
+--- [Q] TKM phản hồi lần 1 ---
+(TRỐNG)
+
+--- [R] Trạng thái dev fix ---
+BA confirm
+
+--- [S] DEV phản hồi lần 1 ---
+BA chốt 06/08/2026 — cụm Hợp đồng tư vấn (27 phiếu), Loại 4 hướng A: giữ quyết định BA 11/05/2026 bỏ menu riêng; phần mềm đúng bản gốc, test case mô tả lối vào đã hết hiệu lực (vào từ Chi tiết Vụ việc / Lịch sử TVV). Không sửa phần mềm theo lối vào cũ.
+
+--- [T] Kết quả verify ---
+📌 KẾT QUẢ CHUNG: CẦN BA XÁC NHẬN — hai yêu cầu chấm được đều ĐẠT, còn một điểm đặc tả chưa nói rõ nên chưa được chấm đạt.
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-BbPPdate.js (bản lên lúc 13:47 ngày 07/08/2026), đo lúc 14:16-14:24 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_03, đơn vị "Cục Bổ trợ tư pháp - Bộ Tư pháp" - đúng vai trò được phép mở biểu mẫu thêm hợp đồng; không dùng tài khoản quản trị.
+
+ĐƯỜNG VÀO THỰC TẾ (nói rõ vì bước 1 của phiếu đã hết hiệu lực)
+
+Bước 1 của phiếu ghi "Chọn menu Hợp đồng Tư vấn". Đã xác nhận bằng mắt: thanh bên có 14 mục và KHÔNG có mục "Hợp đồng Tư vấn" - đúng theo quyết định nghiệp vụ ngày 11/05/2026 (bỏ menu riêng), như phản hồi của bộ phận phát triển. Đây là đường đi, không phải điểm chấm của phiếu, nên không tính là lỗi.
+
+Đường thực tế đã đi: Vụ việc HTPL > tìm vụ việc VV-BTP-TW-20260804-002 > mở Chi tiết vụ việc > mở mục "HĐ tư vấn liên kết" > bấm nút "+ Tạo hợp đồng". Đây là nơi DUY NHẤT trong phần mềm có nút mở biểu mẫu thêm hợp đồng.
+
+ĐÃ ĐẠT - 2 phần
+
+1) Biểu mẫu mở đúng ở chế độ Thêm mới và các trường người dùng nhập đều TRỐNG. Bấm "+ Tạo hợp đồng" lúc 14:22:46, hệ thống mở hộp thoại "Tạo hợp đồng tư vấn". Đọc giá trị thật của từng ô (đọc giá trị đang lưu trong ô, không đọc chữ mờ gợi ý): Tên hợp đồng, Số hợp đồng, Bên B, Tư vấn viên/Chuyên gia, Giá trị hợp đồng, Thời gian thực hiện, Ngày ký, Nội dung hợp đồng, Ghi chú - TẤT CẢ đều rỗng. Ba nhóm con cũng ở trạng thái khởi tạo: Mốc tiến độ 0 dòng, Thanh toán giai đoạn 0 giai đoạn / 0%, Tài liệu đính kèm trống. Kiểm lại bằng đường thứ hai: đọc danh sách yêu cầu mà phần mềm gửi đi ngay tại lượt bấm đó - chỉ có 4 yêu cầu (đọc hồ sơ tài khoản, xem trước mã hợp đồng, nạp danh sách tư vấn viên, nạp danh sách tổ chức tư vấn), KHÔNG có yêu cầu nào đọc một bản ghi hợp đồng cũ. Điều này chứng minh đây thực sự là chế độ tạo mới, không phải mở nhầm bản ghi sẵn có. Hai đường đo khớp nhau. Yêu cầu của đặc tả tại srs-fr-14-hop-dong-tv.md:279 và :290, cột "Mặc định" của bảng đầu vào :82 và :84-:92 (đều để trống).
+
+2) Ô "Bên A" được hệ thống TỰ ĐIỀN, và điền ĐÚNG đơn vị của người đang đăng nhập. Ô Bên A hiện sẵn "Cục Bổ trợ tư pháp - Bộ Tư pháp" - đây là giá trị thật đang nằm trong ô, không phải chữ mờ gợi ý (chữ gợi ý của chính ô đó là "Tên bên A"). Kiểm lại bằng đường thứ hai: đọc hồ sơ tài khoản đang đăng nhập từ máy chủ rồi tra tên đơn vị tương ứng, kết quả là "Cục Bổ trợ tư pháp - Bộ Tư pháp" - trùng khít từng chữ với chuỗi trên biểu mẫu. Nhờ vậy loại được khả năng "có điền nhưng điền nhầm đơn vị khác". Yêu cầu của đặc tả tại srs-fr-14-hop-dong-tv.md:83 (Bên A lấy tự động theo đơn vị quản lý, nguồn là hệ thống) và :290.
+
+CẦN NGHIỆP VỤ CHỐT - 1 điểm (đặc tả tự mâu thuẫn, chưa được chấm đạt hay lỗi)
+
+Điểm chưa chốt: THỜI ĐIỂM ô "Mã hợp đồng" được điền.
+- Đặc tả nói hai đằng: srs-fr-14-hop-dong-tv.md:290 khai "Mã (auto)" như một trường CÓ SẴN TRÊN BIỂU MẪU, còn :119 lại xếp việc sinh mã tự động vào BƯỚC XỬ LÝ KHI LƯU của giao dịch Thêm mới. Không dòng nào phát biểu mã phải hiện ngay lúc mở biểu mẫu.
+- WEB HIỆN TẠI: ĐÚNG KỲ VỌNG ĐỐI TÁC. Ngay khi biểu mẫu vừa mở, ô Mã hợp đồng đã có sẵn "HDTV-20260807-0006", đúng khuôn HDTV-{ngày}-{số thứ tự}. Bộ phận phát triển còn dựng hẳn một điểm xem trước mã riêng; phản hồi của máy chủ cho lượt mở biểu mẫu này trả về đúng chuỗi "HDTV-20260807-0006", trùng khít chuỗi hiển thị. Lưu ý: mã này mới chỉ là XEM TRƯỚC, chưa được cấp cho bản ghi nào vì lượt đo này không bấm lưu.
+- CÂU HỎI CHO NGHIỆP VỤ: đề nghị chốt và BỔ SUNG VÀO ĐẶC TẢ - mã hợp đồng phải hiện ngay khi mở biểu mẫu Thêm mới, hay chỉ được sinh khi bấm lưu? Đây là câu hỏi để hoàn thiện tài liệu, KHÔNG PHẢI điểm chặn bàn giao: phần mềm đang làm đúng như phiếu mong đợi.
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Biểu mẫu có thêm hai trường "Số hợp đồng" và "Ngày ký". Hai trường này có trong phần mô tả dữ liệu của đặc tả (:385, :390) nhưng không nằm trong bảng thành phần biểu mẫu (:290). Thừa thành phần so với bảng thành phần, ghi nhận để nghiệp vụ bổ sung tài liệu, không tính là lỗi.
+- Nhãn nút thực tế là "+ Tạo hợp đồng"; phiếu và đặc tả :286 ghi "+ Thêm hợp đồng"; quy ước chung ở phụ lục lại bắt nhãn "Thêm mới". Ba nguồn lệch nhau về câu chữ. Phiếu này không chấm nhãn nút nên không tính là lỗi; đề nghị nghiệp vụ thống nhất một nhãn.
+- Biểu mẫu hiện dưới dạng hộp thoại chứ không phải trang mới - đặc tả cho phép cả ba hình thức nên không tính là lỗi.
+- Ô "Vụ việc liên kết" trên biểu mẫu hiện sẵn mã vụ việc đang mở, và ô "Trạng thái" hiện sẵn "Đang thực hiện". Cả hai đều hợp lý (một cái là hệ quả của đường vào, một cái là giá trị mặc định của dữ liệu theo :396) nên không tính là vi phạm yêu cầu "các trường trống".
+- Một điểm chuyển sang phiếu QLHDTVVCG_15 xử lý: ở chế độ Thêm mới, mục "Tài liệu đính kèm" KHÔNG cho chọn tệp mà hiện dòng chữ "Vui lòng lưu hợp đồng trước khi đính kèm tài liệu", trong khi đặc tả :92 và :290 đều khai tệp đính kèm là đầu vào của biểu mẫu thêm/sửa. Điểm này thuộc yêu cầu của phiếu QLHDTVVCG_15 nên được đo và kết luận ở phiếu đó.
+
+DỮ LIỆU: lượt đo này KHÔNG tạo, KHÔNG sửa, KHÔNG xóa bản ghi nào - chỉ mở biểu mẫu rồi bấm "Hủy".
+
+Ảnh bằng chứng:
+- Đường vào thực tế: mục "HĐ tư vấn liên kết" trong Chi tiết vụ việc, có nút "+ Tạo hợp đồng": https://drive.google.com/file/d/1s5eRH0ReJ5XY3-KsC1Bf-8Qy3UYs3N8Q/view?usp=drivesdk
+- Biểu mẫu vừa mở: Mã hợp đồng và Bên A đã tự điền, các ô còn lại trống: https://drive.google.com/file/d/1qymUuEc2jEqkB9seNAVYlHwy7zygY5Mj/view?usp=drivesdk
+- Phần dưới biểu mẫu: Nội dung/Ghi chú trống, Mốc tiến độ và Thanh toán giai đoạn chưa có dòng nào: https://drive.google.com/file/d/1fj-A_6RwPm4ZkxoVjqxouGS5MFPPSK5v/view?usp=drivesdk
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.
+
+
+--- [U] Ảnh/video verify ---
+(TRỐNG)
+
+--- [V] Trạng thái 2 ---
+(TRỐNG)
+
+--- [W] TKM phản hồi lần 2 ---
+(TRỐNG)
+
+--- [X] Trạng thái dev fix 2 ---
+(TRỐNG)
+
+--- [Y] DEV phản hồi lần 2 ---
+(TRỐNG)
+
+--- [Z] (cột không tên) ---
+(TRỐNG)
+====================================================================================================
+===== DÒNG 321 — Mã TC = QLHDTVVCG_15 =====
+
+--- [A] Tên ---
+(TRỐNG)
+
+--- [B] STT ---
+(TRỐNG)
+
+--- [C] Tuần ---
+Tuần 4
+
+--- [D] Mã TC ---
+QLHDTVVCG_15
+
+--- [E] Tên chức năng ---
+(TRỐNG)
+
+--- [F] Tác nhân ---
+(TRỐNG)
+
+--- [G] Mô tả ---
+Thêm hợp đồng thành công
+
+--- [H] Điều kiện ---
+1. Đăng nhập hệ thống thành công
+
+
+--- [I] Dữ liệu đầu vào ---
+(TRỐNG)
+
+--- [J] Các bước thực hiện ---
+1. Chọn menu "Hợp đồng Tư vấn"
+2. Nhấn"+ Thêm hợp đồng"
+3. Nhập thông tin hợp lệ và nhấn Lưu
+
+--- [K] Kết quả mong đợi ---
+- Sinh mã hợp đồng HDTV-{YYYYMMDD}-{số thứ tự}, tạo bản ghi hợp đồng cùng toàn bộ mốc tiến độ, thanh toán giai đoạn, liên kết vụ việc, tệp đính kèm đã nhập; gán trạng thái "Đang thực hiện".
+- Hệ thống hiển thị thông báo "Đã lưu hợp đồng" và quay về danh sách.
+
+--- [L] Kết quả thực tế ---
+(TRỐNG)
+
+--- [M] Ảnh/vieo 1 ---
+(TRỐNG)
+
+--- [N] Trạng thái ---
+N/R
+
+--- [O] Dopai ---
+N/R
+
+--- [P] Loại vấn đề ---
+(TRỐNG)
+
+--- [Q] TKM phản hồi lần 1 ---
+(TRỐNG)
+
+--- [R] Trạng thái dev fix ---
+BA confirm
+
+--- [S] DEV phản hồi lần 1 ---
+BA chốt 06/08/2026 — Loại 4 hướng B (bản gốc bị sót câu thông báo): lấy câu theo bản bàn giao .docx là "Đã lưu hợp đồng"; Kết quả mong đợi của đơn vị kiểm thử viết ĐÚNG, không phải sửa. Dev action: Có.
+Dev đã dùng chung câu INF-HDTV-01 "Đã lưu hợp đồng" cho mọi đường lưu hợp đồng (tạo mới và cập nhật).
+
+--- [T] Kết quả verify ---
+📌 KẾT QUẢ CHUNG: CẦN BA XÁC NHẬN — bốn yêu cầu chấm được đều ĐẠT, còn hai điểm đặc tả chưa đủ căn cứ nên chưa được chấm đạt cũng không được chấm lỗi.
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-BbPPdate.js (bản lên lúc 13:47 ngày 07/08/2026), đo lúc 14:39-14:47 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_03, đơn vị "Cục Bổ trợ tư pháp - Bộ Tư pháp" - đúng vai trò được phép lưu hợp đồng; không dùng tài khoản quản trị.
+
+ĐƯỜNG VÀO THỰC TẾ (nói rõ vì bước 1 của phiếu đã hết hiệu lực)
+
+Bước 1 của phiếu ghi "Chọn menu Hợp đồng Tư vấn". Thanh bên KHÔNG có mục đó - đúng theo quyết định nghiệp vụ ngày 11/05/2026 (bỏ menu riêng), như phản hồi của bộ phận phát triển. Đây là đường đi, không phải điểm chấm, nên không tính là lỗi. Đường thực tế: Vụ việc HTPL > tìm vụ việc VV-BTP-TW-20260804-002 > mở Chi tiết vụ việc > mở mục "HĐ tư vấn liên kết" > bấm "+ Tạo hợp đồng" > nhập thông tin > bấm nút gửi biểu mẫu.
+
+Hợp đồng đã tạo thật bằng giao diện: HDTV-20260807-0006 - "Hợp đồng tư vấn xác lập quyền sở hữu trí tuệ và nhãn hiệu cho doanh nghiệp nhỏ và vừa", bên B là Chuyên gia UAT QLNDTVVCG 38, giá trị 250.000.000 đồng, thời gian 07/08/2026 đến 25/08/2026.
+
+ĐÃ ĐẠT - 4 phần
+
+1) Sinh mã hợp đồng đúng khuôn HDTV-{ngày}-{số thứ tự}. Sau khi lưu, mã HDTV-20260807-0006 hiện ở cả ba chỗ: dưới tiêu đề hợp đồng, ô "Mã hợp đồng", và cột "Mã hợp đồng" trên bảng danh sách. Kiểm lại bằng đường thứ hai: đọc lại chính bản ghi đó từ máy chủ, mã lưu trong dữ liệu cũng là HDTV-20260807-0006 - trùng khít chuỗi hiển thị. Đã kiểm riêng phần ngày: 20260807 đúng là NGÀY TẠO bản ghi, không phải ngày kết thúc hợp đồng (25/08/2026). Yêu cầu của đặc tả tại srs-fr-14-hop-dong-tv.md:81, :119 và :514.
+
+2) Lưu bản ghi kèm ĐẦY ĐỦ ba nhóm dữ liệu con đã nhập (nhóm thứ tư là tệp đính kèm, xem phần Cần nghiệp vụ chốt điểm 2). Trước khi lưu đã nhập 1 mốc tiến độ, 1 giai đoạn thanh toán và 3 vụ việc liên kết. Sau khi lưu, mở LẠI màn chi tiết hợp đồng (tải mới từ máy chủ, không đếm trên biểu mẫu cũ) thì đếm được đúng 1 mốc tiến độ "Ban giao ho so tra cuu nhan hieu" hạn 18/08/2026, đúng 1 giai đoạn "Dot 1 - tam ung khi ky hop dong" 100.000.000 đồng ngày 15/08/2026, và đúng 3 vụ việc VV-BTP-TW-20260804-002, -003, -004. Kiểm lại bằng đường thứ hai: đọc lại bản ghi từ máy chủ, số phần tử từng nhóm là 1 - 1 - 3, khớp số đã nhập. Nhờ vậy loại được ca hay gặp "giao diện nhận dữ liệu con nhưng máy chủ chỉ lưu phần thông tin chung". Màn chi tiết còn có mục "Nhật ký hoạt động" ghi lại thao tác tạo mới - đáp ứng yêu cầu lưu vết tại :162. Yêu cầu của đặc tả tại :122, :123, :159 đến :162.
+
+3) Gán trạng thái "Đang thực hiện". Hợp đồng vừa lưu hiện nhãn tiếng Việt "Đang thực hiện" ở thẻ dưới tiêu đề, ô Trạng thái và cột Trạng thái trên bảng danh sách; không chỗ nào lộ mã kỹ thuật ra màn hình. Kiểm lại bằng đường thứ hai: giá trị trạng thái lưu trong dữ liệu đúng là giá trị mặc định mà đặc tả quy định, nên loại được khả năng "giao diện hiển thị mặc định cứng còn dữ liệu lưu khác". Yêu cầu của đặc tả tại :396 và :464.
+
+4) Hiển thị đúng câu thông báo "Đã lưu hợp đồng". Đã cài bộ bắt thông báo trước khi bấm lưu (thông báo loại này tự tắt sau vài giây, đọc muộn sẽ kết luận sai là "im lặng"), không lọc trùng. Kết quả: đúng MỘT thông báo tại một mốc giờ duy nhất 14:43:54, nội dung "Đã lưu hợp đồng" - trùng từng chữ câu chuẩn của đặc tả. Đếm kèm số yêu cầu gửi đi: đúng MỘT yêu cầu lưu, phản hồi thành công, đóng dấu thời gian cùng giây với thông báo. Vậy không có thông báo kép, không có lưu hai lần. Yêu cầu của đặc tả tại :173 và :187. Ghi nhận phản hồi của bộ phận phát triển là chính xác: câu này đã dùng chung cho cả tạo mới lẫn cập nhật.
+
+CẦN NGHIỆP VỤ CHỐT - 2 điểm (chưa được chấm đạt hay lỗi)
+
+Điểm 1: SAU KHI LƯU THÌ MÀN HÌNH ĐI ĐÂU.
+- CẦN BA CONFIRM: đối tác kỳ vọng sau khi lưu hợp đồng mới thì hệ thống quay về màn danh sách hợp đồng; SRS quy định nhóm chức năng này KHÔNG có màn danh sách độc lập, sau khi lưu hệ thống đóng biểu mẫu và trả người dùng về ngữ cảnh đã mở nó, tức Chi tiết Vụ việc hoặc Chi tiết Tư vấn viên (srs-fr-14-hop-dong-tv.md:175, ghi chú "BA chốt 06/08/2026", và :187); web hiện tại: đóng biểu mẫu, ở lại màn Chi tiết vụ việc VV-BTP-TW-20260804-002 và tự nạp lại bảng "HĐ tư vấn liên kết" ngay trong màn đó, bảng đã hiện hợp đồng vừa tạo.
+- Nói cách khác, phần mềm đang làm THEO PHÍA ĐẶC TẢ, khác với câu chữ trong ô Kết quả mong đợi của phiếu. Vì hai nguồn nói ngược nhau nên không được chấm đạt cũng không được chấm lỗi.
+- CÂU HỎI CHO NGHIỆP VỤ: đề nghị chốt - sau khi lưu hợp đồng mới, hệ thống phải quay về một màn danh sách hợp đồng riêng (thì phải dựng thêm màn đó), hay giữ như hiện nay là trả về màn đã mở biểu mẫu? Nếu chốt giữ như hiện nay thì đề nghị sửa lại câu chữ của phiếu kiểm thử cho khớp.
+
+Điểm 2: PHẦN MỀM TÁCH VIỆC ĐÍNH KÈM TỆP THÀNH HAI BƯỚC (phần tệp đính kèm của yêu cầu số 2).
+- HÀNH VI ĐO ĐƯỢC: ở chế độ Thêm mới, mục "Tài liệu đính kèm" KHÔNG có ô chọn tệp, phần mềm hiện dòng chữ "Vui lòng lưu hợp đồng trước khi đính kèm tài liệu". Sau khi lưu, mở lại biểu mẫu ở chế độ SỬA thì ô chọn tệp XUẤT HIỆN, có vùng "Kéo thả hoặc nhấp để chọn tệp đính kèm" kèm ràng buộc ghi rõ trên màn: tối đa 10 tệp, định dạng pdf/doc/docx/xls/xlsx/jpg/png, 20MB mỗi tệp. Nghĩa là NĂNG LỰC ĐÍNH KÈM CÓ, nhưng bị tách làm hai bước - không phải "không đính kèm được".
+- Nói rõ để tránh hiểu nhầm: đội kiểm thử ĐÃ chuẩn bị sẵn bộ tệp thật đúng định dạng; việc không nhập được là do phần mềm không mở chỗ nhập ở bước tạo, không phải do thiếu dữ liệu thử.
+- Đối chứng độc lập: phía máy chủ, việc nạp tệp cũng buộc phải gắn với một hợp đồng ĐÃ TỒN TẠI. Vậy đây là thiết kế nhất quán của phần mềm, không phải trục trặc ngẫu nhiên.
+- Lượt kiểm chế độ Sửa chỉ MỞ RA NHÌN rồi bấm Hủy, KHÔNG tải tệp lên, KHÔNG lưu - vì thao tác sửa hợp đồng thuộc một phiếu kiểm thử khác, làm bây giờ sẽ ảnh hưởng phép đo của phiếu đó. Đã xác minh bản ghi không đổi.
+- Đặc tả đứng ở đâu (đã tự mở tệp đọc lại bốn chỗ): :92 bảng dữ liệu đầu vào CÓ khai trường tệp đính kèm, nhiều tệp, không bắt buộc, do người dùng tải lên; :290 bảng thành phần màn hình CÓ khai "File đính kèm" trên trang thêm/sửa. NHƯNG bước xử lý khi lưu (:122, :123) chỉ nhắc mốc tiến độ, thanh toán giai đoạn và liên kết vụ việc; mục kết quả sau xử lý (:159 đến :162) cũng chỉ liệt kê hợp đồng, mốc tiến độ, thanh toán, liên kết vụ việc và lưu vết - KHÔNG chỗ nào nhắc tệp đính kèm. Tức đặc tả CÓ trường tệp trên biểu mẫu nhưng KHÔNG phát biểu ở đâu rằng tệp phải được lưu CÙNG LÚC tạo bản ghi, trong khi ô Kết quả mong đợi của phiếu lại nói rõ "cùng toàn bộ ... tệp đính kèm đã nhập".
+- Vì đặc tả im lặng nên phần này KHÔNG được chấm đạt, cũng KHÔNG được kết luận là lỗi của bộ phận phát triển.
+- CÂU HỎI CHO NGHIỆP VỤ: đối tác kỳ vọng tạo hợp đồng và nạp tệp đính kèm trong cùng một lượt lưu. Đặc tả có khai trường tệp trên biểu mẫu thêm/sửa (:92, :290) nhưng bước xử lý khi lưu (:122, :123) và mục kết quả sau xử lý (:159 đến :162) không nhắc tệp đính kèm, nên không có căn cứ đòi lưu cùng lúc. Web hiện tại yêu cầu lưu hợp đồng trước rồi mới đính kèm ở chế độ Sửa. Đề nghị nghiệp vụ chốt: nạp tệp lúc tạo có bắt buộc không, hay tách hai bước là chấp nhận được - và bổ sung điều này vào đặc tả.
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Nhãn nút gửi biểu mẫu đổi theo chế độ: chế độ Thêm mới là "Thêm mới", chế độ Sửa là "Lưu". Phiếu chấm theo hành vi nên không tính là lỗi; đề nghị nghiệp vụ thống nhất nhãn.
+- Nhật ký hoạt động của hợp đồng hiện HAI dòng "Tạo mới" cùng mốc 14:43 cho một lần lưu, trong đó một dòng bỏ trống cột Đường dẫn và cột Mã phản hồi, dù chỉ có đúng một yêu cầu lưu được gửi đi. Đặc tả chỉ ghi chung chung là "có lưu vết", không nói một giao dịch sinh mấy dòng nhật ký, nên chỉ ghi nhận, chưa kết luận.
+- Phần mềm CÓ màn chi tiết hợp đồng riêng, và đường dẫn phụ đề của màn đó có liên kết "Hợp đồng tư vấn"; bấm thử liên kết này thì hệ thống ném người dùng về màn Tổng quan chứ không mở danh sách hợp đồng nào. Trong khi đặc tả :266 và :268 nói nhóm chức năng này không còn màn/menu riêng. Ghi nhận làm dữ kiện cho câu hỏi nghiệp vụ về phạm vi màn hình, không tính là lỗi của phiếu này.
+
+DỮ LIỆU ĐÃ THAY ĐỔI: lượt đo này TẠO MỚI 1 hợp đồng tư vấn trên môi trường nội bộ - mã HDTV-20260807-0006 lúc 14:43 ngày 07/08/2026, kèm 1 mốc tiến độ, 1 giai đoạn thanh toán và 3 liên kết tới vụ việc VV-BTP-TW-20260804-002, -003, -004 (chỉ tạo liên kết, không sửa bản thân các vụ việc). Ghi chú của hợp đồng mang dấu QA-F8-321-20260807 để phân biệt với dữ liệu của đối tác. Không sửa, không xóa bản ghi nào khác. Sau khi lượt đo này kết thúc, đội có bổ sung 1 tệp đính kèm vào chính hợp đồng đó để phục vụ các phiếu sau; việc bổ sung diễn ra SAU khi đã đo và ghi xong phần trên, nên không ảnh hưởng kết quả của phiếu này.
+
+Ảnh bằng chứng:
+- Dữ liệu đã nhập trước khi bấm lưu (nội dung, ghi chú, mốc tiến độ, giai đoạn thanh toán): https://drive.google.com/file/d/1-Ut6CKSa2OoHCX1L1he5edygARQTPfOi/view?usp=drivesdk
+- Sau khi lưu: biểu mẫu đóng, màn dừng ở Chi tiết vụ việc, bảng hợp đồng liên kết đã có bản ghi mới: https://drive.google.com/file/d/1ce65-8s3aoiS__GLD7HyVOiz8WqBHHmk/view?usp=drivesdk
+- Mở lại chi tiết hợp đồng đếm từng nhóm: 3 vụ việc, 1 mốc tiến độ, 1 giai đoạn thanh toán, chưa có tài liệu đính kèm: https://drive.google.com/file/d/1tbbdgTvP1J4ix0V-HTnJY80x1fB8xIH0/view?usp=drivesdk
+- Chế độ Thêm mới không có ô chọn tệp, chỉ chế độ Sửa mới có: https://drive.google.com/file/d/1VMsiUnGvgaPLqAvEXnm_cYQBR0JB7OuH/view?usp=drivesdk
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.
+
+
+--- [U] Ảnh/video verify ---
+(TRỐNG)
+
+--- [V] Trạng thái 2 ---
+(TRỐNG)
+
+--- [W] TKM phản hồi lần 2 ---
+(TRỐNG)
+
+--- [X] Trạng thái dev fix 2 ---
+(TRỐNG)
+
+--- [Y] DEV phản hồi lần 2 ---
+(TRỐNG)
+
+--- [Z] (cột không tên) ---
+(TRỐNG)
+====================================================================================================
+===== DÒNG 345 — Mã TC = THBCTHCT_05 =====
+
+--- [A] Tên ---
+(TRỐNG)
+
+--- [B] STT ---
+(TRỐNG)
+
+--- [C] Tuần ---
+Tuần 4
+
+--- [D] Mã TC ---
+THBCTHCT_05
+
+--- [E] Tên chức năng ---
+(TRỐNG)
+
+--- [F] Tác nhân ---
+(TRỐNG)
+
+--- [G] Mô tả ---
+Xuất tệp báo cáo tổng hợp
+
+--- [H] Điều kiện ---
+1. NSD là cán bộ nghiệp vụ cấp Trung ương và có ít nhất một báo cáo từ Bộ/Ngành hoặc Địa phương đã gửi lên.
+2. Đã hoàn thành tổng hợp báo cáo toàn quốc và NSD là cán bộ nghiệp vụ cấp Trung ương.
+
+--- [I] Dữ liệu đầu vào ---
+(TRỐNG)
+
+--- [J] Các bước thực hiện ---
+1. Chọn menu "Đợt báo cáo"
+2. Bấm nút "Xuất Excel" hoặc "Xuất Word"
+
+--- [K] Kết quả mong đợi ---
+- Hệ thống tạo tệp tổng hợp theo biểu mẫu Thông tư số 17/2025/TT-BTP — khổ A4, phông chữ Times New Roman cỡ 13, đầu trang có quốc hiệu và tên cơ quan, cuối trang có ngày ký và chức danh người ký.
+- Đặt tên tệp theo định dạng BaoCaoTongHop_CTHTPL_{YYYYMMDD_HHmm}.xlsx hoặc .docx.
+
+
+--- [L] Kết quả thực tế ---
+(TRỐNG)
+
+--- [M] Ảnh/vieo 1 ---
+(TRỐNG)
+
+--- [N] Trạng thái ---
+N/R
+
+--- [O] Dopai ---
+N/R
+
+--- [P] Loại vấn đề ---
+(TRỐNG)
+
+--- [Q] TKM phản hồi lần 1 ---
+(TRỐNG)
+
+--- [R] Trạng thái dev fix ---
+BA confirm
+
+--- [S] DEV phản hồi lần 1 ---
+BA chốt 06/08/2026, hai ý:
+(1) Tên tệp — nâng quy ước BA chốt 04/08/2026 thành quy ước dùng chung cho MỌI nhóm, đưa vào Phụ lục E; tên tệp Nhóm XI là BaoCaoTongHopCTHTPL_{YYYYMMDD_HHmm}.xlsx / .docx.
+(2) Khối ký — mở rộng ngoại lệ §D.2.4 từ riêng Nhóm IX sang mọi tệp xuất: khối ký gồm ngày ký + họ tên cán bộ xuất báo cáo + chỗ trống cho chữ ký, chức vụ và con dấu khi in chính thức; KHÔNG in sẵn dòng chức danh.
+Dev đã áp cả hai ý (đổi tên tệp theo Phụ lục E §H8 và gỡ dòng chức danh dự phòng ở khối ký).
+
+--- [T] Kết quả verify ---
+⚠️ ĐẠT PHẦN ĐO ĐƯỢC — còn hai ý cần nghiệp vụ chốt (KHÔNG chặn bàn giao).
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, đo lúc 13:56-13:57 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_05 - đúng vai trò và đúng cấp Trung ương mà phiếu yêu cầu, không dùng tài khoản quản trị.
+
+LƯU Ý VỀ BẢN DỰNG: trong lúc đội chạy lô này, hệ thống có một lượt lên bản mới vào 13:47:57 ngày 07/08/2026 (bó mã giao diện đổi từ index-eWHwDgt2.js sang index-BbPPdate.js). Ba phiếu đo trước đó (12:55-13:45) chạy trên bản cũ; riêng phiếu này chạy trên bản MỚI. Đội đã kiểm chéo: tệp Excel xuất lúc 13:32 trên bản cũ và tệp xuất lúc 13:56 trên bản mới trùng khít từng ô nội dung, nên lượt lên bản không làm đổi kết quả của phiếu này.
+
+TIỀN ĐỀ (kiểm sống lúc 13:55)
+
+Điều kiện của phiếu đòi "đã hoàn thành tổng hợp báo cáo toàn quốc". Bản tổng hợp toàn quốc lưu ở phiếu THBCTHCT_01 vẫn còn nguyên trên máy chủ: hai báo cáo của Bộ Kế hoạch và Đầu tư và Sở Tư pháp An Giang (cùng đợt DOT-THBC01-UAT, kỳ Sơ bộ 6 tháng) đọc lại được ở trạng thái "Đã tổng hợp". Chọn hai báo cáo này thì nút "Tổng hợp" mờ đi (đã tổng hợp rồi) còn hai nút "Xuất Excel" và "Xuất Word" bật sáng ngay, không bị chặn.
+
+CÁCH ĐO: đội bấm nút trên giao diện thật - "Xuất Excel" lúc 13:56:30 và "Xuất Word" lúc 13:57:08 - rồi lấy đúng tệp mà hai lượt bấm đó sinh ra và MỞ NỘI DUNG TỆP bằng thư viện đọc tệp (openpyxl cho Excel, python-docx cho Word). Không kết luận bằng ảnh chụp màn hình, không kết luận bằng việc "tải được tệp". Mốc giờ trong tên tệp (…_1356 và …_1357) trùng khít mốc giờ bấm, tức đúng tệp của lượt này chứ không phải tệp cũ.
+
+ĐÃ ĐẠT - 6 phần, đúng trên CẢ HAI định dạng
+
+1) Tạo được tệp và mở đúng định dạng. Excel: mở được, có 1 trang tính tên "Biểu mẫu 21a TP HTPLDN". Word: mở được, có 9 đoạn văn và 2 bảng. Yêu cầu của đặc tả tại srs-fr-15-ct-htpldn.md:1006 và mô tả màn hình :1175.
+
+2) Khổ giấy A4. Excel khai mã khổ giấy 9 - đúng mã A4 theo chuẩn định dạng tệp, hướng dọc. Word khai chiều rộng trang 21,00 cm và chiều cao 29,70 cm - đúng khổ A4. Yêu cầu tại srs-v3.5.md:6719.
+
+3) Phông chữ Times New Roman cỡ 13 ở thân tệp. Excel: đội đọc 42 ô của bảng chỉ tiêu (hàng tiêu đề và 13 hàng chỉ tiêu), cả 42/42 ô đều khai Times New Roman cỡ 13, không ô nào lệch. Word: khai báo phông mặc định của tệp là Times New Roman cỡ 13, và cả 42 ô của bảng chỉ tiêu đều dùng Times New Roman không đặt cỡ riêng nên thừa hưởng đúng cỡ 13. Yêu cầu tại srs-v3.5.md:6720. (Dòng tiêu đề lớn và dòng ghi tên biểu mẫu có cỡ chữ khác - đặc tả chỉ quy định phông chung cho thân tệp, không quy định riêng cho tiêu đề, nên đội không tính là sai.)
+
+4) Đầu tệp có quốc hiệu. Cả hai tệp đều ghi "CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM" và "Độc lập - Tự do - Hạnh phúc" ở phần đầu. Yêu cầu tại srs-v3.5.md:6721.
+
+5) Đầu tệp có tên cơ quan. Cả hai tệp đều ghi "BỘ TƯ PHÁP" ở góc trái phần đầu. Cùng căn cứ trên.
+
+6) Cuối tệp có ngày ký. Cả hai tệp đều ghi "Ngày 07 tháng 08 năm 2026". Yêu cầu tại srs-fr-15-ct-htpldn.md:1017 và srs-v3.5.md:6722.
+
+7) Nội dung tệp đúng theo biểu mẫu Thông tư 17/2025/TT-BTP và khớp số liệu đã tổng hợp. Tệp ghi rõ "Biểu mẫu 21a/TP/HTPLDN (Theo Thông tư số 17/2025/TT-BTP)", đúng đợt và đúng kỳ báo cáo, kèm bảng 13 chỉ tiêu. Đối chiếu từng chỉ tiêu với số liệu bản tổng hợp toàn quốc đã lưu: 12, 4, 3, 7, 7, 37, 29, 7, 14, 8, 680.000.000, 160.000.000, 30.000.000 - khớp 13/13 ở CẢ HAI tệp.
+
+CẦN NGHIỆP VỤ CHỐT - hai ý
+
+Ý thứ nhất: cuối tệp có phải in sẵn dòng chức danh người ký không.
+
+CẦN BA CONFIRM: phiếu kỳ vọng "cuối trang có ngày ký và chức danh người ký". Đặc tả lại quy định ngược lại: srs-fr-15-ct-htpldn.md:1017 khai khối ký cuối trang gồm "ngày ký + họ tên cán bộ xuất báo cáo + chỗ trống cho chữ ký, chức vụ và con dấu khi in chính thức - không in sẵn dòng chức danh"; srs-v3.5.md:6723 nêu đây là ngoại lệ chung cho mọi tệp xuất (BA chốt 04/08/2026, mở rộng phạm vi 06/08/2026), với hai căn cứ: hồ sơ tài khoản không lưu chức vụ nên không có nguồn dữ liệu, và biểu mẫu gốc 21a/21b để trống chỗ này cho người ký tự ghi khi ký tay.
+
+Hiện trạng đo được (giống nhau ở cả hai tệp): khối cuối tệp gồm ngày ký, rồi dòng "NGƯỜI XUẤT BÁO CÁO", rồi dòng "(Ký, ghi rõ họ tên và đóng dấu)", rồi họ tên cán bộ xuất báo cáo. Không có dòng chức danh/chức vụ in sẵn - tức làm đúng ngoại lệ của đặc tả, nhưng lệch kỳ vọng ghi trong phiếu.
+
+Câu hỏi cho nghiệp vụ: phiếu UAT này viết trước hay sau lần chốt ngày 06/08/2026? Tệp xuất có phải in sẵn dòng chức danh người ký không, hay giữ đúng ngoại lệ (chỉ chừa chỗ trống để người ký tự ghi)? Nếu giữ ngoại lệ, xin xác nhận để cập nhật lại kỳ vọng của phiếu.
+
+Ý thứ hai: khuôn tên tệp lệch nhau đúng một dấu gạch dưới.
+
+CẦN BA CONFIRM: phiếu kỳ vọng tên tệp dạng BaoCaoTongHop_CTHTPL_{YYYYMMDD_HHmm}. Đặc tả quy định BaoCaoTongHopCTHTPL_{YYYYMMDD_HHmm} viết liền (srs-fr-15-ct-htpldn.md:1017, BA chốt 06/08/2026), theo khuôn đặt tên tệp chung ở srs-v3.5.md:6760 - phần tên viết liền kiểu chữ hoa đầu từ, dấu gạch dưới chỉ dùng để ngăn các đoạn, và "CTHTPL" không phải một trường dữ liệu đã khai nên không thể đứng làm đoạn định danh riêng.
+
+Hiện trạng đo được: tên tệp thực tế là BaoCaoTongHopCTHTPL_20260807_1356.xlsx và BaoCaoTongHopCTHTPL_20260807_1357.docx - viết liền, tức đúng đặc tả và lệch phiếu đúng một dấu gạch dưới.
+
+Câu hỏi cho nghiệp vụ: chốt một khuôn tên tệp duy nhất - BaoCaoTongHopCTHTPL_… (theo đặc tả) hay BaoCaoTongHop_CTHTPL_… (theo phiếu)? Chốt xong xin sửa cho khớp giữa hai bên. Đây là đề nghị làm rõ, KHÔNG phải lỗi chặn bàn giao.
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Bấm xuất tệp xong hệ thống không hiện thông báo nào. Đặc tả không quy định thông báo cho thao tác xuất tệp nên đội không chấm; nêu để nghiệp vụ cân nhắc bổ sung.
+- Tệp Word không dùng phần đầu trang/chân trang của văn bản; quốc hiệu, tên cơ quan và khối ký nằm trong thân văn bản. Khi tệp dài sang nhiều trang thì quốc hiệu sẽ không lặp lại ở các trang sau. Đặc tả không quy định chỗ đặt nên đội không chấm.
+- Lề trang của cả hai tệp là trái 3 cm, phải 2 cm, trên 2 cm, dưới 2 cm - khớp quy định tại srs-v3.5.md:6724 (phiếu không nhắc lề nên đội chỉ ghi nhận).
+- Số liệu trong tệp khớp bản tổng hợp đã lưu, nhưng cần nói rõ: hệ thống chưa có chức năng mở lại bản ghi tổng hợp để xem, nên không phân biệt được tệp đang lấy số từ bản ghi đã lưu hay cộng lại từ danh sách báo cáo được chọn. Với yêu cầu của phiếu thì điều này không đổi kết quả.
+
+Bằng chứng:
+- Màn "Tổng hợp báo cáo toàn quốc": hai báo cáo "Đã tổng hợp" được chọn, nút "Xuất Excel" và "Xuất Word" bật sáng: https://drive.google.com/file/d/1B6sNDKhHrkbDvMcnt3vbDzWN9TVlhgTm/view?usp=drivesdk
+- Ngay sau hai lượt bấm xuất tệp: https://drive.google.com/file/d/1LZrn-4tBkcpgxb-YlhCAPRkxMQtD5xOQ/view?usp=drivesdk
+- Tệp Excel do chính lượt bấm sinh ra (BaoCaoTongHopCTHTPL_20260807_1356.xlsx): https://docs.google.com/spreadsheets/d/1SUjjrvUrzskgsQ4_vJF9askXGYhttDOh/edit?usp=drivesdk&rtpof=true&sd=true
+- Tệp Word do chính lượt bấm sinh ra (BaoCaoTongHopCTHTPL_20260807_1357.docx): https://docs.google.com/document/d/14sOcHh5IytqiSChEwqtvY-InH0kKsw-a/edit?usp=drivesdk&rtpof=true&sd=true
+
+Lưu ý về dữ liệu: phép đo của phiếu này KHÔNG ghi gì xuống môi trường - hai lượt bấm chỉ sinh tệp, không tạo và không sửa bản ghi nào. Kiểm lại sau khi đo: đợt và các báo cáo giữ nguyên trạng thái cũ.
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.
+
+
+--- [U] Ảnh/video verify ---
+(TRỐNG)
+
+--- [V] Trạng thái 2 ---
+(TRỐNG)
+
+--- [W] TKM phản hồi lần 2 ---
+(TRỐNG)
+
+--- [X] Trạng thái dev fix 2 ---
+(TRỐNG)
+
+--- [Y] DEV phản hồi lần 2 ---
+(TRỐNG)
+
+--- [Z] (cột không tên) ---
+(TRỐNG)

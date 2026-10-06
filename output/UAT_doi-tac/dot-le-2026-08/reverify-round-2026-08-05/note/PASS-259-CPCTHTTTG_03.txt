@@ -1,0 +1,5 @@
+- Đã kiểm tra lại ngày 05/08/2026 trên bản mới nhất của môi trường nghiệm thu: nội dung phản ánh đã được khắc phục.
+- Nhãn trục dọc của biểu đồ đọc được bình thường, không còn hiện toàn giá trị 0.
+- Biểu đồ có thêm trục dọc riêng bên phải dành cho "Số hồ sơ", nên đường Số hồ sơ nằm đúng vị trí giá trị của nó thay vì bị dồn sát đáy.
+- Bảng tổng hợp có đủ các cột Kỳ, Từ ngày, Đến ngày, Số hồ sơ, Tổng chi phí và khớp với số liệu trên biểu đồ.
+- Đã đo lại hai lần, kết quả giống nhau.

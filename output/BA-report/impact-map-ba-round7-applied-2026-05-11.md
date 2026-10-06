@@ -9,11 +9,11 @@ File này trace nhanh các quyết định BA đã được áp dụng vào trac
 
 | Mục BA | Quyết định chuẩn | File đã cập nhật |
 |---|---|---|
-| FR-05.1 Duplicate đánh giá | Duplicate theo `(vu_viec_id, loai_nguoi_danh_gia)`, lỗi `ERR-DG-VV-03`; không dùng `ERR-DG-VV-04` cho duplicate | `bug-reports/vu-viec/non-dev-followup-vu-viec.md`, `bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md`, `functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md` |
-| FR-05.2 Thiếu dữ liệu ưu tiên DN | Chặn/cảnh báo, yêu cầu DN cập nhật; không fallback âm thầm priority 3 | `bug-reports/vu-viec/non-dev-followup-vu-viec.md`, `bug-reports/vu-viec/dev-seed-request-vu-viec.md`, `functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md`, `bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md` |
+| FR-05.1 Duplicate đánh giá | Duplicate theo `(vu_viec_id, loai_nguoi_danh_gia)`, lỗi `ERR-DG-VV-03`; không dùng `ERR-DG-VV-04` cho duplicate | `bug-reports/vu-viec/non-dev-followup-vu-viec.md`, `bug-reports/vu-viec/Pass-bug-report-r7-7-3-functional-vu-viec.md`, `functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md` |
+| FR-05.2 Thiếu dữ liệu ưu tiên DN | Chặn/cảnh báo, yêu cầu DN cập nhật; không fallback âm thầm priority 3 | `bug-reports/vu-viec/non-dev-followup-vu-viec.md`, `bug-reports/vu-viec/dev-seed-request-vu-viec.md`, `functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md`, `bug-reports/vu-viec/Pass-bug-report-r7-7-3-functional-vu-viec.md` |
 | FR-05.3 Phân công khác đơn vị | Không cho nếu người nhận không xem được VV; UI lọc hoặc BE reject | `workflow/vu-viec/workflow-test-report-r7-4-a3-vu-viec.md` |
 | FR-05.4 SLA vụ việc | Mặc định 15 ngày làm việc | `tasks/tmp/todo-qtht.md` |
-| FR-05.5 Enum lịch sử phân công | Giữ enum chung `PHAN_CONG` | `bug-reports/vu-viec/dev-seed-request-vu-viec.md`, `functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md`, `bug-reports/vu-viec/bug-report-r7-7-3-functional-vu-viec.md` |
+| FR-05.5 Enum lịch sử phân công | Giữ enum chung `PHAN_CONG` | `bug-reports/vu-viec/dev-seed-request-vu-viec.md`, `functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md`, `bug-reports/vu-viec/Pass-bug-report-r7-7-3-functional-vu-viec.md` |
 | FR-05.6 Actor chấp nhận phân công | Người được phân công gồm NHT/TVV/CG hoặc TVV tổ chức cử | `workflow/vu-viec/workflow-test-report-r7-4-a3-vu-viec.md` |
 | FR-06.1 Bổ sung lần 4 | `bo_sung_count=3` thì backend chặn yêu cầu bổ sung tiếp; không auto `TU_CHOI` | `functional/chi-tra/functional-test-report-ChiTra-v3.5.md` |
 | FR-06.2 SLA 4 mức | warning 70-<85%, urgent 85-<100%, critical >=100% chưa hoàn thành, overdue quá deadline; cần SRS/UC108 ghi chính thức | `functional/chi-tra/functional-test-report-ChiTra-v3.5.md` |

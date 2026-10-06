@@ -1,0 +1,4 @@
+✅ ĐÃ HẾT LỖI: Màn Danh sách biểu mẫu nay có cột Cơ quan ban hành; thông tin định dạng hiển thị ở cột Loại tài liệu kèm bộ lọc Định dạng đủ 4 giá trị.
+VÌ SAO ĐẠT: Đúng đặc tả đã cập nhật cho phiếu này (srs-fr-09-bieu-mau.md): cột Cơ quan ban hành :671, bộ lọc Định dạng doc/docx/xls/xlsx mặc định Tất cả :654, cột Loại tài liệu dạng biểu tượng :657. Ô tích chọn không nằm trong thành phần màn này (:650-673) và đã có kết luận không sửa ngày 2026-07-24.
+ĐÃ ĐO: Tài khoản CB Nghiệp vụ TW, 27 biểu mẫu của 2 đơn vị, phủ Word, Excel, bản ghi cũ + 1 bản ghi mới tạo: 27/27 hàng có Cơ quan ban hành đúng đơn vị từng bản ghi, đối chiếu 20/20 dòng với máy chủ khớp; bộ lọc ra đúng Tất cả/DOC/DOCX/XLS/XLSX, không còn PDF, lọc XLSX ra 3/3; đếm ô tích chọn = 0. Ảnh QLBMHD_02-veA-cot-co-quan-ban-hanh-2-don-vi.png.
+HIỆU LỰC: Đo trên 18.143.165.120.nip.io, bản dựng HTPLDN V1.0.8 (bó mã index-DIABnbIr.js): Pass tạm cho tới khi bản dựng lên môi trường nghiệm thu.

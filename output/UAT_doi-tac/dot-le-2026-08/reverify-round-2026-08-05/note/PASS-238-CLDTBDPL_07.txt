@@ -1,0 +1,5 @@
+- Đã kiểm tra lại ngày 05/08/2026 trên bản mới nhất của môi trường nghiệm thu: nội dung phản ánh đã được khắc phục.
+- Bảng "Danh sách khóa học" trong tệp PDF nay có đủ 6 cột, đã có cột "Tỷ lệ đạt (%)" như trên màn hình.
+- Số liệu cột này khớp đúng với màn hình ở cả 7 khóa học trong kỳ báo cáo.
+- Đã xuất lại lần thứ hai với đúng điều kiện lọc cũ, tệp vẫn có đủ cột và đúng số liệu, không phải ngẫu nhiên một lần.
+- Việc xuất tệp vẫn chạy bình thường, không còn thông báo chặn; tên tệp có đủ ngày và giờ-phút nên hai lần xuất trong cùng ngày không đè lên nhau.

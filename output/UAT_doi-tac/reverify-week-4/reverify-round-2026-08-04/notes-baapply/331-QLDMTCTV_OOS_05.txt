@@ -1,0 +1,9 @@
+✅ Bug đúng (BA 04/08/2026). Dev FE: bảng danh sách Tổ chức tư vấn đang có 11 cột, thừa cột "Đơn vị quản lý" đặt giữa "Lĩnh vực" và "Người đại diện" — gỡ để bảng về đúng 10 cột theo thiết kế: Ô chọn, Số thứ tự, Mã tổ chức, Tên tổ chức, Loại hình, Người đại diện, Lĩnh vực, Trạng thái, Công khai, Hành động (SCR-IV-NEW-01, srs-fr-04-chuyen-gia-tvv.md dòng 1637-1646). "Đơn vị quản lý" chỉ được nêu ở dòng 1634 với vai trò BỘ LỌC, không phải cột của bảng — nhu cầu xem đơn vị quản lý đã có bộ lọc đó phục vụ. Hệ quả đang thấy: cột thừa đẩy ba cột cuối ra ngoài khung nhìn, trong đó có "Hành động" là chỗ thao tác nhiều nhất. QA đã kiểm lại ngày 04/08/2026 trên bản dựng V1.0.5: cột này VẪN CÒN. Minor.
+
+── CÁCH VERIFY sau Dev fix ──
+Precondition: cbnv_tw + màn Mạng lưới Tư vấn viên → Tổ chức tư vấn, thẻ "Đang hoạt động" có ≥1 bản ghi + đặt cửa sổ trình duyệt ở bề ngang 1440px.
+1) Đọc lần lượt tiêu đề tất cả các cột của bảng danh sách, từ trái sang phải.
+2) Không cuộn ngang, kiểm xem ba cột Trạng thái, Công khai, Hành động có nằm trong khung nhìn không.
+3) Mở bộ lọc phía trên bảng, kiểm bộ lọc theo đơn vị quản lý còn dùng được không.
+✅ PASS khi: bảng có đúng 10 cột theo danh sách trên, không còn cột "Đơn vị quản lý"; ở bề ngang 1440px nhìn thấy được cả ba cột cuối mà không phải cuộn ngang; bộ lọc theo đơn vị quản lý vẫn còn và vẫn lọc đúng.
+❌ FAIL nếu: cột "Đơn vị quản lý" vẫn còn trong bảng; hoặc gỡ cột nhưng đồng thời gỡ mất bộ lọc theo đơn vị quản lý.

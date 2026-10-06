@@ -1,0 +1,331 @@
+{
+  "run_id": "20260626-002157",
+  "base": "http://103.172.236.130:3000/api/v1",
+  "auth": {
+    "cb_nv_tw_01": {
+      "login_status": 200,
+      "otp_status": 200
+    },
+    "qtht_01": {
+      "login_status": 200,
+      "otp_status": 200
+    },
+    "cb_nv_dp_01": {
+      "login_status": 429,
+      "otp_status": null
+    }
+  },
+  "tests": {
+    "pre_list": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps?page=1&pageSize=1",
+      "body": {
+        "success": true,
+        "data": [
+          {
+            "id": "1e29453e-cba4-4618-b3f9-6740f411e906",
+            "nguoiTaoId": "de7d2f4a-9eac-4972-a8c5-f86232009217",
+            "nguoiCapNhatId": "de7d2f4a-9eac-4972-a8c5-f86232009217",
+            "ngayTao": "2026-05-09T15:13:47.536Z",
+            "ngayCapNhat": "2026-06-25T16:56:04.108Z",
+            "donViId": "00000000-0000-4000-8002-000000000001",
+            "seqId": "30",
+            "version": 3,
+            "maDoanhNghiep": "DN-HNI-0004",
+            "tenDoanhNghiep": "Công ty TNHH DN Test 01",
+            "tenVietTat": null,
+            "maSoThue": "9999999990",
+            "giayCnDkkd": null,
+            "ngayCapDkkd": null,
+            "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+            "diaChi": "Số 1, Đường Test, Quận Test, Hà Nội",
+            "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+            "dienThoai": "0901234567",
+            "email": "dntest01@htpldn.test",
+            "fax": null,
+            "nganhNghe": "THUONG_MAI",
+            "nguoiDaiDien": "Nguyễn Văn A",
+            "chucVuDaiDien": null,
+            "doanhThu": "0.00",
+            "soLaoDong": 1,
+            "soLaoDongNu": null,
+            "soLaoDongKhuyetTat": null,
+            "laNuLamChu": false,
+            "tongSoVuViec": 5,
+            "tongChiPhiHoTro": "0.00",
+            "ghiChu": null,
+            "quyMo": "SIEU_NHO",
+            "tongNguonVon": null,
+            "laCongKhai": false,
+            "linhVucIds": []
+          }
+        ],
+        "meta": {
+          "total": 41,
+          "page": 1,
+          "pageSize": 1,
+          "totalPages": 41
+        }
+      }
+    },
+    "create_DN010": {
+      "status": 201,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": true,
+        "data": {
+          "id": "ac0bc38c-1a05-4bd2-8d26-2c53f2c753a7",
+          "nguoiTaoId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "nguoiCapNhatId": null,
+          "ngayTao": "2026-06-25T17:21:58.415Z",
+          "ngayCapNhat": "2026-06-25T17:21:58.415Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "version": 1,
+          "maDoanhNghiep": "DN-HNI-0012",
+          "tenDoanhNghiep": "QA Unblock DN010 20260626-002157",
+          "tenVietTat": null,
+          "maSoThue": "6908118285",
+          "giayCnDkkd": null,
+          "ngayCapDkkd": null,
+          "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+          "diaChi": "QA Unblock 20260626-002157",
+          "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+          "dienThoai": "0901234567",
+          "email": "qa-unblock-DN010-20260626-002157@example.test",
+          "fax": null,
+          "nganhNghe": "THUONG_MAI",
+          "nguoiDaiDien": "Nguyen QA",
+          "chucVuDaiDien": null,
+          "doanhThu": "20000000000",
+          "soLaoDong": 30,
+          "soLaoDongNu": 0,
+          "soLaoDongKhuyetTat": 0,
+          "laNuLamChu": false,
+          "tongSoVuViec": 0,
+          "tongChiPhiHoTro": "0.00",
+          "ghiChu": null,
+          "quyMo": "NHO",
+          "tongNguonVon": "5000000000",
+          "laCongKhai": false
+        },
+        "meta": null
+      }
+    },
+    "create_DN011": {
+      "status": 201,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": true,
+        "data": {
+          "id": "ee0996ac-fd2d-41f0-858b-d1a2ece7fb8d",
+          "nguoiTaoId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "nguoiCapNhatId": null,
+          "ngayTao": "2026-06-25T17:21:58.495Z",
+          "ngayCapNhat": "2026-06-25T17:21:58.495Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "version": 1,
+          "maDoanhNghiep": "DN-HNI-0013",
+          "tenDoanhNghiep": "QA Unblock DN011 20260626-002157",
+          "tenVietTat": null,
+          "maSoThue": "6908118373",
+          "giayCnDkkd": null,
+          "ngayCapDkkd": null,
+          "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+          "diaChi": "QA Unblock 20260626-002157",
+          "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+          "dienThoai": "0901234567",
+          "email": "qa-unblock-DN011-20260626-002157@example.test",
+          "fax": null,
+          "nganhNghe": "CONG_NGHIEP",
+          "nguoiDaiDien": "Nguyen QA",
+          "chucVuDaiDien": null,
+          "doanhThu": "20000000000",
+          "soLaoDong": 30,
+          "soLaoDongNu": 0,
+          "soLaoDongKhuyetTat": 0,
+          "laNuLamChu": false,
+          "tongSoVuViec": 0,
+          "tongChiPhiHoTro": "0.00",
+          "ghiChu": null,
+          "quyMo": "NHO",
+          "tongNguonVon": "5000000000",
+          "laCongKhai": false
+        },
+        "meta": null
+      },
+      "qa_expected_quyMo_present": "NHO"
+    },
+    "create_DN012": {
+      "status": 409,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-SYS-00-01",
+          "message": "Mã doanh nghiệp vừa bị trùng do thao tác đồng thời. Vui lòng thử lại.",
+          "timestamp": "2026-06-25T17:21:58.586Z",
+          "requestId": "6af03da3-597d-4383-8c0e-40075b9eb06d"
+        }
+      }
+    },
+    "create_EDITBASE": {
+      "status": 409,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-SYS-00-01",
+          "message": "Mã doanh nghiệp vừa bị trùng do thao tác đồng thời. Vui lòng thử lại.",
+          "timestamp": "2026-06-25T17:21:58.652Z",
+          "requestId": "f3540ff1-00bf-4167-915b-a527232d1675"
+        }
+      }
+    },
+    "create_DUPEMAIL0": {
+      "status": 409,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-SYS-00-01",
+          "message": "Mã doanh nghiệp vừa bị trùng do thao tác đồng thời. Vui lòng thử lại.",
+          "timestamp": "2026-06-25T17:21:58.722Z",
+          "requestId": "bf333839-f5fb-4eff-a72e-2c375f6c9f03"
+        }
+      }
+    },
+    "create_DUPEMAIL1": {
+      "status": 409,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-SYS-00-01",
+          "message": "Mã doanh nghiệp vừa bị trùng do thao tác đồng thời. Vui lòng thử lại.",
+          "timestamp": "2026-06-25T17:21:58.792Z",
+          "requestId": "995e61dc-d921-4cf4-b4df-149b6e44f519"
+        }
+      }
+    },
+    "create_DUPEMAIL2": {
+      "status": 409,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-SYS-00-01",
+          "message": "Mã doanh nghiệp vừa bị trùng do thao tác đồng thời. Vui lòng thử lại.",
+          "timestamp": "2026-06-25T17:21:58.865Z",
+          "requestId": "fc726d3a-3080-480c-b6e1-058755573d74"
+        }
+      }
+    },
+    "TC-DN-PERM-203_duplicate_email_statuses": [
+      409,
+      409,
+      409
+    ],
+    "TC-DN-PERM-402_delete_target": {
+      "status": 204,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/ac0bc38c-1a05-4bd2-8d26-2c53f2c753a7",
+      "body": null
+    },
+    "TC-DN-PERM-402_audit_after_delete": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/audit-logs?entityType=DOANH_NGHIEP&entityId=ac0bc38c-1a05-4bd2-8d26-2c53f2c753a7&limit=20",
+      "body": {
+        "success": true,
+        "data": [
+          {
+            "id": "8092b7b5-1009-4cb3-87f7-420d698b451f",
+            "entityType": "DOANH_NGHIEP",
+            "entityId": "ac0bc38c-1a05-4bd2-8d26-2c53f2c753a7",
+            "hanhDong": "DELETE",
+            "nguoiThucHienId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T17:21:58.925Z",
+            "ipAddress": null,
+            "endpoint": null,
+            "responseCode": null,
+            "sessionId": "ccb518a0-bd0e-4b39-b481-53aca7af5d98",
+            "module": "DOANH_NGHIEP",
+            "nguoiThucHienUsername": "cb_nv_tw_01",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 01",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          },
+          {
+            "id": "f8e90b4e-579c-43e9-9955-a5cc5eef881d",
+            "entityType": "DOANH_NGHIEP",
+            "entityId": "ac0bc38c-1a05-4bd2-8d26-2c53f2c753a7",
+            "hanhDong": "CREATE",
+            "nguoiThucHienId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T17:21:58.432Z",
+            "ipAddress": "::ffff:127.0.0.1",
+            "endpoint": "POST /api/v1/doanh-nghieps",
+            "responseCode": 201,
+            "sessionId": "ccb518a0-bd0e-4b39-b481-53aca7af5d98",
+            "module": "DOANH_NGHIEP",
+            "nguoiThucHienUsername": "cb_nv_tw_01",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 01",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          }
+        ],
+        "meta": {
+          "page": 1,
+          "pageSize": 50,
+          "total": 2,
+          "totalPages": 1
+        }
+      }
+    },
+    "cleanup_DN010": {
+      "status": 404,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/ac0bc38c-1a05-4bd2-8d26-2c53f2c753a7",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-VAL-VII-02-01",
+          "message": "Bản ghi không tồn tại",
+          "timestamp": "2026-06-25T17:21:59.011Z",
+          "requestId": "e72ecf37-e3f8-42ac-961b-c33ea6099c70"
+        }
+      }
+    },
+    "cleanup_DN011": {
+      "status": 204,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/ee0996ac-fd2d-41f0-858b-d1a2ece7fb8d",
+      "body": null
+    }
+  },
+  "created_dn": [
+    {
+      "label": "DN010",
+      "id": "ac0bc38c-1a05-4bd2-8d26-2c53f2c753a7",
+      "mst": "6908118285"
+    },
+    {
+      "label": "DN011",
+      "id": "ee0996ac-fd2d-41f0-858b-d1a2ece7fb8d",
+      "mst": "6908118373"
+    }
+  ],
+  "verdicts": {
+    "TC-DN-010": "PASS",
+    "TC-DN-011": "PASS",
+    "TC-DN-012": "BLOCKED",
+    "TC-DN-PERM-203": "FAIL",
+    "TC-DN-PERM-606": "FAIL",
+    "TC-DN-PERM-402": "PASS"
+  },
+  "sample_refs": {
+    "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+    "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a"
+  }
+}

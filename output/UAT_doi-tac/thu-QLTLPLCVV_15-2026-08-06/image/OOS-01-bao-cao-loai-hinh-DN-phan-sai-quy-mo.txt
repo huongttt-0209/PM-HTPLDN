@@ -1,0 +1,88 @@
+PHÁT HIỆN NGOÀI PHẠM VI 01 — "BC Chi phí theo loại hình DN" xếp sai quy mô doanh nghiệp
+Env : https://18.143.165.120.nip.io   Bản dựng: V1.0.8   Ngày đo: 2026-08-06 14:46
+Tài khoản đo: cbnv_tw_03 (CB Nghiệp vụ - Trung ương). Không tạo/sửa/xoá bản ghi nào.
+
+================================================================================
+1. NGUỒN SỰ THẬT — hai hồ sơ chi trả ĐÃ THANH TOÁN trong kỳ
+================================================================================
+
+Danh sách hồ sơ chi trả (GET /api/v1/ho-so-chi-tras?page=1&limit=50), lọc trạng thái
+DA_THANH_TOAN:
+
+    Mã hồ sơ         | Doanh nghiệp                  | Quy mô DN | Được duyệt   | Mức hỗ trợ
+    CT-QAW7-CLOSED   | Công ty TNHH Seed Publishable | NHO       | 15.000.000 ₫ |  50%
+    CT-SEED-108      | Công ty TNHH Seed Publishable | SIEU_NHO  |  8.000.000 ₫ | 100%
+                                                       Tổng: 2 hồ sơ · 23.000.000 ₫
+
+================================================================================
+2. HAI BÁO CÁO CÙNG KỲ, CÙNG ĐƠN VỊ, CÙNG THỜI ĐIỂM — MÂU THUẪN NHAU
+================================================================================
+
+Cùng bộ lọc: Kỳ Năm, 01/01/2026 → 31/12/2026, Đơn vị Toàn quốc. Gọi cách nhau 16 giây.
+
+A. "BC Chi phí chi trả hỗ trợ" (UC138 · GET /api/v1/bao-cao/chi-phi-chi-tra)
+   ngayTaoBc 2026-08-06T07:46:04Z · tổng 23.000.000 · 2 hồ sơ
+   theoQuyMoDn:
+       NHO      | 1 hồ sơ | 15.000.000 ₫
+       SIEU_NHO | 1 hồ sơ |  8.000.000 ₫
+   => KHỚP nguồn sự thật ở mục 1.
+
+B. "BC Chi phí theo loại hình DN" (UC141 · GET /api/v1/bao-cao/chi-phi-theo-loai-dn)
+   ngayTaoBc 2026-08-06T07:46:20Z · tổng 23.000.000 · 2 hồ sơ
+   Bảng theo quy mô:
+       SIEU_NHO | 2 hồ sơ | 23.000.000 ₫ | Mức hỗ trợ 100,0% | Trần/hồ sơ 30.000.000 |
+                  Trần chi phí 60.000.000 | Chênh lệch -37.000.000
+   => LỆCH nguồn sự thật: hồ sơ CT-QAW7-CLOSED thuộc quy mô NHO đã bị gộp vào dòng SIEU_NHO.
+      Không có dòng NHO nào trong báo cáo dù thực tế có hồ sơ NHO.
+      Cột "Mức hỗ trợ (%)" cũng ra 100% cho cả dòng, trong khi một trong hai hồ sơ là 50%.
+
+Tổng cộng của hai báo cáo GIỐNG nhau (23.000.000 / 2 hồ sơ) nên nhìn số tổng thì không phát
+hiện được; chỉ vỡ ra khi soi phần chia theo quy mô.
+
+================================================================================
+3. HỆ QUẢ NGƯỜI DÙNG NHÌN THẤY
+================================================================================
+
+- Trên màn "BC Chi phí theo loại hình DN", chọn bộ lọc "Loại DN = Nhỏ" thì màn ra RỖNG
+  ("Không có dữ liệu báo cáo cho kỳ và đơn vị đã chọn") và nút Xuất tự tắt — trong khi thực tế
+  kỳ đó CÓ một hồ sơ quy mô Nhỏ trị giá 15.000.000 ₫.
+- Số liệu quy mô doanh nghiệp trong báo cáo này và trong "BC Chi phí chi trả hỗ trợ" nói ngược
+  nhau, người đọc không biết tin bản nào.
+- Cột trần chi phí / chênh lệch tính trên nền quy mô sai nên cũng sai theo: dòng gộp lấy trần
+  của SIEU_NHO (30.000.000 ₫/hồ sơ) áp cho cả hồ sơ NHO.
+
+================================================================================
+4. ĐẶC TẢ ĐÒI GÌ
+================================================================================
+
+Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/srs-fr-11-bao-cao.md
+
+- :823 — enum loai_dn gồm SIEU_NHO / NHO / VUA (báo cáo phải phân biệt được ba mức này).
+- :831-839 — FR-IX-18 (UC141) "BC Chi phí theo loại hình DN": output bắt buộc gồm quy mô DN ·
+  số hồ sơ · tổng chi phí · mức hỗ trợ (%) · trần/hồ sơ · trần chi phí · chênh lệch, tính
+  THEO TỪNG quy mô doanh nghiệp.
+- :718-724 — FR-IX-15 (UC138) "BC Chi phí chi trả hỗ trợ": các số tổng của kỳ.
+
+Hai báo cáo cùng lấy trên một tập hồ sơ chi trả đã thanh toán trong kỳ, nên phần chia theo quy
+mô doanh nghiệp phải khớp nhau.
+
+================================================================================
+5. CÁCH TÁI HIỆN NGẮN (không cần công cụ đặc biệt)
+================================================================================
+
+1. Đăng nhập cbnv_tw_03. Vào Báo cáo thống kê.
+2. Loại báo cáo "BC Chi phí theo loại hình DN", Kỳ Năm 01/01/2026 → 31/12/2026, Đơn vị Toàn
+   quốc, để trống ô Loại DN. Bấm [Xem báo cáo] → ghi lại các dòng quy mô.
+3. Đổi Loại báo cáo sang "BC Chi phí chi trả hỗ trợ", giữ nguyên kỳ và đơn vị. Bấm [Xem báo cáo]
+   → ghi lại phần chia theo quy mô doanh nghiệp.
+4. So hai bảng: cùng tổng 23.000.000 / 2 hồ sơ nhưng phần chia theo quy mô khác nhau.
+5. Đối chiếu nguồn: mở màn "Chi trả chi phí", lọc hồ sơ trạng thái Đã thanh toán, xem cột quy mô
+   doanh nghiệp của CT-QAW7-CLOSED và CT-SEED-108.
+
+================================================================================
+6. TỆP LIÊN QUAN
+================================================================================
+
+image/CPCTHTTLHDN_06-xuat-excel.xlsx — tệp xuất của báo cáo sai (dòng SIEU_NHO gộp 2 hồ sơ)
+image/CPCTHTTLHDN_06-thong-bao-va-phan-hoi-may-chu.txt — hồ sơ đo case CPCTHTTLHDN_06, mục
+    "ĐÍNH CHÍNH" ghi lại chính phát hiện này

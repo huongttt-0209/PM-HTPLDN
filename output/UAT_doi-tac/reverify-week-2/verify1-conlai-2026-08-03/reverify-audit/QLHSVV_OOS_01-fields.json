@@ -1,0 +1,15 @@
+{
+  "STT": "03/08/2026",
+  "Tuần": "Tuần 2",
+  "Mã TC": "QLHSVV_OOS_01",
+  "Mô tả": "Cột \"Loại\" của bảng tài liệu đính kèm trong hồ sơ vụ việc hiển thị mã nội bộ thô thay vì chữ tiếng Việt",
+  "Điều kiện": "1. Đăng nhập tài khoản Cán bộ nghiệp vụ\n2. Có hồ sơ vụ việc chứa ít nhất 1 tệp đính kèm",
+  "Dữ liệu đầu vào": "Vụ việc VV-BTP-TW-20260803-002 (trạng thái Đã tiếp nhận, đơn vị Bộ Tư pháp - Trung ương), tệp đính kèm QLHSVV_07_qa.jpg (ảnh JPG 38.8 KB, quét sạch, tải lên 03/08/2026 16:13)",
+  "Các bước thực hiện": "1. Chọn menu \"Vụ việc HTPL\"\n2. Mở một hồ sơ có tệp đính kèm (nhấn vào dòng bản ghi)\n3. Bung nhóm \"Tài liệu đính kèm\"\n4. Đọc giá trị ở cột \"Loại\" trên hàng tệp",
+  "Kết quả mong đợi": "Cột \"Loại\" hiển thị chữ tiếng Việt dễ hiểu cho người dùng (ví dụ \"Bổ sung\"), thống nhất với cách các cột khác cùng bảng đang làm và với cách phần mềm đặt tên sự kiện ở Dòng thời gian.",
+  "Kết quả thực tế": "Cột \"Loại\" hiển thị nguyên mã nội bộ viết hoa có gạch dưới: BO_SUNG. Người dùng nghiệp vụ không hiểu đây là loại tài liệu gì.\n\nSo sánh ngay trong CÙNG một hàng của CÙNG bảng đó cho thấy đây là chỗ bị bỏ sót chứ không phải quy ước chung: cột \"Trạng thái quét\" đã được đổi sang tiếng Việt là \"Sạch\", cột \"Định dạng\" hiển thị \"JPG\". Ngoài ra khối \"Dòng thời gian\" ngay bên dưới cùng màn hình đã gọi đúng nghiệp vụ này là \"Bổ sung hồ sơ\", chứng tỏ phần mềm đã có sẵn cách diễn đạt tiếng Việt cho khái niệm này.\n\nLỗi hiển thị ở mọi lần mở màn hình (kiểm 3/3 lần, có 2 lần sau khi tải lại trang bỏ bộ nhớ đệm), không phụ thuộc thao tác.\n\n(Lỗi do tổ kiểm thử phát hiện thêm khi verify case QLHSVV_07 ngày 03/08/2026 - phiếu QLHSVV_07 chỉ nói về nút Tải, không có dòng nào cho phần hiển thị cột Loại nên mở dòng mới.)",
+  "Ảnh/vieo 1": "BUG-QLHSVV_OOS_01-cot-Loai-hien-ma-noi-bo-BO_SUNG.png",
+  "Trạng thái 1": "Fail",
+  "Verify": "Open",
+  "DEV phản hồi lần 1": "✅ Bug ĐÚNG – chuyển dev.\n- Web sai gì: cột \"Loại\" của bảng tài liệu đính kèm (nhóm \"Tài liệu đính kèm\", màn Chi tiết vụ việc) đưa thẳng mã nội bộ BO_SUNG ra cho người dùng đọc.\n- Expected theo đặc tả: FR-V.I-07 (UC57) §Màn hình SCR-V.I-03, bảng Thành phần màn hình dòng 1729 quy định Accordion 3 hiển thị \"tên file, loại, kích thước, ngày upload\" cho người dùng nghiệp vụ; giá trị của cột phải là nhãn đọc được, không phải mã hệ thống. Cùng bảng, cột \"Trạng thái quét\" đã hiển thị đúng dạng nhãn (\"Sạch\"), nên đây là chỗ bị bỏ sót.\n- Verify account/data: cbnv_tw_03 (Cán bộ nghiệp vụ Trung ương, đơn vị Bộ Tư pháp - TW), vụ việc VV-BTP-TW-20260803-002, tệp QLHSVV_07_qa.jpg. Bản dựng V1.0.5, kiểm tra 03/08/2026.\n- Mã lỗi nội bộ: BUG-QLHSVV_OOS_01. Mức độ: Nhẹ (chỉ ảnh hưởng cách hiển thị, không mất dữ liệu).\n- Ghi chú: lỗi này có ở cả bản dựng cũ mà bên kiểm thử đã ghi phiếu, không phải do bản vá lần này gây ra."
+}

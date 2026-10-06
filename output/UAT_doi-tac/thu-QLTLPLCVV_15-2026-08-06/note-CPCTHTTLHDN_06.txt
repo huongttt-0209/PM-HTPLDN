@@ -1,0 +1,72 @@
+🔁 CÒN LỖI — chuyển lại dev.
+
+■ CÒN LỖI Ở ĐÂU
+Vai trò Quản trị hệ thống (tài khoản admin) — đúng vai trò trong ảnh nghiệm thu:
+   [Xem báo cáo] → OK. Hiện đủ bảng 7 cột, hai nút Xuất bật sáng.
+   [Xuất Excel]  → KHÔNG ra tệp. Màn hiện đúng một chữ "Forbidden"
+                   (máy chủ trả 403 · mã ERR-PERM-SYS-00-01)
+Đúng hiện tượng ô "TKM phản hồi lần 1" đã ghi.
+
+■ VÌ SAO LÀ LỖI (đặc tả srs-fr-11-bao-cao.md)
+1. Dòng :79 — kiểm quyền phải nằm ở ĐẦU luồng, nên bước Xem và bước Xuất phải cùng một quy
+   tắc quyền. Hiện đang cho xem đủ số liệu rồi mới chặn ở bước xuất.
+2. Dòng :117 — khi từ chối phải hiện câu tiếng Việt báo người dùng không có quyền xem báo
+   cáo. Hiện đang ném thẳng chuỗi kỹ thuật tiếng Anh của máy chủ ra cho người dùng cuối.
+KHÔNG phải chờ BA mới sửa được: câu hỏi "QTHT có được xuất báo cáo không" đã gửi BA, nhưng
+trả lời hướng nào thì vẫn là lỗi — nếu không được xuất thì phải chặn từ bước Xem và báo bằng
+tiếng Việt; nếu được xuất thì đang chặn nhầm.
+
+■ ĐÃ HẾT LỖI — ĐỪNG ĐỤNG LẠI
+Cán bộ Nghiệp vụ Trung ương xuất Excel tốt: tệp mở đọc được, đầu tệp đủ tên báo cáo + kỳ +
+đơn vị + ngày tạo, bảng có ĐỦ 7 cột nghiệp vụ đòi (Quy mô DN · Số hồ sơ · Tổng chi phí · Mức
+hỗ trợ % · Trần mỗi hồ sơ · Trần chi phí · Chênh lệch), số khớp đúng số trên màn; hai lượt
+xuất ra hai tên tệp khác nhau. Ô lọc "Loại DN" có đúng 3 lựa chọn Siêu nhỏ / Nhỏ / Vừa và có
+tác dụng thật. Hết câu "Không thể tạo file xuất. Vui lòng thử lại." (đối tác báo 16/07).
+
+■ ĐỪNG HIỂU NHẦM MỘT CHỖ
+Chọn "Loại DN = Nhỏ" thì màn ra rỗng. KHÔNG phải do môi trường thiếu dữ liệu quy mô Nhỏ — kỳ
+đó CÓ hồ sơ quy mô Nhỏ trị giá 15.000.000 đ (CT-QAW7-CLOSED); chính báo cáo này xếp nhầm hồ
+sơ đó sang dòng Siêu nhỏ. Đó là lỗi RIÊNG, đã tách phiếu BCTK_QA05 (dòng 368), không tính vào
+phiếu này.
+
+■ AI SỬA
+Dev BE — cho bước Xem và bước Xuất dùng chung quy tắc quyền; từ chối thì trả thông báo theo :117.
+Dev FE — không đẩy chuỗi máy chủ trả về ra thẳng màn hình người dùng.
+BA     — chốt "QTHT có được xuất báo cáo không" để dev chọn hướng sửa.
+
+■ ĐÃ ĐO
+06/08/2026 · bản dựng V1.0.8 · admin (QTHT/TW) + cbnv_tw_03 (CB Nghiệp vụ/TW) · BC Chi phí
+theo loại hình DN · Kỳ Năm 2026 · Toàn quốc · 3 cấu hình Loại DN (để trống / Siêu nhỏ / Nhỏ) ·
+3 lượt bấm xuất · không tạo/sửa/xoá bản ghi nào. Bằng chứng: ô "Ảnh/video verify" cùng dòng.
+
+────────── CÁCH VERIFY SAU KHI DEV FIX ──────────
+Cần trước: tài khoản admin (QTHT, cấp TW) · màn Báo cáo thống kê (/bao-cao) · kỳ báo cáo phải
+CÓ dữ liệu (báo cáo trống thì nút Xuất tự tắt, đo vô nghĩa).
+
+B1. admin → BC Chi phí theo loại hình DN · Kỳ Năm 01/01–31/12/2026 · Toàn quốc · để trống ô
+    Loại DN → [Xem báo cáo] (bấm đúng 1 lần). Ghi lại đủ 7 cột của bảng.
+B2. [Xuất Excel] → chép nguyên văn chữ hiện ra; kiểm có tệp về máy không.
+B3. Đối chiếu bằng đường thứ 2: tab Network xem lời gọi xuất trả mã gì. Có tệp thì MỞ RA ĐỌC,
+    so với 7 cột ở B1.
+B4. Lặp B1–B3 bằng cbnv_tw_03; thêm 1 lượt chọn Loại DN = quy mô CÓ dữ liệu để chắc tệp vẫn
+    khớp màn.
+
+✅ PASS — đạt 1 trong 2:
+   a) admin xuất được tệp .xlsx mở đọc được, đủ 7 cột và số khớp màn, không thông báo từ chối;
+   b) nếu BA chốt QTHT không được xuất → chặn NGAY ở bước [Xem báo cáo], kèm câu tiếng Việt.
+❌ FAIL nếu: còn "Forbidden" hay bất kỳ chuỗi tiếng Anh / mã kỹ thuật nào cho người dùng cuối ·
+   vẫn cho xem đủ rồi mới chặn ở bước Xuất · chỉ ẩn/làm mờ nút Xuất mà bước Xem vẫn vào được ·
+   Cán bộ Nghiệp vụ bị chặn theo · tệp xuất thiếu bất kỳ cột nào trong 7 cột.
+
+⚠️ BẪY
+1. Cán bộ Nghiệp vụ xuất được KHÔNG chứng minh đã fix — vai trò đó vốn đã tốt từ 06/08. Phép đo
+   quyết định là chạy bằng chính tài khoản admin.
+2. Tải được tệp chưa đủ — phải MỞ TỆP RA ĐỌC mới chốt.
+3. Đừng chấm Fail vì cột Chênh lệch âm (chi phí chưa chạm trần theo Nghị định 55 — đúng công
+   thức); vì tên tệp BaoCaoChiPhiTheoLoaiDn_… (khuôn tên đã chốt 04/08/2026); hay vì bảng ít
+   dòng quy mô — điều phải đúng là TỆP KHỚP MÀN. Chuyện xếp sai quy mô doanh nghiệp theo phiếu
+   BCTK_QA05, đừng chấm vào phiếu này.
+4. Khung thông báo sống ~3 giây và đổi chữ NGAY TRONG khung cũ, không mọc khung mới → công cụ
+   đếm "khung mới" chỉ thấy "Đang tạo file..." rồi báo nhầm là im lặng. Phải theo dõi nội dung
+   khung theo thời gian. Ứng dụng gửi lời gọi xuất qua XHR chứ không qua fetch. Tải lại trang
+   trước khi đo — tab mở lâu vẫn chạy mã cũ.

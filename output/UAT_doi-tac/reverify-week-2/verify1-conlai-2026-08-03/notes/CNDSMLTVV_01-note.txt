@@ -1,0 +1,9 @@
+☑️ Đã kiểm tra lại — chức năng chạy đúng.
+- Kiểm tra lại bằng vai trò Cán bộ Nghiệp vụ Trung ương, đúng tiền đề của phiếu: chọn các tư vấn viên đang ở trạng thái "Đang hoạt động" và chưa được công khai.
+- Chọn 2 tư vấn viên rồi bấm "Công khai lên Cổng PLQG": hệ thống MỞ cửa sổ nhập như mong đợi, tiêu đề "Công khai hàng loạt lên Cổng PLQG", kèm đúng câu xác nhận "Công khai 2 tư vấn viên đã chọn lên Cổng pháp luật quốc gia?".
+- Trong cửa sổ có ô "Mô tả công khai" gắn dấu bắt buộc, giới hạn 5000 ký tự.
+- Nếu để trống mô tả rồi bấm "Công khai": hệ thống báo lỗi ngay tại ô nhập ("Vui lòng nhập mô tả công khai") và giữ nguyên cửa sổ, không gửi dữ liệu đi. Đây là chỗ khác với lần bên kiểm thử gặp: thông báo thiếu mô tả nay nằm trong cửa sổ nhập, không còn bắn ra ngoài màn danh sách.
+- Nhập mô tả rồi bấm "Công khai": lưu thành công, thông báo "Đã công khai tư vấn viên thành công", cả 2 hồ sơ chuyển từ "Chưa công khai" sang "Công khai".
+- Kiểm tra thêm ở màn chi tiết tư vấn viên: nút công khai cũng mở đúng cửa sổ nhập, có thêm phần đính kèm tệp và tự điền lại mô tả đã nhập trước đó.
+- Chức năng Cập nhật danh sách mạng lưới tư vấn viên (UC46) hiện hoạt động bình thường. Đề nghị bên kiểm thử xác nhận lại trên bản mới nhất.
+- Verify: tài khoản Cán bộ Nghiệp vụ Trung ương, bản dựng V1.0.5, ngày 03/08/2026.

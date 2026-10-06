@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev (1 ý phụ Reject).
+- Web (BC Vụ việc đã hoàn thành, UC127) render CẢ biểu đồ Bar LẪN Donut theo cùng chiều "lĩnh vực" (Thương mại: 100.0%). KHÔNG có biểu đồ/bảng nào thể hiện chiều "kết quả" (thành công/không thành công).
+- Đối chiếu SRS: mapping dòng 1063 quy định UC127 = "Bar + Donut" với chiều phân tích gồm "Lĩnh vực PL, Kết quả"; mô tả FR-IX-04 dòng 279 nói báo cáo phân theo "lĩnh vực, kết quả (thành công/không), đơn vị". App bỏ hoàn toàn chiều kết quả (2 biểu đồ trùng chiều lĩnh vực). API backend đã trả theoKetQua nhưng FE không dựng → Open.
+- Ý phụ đối tác "thiếu cột theo mức thời hạn": §Output FR-IX-04 KHÔNG có chiều mức thời hạn/SLA (đó là output của FR-IX-03 BC Vụ việc đang hỗ trợ) → ý này KHÔNG phải yêu cầu SRS cho báo cáo này → Reject sub-claim.
+- Tổng verdict: Open (≥1 lỗi con Open). Verify: cbnv_tw (Toàn quốc), Kỳ Năm 2026, 5 VV. Bug ID: BUG-VVDHTHT_04.

@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web đang hiển thị mục kiểm tra thứ 4 của "Nhóm 1 — Pháp lý (bắt buộc)" là "Không có vi phạm đạo đức nghề nghiệp".
+- Theo FR-IV-06 (UC44) · màn hình SCR-IV-03 tab "Thẩm định" (srs-fr-04-chuyen-gia-tvv.md, dòng 1556), danh sách kiểm tra Nhóm 1 phải gồm: "Bằng cấp hợp lệ" / "Chứng chỉ hành nghề" / "Thẻ hành nghề còn hiệu lực" / "Không vi phạm". Ba mục đầu web hiển thị đúng, riêng mục thứ 4 đặt tên sai so với đặc tả.
+- Verify: tài khoản cbnv_tw (Cán bộ Nghiệp vụ - Trung ương), hồ sơ TVV-BTP-TW-0003, tab "Thẩm định".
+- Bug ID: BUG-TDHSTVV_02.

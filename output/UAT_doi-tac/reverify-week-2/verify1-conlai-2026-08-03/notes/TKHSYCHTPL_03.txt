@@ -1,0 +1,15 @@
+☑️ Đã kiểm tra lại — lỗi không còn, chức năng chạy đúng.
+- Đã kiểm tra lại đúng điều kiện phản ánh: vai trò Cán bộ Nghiệp vụ Trung ương, đơn vị Bộ Tư pháp - Trung ương, màn "Vụ việc HTPL", tab "Tất cả", các ô lọc khác để trống, chỉ chọn ô "Mức SLA" = "Sắp hết hạn".
+- Kết quả: hệ thống KHÔNG còn hiện thông báo lỗi. Danh sách trả về 2 hồ sơ, dòng tổng ghi "Hiển thị 1-2 / 2 kết quả", mỗi trang 20 bản ghi đúng như phiếu mong đợi.
+- Để chắc chắn không kết luận vội, tổ kiểm thử đã chạy đủ cả 5 phép đo trên cùng một phiên chứ không chỉ bấm một giá trị:
+  + Không lọc: 37 hồ sơ.
+  + "Bình thường": 30 hồ sơ, không có thông báo lỗi.
+  + "Sắp hết hạn": 2 hồ sơ, không có thông báo lỗi.
+  + "Quá hạn": 5 hồ sơ, không có thông báo lỗi.
+  + "Quá hạn nghiêm trọng": 0 hồ sơ, hiện màn rỗng hợp lệ "Không tìm thấy hồ sơ phù hợp", cũng không có thông báo lỗi.
+  Cộng lại 30 + 2 + 5 + 0 = 37, khớp đúng tổng số hồ sơ khi không lọc, tức bộ lọc chia nhóm đúng và không sót hồ sơ nào.
+- Đã dùng bộ đo thông báo dùng chung của tổ kiểm thử (không lọc trùng, chỉ đọc chữ người dùng nhìn thấy, có tự kiểm chỉ một bộ đo đang chạy): số khung thông báo lỗi đếm được ở cả 4 giá trị đều bằng 0. Ảnh chụp ngay sau khi bấm "Tìm kiếm" cũng không bắt được khung thông báo nào.
+- Đã tải lại trang bỏ bộ nhớ đệm rồi lặp lại đúng thao tác "Sắp hết hạn" một lần nữa, kết quả không đổi — loại trừ khả năng cửa sổ trình duyệt còn chạy bản cũ.
+- Nguyên nhân lỗi cũ đã được xác định và đã được khắc phục ở phần giao diện: bản đối tác quay là bản dựng V1.0.2, khi chọn "Sắp hết hạn" thì giao diện gửi lên máy chủ một mã mức cảnh báo viết khác với mã hệ thống công nhận, nên bị từ chối và không ra kết quả. Bản hiện tại V1.0.5 gửi đúng mã, nên lọc ra kết quả bình thường.
+- Chức năng Tìm kiếm hồ sơ vụ việc (UC 58) hiện hoạt động đúng. Đề nghị bên kiểm thử xác nhận lại trên bản mới nhất.
+- Verify: tài khoản Cán bộ Nghiệp vụ Trung ương (đơn vị Bộ Tư pháp - Trung ương), bản dựng V1.0.5, ngày 03/08/2026.

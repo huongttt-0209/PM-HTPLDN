@@ -1,0 +1,24 @@
+✅ Là bug — chuyển dev · ⚠️ Có ý cần BA xác nhận
+
+Đã kiểm tra lại bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW). Đã tải file thật về và MỞ ĐỌC nội dung, không chỉ kiểm tra tải được hay không.
+
+✅ 1) Cột "Nguồn" trong file Excel hiển thị "Import" → Open, chuyển dev.
+- Cùng một lỗi với QLKCHTV_10: hai giá trị kia đã Việt hoá ("Tự động", "Thủ công"), riêng giá trị này để nguyên tiếng Anh.
+- Bug ID: BUG-QLKCHTV_10 (gộp chung, cùng gốc).
+
+✅ 2) Cột "Câu trả lời" trong file Excel chứa nguyên văn thẻ HTML → Open, chuyển dev.
+- Ví dụ ô C6: "<p>Phản hồi verify QLCKPHCHVM_01 round2: ...</p>" — thẻ <p> hiện y nguyên trong file gửi cho người dùng.
+- Đặc tả dòng 545 quy định câu trả lời là nội dung có định dạng (rich text), nên khi đưa ra file Excel phải là chữ sạch.
+- Lỗi này lặp lại ở cả màn chi tiết. Bug ID: BUG-KCH-HTML-THO.
+
+⚠️ 3) Tên file thiếu giờ phút "HHmm" → cần BA chốt.
+- Đã tái hiện đúng: máy chủ trả về tên "kho-cau-hoi-20260727.xlsx" (đọc từ header phản hồi, tức tên do máy chủ đặt chứ không phải trình duyệt tự đặt).
+- Nhưng bản đặc tả FR đang hiệu lực (srs-fr-13-tv-nhanh.md) KHÔNG có mục Xuất Excel cho Kho câu hỏi, nên không có quy tắc đặt tên nào để đối chiếu. Các module khác thì có (ví dụ Tư vấn chuyên sâu quy định "TVCS-danh-sach-{YYYYMMDD-HHmm}.xlsx").
+- Đề nghị BA chốt quy tắc đặt tên cho Kho câu hỏi.
+
+⚠️ 4) Thiếu cột "Ngày cập nhật" → cần BA chốt, và phạm vi rộng hơn phiếu test nêu.
+- File xuất chỉ có 7 cột: Mã câu hỏi, Câu hỏi, Câu trả lời, Lĩnh vực, Nguồn, Trạng thái, Số lượt xem.
+- So với 12 cột trên màn hình, file còn thiếu cả Từ khóa, Hiệu lực, Công khai, Đánh giá, Ngày tạo — không riêng "Ngày cập nhật".
+- Đặc tả FR không liệt kê cột nào cho file xuất, nên đề nghị BA chốt một lần toàn bộ tập cột.
+
+Lưu ý gửi kèm dev: yêu cầu xuất có truyền pageSize = 20. Dữ liệu hiện tại chỉ 13 bản ghi nên chưa kết luận được file xuất có bị giới hạn theo trang hay không — đề nghị dev tự kiểm với hơn 20 bản ghi.

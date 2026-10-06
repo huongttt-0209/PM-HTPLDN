@@ -1,0 +1,8 @@
+☑️ Đã kiểm tra lại — lỗi không còn, chức năng chạy đúng.
+- Đã chạy lại trọn vẹn luồng Gửi đề xuất đào tạo, tập huấn (UC 32) bằng đúng vai trò phản ánh: đăng nhập bằng tài khoản Doanh nghiệp, nhập cùng bộ dữ liệu (lĩnh vực Dân sự, thời gian mong muốn quý 3/2026, địa điểm Hà Nội, số lượng dự kiến 10).
+- Kết quả: hệ thống báo "Đề xuất đào tạo đã được gửi thành công" đúng một lần, và đề xuất HIỆN NGAY trên danh sách đề xuất của người gửi mà không cần thao tác gì thêm.
+- Đã tải lại trang một lần nữa để kiểm chắc: đề xuất vẫn còn, ở trạng thái "Mới gửi", đúng ngày gửi, kèm hai thao tác Sửa và Xóa của người gửi. Lọc theo trạng thái "Mới gửi" cũng ra đúng đề xuất này.
+- Đã kiểm thêm phía tiếp nhận: đăng nhập tài khoản Cán bộ nghiệp vụ đúng đơn vị tiếp nhận của đề xuất — đề xuất hiển thị đầy đủ trên tab "Đề xuất đào tạo", và cán bộ nhận được thông báo "Đề xuất đào tạo mới" ngay tại thời điểm gửi.
+- Như vậy cả ba yêu cầu của phiếu kiểm thử đều đạt: đề xuất được tạo ở trạng thái mới, cán bộ nghiệp vụ của đơn vị tiếp nhận nhận được thông báo, và người gửi nhận được thông báo gửi thành công.
+- Lưu ý giúp tổ kiểm thử để tránh hiểu nhầm khi kiểm lại: màn hình "Kế hoạch đào tạo" là danh sách các kế hoạch đào tạo đã được ban hành, không phải nơi hiển thị đề xuất vừa gửi. Trong video, danh sách này đã rỗng từ trước khi bấm gửi. Đề xuất vừa gửi nằm ở màn hình danh sách đề xuất đào tạo.
+- Tài khoản đã dùng để kiểm: một tài khoản Doanh nghiệp (người gửi) và một tài khoản Cán bộ nghiệp vụ thuộc đúng đơn vị tiếp nhận (người xem).

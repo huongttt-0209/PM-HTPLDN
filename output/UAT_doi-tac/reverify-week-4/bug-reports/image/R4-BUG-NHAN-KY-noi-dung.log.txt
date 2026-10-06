@@ -1,0 +1,42 @@
+R4 RE-VERIFY — BUG-BCTK-NHAN-KY-GHI-NGAY-ISO (BCTK_OOS_14)
+Ngay chay: 29/07/2026 ~15:55  |  Env: https://18.143.165.120.nip.io  |  Tai khoan: cbnv_tw_01
+Cach lay tep: bam nut [Xuat Excel] tren giao dien (khong goi API), doc Blob do chinh UI sinh ra.
+==============================================================================
+
+MAN: Bao cao thong ke > "BC Vu viec da tiep nhan" > Ky bao cao = Nam > [Xem bao cao]
+
+PHAN 1 — NHAN KY TREN MAN HINH (doc tu <text>/<tspan> cua bieu do)
+------------------------------------------------------------------------------
+   Luot 3 (sang) : "2026-01-01"     <- SAI
+   Luot 4 (chieu): "Nam 2026"       <- DAT
+
+PHAN 2 — NHAN KY TRONG TEP XUAT (bc-vuviec-tiepnhan-R4.xlsx)
+------------------------------------------------------------------------------
+ O     | Luot 3 (sang)  | Luot 4 (chieu)  | KQ
+ ------+----------------+-----------------+-----
+ A26   | "Theo ky"      | "Theo ky"       | tieu de bang, khong doi
+ A27   | "Ky"           | "Ky"            | tieu de cot, khong doi
+ A28   | "2026-01-01"   | "Nam 2026"      | DAT
+ B28   | 27             | 26              | so lieu, khong lien quan bug
+
+ Dong doi chung trong cung tep van dung nhu truoc:
+   A2 = "Ky bao cao: Nam (tu 01/01/2026 den 31/12/2026)"
+   A4 = "Ngay tao: 29/07/2026"
+
+PHAN 3 — KIEM XEM CO PHAI VA CUNG RIENG CHO KY "NAM" KHONG
+------------------------------------------------------------------------------
+ Doi lan luot cac ky khac roi doc lai nhan truc bieu do:
+   Ky = Nam    -> "Nam 2026"
+   Ky = Thang  -> "Thang 7/2026"
+   Ky = Quy    -> "Quy 3/2026"
+   (Ky "Tuan" va "Khoang tuy chon" khong tao ra nhan ky rieng)
+
+ Khong con bat ky chuoi dang nam-thang-ngay nao trong vung bao cao
+ (regex \d{4}-\d{2}-\d{2} tra ve rong o ca 4 ky da thu).
+
+ => Dung mau ma dac ta mo ta cho scope_label:
+    srs-fr-01-dashboard.md:209 — 'UI text hien thi scope. VD: "Nam 2026",
+    "Thang 4/2026", "Nam 2025"'.
+    Sua dung ban chat, khong phai hardcode rieng ky Nam.
+
+KET LUAN: DAT — dong bug nay.

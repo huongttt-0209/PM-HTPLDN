@@ -1,0 +1,24 @@
+⚠️ Cần BA xác nhận — QA verify lại 07/08/2026, bản dựng V1.0.9, vai trò Cán bộ Nghiệp vụ Trung ương (cbnv_tw_05), trên bản ghi tư vấn chuyên sâu TVCS-20260806-0003. Phiếu gồm 2 vế: vế tìm không dấu chạy đúng, vế còn lại phải để BA chốt vì đặc tả màn hình chưa nói tới.
+
+WEB HIỆN TẠI — ĐÚNG KỲ VỌNG ĐỐI TÁC
+- Tìm bằng từ khóa tiếng Việt KHÔNG DẤU chạy đúng: bấm [Xóa bộ lọc] cho bảng về 2 tư liệu, rồi gõ "Nghi dinh" (bỏ dấu hoàn toàn) và bấm [Tìm kiếm] thì bảng còn đúng 1 dòng là bản ghi tên viết CÓ DẤU "Nghị định 55/2019 hỗ trợ pháp lý cho doanh nghiệp nhỏ và vừa"; tư liệu còn lại bị loại. Đối chứng bằng phản hồi máy chủ của chính lượt tìm đó: tổng = 1, mã bản ghi 0d258d7c-9498-48b3-982d-db85a13cdb96 — TRÙNG KHÍT với lượt gõ có dấu ở phiếu QLTLPLCVV_22, tức bỏ dấu và có dấu cho ra cùng một kết quả.
+- Nhóm "Tư liệu pháp lý liên kết" trong màn chi tiết Tư vấn chuyên sâu ĐÃ CÓ ô nhập từ khóa (chữ gợi ý trong ô: "Tìm theo tên hoặc mô tả tư liệu") kèm 3 bộ lọc Loại tư liệu / Lĩnh vực / Trạng thái và hai nút [Tìm kiếm] [Xóa bộ lọc]. Bảng tư liệu đủ 9 cột như đặc tả màn.
+
+VÌ SAO VẪN PHẢI HỎI BA, KHÔNG CHẤM "ĐÃ HẾT LỖI"
+Đặc tả CÓ yêu cầu chức năng tìm kiếm tư liệu (srs-fr-12-tv-chuyen-sau.md:942-951) và màn duy nhất chứa yêu cầu này chính là nhóm tư liệu trong màn chi tiết TVCS (:828, :1153, :1227-1229 — màn riêng SCR-X1-07 đã bị gộp vào). NHƯNG phần Thành phần màn hình của SCR-X1-02 chỉ khai cho nhóm này một bảng dữ liệu và nút [+ Thêm tư liệu] (:1171, :1198), và FR-X.1-06 không có tiêu chí chấp nhận nào cho tìm kiếm (:986-996). Phần dev đang làm đúng ý đối tác lại không có chỗ nào trong đặc tả màn hình quy định.
+
+CẦN BA CONFIRM (1): đối tác kỳ vọng nhóm "Tư liệu pháp lý liên kết" trong màn chi tiết Tư vấn chuyên sâu có ô nhập từ khóa và/hoặc bộ lọc để tìm tư liệu ngay tại đó; SRS quy định chức năng tìm kiếm tư liệu là yêu cầu bắt buộc của FR-X.1-06 (srs-fr-12-tv-chuyen-sau.md:942-951) và màn duy nhất chứa FR-X.1-06 chính là nhóm này (:828, :1153, :1227-1229), nhưng Thành phần màn hình của SCR-X1-02 chỉ khai bảng dữ liệu + nút [+ Thêm tư liệu], không khai ô tìm kiếm hay bộ lọc nào (:1171, :1198), và FR-X.1-06 không có tiêu chí chấp nhận cho tìm kiếm (:986-996); web/dev hiện tại đã có đủ ô tìm kiếm + 3 bộ lọc + nút [Tìm kiếm] [Xóa bộ lọc] và chạy đúng.
+Đề nghị BA chốt: bổ sung thành phần tìm kiếm/lọc này vào SCR-X1-02 phần Thành phần màn hình và bổ sung tiêu chí chấp nhận tương ứng cho FR-X.1-06. Mục đích là bổ sung vào đặc tả, KHÔNG phải chặn bàn giao.
+
+CẦN BA CONFIRM (2 — riêng phiếu này, về yêu cầu không dấu): đối tác kỳ vọng tìm bằng từ khóa tiếng Việt không dấu vẫn ra bản ghi có tên viết có dấu; SRS quy định hai chỗ lệch nhau — bước xử lý của chính FR-X.1-06 ghi "Full-text search trên ten_tu_lieu + mo_ta (hỗ trợ tiếng Việt unaccent)" (srs-fr-12-tv-chuyen-sau.md:948), trong khi quy tắc BR-DATA-08 ở bản gốc file chính không nhắc chữ unaccent và chỉ áp cho FR-II-02 / FR-X.1-02 / FR-X.2-04, phần Ngoại lệ ghi "Các entity khác: search by tìm kiếm theo từ khóa" (srs-v3.5.md:5572); hai bảng tham chiếu trong FR-12 cũng chỉ gán BR-DATA-08 cho FR-X.1-02 (:1579, :1635); web/dev hiện tại đã hỗ trợ không dấu, cho ra đúng cùng một bản ghi với lượt gõ có dấu.
+Đề nghị BA chốt: tìm kiếm tư liệu pháp lý (FR-X.1-06) có bắt buộc hỗ trợ tiếng Việt không dấu hay không, và đồng bộ lại phạm vi BR-DATA-08 giữa file chính với bản trích ở FR-12. Chuẩn chấm vòng này vẫn lấy :948.
+
+ĐÃ ĐO
+Đây là phép đo RIÊNG cho vế không dấu, không suy từ phiếu có dấu — hai phiếu của đối tác dùng chung một ảnh bằng chứng nên ảnh không phân biệt được hai vế. Chọn cụm hai từ "Nghi dinh" chứ không dùng một từ, vì bỏ dấu của "nghị" là "nghi" trùng tiền tố của "nghiệp" nên tìm một từ sẽ mất khả năng phân biệt. Đếm số dòng bảng trước/sau khi tìm (2 → 1) rồi đối chiếu tập mã bản ghi của hai lượt tìm có dấu và không dấu. Tiền đề dùng lại nguyên của phiếu QLTLPLCVV_22, không thêm dữ liệu mới.
+
+BẰNG CHỨNG
+- Gõ từ khóa KHÔNG DẤU "Nghi dinh" vẫn ra bản ghi tên có dấu: https://drive.google.com/file/d/1PPH3XpTzzzcdmkT5ZYICy0PSgIxuq18i/view?usp=drivesdk
+- Nhóm tư liệu có ô tìm kiếm + 3 bộ lọc + bảng 9 cột: https://drive.google.com/file/d/1KGFgkn36R1FI1bBLr1cp84WUShXqe1tr/view?usp=drivesdk
+
+GIỚI HẠN HIỆU LỰC
+Kết quả trên đo tại môi trường kiểm thử nội bộ bản dựng V1.0.9. Ảnh của đối tác chụp ở bản V1.0, tại đó nhóm tư liệu chưa có thanh lọc và bảng chỉ 7 cột — hai bản dựng khác nhau thật, nên kết luận này chỉ có hiệu lực cho bản V1.0.9 và cần đo lại sau khi bản này lên môi trường nghiệm thu.

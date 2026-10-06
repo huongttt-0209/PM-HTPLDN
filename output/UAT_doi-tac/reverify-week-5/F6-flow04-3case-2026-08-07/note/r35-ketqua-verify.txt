@@ -1,0 +1,38 @@
+⚠️ Cần BA xác nhận — QA verify lại 07/08/2026, bản dựng V1.0.9, vai trò Người hỗ trợ pháp lý cấp Địa phương (nht_ag_uat2, Sở Tư pháp An Giang), màn Thêm mới Tư vấn viên. Kết quả mong đợi của phiếu gồm 10 vế: 7 vế chạy đúng, 3 vế phải để BA chốt vì đặc tả đang nói khác hoặc chưa nói tới.
+
+WEB HIỆN TẠI — ĐÚNG KỲ VỌNG ĐỐI TÁC (7 vế)
+- Tạo được hồ sơ: nhập đủ dữ liệu hợp lệ, đính 2 tệp PDF rồi bấm Lưu thì hệ thống tạo hồ sơ TVV-STP-AG-0004 "QA F6 DKTGMLTVV13 0225", đơn vị quản lý tự gán đúng Sở Tư pháp An Giang của người đăng ký.
+- Trạng thái khởi tạo đúng: hồ sơ nằm ở tab "Mới đăng ký" (số đếm tab tăng từ 1 lên 2), badge trạng thái hiển thị "Mới đăng ký".
+- Lĩnh vực pháp luật: chọn 2 lĩnh vực (Thương mại + Lao động) thì hồ sơ lưu đủ cả 2, không thiếu không thừa.
+- Tổ chức chủ quản: chọn "Trung tam Tu van Phap luat QA Dia phuong" thì hồ sơ lưu đúng tổ chức đó.
+- Thông báo cho Cán bộ nghiệp vụ cùng đơn vị: đăng nhập tài khoản Cán bộ Nghiệp vụ CÙNG đơn vị (đã đối chiếu trùng mã đơn vị trước khi chấm) thì thấy thông báo "Hồ sơ tư vấn viên mới cần thẩm định — Hồ sơ TVV QA F6 DKTGMLTVV13 0225 vừa được tạo và đang chờ thẩm định", mốc giờ sau thời điểm bấm Lưu 52 phần nghìn giây.
+- Lưu vết thao tác: Nhật ký hệ thống (tài khoản quản trị) có dòng 07/08/2026 02:30:39 — người dùng "QA NHT An Giang UAT2", đơn vị Sở Tư pháp An Giang, module CG-TVV, đối tượng TU_VAN_VIEN, mã bản ghi b26e0722…, loại thao tác "Tạo mới".
+- Câu thông báo thành công: hiện đúng nguyên văn "Đăng ký thành công, chờ thẩm định".
+
+VÌ SAO VẪN PHẢI HỎI BA, KHÔNG CHẤM "ĐÃ HẾT LỖI"
+Ba vế còn lại của phiếu đang lệch với đặc tả chốt, nên dù web chạy được QA cũng không có căn cứ chấm đạt: hai vế đặc tả nói NGƯỢC với kỳ vọng của phiếu, một vế đặc tả KHÔNG nói gì.
+
+CẦN BA CONFIRM (1 — loại hồ sơ): đối tác kỳ vọng hồ sơ tạo ở màn Thêm mới Tư vấn viên (/chuyen-gia-tvv/tao-moi) mang loại "Người hỗ trợ"; SRS quy định trường Loại của hồ sơ này chỉ nhận TVV hoặc CG, còn "Người hỗ trợ" là một đối tượng riêng tạo ở màn khác với trạng thái khởi tạo khác (srs-fr-04-chuyen-gia-tvv.md:296 ràng buộc CHECK IN ('TVV','CG'); :1490 ô Loại là dropdown 2 lựa chọn "Tư vấn viên"/"Chuyên gia"; :1381-1386 bảng ánh xạ chỉ có TVV/CG; :2019 ghi rõ "NHT lưu ở entity riêng NGUOI_HO_TRO"; :1799 màn tạo Người hỗ trợ ở /chuyen-gia-tvv/nguoi-ho-tro/tao-moi; :2073 Người hỗ trợ khởi tạo ở trạng thái Chờ kích hoạt chứ không phải Mới đăng ký; :18 lịch sử thay đổi 03/05/2026 đã gỡ NHT khỏi danh sách giá trị Loại); web/dev hiện tại mở ô "Loại" ra đúng 2 lựa chọn "Tư vấn viên (TVV)" và "Chuyên gia (CG)", hồ sơ tạo ra mang loại Tư vấn viên.
+Đề nghị BA chốt 1 trong 2 hướng: (a) kỳ vọng của phiếu đang nhầm giữa vai trò người thao tác (Người hỗ trợ) với loại hồ sơ, sửa kỳ vọng về "Tư vấn viên"/"Chuyên gia"; hoặc (b) nghiệp vụ thật sự cần thêm giá trị "Người hỗ trợ" vào trường Loại, khi đó BA cập nhật đặc tả rồi mới verify lại.
+
+CẦN BA CONFIRM (2 — thông báo có kèm mã hồ sơ): đối tác kỳ vọng câu thông báo thành công hiển thị kèm mã hồ sơ vừa tạo; SRS im lặng về việc này — phần Kết quả đầu ra của chức năng tách riêng mã hồ sơ (srs-fr-04-chuyen-gia-tvv.md:348) và câu thông báo "Đăng ký thành công, chờ thẩm định" (:351), không dòng nào yêu cầu ghép mã vào câu thông báo, phần mô tả màn hình (:1522) và phần Hậu điều kiện (:353-357) cũng không nhắc; đối chứng cho thấy khi đặc tả muốn kèm mã thì viết rõ, ví dụ :597 "gửi mail link kích hoạt … kèm mã số TVV"; web/dev hiện tại hiện đúng câu "Đăng ký thành công, chờ thẩm định" nhưng không kèm mã — mã TVV-STP-AG-0004 chỉ có trong dữ liệu máy chủ trả về.
+Đề nghị BA chốt: câu thông báo sau khi đăng ký có bắt buộc kèm mã hồ sơ không; nếu có thì bổ sung câu chuẩn vào đặc tả để dev và QA cùng một mốc.
+
+CẦN BA CONFIRM (3 — điều hướng sau khi lưu): đối tác kỳ vọng sau khi gửi đăng ký thành công hệ thống chuyển sang "trang theo dõi tiến độ"; SRS quy định ngược lại và ở mức bắt buộc — quy ước chung srs-v3.5.md:6759 ghi "Sau khi thực hiện thành công thao tác Thêm mới một bản ghi, hệ thống chuyển hướng về trang Danh sách kèm toast thông báo", ngoại lệ giữ lại trang Chi tiết chỉ hợp lệ khi "có ghi chú riêng tại FR cụ thể", mà phần đặc tả của chức năng này (srs-fr-04-chuyen-gia-tvv.md:280-363 và :1470-1529) không có ghi chú ngoại lệ nào; tra toàn bộ bộ đặc tả cũng không có màn nào tên "trang theo dõi tiến độ" cho luồng này (cụm chữ đó chỉ xuất hiện đúng 1 lần ở srs-fr-15-ct-htpldn.md:621, thuộc nghiệp vụ đợt báo cáo Chương trình HTPLDN); web/dev hiện tại sau khi lưu chuyển về trang Danh sách tư vấn viên, đường dẫn /chuyen-gia-tvv/danh-sach, breadcrumb "Trang chủ / Mạng lưới Tư vấn viên / Danh sách".
+Đề nghị BA chốt 1 trong 2 hướng: (a) giữ quy ước chung, sửa kỳ vọng của phiếu về "quay lại trang Danh sách tư vấn viên"; hoặc (b) nghiệp vụ cần một màn theo dõi tiến độ hồ sơ cho Người hỗ trợ, khi đó BA định nghĩa màn đó và ghi ngoại lệ ngay tại đặc tả chức năng trước khi verify lại.
+
+VỀ Ý "TÊN BUTTON SAI" TRONG Ô TRAO ĐỔI
+Đến bản đặc tả chốt hiện hành, nhãn nút của màn này vẫn là "Lưu" (srs-fr-04-chuyen-gia-tvv.md:1522 và quy ước nhãn nút bắt buộc srs-v3.5.md:6756); cụm "Gửi đăng ký" không xuất hiện ở bất kỳ đâu trong bộ đặc tả. Bước thao tác của chính phiếu cũng ghi "nhấn Lưu". Vì vậy vòng verify này không chấm nhãn nút; nếu muốn đổi tên nút thì đi đường cập nhật đặc tả.
+
+ĐÃ ĐO
+Một lượt tạo hồ sơ duy nhất (máy chủ ghi nhận đúng 1 lần tạo, không bấm lặp). Trước khi nhập liệu đã mở ô "Loại" đọc danh sách lựa chọn; cài sẵn bộ bắt thông báo tự tắt trước khi bấm Lưu rồi mới bấm; ngay sau đó đọc đường dẫn trang và breadcrumb; mở lại hồ sơ đối chiếu trạng thái, lĩnh vực, tổ chức; đăng nhập tài khoản Cán bộ Nghiệp vụ cùng đơn vị để xem thông báo và tài khoản quản trị để xem nhật ký. Mọi kết luận đều có đối chứng bằng dữ liệu máy chủ của chính thao tác đó.
+Lưu ý dữ liệu: lượt đo có tạo thêm 1 hồ sơ tư vấn viên mới trên môi trường kiểm thử nội bộ (TVV-STP-AG-0004), không đụng dữ liệu của đối tác.
+
+BẰNG CHỨNG
+- Ô "Loại" chỉ có 2 lựa chọn Tư vấn viên / Chuyên gia: https://drive.google.com/file/d/1ShIqR8mfpMvkTVO0ZDZFQrgqlfsFMfSQ/view?usp=drivesdk
+- Hồ sơ mới ở tab "Mới đăng ký", đủ 2 lĩnh vực và tổ chức: https://drive.google.com/file/d/1BxtC8GIHUqMBcveAI0a-_FPe6rHQQYl5/view?usp=drivesdk
+- Cán bộ Nghiệp vụ cùng đơn vị nhận được thông báo hồ sơ mới: https://drive.google.com/file/d/1ZQC2MR-A3zxENbL1uC4DQLIUYtIoobog/view?usp=drivesdk
+- Nhật ký hệ thống có dòng "Tạo mới" đúng hồ sơ vừa tạo: https://drive.google.com/file/d/1-jTowDFawc_xbJtUMD8h6Pc0Tm2p_KXq/view?usp=drivesdk
+
+GIỚI HẠN HIỆU LỰC
+Kết quả trên đo tại môi trường kiểm thử nội bộ bản dựng V1.0.9. Ảnh của đối tác chụp ở bản V1.0 trên môi trường nghiệm thu — hai bản dựng khác nhau, nên kết luận này chỉ có hiệu lực cho bản V1.0.9 và cần đo lại sau khi bản này lên môi trường nghiệm thu.

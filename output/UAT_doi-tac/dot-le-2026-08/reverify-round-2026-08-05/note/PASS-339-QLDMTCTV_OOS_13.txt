@@ -1,0 +1,5 @@
+- Đã kiểm tra lại ngày 05/08/2026 trên bản mới nhất của môi trường nghiệm thu: nội dung phản ánh đã được khắc phục.
+- Hai trường giấy tờ trên biểu mẫu Thêm mới tổ chức tư vấn nay dùng thống nhất một tên gọi: "Số Giấy đăng ký hoạt động" và "Ngày cấp Giấy đăng ký hoạt động". Không còn cách gọi "Giấy đăng ký hành nghề".
+- Hai câu báo lỗi khi để trống cũng gọi đúng tên "Giấy đăng ký hoạt động", khớp với nhãn trường.
+- Màn Chỉnh sửa hiển thị giống hệt màn Thêm mới, không còn chỗ nào lệch tên gọi.
+- Hai trường vẫn ở mức bắt buộc: để trống thì hệ thống chặn lại và không tạo hồ sơ nào.

@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web hiện tại: form "Cập nhật năng lực" (thẻ Năng lực, màn Chi tiết tư vấn viên) chỉ có 6 trường: Kinh nghiệm tư vấn, Chuyên ngành, Lĩnh vực pháp luật, Chứng chỉ hiện có (chỉ đọc), Thêm chứng chỉ mới, Ghi chú cập nhật.
+- Thiếu 5 trường theo đặc tả: Bằng cấp chi tiết, Chứng chỉ chi tiết, Trình độ, Số năm kinh nghiệm, Số thẻ hành nghề / File thẻ hành nghề.
+- Mâu thuẫn ngay trong cùng một thẻ: thẻ Năng lực có hiển thị dòng "Bằng cấp" và "Chứng chỉ", nhưng chính nút "Cập nhật năng lực" của thẻ đó lại không cho nhập/sửa hai mục này (chỉ sửa được ở màn Sửa hồ sơ).
+- Theo SRS: FR-IV-04 (UC42) "Cập nhật năng lực", màn hình SCR-IV-03 – thẻ Năng lực; bảng dữ liệu đầu vào quy định đủ 11 trường (srs-fr-04-chuyen-gia-tvv.md, dòng 376–388), và SCR-IV-03 (dòng 1566) quy định thẻ Năng lực gồm Bằng cấp chi tiết, Chứng chỉ chi tiết, Kinh nghiệm chi tiết kèm nút "Cập nhật năng lực" mở biểu mẫu sửa nhanh.
+- Đã verify bằng đúng vai trò của phản ánh: tài khoản Người hỗ trợ (NHT) cùng đơn vị với tư vấn viên, thử trên 2 trạng thái tư vấn viên (Đang hoạt động và Mới đăng ký) — biểu mẫu đều chỉ ra 6 trường.
+- Bug ID: BUG-CNHSNLTVV_02.

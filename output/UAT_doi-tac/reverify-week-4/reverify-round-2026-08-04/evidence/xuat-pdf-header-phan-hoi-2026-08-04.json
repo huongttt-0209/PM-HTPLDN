@@ -1,0 +1,26 @@
+{
+ "status": 200,
+ "headers": {
+  "content-disposition": "attachment; filename=\"bao-cao-hoi-dap-2026-08-04.pdf\"",
+  "content-security-policy": "frame-ancestors 'none'; object-src 'none'; base-uri 'self'",
+  "content-type": "application/pdf",
+  "cross-origin-opener-policy": "same-origin",
+  "cross-origin-resource-policy": "same-origin",
+  "date": "Tue, 04 Aug 2026 11:02:27 GMT",
+  "origin-agent-cluster": "?1",
+  "permissions-policy": "geolocation=(), microphone=(), camera=()",
+  "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+  "server": "nginx",
+  "strict-transport-security": "max-age=31536000; includeSubDomains, max-age=31536000; includeSubDomains",
+  "x-content-type-options": "nosniff, nosniff",
+  "x-dns-prefetch-control": "off",
+  "x-download-options": "noopen",
+  "x-frame-options": "SAMEORIGIN, DENY",
+  "x-permitted-cross-domain-policies": "none",
+  "x-ratelimit-limit": "500",
+  "x-ratelimit-remaining": "493",
+  "x-ratelimit-reset": "7",
+  "x-xss-protection": "0"
+ },
+ "soByte": 28741
+}

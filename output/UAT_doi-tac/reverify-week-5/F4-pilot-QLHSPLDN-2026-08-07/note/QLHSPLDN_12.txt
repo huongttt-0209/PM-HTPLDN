@@ -1,0 +1,4 @@
+✅ ĐÃ HẾT LỖI: Thẻ "Hồ sơ pháp lý DN" nay tìm kiếm được và khi không có bản ghi khớp thì hiện đúng thông báo rỗng.
+VÌ SAO ĐẠT: FR-X.1-04 quy định nhánh không có kết quả tìm kiếm trả mã INF-HSPL-01 với câu "Không tìm thấy hồ sơ pháp lý phù hợp", mức INFO (srs-fr-12-tv-chuyen-sau.md:701).
+ĐÃ ĐO: Tài khoản cbnv_tw_02 (CB Nghiệp vụ Trung ương), doanh nghiệp DN-HNI-0001 thẻ Hồ sơ pháp lý; nhập từ khóa không khớp "zzqqxx-khongtontai" thì bảng còn 0 dòng và chữ trên màn đọc được đúng nguyên văn "Không tìm thấy hồ sơ pháp lý phù hợp" (so từng ký tự, 0 ký tự lệch), đối chứng phản hồi máy chủ của chính lệnh tìm kiếm trả data rỗng và total = 0.
+HIỆU LỰC: Env https://18.143.165.120.nip.io, bản dựng HTPLDN V1.0.9, bó mã assets/index-CxS5qW_0.js, last-modified 06/08/2026 12:48:25 GMT.

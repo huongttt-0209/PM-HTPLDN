@@ -1,0 +1,695 @@
+﻿,,,Loại,Xử lý xong,Đã thực hiện,Đang thực hiện,Chưa thực hiện,,Hủy,,,,,,,,,,,,,
+,,,Bug,0,40,8,44,,0,,,,,,,,,,,,,
+,,,Task,0,0,7,9,,1,,,,,,,,,,,,,
+STT,Nhóm chức năng,Tên Usecase,Tác nhân chính,Transaction,Mô tả,Ảnh minh chứng,Phân loại,Độ ưu tiên,Ngày log,Trạng thái xử lý,Trạng thái xử lý Dopai,Ghi chú,,,,,,,,,,
+1,0. Chung,,,,"Điều chỉnh lại các màn hình cho đồng nhất: 
+1. Bộ lọc nhiều hơn 2 dòng thì để vào trong bộ lọc nâng cao, click vào mới hiển thị đầy đủ bộ lọc (VD danh sách hỏi đáp)
+2. Danh sách các tab: Hiển thị chung mỗi tab có Số lượng bên cạnh và màu xanh
+3. Màn xem chi tiết hiển thị style ""Hỏi đáp pháp lý"" và thu hẹp khoảng cách các dòng giống mục ""Thông tin kế hoạch"" trong ""Đánh giá hiệu quả""
+4. Các button thêm mới text đều là ""Thêm mới"", khi lưu đều là nút ""Lưu""
+5. Các control Dropdown bổ sung có thể search tương đối
+6. Cột Hành động hiển thị chức năng dạng icon và có tooltips chú thích (Ko hiển thị dạng text)
+7. Các màn hình sau khi thêm mới quay về màn danh sách",,Task,Trung bình,25/05/2026,Đang thực hiện,,,,,,,,,,,,
+2,0. Chung,,,,"1. Điều chỉnh lại tên phần mềm: Phần mềm Hỗ trợ pháp lý doanh nghiệp => Sửa ở màn đăng nhập
+2. Thêm logo ở phía trên thanh menu bên trái",,Task,Cao,25/05/2026,Đang thực hiện,,,,,,,,,,,,
+3,II. Quản lý tiếp nhận hỏi đáp vướng mắc pháp lý,"Tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xác nhận tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý để chuyển phân công;
+Hệ thống kiểm tra điều kiện và xác nhận tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý thành công.","Tk: cb_nv_tw_01
+Lỗi: Popup Xác nhận tiếp nhận: Số lượng ký tự ghi chú và button Tiếp nhận bị đè lên nhau
+Mong muốn: Thêm khoảng cách để ko bị đè
+=> Sửa tương tự với popup Đổi mức độ phức tạp, Cập nhật thời hạn => Rà lại các màn khác nữa",https://prnt.sc/HKwQi61IJmqx,Bug,Thấp,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+4,II. Quản lý tiếp nhận hỏi đáp vướng mắc pháp lý,"Quản lý thông tin tiếp nhận xử lý hỏi đáp, vướng mắc pháp lý","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem kết quả cập nhật thông tin xử lý hỏi đáp, vướng mắc pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin phân công, thời hạn xử lý và trạng thái luân chuyển của hồ sơ sau khi được cập nhật.","Tk: cb_nv_tw_01
+Lỗi: Popup Cập nhật thời hạn: Trạng thái hiện là TIEP_NHAN
+Mong muốn: Trạng thái hiển thị text (VD: Tiếp nhận)
+=> Sửa tương tự với popup Phân công xử lý",https://prnt.sc/wsy6__eNYAFB,Bug,Thấp,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+5,II. Quản lý tiếp nhận hỏi đáp vướng mắc pháp lý,"Phân công xử lý câu hỏi, vướng mắc","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn Người hỗ trợ/Tổ chức tư vấn phù hợp để phân công xử lý câu hỏi, vướng mắc;
+Hệ thống kiểm tra điều kiện và chuyển yêu cầu hỏi đáp đến Người hỗ trợ/Tổ chức tư vấn đã chọn nếu hợp lệ.","Tk: cb_nv_tw_01
+Lỗi: Số lượng cá nhân tư vấn hiển thị chưa đủ
+Hiện trang: Tại bản ghi ở trạng thái ""Tiếp nhận"", chọn ""Phân công"" chỉ hiển thị bản ghi của 10 người (8 người trong cục và 2 tư vấn viên). Danh sách tư vấn viên đang hoạt động có 9 tư vấn viên đang hoạt động
+Mong muốn: List thêm đủ danh sách tư vấn viên đang hoạt động","https://prnt.sc/EvJMUF_sDqsB 
+
+https://prnt.sc/7W6NYVWFf_ZI",Bug,Trung bình,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+6,II. Quản lý tiếp nhận hỏi đáp vướng mắc pháp lý,"Phản hồi câu hỏi, vướng mắc","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP nhập phản hồi câu hỏi, vướng mắc rồi nhấn Lưu;
+Hệ thống kiểm tra điều kiện và lưu lại phản hồi câu hỏi, vướng mắc đã nhập.","Tk: tvv_r11_mailfix
+Bổ sung vai trò tư vấn viên/người hỗ trợ được phân công có menu ""Hỏi đáp pháp luật"" để phản hồi nội dung",https://prnt.sc/XL2rAiFKNvX-,Task,Cao,25/05/2026,Hủy,,,,,,,,,,,,
+7,II. Quản lý tiếp nhận hỏi đáp vướng mắc pháp lý,"Phản hồi câu hỏi, vướng mắc","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP nhập phản hồi câu hỏi, vướng mắc rồi nhấn Lưu;
+Hệ thống kiểm tra điều kiện và lưu lại phản hồi câu hỏi, vướng mắc đã nhập.","Tk: cb_nv_tw_01
+Điều chỉnh trường Nội dung phản hồi dạng control editor: Cho phép in đậm, ngắt dòng,... và để ko giới hạn trường vì thực tế câu trả lời có vượt 5000 ký tự",https://phapluat.gov.vn/ho-tro-phap-ly/hoi-dap,Task,Trung bình,25/05/2026,Đang thực hiện,,,,,,,,,,,,
+8,III. Quản lý thông tin chương trình đào tạo tập huấn,Quản lý lập kế hoạch đào tạo bồi dưỡng,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem danh sách lập kế hoạch đào tạo bồi dưỡng;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách lập kế hoạch đào tạo bồi dưỡng.","Tk: cb_nv_tw_01
+Lỗi: Thiếu cột Hành động hiển thị các chức năng (Đang phải nhấn vào màn xem chi tiết mới chỉnh sửa, xóa được)
+Mong muốn: Có cột Hành động hiển thị các chức năng để thao tác
+=> Sửa tương tự Khóa đào tạo",https://prnt.sc/9Ek5nPM6jmDl,Bug,Trung bình,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+9,III. Quản lý thông tin chương trình đào tạo tập huấn,Quản lý lập kế hoạch đào tạo bồi dưỡng,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP thêm mới lập kế hoạch đào tạo bồi dưỡng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới lập kế hoạch đào tạo bồi dưỡng.","Màn thêm mới/chỉnh sửa kế hoạch đào tạo, Chương trình đào tạo, Khóa học: Bổ sung file đính kèm (Cho phép tải lên nhiều)",,Task,Cao,25/05/2026,Đang thực hiện,,,,,,,,,,,,
+10,III. Quản lý thông tin chương trình đào tạo tập huấn,Công khai kế hoạch đào tạo bồi dưỡng,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP công khai kế hoạch đào tạo bồi dưỡng lên chuyên trang;
+Hệ thống kiểm tra điều kiện và thực hiện công khai kế hoạch đào tạo bồi dưỡng lên chuyên trang.","Tk: cb_nv_tw_01
+Điều chỉnh có thể thông báo công khai được kế hoạch đào tạo thành công để chuyển được trạng thái sang ""Đã công khai"" (Giống với Hỏi đáp pháp luật đã xử lý)",https://prnt.sc/0bpS8Bi3sZiJ,Task,Trung bình,25/05/2026,Đang thực hiện,,,,,,,,,,,,
+11,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý chương trình đào tạo, tập huấn","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP thêm mới chương trình đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới chương trình đào tạo, tập huấn.","Tk: cb_nv_tw_01
+Lỗi: Trường Ngân sách dự kiến (VNĐ) là số tiền chưa có dấu ngăn cách hàng
+Mong muốn: Có ngắt cách hàng ",https://prnt.sc/jPRBGsdqPY7K,Bug,Trung bình,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+12,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý chương trình đào tạo, tập huấn","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa chương trình đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa chương trình đào tạo, tập huấn.","Tk: cb_nv_tw_01
+Lỗi: Trạng thái ""Dụ thảo"" ngoài màn danh sách chưa có chức năng Sửa, đang nhấn vào chức năng ""Xem"" để sửa
+Mong muốn: Chức năng Sửa, Xem chi tiết được tách biệt",https://prnt.sc/pYZQPcJOE_Nv,Bug,Trung bình,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+13,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý chương trình đào tạo, tập huấn","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách chương trình đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách chương trình đào tạo, tập huấn.","Tk: cb_nv_tw_01
+Lỗi: Không hiển thị dữ liệu cột Lĩnh vực
+Mong muốn: Hiển thị được dữ liệu Lĩnh vực đã chọn","https://prnt.sc/4GR8wucYWrnD
+
+https://prnt.sc/C1wAdrywMsUr",Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+14,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý chương trình đào tạo, tập huấn","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết chương trình đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết chương trình đào tạo, tập huấn.","Tk: cb_pd_tw_01
+Lỗi: Khi chương trình đào tạo ở trạng thái ""Chờ duyệt"", cán bộ phê duyệt nhấn ""Phê duyệt"", bản ghi đã chuyển sang trạng thái ""Đã duyệt"" nhưng Lịch sử phê duyệt chưa update (F5 mới update)
+Mong muốn: Khi bản ghi ghi chuyển trạng thái thì lịch sử phê duyệt cũng cập nhật",https://somup.com/cOhT26VVpBT,Bug,Thấp,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+15,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý đề xuất đào tạo, tập huấn",Người dân/Doanh nghiệp,"Doanh nghiệp/Người hỗ trợ thêm mới đề xuất đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới đề xuất đào tạo, tập huấn.","Tk: cb_nv_tw_01, cb_pd_tw_01
+Lỗi: Bản ghi đến trạng thái ""Đã tiếp nhận"" ở cả 2 tài khoản khôn thấy button thao tác nào để thực hiện tiếp luồng
+Mong muốn: Bản ghi đến trạng thái ""Đã tiếp nhận"" có thể chạy tiếp luồng","https://prnt.sc/nwtGh6PkC6Va
+
+https://prnt.sc/ywmEtKS9sDyl",Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+16,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý chương trình đào tạo, tập huấn","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP thêm mới chương trình đào tạo, tập huấn;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới chương trình đào tạo, tập huấn.","Tk: cb_nv_tw_01
+Lỗi: Chức năng ""Hủy"" nhưng hiển thị lại là ""Rút bản nháp""
+Mong muốn: Điều chỉnh lại text button và popup xác nhận thành ""Hủy"" để đồng nhất với trạng thái ""Đã hủy""",https://prnt.sc/KsEsxw7DG2Ao,Bug,Thấp,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+17,III. Quản lý thông tin chương trình đào tạo tập huấn,,,,"Tk: cb_nv_tw_01
+Lỗi: Danh sách học viên trong khóa chưa có thêm mới thủ công và tải file mẫu để import
+Mong muốn: Có chức năng thêm học viên thủ công và tải file mẫu import",https://prnt.sc/kZ0t4PSv-pCt,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+18,III. Quản lý thông tin chương trình đào tạo tập huấn,,,,"Tk: cb_nv_tw_01
+Lỗi: Buổi học trong khóa không bắt buộc Địa điểm/Link zoom nhưng khi lưu đang bắt buộc nhập
+Mong muốn: Địa điểm/Link zoom không bắt buộc nhập khi lưu",https://prnt.sc/T9kC8FAklWR7,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+19,III. Quản lý thông tin chương trình đào tạo tập huấn,,,,"Tk: cb_nv_tw_01
+Lỗi: Thông báo lỗi khi lưu buổi học ngoài thời gian khóa học có định dạng ngày chưa đúng
+Mong muốn: Ngày có định dạng là dd/mm/yyyy",https://prnt.sc/hMv8JB_5-1Ua,Bug,Trung bình,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+20,III. Quản lý thông tin chương trình đào tạo tập huấn,,,,"Tk: cb_nv_tw_01
+Lỗi: Không hiển thị danh sách bài giảng để thêm vào khóa học
+Mong muốn: Hiển thị danh sách bài giảng ở kho bài giảng để thêm vào khóa học",https://prnt.sc/ngs_X6Nj-IAH,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+21,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý kho tài liệu, bài giảng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP thêm mới kho tài liệu, bài giảng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới kho tài liệu, bài giảng.","Tk: cb_nv_tw_01
+Lỗi: Nhấn chỉnh sửa 1 bản ghi cũ rồi nhấn ""Thêm bài giảng"" bị lưu lại cache của bản ghi trước vào màn thêm mới
+Mong muốn: Màn thêm mới đều chưa có dữ liệu",https://go.screenpal.com/watch/cOhT28nt7u5,Bug,Trung bình,25/05/2026,Đang thực hiện,Đang thực hiện,,,,,,,,,,,
+22,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý kho tài liệu, bài giảng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP thêm mới kho tài liệu, bài giảng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới kho tài liệu, bài giảng.","Tk: cb_nv_tw_01
+Lỗi: Thêm mới bài giảng, trường Mô tả không bắt buộc nhưng lưu lại bắt buộc nhập
+Mong muốn: Trường mô tả không bắt buộc khi lưu",https://prnt.sc/nWeFF0X7pj-P,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+23,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý kho tài liệu, bài giảng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem danh sách kho tài liệu, bài giảng;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách kho tài liệu, bài giảng.","Tk: cb_nv_tw_01
+Lỗi: Mành danh sách bài giảng thừa cột Khóa học
+Mong muốn: Bài giảng bỏ cột Khóa học",https://prnt.sc/IjNtDbD94D9i,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+24,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý kho tài liệu, bài giảng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem file kho tài liệu, bài giảng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xem file kho tài liệu, bài giảng.","Tk: cb_nv_tw_01
+Lỗi: Không xem preview file PDF
+Mong muốn: Xem preview được file PDF",https://prnt.sc/1NclyTQ-O48q,Bug,Trung bình,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+25,III. Quản lý thông tin chương trình đào tạo tập huấn,,,,"Tk: cb_nv_tw_01
+Hiện trạng: Đề thi đang phân phối vào khóa học
+Mong muốn: 
+- Đề kiểm tra ko có chức năng phân vào khóa mà chỉ quản lý danh sách thông tin
+- Ở khóa học thêm tab Đề kiểm tra và lựa chọn Đề kiểm tra nếu có vào khóa học (Giống Bài giảng)",,Task,Cao,25/05/2026,Đang thực hiện,,,,,,,,,,,,
+26,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý giảng viên, trợ giảng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP thêm mới giảng viên, trợ giảng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới giảng viên, trợ giảng.","Tk: cb_nv_tw_01
+Lỗi: Danh sách giảng viên thừa thông tin vai trò
+Mong muốn: Giảng viên/trợ giảng phải trong Lịch học và mới có vai trò theo từng lịch học",https://prnt.sc/_4DgHWtlMJ9R,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+27,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý giảng viên, trợ giảng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem lịch sử giảng dạy của giảng viên, trợ giảng;
+Hệ thống kiểm tra điều kiện và hiển thị lịch sử giảng dạy của giảng viên, trợ giảng.","Tk: cb_nv_tw_01
+Lỗi:
+1. Cột Thời gian: Chưa hiển thị dữ liệu theo khóa học
+2. Cột Vai trò: Đang hiện mã 
+3. Cột Trang thái: Đã kết thúc đang hiện mã
+Mong muốn: 
+1. Hiển thị được thời gian theo khóa học
+2, 3. Hiển thị text chứ ko hiện mã",https://prnt.sc/GtEB7CrNFsFM,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+28,IV. Quản lý thông tin chuyên gia tư vấn viên pháp lý,Quản lý tư vấn viên,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết tư vấn viên;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết tư vấn viên.","Tk: cb_nv_tw_01
+Lỗi: Màn xem chi tiết tư vấn viên, nhấn xem file đính kèm bị lỗi
+Mong muốn: Xem được preview file đính kèm",https://prnt.sc/t5714-gQ_pvf,Bug,Cao,25/05/2026,Đang thực hiện,Đang thực hiện,,,,,,,,,,,
+29,IV. Quản lý thông tin chuyên gia tư vấn viên pháp lý,,,,"Tk: cb_nv_tw_01
+Lỗi: Thêm mới tổ chức tư vấn chưa tồn tại nhưng lại báo đã tồn tại
+Mong muốn: Thêm mới được tổ chức tư vấn",https://prnt.sc/dt2UYZrjIEeH,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+30,IV. Quản lý thông tin chuyên gia tư vấn viên pháp lý,,,,"Tk: cb_pd_tw_01
+Lỗi: Tổ chức tư vấn chờ duyệt nhưng không hiển thị chức năng phê duyệt, từ chối
+Mong muốn: Hiển thị chức năng phê duyệt, từ chối để thao tác",https://prnt.sc/l2RwOM1fhh-h,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+31,V. Quản lý vụ việc trợ giúp pháp lý,Nhập hồ sơ yêu cầu,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa hồ sơ yêu cầu từ văn bản giấy, điện thoại...;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa hồ sơ yêu cầu.","Tk: cb_nv_tw_01
+Lỗi: Màn chỉnh sửa và màn xem chi tiết vụ việc, nhấn button ""Sửa"" nhưng lại chuyển đến màn danh sách
+Mong muốn: 
+- Màn chỉnh sửa bỏ button Sửa
+- Màn xem chi tiết nhấn Sửa chuyển đến màn chỉnh sửa",https://go.screenpal.com/watch/cOhTDynt7kb,Bug,Trung bình,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+32,V. Quản lý vụ việc trợ giúp pháp lý,Nhập hồ sơ yêu cầu,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa hồ sơ yêu cầu từ văn bản giấy, điện thoại...;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa hồ sơ yêu cầu.","Tk: cb_nv_tw_01
+Lỗi: Khi thêm mới chọn ""Lưu nháp"" đang là trạng thái ""Mới tạo"" nhấn ""Tiếp nhận"" bị lỗi
+Mong muốn: Khi chỉnh sửa vụ việc ở trạng thái ""Mới tạo"" tiếp nhận thành công",https://prnt.sc/zfvWarxA9Qxu,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+33,V. Quản lý vụ việc trợ giúp pháp lý,Lựa chọn người hỗ trợ cho vụ việc,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn Tư vấn viên hoặc Tổ chức tư vấn phù hợp để hỗ trợ cho vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận lựa chọn.","Tk: cb_nv_tw_01
+Lỗi: Không phân công cho người ngoài đơn vị
+Mong muốn: Phân công được cho người phù hợp (Không giới hạn theo đơn vị)",https://prnt.sc/r-D6bYXi3Jl2,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+34,V. Quản lý vụ việc trợ giúp pháp lý,Lựa chọn người hỗ trợ cho vụ việc,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn Tư vấn viên hoặc Tổ chức tư vấn phù hợp để hỗ trợ cho vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận lựa chọn.","Tk: cb_nv_tw_01
+Lỗi: Vụ việc ở trạng thái ""Đã phân công"" nhưng vẫn còn button ""Phân công""
+Mong muốn: Vụ việc ở trạng thái ""Đã phân công"" ẩn button ""Phân công""",https://prnt.sc/DW6mT1oXG9os,Bug,Thấp,25/05/2026,Đang thực hiện,Đang thực hiện,,,,,,,,,,,
+35,V. Quản lý vụ việc trợ giúp pháp lý,Quản lý hồ sơ đề nghị thanh toán,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách hồ sơ đề nghị thanh toán.","Tk: admin
+Lỗi: 
+1. Cột SLA và Ngày nộp dữ liệu bị đè lên nhau
+2. Cột SLA quá hạn màu trắng ko nhìn được text
+Mong muốn: 
+1. Dữ liệu 2 cột ko bị đè lên nhau
+2. SLA quá hạn đổi thành màu khác dễ nhìn","https://prnt.sc/NxyB-ZsPG2I_
+
+https://prnt.sc/fOcaAjw1Z7Jf",Bug,Trung bình,26/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+36,V. Quản lý vụ việc trợ giúp pháp lý,Thẩm định hồ sơ đề nghị thanh toán,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP nhập nhận xét và kết quả thẩm định hồ sơ đề nghị thanh toán;
+Hệ thống lưu trữ kết quả thẩm định và cập nhật trạng thái hồ sơ.","Tk: cb_nv_bn_01
+Lỗi: Không lưu được kết quả thẩm định
+Mong muốn: Lưu được kết quả thẩm định thành công",https://prnt.sc/5D3qRGQmJfQ7,Bug,Cao,26/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+37,V. Quản lý vụ việc trợ giúp pháp lý,Phê duyệt hồ sơ đề nghị thanh toán,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ phê duyệt TW,BN,ĐP phê duyệt hồ sơ đề nghị thanh toán;
+Hệ thống kiểm tra điều kiện và cập nhật trạng thái đã duyệt hồ sơ đề nghị thanh toán.","Tk: cb_pd_bn_01
+Lỗi: Sau khi phê duyệt back về màn danh sách nhưng bản ghi vẫn ở tab ""Chờ phê duyệt"", F5 lại mới chuyển sang tab ""Đã xử lý""
+Mong muốn: Sau khi phê duyệt thành công thì bản ghi chuyển sang tab Đã xử lý",,Bug,Thấp,26/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+38,V. Quản lý vụ việc trợ giúp pháp lý,Cập nhật kết quả xử lý hồ sơ đề nghị thanh toán,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP cập nhật kết quả xử lý hồ sơ đề nghị thanh toán và cập nhật trạng thái cuối cùng của hồ sơ (Đã thanh toán/Từ chối thanh toán);
+Hệ thống kiểm tra điều kiện và lưu lại dữ liệu đã cập nhật kết quả xử lý hồ sơ đề nghị thanh toán.","Tk: cb_nv_bn_01
+Lỗi: Trường Số tiền thực trả và Ngày thanh toán định dạng chưa đúng
+Mong muốn: 
+1. Số tiền thực trả: Có dấu chấm ngăn cách hàng
+2. Ngày thanh toán: dd/mm/yyyy",https://prnt.sc/V-Zblxwkkdcf,Bug,Thấp,26/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+39,V. Quản lý vụ việc trợ giúp pháp lý,Quản lý doanh nghiệp được hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP thêm mới doanh nghiệp được hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới doanh nghiệp được hỗ trợ pháp lý.","Tk: cb_nv_bn_01
+Lỗi: Không có button Thêm mới để thêm doanh nghiệp
+Mong muốn: Có button Thêm mới doanh nghiệp",https://prnt.sc/3xZ46DePetjD,Bug,Cao,26/05/2026,Đang thực hiện,Đang thực hiện,,,,,,,,,,,
+40,V. Quản lý vụ việc trợ giúp pháp lý,Quản lý doanh nghiệp được hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP chỉnh sửa doanh nghiệp được hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa doanh nghiệp được hỗ trợ pháp lý.","Tk: cb_nv_tw_01
+Lỗi: Màn chỉnh sửa trường Loại doanh nghiệp hiển thị id
+Mong muốn: Loại doanh nghiệp hiển thị đúng dữ liệu",https://prnt.sc/U9E2pUX3YEKg,Bug,Cao,26/05/2026,Đang thực hiện,Đang thực hiện,,,,,,,,,,,
+41,VI. Quản lý kiểm tra đánh giá hiệu quả hỗ trợ,Lập kế hoạch đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP lập kế hoạch đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới kế hoạch đánh giá.","Tk: cb_nv_tw_01
+Lỗi: Thêm mới có tải lên file đính kèm nhưng khi lưu bị lỗi không lưu được file
+Mong muốn: Thêm mới có tải lên file thì lưu được file đã tải",https://prnt.sc/MCIjnWL_0XFV,Bug,Cao,26/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+42,VI. Quản lý kiểm tra đánh giá hiệu quả hỗ trợ,Chọn vụ việc đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn các vụ việc;
+Hệ thống kiểm tra điều kiện và lưu lại dữ liệu các vụ việc đánh giá đã chọn.","Tk: cb_nv_tw_01
+Lỗi: Danh sách vụ việc chưa hiển thị Tên vụ việc, Lĩnh vực, Trạng thái
+Mong muốn: Hiển thị đủ dữ liệu của vụ việc",https://prnt.sc/qEQRuzliLBcf,Bug,Trung bình,26/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+43,VI. Quản lý kiểm tra đánh giá hiệu quả hỗ trợ,Chọn vụ việc đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP lựa chọn các vụ việc;
+Hệ thống kiểm tra điều kiện và lưu lại dữ liệu các vụ việc đánh giá đã chọn.","Tk: cb_nv_tw_01
+Lỗi: Xác nhận chọn vụ việc thành công nhưng ở bảng danh sách vụ việc vẫn hiển thị 2 vụ việc là chưa chọn
+Mong muốn: Xem được danh sách các vụ việc đã chọn","https://prnt.sc/ex2WROKEsDk_
+
+https://prnt.sc/NnW3XxIM3e8b",Bug,Cao,26/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+44,VI. Quản lý kiểm tra đánh giá hiệu quả hỗ trợ,Thực hiện đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP lưu kết quả đánh giá;
+Hệ thống lưu dữ liệu và hiển thị thông báo đánh giá thành công.","Tk: cb_nv_tw_03
+Lỗi: Xác nhận hoàn thành chấm điểm thành công nhưng lại có thêm thông báo lỗi 
+Mong muốn: Không hiển thị thông báo lỗi, chỉ hiển thị thông báo thành công",https://prnt.sc/9z3TonZZCFvp,Bug,Trung bình,26/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+45,VI. Quản lý kiểm tra đánh giá hiệu quả hỗ trợ,Lập báo cáo đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP thực hiện thao tác tổng hợp dữ liệu đánh giá theo đợt;
+Hệ thống tự động tổng hợp điểm số, nhận xét theo từng tiêu chí, từng vụ việc trong đợt.","Tk: cb_nv_tw_03
+Lỗi: 
+1. Các trường Số liệu tổng hợp đang là mã
+2. Xếp loại chưa hiển thị được dữ liệu
+3. Trường Trạng thái báo cáo là mã
+Mong muốn: 
+1. Hiển thị dạng text các trường thông tin
+2. Xếp loại hiển thị được dữ liệu
+3. Trạng thái báo cáo hiển thị đúng text\",https://prnt.sc/7q1VpPjki6Yw,Bug,Trung bình,26/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+46,VI. Quản lý kiểm tra đánh giá hiệu quả hỗ trợ,Lập kế hoạch đánh giá,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP lập kế hoạch đánh giá;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới kế hoạch đánh giá.","Tk: cb_nv_tw_01
+Lỗi: Ngày bắt đầu, Ngày kết thúc trong đợt sau khi lưu bị lùi 1 ngày 
+Mong muốn: Lưu lại đúng ngày bắt đầu, ngày kết thúc đã nhập",https://go.screenpal.com/watch/cOhO1PntsPr,Bug,Cao,26/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+47,VII. Quản lý thư viện biểu mẫu hợp đồng,"Quản lý biểu mẫu, hợp đồng","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách biểu mẫu, hợp đồng;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách biểu mẫu, hợp đồng.","Tk: cb_nv_tw_01
+Lỗi: Không thấy menu hay button để chuyển đến màn danh sách tất cả biểu mẫu https://htpldn-dev.ospgroup.vn/bieu-mau/danh-sach (Phải thêm mới biểu mẫu xong mới hiển thị danh sách tất cả biểu mẫu) 
+Mong muốn: Có memu xem danh sách tất cả biểu mẫu",https://prnt.sc/BW2J4HJ_vMar,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+48,VII. Quản lý thư viện biểu mẫu hợp đồng,"Quản lý biểu mẫu, hợp đồng","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem file biểu mẫu, hợp đồng trực tuyến;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xem file biểu mẫu, hợp đồng trực tuyến.","Tk: cb_nv_tw_01
+Lỗi: Nhấn xem preview file biểu mẫu bị lỗi
+Mong muốn: Xm được preview file biểu mẫu 
+=> Sửa cả với button ""Tải xuống""",https://prnt.sc/uD_B_rHJ0I-_,Bug,Trung bình,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+49,XI. Quản lý kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp,Quản lý kế hoạch thực hiện chương trình hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP thêm mới kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới kế hoạch thực hiện chương trình hỗ trợ pháp lý.","Tk: cb_nv_tw_01
+Lỗi: Thêm mới tải lên file đính kèm bị lỗi
+Mong muốn: Thêm mới tải được file đính kèm",https://prnt.sc/n1Ct1yBQfDC4,Bug,Cao,25/05/2026,Đang thực hiện,Đang thực hiện,,,,,,,,,,,
+50,XI. Quản lý kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp,Quản lý kế hoạch thực hiện chương trình hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách kế hoạch thực hiện chương trình hỗ trợ pháp lý.","Tk: cb_nv_tw_01
+Lỗi: Màn danh sách Mục tiêu chưa hiển thị được dữ liệu đã nhập
+Mong muốn: Mục tiêu hiển thị được dữ liệu đã nhập","https://prnt.sc/ESFgd16c903V
+
+https://prnt.sc/twE_--k49Xkl",Bug,Trung bình,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+51,XI. Quản lý kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp,Quản lý kế hoạch thực hiện chương trình hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết kế hoạch thực hiện chương trình hỗ trợ pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết kế hoạch thực hiện chương trình hỗ trợ pháp lý.","Tk: cb_nv_tw_01
+Lỗi: Màn xem chi tiết thừa tab ""Tài liệu"" (Không thao tác gì được)
+Mong muốn: Ẩn tab ""Tài liệu""",https://prnt.sc/it9F1UA_du5o,Bug,Trung bình,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+52,XI. Quản lý kế hoạch thực hiện chương trình hỗ trợ pháp lý doanh nghiệp,Quản lý đợt báo cáo,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP thêm mới đợt báo cáo;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới đợt báo cáo.","Tk: cb_nv_tw_01
+Lỗi: 
+- Đợt báo cáo đang gán với chương trình kế hoạch
+- Đợt báo cáo chưa có chọn phạm vi người nộp báo cáo
+Mong muốn: 
+1. Đợt báo cáo quản lý độc lập với chương trình kế hoạch
+2. Đợt báo cáo phải có chọn phạm vi người nộp báo cáo và xem được tiến độ nộp báo cáo",,Bug,Cao,25/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+53,X. Quản lý tư vấn chuyên sâu với chuyên gia,"Phê duyệt nội dung câu hỏi, tư vấn","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ phê duyệt TW,BN,ĐP phê duyệt nội dung câu hỏi, tư vấn;
+Hệ thống hiển thị màn hình xác nhận phê duyệt nội dung câu hỏi, tư vấn.","Tk: cb_nv_tw_01
+Lỗi: Sau khi duyệt câu hỏi chưa được hiển thị cho người dùng nhưng popup xác nhận đang hiển thị ""Sau khi duyệt, câu hỏi sẽ có hiệu lực và hiển thị cho người dùng.""
+Mong muốn: Điều chỉnh lại thành ""Bạn xác nhận phê duyệt câu hỏi?""",https://prnt.sc/gyUKmerCGpBv,Bug,Thấp,26/05/2026,Đang thực hiện,Đang thực hiện,,,,,,,,,,,
+54,X. Quản lý tư vấn chuyên sâu với chuyên gia,"Quản lý kho câu hỏi, tư vấn","Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách kho câu hỏi, tư vấn;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách kho câu hỏi, tư vấn.","Tk: cb_nv_tw_01
+Lỗi: Chưa có cột Hành động để có thể thực hiện thao tác ở màn danh sách (Phải vào màn xem chi tiết mới thao tác được)
+Mong muốn: 
+1. Bổ sung cột Hành động để có thể thực hiện thao tác ở màn danh sách
+2. Cột Mã đổi hyperlink sang màu xanh",https://prnt.sc/zKHrYsFZ4-MW,Bug,Thấp,26/05/2026,Đã thực hiện - chờ test lại,Đã xử lý,,,,,,,,,,,
+55,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý kho tài liệu, bài giảng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP thêm mới kho tài liệu, bài giảng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới kho tài liệu, bài giảng.","Tk: cb_nv_tw_01
+Lỗi: Hiện trạng Video đang chỉ gắn được link youtube
+Mong muốn: Loại Video có thể tải lên file video từ thiết bị (Chỉ cho phép tải lên 1 video). Nếu đã tải video thì không cần điền link Youtube và ngược lạ, đã điền link Youtube thì ko cho phép tải thêm file",,Task,Cao,26/05/2026,Đang thực hiện,,,,,,,,,,,,
+56,III. Quản lý thông tin chương trình đào tạo tập huấn,Đăng ký tham gia học tập,Doanh nghiệp/Người hỗ trợ,"Doanh nghiệp/Người hỗ trợ xem danh sách các khóa học đang mở đăng ký;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách khóa học kèm thông tin cơ bản về khóa học.","Hiện trạng: Chưa có trường thông tin liên quan đến Mở đăng ký khóa học trên chuyên trang
+Mong muốn: 
+- Bổ sung trường thông tin ""Mở đăng ký từ"" (dd/mm/yyyy), ""Mở đăng ký đến"" (dd/mm/yyyy)
+- Hiển thị 2 trường ở tất cả các trạng thái (Trừ Dự thảo, Chờ duyệt, Hủy) để cập nhật thời gian
+- Bổ sung trường Mô tả: Control editor, không bắt buộc (Phục vụ hiển thị lên chuyên trang)",,Task,Cao,26/05/2026,Chưa thực hiện,,,,,,,,,,,,
+57,X. Quản lý tư vấn chuyên sâu với chuyên gia,,,,"Tk: cb_nv_tw_03
+Màn hình thêm mới phiên tư vấn nhanh:
+Hiện trạng: Doanh nghiệp cần nhập ID (Người dùng ko thể biết được)
+Mong muốn: 
+1. Text nhập trong textarea bỏ gạch chân đỏ phía dưới => Rà soát các control nhập khác để áp dụng chung
+2. ID doanh nghiệp: Đổi thành ""Doanh nghiệp"" là dropdown chọn Doanh nghiệp ",https://prnt.sc/aW2Rs2_BfyVs,Task,Trung bình,27/05/2026,Chưa thực hiện,,,,,,,,,,,,
+58,X. Quản lý tư vấn chuyên sâu với chuyên gia,,,,"Tk: cb_nv_tw_03
+Màn hình cán bộ trả lời câu hỏi: 
+Hiện trạng: % phù hợp đang hiển thị cao hơn 100%
+Mong muốn: Số % phù hợp điều chỉnh lại chỉ đến 100% là phù hợp cao nhất",https://prnt.sc/jCYBZyU08ANT,Task,Trung bình,27/05/2026,Chưa thực hiện,,,,,,,,,,,,
+59,X. Quản lý tư vấn chuyên sâu với chuyên gia,,,,"Tk: cb_nv_tw_03
+Lỗi: Chọn gợi ý là ""Tính thuế HTHT khi chuyển nhượng quyền sử dụng đất?""ở trạng thái Công khai (Đã duyệt) nhưng khi gửi trả lời bị báo lỗi 
+Mong muốn: 
+1. Chọn được câu hỏi gợi ý từ kho thành công
+2. Thêm tiện ích có thể bỏ chọn câu đã chọn",https://prnt.sc/9vyANOUy62UJ,Bug,Cao,27/05/2026,Đang thực hiện,Đang thực hiện,,,,,,,,,,,
+60,X. Quản lý tư vấn chuyên sâu với chuyên gia,Quản lý nội dung tư vấn với chuyên gia,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách nội dung tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách nội dung tư vấn với chuyên gia.","Tk: cb_nv_tw_03
+Hiện trạng: Màn danh sách, nhấn chỉnh sửa vào màn xem chi tiết. Nhấn ""Sửa"" thì mới hiển thị màn chỉnh sửa nhưng không sửa được các thông tin cơ bản của yêu cầu
+Mong muốn: Màn danh sách, nhấn ""Chỉnh sửa"" hiển thị màn hình chỉnh sửa và hiển thị đủ các trường thông tin giống khi thêm mới",https://prnt.sc/ReOwajDk9yiU,Task,Trung bình,27/05/2026,Chưa thực hiện,,,,,,,,,,,,
+61,X. Quản lý tư vấn chuyên sâu với chuyên gia,Quản lý nội dung tư vấn với chuyên gia,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách nội dung tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách nội dung tư vấn với chuyên gia.","Tk: cb_nv_tw_03
+Lỗi: Màn chi tiết, section Vụ việc liên kết, trường Trạng thái đang hiển thị mã (DANG_KIEM_TRA)
+Mong muốn: Màn chi tiết, section Vụ việc liên kết, trường Trạng thái đang hiển thị text (Đang kiểm tra)",https://prnt.sc/zq7alZPZhMQ8,Bug,Thấp,27/05/2026,Chưa thực hiện,,,,,,,,,,,,
+62,V. Quản lý vụ việc trợ giúp pháp lý,Cập nhật kết quả vụ việc,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP thực hiện cập nhật kết quả vụ việc;
+Hệ thống kiểm tra điều kiện và lưu lại dữ liệu kết quả vụ việc đã nhập.","Tk: cb_nv_tw_03 hoặc huongcg
+Lỗi: Cập nhật kết quả hỗ trợ báo lưu thành công nhưng chưa cập nhật vào section ""Kết quả hỗ trợ""
+Mong muốn: Cập nhật được kết quả đã nhập vào section ""Kết quả hỗ trợ"" ",https://go.screenpal.com/watch/cOhtiantNd0,Bug,Cao,27/05/2026,Chưa thực hiện,,,,,,,,,,,,
+63,X. Quản lý tư vấn chuyên sâu với chuyên gia,Quản lý nội dung tư vấn với chuyên gia,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem chi tiết nội dung tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và hiển thị thông tin chi tiết nội dung tư vấn với chuyên gia.","Tk: huongcg
+Màn xem chi tiết yêu cầu tư vấn chuyên sâu
+Lỗi:
+1. Chuyên gia nhấn vào section ""Tài liệu pháp luật"" để xem thì bị báo lỗi 403
+2. Nhật ký thao tác chưa được ghi lại
+Mong muốn: 
+1. Chuyên gia nhấn vào section ""Tài liệu pháp luật"" để xem dữ liệu
+2. Nhật ký ghi lại được log thao tác","https://go.screenpal.com/watch/cOhtiCntNdP
+
+https://prnt.sc/-f3aSS_-8vvK",Bug,Cao,27/05/2026,Chưa thực hiện,,,,,,,,,,,,
+64,X. Quản lý tư vấn chuyên sâu với chuyên gia,Quản lý nội dung tư vấn với chuyên gia,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP xem danh sách nội dung tư vấn với chuyên gia;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách nội dung tư vấn với chuyên gia.","Tk: cb_pd_tw_03
+Lỗi: Màn danh sách cột Thao tác không có chức năng để thao tác, phải vào màn xem chi tiết mới có
+Mong muốn: Màn danh sách của tk phê duyệt, có icon chức năng Xem chi tiết, Phê duyệt, Từ chối ở màn danh sách",https://prnt.sc/6npWIUddFZ8U,Bug,Trung bình,27/05/2026,Chưa thực hiện,,,,,,,,,,,,
+65,X. Quản lý tư vấn chuyên sâu với chuyên gia,Quản lý tư liệu pháp lý của vụ việc,"Cán bộ nghiệp vụ TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP thêm mới tư liệu pháp lý của vụ việc;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới tư liệu pháp lý của vụ việc.","Tk: cb_nv_tw_03
+Lỗi: Thêm mới tư liệu có tải lên file đính kèm thì không lưu được (Không có file mới lưu được)
+Mong muốn: Thêm mới tư liệu có tải lên file đính kèm lưu được thành công",https://prnt.sc/vvM_xjlaoH7_,Bug,Cao,27/05/2026,Chưa thực hiện,,,,,,,,,,,,
+66,III. Quản lý thông tin chương trình đào tạo tập huấn,"Quản lý kho tài liệu, bài giảng","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP xem danh sách kho tài liệu, bài giảng;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách kho tài liệu, bài giảng.","Tk: cb_nv_tw_03
+Hiện trạng: Màn danh sách tài liệu/bài giảng chưa biết được bản ghi nào đã công khai
+Mong muốn: 
+1. Màn danh sách: Bổ sung cột Công khai và bộ lọc Công khai
+2. Màn xem chi tiết: Bổ sung các trường Ảnh đại diện và Ngày công khai (Lấy ngày công khai cuối cùng)",,Task,Trung bình,27/05/2026,Chưa thực hiện,,,,,,,,,,,,
+67,VIII. Quản trị hệ thống,,,,"Tk: admin
+Lỗi: Các danh mục: Xuất excel thành công nhưng ko mở được file
+Mong muốn: File excel xuất về danh sách các danh mục mở ra xem được",https://go.screenpal.com/watch/cOhtjontNMi,Bug,Trung bình,27/05/2026,Chưa thực hiện,,,,,,,,,,,,
+68,X. Quản lý tư vấn chuyên sâu với chuyên gia,,,,"Tk: cb_nv_tw_03
+Hiện trạng: Tư vấn chuyên sâu chưa có trường ""Tiêu đề yêu cầu"" để tìm kiếm nhanh
+Mong muốn: Tư vấn chuyên sâu bổ sung trường ""Tiêu đề yêu cầu"" (Bắt buộc, nhập text)",,Task,Trung bình,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+69,VIII. Quản trị hệ thống,,,,"Tk: admin
+Lỗi: Các danh mục: Click vào tiêu đề cột để sắp xếp bản ghi thì chưa hoạt động
+Mong muốn: Các danh mục: Sắp xếp bản ghi hoạt động được",https://go.screenpal.com/watch/cO1V1snueZS,Bug,Thấp,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+70,VIII. Quản trị hệ thống,Quản lý danh mục lĩnh vực pháp lý,Quản trị hệ thống,"Quan trị hệ thống thêm mới danh mục lĩnh vực pháp lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục lĩnh vực pháp lý.","Tk: admin
+Hiện trạng: Màn thêm mới/chỉnh sửa danh mục đang hiển thị ở góc bên phải màn hình
+Mong muốn: Màn thêm mới/chỉnh sửa là màn hình/popup hiển thị to ra chính giữa màn hình",https://prnt.sc/UeLK6TOd6Tf1,Task,Thấp,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+71,VIII. Quản trị hệ thống,Quản lý danh mục cơ quan đơn vị quản lý,Quản trị hệ thống,"Quan trị hệ thống xóa danh mục cơ quan đơn vị quản lý;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình xác nhận trước khi xóa danh mục cơ quan đơn vị quản lý.","Tk: admin
+Lỗi: Xóa đơn vị thành công vừa hiển thị thông báo thành vừa hiện thông báo lỗi ""Không tìm thấy đơn vị""
+Mong muốn: Bỏ thông báo lỗi ""Không tìm thấy đơn vị""",https://prnt.sc/BFGGlrQG8Cgf,Bug,Trung bình,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+72,VIII. Quản trị hệ thống,,,,"Tk: admin
+Mong muốn: Danh mục Lĩnh vực kinh doanh không có trong UC => Check xem danh mục này phục vụ nghiệp vụ nào, nếu ko thì ẩn hiển thị vì cũng ko có trong UC",https://prnt.sc/io-3Fd8BUHL8,Task,Trung bình,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+73,VIII. Quản trị hệ thống,Quản lý danh mục tiêu chí đánh giá hiệu quả,Quản trị hệ thống,"Quan trị hệ thống thêm mới danh mục tiêu chí đánh giá hiệu quả;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới danh mục tiêu chí đánh giá hiệu quả.","Tk: admin
+Lỗi: Màn thêm mới/chỉnh sửa: Trường Mức chi phí tối đa chưa có dấu chấm ngăn cách hàng
+Mong muốn: Trường Mức chi phí tối đa có dấu chấm ngăn cách hàng",https://prnt.sc/tLNksQ8M7NUu,Bug,Trung bình,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+74,VIII. Quản trị hệ thống,,,,"Tk: admin
+Mẫu phản hồi
+Lỗi: Cột Hành động không có chức năng gì để thao tác 
+Mong muốn: Cột Hành động bổ sung icon Xem chi tiết để xem chi tiết đầy đủ bản ghi.",https://prnt.sc/YxrYU1W0SskJ,Bug,Thấp,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+75,VIII. Quản trị hệ thống,,,,"Tk: admin
+Quản lý ngày lễ
+Lỗi: 
+1. Khi thêm mới/chỉnh sửa/xóa thành công nhưng chưa có thông báo
+2. Cột STT chưa có dữ liệu
+Mong muốn: 
+1. Khi thêm/sửa/xóa thành công có thông báo 
+2. STT có dữ liệu",https://prnt.sc/EMk79T_tXCn1,Bug,Thấp,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+76,VIII. Quản trị hệ thống,Quản lý vai trò,Quản trị hệ thống,"Quan trị hệ thống tìm kiếm vai trò;
+Hệ thống thực hiện truy vấn dữ liệu và hiển thị kết quả dạng danh sách tương ứng với điều kiện tìm kiếm.","Tk: admin
+Lỗi: Bộ lọc Cấp: Tất cả cấp đang chỉ hiển thị là ALL
+Mong muốn: Bộ lọc Cấp: Hiển thị đầu đủ là ""Tất cả cấp (ALL)""",https://prnt.sc/Xhyl9GMejsI_,Bug,Thấp,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+77,VIII. Quản trị hệ thống,Quản lý phân quyền chức năng,Quản trị hệ thống,"Quan trị hệ thống gán một quyền sử dụng chức năng cho vai trò người dùng;
+Hệ thống kiểm tra điều kiện và thực hiện gán quyền đã chọn cho vai trò người dùng.","Tk: admin
+Lỗi: Sau khi gán thêm/hủy gán cho vai trò thành công. Nhấn Quay lại nhưng chưa reload lại trang, số lượng quyền chưa được cập nhật
+Mong muốn: Sau khi gán thêm/hủy gán cho vai trò thành công. Nhấn Quay lại cập nhật được số quyền mới",https://go.screenpal.com/watch/cO1ViAnueUQ,Bug,Thấp,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+78,VIII. Quản trị hệ thống,Quản lý phân quyền truy cập dữ liệu,Quản trị hệ thống,"Quan trị hệ thống gán một quyền sử dụng dữ liệu cho vai trò người dùng;
+Hệ thống kiểm tra điều kiện và thực hiện gán quyền đã chọn cho vai trò người dùng.","Tk: admin
+Lỗi: Lỗi khi lưu cấu hình phân quyền dữ liệu 
+Mong muốn: Phân quyền được dữ liệu thành công",https://prnt.sc/e5uRu9RBjIPj,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+79,VIII. Quản trị hệ thống,Quản lý tài khoản người dùng,Quản trị hệ thống,"Quan trị hệ thống chỉnh sửa tài khoản người dùng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình chỉnh sửa tài khoản người dùng.","Tk: admin
+Lỗi: Thêm mới tài khoản đã nhập đầy đủ thông tin nhưng vào chỉnh sửa thì bị mất dữ liệu Loại tài khoản, Đơn vị đã chọn khi thêm mới
+Mong muốn: Màn chỉnh sửa fill được các trường thông tin theo màn thêm mới đã nhập",https://prnt.sc/ALwlmr0p1Ip4,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+80,VIII. Quản trị hệ thống,Quản lý tài khoản người dùng,Quản trị hệ thống,"Quan trị hệ thống thêm mới tài khoản người dùng;
+Hệ thống kiểm tra điều kiện và hiển thị màn hình thêm mới tài khoản người dùng.","Tk: admin
+Lỗi: Thêm mới tài khoản thành công nhưng chưa có email gửi về mật khẩu
+Mong muốn: Thêm mới tài khoản thành công có email gửi về mật khẩu để kích hoạt",,Bug,Trung bình,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+81,VIII. Quản trị hệ thống,Quản lý tài khoản người dùng,Quản trị hệ thống,"Quan trị hệ thống xem danh sách tài khoản người dùng;
+Hệ thống kiểm tra điều kiện và hiển thị danh sách tài khoản người dùng.","Tk: admin
+Lỗi: Cột Họ tên quá nhỏ, không nhìn được dữ liệu
+Mong muốn: Tăng độ rộng cột Họ tên",https://prnt.sc/Tl1RAq0CG-q0,Bug,Trung bình,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+82,VIII. Quản trị hệ thống,,,,"Tk: admin
+Nhật ký hệ thống
+Lỗi: Cột Loại thao tác có 1 số giá trị đang hiển thị là mã (DISABLE_ACCOUNT, RESTORE_ACCOUNT, ROLE_CHANGE,..) 
+Mong muốn: Cột Loại thao tác hiển thị text giống bộ lọc Loại thao tác",https://prnt.sc/NnHaLH_FUOCP,Bug,Thấp,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+83,IX. Báo cáo thống kê,"Báo cáo thống kê số lượng hỏi đáp, vướng mắc","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê số lượng hỏi đáp, vướng mắc;
+Hệ thống thực hiện thống kê số lượng hỏi đáp, vướng mắc theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Báo cáo đã có đủ số liệu nhưng có 1 biểu đồ chưa hiển thị được
+Mong muốn: Hiển thị được đủ biểu đồ",https://prnt.sc/2yMCiFON-Kk-,Bug,Trung bình,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+84,IX. Báo cáo thống kê,"Báo cáo thống kê số lượng hỏi đáp, vướng mắc","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê số lượng hỏi đáp, vướng mắc;
+Hệ thống thực hiện thống kê số lượng hỏi đáp, vướng mắc theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Bộ Kế hoạch và Đầu tư"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu hỏi đáp load theo đơn vị đã chọn","https://prnt.sc/LxHvLfu-ApfO
+
+https://prnt.sc/rv6MaumVSQWz",Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+85,IX. Báo cáo thống kê,"Báo cáo thống kê số lượng hỏi đáp, vướng mắc","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê số lượng hỏi đáp, vướng mắc;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.","Tk: cb_nv_tw_03
+Chức năng Xuất excel báo cáo
+Hiện trạng: Nội dung trong file excel mới chỉ có bảng thông tin
+Mong muốn: Bổ sung thêm:
+1. Tên báo cáo ở trên cùng
+2. Thời gian (Khoảng thời gian) xuất báo cáo
+3. Phạm vi đơn vị
+4. Bảng dữ liệu có kẻ viền bảng
+=> Sửa chung cho các file xuất excel báo cáo còn lại",https://prnt.sc/hfImdT9gjHG_,Task,Trung bình,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+86,IX. Báo cáo thống kê,Báo cáo thống kê vụ việc đã tiếp nhận,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê vụ việc đã tiếp nhận;
+Hệ thống thực hiện thống kê vụ việc đã tiếp nhận theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Báo cáo đã có đủ số liệu nhưng có 1 biểu đồ chưa hiển thị được
+Mong muốn: Hiển thị được đủ biểu đồ",https://prnt.sc/btGoWe16UUOC,Bug,Trung bình,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+87,IX. Báo cáo thống kê,Báo cáo thống kê vụ việc đã tiếp nhận,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê vụ việc đã tiếp nhận;
+Hệ thống thực hiện thống kê vụ việc đã tiếp nhận theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Bộ Kế hoạch và Đầu tư"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu vụ việc load theo đơn vị đã chọn","https://prnt.sc/v8358zYspxsp
+
+https://prnt.sc/jN1rd_S36vtV",Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+88,IX. Báo cáo thống kê,Báo cáo thống kê vụ việc đang hỗ trợ,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê vụ việc đang hỗ trợ;
+Hệ thống thực hiện thống kê vụ việc đang hỗ trợ theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Bộ Kế hoạch và Đầu tư"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Biểu đồ: Mức SLA đang hiển thị mã
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu vụ việc load theo đơn vị đã chọn
+3. Biểu đồ: Mức SLA đang hiển thị đúng text giống bảng dữ liệu",https://prnt.sc/_te1e-h-akI2,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+89,IX. Báo cáo thống kê,Báo cáo thống kê vụ việc đã hoàn thành hỗ trợ,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê vụ việc đã hoàn thành hỗ trợ;
+Hệ thống thực hiện thống kê vụ việc đã hoàn thành hỗ trợ theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Bộ Kế hoạch và Đầu tư"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Bộ lọc Kết quả không hiển thị dữ liệu để chọn
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu vụ việc load theo đơn vị đã chọn
+3. Bộ lọc Kết quả hiển thị dữ liệu để chọn",https://prnt.sc/NOOpv8QMhDqU,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+90,IX. Báo cáo thống kê,Báo cáo thống kê vụ việc theo thời gian,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian quý để xem thống kê vụ việc theo thời gian;
+Hệ thống thực hiện thống kê vụ việc theo thời gian theo điều kiện thời gian quý đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Bộ Kế hoạch và Đầu tư"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. tongVuViecToanKy đang hiển thị mã
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu vụ việc load theo đơn vị đã chọn
+3. tongVuViecToanKy hiển thị text",https://prnt.sc/DeDFC3XDdyfw,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+91,IX. Báo cáo thống kê,Báo cáo thống kê vụ việc theo thời gian,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn xuất file báo cáo thống kê vụ việc theo thời gian;
+Hệ thống kiểm tra điều kiện và xuất file báo cáo dạng excel về máy tính người dùng.","Tk: cb_nv_tw_03
+Lỗi: Trong file excel, pdf: Từ ngày, Đến ngày hiển thị định dạng ngày chưa đúng
+Mong muốn: Trong file excel, pdf: Từ ngày, Đến ngày hiển thị định dạng ngày dd/mm/yyyy",https://prnt.sc/n2eSW1pfYWXJ,Bug,Trung bình,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+92,IX. Báo cáo thống kê,Báo cáo thống kê các lớp đào tạo bồi dưỡng đang diễn ra,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê các lớp đào tạo bồi dưỡng đang diễn ra;
+Hệ thống thực hiện thống kê các lớp đào tạo bồi dưỡng đang diễn ra theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Bộ lọc Hình thức không có dữ liệu
+4. Bảng đơn vị ở cuối không hiển thị được dữ liệu
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu khóa học load theo đơn vị đã chọn
+3. Bộ lọc Hình thức có dữ liệu
+4. Bảng đơn vị ở cuối hiển thị được dữ liệu","https://prnt.sc/QLpIwPT4ehl9
+
+https://prnt.sc/ZAWHzE1dY4r3
+",Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+93,IX. Báo cáo thống kê,Báo cáo thống kê các lớp đào tạo bồi dưỡng đã diễn ra,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê các lớp đào tạo bồi dưỡng đã diễn ra;
+Hệ thống thực hiện thống kê các lớp đào tạo bồi dưỡng đã diễn ra theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Bộ lọc Hình thức không có dữ liệu
+4. Bảng đơn vị ở cuối không hiển thị được dữ liệu
+5. Có 1 biểu đồ chưa hiển thị được
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu khóa học load theo đơn vị đã chọn
+3. Bộ lọc Hình thức có dữ liệu
+4. Bảng đơn vị ở cuối hiển thị được dữ liệu
+5. Hiển thị được biểu đồ còn lại","https://prnt.sc/sgC0MybH5Bfv
+
+https://prnt.sc/gdfGm6SHLtN3",Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+94,IX. Báo cáo thống kê,Báo cáo thống kê chất lượng đào tạo bồi dưỡng pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chất lượng đào tạo bồi dưỡng pháp lý;
+Hệ thống thực hiện thống kê chất lượng đào tạo bồi dưỡng pháp lý theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Bộ lọc Khóa học đang list id
+4. Có 1 biểu đồ chưa hiển thị được
+5. Tiêu đề 3 card đang hiển thị mã
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Bộ lọc Khóa học hiển thị tên khóa học
+4. Hiển thị được biểu đồ còn lại
+5. Tiêu đề 3 card đang hiển thị tên","https://prnt.sc/A2f1CNUjd4g5
+
+https://prnt.sc/MzB2qCo2EtXf",Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+95,IX. Báo cáo thống kê,Báo cáo thống kê đánh giá hiệu quả hỗ trợ pháp lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê đánh giá hiệu quả hỗ trợ pháp lý;
+Hệ thống thực hiện thống kê đánh giá hiệu quả hỗ trợ pháp lý theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Bộ lọc Đợt đánh giá chưa có dữ liệu
+4. Bảng đơn vị ở cuối chưa hiển thị được dữ liệu
+5. Tiêu đề 3 card đang hiển thị mã
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Bộ lọc Đợt đánh giá list được dữ liệu
+4. Bảng đơn vị ở cuối hiển thị được dữ liệu
+5. Tiêu đề 3 card đang hiển thị tên","https://prnt.sc/I2PqdU2Nof2l
+
+https://prnt.sc/2ZtrGU-O-Rmo",Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+96,IX. Báo cáo thống kê,Báo cáo thống kê số lượng chuyên gia tư vấn pháp luật,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê số lượng chuyên gia tư vấn pháp luật;
+Hệ thống thực hiện thống kê số lượng chuyên gia tư vấn pháp luật theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Bộ lọc Địa bàn thừa
+4. Bảng đơn vị ở cuối chưa hiển thị được dữ liệu
+5. Tiêu đề 3 card đang hiển thị mã
+6. TTV, CG đang viết tắt
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Ẩn bộ lọc Địa bàn
+4. Bảng đơn vị ở cuối hiển thị được dữ liệu
+5. Tiêu đề 3 card đang hiển thị tên
+6. TTV, CG viết đầy đủ, không viết tắt","https://prnt.sc/eQIJu10EQ_xe
+
+https://prnt.sc/tcmX7XAbeAN1",Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+97,IX. Báo cáo thống kê,Báo cáo thông kê vụ việc theo đơn vị quản lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thông kê vụ việc theo đơn vị quản lý;
+Hệ thống thực hiện thông kê vụ việc theo đơn vị quản lý theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Bảng đơn vị ở cuối chưa hiển thị được dữ liệu
+4. Chú thích biểu đồ và tên đơn vị bị đè lên nhau
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Bảng đơn vị ở cuối hiển thị được dữ liệu
+4. Tối ưu lại UI",https://prnt.sc/Dub4zmDAdcQj,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+98,IX. Báo cáo thống kê,Báo cáo thông kê vụ việc theo lĩnh vực,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thông kê vụ việc theo lĩnh vực;
+Hệ thống thực hiện thông kê vụ việc theo lĩnh vực theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Chưa hiển thị được biểu đồ
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Hiển thị được biểu đồ",https://prnt.sc/pQ1CfuS_Mqkp,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+99,IX. Báo cáo thống kê,Báo cáo thống kê vụ việc theo loại hình doanh nghiệp,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê vụ việc theo loại hình doanh nghiệp;
+Hệ thống thực hiện thống kê vụ việc theo loại hình doanh nghiệp theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Chưa hiển thị được biểu đồ
+4. Bộ lọc Loại DN không hiển thị dữ liệu
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Hiển thị được biểu đồ
+4. Bộ lọc Loại DN hiển thị được dữ liệu",https://prnt.sc/-lx3iFvPgIuZ,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+100,IX. Báo cáo thống kê,Báo cáo thống kê vụ việc theo thời gian,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo khoảng thời gian cụ thể để xem thống kê vụ việc theo thời gian;
+Hệ thống thực hiện thống kê vụ việc theo thời gian theo khoảng thời gian cụ thể đã chọn.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Định dạng ngày chưa đúng
+4. Chú thích và ngày ở biểu đồ bị đè lên nhau
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Định dạng ngày dd/mm/yyyy => Sửa cả trong file excel, pdf
+4. Tối ưu lại UX",https://prnt.sc/NG0A7k07QJj_,Bug,Trung bình,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+101,IX. Báo cáo thống kê,Báo cáo thống kê chi chi phí chi trả hỗ trợ ,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chi chi phí chi trả hỗ trợ ;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Tiêu đề card đang là mã
+4. Chú thích và ngày ở biểu đồ bị đè lên nhau
+5. Bảng đơn vị ở cuối chưa hiển thị dữ liệu
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Tiêu đề card là text
+4. Tối ưu lại UX
+5. Bảng đơn vị ở cuối hiển thị được dữ liệu","https://prnt.sc/ZpN37dAB1Fri
+
+https://prnt.sc/eGgi17DxRUg9",Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+102,IX. Báo cáo thống kê,Báo cáo thống kê chi chi phí chi trả hỗ trợ theo đơn vị quản lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chi chi phí chi trả hỗ trợ theo đơn vị quản lý;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo đơn vị quản lý theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Tiêu đề card đang là mã
+4. Chú thích và ngày ở biểu đồ bị đè lên nhau
+5. Bảng đơn vị ở cuối chưa hiển thị dữ liệu
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Tiêu đề card là text
+4. Tối ưu lại UX
+5. Bảng đơn vị ở cuối hiển thị được dữ liệu",https://prnt.sc/BryzY91-bFJE,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+103,IX. Báo cáo thống kê,Báo cáo thống kê chi chi phí chi trả hỗ trợ theo lĩnh vực,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chi chi phí chi trả hỗ trợ theo lĩnh vực;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo lĩnh vực theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Chưa thống kê được báo cáo chi phí theo lĩnh vực
+Mong muốn: thống kê được báo cáo chi phí theo lĩnh vực",https://prnt.sc/lYn3UcGPl0-u,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+104,IX. Báo cáo thống kê,Báo cáo thống kê chi chi phí chi trả hỗ trợ theo loại hình doanh nghiệp,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chi chi phí chi trả hỗ trợ theo loại hình doanh nghiệp;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo loại hình doanh nghiệp theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Bộ lọc Loại DN đang ko hiển thị dữ liệu
+4. Chú thích và ngày ở biểu đồ bị đè lên nhau
+5. Số tiền ở biểu đồ và chú thích biểu đồ chưa có dấu ngăn cách hàng
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Bộ lọc Loại DN hiển thị dữ liệu
+4. Chú thích và ngày ở biểu đồ ko bị đè lên nhau
+5. Số tiền ở biểu đồ và chú thích biểu đồ có dấu ngăn cách hàng",https://prnt.sc/fZKnqCQWqq4F,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+105,IX. Báo cáo thống kê,Báo cáo thống kê chi chi phí chi trả hỗ trợ theo thời gian,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo loại hình doanh nghiệp để xem thống kê chi chi phí chi trả hỗ trợ theo thời gian;
+Hệ thống thực hiện thống kê chi chi phí chi trả hỗ trợ theo thời gian theo loại hình doanh nghiệp đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Tiêu đề card đang là mã
+4. Số tiền ở biểu đồ và chú thích biểu đồ chưa có dấu ngăn cách hàng
+5. Từ ngày, đến ngày chưa đúng định dạng ngày
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Tiêu đề card hiển thị text
+4. Số tiền ở biểu đồ và chú thích biểu đồ có dấu ngăn cách hàng
+5. Từ ngày, đến ngày định dạng ngày dd/mm/yyyy => Sửa cả trong file excel, pdf",https://prnt.sc/i903l-gQi0Sr,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+106,IX. Báo cáo thống kê,Báo cáo thống kê số lượng chương trình hỗ trợ,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê số lượng chương trình hỗ trợ;
+Hệ thống thực hiện thống kê số lượng chương trình hỗ trợ theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Chú thích và ngày ở biểu đồ bị đè lên nhau
+4. 1 biểu đồ chưa hiển thị được
+5. CT đang viết tắt
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Chú thích và ngày ở biểu đồ ko bị đè lên nhau
+4. Biểu đồ hiển thị được
+5. CT viết đầy đủ, ko viết tắt",https://prnt.sc/vim5C8WkKfNZ,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+107,IX. Báo cáo thống kê,Báo cáo thống kê chương trình theo đơn vị quản lý,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chương trình theo đơn vị quản lý;
+Hệ thống thực hiện thống kê chương trình theo đơn vị quản lý theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Tiêu đề card đang là mã
+4. CT đang viết tắt
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Tiêu đề card hiển thị là text
+4. CT viết đầy đủ, ko viết tắt",https://prnt.sc/mc3i2_GtiXLy,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+108,IX. Báo cáo thống kê,Báo cáo thống kê chương trình theo lĩnh vực,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo điều kiện thời gian để xem thống kê chương trình theo lĩnh vực;
+Hệ thống thực hiện thống kê chương trình theo lĩnh vực theo điều kiện thời gian đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Tiêu đề card đang là mã
+4. Chú thích và lĩnh vực ở biểu đồ bị đè lên nhau
+5. Bảng dữ liệu chưa hiển thị được lĩnh vực
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Tiêu đề card hiển thị text
+4. Chú thích và lĩnh vực ở biểu đồ ko bị đè lên nhau
+5. Bảng dữ liệu hiển thị được lĩnh vực",https://prnt.sc/9082uSqjItBs,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+109,IX. Báo cáo thống kê,Báo cáo thống kê chương trình theo thời gian,"Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP","Cán bộ nghiệp vụ TW,BN,ĐP/Cán bộ phê duyệt TW,BN,ĐP chọn lọc theo thời gian tuần/tháng/quý/năm để xem thống kê chương trình theo thời gian;
+Hệ thống thực hiện thống kê chương trình theo thời gian theo thời gian tuần/tháng/quý/năm đã lọc.","Tk: cb_nv_tw_03
+Lỗi: Lọc theo Đơn vị là ""Sở Tư pháp An Giang"":
+1. Tên đơn vị đang hiển thị là id
+2. Dữ liệu chưa load theo đơn vị đã chọn, vẫn đang hiện full trung ương
+3. Tiêu đề card đang là mã
+4. Từ ngày, đến ngày chưa đúng định dạng ngày
+Mong muốn: 
+1. Tên đơn vị hiển thị đúng đơn vị đã chọn
+2. Dữ liệu load theo đơn vị đã chọn
+3. Tiêu đề card hiển thị text
+4. Từ ngày, đến ngày định dạng ngày dd/mm/yyyy => Sửa cả trong file excel, pdf",https://prnt.sc/zpM2Y8PeOPfT,Bug,Cao,1/6/2026,Chưa thực hiện,,,,,,,,,,,,
+110,,,,,,,,,,,,,,,,,,,,,,
+111,,,,,,,,,,,,,,,,,,,,,,
+112,,,,,,,,,,,,,,,,,,,,,,

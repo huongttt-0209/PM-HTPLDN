@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev. (Bug ID: BUG-CNTTTVV_06)
+- Web sai: khi cán bộ sửa hồ sơ tư vấn viên KHÔNG thuộc đơn vị mình rồi bấm Lưu, hệ thống có chặn thao tác (đúng) nhưng thông báo lỗi hiển thị 2 LẦN TRÙNG LẶP, cùng nội dung "Đơn vị của bạn khác đơn vị của tư vấn viên" (đã kiểm đếm: 2 thông báo giống hệt nhau).
+- Ngoài ra nội dung thông báo chưa nêu rõ người dùng không có quyền cập nhật hồ sơ.
+- Expected theo SRS: SCR-IV-02 §Tham chiếu nội bộ (srs-fr-04 dòng 1519) quy định màn Sửa hồ sơ TVV áp dụng quy tắc phân quyền theo đơn vị (BR-AUTH-08) và dùng thông báo lỗi ERR-CN-02; FR-IV-11 (UC49) §Error Handling E2 (dòng 854) và FR-IV-04 §Error Handling E1 (dòng 420) quy định thông báo phải nêu rõ "không có quyền cập nhật hồ sơ tư vấn viên này (khác đơn vị)". Mỗi lần thao tác chỉ hiển thị thông báo một lần.
+- Verify: tài khoản Cán bộ nghiệp vụ Trung ương (đơn vị Bộ Tư pháp - TW), sửa hồ sơ tư vấn viên TVV-STP-AG-0001 thuộc đơn vị địa phương (khác đơn vị) — đúng điều kiện đối tác.

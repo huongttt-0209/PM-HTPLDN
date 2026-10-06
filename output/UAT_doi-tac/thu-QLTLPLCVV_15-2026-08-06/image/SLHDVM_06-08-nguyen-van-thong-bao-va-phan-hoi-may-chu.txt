@@ -1,0 +1,154 @@
+SLHDVM_06 — Nguyên văn thông báo trên màn + phản hồi máy chủ (lượt đo 2026-08-06)
+================================================================================
+Môi trường : https://18.143.165.120.nip.io  (env kiểm thử NỘI BỘ, không phải env nghiệm thu của đối tác)
+Bản dựng   : nhãn hiển thị "HTPLDN · V1.0.8"
+             bó mã  assets/index-CNwX9JjX.js
+             etag   "6a73f6a4-1124fd"   ·  index.html etag "6a73f6a4-428"
+             last-modified: Thu, 06 Aug 2026 02:51:16 GMT   ·  content-length 1123581
+             md5 bó mã: e0e4f737b1fb7ab9409f459a4d0fa051      <- dấu vân tay bản dựng (tự đo)
+Màn        : Báo cáo thống kê → BC Số lượng hỏi đáp/vướng mắc pháp luật (FR-IX-01)
+Bộ đo      : output/UAT_doi-tac/tools/toast-capture.js — không lọc trùng, đọc innerText,
+             tự kiểm soObserverDangSong = 1 TRƯỚC MỌI lượt bấm; đếm thông báo theo MỐC GIỜ khác nhau.
+
+
+PHẦN A — VAI TRÒ RA VERDICT: cbnv_tw_05 (CB Nghiệp vụ - Trung ương, CB_NV_TW, cấp TW,
+         donViId 00000000-0000-4000-8000-000000000001, phạm vi Toàn quốc)
+================================================================================
+Đây đúng tác nhân đặc tả của FR-IX-01 (srs-fr-11-bao-cao.md:140).
+
+--- Dạng 1 — không lọc đặc thù (đúng điều kiện VÒNG 2 của đối tác) ---
+Số trên màn      : Tổng 22 · Đã trả lời 11 · Chờ trả lời 11 · Tỷ lệ 50,0 %
+                   Thời điểm tạo 06/08/2026 12:25  (mới tinh — không phải số cache cũ)
+Bấm [Xuất Excel] : SO_REQUEST = 1  ->  POST /api/v1/bao-cao/export
+                   SO_PHAN_TU_BAT_DUOC = 1 · SO_THONG_BAO_THEO_MOC_GIO = 1
+                   chữ trên màn (innerText) = "Đang tạo file..."
+                   KHÔNG có "Không thể tạo file xuất. Vui lòng thử lại."
+                   KHÔNG có "Forbidden"
+Request body     : {"loaiBaoCao":"BC_HOI_DAP","kyBaoCao":"NAM","tuNgay":"2026-01-01",
+                    "denNgay":"2026-12-31","filterDacThu":{},"formatXuat":"XLSX"}
+Phản hồi máy chủ : HTTP/2 200
+                   content-disposition: attachment; filename="BaoCaoHoiDap_20260806_1225.xlsx"
+                   content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+                   6966 byte  ·  md5 1eaf95edb62da238c0d7f69ecb42b1b2
+
+--- Dạng 2 — lọc Lĩnh vực PL = Thuế (đúng điều kiện VÒNG 1 của đối tác) ---
+Số trên màn      : Tổng 8 · Đã trả lời 6 · Chờ trả lời 2 · Tỷ lệ 75,0 %
+                   Thời điểm tạo 06/08/2026 12:28
+Bấm [Xuất Excel] : SO_REQUEST = 1 · SO_THONG_BAO_THEO_MOC_GIO = 1 · chữ = "Đang tạo file..."
+                   KHÔNG có thông báo lỗi nào
+Request body     : ... "filterDacThu":{"linhVucId":"bbbbbbbb-0000-4000-8000-000000000018"} ...
+Phản hồi máy chủ : HTTP/2 200
+                   content-disposition: attachment; filename="BaoCaoHoiDap_20260806_1229.xlsx"
+                   6878 byte  ·  md5 32cef683cdfc71efaec3e2348b1cb878
+
+--- Dạng 3 — lọc Trạng thái HĐ = Đã trả lời ---
+Số trên màn      : Tổng 11 · Đã trả lời 11 · Chờ trả lời 0 · Tỷ lệ 100,0 %
+                   Thời điểm tạo 06/08/2026 12:30
+Bấm [Xuất Excel] : SO_REQUEST = 1 · SO_THONG_BAO_THEO_MOC_GIO = 1 · chữ = "Đang tạo file..."
+                   KHÔNG có thông báo lỗi nào
+Request body     : ... "filterDacThu":{"trangThaiHd":"DA_TRA_LOI"} ...
+Phản hồi máy chủ : HTTP/2 200
+                   content-disposition: attachment; filename="BaoCaoHoiDap_20260806_1230.xlsx"
+                   6928 byte  ·  md5 aab88a6baaa00753381ba5ef0a24059c
+
+--- Trình duyệt CÓ THẬT SỰ nhận tệp về máy không (đặc tả :1052 "click -> auto-download") ---
+Chrome ghi ra đĩa 3 tệp, đúng 3 mốc giờ bấm, md5 TRÙNG KHÍT thân phản hồi:
+   ~/Downloads/.com.google.Chrome.Fa9SBg  6966 B  12:25  md5 1eaf95edb62da238c0d7f69ecb42b1b2
+   ~/Downloads/.com.google.Chrome.DYjrEA  6878 B  12:29  md5 32cef683cdfc71efaec3e2348b1cb878
+   ~/Downloads/.com.google.Chrome.sMMaJ3  6928 B  12:30  md5 aab88a6baaa00753381ba5ef0a24059c
+(Tên là tên tạm của Chrome vì phiên MCP chạy ngữ cảnh cô lập nên không chốt tên tệp.
+ Tên người dùng thật nhìn thấy lấy từ content-disposition: BaoCaoHoiDap_YYYYMMDD_HHmm.xlsx —
+ cùng máy, phiên Chrome thường của một tổ QA khác cùng ngày đã đổ về đúng khuôn tên đó.)
+
+--- Mở tệp ra ĐỌC bằng openpyxl (không dừng ở "200 + có byte") ---
+Cả 3 tệp: 1 sheet tên "BC Số lượng hỏi đáp".
+4 dòng đầu tệp (đặc tả :1092 đòi tiêu đề BC + kỳ + đơn vị + ngày tạo) — CÓ ĐỦ:
+   A1 "BC Số lượng hỏi đáp/vướng mắc pháp luật"
+   A2 "Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)"
+   A3 "Đơn vị: Toàn quốc"
+   A4 "Ngày tạo: 06/08/2026"
+
+So số liệu trong tệp với số liệu ĐANG HIỆN trên màn:
+   dạng 1  Tổng 22 / ĐTL 11 / CTL 11 / 75->50 %      ->  tệp: 22 / 11 / 11 / 50    KHỚP
+           theo lĩnh vực Thương mại 13 · Thuế 8 · Lao động 1 (=22)  ->  tệp y hệt   KHỚP
+           theo đơn vị Cục Bổ trợ tư pháp 21 · Sở Tư pháp Hà Nội 1 (=22) -> y hệt   KHỚP
+   dạng 2  Tổng 8 / 6 / 2 / 75 %                     ->  tệp: 8 / 6 / 2 / 75       KHỚP
+           theo lĩnh vực CHỈ CÒN "Thuế 8"  -> tệp chỉ có Thuế 8                     KHỚP
+   dạng 3  Tổng 11 / 11 / 0 / 100 %                  ->  tệp: 11 / 11 / 0 / 100    KHỚP
+           theo lĩnh vực Thuế 6 · Thương mại 4 · Lao động 1 (=11) -> tệp y hệt      KHỚP
+3 tệp có md5 KHÁC NHAU  =>  tệp xuất bám đúng bộ lọc hiện tại (BR-DATA-06, :1280),
+không phải luôn trả về bản không lọc.
+
+--- Đo bằng ĐƯỜNG THỨ HAI (gọi thẳng máy chủ bằng curl, ngoài trình duyệt, cùng tham số dạng 2) ---
+POST /api/v1/bao-cao/export  ->  HTTP 200 · 6879 byte
+content-disposition: attachment; filename="BaoCaoHoiDap_20260806_1232.xlsx"
+Mở bằng openpyxl: 4 dòng header y hệt · số liệu 8 / 6 / 2 / 75 · Thuế 8 · Cục Bổ trợ tư pháp 8
+=> HAI ĐƯỜNG KHỚP NHAU HOÀN TOÀN.
+
+
+PHẦN B — ĐỐI CHỨNG ĐÚNG VAI TRÒ ĐỐI TÁC DÙNG: admin (Quản trị hệ thống, QTHT, cấp TW)
+================================================================================
+Vì sao đo phần này: cả video vòng 1 lẫn ảnh vòng 2 của đối tác đều hiện ở góc phải trên
+"Quản trị viên · QTHT · BTP · TW" — tức đối tác thao tác bằng vai trò QTHT, KHÔNG phải
+CB Nghiệp vụ. Phần B chỉ để ĐIỀU TRA (đóng dòng GAP "Vai trò / tài khoản"), không ra verdict.
+
+--- Trên giao diện thật, cùng màn, cùng bộ lọc vòng 2 của đối tác ---
+Xem báo cáo      : CHẠY ĐƯỢC. GET /api/v1/bao-cao/hoi-dap -> HTTP 200
+                   Màn hiện Tổng 22 · 11 · 11 · 50,0 % (đúng bằng số vai trò CB Nghiệp vụ thấy)
+                   Thời điểm tạo 06/08/2026 12:37
+Nút [Xuất Excel] : HIỆN và Ở TRẠNG THÁI BẤM ĐƯỢC (disabled = false)
+Bấm [Xuất Excel] : POST /api/v1/bao-cao/export  ->  HTTP 403
+                   Chữ hiện trên màn (innerText) = "Forbidden"
+                   Xuất hiện sau khi bấm 102 ms, biến mất ở 3 440 ms  (sống ~3,3 giây)
+                   Hình học lúc đang hiện: x=8 · y=16 · w=1416 · h=40 · opacity 1 · visibility visible
+                   => khung thông báo hiện THẬT với người dùng, không phải node ẩn.
+                   Console: "Failed to load resource: the server responded with a status of 403".
+
+*** LƯU Ý PHƯƠNG PHÁP (ghi để người sau không mắc lại) ***
+Bộ bắt thông báo theo kiểu "nghe node MỚI được thêm" CHỈ bắt được "Đang tạo file..." và
+BỎ SÓT chữ "Forbidden" — vì thư viện giao diện THAY CHỮ TRONG CHÍNH NODE CŨ chứ không thêm
+node mới. Phải đo thêm bằng cách theo dõi NỘI DUNG vùng thông báo theo thời gian (innerText)
+mới thấy. Nếu chỉ tin bộ đo addedNodes thì sẽ kết luận sai là "không có thông báo nào".
+
+--- Phản hồi nguyên văn của máy chủ khi vai trò QTHT bấm xuất ---
+{"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+ "timestamp":"2026-08-06T05:33:42.073Z","requestId":"cc37e318-eee2-43b5-867b-125ed2693994"}}
+
+--- Phạm vi của việc bị chặn (vai trò QTHT) ---
+XEM báo cáo (GET)                                   -> 200 ở cả 3 loại BC đã thử
+   /api/v1/bao-cao/hoi-dap                          -> 200
+   /api/v1/bao-cao/lop-dao-tao-dang-dien-ra         -> 200
+   /api/v1/bao-cao/vu-viec-tiep-nhan                -> 200
+XUẤT tệp (POST /api/v1/bao-cao/export)              -> 403 ở MỌI tổ hợp đã thử
+   BC_HOI_DAP / XLSX                    -> 403          BC_HOI_DAP / PDF                    -> 403
+   BC_LOP_DAO_TAO_DANG_DIEN_RA / XLSX   -> 403          BC_LOP_DAO_TAO_DANG_DIEN_RA / PDF   -> 403
+   BC_VU_VIEC_TIEP_NHAN / XLSX          -> 403          BC_VU_VIEC_TIEP_NHAN / PDF          -> 403
+=> Không phải lỗi riêng của báo cáo hỏi đáp: vai trò QTHT XEM được mọi báo cáo nhưng
+   KHÔNG XUẤT được báo cáo nào, ở cả hai định dạng.
+
+
+PHẦN C — ĐỐI CHIẾU VỚI 2 VẾ ĐỐI TÁC PHẢN ÁNH
+================================================================================
+Vế a — "Không thể tạo file xuất. Vui lòng thử lại." (ERR-RPT-04, đặc tả :116)
+       KHÔNG tái hiện ở bất kỳ đâu: vai trò CB Nghiệp vụ 3/3 dạng đều xuất được;
+       vai trò QTHT trả 403 "Forbidden" — là câu khác hẳn, không phải ERR-RPT-04.
+       => vế a HẾT LỖI.
+
+Vế b — "Forbidden"
+       TÁI HIỆN NGUYÊN VẸN, ngay trên bản dựng V1.0.8, đúng vai trò đối tác dùng (QTHT),
+       đúng màn, đúng bộ lọc, cùng một chữ "Forbidden" như ảnh SLHDVM_06_v2.jpg.
+       => vế b CÒN LỖI.
+
+--- Số lượt đã thử chụp được khung thông báo tự tắt ---
+3 lượt. Lượt 1 và 2 (hẹn bấm sau 2200 ms / 600 ms rồi chụp) đều trượt vì máy chụp nhanh hơn
+mốc bấm. Lượt 3 bấm lặp mỗi 1,5 giây trong lúc chụp -> BẮT ĐƯỢC khung thông báo đỏ "Forbidden",
+lưu tại image/SLHDVM_06-07-doichung-vaitro-QTHT-thong-bao-Forbidden-V108.png
+
+
+PHẦN D — DỮ LIỆU ĐÃ THAY ĐỔI TRÊN MÔI TRƯỜNG
+================================================================================
+KHÔNG seed, KHÔNG sửa, KHÔNG xóa bản ghi nghiệp vụ nào. Toàn bộ phép đo là thao tác CHỈ ĐỌC
+(xem báo cáo + xuất tệp). Có 2 lượt đăng nhập ghi vào nhật ký hệ thống:
+   - cbnv_tw_05 đăng nhập lúc ~12:23 (tài khoản được giao)
+   - admin (QTHT) đăng nhập 2 lượt (1 qua API 12:33, 1 qua giao diện 12:36) CHỈ để đối chứng
+     vai trò; đã đăng xuất và đóng thẻ trình duyệt lúc ~12:40.

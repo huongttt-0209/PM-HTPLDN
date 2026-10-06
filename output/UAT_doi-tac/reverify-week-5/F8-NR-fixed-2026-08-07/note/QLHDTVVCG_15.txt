@@ -1,0 +1,55 @@
+📌 KẾT QUẢ CHUNG: CẦN BA XÁC NHẬN — bốn yêu cầu chấm được đều ĐẠT, còn hai điểm đặc tả chưa đủ căn cứ nên chưa được chấm đạt cũng không được chấm lỗi.
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-BbPPdate.js (bản lên lúc 13:47 ngày 07/08/2026), đo lúc 14:39-14:47 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_03, đơn vị "Cục Bổ trợ tư pháp - Bộ Tư pháp" - đúng vai trò được phép lưu hợp đồng; không dùng tài khoản quản trị.
+
+ĐƯỜNG VÀO THỰC TẾ (nói rõ vì bước 1 của phiếu đã hết hiệu lực)
+
+Bước 1 của phiếu ghi "Chọn menu Hợp đồng Tư vấn". Thanh bên KHÔNG có mục đó - đúng theo quyết định nghiệp vụ ngày 11/05/2026 (bỏ menu riêng), như phản hồi của bộ phận phát triển. Đây là đường đi, không phải điểm chấm, nên không tính là lỗi. Đường thực tế: Vụ việc HTPL > tìm vụ việc VV-BTP-TW-20260804-002 > mở Chi tiết vụ việc > mở mục "HĐ tư vấn liên kết" > bấm "+ Tạo hợp đồng" > nhập thông tin > bấm nút gửi biểu mẫu.
+
+Hợp đồng đã tạo thật bằng giao diện: HDTV-20260807-0006 - "Hợp đồng tư vấn xác lập quyền sở hữu trí tuệ và nhãn hiệu cho doanh nghiệp nhỏ và vừa", bên B là Chuyên gia UAT QLNDTVVCG 38, giá trị 250.000.000 đồng, thời gian 07/08/2026 đến 25/08/2026.
+
+ĐÃ ĐẠT - 4 phần
+
+1) Sinh mã hợp đồng đúng khuôn HDTV-{ngày}-{số thứ tự}. Sau khi lưu, mã HDTV-20260807-0006 hiện ở cả ba chỗ: dưới tiêu đề hợp đồng, ô "Mã hợp đồng", và cột "Mã hợp đồng" trên bảng danh sách. Kiểm lại bằng đường thứ hai: đọc lại chính bản ghi đó từ máy chủ, mã lưu trong dữ liệu cũng là HDTV-20260807-0006 - trùng khít chuỗi hiển thị. Đã kiểm riêng phần ngày: 20260807 đúng là NGÀY TẠO bản ghi, không phải ngày kết thúc hợp đồng (25/08/2026). Yêu cầu của đặc tả tại srs-fr-14-hop-dong-tv.md:81, :119 và :514.
+
+2) Lưu bản ghi kèm ĐẦY ĐỦ ba nhóm dữ liệu con đã nhập (nhóm thứ tư là tệp đính kèm, xem phần Cần nghiệp vụ chốt điểm 2). Trước khi lưu đã nhập 1 mốc tiến độ, 1 giai đoạn thanh toán và 3 vụ việc liên kết. Sau khi lưu, mở LẠI màn chi tiết hợp đồng (tải mới từ máy chủ, không đếm trên biểu mẫu cũ) thì đếm được đúng 1 mốc tiến độ "Ban giao ho so tra cuu nhan hieu" hạn 18/08/2026, đúng 1 giai đoạn "Dot 1 - tam ung khi ky hop dong" 100.000.000 đồng ngày 15/08/2026, và đúng 3 vụ việc VV-BTP-TW-20260804-002, -003, -004. Kiểm lại bằng đường thứ hai: đọc lại bản ghi từ máy chủ, số phần tử từng nhóm là 1 - 1 - 3, khớp số đã nhập. Nhờ vậy loại được ca hay gặp "giao diện nhận dữ liệu con nhưng máy chủ chỉ lưu phần thông tin chung". Màn chi tiết còn có mục "Nhật ký hoạt động" ghi lại thao tác tạo mới - đáp ứng yêu cầu lưu vết tại :162. Yêu cầu của đặc tả tại :122, :123, :159 đến :162.
+
+3) Gán trạng thái "Đang thực hiện". Hợp đồng vừa lưu hiện nhãn tiếng Việt "Đang thực hiện" ở thẻ dưới tiêu đề, ô Trạng thái và cột Trạng thái trên bảng danh sách; không chỗ nào lộ mã kỹ thuật ra màn hình. Kiểm lại bằng đường thứ hai: giá trị trạng thái lưu trong dữ liệu đúng là giá trị mặc định mà đặc tả quy định, nên loại được khả năng "giao diện hiển thị mặc định cứng còn dữ liệu lưu khác". Yêu cầu của đặc tả tại :396 và :464.
+
+4) Hiển thị đúng câu thông báo "Đã lưu hợp đồng". Đã cài bộ bắt thông báo trước khi bấm lưu (thông báo loại này tự tắt sau vài giây, đọc muộn sẽ kết luận sai là "im lặng"), không lọc trùng. Kết quả: đúng MỘT thông báo tại một mốc giờ duy nhất 14:43:54, nội dung "Đã lưu hợp đồng" - trùng từng chữ câu chuẩn của đặc tả. Đếm kèm số yêu cầu gửi đi: đúng MỘT yêu cầu lưu, phản hồi thành công, đóng dấu thời gian cùng giây với thông báo. Vậy không có thông báo kép, không có lưu hai lần. Yêu cầu của đặc tả tại :173 và :187. Ghi nhận phản hồi của bộ phận phát triển là chính xác: câu này đã dùng chung cho cả tạo mới lẫn cập nhật.
+
+CẦN NGHIỆP VỤ CHỐT - 2 điểm (chưa được chấm đạt hay lỗi)
+
+Điểm 1: SAU KHI LƯU THÌ MÀN HÌNH ĐI ĐÂU.
+- CẦN BA CONFIRM: đối tác kỳ vọng sau khi lưu hợp đồng mới thì hệ thống quay về màn danh sách hợp đồng; SRS quy định nhóm chức năng này KHÔNG có màn danh sách độc lập, sau khi lưu hệ thống đóng biểu mẫu và trả người dùng về ngữ cảnh đã mở nó, tức Chi tiết Vụ việc hoặc Chi tiết Tư vấn viên (srs-fr-14-hop-dong-tv.md:175, ghi chú "BA chốt 06/08/2026", và :187); web hiện tại: đóng biểu mẫu, ở lại màn Chi tiết vụ việc VV-BTP-TW-20260804-002 và tự nạp lại bảng "HĐ tư vấn liên kết" ngay trong màn đó, bảng đã hiện hợp đồng vừa tạo.
+- Nói cách khác, phần mềm đang làm THEO PHÍA ĐẶC TẢ, khác với câu chữ trong ô Kết quả mong đợi của phiếu. Vì hai nguồn nói ngược nhau nên không được chấm đạt cũng không được chấm lỗi.
+- CÂU HỎI CHO NGHIỆP VỤ: đề nghị chốt - sau khi lưu hợp đồng mới, hệ thống phải quay về một màn danh sách hợp đồng riêng (thì phải dựng thêm màn đó), hay giữ như hiện nay là trả về màn đã mở biểu mẫu? Nếu chốt giữ như hiện nay thì đề nghị sửa lại câu chữ của phiếu kiểm thử cho khớp.
+
+Điểm 2: PHẦN MỀM TÁCH VIỆC ĐÍNH KÈM TỆP THÀNH HAI BƯỚC (phần tệp đính kèm của yêu cầu số 2).
+- HÀNH VI ĐO ĐƯỢC: ở chế độ Thêm mới, mục "Tài liệu đính kèm" KHÔNG có ô chọn tệp, phần mềm hiện dòng chữ "Vui lòng lưu hợp đồng trước khi đính kèm tài liệu". Sau khi lưu, mở lại biểu mẫu ở chế độ SỬA thì ô chọn tệp XUẤT HIỆN, có vùng "Kéo thả hoặc nhấp để chọn tệp đính kèm" kèm ràng buộc ghi rõ trên màn: tối đa 10 tệp, định dạng pdf/doc/docx/xls/xlsx/jpg/png, 20MB mỗi tệp. Nghĩa là NĂNG LỰC ĐÍNH KÈM CÓ, nhưng bị tách làm hai bước - không phải "không đính kèm được".
+- Nói rõ để tránh hiểu nhầm: đội kiểm thử ĐÃ chuẩn bị sẵn bộ tệp thật đúng định dạng; việc không nhập được là do phần mềm không mở chỗ nhập ở bước tạo, không phải do thiếu dữ liệu thử.
+- Đối chứng độc lập: phía máy chủ, việc nạp tệp cũng buộc phải gắn với một hợp đồng ĐÃ TỒN TẠI. Vậy đây là thiết kế nhất quán của phần mềm, không phải trục trặc ngẫu nhiên.
+- Lượt kiểm chế độ Sửa chỉ MỞ RA NHÌN rồi bấm Hủy, KHÔNG tải tệp lên, KHÔNG lưu - vì thao tác sửa hợp đồng thuộc một phiếu kiểm thử khác, làm bây giờ sẽ ảnh hưởng phép đo của phiếu đó. Đã xác minh bản ghi không đổi.
+- Đặc tả đứng ở đâu (đã tự mở tệp đọc lại bốn chỗ): :92 bảng dữ liệu đầu vào CÓ khai trường tệp đính kèm, nhiều tệp, không bắt buộc, do người dùng tải lên; :290 bảng thành phần màn hình CÓ khai "File đính kèm" trên trang thêm/sửa. NHƯNG bước xử lý khi lưu (:122, :123) chỉ nhắc mốc tiến độ, thanh toán giai đoạn và liên kết vụ việc; mục kết quả sau xử lý (:159 đến :162) cũng chỉ liệt kê hợp đồng, mốc tiến độ, thanh toán, liên kết vụ việc và lưu vết - KHÔNG chỗ nào nhắc tệp đính kèm. Tức đặc tả CÓ trường tệp trên biểu mẫu nhưng KHÔNG phát biểu ở đâu rằng tệp phải được lưu CÙNG LÚC tạo bản ghi, trong khi ô Kết quả mong đợi của phiếu lại nói rõ "cùng toàn bộ ... tệp đính kèm đã nhập".
+- Vì đặc tả im lặng nên phần này KHÔNG được chấm đạt, cũng KHÔNG được kết luận là lỗi của bộ phận phát triển.
+- CÂU HỎI CHO NGHIỆP VỤ: đối tác kỳ vọng tạo hợp đồng và nạp tệp đính kèm trong cùng một lượt lưu. Đặc tả có khai trường tệp trên biểu mẫu thêm/sửa (:92, :290) nhưng bước xử lý khi lưu (:122, :123) và mục kết quả sau xử lý (:159 đến :162) không nhắc tệp đính kèm, nên không có căn cứ đòi lưu cùng lúc. Web hiện tại yêu cầu lưu hợp đồng trước rồi mới đính kèm ở chế độ Sửa. Đề nghị nghiệp vụ chốt: nạp tệp lúc tạo có bắt buộc không, hay tách hai bước là chấp nhận được - và bổ sung điều này vào đặc tả.
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Nhãn nút gửi biểu mẫu đổi theo chế độ: chế độ Thêm mới là "Thêm mới", chế độ Sửa là "Lưu". Phiếu chấm theo hành vi nên không tính là lỗi; đề nghị nghiệp vụ thống nhất nhãn.
+- Nhật ký hoạt động của hợp đồng hiện HAI dòng "Tạo mới" cùng mốc 14:43 cho một lần lưu, trong đó một dòng bỏ trống cột Đường dẫn và cột Mã phản hồi, dù chỉ có đúng một yêu cầu lưu được gửi đi. Đặc tả chỉ ghi chung chung là "có lưu vết", không nói một giao dịch sinh mấy dòng nhật ký, nên chỉ ghi nhận, chưa kết luận.
+- Phần mềm CÓ màn chi tiết hợp đồng riêng, và đường dẫn phụ đề của màn đó có liên kết "Hợp đồng tư vấn"; bấm thử liên kết này thì hệ thống ném người dùng về màn Tổng quan chứ không mở danh sách hợp đồng nào. Trong khi đặc tả :266 và :268 nói nhóm chức năng này không còn màn/menu riêng. Ghi nhận làm dữ kiện cho câu hỏi nghiệp vụ về phạm vi màn hình, không tính là lỗi của phiếu này.
+
+DỮ LIỆU ĐÃ THAY ĐỔI: lượt đo này TẠO MỚI 1 hợp đồng tư vấn trên môi trường nội bộ - mã HDTV-20260807-0006 lúc 14:43 ngày 07/08/2026, kèm 1 mốc tiến độ, 1 giai đoạn thanh toán và 3 liên kết tới vụ việc VV-BTP-TW-20260804-002, -003, -004 (chỉ tạo liên kết, không sửa bản thân các vụ việc). Ghi chú của hợp đồng mang dấu QA-F8-321-20260807 để phân biệt với dữ liệu của đối tác. Không sửa, không xóa bản ghi nào khác. Sau khi lượt đo này kết thúc, đội có bổ sung 1 tệp đính kèm vào chính hợp đồng đó để phục vụ các phiếu sau; việc bổ sung diễn ra SAU khi đã đo và ghi xong phần trên, nên không ảnh hưởng kết quả của phiếu này.
+
+Ảnh bằng chứng:
+- Dữ liệu đã nhập trước khi bấm lưu (nội dung, ghi chú, mốc tiến độ, giai đoạn thanh toán): https://drive.google.com/file/d/1-Ut6CKSa2OoHCX1L1he5edygARQTPfOi/view?usp=drivesdk
+- Sau khi lưu: biểu mẫu đóng, màn dừng ở Chi tiết vụ việc, bảng hợp đồng liên kết đã có bản ghi mới: https://drive.google.com/file/d/1ce65-8s3aoiS__GLD7HyVOiz8WqBHHmk/view?usp=drivesdk
+- Mở lại chi tiết hợp đồng đếm từng nhóm: 3 vụ việc, 1 mốc tiến độ, 1 giai đoạn thanh toán, chưa có tài liệu đính kèm: https://drive.google.com/file/d/1tbbdgTvP1J4ix0V-HTnJY80x1fB8xIH0/view?usp=drivesdk
+- Chế độ Thêm mới không có ô chọn tệp, chỉ chế độ Sửa mới có: https://drive.google.com/file/d/1VMsiUnGvgaPLqAvEXnm_cYQBR0JB7OuH/view?usp=drivesdk
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.

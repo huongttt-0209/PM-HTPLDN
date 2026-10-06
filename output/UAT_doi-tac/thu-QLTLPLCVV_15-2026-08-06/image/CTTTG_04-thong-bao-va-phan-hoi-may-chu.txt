@@ -1,0 +1,212 @@
+CTTTG_04 — BC Chương trình theo thời gian (FR-IX-23 / UC146)
+Nguyên văn thông báo trên màn + phản hồi máy chủ + nội dung tệp xuất
+Môi trường: https://18.143.165.120.nip.io — bản dựng HTPLDN · V1.0.8
+
+⚠️ BẢN DỰNG ĐỔI GIỮA PHIÊN ĐO — chuỗi phiên bản GIỮ NGUYÊN "V1.0.8" nhưng bó mã giao diện đổi:
+    14:10–14:19  assets/index-CNwX9JjX.js   (lượt đo đầu của nhánh A)
+    14:22 trở đi assets/index-DIABnbIr.js   (nhánh B + toàn bộ lượt đo lại của nhánh A)
+  ⇒ Đã ĐO LẠI nhánh A trên bó mã MỚI (14:28–14:38) để hai nhánh nằm trên CÙNG một bản dựng.
+    Mọi số liệu dùng để chấm ở dưới là của bó mã index-DIABnbIr.js.
+
+Thời điểm đo: 2026-08-06 14:10 → 14:38 (giờ máy trạm, GMT+7)
+Bộ bắt thông báo: tools/toast-capture.js (không lọc trùng · đọc innerText · đếm request).
+  Tự kiểm TRƯỚC mỗi lượt đo: soObserverDangSong = 1 (hợp lệ) — mọi lượt đều = 1.
+  Bổ sung: bộ ghi chữ theo thời gian (đọc innerText của .ant-message-notice-wrapper mỗi 100ms)
+  vì thư viện giao diện DÙNG LẠI một khung và ĐỔI CHỮ TẠI CHỖ — chỉ nghe addedNodes thì bắt
+  được chữ đầu ("Đang tạo file...") mà mất chữ cuối ("Tạo file thành công." / "Forbidden").
+Bẫy cache máy chủ đã loại trừ: trường "Thời điểm tạo" đổi theo từng lượt Xem báo cáo
+  (14:10 → 14:16 → 14:30 → 14:35 → 14:36 → 14:37), không phải số cũ đọc lại.
+
+=====================================================================
+NHÁNH A — cbnv_tw_04 (CB Nghiệp vụ Trung ương, cấp TW) — vai trò của đặc tả, dùng để chấm
+=====================================================================
+Danh tính xác nhận TRƯỚC phép đo (GET /api/v1/auth/me, 14:28:52):
+  hoTen = "CB Nghiệp vụ - Trung ương #04" · vaiTro = ["CB_NV_TW"] · capDonVi = "TW"
+  donViId = "00000000-0000-4000-8000-000000000001"
+Danh tính xác nhận SAU toàn bộ phép đo nhánh A (14:38:29): GIỐNG HỆT, bó mã vẫn index-DIABnbIr.js
+  ⇒ phép đo hợp lệ.
+
+--- Dạng ① (Kỳ Năm · 01/01/2026 → 31/12/2026 · Toàn quốc — trùng khít ảnh vòng 1 của đối tác) ---
+URL sinh ra: /bao-cao?loai=ct-theo-thoi-gian&kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+  (trùng khít thanh địa chỉ trên ảnh vòng 1 của đối tác)
+Màn (Thời điểm tạo 06/08/2026 14:30):
+  Tổng chương trình toàn kỳ = 6 · Tổng DN toàn kỳ = 0 · Tổng ngân sách toàn kỳ = 250,000,000
+  Biểu đồ: 1 điểm "Năm 2026"
+  Bảng "Theo kỳ": Năm 2026 | 01/01/2026 | 31/12/2026 | 6 | 0 | 250.000.000 ₫
+[Xem báo cáo] lúc 14:30: 0 thông báo.
+[Xuất Excel] lúc 14:31 (bấm bằng công cụ chuột thật của trình duyệt):
+  SO_REQUEST = 1 → POST /api/v1/bao-cao/export → HTTP 200
+  SO_KHUNG_THONG_BAO = 1 (1 mốc giờ, không double-toast). CHỮ NGƯỜI DÙNG THẤY:
+     "Đang tạo file..."  →  "Tạo file thành công."   (đổi tại chỗ trong CÙNG 1 khung)
+     khung position: fixed, rộng 1432 × cao 40 px; sống 2,522 giây rồi tự tắt
+  KHÔNG có "Không thể tạo file xuất. Vui lòng thử lại." · KHÔNG có "Forbidden"
+  Tệp GIAO VỀ MÁY: BaoCaoCtTheoThoiGian_20260806_1430.xlsx (6.758 byte)
+
+Nội dung tệp (mở bằng openpyxl — magic PK\x03\x04, zip thật, có xl/workbook.xml):
+  sheet: "Chương trình theo thời gian"
+  A1: BC Chương trình theo thời gian
+  A2: Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+  A3: Đơn vị: Toàn quốc
+  A4: Ngày tạo: 06/08/2026
+  A6           : Tổng số chương trình toàn kỳ
+  A7|B7        : Chỉ tiêu | Số lượng
+  A8|B8        : Tổng số chương trình toàn kỳ | 6
+  A10          : Tổng số DN toàn kỳ
+  A12|B12      : Tổng số DN toàn kỳ | 0
+  A14          : Tổng ngân sách toàn kỳ
+  A16|B16      : Tổng ngân sách toàn kỳ | 250000000
+  A18          : Theo kỳ
+  A19..F19     : Kỳ | Từ ngày | Đến ngày | Số chương trình | Số DN | Tổng ngân sách (₫)
+  A20..F20     : Năm 2026 | 01/01/2026 | 31/12/2026 | 6 | 0 | 250000000
+  ⇒ khớp TỪNG Ô với màn; cộng dọc cột "Số chương trình" = 6 = thẻ tổng.
+  Lưu bản sao: testfiles/CTTTG_04-dang1-bandung-moi-DIABnbIr.xlsx
+
+--- Dạng ② (Đơn vị = Cục Bổ trợ tư pháp - Bộ Tư pháp (BTP-TW) — trùng khít ảnh vòng 2 của đối tác) ---
+URL: ...&donViId=00000000-0000-4000-8000-000000000001   (đúng chuỗi trên thanh địa chỉ ảnh vòng 2)
+Màn (Thời điểm tạo 14:37): Tổng 6 · 0 · 250,000,000 — TRÙNG dạng ① vì mọi chương trình trên env
+  đều thuộc đơn vị này (ca suy biến, đã đóng bằng dạng ②b bên dưới).
+[Xuất Excel] lúc 14:37: 1 request POST /api/v1/bao-cao/export → HTTP 200.
+  Tiêu đề phản hồi: content-disposition: attachment; filename="BaoCaoCtTheoThoiGian_20260806_1437.xlsx"
+                    content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+  Thân yêu cầu đã gửi:
+  {"loaiBaoCao":"BC_CT_THEO_THOI_GIAN","kyBaoCao":"NAM","tuNgay":"2026-01-01","denNgay":"2026-12-31",
+   "donViId":"00000000-0000-4000-8000-000000000001","formatXuat":"XLSX"}
+  ⚠️ Lượt này tệp KHÔNG rơi xuống thư mục tải về của máy (xem mục HẠN CHẾ) — đã lấy nguyên si thân
+     phản hồi làm bằng chứng: testfiles/CTTTG_04-dang2-bandung-moi.xlsx, mở được bằng openpyxl.
+Nội dung tệp: giống dạng ① NHƯNG A3 đổi thành "Đơn vị: Cục Bổ trợ tư pháp - Bộ Tư pháp"
+  ⇒ bộ lọc đơn vị CÓ đi vào nội dung tệp.
+
+--- Dạng ②b (Đơn vị = Bộ Công an (BCA) — nhánh phụ chứng minh bộ lọc đơn vị có tác dụng) ---
+URL: ...&donViId=00000000-0000-4000-8001-000000000016
+Màn (14:38): "Không có dữ liệu báo cáo cho kỳ và đơn vị đã chọn" (đúng E3 :113)
+  + [Xuất Excel] và [Xuất PDF] đều ở trạng thái KHOÁ (disabled = true).
+  ⇒ bộ lọc đơn vị THẬT SỰ lọc dữ liệu; dạng ② trùng dạng ① chỉ vì env chỉ có 1 đơn vị có dữ liệu.
+  Ảnh: CTTTG_04-A8-dang2b-donvi-BoCongAn-khong-co-du-lieu-ban-dung-moi.png
+
+--- Dạng ③ (Kỳ Tháng, khoảng 01/01/2026 → 31/12/2026 — dạng AC :1023 nêu đích danh "12 tháng") ---
+URL: /bao-cao?loai=ct-theo-thoi-gian&kyBaoCao=THANG&tuNgay=2026-01-01&denNgay=2026-12-31
+⚠️ CÁCH ĐẠT TRẠNG THÁI NÀY — khai rõ: trên giao diện KHÔNG chọn được cấu hình này (xem mục
+   GHI NHẬN RIÊNG (2)). Đã mở đúng địa chỉ trên bằng thanh địa chỉ trình duyệt; sau đó màn tự
+   dựng lại đầy đủ (ô Kỳ báo cáo hiện "Tháng", ô Thời gian hiện "Từ 01/01/2026 — Đến 31/12/2026")
+   và thao tác [Xuất Excel] là BẤM CHUỘT THẬT trên nút của màn, không gọi thẳng API.
+Màn (Thời điểm tạo 14:36): Tổng 6 · 0 · 250,000,000
+  Biểu đồ đường: 12 mốc "Tháng 1/2026" … "Tháng 12/2026"
+  Bảng "Theo kỳ" trên màn — 12 hàng:
+    Tháng 1/2026  01/01–31/01  5  0  200.000.000 ₫
+    Tháng 2/2026  01/02–28/02  0  0  0 ₫
+    Tháng 3/2026  01/03–31/03  1  0   50.000.000 ₫
+    Tháng 4..12/2026            0  0  0 ₫  (9 hàng còn lại đều 0)
+[Xuất Excel] lúc 14:36 (bấm chuột thật):
+  SO_REQUEST = 1 → POST /api/v1/bao-cao/export → HTTP 200
+  SO_KHUNG_THONG_BAO = 1. CHỮ NGƯỜI DÙNG THẤY: "Đang tạo file..." → "Tạo file thành công."
+    (khung fixed, 1432 × 40 px, sống 2,502 giây)
+  Tệp GIAO VỀ MÁY: BaoCaoCtTheoThoiGian_20260806_1436.xlsx (7.217 byte)
+Nội dung tệp: A2 đổi thành "Kỳ báo cáo: Tháng (từ 01/01/2026 đến 31/12/2026)";
+  bảng "Theo kỳ" có ĐÚNG 12 hàng, khớp TỪNG HÀNG với màn (Tháng 1 = 5 · Tháng 3 = 1 · 10 tháng
+  còn lại = 0). Cộng dọc 5+1 = 6 = ô A8 "Tổng số chương trình toàn kỳ" = thẻ tổng trên màn.
+  Lưu bản sao: testfiles/CTTTG_04-dang3-bandung-moi-DIABnbIr.xlsx
+  ⇒ 12 nhãn kỳ khác nhau ≠ 1 nhãn kỳ của dạng ① ⇒ nội dung tệp bám theo bộ lọc (:1280).
+
+(Lượt đo trên bó mã CŨ index-CNwX9JjX.js — giữ để đối chiếu, KHÔNG dùng để chấm:
+ dạng ① 14:11 → BaoCaoCtTheoThoiGian_20260806_1411.xlsx ·
+ dạng ② 14:12 → ..._1412.xlsx · dạng ③ 14:17 → ..._1417.xlsx (byte trùng khít thân phản hồi
+ đã bắt được, md5 23fe81b65482911c8d2b66614e4cfdcb) · dạng ②b 14:18 cùng kết quả khoá nút.
+ Kết quả của hai bó mã GIỐNG NHAU ở mọi tiêu chí.)
+
+=====================================================================
+NHÁNH B — admin (QTHT) — trùng khít vai trò trên 2 ảnh của đối tác, đối chứng
+=====================================================================
+Đo lúc 14:22–14:23, trên bó mã MỚI index-DIABnbIr.js (cùng bản dựng với nhánh A ở trên).
+Danh tính xác nhận TRƯỚC và SAU phép đo — GIỐNG HỆT:
+  hoTen = "Quản trị hệ thống" · vaiTro = ["QTHT"] · capDonVi = "TW"
+  donViId = "00000000-0000-4000-8000-000000000001"
+
+--- Dạng ① (Kỳ Năm · 01/01/2026 → 31/12/2026 · Toàn quốc) ---
+[Xem báo cáo] lúc 14:22:
+  GET /api/v1/bao-cao/ct-theo-thoi-gian?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31 → HTTP 200
+  Màn hiện ĐẦY ĐỦ: Tổng chương trình toàn kỳ 6 · Tổng DN 0 · Tổng ngân sách 250,000,000
+  + biểu đồ + bảng "Theo kỳ". 0 thông báo, không bị chặn.
+  ⇒ QTHT XEM ĐƯỢC báo cáo.
+  Ảnh: CTTTG_04-B1-qtht-xem-duoc-bao-cao-day-du-truoc-khi-bam-xuat-V108.png
+
+[Xuất Excel] lúc 14:23:25:
+  SO_REQUEST = 1 → POST /api/v1/bao-cao/export → HTTP 403
+  SO_KHUNG_THONG_BAO = 1 (1 mốc giờ). CHỮ NGƯỜI DÙNG THẤY:
+     "Đang tạo file..."  →  "Forbidden"    (đổi tại chỗ trong cùng 1 khung)
+     khung position: fixed, rộng 1432 × cao 40 px; sống 3,401 giây
+  KHÔNG có tệp nào được giao (thư mục tải về không có tệp mới quanh 14:23).
+  Ảnh (lượt hẹn giờ bấm trước 2500 ms rồi mới chụp — vẫn không bắt được lớp thông báo):
+     CTTTG_04-B2-qtht-hen-gio-bam-xuat-excel-truoc-2500ms-V108.png
+  Tái hiện 2 lần, kết quả y hệt.
+
+Nguyên văn thân phản hồi máy chủ (HTTP 403):
+{
+  "success": false,
+  "error": {
+    "code": "ERR-PERM-SYS-00-01",
+    "message": "Forbidden",
+    "timestamp": "2026-08-06T07:23:25.836Z",
+    "requestId": "bf96f7f7-e505-4dec-913e-930a903f70d9"
+  }
+}
+
+⇒ TÁI HIỆN ĐÚNG triệu chứng vòng 2 của đối tác ("Forbidden"), trên env verify + bản dựng V1.0.8
+  bó mã index-DIABnbIr.js. Câu của vòng 1 (":116" — "Không thể tạo file xuất. Vui lòng thử lại.")
+  KHÔNG còn tái hiện ở bất kỳ nhánh nào.
+
+=====================================================================
+HẠN CHẾ ĐÃ GHI NHẬN
+=====================================================================
+- KHÔNG chụp được ảnh lớp thông báo (cả nhánh A và nhánh B). Đã thử: chụp ngay sau khi bấm ·
+  hẹn giờ bấm sau 2500 ms rồi mới chụp (nhánh A 2 lượt, nhánh B 1 lượt). Thư viện giao diện dựng
+  lớp thông báo qua portal nên công cụ chụp không bắt được — cùng hạn chế đã ghi ở
+  BUG-QLTLPLCVV-015, BUG-SLCTHT-006, BUG-CTTLV-005 trong chính đợt này.
+  Bằng chứng thay thế = chữ đọc bằng innerText + số đo chứng minh khung hiển thị THẬT với người
+  dùng (position: fixed, rộng 1432 px, cao 40 px, sống 2,5–3,4 giây) + nguyên văn phản hồi máy chủ.
+- 2 lượt xuất KHÔNG rơi tệp xuống thư mục tải về dù máy chủ trả 200 kèm content-disposition:
+    (i)  lượt 14:32 — bấm nút bằng lệnh click() hẹn giờ, KHÔNG phải cử chỉ người dùng thật;
+    (ii) lượt 14:37 dạng ② — bấm chuột thật, nhưng là lượt tải thứ 3 liên tiếp trong ít phút.
+  Cả hai lượt đều CÓ 1 request → 200 + thông báo "Tạo file thành công.". Đây là hành vi chặn tải
+  tự động của trình duyệt trong ngữ cảnh tự động hoá, KHÔNG kết luận thành lỗi phần mềm — vì
+  4 lượt khác trong cùng phiên (14:11 · 14:12 · 14:17 · 14:19 · 14:30 · 14:36) tệp về máy bình
+  thường, và 2 phép đo QUYẾT ĐỊNH (dạng ① lúc 14:30 và dạng ③ lúc 14:36) đều có tệp thật trên đĩa.
+  Với lượt (ii) đã lấy nguyên si thân phản hồi làm bằng chứng thay thế và mở đọc được.
+- Dạng ③ không đạt được bằng thao tác trên màn (xem GHI NHẬN RIÊNG (2)); đã đạt bằng địa chỉ
+  trình duyệt rồi bấm nút thật — khai rõ ở phần dạng ③.
+
+=====================================================================
+GHI NHẬN RIÊNG — nằm trong màn đang tranh chấp nhưng ĐỐI TÁC KHÔNG NÊU (không kéo verdict)
+=====================================================================
+(1) 🔴 Thẻ "Tổng DN toàn kỳ" + cột "Số DN" + đường "Số DN" trên biểu đồ VẪN CÒN.
+    srs-fr-11-bao-cao.md:1018 (FR-IX-23, Output đặc thù trend_data[]) ghi rõ:
+      "[CTTLV_04 chốt 2026-07-24: bỏ so_dn — CSV UC146 chỉ 'thống kê chương trình theo thời
+       gian', không có số DN; không có mô hình CT↔DN. Cùng lý do FR-IX-22.]"
+    Bản dựng V1.0.8 (bó mã index-DIABnbIr.js) vẫn hiện:
+      - thẻ "Tổng DN toàn kỳ" = 0 trên màn
+      - chú giải biểu đồ có đường "Số DN"
+      - cột "Số DN" trong bảng "Theo kỳ" trên màn
+      - trong tệp xuất: khối A10–B12 "Tổng số DN toàn kỳ | 0" và cột E "Số DN"
+    Loại BC anh em (BC Chương trình theo lĩnh vực, đo cùng ngày ở case CTTLV_05) thì ĐÃ gỡ.
+    ⇒ Trái :1018. CHƯA mở phiếu: theo quy tắc của đợt, bug ngoài phạm vi cần mở dòng mới trên
+      bảng theo dõi phải được phiên chính duyệt mã trước. Đã báo về phiên chính.
+(2) 🔴 Không chọn được "12 tháng" trên màn — AC :1023 không với tới được bằng giao diện.
+    :1023 ghi: "Given CB chọn 12 tháng When tạo BC Then hiển thị biểu đồ trend số CT theo thời gian".
+    Đo trên màn (14:33–14:35): ô "Thời gian" KHÔNG phải ô chọn ngày — nó là 2 ô ẩn
+    (input type=hidden) do hệ thống tự suy từ ô "Kỳ báo cáo"; trên màn chỉ hiện dòng chữ đọc.
+      - Kỳ = Năm            → tự đặt 01/01/2026 – 31/12/2026 → biểu đồ 1 điểm "Năm 2026"
+      - Kỳ = Tháng          → tự đặt 01/08/2026 – 31/08/2026 (đúng 1 tháng) → 1 điểm
+      - Kỳ = Khoảng tùy chọn → CÓ ô chọn ngày; đặt 01/01/2026 – 31/12/2026 → vẫn CHỈ 1 điểm
+                               ("01/01/2026 - 31/12/2026"), không tách theo tháng
+    ⇒ Không cấu hình nào trên màn cho ra biểu đồ trend nhiều điểm. Máy chủ thì LÀM ĐƯỢC: gọi
+      kyBaoCao=THANG kèm khoảng 01/01–31/12/2026 trả về đủ 12 mốc (đã đo ở dạng ③).
+    ⇒ CHƯA mở phiếu, cùng lý do như (1). Đã báo về phiên chính.
+(3) Thẻ "Tổng ngân sách toàn kỳ" — danh sách Output đặc thù :1016–:1020 KHÔNG có mục ngân sách,
+    nhưng đặc tả cũng KHÔNG có câu nào bỏ nó như đã làm với so_dn ở :1018; loại BC anh em
+    FR-IX-21 lại CÓ tong_ngan_sach (:944). ⇒ đặc tả IM LẶNG → đã thêm mục hỏi BA, KHÔNG log lỗi.
+(4) URL trên thanh địa chỉ chỉ được ghi lại khi bấm [Xem báo cáo]. Đo được: khi đang hiển thị báo
+    cáo Kỳ Năm rồi đổi ô "Kỳ báo cáo" sang Tháng, rồi sang Khoảng tùy chọn, mà CHƯA bấm
+    [Xem báo cáo], thì địa chỉ vẫn giữ nguyên chuỗi cũ ...&kyBaoCao=NAM&... trong khi form đã đổi.
+    Bấm [Xem báo cáo] thì địa chỉ đổi đúng theo bộ lọc đang chọn.
+    ⇒ Cùng CƠ CHẾ với hiện tượng "URL cũ" trên ảnh vòng 2 của đối tác. KHÔNG đo riêng trường hợp
+      đổi LOẠI báo cáo trong lúc đang hiển thị báo cáo của loại khác — chưa kết luận cho ca đó.
+      Đặc tả im lặng về việc URL phải khớp bộ lọc ⇒ không log lỗi, chỉ ghi nhận.

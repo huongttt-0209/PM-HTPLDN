@@ -1,0 +1,8 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Tái hiện được đúng như phản ánh: bấm nút Xem (👁) ở màn danh sách Giảng viên / Trợ giảng thì mở màn có nhãn "Chi tiết" (đường dẫn không có /chinh-sua), nhưng tab "Thông tin" bên trong là form nhập đầy đủ – mọi ô đều sửa được và có nút Hủy / Lưu. Kiểm trên 2 bản ghi khác nhau đều như vậy.
+- Nặng hơn phản ánh ban đầu: không chỉ nhìn giống form sửa mà LƯU ĐƯỢC THẬT. Sửa ô "Chuyên ngành" ngay tại màn Xem rồi bấm Lưu thì hệ thống báo "Cập nhật giảng viên thành công" và đọc lại bản ghi thấy dữ liệu đã bị ghi đè. Nghĩa là người chỉ định xem hồ sơ vẫn có thể vô tình sửa mất dữ liệu giảng viên. (QA đã khôi phục lại giá trị cũ ngay sau khi kiểm.)
+- Chế độ Xem và chế độ Sửa hiện chỉ khác nhau ở đường dẫn và nhãn breadcrumb, còn khả năng thay đổi dữ liệu là như nhau.
+- Yêu cầu theo đặc tả: SCR-III-05 §Cột Hành động (srs-fr-03-dao-tao.md:1924) quy định Xem và Sửa là hai hành động riêng, và ghi chú ngay tại dòng đó nêu rõ nút "Xem" được bổ sung "cho nhất quán với các màn danh sách khác"; §Nhãn màn theo chế độ (dòng 1926) quy định nhãn "theo tiền lệ module Tư vấn viên"; mà màn chi tiết Tư vấn viên được đặc tả là chỉ đọc (srs-fr-04-chuyen-gia-tvv.md:1556 – tab "Hồ sơ": 6 nhóm thu gọn được, chỉ đọc).
+- Đối chứng ngay trong phần mềm: màn chi tiết Tư vấn viên mở bằng nút "Xem" không có ô nhập nào, muốn sửa phải bấm nút "Sửa hồ sơ" riêng. Màn Giảng viên đang lệch khỏi chuẩn này.
+- Kiểm bằng: tài khoản CB Nghiệp vụ Trung ương (BTP·TW), cùng màn hình và cùng cách mở như trong ảnh anh/chị gửi.
+- Bug ID: BUG-QLGVTG_07

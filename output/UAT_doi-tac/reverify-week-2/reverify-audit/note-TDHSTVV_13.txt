@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG – chuyển dev (đúng ở ý đối tác nêu: không hiển thị thông báo).
+- Đã chạy lại đúng thao tác: chọn Kết luận thẩm định "YÊU CẦU BỔ SUNG", nhập lý do, bấm "Gửi KQ". Hệ thống KHÔNG hiển thị bất kỳ thông báo nào (theo dõi giao diện liên tục 4 giây sau cú bấm).
+- Phần nghiệp vụ chạy đúng: hồ sơ chuyển sang trạng thái "Yêu cầu bổ sung" và lý do được lưu lại đầy đủ. Lỗi chỉ nằm ở việc thiếu thông báo phản hồi cho cán bộ.
+- Theo quy định giao diện UI-04 áp dụng toàn hệ thống (srs-v3.5.md, dòng 571): "Toast notification cho thao tác thành công" — thao tác thành công thì bắt buộc phải có thông báo. Chức năng liên quan: FR-IV-06 (UC44) - SCR-IV-03 nút "Gửi kết quả thẩm định" (srs-fr-04-chuyen-gia-tvv.md, dòng 1564).
+- Lưu ý: câu chữ thông báo trong Kết quả mong đợi ("Đã gửi yêu cầu bổ sung đến Người hỗ trợ") không có trong đặc tả; SRS (dòng 519 và 1564) quy định thông báo được gửi đến CHỦ HỒ SƠ (tư vấn viên), không phải "Người hỗ trợ". Bug này chỉ yêu cầu phải có thông báo thành công, không áp đặt câu chữ.
+- Verify: tài khoản cbnv_tw (Cán bộ Nghiệp vụ - Trung ương), hồ sơ TVV-BTP-TW-0003 ở trạng thái "Đang thẩm định" trước thao tác.
+- Bug ID: BUG-TDHSTVV_13.

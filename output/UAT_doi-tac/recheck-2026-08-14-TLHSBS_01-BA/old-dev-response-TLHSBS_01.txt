@@ -1,0 +1,4 @@
+✅ Bug ĐÚNG – chuyển dev.
+- KPI-S-01 (UC1-9 bổ sung) §KPI bổ sung Dashboard (dòng 567-591): vụ hoàn thành từng qua bước “Yêu cầu bổ sung” phải được tính vào tử số của tỷ lệ hồ sơ bổ sung.
+- Verify live bằng `cbnv_tw_02`, phạm vi Toàn quốc, năm 2026: Dashboard có 23 vụ hoàn thành nhưng thẻ vẫn hiển thị 0% và “Chưa có dữ liệu”; vụ `VV-BTP-TW-20260712-005` đã hoàn thành ngày 25/07/2026 và dòng thời gian có “Bổ sung hồ sơ” ngày 15/07/2026.
+- Bug ID: BUG-TLHSBS_01.

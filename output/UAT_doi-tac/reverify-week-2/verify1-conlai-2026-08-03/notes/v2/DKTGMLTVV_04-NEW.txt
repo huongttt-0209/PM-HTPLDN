@@ -1,0 +1,10 @@
+⚠️ Cần BA xác nhận — trạng thái: CHỜ BA XÁC NHẬN (chưa phải việc của dev).
+- Kiểm tra lại trên web (vai trò Người hỗ trợ pháp lý, màn Thêm mới Tư vấn viên): nhóm "Tổ chức & Mạng lưới" hiển thị đúng 3 trường — "Tổ chức hành nghề chính", "Tổ chức đối tác", "Lĩnh vực pháp luật" (bắt buộc). Không có trường thứ 4. Đã kiểm cả 2 giá trị của ô "Loại" (Tư vấn viên và Chuyên gia), số trường không đổi.
+- ⚠️ Như vậy quan sát của bên kiểm thử là chính xác: web đang hiển thị nhiều hơn 2 trường. Phần cần chốt là ĐẶC TẢ, không phải lỗi phần mềm.
+- Theo SRS v3.5 hiện hành — FR-IV-03 (UC41), màn SCR-IV-02 (dòng 1470), bảng thành phần dòng 1514-1517 — nhóm 3 gồm đúng 3 mục: 4.1 Tổ chức chính (dòng 1515), 4.2 Tổ chức đối tác (dòng 1516), 4.3 Lĩnh vực pháp luật bắt buộc (dòng 1517). Web khớp 100% bản này.
+- Kỳ vọng "chỉ 2 trường" đang bám bản SRS bàn giao lần 2 ngày 10/7. Hai bản tài liệu lệch nhau ở đúng trường "Tổ chức đối tác".
+- ⚠️ Đề nghị BA xác nhận 2 điểm:
+  (1) Bản SRS nào là chuẩn cho nhóm 3 màn SCR-IV-02: bản v3.5 (3 trường) hay bản bàn giao 10/7 (2 trường)?
+  (2) Trường "Tổ chức đối tác" (SRS v3.5 dòng 1516, quan hệ nhiều-nhiều) có giữ trên form Thêm mới Tư vấn viên không? Lưu ý BA đã chốt mục 4.1 cùng nhóm này ngày 30/07/2026 (case DKTGMLTVV_03) và giữ nguyên mục 4.2.
+- Chốt xong xin cập nhật đồng bộ cả 2 bản tài liệu để tránh lệch tiếp.
+- Verify: tài khoản Người hỗ trợ pháp lý cấp Trung ương, bản dựng V1.0.5, ngày 03/08/2026.

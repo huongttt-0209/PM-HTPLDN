@@ -1,0 +1,64 @@
+# QLDMTCTV_OOS_05 — dòng 331 (tab `UAT_TGPL Doanh Nghiệp-tuần 3`)
+
+## Tuần
+
+Tuần 3
+
+## Mã TC
+
+QLDMTCTV_OOS_05
+
+## Mô tả
+
+Danh sách Tổ chức tư vấn — bảng có thêm cột "Đơn vị quản lý" không nằm trong danh sách cột của đặc tả
+
+## Điều kiện
+
+1. Đăng nhập tài khoản Cán bộ Nghiệp vụ cấp Trung ương (cbnv_tw_04), đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp.
+2. Chọn menu "Mạng lưới Tư vấn viên" -> "Tổ chức tư vấn".
+
+## Dữ liệu đầu vào
+
+3 tổ chức ở thẻ "Đang hoạt động".
+
+## Các bước thực hiện
+
+1. Đọc lần lượt toàn bộ tiêu đề cột của bảng, từ trái sang phải.
+2. Đối chiếu với danh sách cột trong đặc tả màn hình.
+
+## Kết quả mong đợi
+
+Màn hình SCR-IV-NEW-01 liệt kê đúng 10 cột cho bảng danh sách, từ dòng 1637 đến dòng 1646: Ô chọn, Số thứ tự, Mã tổ chức, Tên tổ chức, Loại hình, Người đại diện, Lĩnh vực, Trạng thái, Công khai, Hành động. "Đơn vị quản lý" chỉ được nêu ở dòng 1634 với vai trò là một bộ lọc, không phải cột của bảng.
+
+## Kết quả thực tế
+
+Bảng đang có 11 cột: thêm cột "Đơn vị quản lý" đặt giữa "Lĩnh vực" và "Người đại diện".
+Không thiếu thông tin, nhưng lệch danh sách cột đã duyệt và làm bảng rộng thêm, phải cuộn ngang mới thấy được 3 cột cuối (Trạng thái, Công khai, Hành động).
+
+## Ảnh/vieo 1
+
+QLDMTCTV_05-cbnv-tw-04-thanh-the-truoc-khi-seed.png
+
+## Trạng thái 1
+
+Fail
+
+## Trạng thái dev fix 1
+
+BA confirm
+
+## Verify
+
+BA confirm
+
+## DEV phản hồi lần 1
+
+⚠️ Cần BA xác nhận.
+- Bảng danh sách đang có thêm cột "Đơn vị quản lý" đặt giữa cột "Lĩnh vực" và "Người đại diện".
+- Theo màn hình SCR-IV-NEW-01 (dòng 1637 đến 1646), bảng chỉ gồm 10 cột và "Đơn vị quản lý" không nằm trong đó; mục này được nêu ở dòng 1634 với vai trò bộ lọc.
+- Không mất thông tin, nhưng bảng bị rộng thêm nên phải cuộn ngang mới thấy các cột Trạng thái, Công khai và Hành động.
+⚠️ Câu hỏi gửi BA: đặc tả liệt kê 10 cột nhưng KHÔNG có câu nào cấm thêm cột, nên chưa kết luận được đây là lỗi hay là cải tiến hợp lý. Đề nghị BA chốt: (a) giữ cột "Đơn vị quản lý" và bổ sung vào danh sách cột trong đặc tả; hoặc (b) bỏ cột này khỏi bảng, chỉ giữ vai trò bộ lọc như dòng 1634.
+- Ghi chú tham chiếu: chức năng "Quản lý Tổ chức tư vấn" (FR-IV-NEW-01) trong đặc tả KHÔNG được cấp mã UC (dòng 1029 ghi "chưa có trong CSV"), nên chỉ nêu tên chức năng và số dòng, không có mã UC để dẫn.
+- Lỗi do QA phát hiện thêm khi kiểm 4 phiếu QLDMTCTV_02 / _05 / _06 / _09 ngày 03/08/2026, không nằm trong phạm vi 4 phiếu đó nên mở dòng riêng để chuyển dev.
+- Môi trường kiểm: bản dựng HTPLDN V1.0.5.
+- Đã đưa vào file gửi BA: ba-confirmation-needed-luong4-to-chuc-tu-van-2026-08-03.md, mục 3 (mức ưu tiên thấp — chỉ ảnh hưởng hiển thị).

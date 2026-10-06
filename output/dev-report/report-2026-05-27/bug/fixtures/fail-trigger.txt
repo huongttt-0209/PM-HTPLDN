@@ -1,0 +1,6 @@
+FAIL-TRIGGER FIXTURE
+====================
+Intended for negative path: simulate processing failure post-upload.
+- Used in upload retry / failed-status bug verify
+- Size: small, intentional invalid content marker
+- Marker string: FAIL_TRIGGER_DOCX_INVALID_MAGIC_BYTES_v1

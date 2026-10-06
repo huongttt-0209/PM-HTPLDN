@@ -1,0 +1,7 @@
+⚠️ Cần BA xác nhận.
+- Web hiện tại (kiểm tra 21/07, tài khoản QTHT), form Sửa "Hồ sơ đề nghị thanh toán" có 2 điểm:
+  (1) có trường "Danh mục cha" (tùy chọn) — SRS TPL-DM-CRUD (FR-VIII-09 / UC107) là danh mục phẳng, Inputs không có trường này;
+  (2) khối "Thành phần hồ sơ" buộc tối thiểu 1 thành phần (Mã + Tên thành phần bắt buộc, Thành phần 1 không xóa được).
+- SRS FR-VIII-09 (dòng 442) ghi "thành phần hồ sơ" = KHÔNG bắt buộc (N).
+- Câu hỏi BA: (a) có đưa "Danh mục cha" vào đặc tả không? (b) giữ ràng buộc ≥1 thành phần (đúng nghiệp vụ) hay bỏ để khớp SRS (N)?
+Ref: FR-VIII-09 (UC107) §Inputs (dòng 442); TPL-DM-CRUD §Inputs (dòng 77-83).

@@ -1,0 +1,5 @@
+- Đã kiểm tra lại ngày 05/08/2026 trên bản mới nhất của môi trường nghiệm thu: nội dung phản ánh đã được khắc phục.
+- Tệp PDF xuất ra nay có quốc hiệu, tiêu ngữ và tên cơ quan ban hành ở đầu trang; cuối trang có ngày ký, dòng "NGƯỜI XUẤT BÁO CÁO", họ tên người xuất báo cáo và chỗ trống để đóng dấu khi in chính thức.
+- Tên tệp đã có đủ ngày và giờ-phút, nên xuất nhiều lần trong cùng một ngày không còn đè lên nhau.
+- Vẫn giữ khổ A4, phông chữ Times New Roman và đủ bốn mục: tên báo cáo, kỳ báo cáo, đơn vị, ngày tạo.
+- Tệp không có chữ ký số và không có dòng chức danh người ký — đúng theo kết luận đã thống nhất cho nhóm báo cáo thống kê, không tính là lỗi.

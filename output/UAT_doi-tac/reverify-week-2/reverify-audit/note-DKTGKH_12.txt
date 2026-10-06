@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+• Import Excel danh sách đăng ký (tab "Học viên") chạy đúng: chọn file → "Bắt đầu Import" → hệ thống nạp và hiển thị báo cáo kết quả (Tổng dòng / Thành công / Bỏ qua trùng / Lỗi + lý do từng dòng); bản ghi hợp lệ vào danh sách, nguồn "Import Excel".
+• Đối tác kỳ vọng thêm bước "bản xem trước" (số dòng hợp lệ/lỗi) TRƯỚC khi nạp. Theo SRS FR-III-04 (UC23) §Processing bước 6 (dòng 474) + §Outputs (dòng 485): hệ thống validate → import → báo cáo kết quả, KHÔNG có bước xem trước riêng trước khi nạp.
+• Câu hỏi BA: có bổ sung màn xem trước trước khi nạp không, hay giữ nạp-rồi-báo-cáo như hiện tại?
+• Verify: CB_NV_TW, Khóa học › tab Học viên › Tải lên Excel.

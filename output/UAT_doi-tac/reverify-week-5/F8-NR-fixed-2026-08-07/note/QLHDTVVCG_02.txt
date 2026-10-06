@@ -1,0 +1,57 @@
+📌 KẾT QUẢ CHUNG: CẦN BA XÁC NHẬN — hai yêu cầu chấm được đều ĐẠT, còn ba điểm chưa có chuẩn để chấm nên không được kết là đạt cũng không được kết là lỗi.
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-BbPPdate.js (bản lên lúc 13:47 ngày 07/08/2026), đo lúc 15:0x-15:2x ngày 07/08/2026, cửa sổ trình duyệt 1440x900. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_03 - bắt buộc dùng vai trò này vì đặc tả :286 nói nút thêm hợp đồng chỉ hiện với cán bộ nghiệp vụ; dùng vai trò tư vấn viên sẽ đánh trượt oan.
+
+ĐƯỜNG VÀO THỰC TẾ VÀ MÀN ĐÃ CHẤM
+
+Bước 1 của phiếu ghi "Chọn menu Hợp đồng Tư vấn". Thanh bên KHÔNG có mục đó - đúng theo quyết định nghiệp vụ ngày 11/05/2026 (bỏ menu riêng), như phản hồi của bộ phận phát triển. Đây là đường đi, không phải điểm chấm, nên không tính là lỗi.
+
+Đã chấm trên MÀN 1: Chi tiết vụ việc VV-BTP-TW-20260804-002 > mục "HĐ tư vấn liên kết". Chọn màn này vì thanh lọc của nó khớp từng ý với đặc tả :287, và đây là nơi DUY NHẤT có nút mở biểu mẫu thêm hợp đồng. Bảng lúc đo có 2 hợp đồng thật, cố ý dựng lệch nhau để đo được cả hai chiều của quy tắc (một cái kết thúc trong 30 ngày, một cái ngoài 30 ngày; một cái đã thanh toán một phần, một cái chưa).
+
+ĐÃ ĐẠT - 2 phần
+
+1) Dữ liệu hiển thị ĐÚNG ĐỊNH DẠNG và đủ trường thông tin. Đọc từng ô trên 2 dòng thật: Giá trị hiện "200.000.000 VNĐ" và "250.000.000 VNĐ" (đúng cách viết tiền Việt, có dấu chấm ngăn nghìn và đơn vị); Ngày bắt đầu / kết thúc hiện dạng ngày/tháng/năm; Số vụ việc liên kết hiện dạng huy hiệu tròn (1 và 3); Tiến độ thanh toán hiện dạng thanh tiến trình kèm phần trăm (25% và 0%); cột Hành động là ba nút biểu tượng Xem chi tiết / Sửa / Xóa.
+   Riêng vế QUAN TRỌNG NHẤT - ngày kết thúc còn dưới 30 ngày phải tô đỏ - đã đo được CẢ HAI CHIỀU: hợp đồng kết thúc 25/08/2026 (còn 18 ngày) hiển thị ĐỎ và in đậm; hợp đồng kết thúc 30/12/2026 (còn 145 ngày) hiển thị màu chữ thường. Tức quy tắc chạy CÓ ĐIỀU KIỆN đúng, không phải tô đỏ tất cả.
+   Kiểm lại bằng đường thứ hai: đọc giá trị thô của chính hai bản ghi đó từ máy chủ, từng con số khớp với chuỗi đang hiển thị, và ngày thô lưu dạng năm-tháng-ngày được giao diện đổi sang ngày/tháng/năm - chứng minh có lớp định dạng thật chứ không in thẳng dữ liệu. Yêu cầu của đặc tả tại srs-fr-14-hop-dong-tv.md:288 và bảng dữ liệu ra :147 đến :155.
+
+2) ĐỒNG NHẤT NGÔN NGỮ hiển thị. Đọc toàn bộ chữ trên màn: 11 tiêu đề cột, nhãn các ô lọc, nhãn nút, nội dung ô Trạng thái và dòng phân trang - tất cả đều tiếng Việt, không chỗ nào lộ mã kỹ thuật, không chỗ nào lẫn tiếng Anh. Đã quét chủ động 8 mã dữ liệu hay lộ và 14 từ tiếng Anh hay lọt: không có kết quả nào. Đặc biệt kiểm kỹ ô Trạng thái vì đây là chỗ hay lộ mã nhất - màn hiện "Đang thực hiện". Kiểm lại bằng đường thứ hai: giá trị thô lưu trong dữ liệu của chính hai bản ghi đó là mã kỹ thuật, còn màn hiện nhãn tiếng Việt, tức CÓ lớp dịch nhãn - đúng quy ước của đặc tả (srs-fr-05-vu-viec.md:1492: mã dữ liệu không bao giờ được xuất hiện trên giao diện người dùng).
+
+CẦN NGHIỆP VỤ CHỐT - 3 điểm (chưa được chấm đạt hay lỗi)
+
+Điểm 1: BẢNG THÀNH PHẦN MÀN HÌNH ÁP CHO MÀN NÀO. Đây là điểm quan trọng nhất của phiếu, đề nghị nghiệp vụ đọc kỹ.
+- Đặc tả mô tả một MÀN DANH SÁCH HỢP ĐỒNG ĐỘC LẬP gồm 5 vùng: đường dẫn phụ đề riêng (:285), tiêu đề trang "Quản lý Hợp đồng Tư vấn" kèm 3 nút (:286), thanh lọc (:287), bảng 10 cột (:288), phân trang (:289).
+- NHƯNG chính đặc tả, tại :266 và :268, đã BỎ màn độc lập đó theo quyết định nghiệp vụ ngày 11/05/2026. Hợp đồng nay là một mục nằm BÊN TRONG màn Chi tiết vụ việc.
+- Hệ quả: một mục nằm trong màn khác thì VỀ KIẾN TRÚC không thể có đường dẫn phụ đề riêng, tiêu đề trang riêng hay phân trang riêng của nó. Ba vùng đó thiếu là HỆ QUẢ CỦA CHÍNH QUYẾT ĐỊNH BỎ MÀN, không phải bộ phận phát triển làm thiếu.
+- Đối chiếu thực tế cho nghiệp vụ tham khảo: thanh lọc khớp TỪNG Ý với :287 (ô tìm theo tên hợp đồng / mã hợp đồng / bên B, ô chọn tư vấn viên gõ tìm được, khoảng từ ngày đến ngày). Bảng có ĐỦ 10 cột đặc tả đòi, còn thừa thêm cột Trạng thái - đặc tả liệt kê thành phần bắt buộc có chứ không cấm thêm, nên thừa không tính là lỗi. Phân trang có, mặc định đúng 20 mục một trang. Nút thêm hợp đồng và nút Xuất Excel đều có; riêng nút Làm mới không có, thay bằng nút Xóa bộ lọc.
+- CÂU HỎI CHO NGHIỆP VỤ: bảng thành phần màn hình :278 đến :289 áp cho bề mặt nào? Nếu áp cho mục hợp đồng nằm trong Chi tiết vụ việc thì đề nghị viết lại bảng cho khớp kiến trúc hiện tại (bỏ các vùng chỉ màn độc lập mới có). Nếu vẫn muốn có màn độc lập thì đó là yêu cầu dựng thêm màn, cần quyết định riêng.
+- Dữ kiện thêm: phần mềm hiện VẪN CÒN dấu vết màn độc lập - có màn chi tiết hợp đồng riêng, đường dẫn phụ đề của màn đó có liên kết "Hợp đồng tư vấn"; bấm thử liên kết này thì hệ thống ném người dùng về màn Tổng quan chứ không mở danh sách hợp đồng nào. Có ảnh kèm.
+
+Điểm 2: KHÔNG CÓ BẢN VẼ THIẾT KẾ ĐỂ ĐỐI CHIẾU.
+- Ô Kết quả mong đợi đòi "hiển thị giống với thiết kế". Đặc tả tại :274 trỏ sang một tài liệu bản vẽ màn hình, nhưng tài liệu đó KHÔNG có trong bộ nguồn chuẩn được cấp. Không có bản vẽ thì mọi khác biệt về bố cục, thứ tự, khoảng cách, màu sắc, kiểu điều khiển đều KHÔNG có căn cứ để kết luận đúng hay sai.
+- Hiện trạng đã chụp ảnh đầy đủ để nghiệp vụ tự đối chiếu.
+- CÂU HỎI CHO NGHIỆP VỤ: đề nghị cung cấp bản vẽ màn hình cho nhóm hợp đồng, hoặc xác nhận không dùng bản vẽ làm chuẩn nghiệm thu cho nhóm này.
+
+Điểm 3: TIÊU CHÍ "KHÔNG TRÀN / KHÔNG ĐÈ" CHƯA ĐƯỢC ĐỊNH NGHĨA.
+- Đặc tả chỉ quy định cách CẮT chuỗi dài và độ phân giải tối thiểu (từ 1024x768 trở lên), hoàn toàn IM LẶNG về thế nào là "tràn" hay "đè" bố cục.
+- Hiện trạng đo ở 1440x900: trang KHÔNG bị cuộn ngang; bảng dùng cách cuộn ngang bên trong khung bảng (cách xử lý phổ biến và hợp lý) chứ không đẩy vỡ trang; các ô nằm gọn, không thấy chữ đè lên nhau; tên hợp đồng dài (85 và 79 ký tự) được cắt gọn kèm dấu ba chấm.
+- CÂU HỎI CHO NGHIỆP VỤ: đề nghị chốt tiêu chí nghiệm thu cho vế này - đo ở độ phân giải nào, và có chấp nhận cách cuộn ngang bên trong khung bảng hay không.
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Cột Tên hợp đồng CÓ cắt chuỗi kèm dấu ba chấm nhưng KHÔNG có gợi ý hiện đủ nội dung khi rê chuột. Quy ước chung của đặc tả đòi "cắt + dấu ba chấm + gợi ý khi rê chuột". Tuy nhiên chính quy ước đó tự mâu thuẫn về phạm vi: câu mở đầu nói áp cho MỌI cột chữ trong bảng, câu kết lại nói áp nhất quán cho 5 màn - mà 5 màn đó thuộc nhóm vụ việc chứ không phải nhóm hợp đồng. Vì phạm vi chưa rõ nên chỉ ghi nhận, chưa kết luận là lỗi; đề nghị nghiệp vụ chốt phạm vi rồi mới giao việc cho bộ phận phát triển.
+- Nhãn nút thêm thực tế là "+ Tạo hợp đồng"; đặc tả :286 ghi "+ Thêm hợp đồng"; quy ước chung ở phụ lục lại bắt nhãn "Thêm mới". Ba nguồn lệch nhau về câu chữ; phiếu này không chấm nhãn nút nên không tính là lỗi.
+- Quy tắc tô đỏ ngày kết thúc dưới 30 ngày CÓ chạy trên màn đã chấm, nhưng KHÔNG chạy trên mục "Hợp đồng tư vấn" ở màn Chi tiết tư vấn viên (ở đó hợp đồng kết thúc 25/08/2026 vẫn hiển thị màu thường). Hai bề mặt cùng đọc một loại dữ liệu nhưng khác bộ cột (11 cột so với 6 cột) và khác cả quy tắc tô màu. Ghi nhận làm dữ kiện cho câu hỏi nghiệp vụ ở Điểm 1.
+
+DỮ LIỆU ĐÃ THAY ĐỔI: để đo được phiếu này, lượt đo có TẠO MỚI 1 hợp đồng tư vấn bằng giao diện trên môi trường nội bộ - mã HDTV-20260807-0007, tên "Hợp đồng tư vấn pháp luật lao động và bảo hiểm xã hội cho doanh nghiệp siêu nhỏ", bên B là QA TVV PheDuyet TW R19, giá trị 200.000.000 đồng, thời gian 07/08/2026 đến 30/12/2026, kèm 1 giai đoạn thanh toán 50.000.000 đồng đã thanh toán và 1 vụ việc liên kết. Đây là DỰNG TIỀN ĐỀ, không phải phép đo: cần một bản ghi kết thúc NGOÀI 30 ngày để chứng minh quy tắc tô đỏ chạy có điều kiện, và cần tiến độ thanh toán khác 0% để đo được cột đó. Ghi chú của hợp đồng mang dấu QA-F8-TIEN-DE-20260807 để phân biệt với dữ liệu của đối tác. Không sửa, không xóa bản ghi nào.
+
+Ảnh bằng chứng:
+- Màn đã chấm: thanh lọc, hai nút, bảng, phân trang; tên hợp đồng dài bị cắt kèm dấu ba chấm: https://drive.google.com/file/d/1eFlzIJEB0YPwUw_iYcsxswCDKdMkoHik/view?usp=drivesdk
+- Cột ngày kết thúc: 25/08/2026 tô đỏ, 30/12/2026 màu thường; huy hiệu số vụ việc; thanh tiến độ thanh toán: https://drive.google.com/file/d/18uTE5PffuOdz_3KUpBWuJGIjo0g9X1Xd/view?usp=drivesdk
+- Mục "Hợp đồng tư vấn" trên màn Chi tiết tư vấn viên (6 cột, không có nút thêm, không tô đỏ): https://drive.google.com/file/d/1PsSQDoh5VnVcKSrOcjIXOtHHS8Pkp5lh/view?usp=drivesdk
+- Bấm liên kết "Hợp đồng tư vấn" trên đường dẫn phụ đề thì rơi về màn Tổng quan: https://drive.google.com/file/d/1Pun_QL_0Mr-FTxvgrMWz1bUidGMvnpwD/view?usp=drivesdk
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.

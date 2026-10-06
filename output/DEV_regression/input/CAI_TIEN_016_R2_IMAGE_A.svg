@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="480" viewBox="0 0 640 480">
+  <rect width="640" height="480" fill="#0b5ed7"/>
+  <rect x="30" y="30" width="580" height="420" rx="28" fill="#ffffff" stroke="#ffc107" stroke-width="12"/>
+  <text x="320" y="170" text-anchor="middle" font-family="Arial" font-size="42" font-weight="700" fill="#0b5ed7">CAI_TIEN-016</text>
+  <text x="320" y="245" text-anchor="middle" font-family="Arial" font-size="58" font-weight="700" fill="#d63384">DEV R2 — IMAGE A</text>
+  <text x="320" y="320" text-anchor="middle" font-family="Arial" font-size="28" fill="#212529">TVCS MAIN ENTITY</text>
+  <text x="320" y="370" text-anchor="middle" font-family="Arial" font-size="24" fill="#198754">2026-08-15 UNIQUE A</text>
+</svg>

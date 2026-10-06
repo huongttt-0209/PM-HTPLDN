@@ -1,0 +1,6 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Hộp thoại "Xác nhận phê duyệt": ô "Số quyết định công nhận" đang cho phép nhập tới 200 ký tự (bộ đếm hiển thị "0 / 200"). Đã thử nhập chuỗi 150 ký tự → hệ thống nhận đủ 150 ký tự, không báo lỗi, nút "Phê duyệt" vẫn bật.
+- Theo FR-IV-07 (UC45) §Inputs (srs-fr-04 dòng 581), Số quyết định công nhận là trường bắt buộc khi phê duyệt, theo mẫu QĐ-{số}/QĐ-{đơn vị} và tối đa 100 ký tự → hệ thống phải chặn khi vượt 100 ký tự.
+- Ô "Ý kiến phê duyệt (tùy chọn)" giới hạn 2.000 ký tự — đúng yêu cầu.
+- Verify: tài khoản cbpd_tw (CB Phê duyệt - Trung ương), hồ sơ TVV-BTP-TW-0005 ở trạng thái "Chờ phê duyệt".
+- Bug ID: BUG-PDHSTVV_03.

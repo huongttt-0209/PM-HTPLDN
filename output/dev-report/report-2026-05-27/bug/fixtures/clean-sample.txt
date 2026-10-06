@@ -1,0 +1,6 @@
+CLEAN FIXTURE
+=============
+This is a clean text fixture for upload tests.
+SHA256 expected: dynamic (compute via openssl dgst -sha256 clean-sample.txt)
+Size: small (<1KB) — safe for endpoint validation tests.
+Use case: Happy path upload, baseline file scan should return ACCEPT.

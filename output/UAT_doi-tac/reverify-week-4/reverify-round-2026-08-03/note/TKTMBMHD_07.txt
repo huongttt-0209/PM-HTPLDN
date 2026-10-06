@@ -1,0 +1,6 @@
+- Đã chạy lại luồng: Thư viện biểu mẫu > Thư mục, đặt bộ lọc rồi bấm "Xóa bộ lọc".
+- Phần đã được sửa: thanh tab phân loại nay ĐÃ tự về "Tất cả", các ô Tìm kiếm, Lĩnh vực, Trạng thái và Khoảng ngày cũng đã được xóa trắng.
+- Phần còn lỗi: danh sách KHÔNG trở về mặc định. Mặc định màn hình có 23 thư mục; sau khi gõ từ khóa rồi bấm "Xóa bộ lọc", danh sách vẫn chỉ hiển thị các bản ghi khớp từ khóa cũ (ví dụ gõ "test" thì còn 9 kết quả, gõ "a" kèm lĩnh vực Thuế thì còn 2 kết quả). Số đếm trên tab "Tất cả" cũng đổi theo, hiển thị "Tất cả 9" thay vì "Tất cả 23".
+- Hệ quả với người dùng: ô lọc trông như đã trống nhưng danh sách vẫn đang bị lọc, dễ hiểu nhầm là hệ thống chỉ có ngần đó thư mục.
+- Bấm thêm nút "Làm mới" cũng không đưa danh sách về mặc định.
+- Đã thử 2 lần với 2 bộ lọc khác nhau, kết quả giống nhau.

@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Bấm "Lưu nháp" trên tab Thẩm định: hệ thống KHÔNG hiển thị bất kỳ thông báo nào (đã theo dõi DOM liên tục 3,5 giây sau cú bấm, không có thông báo nào xuất hiện), dù yêu cầu lưu đã chạy và máy chủ trả về thành công.
+- Nội dung 3 ô "Nhận xét" (Nhóm 2, Nhóm 3, Nhóm 4) không được gửi lên máy chủ, nên bị mất hoàn toàn.
+- Sau khi tải lại trang: 3 ô Nhận xét trống, "Kết luận Pháp lý" và "Kết luận thẩm định" không được chọn lại → bản nháp không được nạp lại, cán bộ không thể quay lại hoàn thiện sau.
+- Theo FR-IV-06 (UC44) · SCR-IV-03 tab "Thẩm định" (srs-fr-04-chuyen-gia-tvv.md, dòng 1563), nút "Lưu nháp" phải lưu kết quả thẩm định tạm (gồm điểm và ô nhận xét của Nhóm 2/3/4 — dòng 1557-1559) và phải phản hồi cho người dùng biết đã lưu.
+- Verify: tài khoản cbnv_tw (Cán bộ Nghiệp vụ - Trung ương), hồ sơ TVV-BTP-TW-0003 ở đúng trạng thái "Đang thẩm định" như đối tác.
+- Bug ID: BUG-TDHSTVV_08.

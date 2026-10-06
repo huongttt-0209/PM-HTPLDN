@@ -1,0 +1,8 @@
+Hệ thống hoạt động đúng thiết kế theo UC84: cho phép lưu khi tổng trọng số chưa bằng 100% và hiển thị cảnh báo; chỉ bắt buộc đủ 100% trước bước phân công/chuyển trạng thái.
+
+--- QA kiểm thử lại 03/08/2026 ---
+- Đã tạo một đợt đánh giá mới (trạng thái Lập kế hoạch), thêm tiêu chí có trọng số 90 rồi bấm Lưu.
+- Kết quả: hệ thống lưu thành công và hiển thị đồng thời hai thông báo — "Đã lưu tiêu chí đánh giá" và "Tổng trọng số hiện tại: 90%. Cần đảm bảo = 100% trước khi trình phê duyệt".
+- Trên màn hình còn có dòng "Tổng trọng số: 90%" cập nhật tức thời kèm chú thích cần bằng 100%, và cảnh báo "Tổng điểm tối đa có trọng số hiện tại: 90. Cần đảm bảo = 100 trước khi trình phê duyệt".
+- Rời màn rồi mở lại đợt: tiêu chí vẫn được lưu, đợt vẫn ở Lập kế hoạch, cảnh báo vẫn hiển thị.
+- Kết luận: khớp Kết quả mong đợi của phiếu → Pass.

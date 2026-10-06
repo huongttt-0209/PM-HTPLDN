@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Đã kiểm đúng trạng thái sau khi `DOT-THBC01-UAT` tổng hợp thành công: 1 request POST, 1 toast thành công, hai đơn vị chuyển `Đã tổng hợp`.
+- Toàn trang và kiểm tra DOM lần hai đều không có chức năng Xuất/Tải Excel hoặc Word (`totalExportControls=0`).
+- Theo FR-XI-09 (UC170) dòng 1011 và 1022, báo cáo tổng hợp phải cho xuất file `.xlsx` hoặc `.docx`.
+- Bug ID: BUG-THBCTHCT_05.

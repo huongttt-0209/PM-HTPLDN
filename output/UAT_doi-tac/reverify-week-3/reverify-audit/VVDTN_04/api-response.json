@@ -1,0 +1,4 @@
+GET /api/v1/bao-cao/vu-viec-tiep-nhan?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31  [200]
+{"success":true,"data":{"tongVuViec":14,"theoKenh":[{"kenh":"Trực tiếp","soLuong":14}],"theoLinhVuc":[{"linhVucId":"bbbbbbbb-0000-4000-8000-00000000001c","ten":"Thương mại","soLuong":14}],"theoDonVi":[{"ten":"Cục Bổ trợ tư pháp - Bộ Tư pháp","soLuong":7},{"ten":"Bộ Kế hoạch và Đầu tư","soLuong":3},{"ten":"Sở Tư pháp An Giang","soLuong":3},{"ten":"Sở Tư pháp Hà Nội","soLuong":1}],"theoKy":[{"ky":"2026-01-01","soLuong":14}]},"meta":null}
+
+>>> BE TRẢ theoLinhVuc (Thương mại: 14) nhưng UI KHÔNG render bảng/biểu đồ lĩnh vực → FE bug.

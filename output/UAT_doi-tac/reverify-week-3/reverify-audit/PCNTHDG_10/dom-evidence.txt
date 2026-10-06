@@ -1,0 +1,12 @@
+PCNTHDG_10 — Trình phê duyệt trùng người — DOM evidence (env 18.143, cbnv_tw, đợt DG-20260720-0002)
+
+BƯỚC:
+1. Tab Phân công → "Thêm người đánh giá" → chọn "Cán bộ Nghiệp vụ Demo" + Vai trò "Trưởng nhóm" → Thêm mới
+   → Thêm thành công. Tổng: 1 người — 1 Trưởng nhóm.
+2. "Thêm người đánh giá" lần 2 → chọn LẠI "Cán bộ Nghiệp vụ Demo" (option vẫn còn trong dropdown) + Vai trò "Đánh giá viên" → Thêm mới
+   → Hệ thống TỪ CHỐI, toast: "Người đánh giá đã được phân công trong kế hoạch này"
+   → modalStillOpenAfterDup = true (modal không đóng)
+   → Tổng vẫn: 1 người — 1 Trưởng nhóm (KHÔNG thêm trùng)
+
+KẾT LUẬN: App CHẶN người đánh giá trùng ngay tại bước thêm, kèm thông báo rõ ràng — đúng SRS #38 dòng 864 ("không trùng lặp").
+Lỗi đối tác báo ("hệ thống hiển thị thông báo thành công" / cho phép trùng) KHÔNG tái hiện → Reject.

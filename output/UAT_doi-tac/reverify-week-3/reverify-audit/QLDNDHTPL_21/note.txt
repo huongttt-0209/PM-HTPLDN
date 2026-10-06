@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web hiện tại: màn "Xem chi tiết doanh nghiệp" (mở bằng nút Xem, URL /doanh-nghiep/{id}) hiển thị toàn bộ trường dưới dạng ô nhập chỉnh sửa được (21/23 ô nhập được, 5 dropdown mở được, có nút Hủy/Lưu, không có chế độ chỉ đọc) → cho phép sửa ngay tại màn Xem.
+- Theo SRS FR-V.III-01 (UC81) màn SCR-V.III-02: URL /doanh-nghiep/:id là "xem chi tiết" (chỉ hiển thị), URL /doanh-nghiep/:id/sua mới là "chỉnh sửa" (srs-fr-07-doanh-nghiep.md:459); danh sách có 2 hành động riêng Xem / Sửa (dòng 443); AC "CB NV xem chi tiết → hiển thị hồ sơ" (dòng 196). Vậy màn Xem phải ở chế độ chỉ đọc, muốn sửa phải qua chức năng Sửa.
+- Kiểm chứng: URL /:id và /:id/sua render form editable giống hệt nhau → hệ thống không có màn Xem chỉ đọc.
+- Verify bằng tài khoản cbnv_tw (CB_NV_TW), DN-SEED-0001. Bug ID BUG-QLDNDHTPL_21.

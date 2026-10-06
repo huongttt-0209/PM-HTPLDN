@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi do QA phát hiện thêm khi verify KTDGKQHT_02 ngày 03/08/2026, không nằm trong phạm vi phiếu gốc nên mở dòng riêng.
+- Web đang sai: tỷ lệ chuyên cần trên tab "Kết quả" lấy mẫu số là SỐ BUỔI ĐÃ ĐIỂM DANH thay vì TỔNG SỐ BUỔI CỦA KHÓA. Khóa có 3 buổi trong lịch học, mới điểm danh 1 buổi thì màn hình hiện "0/1 (100.00%)" và "1/1 (100.00%)".
+- Đúng theo đặc tả phải là 33.33% cho cả 2 học viên: FR-III-05 (UC24) §Quy tắc nghiệp vụ BR-KQ-02 (srs-fr-03-dao-tao.md dòng 2251) quy định tỷ lệ chuyên cần = (số buổi Có mặt + số buổi Vắng có phép) / tổng số buổi × 100.
+- Đã đo bằng 3 cách độc lập, cùng một kết quả: giao diện tab Kết quả; nội dung file DOCX xuất ra (cột "Tổng số buổi" = 1); dữ liệu máy chủ trả về cho màn hình (tổng số buổi = 1 trong khi lịch học của chính khóa đó có 3 buổi).
+- Mức độ ảnh hưởng: ngưỡng chuyên cần tối thiểu mặc định là 80%. Học viên mới dự 1/3 buổi vẫn được tính 100% nên vượt ngưỡng, dẫn tới kết luận Đạt/Không đạt của khóa học bị sai.
+- Dữ liệu kiểm tra: khóa học KH-QAW7-HOINGHI (Đang diễn ra, 2 học viên, lịch học 3 buổi, đã điểm danh 1 buổi). Tài khoản cbnv_tw. Bản dựng V1.0.5.

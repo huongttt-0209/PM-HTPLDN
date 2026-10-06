@@ -1,0 +1,18 @@
+☑️ Đã kiểm tra lại — lỗi ĐÃ ĐƯỢC SỬA.
+
+Phạm vi kiểm tra: đo ngày 27/07/2026 trên môi trường được giao 18.143.165.120.nip.io, bằng tài khoản Cán bộ NV Trung ương, đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp, đúng màn "Quản lý hỏi đáp, vướng mắc pháp lý". Lưu ý: lần này KHÔNG đo trên môi trường đối tác, nên kết luận này xác nhận phần xử lý đã được sửa; đề nghị đội phát triển xác nhận thêm rằng bản sửa đã được triển khai lên môi trường đối tác.
+
+Trước khi đo đã dựng đủ tiền đề để lỗi có thể lộ ra: thẻ gộp nhiều trạng thái phải chứa bản ghi của cả hai trạng thái, nếu không thì kết quả tình cờ vẫn đúng và lỗi bị che. Thẻ "Hoàn thành" sẵn có 1 bản ghi "Hoàn thành" và 1 bản ghi "Đã hủy". Thẻ "Đang xử lý" ban đầu chỉ có 1 bản ghi "Đang xử lý" nên đã tạo thêm 1 bản ghi ở trạng thái "Tiếp nhận" (mã HD-20260727-001) theo đúng luồng chuẩn.
+
+Kết quả đo:
+- Thẻ "Đang xử lý" (2 bản ghi) kết hợp ô lọc "Tiếp nhận": trả về đúng 1 bản ghi HD-20260727-001 trạng thái "Tiếp nhận". Trước đây trả nguyên 22 bản ghi của thẻ, lẫn cả "Đang xử lý".
+- Thẻ "Hoàn thành" (2 bản ghi) kết hợp ô lọc "Đã hủy": trả về đúng 1 bản ghi HD-20260708-002 trạng thái "Đã hủy". Trước đây trả 10 bản ghi, lẫn cả "Hoàn thành".
+- Thẻ "Hoàn thành" kết hợp ô lọc "Hoàn thành": trả về đúng 1 bản ghi HD-20260707-005 trạng thái "Hoàn thành". Trước đây hai lựa chọn "Hoàn thành" và "Hủy" cho ra CÙNG một tập 10 bản ghi; nay cho ra hai bản ghi khác nhau.
+
+Phép đo quyết định chính là phép đo mà báo cáo lỗi trước đó đã dùng: so kết quả khi chỉ đứng ở thẻ, với kết quả khi vừa đứng ở thẻ vừa đặt ô lọc. Trước đây hai truy vấn trùng khít nhau, chứng tỏ giá trị người dùng chọn bị bỏ qua hoàn toàn. Nay hai truy vấn cho kết quả khác nhau (2 so với 1), tức điều kiện của thẻ và giá trị ở ô lọc đã được kết hợp theo AND đúng như yêu cầu.
+
+Đã kiểm bằng 2 cách độc lập và cho kết quả như nhau: thao tác trực tiếp trên giao diện và đọc bảng hiển thị, đồng thời đối chiếu số bản ghi trả về của chính lần bấm Tìm kiếm đó.
+
+Ghi nhận thêm: lỗi phụ nêu ở lần trước cũng đã được sửa — nhãn của trạng thái hủy trong ô lọc nay hiển thị đúng là "Đã hủy" thay vì "Hủy".
+
+Bug ID: BUG-TKHDVMTH_07 — trạng thái: đã đóng.

@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG – chuyển dev. Tái hiện chính xác, và tìm được nguyên nhân thật.
+- Đã chạy lại đúng điều kiện đối tác (hồ sơ đang ở trạng thái "Yêu cầu bổ sung", chọn KHÔNG ĐẠT, bấm "Gửi KQ"): hệ thống hiện đúng thông báo "Dữ liệu đã bị thay đổi, vui lòng tải lại", tải lại thì dữ liệu vẫn như cũ.
+- Nguyên nhân: thông báo này SAI bản chất. Máy chủ thực tế báo "TVV không ở trạng thái hợp lệ để thẩm định" (mã ERR-STATE-IV-TD-01), tức hồ sơ đang ở trạng thái không cho phép thẩm định. Giao diện lại dịch thành thông báo xung đột dữ liệu, nên người dùng tải lại trang vô ích và không bao giờ biết lý do thật. Lỗi xảy ra cả khi vừa tải lại trang mới hoàn toàn, nên không phải do giữ dữ liệu cũ.
+- Kèm theo: theo FR-IV-06 (UC44) - SCR-IV-03 (srs-fr-04-chuyen-gia-tvv.md, dòng 1555), thẻ "Thẩm định" chỉ được hiển thị khi hồ sơ ở trạng thái "Đang thẩm định" hoặc "Chờ phê duyệt". Web vẫn cho mở thẻ này và bấm "Gửi KQ" ở trạng thái "Yêu cầu bổ sung", tức dẫn người dùng vào thao tác chắc chắn bị từ chối.
+- Đối chứng trên trạng thái hợp lệ: đã seed hồ sơ mới TVV-BTP-TW-0004, chọn KHÔNG ĐẠT và gửi -> hồ sơ chuyển sang "Từ chối" đúng nghiệp vụ, NHƯNG vẫn không hiện thông báo thành công nào (Kết quả mong đợi là "Đã từ chối hồ sơ"). Vi phạm quy định giao diện UI-04 (srs-v3.5.md, dòng 571: "Toast notification cho thao tác thành công").
+- Verify: tài khoản cbnv_tw (Cán bộ Nghiệp vụ - Trung ương), hồ sơ TVV-BTP-TW-0003 (Yêu cầu bổ sung) và TVV-BTP-TW-0004 (trạng thái hợp lệ).
+- Bug ID: BUG-TDHSTVV_14.

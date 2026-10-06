@@ -1,0 +1,21 @@
+✅ Đã hết lỗi — cán bộ nghiệp vụ NHẬN ĐƯỢC thông báo sau khi người được phân công cập nhật kết quả hỗ trợ.
+
+ĐÃ ĐO ĐƯỢC (4 lần bấm trên 3 hồ sơ tự dựng, đủ 3 dạng người tạo/người tiếp nhận/người phân công):
+• Ngay sau khi bấm [Cập nhật kết quả], cán bộ nghiệp vụ gắn với hồ sơ nhận được thông báo trên CẢ 2 KÊNH: mục trong ứng dụng (trang Thông báo) và thư gửi tới đúng địa chỉ hộp thư của chính tài khoản đó. Độ trễ 4-6 giây ở ba hồ sơ đầu và 0,2 giây ở lần bấm thứ tư — đều trong hạn 5 phút của đặc tả.
+• Nội dung thông báo mô tả đúng thao tác vừa làm, có đúng mã vụ việc và nói rõ việc cần làm tiếp, nguyên văn: "Người được phân công đã cập nhật kết quả hỗ trợ vụ việc: - Mã vụ việc: ... - Doanh nghiệp: ... Vui lòng đăng nhập hệ thống để xem xét và chuẩn bị trình phê duyệt."
+• Mục thông báo nằm ở đầu danh sách (mới nhất trước) đúng lúc đo.
+• Đúng ở cả 3 dạng, kể cả dạng hồ sơ do doanh nghiệp tự gửi: cán bộ tiếp nhận vẫn nhận được.
+• Lần bấm thứ tư cố ý lặp đúng bộ nhập tối thiểu — CHỈ nhập nội dung, KHÔNG đính tệp, KHÔNG ghi chú — vẫn nhận đủ thông báo ở cả 2 kênh. Vậy việc gửi thông báo không lệ thuộc chuyện có đính tệp hay không.
+
+PHÉP KIỂM CHỨNG ĐI KÈM (để số đo không bị hiểu nhầm):
+• Chứng dương: trước đó, ở bước người được phân công "Chấp nhận" phân công, cũng chính 3 hộp thông báo ấy đều nhận được thông báo. Tức đường thông báo của các tài khoản này đang hoạt động bình thường.
+• Chứng âm: người bấm cập nhật KHÔNG nhận thông báo của chính mình; cán bộ không liên quan hồ sơ cũng không nhận. Ở lần bấm thứ tư, toàn máy chủ thư chỉ phát sinh đúng 1 thư, gửi đúng 1 người.
+• Đo bằng hai đường độc lập (giao diện và đọc lại dữ liệu bằng phiên đăng nhập của chính người nhận), hai đường khớp nhau; số đếm lấy thô, không lọc trùng.
+
+LƯU Ý KHI KIỂM LẠI (đo được từ dữ liệu lần này): thông báo về hộp của cán bộ đã TIẾP NHẬN / TẠO hồ sơ. Cán bộ chỉ thực hiện bước phân công mà không tiếp nhận hồ sơ thì không nhận thông báo này. Vì vậy khi kiểm cần mở đúng trang Thông báo và hộp thư của cán bộ đã tiếp nhận hồ sơ đó, thay vì mở một tài khoản cán bộ bất kỳ.
+
+ĐÃ TEST BẰNG: VV-BTP-TW-20260806-003 (cán bộ tự tạo, tự tiếp nhận, tự phân công — bấm 2 lần: một lần đủ nội dung + tệp + ghi chú, một lần chỉ nội dung), VV-BTP-TW-20260806-004 (cán bộ A tạo và tiếp nhận, cán bộ B phân công), VV-STP-AG-20260806-005 (doanh nghiệp tự gửi hồ sơ, cán bộ địa phương tiếp nhận và phân công). Người bấm cập nhật: QA TVV Seed28 Active (Tư vấn viên · Chuyên gia, cấp Trung ương) và QA NHT An Giang UAT2 (Người hỗ trợ pháp lý, cấp Địa phương) — đều đúng là người được phân công của hồ sơ mình bấm. Người kiểm thông báo: 3 tài khoản Cán bộ Nghiệp vụ khác nhau, mỗi người tự đăng nhập mở hộp của chính mình.
+
+Căn cứ đặc tả: FR-V.I-15 (srs-fr-05-vu-viec.md:1106 bước 5 "Gửi thông báo CB NV"; :1114 "CB NV nhận thông báo để review"; :1125 tiêu chí chấp nhận) và BR-NOTIF-01 (:2480, danh sách áp dụng ở :2482 có FR-V.I-15) yêu cầu gửi đủ 2 kênh trong ứng dụng và thư; mốc gửi thư ≤ 5 phút theo srs-v3.5.md:739.
+
+Kết quả trên ứng với bản dựng đã kiểm (HTPLDN V1.0.8, bó mã assets/index-DIABnbIr.js, ngày dựng 06/08/2026 14:13 giờ VN); đề nghị xác nhận lại khi bản dựng này lên môi trường nghiệm thu.

@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Yêu cầu theo đặc tả: SCR-IV-01 §Thao tác hàng loạt dòng 1465 quy định luồng "Hủy công khai hàng loạt" phải đi qua MD-HUY-CONG-KHAI; mẫu hộp thoại MD-HUY-CONG-KHAI định nghĩa ở §3.0b dòng 1407.
+- Bằng chứng đo: 7 mốc quan sát trong 2,2 giây đều không có hộp thoại; tại mốc 50 mili-giây lệnh gỡ công khai đã gửi. 1 lệnh - 1 thông báo, tái hiện 3/3.
+- Ảnh kèm theo chụp thanh thao tác hàng loạt có nút "Hủy công khai" và dòng đang công khai được chọn (điểm vào của thao tác).
+- Mã lỗi nội bộ: BUG-CNDSMLTVV_OOS_01. Tài khoản kiểm tra: cbnv_tw_02 (Cán bộ nghiệp vụ Trung ương, đơn vị Cục Bổ trợ tư pháp). Bản dựng V1.0.5, kiểm tra ngày 03/08/2026.
+- Dữ liệu thử đã hoàn trả: hồ sơ TVV-SEED-0001 được đưa về đúng trạng thái ban đầu (Chưa công khai) sau khi đo.
+- Lỗi phát hiện ngoài phạm vi các dòng TC có sẵn nên mở dòng mới.

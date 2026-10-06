@@ -1,0 +1,22 @@
+PDPCDG_01 — Phê duyệt phân công → gửi thông báo cho CB nghiệp vụ — ACTION LOG (env 18.143)
+
+[cbpd_tw] đợt DG-20260720-0002 (id eaf06391-814c-4bb6-ad71-acd707da049a), trạng thái Chờ duyệt PC (CHO_DUYET_PC), tab Phân công (chế độ phê duyệt): 2 nút "Phê duyệt" / "Từ chối".
+- Bấm "Phê duyệt" → confirm modal: "Phê duyệt phân công? Xác nhận phê duyệt danh sách phân công đánh giá." [Hủy] [Phê duyệt]
+- Xác nhận → Toast: "Đã phê duyệt phân công"
+- Trạng thái đợt: Chờ duyệt PC → Thực hiện (CHO_DUYET_PC → THUC_HIEN) — đúng SRS (duyệt → THUC_HIEN, dòng 347/364/1143).
+- Thời điểm: ~2026-07-20 13:49-13:52.
+
+CẦN VERIFY (phía cbnv_tw — người trình phân công / CB nghiệp vụ đơn vị): notification "phê duyệt phân công" có xuất hiện trong /api/v1/thong-baos của cbnv_tw không.
+
+=== VERIFY (phía cbnv_tw — người trình / CB nghiệp vụ TW) ===
+- cbnv_tw: vaiTro=CB_NV_TW, donViId=00000000-0000-4000-8000-000000000001, capDonVi=TW, hoTen="CB Nghiệp vụ - Trung ương".
+- GET /api/v1/thong-baos (cbnv_tw): meta.total=177. 30 thông báo ngày 2026-07-20 ĐỀU là "Tài khoản vừa đăng nhập ở nơi khác" (do QA switch account nhiều lần).
+- Lọc bỏ "đăng nhập ở nơi khác": còn 7 thông báo non-login, MỚI NHẤT = 2026-07-16 (khóa học/đào tạo + "Câu hỏi quá hạn" 07-15). KHÔNG có thông báo nào về phê duyệt/phân công đánh giá đợt DG-20260720-0002.
+- approveMatch (lọc "phê duyệt|phân công|đánh giá" + ngày hôm nay) = [] → KHÔNG có thông báo phê duyệt phân công.
+
+KẾT LUẬN: Sau khi CB PD "Phê duyệt phân công" (đợt DG-20260720-0002 chuyển đúng CHO_DUYET_PC → THUC_HIEN), hệ thống KHÔNG gửi thông báo cho CB nghiệp vụ (người trình phân công / cùng đơn vị).
+SRS FR-VI-04 Phê duyệt phân công (UC86):
+- dòng 366 (Postconditions): "Thông báo gửi CB NV".
+- dòng 349 (Main flow, bước 7): "Gửi thông báo CB NV trình".
+- dòng 901 (Business rules): "Phê duyệt/Từ chối (cả PC và BC) → gửi thông báo cho CB NV trình".
+→ SRS bắt buộc gửi thông báo cho CB NV khi phê duyệt phân công; app không gửi = thiếu thông báo = Open. Khớp báo cáo đối tác (CB NV không nhận được thông báo).

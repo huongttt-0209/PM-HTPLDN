@@ -1,0 +1,191 @@
+QLDX_05 — Gia hạn phiên · TIMELINE PHÉP ĐO
+==========================================================================
+Env      : https://18.143.165.120.nip.io  (env NỘI BỘ)
+Bó mã FE : assets/index-DsMHK7Dp.js · assets/index-DVlgOkLg.css   (khớp BAN-DUNG.md)
+App      : sidebar hiện "HTPLDN · V1.0.9"
+Tài khoản: cbnv_tw_03 / Test@1234  → "CB Nghiệp vụ - Trung ương #03"
+           JWT: vaiTro=["CB_NV_TW"] · capDonVi="TW" · authMethod="LOCAL" · idleTtl=1800 (=30 phút)
+           Ghi nhớ đăng nhập: KHÔNG tick (đã verify checked=false ngay trước submit)
+Màn idle : /chuyen-gia-tvv/danh-sach  ("Tư vấn viên / Chuyên gia", bảng 7 dòng)
+           Đã chủ động rời /dashboard bằng click sidebar (Dashboard tự làm mới 60s).
+Giờ ghi  : giờ VN (Asia/Ho_Chi_Minh)
+
+--------------------------------------------------------------------------
+1. CÁC MỐC CHÍNH
+--------------------------------------------------------------------------
+Tải lại /login                       : 02:19:39
+OTP MailHog (mailbox cbnv_tw_03)     : 146986  (tạo 02:20:05)
+Đăng nhập xong (JWT iat)             : 02:20:17
+Sang màn danh sách tĩnh              : 02:20:50
+t_set (thời điểm đặt mốc)            : 02:21:23.717
+t_baseline  = localStorage["auth-last-activity"]
+                                     : 01:56:53.717   (= t_set − 24.5 phút)
+Mốc modal cảnh báo kỳ vọng (bl+25')  : 02:21:53.717
+MODAL BẬT THỰC TẾ                    : 02:21:54.1 ± 0.13s  (kẹp idle 25.004′ tắt → 25.008′ HIỆN)
+>>> t_logout_goc = t_baseline + 30'  : 02:26:53.717   <<< TRỤC CỦA PHÉP ĐO C2
+BẤM "Gia hạn phiên"                  : 02:22:28.831   (giá trị FE tự ghi vào auth-last-activity)
+MODAL TẮT                            : 02:22:29.218   (kẹp 02:22:28.968 HIỆN → 02:22:29.218 tắt)
+Chụp ảnh sau mốc logout gốc          : ~02:28:27      (+93.9s so với t_logout_goc)
+Đối chứng API                        : 02:28:46       (+113.2s so với t_logout_goc) → HTTP 200
+Mẫu quan sát cuối                    : 02:30:13.239   (idle 7.74′ theo baseline mới, vẫn ở màn cũ)
+
+Nếu đồng hồ ĐÃ reset về mốc bấm thì:
+  mốc cảnh báo MỚI  = 02:22:28.831 + 25' = 02:47:28.8   (chưa tới trong lúc đo → modal không được bật lại)
+  mốc logout  MỚI   = 02:22:28.831 + 30' = 02:52:28.8   (chưa tới trong lúc đo)
+
+--------------------------------------------------------------------------
+2. GIÁ TRỊ auth-last-activity TRƯỚC / SAU KHI BẤM
+--------------------------------------------------------------------------
+Trước khi bấm : 1786042613717  = 01:56:53.717  (đúng bằng t_baseline, KHÔNG bị FE ghi lại lần nào)
+Sau khi bấm   : 1786044148831  = 02:22:28.831
+Đã bị đặt lại : CÓ
+Hiệu số so với thời điểm bấm: mốc mới ≈ chính thời điểm bấm.
+  Mẫu 02:22:28.719 còn giá trị cũ; mẫu 02:22:28.968 đã có giá trị mới = 02:22:28.831
+  ⇒ độ trễ phát hiện ≤ 137 ms; idle tính lại = 0.002′ ⇒ đồng hồ FE về 0.
+  (Mốc tham chiếu q.mark_truoc_bam đặt lúc 02:22:26.1 là mốc TRƯỚC vòng gọi MCP click,
+   chênh 2.73s là độ trễ round-trip của tool, KHÔNG phải độ trễ của app.)
+
+--------------------------------------------------------------------------
+3. TOÀN VẸN PHÉP ĐO
+--------------------------------------------------------------------------
+Bộ ghi (recorder) : setInterval 250 ms, THUẦN ĐỌC DOM + đọc localStorage.
+                    Không dispatch mousemove/click/keydown/scroll/touchstart.
+                    Không reload, không navigate sau khi đặt mốc.
+Tổng số mẫu       : 2119  (02:21:23.717 → 02:30:13.239)
+Lọc "hiện thật"   : getClientRects().length>0 + display/visibility/opacity + (offsetParent | position:fixed).
+                    Lấy chữ bằng innerText của phần tử modal đang hiện — KHÔNG dùng textContent.
+Trước khi bấm     : auth-last-activity giữ đúng t_baseline ở TOÀN BỘ mẫu (0 mẫu bị ghi lại)
+Sau khi bấm       : auth-last-activity KHÔNG đổi thêm lần nào (0/1608 mẫu)  ⇒ không có thao tác vô tình
+                    modal KHÔNG bật lại lần nào (0/1608 mẫu)
+                    KHÔNG rời khỏi /chuyen-gia-tvv/danh-sach lần nào (0/1608 mẫu)
+Node modal        : sau khi tắt, DOM vẫn còn 1 node .ant-modal nhưng KHÔNG hiện
+                    ⇒ nếu chỉ kiểm "node tồn tại" sẽ kết luận sai là modal còn hiện.
+Console error/warn: RỖNG
+Số tab dùng phiên : 1 (tab about:blank của profile --isolated không dùng phiên)
+
+--------------------------------------------------------------------------
+4. NỘI DUNG MODAL ĐỌC ĐƯỢC (innerText, trước khi bấm)
+--------------------------------------------------------------------------
+Phiên làm việc sắp hết hạn
+
+Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc.
+
+Phiên sẽ tự đăng xuất sau 4:26.
+
+Đăng xuất
+Gia hạn phiên
+
+Nút hiện thật trong modal (đúng 2): "Đăng xuất" (disabled=false) · "Gia hạn phiên" (disabled=false)
+
+--------------------------------------------------------------------------
+5. BẢNG POLL (trích từ bộ ghi 250 ms)
+--------------------------------------------------------------------------
+=== A. CUA SO MODAL BAT (do phan giai 250ms, +-2s quanh moc) ===
+2026-08-07 02:21:52.218 | idle=24.975  | la=2026-08-07 01:56:53.717 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:52.469 | idle=24.979  | la=2026-08-07 01:56:53.717 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:52.718 | idle=24.983  | la=2026-08-07 01:56:53.717 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:52.968 | idle=24.988  | la=2026-08-07 01:56:53.717 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:53.218 | idle=24.992  | la=2026-08-07 01:56:53.717 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:53.467 | idle=24.996  | la=2026-08-07 01:56:53.717 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:53.717 | idle=25      | la=2026-08-07 01:56:53.717 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:53.974 | idle=25.004  | la=2026-08-07 01:56:53.717 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:54.219 | idle=25.008  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:54.468 | idle=25.013  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:54.719 | idle=25.017  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:54.969 | idle=25.021  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:55.218 | idle=25.025  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:55.468 | idle=25.029  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:55.720 | idle=25.033  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:55.968 | idle=25.038  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:56.220 | idle=25.042  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+
+=== B. CUA SO BAM "Gia han phien" (do phan giai 250ms, +-2s quanh moc) ===
+2026-08-07 02:22:26.969 | idle=25.554  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:27.219 | idle=25.558  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:27.469 | idle=25.563  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:27.720 | idle=25.567  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:27.968 | idle=25.571  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:28.219 | idle=25.575  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:28.470 | idle=25.579  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:28.719 | idle=25.583  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:28.968 | idle=0.002   | la=2026-08-07 02:22:28.831 | modal=HIEN  | /chuyen-gia-tvv/danh-sach   <- auth-last-activity ĐÃ ĐẶT LẠI
+2026-08-07 02:22:29.218 | idle=0.006   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach   <- MODAL TẮT
+2026-08-07 02:22:29.470 | idle=0.011   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:29.720 | idle=0.015   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:29.968 | idle=0.019   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:30.218 | idle=0.023   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:30.469 | idle=0.027   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:30.719 | idle=0.031   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:30.969 | idle=0.036   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+
+=== C. BANG POLL TOAN BO PHEP DO (moc ~15s) ===
+2026-08-07 02:21:23.717 | idle=24.5    | la=2026-08-07 01:56:53.717 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:38.718 | idle=24.75   | la=2026-08-07 01:56:53.717 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:21:53.974 | idle=25.004  | la=2026-08-07 01:56:53.717 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:09.219 | idle=25.258  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:24.220 | idle=25.508  | la=2026-08-07 01:56:53.717 | modal=HIEN  | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:39.468 | idle=0.177   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:22:54.468 | idle=0.427   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:23:09.469 | idle=0.677   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:23:24.470 | idle=0.927   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:23:39.719 | idle=1.181   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:23:54.719 | idle=1.431   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:24:09.969 | idle=1.686   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:24:25.219 | idle=1.94    | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:24:40.220 | idle=2.19    | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:24:55.220 | idle=2.44    | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:25:10.469 | idle=2.694   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:25:25.469 | idle=2.944   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:25:40.722 | idle=3.198   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:25:55.969 | idle=3.452   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:26:10.969 | idle=3.702   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:26:25.971 | idle=3.952   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:26:40.971 | idle=4.202   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+--- 02:26:53.717 = t_logout_goc (mốc auto-logout GỐC) đã đi qua, KHÔNG bị đá /login, modal KHÔNG bật lại ---
+2026-08-07 02:26:56.219 | idle=4.456   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:27:11.219 | idle=4.706   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:27:26.222 | idle=4.957   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:27:41.470 | idle=5.211   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:27:56.719 | idle=5.465   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach   <- đã vượt t_logout_goc + 60s
+2026-08-07 02:28:11.722 | idle=5.715   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:28:26.969 | idle=5.969   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach   <- ảnh QLDX_05-C2-sau-moc-logout-goc.png
+2026-08-07 02:28:41.970 | idle=6.219   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach   <- sau đối chứng API 200 (02:28:46)
+2026-08-07 02:28:56.974 | idle=6.469   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:29:11.984 | idle=6.719   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:29:26.988 | idle=6.969   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:29:41.989 | idle=7.219   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:29:56.991 | idle=7.469   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:30:12.241 | idle=7.723   | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach
+2026-08-07 02:30:13.239 | idle=7.74    | la=2026-08-07 02:22:28.831 | modal=tat   | /chuyen-gia-tvv/danh-sach   <- mẫu cuối
+
+--------------------------------------------------------------------------
+6. MD5 ẢNH — CÔNG BỐ TRƯỚC VIỆC HAI ẢNH TRÙNG BYTE
+--------------------------------------------------------------------------
+d5ec792e372ab7471e83dd58259f4b96  QLDX_05-C1-truoc-khi-bam-gia-han.png   (02:22:1x, modal đang hiện)
+05a1c72e2b1ba59f3a4076bb0128f2a5  QLDX_05-C1-sau-khi-bam-gia-han.png     (02:22:39)
+05a1c72e2b1ba59f3a4076bb0128f2a5  QLDX_05-C2-sau-moc-logout-goc.png      (02:28:27, +93.9s sau mốc gốc)
+
+⚠️ Hai ảnh "sau khi bấm" (02:22:39) và "sau mốc logout gốc" (02:28:27) TRÙNG BYTE HOÀN TOÀN
+   (cùng md5 05a1c72e…, cùng 480612 bytes). Đây KHÔNG phải lỗi chụp lại cùng một file:
+   hai lần chụp cách nhau 5 phút 48 giây, nhưng vùng nhìn thấy của trang KHÔNG có phần tử nào
+   thay đổi theo thời gian (bảng danh sách tĩnh 7 dòng, không có đồng hồ trên màn, badge thông
+   báo giữ nguyên 56). Việc trùng byte chính là bằng chứng cho điều đang cần chứng minh:
+   giữa hai mốc đó KHÔNG có auto-logout, KHÔNG có modal bật lại, KHÔNG đổi màn.
+   Tuy vậy, ảnh trùng byte thì TỰ NÓ không neo được thời gian. Thời gian được neo bằng:
+     - bảng poll 250ms ở §5 (liên tục 02:21:23 → 02:30:13, không gián đoạn), và
+     - header `date` của máy chủ trong QLDX_05-doi-chung-api.txt (19:28:47 GMT = 02:28:47 VN).
+   Ai kiểm chứng lại xin đọc hai nguồn đó, đừng chỉ dựa vào ảnh.
+
+--------------------------------------------------------------------------
+7. KẾT LUẬN SỐ ĐO (không diễn giải verdict — verdict ở file do/QLDX_05.md)
+--------------------------------------------------------------------------
+C1  Modal đóng sau khi bấm "Gia hạn phiên": CÓ.
+    Bấm 02:22:28.831 → modal hết hiện tại 02:22:29.218 ⇒ đóng trong ≤ 0.39 s.
+    Suốt 1608 mẫu còn lại (tới 02:30:13) modal KHÔNG bật lại.
+
+C2  Đồng hồ đếm được đặt lại: CÓ (cả 3 dấu hiệu đồng thuận).
+    (a) auth-last-activity: 01:56:53.717 → 02:22:28.831 (idle FE về 0).
+    (b) Đi qua t_logout_goc 02:26:53.717 mà KHÔNG bị đá /login, vẫn đứng
+        /chuyen-gia-tvv/danh-sach, h1 = "Tư vấn viên / Chuyên gia", modal KHÔNG bật lại
+        (đúng như suy ra: mốc cảnh báo mới 02:47:28.8 chưa tới).
+    (c) Đối chứng API sau mốc gốc: HTTP 200 (chi tiết ở QLDX_05-doi-chung-api.txt).

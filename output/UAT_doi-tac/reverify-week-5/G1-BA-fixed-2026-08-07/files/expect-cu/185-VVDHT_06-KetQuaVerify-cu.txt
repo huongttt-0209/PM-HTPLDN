@@ -1,0 +1,15 @@
+Verify 06/08/2026, bản dựng V1.0.8 (đối tác đo trên V1.0/V1.0.2). Đo cả hai vai trò trên chính màn BC Vụ việc đang hỗ trợ, kết quả TRÁI NGƯỢC nhau nên chưa chốt được, cần BA xác nhận phạm vi vai trò. Đây là cùng một câu hỏi vai trò với VVDTN_06 nhưng đã đo lại độc lập trên màn này, không suy từ case kia.
+
+- Với CB Nghiệp vụ TW (cbnv_tw — đúng tác nhân theo SRS): XUẤT ĐƯỢC bình thường. Bấm nút Xuất Excel thật trên giao diện, tệp BaoCaoVuViecDangHoTro_20260806_1417.xlsx tải về và MỞ ĐỌC được: đủ tiêu đề báo cáo, kỳ, đơn vị, ngày tạo; số liệu khớp màn từng con số (tổng 14; theo mức SLA 12/0/2/0; theo người hỗ trợ QA TVV Seed28 Active 4 vụ, 2 quá hạn). Đặt thêm bộ lọc Mức SLA = Quá hạn rồi xuất lại thì tệp bám đúng bộ lọc mới (tổng 2). Tên tệp đúng khuôn quy định.
+
+- Với Quản trị viên QTHT (admin — ĐÚNG vai trò đối tác đã dùng khi báo lỗi): TÁI HIỆN y hệt triệu chứng vòng 2 của đối tác. Cùng một phiên, cùng bộ lọc: xem báo cáo trả về bình thường (HTTP 200, tổng 14) nhưng bấm Xuất Excel thì bị chặn HTTP 403 và trên màn hiện đúng thông báo "Forbidden" (đã chụp được ảnh thông báo trên nền màn đang có dữ liệu). Gọi kiểm tra phiên ngay sau đó vẫn còn sống, nên đây là chặn quyền thật chứ không phải hết phiên. Nút Xuất vẫn hiện và bấm được với vai trò này.
+
+- Vì sao Dev không tái hiện được: nhiều khả năng Dev test bằng vai trò CB Nghiệp vụ (luồng đó đúng là chạy tốt), còn đối tác test bằng QTHT. Lượt đo này cũng loại trừ được giả thuyết "chức năng xuất của màn này hỏng": cùng màn, cùng bộ lọc, chỉ đổi vai trò thì kết quả đảo chiều.
+
+=> Cần BA chốt: vai trò QTHT có được dùng chức năng Báo cáo thống kê (xem VÀ xuất tệp) không? SRS mâu thuẫn — mục Tác nhân của báo cáo này không liệt kê QTHT (srs-fr-11-bao-cao.md:236), nhưng quy tắc phân quyền BR-AUTH-08 (:1268) lại ghi ngoại lệ "QTHT bypass" áp cho toàn bộ nhóm báo cáo, và luồng xử lý chỉ có một bước kiểm quyền chung cho cả xem lẫn xuất (:79). Hiện trạng cho xem mà chặn xuất thì không khớp cách hiểu nào. Đây là MỘT quyết định áp cho cả nhóm báo cáo (VVDTN_06, VVDHT_06, VVTTG_05), không phải nhiều quyết định riêng. Chi tiết 2 hướng xử lý + đề xuất trả lời đối tác: ba-confirmation-needed-BCTK-B1-2026-08-06.md mục VVDHT_06.
+
+Ghi chú: thông báo chặn quyền đang trả "Forbidden" (tiếng Anh, mã ERR-PERM-SYS-00-01) trong khi đặc tả (:117) quy định phải là "Bạn không có quyền xem báo cáo này" — điểm này đã tách thành dòng lỗi riêng, không phụ thuộc BA chọn hướng nào.
+
+Ghi nhận thêm khi đo (không ảnh hưởng kết luận case này): cả trên màn lẫn trong tệp Excel, mục "Theo đơn vị" chỉ có dòng tiêu đề mà không có dữ liệu, trong khi đặc tả quy định phần này luôn phải có.
+
+Lưu ý hiệu lực: đo trên môi trường nội bộ 18.143.165.120.nip.io bản V1.0.8, chưa phải môi trường đối tác.

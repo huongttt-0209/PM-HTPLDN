@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+- Chức năng: BC Chương trình theo lĩnh vực (FR-IX-22 / UC145).
+- Web hiện tại hiển thị đúng thực tế: chương trình chưa gán lĩnh vực được gom vào nhóm "Không xác định"; chương trình có lĩnh vực hiển thị đúng tên (đã kiểm chứng cả 2 nhánh, kỳ Năm 2026, Toàn quốc, tài khoản CB Nghiệp vụ - Trung ương). Không phải lỗi hiển thị.
+- Vướng đặc tả: SRS yêu cầu báo cáo gom "theo lĩnh vực" (FR-IX-22, dòng 961 và 981-982) nhưng entity + form tạo Chương trình HTPLDN lại KHÔNG có trường lĩnh vực (srs-fr-15-ct-htpldn.md dòng 1323-1334 và 129-137) → theo SRS không có cách gán lĩnh vực cho chương trình, nên mọi chương trình rơi vào "Không xác định". SRS cũng không quy định cách xử lý chương trình chưa gán lĩnh vực.
+- Câu hỏi BA: Chương trình HTPLDN có cần bổ sung trường "lĩnh vực" (bắt buộc hay tùy chọn) không, và báo cáo xử lý chương trình chưa gán lĩnh vực thế nào (giữ nhóm "Không xác định" / ẩn / bắt buộc gán khi tạo)?

@@ -1,0 +1,46 @@
+🔁 CÒN LỖI — chuyển lại dev.
+
+■ LỖI Ở ĐÂU
+Ai     : Cán bộ nghiệp vụ phụ trách hồ sơ (vd cbnv_tw_01)
+Màn    : Chi tiết vụ việc → khối "Dòng thời gian"
+Làm gì : Người được phân công bấm [Từ chối] và CÓ nhập lý do
+Hỏng   : Nhật ký ghi được thao tác (đúng người, đúng giờ) nhưng KHÔNG lưu lý do. Hồ sơ quay về
+         "Đã tiếp nhận" rồi thì cán bộ không còn chỗ nào đọc được vì sao bị từ chối.
+         Đo 3 hồ sơ, kiểm cả trên màn lẫn đọc thẳng máy chủ — hai đường như nhau.
+
+■ SAI CHỖ NÀO (srs-fr-05-vu-viec.md)
+:2142 — lý do là trường BẮT BUỘC với nhóm hành động có "từ chối phân công"
+:826-827 — bước "Ghi nhật ký thao tác" của luồng phân công
+:1735 — khối Dòng thời gian hiển thị "Luôn"
+Có thể rộng hơn một thao tác: "Yêu cầu bổ sung" cũng bắt buộc có lý do và cũng không thấy lý do
+trong nhật ký — dev cân nhắc sửa chung một chỗ.
+
+■ ĐÃ CHẠY ĐÚNG — ĐỪNG TEST LẠI (6/7 vế đối tác nêu)
+Bấm Từ chối chạy bình thường, không còn văng sang màn chặn quyền · có thông báo "Đã từ chối phân
+công" rồi tự về màn danh sách · bản ghi phân công chuyển "Từ chối", lý do lưu khớp từng chữ · hồ
+sơ về đúng "Đã tiếp nhận" và có nút [Phân công] để giao lại · cán bộ phụ trách NHẬN ĐƯỢC thông
+báo kèm nguyên văn lý do, cả chuông lẫn thư, đúng ở cả 3 dạng hồ sơ.
+
+■ AI SỬA
+Dev BE — ghi lý do vào nhật ký vụ việc cho thao tác từ chối phân công.
+Dev FE — cho cán bộ đọc được lý do đó trên màn chi tiết, kể cả sau khi hồ sơ về "Đã tiếp nhận".
+
+■ VERIFY LẠI SAU KHI FIX
+Cần trước: 1 vụ việc đã bị người được phân công từ chối kèm lý do. Chưa có thì dựng: nhập hồ sơ →
+  tiếp nhận → kiểm tra hồ sơ kết luận Đạt → Phân công → đăng nhập chính người đó → [Từ chối] →
+  nhập lý do ≥10 ký tự (GHI LẠI NGUYÊN VĂN) → Xác nhận.
+B1. Cán bộ phụ trách mở chi tiết vụ việc → khối "Dòng thời gian" → đọc mục từ chối phân công.
+B2. Kiểm bằng đường thứ hai: đọc nhật ký chính vụ việc đó từ máy chủ
+    (GET /api/v1/vu-viecs/{id}/lich-su).
+✅ ĐẠT: nhật ký có lý do, khớp từng chữ chuỗi đã nhập, VÀ cán bộ đọc được ngay trên hồ sơ. Đúng
+   cả hai đường đo, lặp lại được trên ≥2 hồ sơ.
+❌ CHƯA ĐẠT: nhật ký vẫn trống lý do; hoặc máy chủ đã có mà màn hình không cho đọc (fix nửa vời
+   vẫn tính là chưa đạt); hoặc lý do lệch chuỗi đã nhập.
+⚠️ Bẫy: thấy lý do trong thông báo gửi cán bộ hoặc trong bản ghi phân công thì KHÔNG tính — hai
+   chỗ đó vốn đã có từ trước, phải đọc đúng mục nhật ký. Đừng chấm hỏng vì cách trình bày dòng
+   nhật ký (thứ tự, định dạng ngày giờ) — đặc tả không quy định.
+
+Đo 06/08/2026 · V1.0.8 (bó mã index-DIABnbIr.js) · 3 hồ sơ QA tự dựng VV-BTP-TW-20260806-001 /
+-002 / VV-STP-AG-20260806-004 · người bấm Từ chối: QA TVV Seed28 Active (TW) và QA NHT An Giang
+UAT2 (ĐP) · không tạo/sửa/xoá bản ghi nào khác.
+Ảnh: reverify-bug-devfix-2026-08-06/batch-B6-vuviec-htpl/image/XNTGHTVV_03-09-VV2-sau-tu-choi-trang-thai-Da-tiep-nhan-va-nhat-ky-Tu-choi-phan-cong.png

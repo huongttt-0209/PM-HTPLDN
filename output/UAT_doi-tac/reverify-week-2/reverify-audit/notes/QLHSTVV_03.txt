@@ -1,0 +1,8 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web hiện tại: thẻ "Hồ sơ" của màn Chi tiết tư vấn viên chia 5 nhóm: Thông tin cá nhân / Nghề nghiệp / Tổ chức & Mạng lưới / File đính kèm / Ghi chú.
+- Sai so với đặc tả ở bố cục nhóm: "Lĩnh vực pháp luật" phải là MỘT NHÓM RIÊNG nhưng đang bị gộp vào nhóm "Tổ chức & Mạng lưới"; đồng thời phát sinh thêm nhóm "Ghi chú" không có trong đặc tả, và thiếu nhóm "Thông tin công khai" (nhóm này chỉ hiện khi hồ sơ đã công khai).
+- Theo SRS: FR-IV-05 (UC43) – SCR-IV-03, thẻ "Hồ sơ" (srs-fr-04-chuyen-gia-tvv.md, dòng 1554) quy định 6 nhóm thu gọn, chỉ đọc: (a) Thông tin cá nhân, (b) Nghề nghiệp, (c) Tổ chức, (d) Lĩnh vực, (e) File đính kèm, (f) Thông tin công khai (chỉ hiển thị khi hồ sơ đã công khai). Bản thiết kế đối tác dẫn cũng tách riêng "Nhóm 4 – Lĩnh vực pháp luật".
+- Đã kiểm tra để loại trừ nguyên nhân thiếu dữ liệu: tư vấn viên thử nghiệm CÓ đủ cả Tổ chức chính và Lĩnh vực, vẫn không tách nhóm.
+- Đã verify bằng đúng vai trò của phản ánh: tài khoản Cán bộ Nghiệp vụ Trung ương, trên 2 tư vấn viên (một chưa công khai, một đã công khai) — bố cục nhóm như nhau.
+- Lưu ý: các trường còn thiếu BÊN TRONG nhóm (Loại, Đơn vị quản lý, Chức vụ, Nơi công tác, Chứng chỉ hành nghề, Mô tả kinh nghiệm) đã ghi nhận ở BUG-QLTVV_04, không lặp lại ở đây.
+- Bug ID: BUG-QLHSTVV_03.

@@ -1,0 +1,6 @@
+Không tái hiện — đề nghị đối tác kiểm tra lại.
+- Tái hiện: upload file .docx HỢP LỆ (<20MB) vào trường File biểu mẫu → 0 lỗi, file đính kèm thành công; submit "Thêm mới" → tạo biểu mẫu THÀNH CÔNG (chuyển sang danh sách, record xuất hiện).
+- Lỗi "Upload file thất bại. Vui lòng thử lại." với file hợp lệ mà đối tác báo KHÔNG tái hiện trên build hiện tại.
+- Chuỗi "Vui lòng thử lại" gợi lỗi tạm thời (server/mạng) tại thời điểm đối tác chụp.
+- Đề nghị: nếu gặp lại, gửi kèm định dạng + kích thước file + thời điểm để soát lỗi tạm thời.
+- Verify: cbnv_tw (CB Nghiệp vụ - TW), form Thêm biểu mẫu, 20/07/2026.

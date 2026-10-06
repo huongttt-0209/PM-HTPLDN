@@ -1,0 +1,45 @@
+📌 CÒN LỖI (REOPEN) — ô tìm kiếm có lọc thật, nhưng KHÔNG tìm được bằng từ khóa tiếng Việt CÓ DẤU, kể cả khi gõ đúng nguyên văn tên hợp đồng đang hiện trên bảng.
+
+Bên nghiệm thu chưa chạy phiếu này lượt nào (ô Kết quả thực tế trống) nên đây là lượt đo đầu tiên — chỉ kết luận hiện trạng, không kết luận về tác dụng bản sửa.
+
+❌ CÒN LỖI
+1) Gõ "sở hữu trí tuệ" — nguyên văn từ tên hợp đồng HDTV-20260807-0006 đang hiện ngay trên bảng → rỗng, báo "Không tìm thấy hợp đồng phù hợp".
+2) Cặp đối chứng quyết định — hai từ ĐỨNG LIỀN NHAU trong cùng chuỗi tên ("...cho doanh nghiệp nhỏ và vừa"):
+   · "doanh" (không dấu) → ra đủ 2 hợp đồng
+   · "nghiệp" (có dấu)  → ra 0 hợp đồng
+   Khác biệt duy nhất là dấu tiếng Việt.
+3) Cùng chiều ở trường Bên B ("Chuyên gia UAT QLNDTVVCG 38"): "UAT" → 1 · "QLNDTVVCG" → 1 · "Chuyên" → 0.
+4) Gõ bản không dấu của chính những từ đó ("chuyen", "nghiep", "so huu tri tue") cũng ra 0 ⇒ không có cách gõ nào tìm được hợp đồng theo tên tiếng Việt của nó.
+Đã loại trừ: không phải do tên hợp đồng ngoài vùng tìm ("doanh" chỉ có trong tên mà vẫn ra 2 kết quả) · không phải do gõ nhiều từ ("nghiệp" chỉ 1 từ) · không phải do hoa/thường · không phải do 1 bản ghi bất thường (lặp lại trên tập 4 hợp đồng khác, cùng kết quả).
+
+VÌ SAO LÀ LỖI
+Kết quả mong đợi của chính phiếu: "Có kết quả, hệ thống hiển thị danh sách hợp đồng phù hợp". srs-fr-14-hop-dong-tv.md:226 quy định tìm toàn văn trên tên hợp đồng · mã hợp đồng · bên B; :255 quy định nhập từ khóa phải trả về danh sách khớp. Chính ô tìm kiếm ghi gợi ý "Tìm theo tên HĐ, mã HĐ, bên B" — trùng khít phạm vi đặc tả. Tên hợp đồng trong hệ thống đều là tiếng Việt có dấu, nên gõ tên để tìm sẽ LUÔN rỗng; ô tìm kiếm gần như chỉ dùng được khi gõ trọn mã hợp đồng.
+
+DEV CẦN SỬA
+Gõ một từ/cụm tiếng Việt có dấu đang có trong tên hợp đồng hoặc bên B của hợp đồng thuộc phạm vi xem được → phải trả hợp đồng đó về bảng. Xử lý thống nhất cho cả 3 trường phần mềm đã ghi trên ô tìm kiếm.
+
+✅ ĐÃ CHẠY ĐÚNG (đừng làm hỏng lại): lọc thật (gõ mã HDTV-20260807-0007 → còn đúng 1 dòng, "1-1 / 1 mục") · ghép nhiều từ theo điều kiện VÀ (:227) · phân trang (:228) · câu báo rỗng đúng chữ.
+
+GHI NHẬN — KHÔNG tính là lỗi: khớp theo TỪ TRỌN VẸN, không khớp mẩu chuỗi ("0007" → 0 dù "HDTV-20260807-0007" → 1) — đúng bản chất tìm toàn văn · nội dung/ghi chú hợp đồng ngoài vùng tìm, đúng :226 · thanh bên không có mục "Hợp đồng Tư vấn" — đúng quyết định nghiệp vụ 11/05/2026 bỏ menu riêng, là đường đi chứ không phải điểm chấm.
+
+🔎 ĐÃ ĐO: 07/08/2026 15:2x–15:3x · env nội bộ 18.143.165.120.nip.io, bó mã index-BbPPdate.js (kiểm lại cuối phiên vẫn đúng bản dựng đó) · cbnv_tw_03 (đặc tả :203 khai đúng vai này; cấp Trung ương cho phạm vi dữ liệu rộng nhất) · mục "HĐ tư vấn liên kết" trên Chi tiết vụ việc VV-BTP-TW-20260804-002 · 2 hợp đồng trên màn + đối chứng 4 hợp đồng của tư vấn viên khác · 5 lượt bấm Tìm kiếm, mỗi lượt đối chiếu lại số liệu máy chủ (5/5 khớp) · KHÔNG thay đổi dữ liệu nào.
+
+── CÁCH VERIFY sau Dev fix ──
+Precondition: cbnv_tw_03 → Chi tiết vụ việc VV-BTP-TW-20260804-002 → "HĐ tư vấn liên kết". Bảng có ≥2 hợp đồng, ≥1 hợp đồng tên tiếng Việt CÓ DẤU chứa một từ mà hợp đồng kia KHÔNG có.
+1) Gõ cụm CÓ DẤU nguyên văn từ tên hợp đồng trên bảng (vd "sở hữu trí tuệ") → Tìm kiếm.
+2) Gõ 1 từ đơn CÓ DẤU từ tên hợp đồng, chọn từ chỉ khớp 1 hợp đồng (vd "nghiệp") → Tìm kiếm.
+3) Gõ 1 từ đơn CÓ DẤU từ ô Bên B (vd "Chuyên") → Tìm kiếm.
+4) Gõ trọn mã hợp đồng → kiểm phần đang chạy đúng có bị phá vỡ không.
+Mỗi lượt đối chiếu số bản ghi và mã hợp đồng máy chủ trả về với số dòng trên bảng.
+✅ PASS: bước 1-3 đều trả đúng hợp đồng chứa từ khóa và loại hợp đồng không chứa; bước 4 vẫn ra đúng 1 hợp đồng; số liệu máy chủ khớp bảng cả 4 lượt.
+❌ FAIL: bất kỳ lượt nào ở bước 1-3 vẫn rỗng trong khi hợp đồng chứa từ khóa đó đang tồn tại và người dùng có quyền xem · hoặc bước 4 không còn ra kết quả (sửa chỗ này hỏng chỗ kia).
+⚠️ Đừng chấm FAIL vì gõ mẩu chuỗi ("0007", "PheDuy") không ra kết quả, hoặc vì nội dung/ghi chú hợp đồng không nằm trong vùng tìm.
+⚠️ Tìm được bằng từ KHÔNG DẤU là điểm cộng, đặc tả không đòi — đừng dùng để chấm PASS/FAIL.
+
+Ảnh bằng chứng:
+- "sở hữu trí tuệ" (nguyên văn từ tên hợp đồng trên bảng) → rỗng; ảnh thấy rõ gợi ý ô tìm kiếm "Tìm theo tên HĐ, mã HĐ, bên B": https://drive.google.com/file/d/1VCmA9j7KjRNaBmgxRM99IWQR9s-HHrKd/view?usp=drivesdk
+- "doanh" (không dấu, chỉ có trong tên hợp đồng) → đủ 2 dòng: https://drive.google.com/file/d/1SdPtfO5oMifK8WknCCuJb2aDvV0Iq0PB/view?usp=drivesdk
+- "nghiệp" (có dấu, đứng ngay cạnh "doanh" trong cùng chuỗi tên) → 0 dòng: https://drive.google.com/file/d/1HKYC0s9d8kvmrpeB6be5Q-XdVHvsnCE3/view?usp=drivesdk
+- Gõ mã hợp đồng → đúng 1 dòng, loại bản ghi không khớp: https://drive.google.com/file/d/176lLNuo0jHqY7NgtaWYvnwUGil6aPgvx/view?usp=drivesdk
+
+Kết quả chỉ có hiệu lực cho env nội bộ ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu chạy trên htpldn-uat.ospgroup.vn.

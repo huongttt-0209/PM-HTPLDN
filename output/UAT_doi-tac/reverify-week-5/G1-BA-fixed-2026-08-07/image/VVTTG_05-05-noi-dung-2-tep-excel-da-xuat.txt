@@ -1,0 +1,53 @@
+====================================================================================================
+FILE: BaoCaoVuViecTheoThoiGian_20260807_1550.xlsx | bytes = 6879
+====================================================================================================
+--- [1] openpyxl ---
+('SHEET', 'Vụ việc theo thời gian', 19, 5)
+(1, ['BC Vụ việc theo thời gian'])
+(2, ['Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)'])
+(3, ['Đơn vị: Toàn quốc'])
+(4, ['Ngày tạo: 07/08/2026'])
+(6, ['Tổng số vụ việc toàn kỳ'])
+(7, ['Chỉ tiêu', 'Số lượng'])
+(8, ['Tổng số vụ việc toàn kỳ', '55'])
+(10, ['Theo kỳ'])
+(11, ['Kỳ', 'Từ ngày', 'Đến ngày', 'Tiếp nhận', 'Hoàn thành'])
+(12, ['Năm 2026', '01/01/2026', '31/12/2026', '55', '21'])
+(14, ['Theo đơn vị'])
+(15, ['Đơn vị', 'Tiếp nhận', 'Hoàn thành', 'Tổng số'])
+(16, ['Sở Tư pháp An Giang', '8', '1', '8'])
+(17, ['Sở Tư pháp Hà Nội', '6', '1', '6'])
+(18, ['Cục Bổ trợ tư pháp - Bộ Tư pháp', '38', '17', '38'])
+(19, ['Bộ Kế hoạch và Đầu tư', '3', '2', '3'])
+
+--- [2] zip raw xml ---
+parts: ['xl/theme/theme1.xml', '_rels/.rels', 'xl/worksheets/sheet1.xml', '[Content_Types].xml', 'docProps/app.xml', 'docProps/core.xml', 'xl/styles.xml', 'xl/_rels/workbook.xml.rels', 'xl/workbook.xml']
+so chuoi tho: 41
+['BC Vụ việc theo thời gian', 'Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)', 'Đơn vị: Toàn quốc', 'Ngày tạo: 07/08/2026', 'Tổng số vụ việc toàn kỳ', 'Chỉ tiêu', 'Số lượng', 'Tổng số vụ việc toàn kỳ', '55', 'Theo kỳ', 'Kỳ', 'Từ ngày', 'Đến ngày', 'Tiếp nhận', 'Hoàn thành', 'Năm 2026', '01/01/2026', '31/12/2026', '55', '21', 'Theo đơn vị', 'Đơn vị', 'Tiếp nhận', 'Hoàn thành', 'Tổng số', 'Sở Tư pháp An Giang', '8', '1', '8', 'Sở Tư pháp Hà Nội', '6', '1', '6', 'Cục Bổ trợ tư pháp - Bộ Tư pháp', '38', '17', '38', 'Bộ Kế hoạch và Đầu tư', '3', '2', '3']
+
+====================================================================================================
+FILE: BaoCaoVuViecTheoThoiGian_20260807_1552.xlsx | bytes = 6819
+====================================================================================================
+--- [1] openpyxl ---
+('SHEET', 'Vụ việc theo thời gian', 18, 5)
+(1, ['BC Vụ việc theo thời gian'])
+(2, ['Kỳ báo cáo: Tháng (từ 01/08/2026 đến 31/08/2026)'])
+(3, ['Đơn vị: Toàn quốc'])
+(4, ['Ngày tạo: 07/08/2026'])
+(6, ['Tổng số vụ việc toàn kỳ'])
+(7, ['Chỉ tiêu', 'Số lượng'])
+(8, ['Tổng số vụ việc toàn kỳ', '25'])
+(10, ['Theo kỳ'])
+(11, ['Kỳ', 'Từ ngày', 'Đến ngày', 'Tiếp nhận', 'Hoàn thành'])
+(12, ['Tháng 8/2026', '01/08/2026', '31/08/2026', '25', '3'])
+(14, ['Theo đơn vị'])
+(15, ['Đơn vị', 'Tiếp nhận', 'Hoàn thành', 'Tổng số'])
+(16, ['Cục Bổ trợ tư pháp - Bộ Tư pháp', '15', '2', '15'])
+(17, ['Sở Tư pháp Hà Nội', '5', '0', '5'])
+(18, ['Sở Tư pháp An Giang', '5', '1', '5'])
+
+--- [2] zip raw xml ---
+parts: ['xl/theme/theme1.xml', '_rels/.rels', 'xl/worksheets/sheet1.xml', '[Content_Types].xml', 'docProps/app.xml', 'docProps/core.xml', 'xl/styles.xml', 'xl/_rels/workbook.xml.rels', 'xl/workbook.xml']
+so chuoi tho: 37
+['BC Vụ việc theo thời gian', 'Kỳ báo cáo: Tháng (từ 01/08/2026 đến 31/08/2026)', 'Đơn vị: Toàn quốc', 'Ngày tạo: 07/08/2026', 'Tổng số vụ việc toàn kỳ', 'Chỉ tiêu', 'Số lượng', 'Tổng số vụ việc toàn kỳ', '25', 'Theo kỳ', 'Kỳ', 'Từ ngày', 'Đến ngày', 'Tiếp nhận', 'Hoàn thành', 'Tháng 8/2026', '01/08/2026', '31/08/2026', '25', '3', 'Theo đơn vị', 'Đơn vị', 'Tiếp nhận', 'Hoàn thành', 'Tổng số', 'Cục Bổ trợ tư pháp - Bộ Tư pháp', '15', '2', '15', 'Sở Tư pháp Hà Nội', '5', '0', '5', 'Sở Tư pháp An Giang', '5', '1', '5']
+

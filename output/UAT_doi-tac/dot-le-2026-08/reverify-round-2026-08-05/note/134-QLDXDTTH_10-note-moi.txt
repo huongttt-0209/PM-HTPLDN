@@ -1,0 +1,5 @@
+- Đã kiểm tra lại ngày 05/08/2026 trên bản mới nhất của môi trường nghiệm thu, bằng tài khoản Cán bộ nghiệp vụ cấp Trung ương và đối chứng thêm bằng tài khoản có phạm vi xem toàn hệ thống.
+- Phần đã khắc phục: bảng Đề xuất đào tạo nay có cột "Người đề xuất", và cả 7 đề xuất đang có đều hiện đủ họ tên kèm đơn vị; màn hình chi tiết cũng hiển thị đúng thông tin này. Không còn đề xuất nào hiện dấu gạch ngang.
+- Phần chưa kiểm được: nhóm đề xuất gửi từ chuyên trang (người gửi không dùng tài khoản trong phần mềm) — vốn là nhóm được phản ánh ở lần trước — hiện không còn bản ghi nào trong môi trường. Đã kiểm bằng phạm vi xem toàn hệ thống nên loại trừ khả năng bản ghi bị bộ lọc che.
+- Không tạo lại được nhóm dữ liệu này: chức năng tạo đề xuất luôn lấy người đề xuất từ tài khoản đang đăng nhập, và kênh tiếp nhận từ chuyên trang chưa dùng được trên môi trường nghiệm thu.
+- Đề nghị khôi phục hoặc tạo lại ít nhất một đề xuất có người gửi không phải tài khoản trong phần mềm để chốt dứt điểm nội dung này. Ở thời điểm kiểm tra, mọi đề xuất quan sát được đều hiển thị đúng.

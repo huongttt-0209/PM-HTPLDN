@@ -1,0 +1,109 @@
+CPHTCT_06 — BC Chi phí chi trả hỗ trợ · thao tác [Xuất Excel]
+Bằng chứng chữ: thông báo nguyên văn + phản hồi máy chủ của CHÍNH lượt bấm đó
+Env verify : https://18.143.165.120.nip.io      Bản dựng: V1.0.8 (gói assets/index-CNwX9JjX.js)
+Ngày đo    : 2026-08-06
+Cách đo    : cài bộ theo dõi lên document.body TRƯỚC khi bấm nút (không lọc trùng, đọc innerText,
+             đếm số request kèm theo), cộng nhật ký mạng của trình duyệt làm đường đo thứ hai.
+
+================================================================================
+A. VAI TRÒ `cbnv_tw_03` (CB Nghiệp vụ - Trung ương) — đúng tác nhân đặc tả :62
+================================================================================
+
+A1. Lượt xuất thứ nhất — 12:49
+    Số khung thông báo mọc lên : 1   (không có hiện tượng 2 thông báo chồng)
+    Chữ lúc khung mọc ra       : "Đang tạo file..."
+    Số request kèm lượt bấm    : 1   → POST /api/v1/bao-cao/export
+    Phản hồi máy chủ           : 200, kiểu nội dung
+                                 application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+    Tệp hệ thống giao ra       : 1 tệp — BaoCaoChiPhiChiTra_20260806_1249.xlsx  (6918 byte)
+
+A2. Lượt xuất thứ hai — 12:51 (để kiểm tra hai lần xuất cùng ngày có đè tệp nhau không)
+    Số khung thông báo         : 1
+    Chuỗi chữ đo theo thời gian trong CÙNG một khung thông báo:
+        +201 ms  : "Tạo file thành công."
+        +2601 ms : ""            (khung tự tắt)
+    Tệp hệ thống giao ra       : 1 tệp — BaoCaoChiPhiChiTra_20260806_1251.xlsx  (6917 byte)
+    → Tên tệp lần 2 KHÁC lần 1 (…_1249 vs …_1251): không đè tệp, đúng lý do BA chốt ở :85.
+
+    !! Lưu ý cách đo (để người đọc sau không kết luận nhầm):
+       Thư viện giao diện của ứng dụng CẬP NHẬT CHỮ NGAY TRONG khung thông báo cũ chứ không
+       mọc khung mới. Nếu chỉ ghi lại "khung nào mới mọc" thì chỉ thấy "Đang tạo file..." và
+       dễ kết luận sai là hệ thống im lặng, không báo thành công. Phải lấy mẫu chữ theo thời
+       gian mới thấy câu "Tạo file thành công.". Đây KHÔNG phải lỗi.
+
+A3. Nội dung tệp .xlsx đọc bằng thư viện đọc bảng tính (openpyxl):
+    Có đủ 4 mục header đặc tả đòi ở :1092 — tên báo cáo · kỳ báo cáo · đơn vị · ngày tạo.
+    Số liệu trong tệp khớp số đang hiện trên màn:
+        Tổng chi phí   23.000.000
+        Tổng hồ sơ     2
+        TB/hồ sơ       11.500.000
+        Dòng đơn vị    Cục Bổ trợ tư pháp
+    => Triệu chứng gốc ngày 16/07 ("Không thể tạo file xuất. Vui lòng thử lại." = ERR-RPT-04,
+       đặc tả :116) KHÔNG còn tái hiện với vai trò này.
+
+================================================================================
+B. VAI TRÒ `admin` (Quản trị viên — QTHT, BTP · TW) — ĐÚNG VAI TRÒ TRONG ẢNH ĐỐI TÁC
+================================================================================
+
+B1. Bước Xem báo cáo — KHÔNG bị chặn
+    GET /api/v1/bao-cao/chi-phi-chi-tra  → 200
+    Màn hiện đầy đủ số liệu, y hệt số của vai trò cbnv_tw_03 (Thời điểm tạo 06/08/2026 12:59).
+    Hai nút [Xuất Excel] / [Xuất PDF] đều bấm được (không bị làm mờ, không bị ẩn).
+    Ảnh: image/CPHTCT_06-02-qtht-xem-duoc-bao-cao-nut-xuat-van-bam-duoc.png
+
+B2. Bước Xuất Excel — BỊ CHẶN
+    Số khung thông báo mọc lên : 1
+    Chữ lúc khung mọc ra       : "Đang tạo file..."
+    CHỮ NGƯỜI DÙNG THỰC SỰ ĐỌC ĐƯỢC (đo theo thời gian trong cùng khung đó):
+
+        Forbidden
+
+    Khung thông báo sống 3.150 ms, vị trí x=0 y=8 rộng 1432 px (nằm trong vùng nhìn thấy,
+    không phải node ẩn).
+    Số tệp hệ thống giao ra    : 0
+    Số blob tạo ra             : 0
+
+B3. Phản hồi máy chủ của CHÍNH lượt bấm đó (lấy từ nhật ký mạng trình duyệt, request #99):
+
+    POST https://18.143.165.120.nip.io/api/v1/bao-cao/export
+    Nội dung gửi lên:
+        {"loaiBaoCao":"BC_CHI_PHI_CHI_TRA","kyBaoCao":"NAM",
+         "tuNgay":"2026-01-01","denNgay":"2026-12-31","formatXuat":"XLSX"}
+    Mã trả về: 403
+    Nội dung trả về:
+        {"success":false,
+         "error":{"code":"ERR-PERM-SYS-00-01",
+                  "message":"Forbidden",
+                  "timestamp":"2026-08-06T05:59:34.537Z",
+                  "requestId":"4eaa4039-50cd-41c1-91e7-f05759d154bd"}}
+
+    Vé đăng nhập đang dùng (đọc từ cookie phiên): vaiTro ["QTHT"], capDonVi "TW"
+    → xác nhận đúng là vai trò Quản trị viên, không phải nhầm tài khoản.
+
+    (Bộ theo dõi giao diện đếm "0 request" vì ứng dụng gửi request này qua đường không đi
+     ngang chỗ móc của bộ theo dõi; nhật ký mạng của trình duyệt là đường đo độc lập thứ hai
+     và đã ghi nhận đầy đủ như trên.)
+
+================================================================================
+C. ĐỐI CHIẾU VỚI ĐẶC TẢ
+================================================================================
+
+- srs-v3.5/srs-fr-11-bao-cao.md:117 — E7 ERR-RPT-05 quy định câu hiện cho người dùng khi
+  thiếu quyền là "Bạn không có quyền xem báo cáo này". Chuỗi "Forbidden" KHÔNG có trong
+  bảng lỗi của đặc tả.
+- :62 — đặc tả khai tác nhân là CB Nghiệp vụ / CB Phê duyệt; IM LẶNG về việc Quản trị viên
+  có được xuất hay không → phần "có được phép hay không" là câu hỏi gửi BA
+  (cau-hoi-BA.md Mục 2), KHÔNG tự chấm.
+- Dù BA trả lời theo hướng nào thì câu hiện cho người dùng vẫn phải theo :117, nên riêng
+  khuyết tật "hiện chuỗi Forbidden" là chắc chắn, không chờ BA.
+
+================================================================================
+D. TỆP SỐ LIỆU THÔ (để dev/BA mở lại kiểm chứng)
+================================================================================
+
+testfiles/CPHTCT_06-xlsx-capture.json        — lượt xuất 12:49 (vai trò cbnv_tw_03)
+testfiles/CPHTCT_06-xlsx-capture-lan2.json   — lượt xuất 12:51 (vai trò cbnv_tw_03)
+testfiles/CPHTCT_06-qtht-xuat-excel.json     — lượt xuất bị chặn (vai trò admin/QTHT)
+image/CPHTCT_06-xuat-excel.xlsx              — tệp thật hệ thống giao ra, 6918 byte
+image/CPHTCT_06-01-xuat-excel-thanh-cong.png — màn hình vai trò CB Nghiệp vụ sau khi xuất
+image/CPHTCT_06-02-qtht-xem-duoc-bao-cao-nut-xuat-van-bam-duoc.png — màn hình vai trò QTHT

@@ -1,0 +1,29 @@
+Reopen 11/08/2026 — môi trường nội bộ https://18.143.165.120.nip.io, bản dựng assets/index-x06iyQ52.js.
+
+LỖI Ở ĐÂU: Vụ việc HTPL → mở chi tiết vụ việc → nút [Đánh giá] ở đầu trang (hoặc thẻ "Đánh giá" trong bộ thẻ chi tiết), đăng nhập bằng tài khoản DOANH NGHIỆP (0109998887).
+
+LỖI THẾ NÀO: trên vụ việc VV-BTP-TW-20260804-001 (Hoàn thành, chưa ai đánh giá), nhập 3 điểm 9 · 8 · 10 + nhận xét rồi bấm [Xác nhận] thì:
+- màn hình báo "Lỗi hệ thống, vui lòng thử lại sau";
+- lời gọi POST /api/v1/vu-viecs/{id}/danh-gia trả HTTP 500, mã ERR-SYS-00-00-01;
+- tải lại trang, khối Đánh giá vẫn "Chưa có thông tin" — đánh giá KHÔNG được lưu.
+Đo 2 lần trên 2 vụ việc khác nhau đều y hệt.
+
+CHỈ HỎNG VỚI VAI TRÒ DOANH NGHIỆP: cùng chính vụ việc đó, tài khoản cán bộ gửi đánh giá thì lưu bình thường (HTTP 201). Với vụ việc đã có đánh giá, cán bộ nhận thông báo nghiệp vụ "Vụ việc đã được đánh giá", còn doanh nghiệp vẫn nhận lỗi hệ thống — tức không phải do bản ghi hay do đã đánh giá trước đó.
+
+PHẦN ĐÃ ĐẠT (không cần sửa): doanh nghiệp đã thấy đủ 18/18 vụ việc của mình, gồm vụ việc do Trung ương thụ lý; mở được từ danh sách và khi dán thẳng địa chỉ; đọc được kết quả hỗ trợ, tải được tài liệu; vụ việc của doanh nghiệp khác vẫn bị chặn.
+
+CẦN ĐẠT: doanh nghiệp gửi được đánh giá cho vụ việc của mình ở trạng thái Hoàn thành / Đã đánh giá, và nội dung đã gửi đọc lại được sau khi tải lại trang. Cách hiện thực do dev tự chọn.
+
+── VERIFY LẠI SAU KHI FIX ──
+Tiền đề: env NỘI BỘ https://18.143.165.120.nip.io. Tài khoản doanh nghiệp 0109998887 / Test@1234 (tên đăng nhập là mã số thuế; mã xác thực lấy ở MailHog http://18.143.165.120:8025); tài khoản cán bộ cbnv_tw / Test@1234 để làm phép thử phân biệt; doanh nghiệp thứ hai 0209888006 / Test@1234 để kiểm vế chặn. Dữ liệu phải có ÍT NHẤT 1 vụ việc thuộc chính doanh nghiệp 0109998887, trạng thái Hoàn thành và CHƯA ai đánh giá — kiểm lúc 11/08 thì CẢ 4 vụ việc Hoàn thành của doanh nghiệp này đều đã có đánh giá (VV-BTP-TW-20260803-001, -20260804-001, -20260806-003, -20260806-004), nên phải đưa một vụ việc mới của doanh nghiệp này đi trọn luồng đến Hoàn thành trước khi đo. Tải lại trang bằng địa chỉ và ghi bó mã assets/index-*.js ở đầu và cuối phiên đo.
+1) Đăng nhập 0109998887 → Vụ việc HTPL → mở vụ việc sạch nói trên → bấm [Đánh giá] (hoặc mở thẻ "Đánh giá").
+2) Nhập 3 điểm thành phần và một chuỗi nhận xét mốc giờ duy nhất dạng QA-DGKQ-<YYYYMMDD-HHMM>, bấm [Xác nhận]. Ghi lại NGUYÊN VĂN thông báo hiện ra.
+3) Tải lại trang BẰNG ĐỊA CHỈ, mở lại vụ việc và đọc khối Đánh giá.
+4) Phép thử phân biệt, chỉ chạy khi bước 2 vẫn lỗi: đăng nhập cbnv_tw, mở CHÍNH vụ việc đó và gửi đánh giá. Cán bộ gửi được mà doanh nghiệp không gửi được thì lỗi vẫn nằm ở vai trò doanh nghiệp.
+5) Vế chặn — không được vỡ khi sửa: đăng nhập 0209888006 rồi dán thẳng địa chỉ chi tiết vụ việc của 0109998887.
+✅ PASS khi cả 3 điều kiện cùng đúng: (a) ở bước 2 doanh nghiệp gửi được, hệ thống báo thành công, không có thông báo lỗi hệ thống; (b) ở bước 3 sau khi tải lại trang, khối Đánh giá hiển thị đúng 3 điểm và đúng chuỗi QA-DGKQ-… đã nhập, không mất, không cắt; (c) ở bước 5 doanh nghiệp khác vẫn không mở được vụ việc không thuộc mình.
+❌ FAIL nếu: bước 2 còn báo "Lỗi hệ thống…" hoặc lời gọi danh-gia trả 5xx hoặc bấm [Xác nhận] không có phản hồi nào; hoặc gửi xong mà tải lại trang thì khối Đánh giá vẫn "Chưa có thông tin"; hoặc nội dung đọc lại lệch với nội dung đã nhập; hoặc vế chặn ở bước 5 bị vỡ.
+⚠️ Bẫy FAIL oan lớn nhất của dòng này: đo lại trên vụ việc ĐÃ CÓ đánh giá. Khi đó thông báo "Vụ việc đã được đánh giá" là thông báo nghiệp vụ ĐÚNG, không phải lỗi — phải đổi sang vụ việc sạch rồi đo lại.
+⚠️ Không chấm PASS chỉ vì thấy nút [Đánh giá] hiện ra hoặc thấy khối Đánh giá mở được: vế phạm vi nhìn đã đạt từ trước, điều đang đo là GỬI được và ĐỌC LẠI được.
+⚠️ Không chấm FAIL vì nhãn/vị trí khối Đánh giá, vì điểm hiển thị một chữ số thập phân, hay vì cách làm tròn điểm tổng — phần hiển thị đó thuộc dòng DGKQHTVV_02 và đã PASS ngày 11/08.
+Ảnh lỗi: image/DGKQHTVV_01-dn-danh-gia-500-2026-08-11.png (thư mục reverify-devfix-2026-08-11 của lượt đo 11/08).

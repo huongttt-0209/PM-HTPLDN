@@ -1,0 +1,15 @@
+{
+  "STT": "03/08/2026",
+  "Tuần": "Tuần 2",
+  "Mã TC": "DKTGMLTVV_OOS_02",
+  "Mô tả": "Đăng ký tham gia mạng lưới — nhãn trường trên biểu mẫu Thêm mới Tư vấn viên lệch so với đặc tả",
+  "Điều kiện": "1. Đăng nhập tài khoản Người hỗ trợ pháp lý cấp Trung ương, đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp\n2. Mở màn hình Mạng lưới Tư vấn viên -> Tư vấn viên / Chuyên gia -> Thêm mới",
+  "Dữ liệu đầu vào": "Không cần nhập dữ liệu — chỉ đọc nhãn trên biểu mẫu còn trống.",
+  "Các bước thực hiện": "1. Chọn menu \"Mạng lưới Tư vấn viên\" -> \"Tư vấn viên / Chuyên gia\", bấm [+ Thêm mới]\n2. Đọc tên nhóm thứ hai của biểu mẫu\n3. Đọc nhãn ô nhập số giấy tờ tùy thân ở nhóm thông tin cá nhân\n4. Đọc nhãn ô chọn trình độ ở nhóm thứ hai\n5. Đối chiếu 3 nhãn trên với bảng Danh sách trường của SCR-IV-02",
+  "Kết quả mong đợi": "Nhãn hiển thị đúng như đặc tả SCR-IV-02 \"Thêm mới / Chỉnh sửa Tư vấn viên\" §Danh sách trường:\n- dòng 1500 — nhóm 2 tên là \"Thông tin nghề nghiệp\"\n- dòng 1495 — mục 2.7 là \"Số Căn cước công dân *\"\n- dòng 1503 — mục 3.1 là \"Trình độ *\"",
+  "Kết quả thực tế": "Cả 3 nhãn đều lệch so với đặc tả:\n1. Tên nhóm 2 hiển thị \"Nghề nghiệp\" — đặc tả dòng 1500 ghi \"Thông tin nghề nghiệp\".\n2. Nhãn ô giấy tờ tùy thân hiển thị \"Số CMND/CCCD\" — đặc tả dòng 1495 ghi \"Số Căn cước công dân\". Đây không chỉ là rút gọn chữ: Chứng minh nhân dân và Căn cước công dân là hai loại giấy tờ khác nhau, nhãn hiện tại cho hiểu là chấp nhận cả số CMND trong khi đặc tả chỉ nêu Căn cước công dân. Cùng chỗ này, màn hình chi tiết hồ sơ cũng hiển thị \"CMND/CCCD\".\n3. Nhãn ô trình độ hiển thị \"Trình độ học vấn\" — đặc tả dòng 1503 ghi \"Trình độ\".\n\nĐọc trực tiếp trên biểu mẫu còn trống nên không phụ thuộc dữ liệu thử. Trong 3 điểm trên, điểm 2 ảnh hưởng tới cách hiểu nghiệp vụ (loại giấy tờ được chấp nhận); điểm 1 và 3 là sai khác câu chữ.",
+  "Ảnh/vieo 1": "BUG-DKTGMLTVV_OOS_02-ba-nhan-lech-srs.png",
+  "Trạng thái 1": "Fail",
+  "Verify": "Open",
+  "DEV phản hồi lần 1": "✅ Bug ĐÚNG – chuyển dev.\n- Yêu cầu theo đặc tả: SCR-IV-02 \"Thêm mới / Chỉnh sửa Tư vấn viên\" §Danh sách trường — dòng 1500 \"Thông tin nghề nghiệp\"; dòng 1495 mục 2.7 \"Số Căn cước công dân *\"; dòng 1503 mục 3.1 \"Trình độ *\".\n- Đề nghị BA xác nhận riêng điểm 2: nhãn \"Số CMND/CCCD\" có phải là thay đổi phạm vi giấy tờ được chấp nhận hay chỉ là sai khác câu chữ. Nếu là thay đổi phạm vi thì cần cập nhật đặc tả; nếu không thì sửa nhãn về đúng đặc tả.\n- Mã lỗi nội bộ: BUG-DKTGMLTVV_OOS_02. Tài khoản kiểm tra: nht_qa_tw (Người hỗ trợ pháp lý, cấp Trung ương, đơn vị Cục Bổ trợ tư pháp). Bản dựng V1.0.5, kiểm tra ngày 03/08/2026.\n- Lỗi phát hiện ngoài phạm vi các dòng TC có sẵn nên mở dòng mới."
+}

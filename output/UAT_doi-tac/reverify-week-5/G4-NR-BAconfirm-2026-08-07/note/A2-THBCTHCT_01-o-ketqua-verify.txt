@@ -1,0 +1,29 @@
+✅ CÒN LỖI — đề nghị chuyển lại bộ phận phát triển.
+
+Kiểm tra lại ngày 07/08/2026, khung giờ 20:53–21:14, trên bản dựng V1.0.10, bằng tài khoản Cán bộ Nghiệp vụ Trung ương. Phiếu này Quý đơn vị chưa chạy được lượt nào nên không có ảnh cũ để đối chiếu; chúng tôi chấm theo đúng nội dung "Kết quả mong đợi" của phiếu. Đã chạy đủ ba bước của phiếu và chạy hai lượt trên hai đợt báo cáo khác nhau để chắc chắn kết quả không phụ thuộc một bộ dữ liệu; hai lượt cho kết quả trùng khít.
+
+PHẦN ĐÃ ĐẠT
+- Lưu được bản ghi báo cáo tổng hợp toàn quốc. Cả hai lượt đều tạo mới đúng một bản báo cáo tổng hợp cấp Trung ương, thuộc đúng đợt đã chọn, mang đủ 13 chỉ tiêu đúng bằng số hiển thị trên biểu lúc bấm.
+- Hệ thống có lưu vết thao tác: mỗi lượt bấm sinh đúng một mục nhật ký, đúng bản ghi vừa tạo, đúng mốc giờ, đúng tài khoản, đúng vai trò và đơn vị.
+- Câu thông báo khi tổng hợp thành công hiển thị đúng "Đã tổng hợp báo cáo toàn quốc". Một lượt bấm chỉ sinh một thông báo, không hiện lặp.
+- Màn hình chọn báo cáo để tổng hợp nay đã tách theo từng đơn vị: cùng một mã đợt được hiển thị thành nhiều dòng riêng, mỗi đơn vị một dòng, mỗi dòng có ngày gửi lên Trung ương, trạng thái và ô chọn riêng. Phần này đúng như bộ phận phát triển đã nêu.
+
+❌ PHẦN CÒN LỖI — trạng thái bị đổi sai cho những đơn vị KHÔNG được chọn
+- Phiếu yêu cầu: sau khi lưu, chỉ những báo cáo ĐÃ CHỌN mới chuyển từ "Đã gửi TW" sang "Đã tổng hợp".
+- Thực tế đo được: sau khi lưu, những đơn vị khác trong cùng đợt cũng bị đóng dấu "Đã tổng hợp", kể cả đơn vị CHƯA HỀ gửi báo cáo lên Trung ương.
+- Lượt 1 — đợt kỳ Sơ bộ năm: chọn đúng 2 đơn vị (Bộ Kế hoạch và Đầu tư, Sở Tư pháp Hà Nội). Sau khi lưu, danh sách tăng từ 4 lên 5 dòng: Sở Tư pháp An Giang tự xuất hiện với trạng thái "Đã tổng hợp", cột "Ngày gửi TW" để trống. Đơn vị này lúc đó đang chờ chính đơn vị mình phê duyệt nội bộ, chưa gửi lên Trung ương.
+- Lượt 2 — đợt kỳ Sơ bộ 6 tháng: chỉ chọn đúng 1 đơn vị (Bộ Kế hoạch và Đầu tư). Sau khi lưu, Sở Tư pháp An Giang của đợt đó cũng hiện ra với trạng thái "Đã tổng hợp", cột "Ngày gửi TW" để trống, trong khi đơn vị này còn đang soạn báo cáo, chưa trình duyệt và chưa gửi đi.
+- Đã tải lại toàn bộ trang và kiểm chứng lại: hiện tượng vẫn còn, không phải hiển thị tạm thời.
+- Kiểm chứng thêm bằng chính tài khoản của Sở Tư pháp An Giang: báo cáo của đơn vị này vẫn đang ở trạng thái chờ duyệt / đang lập, chưa hề đổi. Nghĩa là dữ liệu của đơn vị không bị sửa, nhưng màn hình tổng hợp của Trung ương đang tính trạng thái theo cả đợt thay vì theo từng bản báo cáo, đồng thời kéo cả những báo cáo chưa gửi lên Trung ương vào danh sách.
+- Hệ quả nghiệp vụ: cán bộ Trung ương nhìn vào sẽ tưởng đơn vị đã nộp và đã được tổng hợp, trong khi đơn vị đó thực tế còn chưa gửi báo cáo. Số liệu của họ cũng không nằm trong bản tổng hợp vừa lưu.
+
+ẢNH BẰNG CHỨNG
+- Danh sách chọn báo cáo nay tách theo từng đơn vị, mỗi đơn vị một dòng (phần đã sửa): https://drive.google.com/file/d/1d46M0gRWdRfpVjVKNpSNxHB0hj2ORrNc/view?usp=drivesdk
+- Đã tick đúng 2 đơn vị trước khi bấm Tổng hợp: https://drive.google.com/file/d/1qBtzj97hOiIAGxZH8GVbkwvEXv1BuIf6/view?usp=drivesdk
+- Ngay sau khi bấm "Lưu tổng hợp": thông báo "Đã tổng hợp báo cáo toàn quốc": https://drive.google.com/file/d/1Rz3CyAeGZIHXSB5GlFJ9M2_f-x__ntTl/view?usp=drivesdk
+- Sau khi tải lại toàn bộ trang: đơn vị không được chọn vẫn bị kéo theo: https://drive.google.com/file/d/1ZOTECkNvcVc0OuGveySaUfmx6lLY7f2c/view?usp=drivesdk
+- Ảnh chốt: Sở Tư pháp An Giang có cột "Ngày gửi TW" để trống nhưng trạng thái vẫn "Đã tổng hợp", ở cả hai đợt: https://drive.google.com/file/d/1mNR0poibIs-xZxbH8kJ9RPrxFwrIPY0l/view?usp=drivesdk
+
+Lưu ý về dữ liệu: lượt đo có ghi xuống hệ thống — hai đợt báo cáo đã chuyển sang "Đã tổng hợp" và hệ thống tạo mới hai bản báo cáo tổng hợp toàn quốc. Đây là thao tác bắt buộc của chính phiếu này.
+
+KẾT LUẬN: các bước của phiếu chạy thông, phần lưu bản ghi, lưu vết và câu thông báo đều đạt; nhưng yêu cầu "chỉ chuyển trạng thái các báo cáo đã chọn" chưa đạt và đã tái hiện ở cả hai lượt. Đề nghị bộ phận phát triển xử lý rồi kiểm tra lại.

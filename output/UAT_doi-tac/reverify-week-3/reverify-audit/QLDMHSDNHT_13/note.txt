@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+- Web hiện tại (kiểm tra 21/07, tài khoản QTHT): form Sửa "Hồ sơ đề nghị hỗ trợ" có trường "Danh mục cha" (dạng tùy chọn, không chặn lưu).
+- Theo SRS mẫu dùng chung TPL-DM-CRUD (FR-VIII-08 / UC106) §Inputs, danh mục này là danh mục phẳng, KHÔNG có trường "Danh mục cha".
+- Câu hỏi BA: có bổ sung "Danh mục cha" vào đặc tả cho danh mục phẳng, hay yêu cầu ẩn trường này?
+Ref: FR-VIII-08 (UC106); TPL-DM-CRUD §Inputs (dòng 77-83).

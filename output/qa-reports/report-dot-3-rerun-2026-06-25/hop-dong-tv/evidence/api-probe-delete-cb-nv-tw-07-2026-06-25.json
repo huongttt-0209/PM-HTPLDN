@@ -1,0 +1,18 @@
+{
+  "DELETE unlinked same_day": {
+    "status": 204,
+    "data": null
+  },
+  "GET after delete": {
+    "status": 404,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-VAL-X3-159-02",
+        "message": "Hợp đồng tư vấn không tồn tại",
+        "timestamp": "2026-06-25T15:34:55.136Z",
+        "requestId": "ebe6c773-3c4d-41d1-8b5d-3df28c5af4e4"
+      }
+    }
+  }
+}

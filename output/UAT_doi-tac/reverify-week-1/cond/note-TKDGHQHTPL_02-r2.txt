@@ -1,0 +1,36 @@
+✅ Bug ĐÚNG một phần – chuyển dev + cần BA/CĐT xác nhận 2 điểm hẹp (không phải mở lại thiết kế).
+
+Đã kiểm tra lại ngày 27/07/2026 bằng tài khoản cbnv_tw (Cán bộ NV Trung ương, đơn vị BTP · TW) trên chính môi trường đối tác, đúng bộ lọc trong ảnh (Cấp đơn vị "Trung ương" + Đơn vị "Cục Bổ trợ tư pháp - Bộ Tư pháp").
+
+1) Phần đối tác phản ánh — con số vượt quá 100 thì KHÔNG còn tái hiện:
+- Thẻ nay hiển thị 8.2/100, trục biểu đồ trần 100 (ảnh đối tác là 164.0/100, trục 172).
+- Cùng bộ lọc, thẻ "Tỷ lệ tuân thủ thời hạn xử lý" bên cạnh vẫn là 17.4% đúng như ảnh đối tác, chứng minh vẫn là cùng tập dữ liệu chưa bị đụng vào — chỉ riêng con số điểm đổi.
+- Hai cột biểu đồ cũng đổi theo đúng một hệ số: 172 thành 8.6 và 150 thành 7.5, đều chia đúng 20 lần. Đã quét thêm 33 tổ hợp bộ lọc khác nhau, không tổ hợp nào vượt quá 100.
+- Ghi nhận: hệ số 20 này trùng khít mức lệch mà chính tài liệu đã nêu — CHANGELOG-v3-to-v3.5.md dòng 1729: "v3 ghi điểm đánh giá theo thang 1-5 trong khi nhóm dữ liệu kết quả đánh giá thực tế lưu thang 0-100 — lệch nhau 20 lần". Nên giải trình của đội phát triển là có cơ sở.
+
+2) Nhưng cùng thẻ đó vẫn còn sai, KHÔNG nên đóng:
+- Trên đúng môi trường này, kết quả đánh giá cao nhất đang là 10,00 điểm và được hệ thống xếp loại "Xuất sắc" — tức đã đạt mức trần tuyệt đối. Vậy mà thẻ Dashboard vẫn gộp nó vào con số ghi "trên 100", làm một kết quả hoàn hảo trông như chỉ đạt khoảng một phần mười.
+- Kiểm chứng bằng số học trên đúng dữ liệu này: 6 kết quả có điểm, tổng 49,30, chia 6 ra 8,216 — khớp con số 8.2 đang hiển thị. Các mức điểm lần lượt là 10,00 / 9,50 / 8,90 / 8,00 / 7,90 / 5,00, toàn bộ nằm trong khoảng 0 đến 10.
+- Đối chiếu cách hệ thống tự xếp loại cũng cho thấy trần là 10: 5,00 xếp "Đạt" (tức 50%), 9,50 xếp "Xuất sắc" (95%), 8,90 và 7,90 xếp "Tốt" (89% và 79%). Đúng quy ước tại srs-fr-08-danh-gia.md dòng 874: ">=90% Xuất sắc / >=70% Tốt / >=50% Đạt / <50% Chưa đạt".
+- Ngay trên cùng màn hình này, thẻ "Chất lượng đào tạo, bồi dưỡng pháp lý" phía dưới đang hiển thị "Điểm trung bình 7.3/10" và "Điểm kiểm tra trung bình 7.3/10". Cùng một màn, cùng độ lớn con số, nhưng một thẻ ghi trên 10 còn thẻ đánh giá ghi trên 100.
+- Hệ quả nhìn thấy được: hai cột biểu đồ 8.6 và 7.5 bị vẽ dẹt sát đáy trên trục chạy tới 100, gần như không đọc được xu hướng.
+
+3) Chỗ cần sửa nằm ở NGHIỆP VỤ ĐÁNH GIÁ, KHÔNG phải ở Dashboard:
+- Đã sàng 3 hướng xử lý, đối chiếu với toàn bộ các dòng đặc tả liên quan. Chỉ còn MỘT hướng thoả hết:
+  · Quy đổi con số trên Dashboard sang phần trăm: Dashboard sẽ hiện 86 trong khi màn chi tiết hiện 8,6 cho cùng một vụ (màn chi tiết hiển thị số thô — srs-fr-08-danh-gia.md dòng 873). Đây đúng là tình huống đặc tả đã chủ động sửa trước đó — CHANGELOG-v3-to-v3.5.md dòng 1729: "Cán bộ nghiệp vụ nhìn biểu đồ Dashboard hiển thị 3.5 trong khi báo cáo chi tiết hiển thị 70 cho cùng một vụ, không cách nào đối chiếu". Hướng này tái tạo lại đúng lỗi cũ, LOẠI.
+  · Giữ số thô và đổi mẫu số theo trần riêng từng kế hoạch: mỗi kế hoạch một trần khác nhau thì không cộng trung bình chéo kế hoạch được, mà đó lại là việc chính của thẻ này. LOẠI.
+  · Ràng buộc cấu hình tiêu chí sao cho điểm tổng đạt trần đúng 100: thoả đồng thời srs-fr-01-dashboard.md dòng 416 (thang 0-100 theo điểm tổng), srs-fr-08-danh-gia.md dòng 1049 (điểm tổng từ 0 đến 100), dòng 874 (xếp loại theo phần trăm), yêu cầu đối chiếu được với màn chi tiết, và phép cộng trung bình chéo kế hoạch. CHỌN hướng này.
+- Củng cố: dữ liệu đời trước trên môi trường được giao (kế hoạch KHDG-SEED-0001) đang mang điểm 80 / 60 / 90 — tức đã ở thang 0-100 từ trước. Thang 0-100 nhiều khả năng luôn là thiết kế gốc; giá trị mặc định 10 của điểm tối đa (dòng 1100) mới là chỗ lệch.
+- Vì vậy đề nghị đội phát triển KHÔNG sửa ở Dashboard — thẻ đang hiển thị đúng như đặc tả mô tả.
+
+4) Hai điểm cần BA/CĐT xác nhận trước khi sửa (chỉ cần trả lời có/không, không cần thiết kế lại):
+- Điểm 1: bổ sung ràng buộc còn thiếu — tổng của (điểm tối đa từng tiêu chí × trọng số / 100) phải bằng 100. Hiện srs-fr-08-danh-gia.md dòng 191 chỉ ghi điểm tối đa "lớn hơn 0, số nguyên dương", dòng 850 màn hình cũng chỉ ghi "number > 0"; không dòng nào ràng buộc tổng. Riêng trọng số thì đã có ràng buộc tổng 100% (dòng 850, BR-CALC-04). Đây là thêm một luật nghiệp vụ mới nên đội phát triển không tự quyết được.
+- Điểm 2: duyệt cách xử lý dữ liệu đã có. Các kế hoạch đang cấu hình điểm tối đa bằng 10 sẽ phải quy đổi, hoặc chấp nhận để lệch vĩnh viễn. Việc này đụng vào kết quả đã chấm nên cần người có thẩm quyền duyệt.
+- Ghi chú: srs-fr-01-dashboard.md dòng 410 hiện vẫn ghi FR-I-08 có "công thức tính chờ CĐT review", tức phần này chưa được ký chính thức.
+- Đã ghi vào bảng theo dõi mâu thuẫn đặc tả, mã SRS-C-009.
+
+5) Lỗ hổng độc lập phát hiện kèm: điểm tối đa để tự do ("lớn hơn 0, số nguyên dương" — dòng 191) trong khi điểm tổng bị chặn trong khoảng 0 đến 100 (dòng 1049). Nếu cấu hình điểm tối đa 200 và chấm 150 thì điểm tổng thành 150, vi phạm chính ràng buộc đó. Đã dựng thử một kế hoạch điểm tối đa 200 trên môi trường được giao và hệ thống chấp nhận. Điểm 1 ở mục 4 nếu được duyệt sẽ bịt luôn lỗ hổng này.
+
+Phạm vi để đội phát triển không sửa nhầm: phần tính điểm và xếp loại đang chạy ĐÚNG đặc tả của nó (đã kiểm 6 kết quả, xếp loại khớp phần trăm). Thẻ Dashboard cũng đang hiển thị đúng như đặc tả mô tả. Sai lệch nằm ở chỗ cấu hình điểm tối đa của tiêu chí không bị ràng buộc để điểm tổng đạt trần 100.
+
+Bug ID: BUG-TKDGHQ-THANG-DIEM.

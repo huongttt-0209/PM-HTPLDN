@@ -1,0 +1,1367 @@
+========================================================================================================
+R2 — QUÉT LƯỢT 2: CÁC CHỨC NĂNG XUẤT TỆP CHƯA RÀ Ở LƯỢT 1 · PM HTPLDN
+Môi trường : https://18.143.165.120.nip.io
+Tài khoản  : cbnv_tw_01 (CB_NV_TW — Cán bộ nghiệp vụ Trung ương, phạm vi Toàn quốc)
+             admin (QTHT) — CHỈ dùng cho mục 7 và 8, vì cbnv_tw_01 không thấy 2 menu đó
+Thời điểm  : 2026-07-28 16:26 → 17:00 giờ Việt Nam (= 09:26 → 10:00 giờ quốc tế UTC, lệch +7)
+Cách lấy tệp: bấm nút xuất THẬT trên giao diện. Trình duyệt đang chạy hồ sơ tách biệt nên tệp
+             KHÔNG rơi vào ~/Downloads; nội dung tệp được lấy đúng từng byte ngay tại thời điểm
+             trình duyệt nhận tệp (đối tượng tệp mà chính nút xuất tạo ra), kèm tên tệp lấy từ
+             thuộc tính "download" của liên kết tải mà ứng dụng sinh ra — tức đúng tên mà người
+             dùng thật sẽ thấy khi lưu về máy.
+Ghi chú    : mục 1 KHÔNG bấm [Tổng hợp] (nút đổi trạng thái đợt) theo yêu cầu.
+Tệp gốc    : 12 tệp đã tải về được lưu tại
+             output/UAT_doi-tac/reverify-week-4/files/R2-QUET2/
+             (kèm doc-tep-xuat.py — chạy `python3 doc-tep-xuat.py <tep> [xlsx|docx|pdf]`
+              để in lại đúng phần [NỘI DUNG TỆP] trong file log này)
+Ảnh        : 11 ảnh R2-QUET2-*.png nằm cùng thư mục với file log này.
+========================================================================================================
+
+
+########################################################################################################
+# MÀN: Chương trình HTPLDN → Đợt báo cáo → chi tiết DOT-SO_BO_NAM-2026-1
+########################################################################################################
+
+[CỘT TRÊN GIAO DIỆN] (5, đã bỏ cột Hành động/chọn) — bảng Tiến độ nộp theo đơn vị:
+   - Đơn vị
+   - Cấp
+   - Trạng thái nộp
+   - Ngày nộp
+   - Số lần nhắc
+
+[CỘT TRÊN GIAO DIỆN] (2, đã bỏ cột Hành động/chọn) — bảng Biểu mẫu 21a/TP/HTPLDN:
+   - Chỉ tiêu
+   - Kỳ này
+
+[SỐ LIỆU TRÊN GIAO DIỆN]
+   Đợt        : DOT-SO_BO_NAM-2026-1 — "QA Reverify CTBC 715 v2 fresh"
+   Kỳ BC      : SO_BO_NAM · Từ 01/01/2026 · Đến 31/12/2026 · Hạn nộp 31/12/2026
+   Trạng thái : TAO_DOT (bước 1/6 của thanh tiến trình)
+   Tiến độ nộp: 83 dòng đơn vị (BN + DP). Bộ KH&ĐT = "Chờ duyệt"; STP An Giang = "Đang lập";
+                81 đơn vị còn lại = "Chưa nộp", Ngày nộp "—", Số lần nhắc 0.
+   Biểu mẫu 21a (13 dòng, tất cả giá trị = 0):
+      1. Số TVV kiện toàn · 2. Cuộc tập huấn · 3. Hội nghị đối thoại · 4. VB trả lời UBND
+      5. VB TV mạng lưới TVV · 6. HS tiếp nhận · 7. HS giải quyết tổng · 8. DN vừa
+      9. DN nhỏ · 10. DN siêu nhỏ · 11. KP hỗ trợ TVPL (NSNN) · 12. KP chi HĐ khác · 13. KP xã hội hóa
+   KHÔNG có khối "Biểu mẫu 21b" trên màn hình.
+
+[NÚT XUẤT]
+   Toàn màn hình chi tiết đợt chỉ có DUY NHẤT 1 nút: [Tổng hợp].
+   KHÔNG có [Xuất Excel], KHÔNG có [Xuất Word] ở trạng thái TAO_DOT.
+   Đã kiểm tra thêm: Chương trình HTPLDN → chi tiết CT (cả CT trạng thái "Dự thảo" lẫn CT
+   "Hoàn thành" CT-20260721-0003) chỉ có duy nhất tab "Thông tin", KHÔNG có tab "Đợt báo cáo".
+   Đặc tả srs-fr-15-ct-htpldn.md dòng 1167 (hàng 45) đặt [Xuất Excel] [Xuất Word] trong khối
+   "[TW] Tổng hợp" — khối này chỉ mở ra sau khi bấm [Tổng hợp], tức phải ĐỔI TRẠNG THÁI đợt.
+
+=> KHÔNG ĐO ĐƯỢC nội dung tệp, vì muốn hiện nút xuất thì phải bấm [Tổng hợp] (đổi trạng thái).
+
+[ĐỐI CHIẾU VỚI MẪU 21a TRONG ĐẶC TẢ]
+   srs-fr-15-ct-htpldn.md dòng 1159 (hàng 37): "Bieu mau 21a (TT17/2025) ... Chi tieu /
+   So lieu ky truoc / Ky nay / Ghi chu" = 4 cột.
+   Giao diện thực tế: 2 cột (Chỉ tiêu, Kỳ này). Thiếu "Số liệu kỳ trước" và "Ghi chú".
+   Bảng trên màn hình có thanh cuộn ngang nhưng đã kiểm tra chiều rộng cuộn (1769) ~ chiều rộng
+   hiển thị (1765) và đếm thẻ tiêu đề = 2 → không có cột nào bị ẩn sang phải.
+
+[ẢNH] R2-QUET2-dot-bao-cao-chi-tiet-bieu-mau-21a.png
+
+
+
+########################################################################################################
+# MÀN: Đánh giá hiệu quả → đợt DG-20260722-0001 → Tab Báo cáo → [Xuất XLSX]
+# Tệp tải về: bao-cao-BCDG-20260724-0001.xlsx   (7464 byte)
+########################################################################################################
+
+[CỘT TRÊN GIAO DIỆN] (11, đã bỏ cột Hành động/chọn):
+   - Mã báo cáo
+   - Trạng thái
+   - KP chi HĐ khác (NSNN)
+   - KP xã hội hóa
+   - Nhận xét tổng thể
+   - Kiến nghị
+   - (Số liệu tổng hợp) Đã đánh giá
+   - (Số liệu tổng hợp) Tổng số vụ việc
+   - (Số liệu tổng hợp) Xếp loại
+   - (Số liệu tổng hợp) Điểm trung bình
+   - (Chỉ tiêu hoạt động HTPLDN — Nhóm VI) 11 dòng: 1..11
+
+[SỐ LIỆU TRÊN GIAO DIỆN — tab Báo cáo của đợt DG-20260722-0001 "QA-THDG05-partial-save-test"]
+   Mã báo cáo BCDG-20260724-0001 · Trạng thái "Dự thảo"
+   KP chi HĐ khác (NSNN) = "--" · KP xã hội hóa = "--" · Nhận xét tổng thể = "--" · Kiến nghị = "--"
+   Số liệu tổng hợp: Đã đánh giá 3 · Tổng số vụ việc 3 · Xếp loại "Tốt: 3" · Điểm trung bình 8.2
+   Chỉ tiêu hoạt động HTPLDN (Nhóm VI) — màn hình chỉ liệt kê 11 dòng (1→11), giá trị:
+      1=1 · 2=2 · 3=0 · 4=0 · 5=0 · 6=0 · 7=0 · 8=0 · 9=0 · 10=0 · 11=0 đ
+   Ngoài ra có 2 biểu đồ (radar theo tiêu chí, cột theo vụ việc). Màn hình KHÔNG có bảng liệt kê
+   từng vụ việc (không thấy cột Vụ việc / DN / Lĩnh vực / Điểm tổng / Xếp loại).
+   Nút xuất: [Xuất XLSX] [Xuất DOCX] (đúng như đặc tả srs-fr-08-danh-gia.md dòng 888, hàng 53).
+
+[ẢNH] R2-QUET2-danh-gia-tab-bao-cao.png
+
+--- Sheet 'Báo cáo đánh giá'  vung=A1:F26  (26 dong x 6 cot)
+
+[NOI DUNG TEP -- tung o: gia tri | kieu | dinh dang o]
+  Dong 1:
+     A1    'Báo cáo đánh giá - QA-THDG05-partial-save-test'                                                         | str       | General              
+  Dong 2:
+     A2    'Mã báo cáo: BCDG-20260724-0001'                                                                         | str       | General              
+  Dong 3:
+     A3    'Trạng thái: Dự thảo'                                                                                    | str       | General              
+  Dong 5:
+     A5    'CHI TIEU HOAT DONG (Nhom VI)'                                                                           | str       | General              
+  Dong 6:
+     A6    'Tong so vu viec'                                                                                        | str       | General              
+     B6    '3'                                                                                                      | int       | General              
+     D6    '1. So TVV kien toan/cong bo'                                                                            | str       | General              
+     E6    '1'                                                                                                      | int       | General              
+  Dong 7:
+     A7    'Da danh gia'                                                                                            | str       | General              
+     B7    '3'                                                                                                      | int       | General              
+     D7    '2. So cuoc tap huan'                                                                                    | str       | General              
+     E7    '2'                                                                                                      | int       | General              
+  Dong 8:
+     A8    'Diem trung binh'                                                                                        | str       | General              
+     B8    '8.2'                                                                                                    | float     | General              
+     D8    '3. So hoi nghi doi thoai'                                                                               | str       | General              
+     E8    '0'                                                                                                      | int       | General              
+  Dong 9:
+     D9    '4. So VB tra loi UBND'                                                                                  | str       | General              
+     E9    '0'                                                                                                      | int       | General              
+  Dong 10:
+     D10   '5. So VB TV mang luoi TVV'                                                                              | str       | General              
+     E10   '0'                                                                                                      | int       | General              
+  Dong 11:
+     D11   '6. So HS tiep nhan'                                                                                     | str       | General              
+     E11   '0'                                                                                                      | int       | General              
+  Dong 12:
+     D12   '7. So HS giai quyet tong'                                                                               | str       | General              
+     E12   '0'                                                                                                      | int       | General              
+  Dong 13:
+     D13   '8. HS DN vua'                                                                                           | str       | General              
+     E13   '0'                                                                                                      | int       | General              
+  Dong 14:
+     D14   '9. HS DN nho'                                                                                           | str       | General              
+     E14   '0'                                                                                                      | int       | General              
+  Dong 15:
+     D15   '10. HS DN sieu nho'                                                                                     | str       | General              
+     E15   '0'                                                                                                      | int       | General              
+  Dong 16:
+     D16   '11. KP ho tro chi phi TVPL (NSNN)'                                                                      | str       | General              
+     E16   '0'                                                                                                      | int       | General              
+  Dong 17:
+     D17   '12. KP chi HD khac (NSNN)'                                                                              | str       | General              
+     E17   '0'                                                                                                      | int       | General              
+  Dong 18:
+     D18   '13. KP xa hoi hoa'                                                                                      | str       | General              
+     E18   '0'                                                                                                      | int       | General              
+  Dong 23:
+     A23   'STT'                                                                                                    | str       | General              
+     B23   'Vụ việc ID'                                                                                             | str       | General              
+     C23   'Điểm tổng'                                                                                              | str       | General              
+     D23   'Xếp loại'                                                                                               | str       | General              
+     E23   'Trạng thái'                                                                                             | str       | General              
+  Dong 24:
+     A24   '1'                                                                                                      | int       | General              
+     B24   '8e259653-e0a5-49e8-ae7c-5fb07734ce09'                                                                   | str       | General              
+     C24   '8'                                                                                                      | int       | General              
+     D24   'Tốt'                                                                                                    | str       | General              
+     E24   'Đã đánh giá'                                                                                            | str       | General              
+  Dong 25:
+     A25   '2'                                                                                                      | int       | General              
+     B25   'eeeeeeee-0000-4000-8000-000000000012'                                                                   | str       | General              
+     C25   '8.9'                                                                                                    | float     | General              
+     D25   'Tốt'                                                                                                    | str       | General              
+     E25   'Đã đánh giá'                                                                                            | str       | General              
+  Dong 26:
+     A26   '3'                                                                                                      | int       | General              
+     B26   'eeeeeeee-0000-4000-8000-000000000011'                                                                   | str       | General              
+     C26   '7.7'                                                                                                    | float     | General              
+     D26   'Tốt'                                                                                                    | str       | General              
+     E26   'Đã đánh giá'                                                                                            | str       | General              
+
+
+########################################################################################################
+# MÀN: Đánh giá hiệu quả → đợt DG-20260722-0001 → Tab Báo cáo → [Xuất DOCX]
+# Tệp tải về: bao-cao-BCDG-20260724-0001.docx   (10309 byte)
+########################################################################################################
+
+[CỘT TRÊN GIAO DIỆN] — giống hệt khối [Xuất XLSX] ngay phía trên.
+
+--- Word: 16 doan van + 4 bang
+
+[NOI DUNG TEP -- doan van]
+  P1   [(khong style)] 'CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM'
+  P2   [(khong style)] 'Độc lập - Tự do - Hạnh phúc'
+  P3   [Heading 1] 'BÁO CÁO ĐÁNH GIÁ - QA-THDG05-PARTIAL-SAVE-TEST'
+  P4   [(khong style)] '(Theo mẫu Thông tư số 17/2025/TT-BTP)'
+  P5   [(khong style)] 'Mã báo cáo: BCDG-20260724-0001'
+  P6   [(khong style)] 'Tên đợt đánh giá: QA-THDG05-partial-save-test'
+  P7   [(khong style)] 'Mã kế hoạch: DG-20260722-0001'
+  P8   [(khong style)] 'Trạng thái báo cáo: Dự thảo'
+  P10  [(khong style)] 'I. SỐ LIỆU TỔNG HỢP'
+  P11  [(khong style)] 'II. CHI TIẾT KẾT QUẢ ĐÁNH GIÁ'
+  P12  [(khong style)] 'III. CHỈ TIÊU HOẠT ĐỘNG HTPLDN'
+  P13  [(khong style)] 'IV. NHẬN XÉT TỔNG THỂ'
+  P14  [(khong style)] '—'
+  P15  [(khong style)] 'V. KIẾN NGHỊ'
+  P16  [(khong style)] '—'
+
+  --- Bang 1: 5 dong x 2 cot
+     B1.R1   'Chỉ tiêu' | 'Giá trị'
+     B1.R2   'Tổng số vụ việc' | '3'
+     B1.R3   'Số vụ việc đã đánh giá' | '3'
+     B1.R4   'Điểm trung bình' | '8.20'
+     B1.R5   'Phân bố xếp loại' | 'Tốt: 3'
+
+  --- Bang 2: 4 dong x 5 cot
+     B2.R1   'STT' | 'Vụ việc' | 'Điểm tổng' | 'Xếp loại' | 'Trạng thái'
+     B2.R2   '1' | '8e259653-e0a5-49e8-ae7c-5fb07734ce09' | '8.00' | 'Tốt' | 'Đã đánh giá'
+     B2.R3   '2' | 'eeeeeeee-0000-4000-8000-000000000012' | '8.90' | 'Tốt' | 'Đã đánh giá'
+     B2.R4   '3' | 'eeeeeeee-0000-4000-8000-000000000011' | '7.70' | 'Tốt' | 'Đã đánh giá'
+
+  --- Bang 3: 14 dong x 3 cot
+     B3.R1   'STT' | 'Chỉ tiêu' | 'Số liệu'
+     B3.R2   '1' | 'Số TVV kiện toàn/công bố' | '1'
+     B3.R3   '2' | 'Số cuộc tập huấn' | '2'
+     B3.R4   '3' | 'Số hội nghị đối thoại' | '0'
+     B3.R5   '4' | 'Số VB trả lời UBND' | '0'
+     B3.R6   '5' | 'Số VB TV mạng lưới TVV' | '0'
+     B3.R7   '6' | 'Số HS tiếp nhận' | '0'
+     B3.R8   '7' | 'Số HS giải quyết tổng' | '0'
+     B3.R9   '8' | 'HS DN vừa' | '0'
+     B3.R10  '9' | 'HS DN nhỏ' | '0'
+     B3.R11  '10' | 'HS DN siêu nhỏ' | '0'
+     B3.R12  '11' | 'KP hỗ trợ chi phí TVPL (NSNN)' | '0'
+     B3.R13  '12' | 'KP chi HĐ khác (NSNN)' | '—'
+     B3.R14  '13' | 'KP xã hội hóa' | '—'
+
+  --- Bang 4: 2 dong x 2 cot
+     B4.R1   'NGƯỜI LẬP BÁO CÁO' | '..........., ngày 28 tháng 7 năm 2026 / THỦ TRƯỞNG ĐƠN VỊ'
+     B4.R2   '(Ký, ghi rõ họ tên)' | '(Ký, đóng dấu, ghi rõ họ tên)'
+
+
+########################################################################################################
+# MÀN: Đào tạo → Khóa học KH-20260716-002 → Tab Điểm danh (buổi SÁNG 20/09/2026) → [Xuất Excel]
+# Tệp tải về: diem-danh-033910fc-895d-432a-8407-8f7f0a9516c2.xlsx   (6918 byte)
+########################################################################################################
+
+[CỘT TRÊN GIAO DIỆN] (7, đã bỏ cột Hành động/chọn):
+   - STT
+   - Họ tên
+   - Email
+   - Số điện thoại
+   - Đơn vị
+   - Trạng thái
+   - Ghi chú
+
+[SỐ LIỆU TRÊN GIAO DIỆN — khóa học KH-20260716-002, tab Điểm danh]
+   Ô chọn buổi học có 2 lựa chọn:
+      (a) 20/09/2026 · 08:00:00-11:30:00 · Buoi SANG - QA RV5 KTDGKQHT_03
+      (b) 20/09/2026 · 13:30:00-17:00:00 · Buoi CHIEU - QA RV5 KTDGKQHT_03
+   Khi CHƯA chọn buổi: bảng hiện "Vui lòng chọn buổi học để bắt đầu điểm danh".
+   Đã chọn buổi (a) SÁNG rồi mới bấm xuất. Bảng lúc đó có 2 dòng:
+      1 · QA HV RV5 Hai · qa.hv.rv5.hai@htpldn.test · 0912345672 · Cong ty QA RV5 · Có mặt   · (ghi chú trống)
+      2 · QA HV RV5 Mot · qa.hv.rv5.mot@htpldn.test · 0912345671 · Cong ty QA RV5 · Vắng không phép · (ghi chú trống)
+   Đối chiếu buổi (b) CHIỀU (chỉ để so, không xuất): Hai = Vắng có phép · Mot = Vắng không phép.
+   Cột "Trạng thái" trên màn là 3 nút chọn (Có mặt / Vắng có phép / Vắng không phép), đang khoá.
+
+[ẢNH] R2-QUET2-khoa-hoc-tab-diem-danh.png
+
+--- Sheet 'Điểm danh'  vung=A1:G5  (5 dong x 7 cot)
+
+[NOI DUNG TEP -- tung o: gia tri | kieu | dinh dang o]
+  Dong 1:
+     A1    'Mã học viên'                                                                                            | str       | General              
+     B1    'Họ tên'                                                                                                 | str       | General              
+     C1    'Đơn vị'                                                                                                 | str       | General              
+     D1    'Ngày điểm danh'                                                                                         | str       | General              
+     E1    'Trạng thái'                                                                                             | str       | General              
+     F1    'Có mặt (1/0)'                                                                                           | str       | General              
+     G1    'Ghi chú'                                                                                                | str       | General              
+  Dong 2:
+     A2    '4d549093-1bab-4466-9fbe-eba114038214'                                                                   | str       | General              
+     B2    'QA HV RV5 Hai'                                                                                          | str       | General              
+     C2    'Cong ty QA RV5'                                                                                         | str       | General              
+     D2    '2026-09-20 00:00:00'                                                                                    | datetime  | mm-dd-yy             NGAY/GIO
+     E2    'Có mặt'                                                                                                 | str       | General              
+     F2    '1'                                                                                                      | int       | General              
+     G2    ''                                                                                                       | str       | General              
+  Dong 3:
+     A3    '4d549093-1bab-4466-9fbe-eba114038214'                                                                   | str       | General              
+     B3    'QA HV RV5 Hai'                                                                                          | str       | General              
+     C3    'Cong ty QA RV5'                                                                                         | str       | General              
+     D3    '2026-09-20 00:00:00'                                                                                    | datetime  | mm-dd-yy             NGAY/GIO
+     E3    'Vắng có phép'                                                                                           | str       | General              
+     F3    '0'                                                                                                      | int       | General              
+     G3    ''                                                                                                       | str       | General              
+  Dong 4:
+     A4    'c6777c29-863c-444c-9ea0-07704d43ab8f'                                                                   | str       | General              
+     B4    'QA HV RV5 Mot'                                                                                          | str       | General              
+     C4    'Cong ty QA RV5'                                                                                         | str       | General              
+     D4    '2026-09-20 00:00:00'                                                                                    | datetime  | mm-dd-yy             NGAY/GIO
+     E4    'Vắng không phép'                                                                                        | str       | General              
+     F4    '0'                                                                                                      | int       | General              
+     G4    ''                                                                                                       | str       | General              
+  Dong 5:
+     A5    'c6777c29-863c-444c-9ea0-07704d43ab8f'                                                                   | str       | General              
+     B5    'QA HV RV5 Mot'                                                                                          | str       | General              
+     C5    'Cong ty QA RV5'                                                                                         | str       | General              
+     D5    '2026-09-20 00:00:00'                                                                                    | datetime  | mm-dd-yy             NGAY/GIO
+     E5    'Vắng không phép'                                                                                        | str       | General              
+     F5    '0'                                                                                                      | int       | General              
+     G5    ''                                                                                                       | str       | General              
+
+
+########################################################################################################
+# MÀN: Đào tạo → Khóa học KH-20260716-002 → Tab Kết quả → [Xuất DOCX]
+# Tệp tải về: ket-qua-033910fc-895d-432a-8407-8f7f0a9516c2.docx   (1920 byte)
+########################################################################################################
+
+[CỘT TRÊN GIAO DIỆN] (10, đã bỏ cột Hành động/chọn):
+   - STT
+   - Họ tên
+   - Email
+   - Số điện thoại
+   - Đơn vị
+   - Chuyên cần
+   - Điểm kiểm tra
+   - Kết quả
+   - Xếp loại
+   - Ghi chú
+
+[SỐ LIỆU TRÊN GIAO DIỆN — khóa học KH-20260716-002, tab Kết quả]
+   1 · QA HV RV5 Hai · qa.hv.rv5.hai@htpldn.test · 0912345672 · Cục Bổ trợ tư pháp - Bộ Tư pháp
+       · Chuyên cần "1/2 (100.00%)" · Điểm kiểm tra (ô nhập) = 1.5 · Kết quả "Không đạt"
+       · Xếp loại "Không đạt" · Ghi chú (ô nhập) trống
+   2 · QA HV RV5 Mot · qa.hv.rv5.mot@htpldn.test · 0912345671 · Cục Bổ trợ tư pháp - Bộ Tư pháp
+       · Chuyên cần "0/2 (0.00%)" · Điểm kiểm tra (ô nhập) trống · Kết quả "—" · Xếp loại "—"
+       · Ghi chú (ô nhập) trống
+
+[NÚT XUẤT] Tab Kết quả CHỈ có [Xuất DOCX]. KHÔNG có [Xuất Excel].
+   (Đã kiểm tra từng nút thuộc khung tab nào: nút "Xuất Excel" còn nằm trong DOM là của tab
+   Điểm danh đang bị ẩn, không phải của tab Kết quả.)
+
+[ẢNH] R2-QUET2-khoa-hoc-tab-ket-qua.png
+
+--- Word: 11 doan van + 1 bang
+
+[NOI DUNG TEP -- doan van]
+  P1   [Normal] 'BÁO CÁO KẾT QUẢ ĐÀO TẠO'
+  P2   [Normal] 'Khóa học: QA RV5 - Khoa hoc test diem danh theo buoi (KTDGKQHT_03/08) (KH-20260716-002)'
+  P3   [Normal] 'Đơn vị tổ chức: Cục Bổ trợ tư pháp - Bộ Tư pháp'
+  P4   [Normal] 'Thời gian: từ 01/09/2026 đến 30/09/2026'
+  P5   [Normal] 'Tổng số học viên: 2 — Đạt: 0 — Không đạt: 1'
+  P8   [Normal] 'Ngày xuất báo cáo: 28/07/2026'
+  P10  [Normal] 'NGƯỜI LẬP BÁO CÁO'
+  P11  [Normal] '(Ký, ghi rõ họ tên)'
+
+  --- Bang 1: 3 dong x 7 cot
+     B1.R1   'STT' | 'Họ và tên' | 'Số buổi có mặt' | 'Tổng số buổi' | 'Tỉ lệ chuyên cần (%)' | 'Điểm kiểm tra' | 'Kết quả'
+     B1.R2   '1' | 'QA HV RV5 Hai' | '1' | '2' | '100.00' | '1.5' | 'Không đạt'
+     B1.R3   '2' | '' | '0' | '2' | '0.00' | '' | ''
+
+
+########################################################################################################
+# MÀN: Doanh nghiệp → chi tiết DN-HNI-0006 → Tab Hồ sơ pháp lý
+########################################################################################################
+
+[CỘT TRÊN GIAO DIỆN] (9, đã bỏ cột Hành động/chọn):
+   - Mã hồ sơ
+   - Tên hồ sơ
+   - Loại
+   - Lĩnh vực pháp lý
+   - Nguồn
+   - Ngày cấp
+   - Ngày hết hạn
+   - Trạng thái
+   - Có tệp đính kèm
+
+[SỐ LIỆU TRÊN GIAO DIỆN — DN-HNI-0006 "Công ty TNHH QA Reverify R5", tab Hồ sơ pháp lý]
+   HSPL-20260725-0004 · R7 retest QLHSPLDN_03 - ho so moi 25/07/2026 · Quyết định · Thương mại
+      · Thủ công · Ngày cấp "-" · Ngày hết hạn "-" · Hiệu lực · Có tệp đính kèm "Có"
+   HSPL-20260725-0003 · R6 HSPL verify QLHSPLDN_03 - 25/07/2026 · Giấy phép · Lao động
+      · Thủ công · Ngày cấp "-" · Ngày hết hạn "-" · Hiệu lực · Có tệp đính kèm "Có"
+   Phân trang: 1 trang.
+
+[NÚT XUẤT] KHÔNG CÓ NÚT XUẤT.
+   Toàn bộ nút trên tab này: [Thêm hồ sơ] và trên từng dòng là [Sửa] [Xoá].
+
+[ẢNH] R2-QUET2-dn-ho-so-phap-ly-khong-co-nut-xuat.png
+
+
+
+########################################################################################################
+# MÀN: Hợp đồng tư vấn → danh sách
+########################################################################################################
+
+[KHÔNG CÓ MÀN DANH SÁCH RIÊNG]
+   Thanh menu bên trái của cbnv_tw_01 (và cả của admin) KHÔNG có mục "Hợp đồng tư vấn".
+   Gõ thẳng đường dẫn /hop-dong-tv/danh-sach thì ứng dụng đá về /dashboard.
+   Đặc tả srs-fr-14-hop-dong-tv.md dòng 264 (quyết định BA vòng 7, 2026-05-11) ghi rõ:
+   đường dẫn danh sách độc lập là đường dẫn ẩn, không nằm trong menu; nghiệp vụ chính vào
+   hợp đồng tư vấn từ ngữ cảnh Vụ việc hoặc Tư vấn viên.
+
+[LỐI VÀO 1 — Vụ việc HTPL → chi tiết VV-QAW7-TV-MANGLUOI → khối "HĐ tư vấn liên kết"]
+[CỘT TRÊN GIAO DIỆN] (10, đã bỏ cột Hành động/chọn):
+   - Mã hợp đồng
+   - Tên hợp đồng
+   - Bên A
+   - Bên B
+   - Giá trị (VNĐ)
+   - Ngày bắt đầu
+   - Ngày kết thúc
+   - Vụ việc
+   - Tiến độ TT
+   - Trạng thái
+   Dữ liệu: "Vụ việc này chưa có hợp đồng tư vấn liên kết."
+   Nút trong khối: CHỈ có [+ Tạo hợp đồng]. KHÔNG có nút xuất.
+
+[LỐI VÀO 2 — Mạng lưới TV → chi tiết Tư vấn viên → tab "Lịch sử hỗ trợ" → bảng "Hợp đồng tư vấn"]
+[CỘT TRÊN GIAO DIỆN] (5, đã bỏ cột Hành động/chọn):
+   - Mã HĐ
+   - Tên hợp đồng
+   - Trạng thái
+   - Ngày bắt đầu
+   - Ngày kết thúc
+   Dữ liệu: "Tư vấn viên chưa có hợp đồng tư vấn nào."
+   Khối này KHÔNG có nút nào, kể cả nút xuất.
+
+=> KHÔNG ĐO ĐƯỢC: không có nút xuất ở bất kỳ lối vào nào.
+
+[ẢNH] R2-QUET2-hop-dong-tv-trong-vu-viec-khong-co-nut-xuat.png
+
+
+
+########################################################################################################
+# MÀN: Quản trị hệ thống → Danh mục dùng chung (Lĩnh vực pháp lý) → [Xuất Excel]
+# Tệp tải về: danh-muc-linh_vuc_pl-2026-07-28.xlsx   (7340 byte)
+########################################################################################################
+
+[CỘT TRÊN GIAO DIỆN] (5, đã bỏ cột Hành động/chọn):
+   - Mã
+   - Tên
+   - Mô tả
+   - Thứ tự
+   - Trạng thái
+
+[SỐ LIỆU TRÊN GIAO DIỆN — tab "Lĩnh vực pháp lý", 1-10 / 10 mục]
+   THUE Thuế 1 · LAO_DONG Lao động 2 · DAT_DAI Đất đai 3 · DAN_SU Dân sự 4 · THUONG_MAI Thương mại 5
+   HINH_SU Hình sự 6 · HANH_CHINH Hành chính 7 · SHTT Sở hữu trí tuệ 8 · DOANH_NGHIEP Doanh nghiệp 9
+   DAU_TU Đầu tư 10
+   Cột "Mô tả" rỗng ở cả 10 dòng. Cột "Trạng thái" là công tắc bật/tắt, cả 10 dòng đều ĐANG BẬT.
+   Màn hình KHÔNG có cột ngày (không có Ngày tạo / Ngày cập nhật).
+   Màn có 15 tab danh mục; chỉ đo tab đầu "Lĩnh vực pháp lý".
+   Tài khoản cbnv_tw_01 KHÔNG thấy menu này → phải dùng tài khoản admin.
+
+[ẢNH] R2-QUET2-danh-muc-dung-chung.png
+
+--- Sheet 'LINH_VUC_PL'  vung=A1:H11  (11 dong x 8 cot)
+
+[NOI DUNG TEP -- tung o: gia tri | kieu | dinh dang o]
+  Dong 1:
+     A1    'STT'                                                                                                    | str       | General              
+     B1    'Mã'                                                                                                     | str       | General              
+     C1    'Tên'                                                                                                    | str       | General              
+     D1    'Mô tả'                                                                                                  | str       | General              
+     E1    'Thứ tự'                                                                                                 | str       | General              
+     F1    'Trạng thái'                                                                                             | str       | General              
+     G1    'Ngày tạo'                                                                                               | str       | dd/mm/yyyy hh:mm     
+     H1    'Ngày cập nhật'                                                                                          | str       | dd/mm/yyyy hh:mm     
+  Dong 2:
+     A2    '1'                                                                                                      | int       | General              
+     B2    'THUE'                                                                                                   | str       | General              
+     C2    'Thuế'                                                                                                   | str       | General              
+     D2    ''                                                                                                       | str       | General              
+     E2    '1'                                                                                                      | int       | General              
+     F2    'Kích hoạt'                                                                                              | str       | General              
+     G2    '2026-06-29 06:35:33.848000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+     H2    '2026-06-29 06:35:33.848000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+  Dong 3:
+     A3    '2'                                                                                                      | int       | General              
+     B3    'LAO_DONG'                                                                                               | str       | General              
+     C3    'Lao động'                                                                                               | str       | General              
+     D3    ''                                                                                                       | str       | General              
+     E3    '2'                                                                                                      | int       | General              
+     F3    'Kích hoạt'                                                                                              | str       | General              
+     G3    '2026-06-29 06:35:33.849000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+     H3    '2026-06-29 06:35:33.849000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+  Dong 4:
+     A4    '3'                                                                                                      | int       | General              
+     B4    'DAT_DAI'                                                                                                | str       | General              
+     C4    'Đất đai'                                                                                                | str       | General              
+     D4    ''                                                                                                       | str       | General              
+     E4    '3'                                                                                                      | int       | General              
+     F4    'Kích hoạt'                                                                                              | str       | General              
+     G4    '2026-06-29 06:35:33.849000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+     H4    '2026-06-29 06:35:33.849000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+  Dong 5:
+     A5    '4'                                                                                                      | int       | General              
+     B5    'DAN_SU'                                                                                                 | str       | General              
+     C5    'Dân sự'                                                                                                 | str       | General              
+     D5    ''                                                                                                       | str       | General              
+     E5    '4'                                                                                                      | int       | General              
+     F5    'Kích hoạt'                                                                                              | str       | General              
+     G5    '2026-06-29 06:35:33.849000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+     H5    '2026-06-29 06:35:33.849000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+  Dong 6:
+     A6    '5'                                                                                                      | int       | General              
+     B6    'THUONG_MAI'                                                                                             | str       | General              
+     C6    'Thương mại'                                                                                             | str       | General              
+     D6    ''                                                                                                       | str       | General              
+     E6    '5'                                                                                                      | int       | General              
+     F6    'Kích hoạt'                                                                                              | str       | General              
+     G6    '2026-06-29 06:35:12.848000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+     H6    '2026-06-29 06:35:12.848000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+  Dong 7:
+     A7    '6'                                                                                                      | int       | General              
+     B7    'HINH_SU'                                                                                                | str       | General              
+     C7    'Hình sự'                                                                                                | str       | General              
+     D7    ''                                                                                                       | str       | General              
+     E7    '6'                                                                                                      | int       | General              
+     F7    'Kích hoạt'                                                                                              | str       | General              
+     G7    '2026-06-29 06:35:33.850000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+     H7    '2026-06-29 06:35:33.850000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+  Dong 8:
+     A8    '7'                                                                                                      | int       | General              
+     B8    'HANH_CHINH'                                                                                             | str       | General              
+     C8    'Hành chính'                                                                                             | str       | General              
+     D8    ''                                                                                                       | str       | General              
+     E8    '7'                                                                                                      | int       | General              
+     F8    'Kích hoạt'                                                                                              | str       | General              
+     G8    '2026-06-29 06:35:33.850000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+     H8    '2026-06-29 06:35:33.850000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+  Dong 9:
+     A9    '8'                                                                                                      | int       | General              
+     B9    'SHTT'                                                                                                   | str       | General              
+     C9    'Sở hữu trí tuệ'                                                                                         | str       | General              
+     D9    ''                                                                                                       | str       | General              
+     E9    '8'                                                                                                      | int       | General              
+     F9    'Kích hoạt'                                                                                              | str       | General              
+     G9    '2026-06-29 06:35:33.851000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+     H9    '2026-06-29 06:35:33.851000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+  Dong 10:
+     A10   '9'                                                                                                      | int       | General              
+     B10   'DOANH_NGHIEP'                                                                                           | str       | General              
+     C10   'Doanh nghiệp'                                                                                           | str       | General              
+     D10   ''                                                                                                       | str       | General              
+     E10   '9'                                                                                                      | int       | General              
+     F10   'Kích hoạt'                                                                                              | str       | General              
+     G10   '2026-06-29 06:35:33.851000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+     H10   '2026-06-29 06:35:33.851000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+  Dong 11:
+     A11   '10'                                                                                                     | int       | General              
+     B11   'DAU_TU'                                                                                                 | str       | General              
+     C11   'Đầu tư'                                                                                                 | str       | General              
+     D11   ''                                                                                                       | str       | General              
+     E11   '10'                                                                                                     | int       | General              
+     F11   'Kích hoạt'                                                                                              | str       | General              
+     G11   '2026-06-29 06:35:33.851000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+     H11   '2026-06-29 06:35:33.851000'                                                                             | datetime  | dd/mm/yyyy hh:mm     NGAY/GIO
+
+
+########################################################################################################
+# MÀN: Quản trị hệ thống → Nhật ký hệ thống (Audit log) → [Xuất Excel]
+# Tệp tải về: audit-log-2026-07-28.xlsx  +  export.xlsx   (mỗi tệp 113322 byte — 1 lần bấm ra 2 tệp)
+########################################################################################################
+
+[CỘT TRÊN GIAO DIỆN] (8, đã bỏ cột Hành động/chọn):
+   - Thời gian
+   - Người dùng
+   - Đơn vị
+   - Module
+   - Entity
+   - Mã bản ghi
+   - Loại thao tác
+   - Chi tiết thay đổi
+   (bảng còn 1 cột đầu không có tiêu đề, chứa nút [+] để mở rộng từng dòng)
+
+[SỐ LIỆU TRÊN GIAO DIỆN — bộ lọc 21/07/2026 → 28/07/2026, "Hiển thị 1-50 / 1635 kết quả"]
+   10 dòng đầu:
+      28/07/2026 16:48:34 · Quản trị hệ thống · — · — · TAI_KHOAN · 00000000… · Đăng nhập
+      28/07/2026 16:48:06 · Quản trị hệ thống · — · — · TAI_KHOAN · 00000000… · Chờ xác minh OTP
+      28/07/2026 16:47:33 · CB Nghiệp vụ - Trung ương #01 · Cục Bổ trợ tư pháp - Bộ Tư pháp · — · TAI_KHOAN · 6647b7bb… · Đăng xuất
+      28/07/2026 16:42:51 · CB Nghiệp vụ - Trung ương #01 · Cục Bổ trợ tư pháp - Bộ Tư pháp · Đào tạo · KET_QUA_DAO_TAO · — · Xuất dữ liệu
+      28/07/2026 16:39:54 · CB Nghiệp vụ - Trung ương #01 · Cục Bổ trợ tư pháp - Bộ Tư pháp · Đánh giá · BAO_CAO_DANH_GIA · — · Xuất dữ liệu
+      28/07/2026 16:39:31 · CB Nghiệp vụ - Trung ương #01 · Cục Bổ trợ tư pháp - Bộ Tư pháp · Đánh giá · BAO_CAO_DANH_GIA · — · Xuất dữ liệu
+      28/07/2026 15:53:35 · CB Nghiệp vụ - Trung ương #01 · Cục Bổ trợ tư pháp - Bộ Tư pháp · Đào tạo · CHUONG_TRINH_DAO_TAO · — · Xuất dữ liệu
+      28/07/2026 15:53:29 · CB Nghiệp vụ - Trung ương #01 · Cục Bổ trợ tư pháp - Bộ Tư pháp · Đào tạo · KE_HOACH_DAO_TAO · — · Xuất dữ liệu
+      28/07/2026 15:53:02 · CB Nghiệp vụ - Trung ương #01 · Cục Bổ trợ tư pháp - Bộ Tư pháp · Biểu mẫu · THU_MUC_BIEU_MAU · — · Xuất dữ liệu
+      28/07/2026 15:52:56 · CB Nghiệp vụ - Trung ương #01 · Cục Bổ trợ tư pháp - Bộ Tư pháp · Đánh giá · KE_HOACH_DANH_GIA · — · Xuất dữ liệu
+   Cột "Chi tiết thay đổi" trên màn là liên kết "Mở rộng để xem".
+   Tài khoản cbnv_tw_01 KHÔNG thấy menu này → phải dùng tài khoản admin.
+
+[BẤT THƯỜNG KHI BẤM XUẤT]
+   Một lần bấm [Xuất Excel] ở màn này sinh ra HAI tệp tải về cùng lúc, cùng kích thước 113 322 byte:
+      (1) audit-log-2026-07-28.xlsx      (2) export.xlsx
+   Các màn khác đo trong lượt này chỉ sinh 1 tệp / 1 lần bấm.
+
+[ẢNH] R2-QUET2-nhat-ky-he-thong-audit-log.png
+
+--- Sheet 'Nhat ky he thong'  vung=A1:O1636  (1636 dong x 15 cot)
+
+[NOI DUNG TEP -- tung o: gia tri | kieu | dinh dang o]
+  (in 21 dong dau; 1615 dong con lai cung cau truc -- xem muc thong ke cuoi khoi)
+  Dong 1:
+     A1    'Thời gian'                                                                                              | str       | General              
+     B1    'Module'                                                                                                 | str       | General              
+     C1    'Entity type'                                                                                            | str       | General              
+     D1    'Entity ID'                                                                                              | str       | General              
+     E1    'Hành động'                                                                                              | str       | General              
+     F1    'Username'                                                                                               | str       | General              
+     G1    'Họ và tên'                                                                                              | str       | General              
+     H1    'Don vi'                                                                                                 | str       | General              
+     I1    'Vai tro'                                                                                                | str       | General              
+     J1    'Nguồn hệ thống'                                                                                         | str       | General              
+     K1    'Consumer'                                                                                               | str       | General              
+     L1    'IP'                                                                                                     | str       | General              
+     M1    'Endpoint'                                                                                               | str       | General              
+     N1    'Mã phản hồi'                                                                                            | str       | General              
+     O1    'Session'                                                                                                | str       | General              
+  Dong 2:
+     A2    '2026-07-28 09:48:34'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B2    ''                                                                                                       | str       | General              
+     C2    'TAI_KHOAN'                                                                                              | str       | General              
+     D2    '00000000-0000-4000-8000-000000000099'                                                                   | str       | General              
+     E2    'Đăng nhập'                                                                                              | str       | General              
+     F2    'admin'                                                                                                  | str       | General              
+     G2    'Quản trị hệ thống'                                                                                      | str       | General              
+     H2    ''                                                                                                       | str       | General              
+     I2    'Quản trị hệ thống'                                                                                      | str       | General              
+     J2    ''                                                                                                       | str       | General              
+     K2    ''                                                                                                       | str       | General              
+     L2    '172.18.0.8'                                                                                             | str       | General              
+     M2    ''                                                                                                       | str       | General              
+     N2    ''                                                                                                       | str       | General              
+     O2    ''                                                                                                       | str       | General              
+  Dong 3:
+     A3    '2026-07-28 09:48:06'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B3    ''                                                                                                       | str       | General              
+     C3    'TAI_KHOAN'                                                                                              | str       | General              
+     D3    '00000000-0000-4000-8000-000000000099'                                                                   | str       | General              
+     E3    'Chờ xác minh OTP'                                                                                       | str       | General              
+     F3    'admin'                                                                                                  | str       | General              
+     G3    'Quản trị hệ thống'                                                                                      | str       | General              
+     H3    ''                                                                                                       | str       | General              
+     I3    'Quản trị hệ thống'                                                                                      | str       | General              
+     J3    ''                                                                                                       | str       | General              
+     K3    ''                                                                                                       | str       | General              
+     L3    '172.18.0.8'                                                                                             | str       | General              
+     M3    ''                                                                                                       | str       | General              
+     N3    ''                                                                                                       | str       | General              
+     O3    ''                                                                                                       | str       | General              
+  Dong 4:
+     A4    '2026-07-28 09:47:33'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B4    ''                                                                                                       | str       | General              
+     C4    'TAI_KHOAN'                                                                                              | str       | General              
+     D4    '6647b7bb-db9a-4a12-9535-766c77a4f04b'                                                                   | str       | General              
+     E4    'Đăng xuất'                                                                                              | str       | General              
+     F4    'cbnv_tw_01'                                                                                             | str       | General              
+     G4    'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H4    'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I4    'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J4    ''                                                                                                       | str       | General              
+     K4    ''                                                                                                       | str       | General              
+     L4    '172.18.0.8'                                                                                             | str       | General              
+     M4    ''                                                                                                       | str       | General              
+     N4    ''                                                                                                       | str       | General              
+     O4    ''                                                                                                       | str       | General              
+  Dong 5:
+     A5    '2026-07-28 09:42:51'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B5    'Đào tạo'                                                                                                | str       | General              
+     C5    'KET_QUA_DAO_TAO'                                                                                        | str       | General              
+     D5    ''                                                                                                       | str       | General              
+     E5    'Xuất dữ liệu'                                                                                           | str       | General              
+     F5    'cbnv_tw_01'                                                                                             | str       | General              
+     G5    'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H5    'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I5    'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J5    ''                                                                                                       | str       | General              
+     K5    ''                                                                                                       | str       | General              
+     L5    '172.18.0.8'                                                                                             | str       | General              
+     M5    'POST /api/v1/khoa-hocs/033910fc-895d-432a-8407-8f7f0a9516c2/ket-quas/export-docx'                       | str       | General              
+     N5    '200'                                                                                                    | int       | General              
+     O5    '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 6:
+     A6    '2026-07-28 09:39:54'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B6    'Đánh giá'                                                                                               | str       | General              
+     C6    'BAO_CAO_DANH_GIA'                                                                                       | str       | General              
+     D6    ''                                                                                                       | str       | General              
+     E6    'Xuất dữ liệu'                                                                                           | str       | General              
+     F6    'cbnv_tw_01'                                                                                             | str       | General              
+     G6    'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H6    'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I6    'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J6    ''                                                                                                       | str       | General              
+     K6    ''                                                                                                       | str       | General              
+     L6    '172.18.0.8'                                                                                             | str       | General              
+     M6    'POST /api/v1/ke-hoach-danh-gias/7cd25d02-103a-4cb4-a25a-40481c1f6208/bao-cao/export-word'               | str       | General              
+     N6    '200'                                                                                                    | int       | General              
+     O6    '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 7:
+     A7    '2026-07-28 09:39:31'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B7    'Đánh giá'                                                                                               | str       | General              
+     C7    'BAO_CAO_DANH_GIA'                                                                                       | str       | General              
+     D7    ''                                                                                                       | str       | General              
+     E7    'Xuất dữ liệu'                                                                                           | str       | General              
+     F7    'cbnv_tw_01'                                                                                             | str       | General              
+     G7    'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H7    'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I7    'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J7    ''                                                                                                       | str       | General              
+     K7    ''                                                                                                       | str       | General              
+     L7    '172.18.0.8'                                                                                             | str       | General              
+     M7    'POST /api/v1/ke-hoach-danh-gias/7cd25d02-103a-4cb4-a25a-40481c1f6208/bao-cao/export'                    | str       | General              
+     N7    '200'                                                                                                    | int       | General              
+     O7    '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 8:
+     A8    '2026-07-28 08:53:35'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B8    'Đào tạo'                                                                                                | str       | General              
+     C8    'CHUONG_TRINH_DAO_TAO'                                                                                   | str       | General              
+     D8    ''                                                                                                       | str       | General              
+     E8    'Xuất dữ liệu'                                                                                           | str       | General              
+     F8    'cbnv_tw_01'                                                                                             | str       | General              
+     G8    'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H8    'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I8    'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J8    ''                                                                                                       | str       | General              
+     K8    ''                                                                                                       | str       | General              
+     L8    '172.18.0.8'                                                                                             | str       | General              
+     M8    'POST /api/v1/chuong-trinh-dao-taos/export'                                                              | str       | General              
+     N8    '200'                                                                                                    | int       | General              
+     O8    '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 9:
+     A9    '2026-07-28 08:53:29'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B9    'Đào tạo'                                                                                                | str       | General              
+     C9    'KE_HOACH_DAO_TAO'                                                                                       | str       | General              
+     D9    ''                                                                                                       | str       | General              
+     E9    'Xuất dữ liệu'                                                                                           | str       | General              
+     F9    'cbnv_tw_01'                                                                                             | str       | General              
+     G9    'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H9    'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I9    'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J9    ''                                                                                                       | str       | General              
+     K9    ''                                                                                                       | str       | General              
+     L9    '172.18.0.8'                                                                                             | str       | General              
+     M9    'POST /api/v1/ke-hoach-dao-taos/export?page=1&pageSize=20'                                               | str       | General              
+     N9    '200'                                                                                                    | int       | General              
+     O9    '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 10:
+     A10   '2026-07-28 08:53:02'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B10   'BIEU_MAU'                                                                                               | str       | General              
+     C10   'THU_MUC_BIEU_MAU'                                                                                       | str       | General              
+     D10   ''                                                                                                       | str       | General              
+     E10   'Xuất dữ liệu'                                                                                           | str       | General              
+     F10   'cbnv_tw_01'                                                                                             | str       | General              
+     G10   'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H10   'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I10   'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J10   ''                                                                                                       | str       | General              
+     K10   ''                                                                                                       | str       | General              
+     L10   '172.18.0.8'                                                                                             | str       | General              
+     M10   'POST /api/v1/thu-muc-bieu-maus/export'                                                                  | str       | General              
+     N10   '200'                                                                                                    | int       | General              
+     O10   '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 11:
+     A11   '2026-07-28 08:52:56'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B11   'Đánh giá'                                                                                               | str       | General              
+     C11   'KE_HOACH_DANH_GIA'                                                                                      | str       | General              
+     D11   ''                                                                                                       | str       | General              
+     E11   'Xuất dữ liệu'                                                                                           | str       | General              
+     F11   'cbnv_tw_01'                                                                                             | str       | General              
+     G11   'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H11   'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I11   'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J11   ''                                                                                                       | str       | General              
+     K11   ''                                                                                                       | str       | General              
+     L11   '172.18.0.8'                                                                                             | str       | General              
+     M11   'POST /api/v1/ke-hoach-danh-gias/export?page=1&pageSize=20'                                              | str       | General              
+     N11   '200'                                                                                                    | int       | General              
+     O11   '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 12:
+     A12   '2026-07-28 08:51:32'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B12   'Hỏi đáp'                                                                                                | str       | General              
+     C12   'HOI_DAP'                                                                                                | str       | General              
+     D12   ''                                                                                                       | str       | General              
+     E12   'Xuất dữ liệu'                                                                                           | str       | General              
+     F12   'cbnv_tw_01'                                                                                             | str       | General              
+     G12   'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H12   'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I12   'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J12   ''                                                                                                       | str       | General              
+     K12   ''                                                                                                       | str       | General              
+     L12   '172.18.0.8'                                                                                             | str       | General              
+     M12   'GET /api/v1/hoi-daps/export?tab=TAT_CA'                                                                 | str       | General              
+     N12   '200'                                                                                                    | int       | General              
+     O12   '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 13:
+     A13   '2026-07-28 08:51:23'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B13   'CHUYEN_GIA_TVV'                                                                                         | str       | General              
+     C13   'TO_CHUC_TU_VAN'                                                                                         | str       | General              
+     D13   ''                                                                                                       | str       | General              
+     E13   'Xuất dữ liệu'                                                                                           | str       | General              
+     F13   'cbnv_tw_01'                                                                                             | str       | General              
+     G13   'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H13   'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I13   'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J13   ''                                                                                                       | str       | General              
+     K13   ''                                                                                                       | str       | General              
+     L13   '172.18.0.8'                                                                                             | str       | General              
+     M13   'POST /api/v1/to-chuc-tu-vans/export'                                                                    | str       | General              
+     N13   '200'                                                                                                    | int       | General              
+     O13   '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 14:
+     A14   '2026-07-28 08:51:17'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B14   'CHUYEN_GIA_TVV'                                                                                         | str       | General              
+     C14   'TU_VAN_VIEN'                                                                                            | str       | General              
+     D14   ''                                                                                                       | str       | General              
+     E14   'Xuất dữ liệu'                                                                                           | str       | General              
+     F14   'cbnv_tw_01'                                                                                             | str       | General              
+     G14   'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H14   'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I14   'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J14   ''                                                                                                       | str       | General              
+     K14   ''                                                                                                       | str       | General              
+     L14   '172.18.0.8'                                                                                             | str       | General              
+     M14   'POST /api/v1/tu-van-viens/export'                                                                       | str       | General              
+     N14   '200'                                                                                                    | int       | General              
+     O14   '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 15:
+     A15   '2026-07-28 08:51:12'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B15   'Tư vấn'                                                                                                 | str       | General              
+     C15   'NOI_DUNG_TU_VAN_CS'                                                                                     | str       | General              
+     D15   ''                                                                                                       | str       | General              
+     E15   'Xuất dữ liệu'                                                                                           | str       | General              
+     F15   'cbnv_tw_01'                                                                                             | str       | General              
+     G15   'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H15   'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I15   'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J15   ''                                                                                                       | str       | General              
+     K15   ''                                                                                                       | str       | General              
+     L15   '172.18.0.8'                                                                                             | str       | General              
+     M15   'GET /api/v1/noi-dung-tu-van-cs/export?trangThai=TIEP_NHAN,PHAN_CONG&page=1&pageSize=20'                 | str       | General              
+     N15   '200'                                                                                                    | int       | General              
+     O15   '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 16:
+     A16   '2026-07-28 08:49:25'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B16   'HO_SO_CHI_TRA'                                                                                          | str       | General              
+     C16   'HO_SO_CHI_TRA'                                                                                          | str       | General              
+     D16   ''                                                                                                       | str       | General              
+     E16   'Xuất dữ liệu'                                                                                           | str       | General              
+     F16   'cbnv_tw_01'                                                                                             | str       | General              
+     G16   'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H16   'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I16   'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J16   ''                                                                                                       | str       | General              
+     K16   ''                                                                                                       | str       | General              
+     L16   '172.18.0.8'                                                                                             | str       | General              
+     M16   'POST /api/v1/ho-so-chi-tras/export'                                                                     | str       | General              
+     N16   '200'                                                                                                    | int       | General              
+     O16   '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 17:
+     A17   '2026-07-28 08:49:19'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B17   'Vụ việc'                                                                                                | str       | General              
+     C17   'VU_VIEC'                                                                                                | str       | General              
+     D17   ''                                                                                                       | str       | General              
+     E17   'Xuất dữ liệu'                                                                                           | str       | General              
+     F17   'cbnv_tw_01'                                                                                             | str       | General              
+     G17   'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H17   'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I17   'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J17   ''                                                                                                       | str       | General              
+     K17   ''                                                                                                       | str       | General              
+     L17   '172.18.0.8'                                                                                             | str       | General              
+     M17   'POST /api/v1/vu-viecs/export'                                                                           | str       | General              
+     N17   '200'                                                                                                    | int       | General              
+     O17   '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 18:
+     A18   '2026-07-28 08:49:14'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B18   'Doanh nghiệp'                                                                                           | str       | General              
+     C18   'DOANH_NGHIEP'                                                                                           | str       | General              
+     D18   ''                                                                                                       | str       | General              
+     E18   'Xuất dữ liệu'                                                                                           | str       | General              
+     F18   'cbnv_tw_01'                                                                                             | str       | General              
+     G18   'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H18   'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I18   'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J18   ''                                                                                                       | str       | General              
+     K18   ''                                                                                                       | str       | General              
+     L18   '172.18.0.8'                                                                                             | str       | General              
+     M18   'POST /api/v1/doanh-nghieps/export'                                                                      | str       | General              
+     N18   '200'                                                                                                    | int       | General              
+     O18   '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 19:
+     A19   '2026-07-28 08:42:34'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B19   'Tư vấn'                                                                                                 | str       | General              
+     C19   'TU_VAN_NHANH'                                                                                           | str       | General              
+     D19   '1b9236b1-146d-4cf4-902b-aad76cbca141'                                                                   | str       | General              
+     E19   'Xuất dữ liệu'                                                                                           | str       | General              
+     F19   'cbnv_tw_01'                                                                                             | str       | General              
+     G19   'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H19   'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I19   'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J19   ''                                                                                                       | str       | General              
+     K19   ''                                                                                                       | str       | General              
+     L19   '172.18.0.8'                                                                                             | str       | General              
+     M19   'GET /api/v1/tu-van-nhanhs/1b9236b1-146d-4cf4-902b-aad76cbca141/danh-gia/export'                         | str       | General              
+     N19   '200'                                                                                                    | int       | General              
+     O19   '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 20:
+     A20   '2026-07-28 08:42:15'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B20   'Tư vấn'                                                                                                 | str       | General              
+     C20   'TU_VAN_NHANH'                                                                                           | str       | General              
+     D20   '1b9236b1-146d-4cf4-902b-aad76cbca141'                                                                   | str       | General              
+     E20   'Xuất dữ liệu'                                                                                           | str       | General              
+     F20   'cbnv_tw_01'                                                                                             | str       | General              
+     G20   'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H20   'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I20   'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J20   ''                                                                                                       | str       | General              
+     K20   ''                                                                                                       | str       | General              
+     L20   '172.18.0.8'                                                                                             | str       | General              
+     M20   'GET /api/v1/tu-van-nhanhs/1b9236b1-146d-4cf4-902b-aad76cbca141/danh-gia/export'                         | str       | General              
+     N20   '200'                                                                                                    | int       | General              
+     O20   '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+  Dong 21:
+     A21   '2026-07-28 08:41:01'                                                                                    | str       | General              NGAY/GIO dang CHUOI
+     B21   'Tư vấn'                                                                                                 | str       | General              
+     C21   'KHO_CAU_HOI'                                                                                            | str       | General              
+     D21   ''                                                                                                       | str       | General              
+     E21   'Xuất dữ liệu'                                                                                           | str       | General              
+     F21   'cbnv_tw_01'                                                                                             | str       | General              
+     G21   'CB Nghiệp vụ - Trung ương #01'                                                                          | str       | General              
+     H21   'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     I21   'Cán bộ Nghiệp vụ TW'                                                                                    | str       | General              
+     J21   ''                                                                                                       | str       | General              
+     K21   ''                                                                                                       | str       | General              
+     L21   '172.18.0.8'                                                                                             | str       | General              
+     M21   'POST /api/v1/kho-cau-hois/export'                                                                       | str       | General              
+     N21   '200'                                                                                                    | int       | General              
+     O21   '47590a80-2318-4048-abaf-3cff9911ef65'                                                                   | str       | General              
+
+[THỐNG KÊ TOÀN TỆP — 1635 dòng dữ liệu x 15 cột]
+   Ô 'Thời gian' là CHUỖI ký tự 'YYYY-MM-DD HH:MM:SS', định dạng ô General (không phải ô ngày).
+   Số ô TRỐNG theo cột:
+      Consumer          1635/1635 (100,0%)
+      Nguồn hệ thống    1629/1635 ( 99,6%)
+      Session            951/1635 ( 58,2%)
+      Endpoint           940/1635 ( 57,5%)
+      Mã phản hồi        940/1635 ( 57,5%)
+      Module             905/1635 ( 55,4%)
+      Don vi             272/1635 ( 16,6%)
+      IP                 111/1635 (  6,8%)
+      Entity ID          109/1635 (  6,7%)
+      Thời gian / Họ và tên / Username / Vai tro / Entity type / Hành động : 0 ô trống
+   Số dòng có giờ (trong tệp) < 07:00 → 629/1635 (38,5%) — đây là các dòng mà NGÀY trong tệp
+   nhỏ hơn NGÀY hiển thị trên màn hình 1 ngày. Xem mục ĐỐI CHIẾU NGÀY §1.
+
+
+########################################################################################################
+# MÀN: Báo cáo thống kê — BC Vụ việc đã hoàn thành → [Xuất Excel]
+# Tệp tải về: bao-cao-vu-viec-hoan-thanh-2026-07-28.xlsx   (6577 byte)
+########################################################################################################
+
+[BẢNG TRÊN GIAO DIỆN — Loại "BC Vụ việc đã hoàn thành", Kỳ Năm 01/01/2026→31/12/2026,
+ Đơn vị Toàn quốc, Thời điểm tạo 28/07/2026 16:28]
+   4 thẻ số liệu: Tổng vụ việc 17 · Thành công 2 · Không thành công 0 · Tỷ lệ thành công 11.8 %
+   Bảng 1 "Lĩnh vực PL | Số lượng"          : Dân sự 11 · Thương mại 6
+   Bảng 2 "Kết quả | Số lượng | Tỷ lệ"       : Chưa xác định 15 (88,2%) · Thành công 2 (11,8%)
+     (có tiêu đề phụ "Thống kê theo kết quả")
+   Bảng 3 "Đơn vị | Số lượng"                : Cục Bổ trợ tư pháp - Bộ Tư pháp 14 · Bộ KH&ĐT 2
+                                               · Sở Tư pháp Hà Nội 1
+   Ngoài ra 2 biểu đồ (cột theo lĩnh vực, tròn theo kết quả).
+
+[ẢNH] R2-QUET2-bao-cao-vu-viec-da-hoan-thanh.png
+
+--- Sheet 'BC Vụ việc đã hoàn thành'  vung=A1:B8  (8 dong x 2 cot)
+
+[NOI DUNG TEP -- tung o: gia tri | kieu | dinh dang o]
+  Dong 1:
+     A1    'BC Vụ việc đã hoàn thành'                                                                               | str       | General              
+  Dong 2:
+     A2    'Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)'                                                         | str       | General              NGAY/GIO dang CHUOI
+  Dong 3:
+     A3    'Đơn vị: Toàn quốc'                                                                                      | str       | General              
+  Dong 4:
+     A4    'Ngày tạo: 28/07/2026'                                                                                   | str       | General              NGAY/GIO dang CHUOI
+  Dong 6:
+     A6    'Lĩnh vực PL'                                                                                            | str       | General              
+     B6    'Số lượng'                                                                                               | str       | #,##0                
+  Dong 7:
+     A7    'Dân sự'                                                                                                 | str       | General              
+     B7    '11'                                                                                                     | int       | #,##0                
+  Dong 8:
+     A8    'Thương mại'                                                                                             | str       | General              
+     B8    '6'                                                                                                      | int       | #,##0                
+
+
+########################################################################################################
+# MÀN: Báo cáo thống kê — BC Vụ việc đã hoàn thành → [Xuất PDF] (khổ A4, hướng Dọc)
+# Tệp tải về: bao-cao-vu-viec-hoan-thanh-2026-07-28.pdf   (18341 byte)
+########################################################################################################
+
+[CỘT TRÊN GIAO DIỆN] — giống hệt khối [Xuất Excel] ngay phía trên.
+
+--- PDF: 1 trang
+
+[NOI DUNG TEP -- van ban tung trang]
+  --- Trang 1
+     | BC VỤ VIỆC ĐÃ HOÀN THÀNH
+     | Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+     | Đơn vị: Toàn quốc
+     | Ngày tạo: 28/07/2026
+     | Lĩnh vực PL
+     | Số lượng
+     | Dân sự
+     | 11
+     | Thương mại
+     | 6
+
+
+########################################################################################################
+# MÀN: Báo cáo thống kê — BC Số lượng CG/TVV → [Xuất Excel]
+# Tệp tải về: bao-cao-so-luong-cg-tvv-2026-07-28.xlsx   (6680 byte)
+########################################################################################################
+
+[BẢNG TRÊN GIAO DIỆN — Loại "BC Số lượng CG/TVV", Kỳ Năm 01/01/2026→31/12/2026,
+ Đơn vị Toàn quốc, Thời điểm tạo 28/07/2026 16:33]
+   3 thẻ số liệu: Tổng Tư vấn viên 5 · Số Tư vấn viên 4 · Số Chuyên gia 1
+   Bảng 1 "Đơn vị | Số Tư vấn viên | Số Chuyên gia | Tổng số":
+      Cục Bổ trợ tư pháp - Bộ Tư pháp  1 · 1 · 2
+      Bộ Kế hoạch và Đầu tư            1 · 0 · 1
+      Sở Tư pháp Hà Nội                1 · 0 · 1
+      Sở Tư pháp An Giang              1 · 0 · 1
+   Bảng 2 "Lĩnh vực PL | Số lượng | Tỷ lệ" (tiêu đề phụ "Thống kê theo lĩnh vực pháp luật"):
+      Thương mại 2 (66,7%) · Doanh nghiệp 1 (33,3%)
+   Ngoài ra 2 biểu đồ (cột theo đơn vị, tròn theo đơn vị).
+
+[ẢNH] R2-QUET2-bao-cao-so-luong-cg-tvv.png
+
+--- Sheet 'BC Số lượng CG TVV'  vung=A1:D10  (10 dong x 4 cot)
+
+[NOI DUNG TEP -- tung o: gia tri | kieu | dinh dang o]
+  Dong 1:
+     A1    'BC Số lượng CG/TVV'                                                                                     | str       | General              
+  Dong 2:
+     A2    'Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)'                                                         | str       | General              NGAY/GIO dang CHUOI
+  Dong 3:
+     A3    'Đơn vị: Toàn quốc'                                                                                      | str       | General              
+  Dong 4:
+     A4    'Ngày tạo: 28/07/2026'                                                                                   | str       | General              NGAY/GIO dang CHUOI
+  Dong 6:
+     A6    'Đơn vị'                                                                                                 | str       | General              
+     B6    'Số TVV'                                                                                                 | str       | #,##0                
+     C6    'Số CG'                                                                                                  | str       | #,##0                
+     D6    'Tổng số'                                                                                                | str       | #,##0                
+  Dong 7:
+     A7    'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     B7    '1'                                                                                                      | int       | #,##0                
+     C7    '1'                                                                                                      | int       | #,##0                
+     D7    '2'                                                                                                      | int       | #,##0                
+  Dong 8:
+     A8    'Bộ Kế hoạch và Đầu tư'                                                                                  | str       | General              
+     B8    '1'                                                                                                      | int       | #,##0                
+     C8    '0'                                                                                                      | int       | #,##0                
+     D8    '1'                                                                                                      | int       | #,##0                
+  Dong 9:
+     A9    'Sở Tư pháp Hà Nội'                                                                                      | str       | General              
+     B9    '1'                                                                                                      | int       | #,##0                
+     C9    '0'                                                                                                      | int       | #,##0                
+     D9    '1'                                                                                                      | int       | #,##0                
+  Dong 10:
+     A10   'Sở Tư pháp An Giang'                                                                                    | str       | General              
+     B10   '1'                                                                                                      | int       | #,##0                
+     C10   '0'                                                                                                      | int       | #,##0                
+     D10   '1'                                                                                                      | int       | #,##0                
+
+
+########################################################################################################
+# MÀN: Báo cáo thống kê — BC Số lượng CG/TVV → [Xuất PDF] (khổ A4, hướng Dọc)
+# Tệp tải về: bao-cao-so-luong-cg-tvv-2026-07-28.pdf   (19489 byte)
+########################################################################################################
+
+[CỘT TRÊN GIAO DIỆN] — giống hệt khối [Xuất Excel] ngay phía trên.
+
+--- PDF: 1 trang
+
+[NOI DUNG TEP -- van ban tung trang]
+  --- Trang 1
+     | BC SỐ LƯỢNG CG/TVV
+     | Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+     | Đơn vị: Toàn quốc
+     | Ngày tạo: 28/07/2026
+     | Đơn vị
+     | Số TVV
+     | Số CG
+     | Tổng số
+     | Cục Bổ trợ tư pháp - 
+     | Bộ Tư pháp
+     | 1
+     | 1
+     | 2
+     | Bộ Kế hoạch và Đầu 
+     | tư
+     | 1
+     | 0
+     | 1
+     | Sở Tư pháp Hà Nội
+     | 1
+     | 0
+     | 1
+     | Sở Tư pháp An 
+     | Giang
+     | 1
+     | 0
+     | 1
+
+
+########################################################################################################
+# MÀN: Báo cáo thống kê — BC Chi phí chi trả hỗ trợ → [Xuất Excel]
+# Tệp tải về: bao-cao-chi-phi-chi-tra-2026-07-28.xlsx   (6585 byte)
+########################################################################################################
+
+[BẢNG TRÊN GIAO DIỆN — Loại "BC Chi phí chi trả hỗ trợ", Kỳ Năm 01/01/2026→31/12/2026,
+ Đơn vị Toàn quốc, Thời điểm tạo 28/07/2026 16:35]
+   3 thẻ số liệu: Tổng chi phí 23,000,000 · Tổng hồ sơ 2 · Trung bình/hồ sơ 11,500,000
+   Bảng 1 (bảng DUY NHẤT) "Đơn vị | Tổng hồ sơ | Tổng chi phí | Trung bình / hồ sơ":
+      Cục Bổ trợ tư pháp - Bộ Tư pháp · 2 · 23.000.000 ₫ · 11.500.000 ₫
+   Ngoài ra 1 biểu đồ cột.
+
+[ẢNH] R2-QUET2-bao-cao-chi-phi-chi-tra.png
+
+--- Sheet 'BC Chi phí chi trả'  vung=A1:D7  (7 dong x 4 cot)
+
+[NOI DUNG TEP -- tung o: gia tri | kieu | dinh dang o]
+  Dong 1:
+     A1    'BC Chi phí chi trả hỗ trợ'                                                                              | str       | General              
+  Dong 2:
+     A2    'Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)'                                                         | str       | General              NGAY/GIO dang CHUOI
+  Dong 3:
+     A3    'Đơn vị: Toàn quốc'                                                                                      | str       | General              
+  Dong 4:
+     A4    'Ngày tạo: 28/07/2026'                                                                                   | str       | General              NGAY/GIO dang CHUOI
+  Dong 6:
+     A6    'Đơn vị'                                                                                                 | str       | General              
+     B6    'Tổng hồ sơ'                                                                                             | str       | #,##0                
+     C6    'Tổng chi phí (₫)'                                                                                       | str       | #,##0                
+     D6    'Trung bình / hồ sơ (₫)'                                                                                 | str       | #,##0                
+  Dong 7:
+     A7    'Cục Bổ trợ tư pháp - Bộ Tư pháp'                                                                        | str       | General              
+     B7    '2'                                                                                                      | int       | #,##0                
+     C7    '23000000'                                                                                               | int       | #,##0                
+     D7    '11500000'                                                                                               | int       | #,##0                
+
+
+########################################################################################################
+# MÀN: Báo cáo thống kê — BC Chi phí chi trả hỗ trợ → [Xuất PDF] (khổ A4, hướng Dọc)
+# Tệp tải về: bao-cao-chi-phi-chi-tra-2026-07-28.pdf   (20117 byte)
+########################################################################################################
+
+[CỘT TRÊN GIAO DIỆN] — giống hệt khối [Xuất Excel] ngay phía trên.
+
+--- PDF: 1 trang
+
+[NOI DUNG TEP -- van ban tung trang]
+  --- Trang 1
+     | BC CHI PHÍ CHI TRẢ HỖ TRỢ
+     | Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+     | Đơn vị: Toàn quốc
+     | Ngày tạo: 28/07/2026
+     | Đơn vị
+     | Tổng hồ sơ
+     | Tổng chi phí (₫)
+     | Trung bình / hồ sơ 
+     | (₫)
+     | Cục Bổ trợ tư pháp - 
+     | Bộ Tư pháp
+     | 2
+     | 23.000.000
+     | 11.500.000
+
+
+========================================================================================================
+ĐỐI CHIẾU NGÀY: GIAO DIỆN ĐANG HIỂN THỊ  vs  Ô NGÀY TRONG TỆP XUẤT
+========================================================================================================
+
+### 1. NHẬT KÝ HỆ THỐNG — cột 'Thời gian' (đối chiếu 10/10 bản ghi đầu, trang 1)
+
+   Thao tác                                     Giao diện              Trong tệp             Lệch
+   Đăng nhập · Quản trị hệ thống                28/07/2026 16:48:34    2026-07-28 09:48:34   -7 giờ · 0 ngày
+   Chờ xác minh OTP · Quản trị hệ thống         28/07/2026 16:48:06    2026-07-28 09:48:06   -7 giờ · 0 ngày
+   Đăng xuất · CB NV TW #01                     28/07/2026 16:47:33    2026-07-28 09:47:33   -7 giờ · 0 ngày
+   Xuất dữ liệu · KET_QUA_DAO_TAO               28/07/2026 16:42:51    2026-07-28 09:42:51   -7 giờ · 0 ngày
+   Xuất dữ liệu · BAO_CAO_DANH_GIA              28/07/2026 16:39:54    2026-07-28 09:39:54   -7 giờ · 0 ngày
+   Xuất dữ liệu · BAO_CAO_DANH_GIA              28/07/2026 16:39:31    2026-07-28 09:39:31   -7 giờ · 0 ngày
+   Xuất dữ liệu · CHUONG_TRINH_DAO_TAO          28/07/2026 15:53:35    2026-07-28 08:53:35   -7 giờ · 0 ngày
+   Xuất dữ liệu · KE_HOACH_DAO_TAO              28/07/2026 15:53:29    2026-07-28 08:53:29   -7 giờ · 0 ngày
+   Xuất dữ liệu · THU_MUC_BIEU_MAU              28/07/2026 15:53:02    2026-07-28 08:53:02   -7 giờ · 0 ngày
+   Xuất dữ liệu · KE_HOACH_DANH_GIA             28/07/2026 15:52:56    2026-07-28 08:52:56   -7 giờ · 0 ngày
+
+   Đối chiếu thêm 5 bản ghi có giờ Việt Nam rơi vào rạng sáng (lọc lại ngày 22/07/2026 trên màn):
+
+   Thao tác                                     Giao diện              Trong tệp             Lệch
+   Đăng xuất · Quản trị hệ thống                23/07/2026 05:36:42    2026-07-22 22:36:42   -1  <<< SAI NGÀY
+   Đăng nhập · Quản trị hệ thống                23/07/2026 05:03:14    2026-07-22 22:03:14   -1  <<< SAI NGÀY
+   Chờ xác minh OTP · Quản trị hệ thống         23/07/2026 05:02:43    2026-07-22 22:02:43   -1  <<< SAI NGÀY
+   Đăng xuất · Quản trị hệ thống                23/07/2026 01:51:49    2026-07-22 18:51:49   -1  <<< SAI NGÀY
+   Đăng nhập · Quản trị hệ thống                23/07/2026 01:14:28    2026-07-22 18:14:28   -1  <<< SAI NGÀY
+
+   Đếm trên toàn bộ tệp (1 635 bản ghi): 629 bản ghi có giờ trong tệp < 07:00
+   → 629/1 635 bản ghi (38,5%) bị lệch -1 ngày so với ngày hiển thị trên màn hình.
+   Ô 'Thời gian' trong tệp là CHUỖI ký tự dạng 'YYYY-MM-DD HH:MM:SS' (không phải ô ngày thật).
+
+### 2. ĐIỂM DANH KHÓA HỌC — cột 'Ngày điểm danh' (2 học viên × 2 buổi = 4 dòng)
+
+   Học viên            Buổi trên màn                        Trong tệp              Lệch
+   QA HV RV5 Hai       20/09/2026 (buổi SÁNG)               2026-09-20 00:00:00    0
+   QA HV RV5 Hai       20/09/2026 (buổi CHIỀU)              2026-09-20 00:00:00    0
+   QA HV RV5 Mot       20/09/2026 (buổi SÁNG)               2026-09-20 00:00:00    0
+   QA HV RV5 Mot       20/09/2026 (buổi CHIỀU)              2026-09-20 00:00:00    0
+
+   => Ngày KHỚP (0 lệch). Nhưng ô này là ngày-giờ thật với định dạng ô 'mm-dd-yy'
+      (kiểu Mỹ tháng-ngày-năm), không phải dd/MM/yyyy. Giờ luôn 00:00:00 nên không có buổi.
+
+### 3. DANH MỤC DÙNG CHUNG — cột 'Ngày tạo' / 'Ngày cập nhật' (10/10 bản ghi)
+
+   Màn hình KHÔNG CÓ cột ngày nào → không có gì để đối chiếu trực tiếp.
+   Giá trị trong tệp (ô ngày-giờ thật, định dạng ô 'dd/mm/yyyy hh:mm' — đúng kiểu Việt Nam):
+      THUE / LAO_DONG / DAT_DAI / DAN_SU / HINH_SU / HANH_CHINH / SHTT / DOANH_NGHIEP / DAU_TU
+         = 2026-06-29 06:35:33.8xx  (cộng 7h = 29/06/2026 13:35 giờ Việt Nam)
+      THUONG_MAI
+         = 2026-06-29 06:35:12.848  (cộng 7h = 29/06/2026 13:35 giờ Việt Nam)
+   Giờ ghi trong tệp (06:35) sớm hơn 7 tiếng so với giờ Việt Nam tương ứng (13:35) — cùng độ lệch
+   quan sát được ở các màn khác. Vì 06:35 và 13:35 vẫn rơi vào cùng một ngày nên lần đo này
+   KHÔNG quan sát được lệch NGÀY ở màn này.
+
+### 4. BÁO CÁO THỐNG KÊ — dòng 'Ngày tạo' trong tệp
+
+   Báo cáo                        Giao diện "Thời điểm tạo"   Trong tệp              Lệch
+   BC Vụ việc đã hoàn thành       28/07/2026 16:28            Ngày tạo: 28/07/2026   0
+   BC Số lượng CG/TVV             28/07/2026 16:33            Ngày tạo: 28/07/2026   0
+   BC Chi phí chi trả hỗ trợ      28/07/2026 16:35            Ngày tạo: 28/07/2026   0
+
+   => 0 lệch ở lần đo này. Lưu ý: tệp chỉ ghi NGÀY, bỏ mất GIỜ (giao diện có giờ 16:28/16:33/16:35).
+      Vì đo lúc 16:xx giờ Việt Nam (= 09:xx giờ quốc tế, vẫn cùng ngày) nên chưa phân biệt được
+      tệp lấy ngày theo giờ Việt Nam hay giờ quốc tế. Muốn kết luận phải đo lại vào khung
+      00:00-06:59 giờ Việt Nam.
+
+### 5. BÁO CÁO ĐÁNH GIÁ (đợt DG-20260722-0001) — ngày trong tệp
+
+   Tệp .xlsx : KHÔNG có ô ngày nào (chỉ có Mã báo cáo + Trạng thái + số liệu).
+   Tệp .docx : "Ngày xuất báo cáo" nằm trong bảng chữ ký: "..........., ngày 28 tháng 7 năm 2026".
+               Giao diện lúc bấm xuất: 28/07/2026 16:39 giờ Việt Nam → lệch 0 ngày.
+               (Cùng giới hạn như mục 4: đo lúc 16:xx nên chưa phân biệt được múi giờ.)
+
+### 6. KẾT QUẢ HỌC TẬP (khóa KH-20260716-002) — ngày trong tệp .docx
+
+   "Thời gian: từ 01/09/2026 đến 30/09/2026"  vs giao diện "01/09/2026 — 30/09/2026"  → lệch 0
+   "Ngày xuất báo cáo: 28/07/2026"            vs thời điểm bấm xuất 28/07/2026 16:42  → lệch 0
+
+========================================================================================================
+ĐỐI CHIẾU CỘT (GIAO DIỆN  vs  TỆP XUẤT)
+========================================================================================================
+
+### A. NHÓM CÓ MẪU TRONG ĐẶC TẢ — đối chiếu với MẪU (không đối chiếu giao diện)
+
+1) Biểu mẫu 21a — Đợt báo cáo (mẫu 21a TT17/2025)
+   Mẫu trong đặc tả (srs-fr-15-ct-htpldn.md:1159) : Chỉ tiêu | Số liệu kỳ trước | Kỳ này | Ghi chú  = 4 cột
+   Giao diện thực tế                                : Chỉ tiêu | Kỳ này                            = 2 cột
+   Tệp xuất                                         : KHÔNG ĐO ĐƯỢC (không có nút xuất ở trạng thái TAO_DOT)
+   Thiếu so với mẫu (trên giao diện)                : "Số liệu kỳ trước", "Ghi chú"
+
+2) Báo cáo đánh giá hiệu quả (mẫu TT17/2025 — srs-fr-08-danh-gia.md:888)
+   Tệp .docx có ghi rõ dòng "(Theo mẫu Thông tư số 17/2025/TT-BTP)" và có đủ khung văn bản
+   hành chính: quốc hiệu, tiêu ngữ, 5 mục I→V, bảng ký NGƯỜI LẬP BÁO CÁO / THỦ TRƯỞNG ĐƠN VỊ.
+   Tệp .xlsx của CÙNG báo cáo KHÔNG có khung mẫu đó: không quốc hiệu, không mục I→V,
+   không nhận xét/kiến nghị, không bảng ký. Hai tệp cùng nút xuất cạnh nhau nhưng khác hẳn nội dung.
+
+   Chênh lệch nội dung .xlsx  vs  .docx của cùng một báo cáo:
+      .docx có – .xlsx KHÔNG có : quốc hiệu/tiêu ngữ · "(Theo mẫu Thông tư số 17/2025/TT-BTP)"
+                                  · Tên đợt · Mã kế hoạch · mục IV Nhận xét tổng thể
+                                  · mục V Kiến nghị · dòng "Phân bố xếp loại: Tốt: 3"
+                                  · bảng ký tên · cột "STT" ở bảng chỉ tiêu
+      .xlsx có – .docx KHÔNG có : (không có mục nào)
+      Cả 2 tệp                  : cột "Vụ việc" chỉ ghi mã định danh nội bộ (dạng
+                                  8e259653-e0a5-49e8-…), không ghi mã vụ việc / tên doanh nghiệp.
+      Chữ trong .xlsx           : nhãn chỉ tiêu bị BỎ DẤU tiếng Việt ("CHI TIEU HOAT DONG (Nhom VI)",
+                                  "Tong so vu viec", "So TVV kien toan/cong bo"…), trong khi tiêu đề
+                                  bảng ở dòng 23 lại có dấu ("Vụ việc ID", "Điểm tổng", "Xếp loại").
+      Đặc tả (srs-fr-08-danh-gia.md:882, hàng 47) mô tả bảng tổng hợp gồm
+                                  VV / DN / Lĩnh vực / Điểm từng tiêu chí / Điểm tổng / Xếp loại.
+                                  .xlsx (A23:E26) và .docx (Bảng 2) có bảng này với 4 cột
+                                  Vụ việc / Điểm tổng / Xếp loại / Trạng thái — THIẾU "DN",
+                                  "Lĩnh vực" và "Điểm từng tiêu chí" so với đặc tả.
+                                  GIAO DIỆN thì KHÔNG có bảng này (2 tệp có nhiều hơn màn hình).
+
+   Số dòng chỉ tiêu KHÁC NHAU giữa màn hình và tệp (cùng 1 báo cáo, đo cùng lúc):
+      Giao diện : 11 dòng (1 → 11, dừng ở "KP hỗ trợ chi phí TVPL (NSNN)")
+      .xlsx     : 13 dòng (D6:E18) — có thêm 12. KP chi HĐ khác (NSNN) và 13. KP xã hội hóa
+      .docx     : 13 dòng (Bảng 3) — có thêm 2 dòng như trên
+   Và 2 dòng thêm đó có GIÁ TRỊ KHÁC NHAU giữa 2 tệp: .xlsx ghi 0 và 0, .docx ghi '—' và '—'
+   (giao diện ở phần trên màn ghi "--" cho cả hai).
+
+### B. NHÓM ĐẶC TẢ IM LẶNG VỀ TẬP CỘT — đối chiếu VỚI GIAO DIỆN
+
+   Màn hình                                  Cột giao diện → cột tệp   Cột tệp THIẾU so với màn      Cột tệp CÓ THÊM
+   ----------------------------------------  ------------------------  ----------------------------  ------------------------------
+   Điểm danh khóa học (Excel)                7 → 7                     STT · Email · Số điện thoại   Mã học viên · Ngày điểm danh
+                                                                                                     · Có mặt (1/0)
+   Kết quả học tập (DOCX)                    10 → 7                    Email · Số điện thoại         Số buổi có mặt · Tổng số buổi
+                                                                       · Đơn vị · Xếp loại · Ghi chú
+   Danh mục dùng chung (Excel)               5 → 8                     (không thiếu cột nào)         STT · Ngày tạo · Ngày cập nhật
+   Nhật ký hệ thống (Excel)                  8 → 15                    Chi tiết thay đổi             Entity ID · Username · Vai tro
+                                                                                                     · Nguồn hệ thống · Consumer
+                                                                                                     · IP · Endpoint · Mã phản hồi
+                                                                                                     · Session
+   BC Vụ việc đã hoàn thành (Excel + PDF)    3 bảng → 1 bảng           BẢNG "Kết quả" · BẢNG "Đơn vị" (không)
+                                             (4 thẻ số liệu → 0)       · cả 4 thẻ số liệu
+   BC Số lượng CG/TVV (Excel + PDF)          2 bảng → 1 bảng           BẢNG "Lĩnh vực PL"            (không)
+                                             (3 thẻ số liệu → 0)       · cả 3 thẻ số liệu
+   BC Chi phí chi trả hỗ trợ (Excel + PDF)   1 bảng → 1 bảng           cả 3 thẻ số liệu              (không)
+                                             (3 thẻ số liệu → 0)
+   Hồ sơ pháp lý DN                          9 → (không có nút xuất)
+   Hợp đồng tư vấn                           10 → (không có nút xuất)
+   Đợt báo cáo — biểu mẫu 21a                2 → (không đo được)
+
+### C. NHÃN CỘT ĐỔI TÊN GIỮA MÀN HÌNH VÀ TỆP
+
+   Màn hình                     Trong tệp                  Ở đâu
+   ---------------------------  -------------------------  --------------------------------------
+   Số Tư vấn viên               Số TVV                     BC Số lượng CG/TVV (Excel + PDF)
+   Số Chuyên gia                Số CG                      BC Số lượng CG/TVV (Excel + PDF)
+   Tổng chi phí                 Tổng chi phí (₫)           BC Chi phí chi trả hỗ trợ (Excel + PDF)
+   Trung bình / hồ sơ           Trung bình / hồ sơ (₫)     BC Chi phí chi trả hỗ trợ (Excel + PDF)
+   Họ tên                       Họ và tên                  Kết quả học tập (DOCX)
+   Chuyên cần "1/2 (100.00%)"   tách 3 cột: Số buổi có mặt Kết quả học tập (DOCX)
+                                / Tổng số buổi / Tỉ lệ
+   Người dùng                   Họ và tên (+ cột Username) Nhật ký hệ thống (Excel)
+   Entity                       Entity type                Nhật ký hệ thống (Excel)
+   Mã bản ghi                   Entity ID                  Nhật ký hệ thống (Excel)
+   Loại thao tác                Hành động                  Nhật ký hệ thống (Excel)
+   Đơn vị                       Don vi (mất dấu)           Nhật ký hệ thống (Excel)
+   (không có trên màn)          Vai tro (mất dấu)          Nhật ký hệ thống (Excel)
+
+### D. CÁC ĐIỂM KHÁC GHI NHẬN ĐƯỢC KHI ĐỌC TỆP
+
+   - Điểm danh: màn hình đang chọn buổi SÁNG và chỉ hiện 2 dòng, nhưng tệp có 4 dòng —
+     gồm cả buổi CHIỀU. Trong tệp, 2 dòng của cùng 1 học viên có Trạng thái mâu thuẫn nhau
+     ("QA HV RV5 Hai": Có mặt và Vắng có phép) mà không có cột nào cho biết đó là buổi nào.
+   - Kết quả học tập (DOCX): dòng số 2 có ô "Họ và tên" TRỐNG và ô "Kết quả" TRỐNG,
+     trong khi màn hình hiện đủ "QA HV RV5 Mot" và "—".
+   - Kết quả học tập: cùng một con số "1/2" được ghi là tỉ lệ chuyên cần 100.00% ở CẢ màn hình
+     lẫn tệp.
+   - Đơn vị của học viên không thống nhất giữa 2 tab của cùng khóa học: tab Điểm danh ghi
+     "Cong ty QA RV5", tab Kết quả ghi "Cục Bổ trợ tư pháp - Bộ Tư pháp"; tệp điểm danh lấy
+     theo tab Điểm danh, tệp kết quả không có cột Đơn vị.
+   - Tên tệp của 2 chức năng trong Khóa học dùng mã định danh nội bộ của khóa
+     (diem-danh-033910fc-895d-432a-8407-8f7f0a9516c2.xlsx) chứ không dùng mã khóa KH-20260716-002.
+   - Nhật ký hệ thống: 1 lần bấm ra 2 tệp (audit-log-2026-07-28.xlsx + export.xlsx).
+   - Nhật ký hệ thống: đặt bộ lọc trên màn là 22/07/2026 → 22/07/2026 nhưng bảng trả về có cả
+     bản ghi hiển thị ngày 23/07/2026 (ví dụ 23/07/2026 05:36:42).
+   - Nhật ký hệ thống: tỷ lệ ô trống trong tệp — Consumer 1635/1635 · Nguồn hệ thống 1629/1635
+     · Session 951/1635 · Endpoint 940/1635 · Mã phản hồi 940/1635 · Module 905/1635
+     · Don vi 272/1635 · IP 111/1635 · Entity ID 109/1635.
+   - Báo cáo thống kê: nút [Xuất PDF] KHÔNG tải tệp ngay mà mở hộp thoại "Tùy chọn in báo cáo PDF"
+     (Khổ giấy A4/A3/Letter · Hướng Dọc/Ngang) rồi mới có nút [Xuất file]. Lần đo này chọn mặc định
+     A4 + Dọc.
+   - Cả 3 tệp PDF báo cáo đều 1 trang, nội dung chữ trùng đúng với tệp Excel cùng báo cáo
+     (cùng thiếu các bảng phụ và các thẻ số liệu).
+   - Trong tệp Excel báo cáo thống kê, ô tiêu đề cột số ("Số lượng", "Số TVV"…) được gán định dạng
+     số #,##0 dù nội dung là chữ.

@@ -1,0 +1,9 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi do tổ kiểm thử phát hiện thêm ngày 03/08/2026 trong lúc dựng đề kiểm tra để chốt dòng KTDGKQHT_21, không nằm trong phạm vi phiếu nào của đối tác.
+- Tab "Đề kiểm tra" ở màn chi tiết khóa học chỉ có 5 cột: Tên đề · Số câu hỏi · Trạng thái · Thời điểm thêm · Hành động.
+- Theo FR-III-05 (UC24) §Đặc tả màn hình SCR-III-02 - Tab 7 "Đề kiểm tra" (srs-fr-03-dao-tao.md dòng 1908), bảng này phải cho cán bộ thấy đủ: STT · Mã đề · Tên đề · Số câu · Lĩnh vực · Người thêm · Thời điểm thêm · Hành động (Xem chi tiết · Gỡ khỏi khóa).
+- Đang thiếu 4 cột: STT, Mã đề, Lĩnh vực, Người thêm. Hệ quả nghiệp vụ: khóa gán nhiều đề thì cán bộ không phân biệt được đề nào theo mã, không biết đề thuộc lĩnh vực nào để đối chiếu với lĩnh vực của khóa, và không truy được ai đã thêm đề vào khóa.
+- Cột Hành động cũng chỉ có thao tác gỡ đề (biểu tượng thùng rác), không có "Xem chi tiết" như đặc tả — cán bộ không xem được nội dung đề trước khi quyết định giữ hay gỡ.
+- Ngoài ra bảng có thêm cột "Trạng thái" không nằm trong danh sách của đặc tả; đây chỉ là ghi nhận, không tính vào lỗi.
+- Cần lưu ý thêm (chưa kết luận): ngay dưới bảng có nút "Gỡ công khai" — đặc tả tab này không nhắc tới nút đó, đề nghị dev xác nhận nút này thuộc về tab nào.
+- Tài khoản kiểm tra: cbnv_tw_05 (Cán bộ nghiệp vụ Trung ương, Cục Bổ trợ tư pháp). Khóa học AAA-KH-TW, trạng thái Hoàn thành, đã gán đề QA-DEKT-0803. Bản dựng V1.0.5, gói giao diện index-RAuQ-eDH.js.

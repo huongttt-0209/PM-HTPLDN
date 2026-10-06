@@ -1,0 +1,7 @@
+⚠️ Cần BA xác nhận.
+- Thực tế web đúng như đối tác quan sát: thẻ giới thiệu tư vấn viên ở đầu trang Chi tiết chỉ hiển thị Ảnh, Họ tên, Mã tư vấn viên, Trạng thái, Điểm đánh giá và Ngày công nhận — không có "Loại", "Tổ chức tư vấn", "Lĩnh vực pháp luật".
+- Đã kiểm tra kỹ: tư vấn viên dùng để thử CÓ đủ dữ liệu 3 trường này (Loại = Tư vấn viên, Tổ chức chính = Trung tâm Tư vấn Pháp luật Seed, Lĩnh vực = Thương mại) và 3 trường vẫn hiển thị bình thường trong thẻ "Hồ sơ" — tức không phải thiếu dữ liệu mà là thẻ đầu trang không bố trí các trường này.
+- Tuy nhiên SRS đang quy định khác kỳ vọng của đối tác: FR-IV-05 (UC43) – SCR-IV-03, phần thẻ thông tin chính (srs-fr-04-chuyen-gia-tvv.md, dòng 1541) chỉ liệt kê: Ảnh chân dung, Họ tên, Mã tư vấn viên, Trạng thái, Điểm đánh giá trung bình, Ngày công nhận — không nêu Loại / Tổ chức tư vấn / Lĩnh vực pháp luật.
+- Câu hỏi cần BA chốt: có bổ sung 3 trường "Loại", "Tổ chức tư vấn", "Lĩnh vực pháp luật" vào thẻ giới thiệu đầu trang theo bản thiết kế không, hay giữ đúng SRS hiện tại (3 trường này chỉ nằm trong thẻ "Hồ sơ")?
+- Ghi chú liên quan: riêng trường "Loại", SRS CÓ yêu cầu hiển thị trong nhóm "Thông tin cá nhân" của thẻ Hồ sơ (dòng 1554) và web đang thiếu — việc này đã ghi nhận ở BUG-QLTVV_04.
+- Đã verify bằng vai trò của phản ánh: tài khoản Cán bộ Nghiệp vụ Trung ương, trên 2 tư vấn viên (một chưa công khai, một đã công khai) — kết quả như nhau.

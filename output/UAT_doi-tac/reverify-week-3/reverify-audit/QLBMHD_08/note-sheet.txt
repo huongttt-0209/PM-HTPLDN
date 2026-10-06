@@ -1,0 +1,6 @@
+Cần BA + Dev/Security xác nhận pipeline quét virus (rủi ro bảo mật thật, KHÔNG phải wording).
+- Đối tác báo "thông báo mã độc sai thiết kế" — thực tế trên build hiện tại KHÔNG có thông báo/chặn nào: file .docx HỢP LỆ chứa chuỗi test mã độc chuẩn EICAR được CHẤP NHẬN, lưu (HTTP 201) và tạo thành biểu mẫu thành công.
+- SRS bắt buộc quét virus file đính kèm TRƯỚC lưu trữ + chặn nếu phát hiện mã độc: srs-fr-09 dòng 314, 382 (EC-02 → ERR-BM-07), 652.
+- Rủi ro: file mã độc có thể được lưu + công khai lên Cổng PLQG.
+- Caveat: EICAR nằm trong ZIP .docx; chưa quan sát được server-side → chưa khẳng định "không có AV" hay "AV không quét trong archive". Đề nghị BA + Dev/Security xác nhận: (1) AV có chạy trước lưu trữ không; (2) có quét nội dung trong archive .docx không.
+- Chi tiết: ba-confirmation-needed-week-3-bieu-mau-batch4.md (mục QLBMHD_08). Verify: cbnv_tw, 20/07/2026, upload 201 + record tạo.

@@ -1,0 +1,22 @@
+✅ Bug ĐÚNG – chuyển dev. (QA phát hiện ngoài phạm vi khi verify TKDGHQHTPL_02, không thuộc case nào của đối tác.)
+
+⚠️ ĐỌC TRƯỚC KHI RE-VERIFY — lỗi chỉ lộ ra khi có đủ tiền đề dữ liệu:
+- Đo trên môi trường ĐƯỢC GIAO 18.143.165.120.nip.io, KHÔNG phải môi trường đối tác htpldn-uat.ospgroup.vn.
+- Tiền đề bắt buộc: trong kỳ đang xem phải có đồng thời (a) ít nhất 1 kết quả đánh giá còn ở trạng thái "Chưa đánh giá" nhưng đã có sẵn điểm tổng, và (b) ít nhất 1 kế hoạch đánh giá ở trạng thái "Hủy" mà kết quả của nó đã có điểm.
+- Tại 27/07/2026, môi trường đối tác KHÔNG thoả tiền đề này (6 kết quả có điểm thì cả 6 đều đã ở "Đã đánh giá", không có kế hoạch "Hủy" nào có kết quả mang điểm). Mở Dashboard ở đó sẽ không thấy lỗi — đó KHÔNG phải bằng chứng đã sửa.
+
+Web sai gì (số liệu tại thời điểm đo trên môi trường được giao):
+- Thẻ "Điểm đánh giá hiệu quả hỗ trợ pháp lý" hiển thị 29.5/100 kèm chú thích "Dựa trên 14 đánh giá", trong khi số kết quả thực sự đã chấm chỉ có 11.
+- Đếm thừa 3 bản ghi: 14 = 11 kết quả "Đã đánh giá" + 3 kết quả vẫn ở trạng thái "Chưa đánh giá" nhưng đã có sẵn điểm (80,00 / 60,00 / 90,00). Chính 3 bản ghi chưa chấm này lại là 3 cột CAO NHẤT của biểu đồ (02/2026 = 90.0 · 04/2026 = 80.0 · 05/2026 = 60.0).
+- Kế hoạch đã hủy vẫn được tính: kế hoạch DG-20260727-0001 ở trạng thái "Hủy" nhưng kết quả 100,00 của nó vẫn vào trung bình chung và vào cột 07/2026. Bỏ riêng bản ghi này ra thì cột 07/2026 là 8,24 thay vì 16.6 — tức một bản ghi của kế hoạch đã hủy làm cột này tăng gấp đôi.
+- Đối chiếu số học để loại trừ nhầm lẫn: cộng điểm của đúng 14 bản ghi được đếm ra 412,40; chia 14 được 29,457 — khớp con số 29.5 hiển thị trên thẻ. Nghĩa là thẻ đang lấy toàn bộ bản ghi có điểm, không lọc theo trạng thái kết quả và cũng không loại kế hoạch đã hủy.
+
+Kết quả mong đợi theo đặc tả:
+- FR-I-08 (UC 8) — srs-fr-01-dashboard.md dòng 441 quy định bước xử lý là "Tính điểm đánh giá hiệu quả hỗ trợ pháp lý trung bình từ kết quả đánh giá thuộc phạm vi"; dòng 452 mô tả cỡ mẫu là "tổng số đánh giá trong kỳ + phạm vi đã lọc"; dòng 425 nêu điều kiện tiên quyết "Có dữ liệu đánh giá trong kỳ".
+- srs-fr-08-danh-gia.md dòng 1052: Kết quả đánh giá chỉ có 2 trạng thái "Chưa đánh giá" / "Đã đánh giá", mặc định là "Chưa đánh giá" — bản ghi chưa chấm chưa phải là một đánh giá đã hoàn tất, nên không nên góp vào giá trị trung bình lẫn cỡ mẫu.
+- srs-fr-08-danh-gia.md dòng 1183: chuyển trạng thái sang "Hủy" có hệ quả "Audit, soft-delete"; dòng 1168 mô tả trạng thái này là "Đợt đánh giá bị hủy" — nên kết quả của kế hoạch đã hủy không nên tiếp tục tham gia chỉ số quản trị.
+- Quy tắc BR-RPT-01 (srs-v3.5.md dòng 5608) đã nêu nguyên tắc này cho báo cáo thống kê: "Bản ghi DU_THAO, CHO_PHE_DUYET, TU_CHOI, DA_HUY KHÔNG được tính vào số liệu thống kê". Tuy nhiên cột phạm vi áp dụng của quy tắc mới chỉ liệt kê nhóm Báo cáo (FR-IX-01..23), chưa gồm Dashboard — nên nếu đội phát triển cho rằng Dashboard không chịu ràng buộc này thì cần BA bổ sung phạm vi, không phải sửa code.
+
+Phạm vi để dev không sửa nhầm: dòng này chỉ nói về việc lọc bản ghi đầu vào của thẻ. Việc thẻ đang trộn nhiều thang điểm khác nhau là vấn đề riêng, đã nằm ở dòng TKDGHQHTPL_02 (mã theo dõi SRS-C-009).
+
+Bug ID: BUG-TKDGHQ-KPI-LOC.

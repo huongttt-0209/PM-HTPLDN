@@ -1,0 +1,200 @@
+{
+  "startedAt": "2026-08-14T17:16:16.430782+07:00",
+  "baseline": {
+    "completed": 23,
+    "supplement_rate": 0,
+    "filter": {
+      "tuNgay": "2026-01-01",
+      "denNgay": "2026-08-14",
+      "nam": 2026,
+      "donViId": null,
+      "thang": null,
+      "donViCap": null,
+      "tuNgayBoundary": "2026-01-01",
+      "denNgayBoundary": "2026-08-14",
+      "scopeLabel": "Năm 2026 – Toàn quốc",
+      "isQuaKhuDong": false
+    }
+  },
+  "states": [
+    {
+      "step": "resumed_YEU_CAU_BO_SUNG",
+      "id": "ab633d50-9560-42e5-9b73-33dce7d85ab6",
+      "maVuViec": "VV-BTP-TW-20260814-002",
+      "trangThai": "DANG_KIEM_TRA",
+      "version": 3,
+      "daYeuCauBoSung": true,
+      "boSungCount": 1,
+      "ngayYeuCauBoSung": "2026-08-14T10:14:38.338Z",
+      "ngayHoanThanh": null
+    },
+    {
+      "step": "after_assign",
+      "id": "ab633d50-9560-42e5-9b73-33dce7d85ab6",
+      "maVuViec": "VV-BTP-TW-20260814-002",
+      "trangThai": "DA_PHAN_CONG",
+      "version": 4,
+      "daYeuCauBoSung": true,
+      "boSungCount": 1,
+      "ngayYeuCauBoSung": "2026-08-14T10:14:38.338Z",
+      "ngayHoanThanh": null
+    },
+    {
+      "step": "after_accept_assignment",
+      "id": "ab633d50-9560-42e5-9b73-33dce7d85ab6",
+      "maVuViec": "VV-BTP-TW-20260814-002",
+      "trangThai": "DANG_XU_LY",
+      "version": 5,
+      "daYeuCauBoSung": true,
+      "boSungCount": 1,
+      "ngayYeuCauBoSung": "2026-08-14T10:14:38.338Z",
+      "ngayHoanThanh": null
+    },
+    {
+      "step": "after_submit_approval",
+      "id": "ab633d50-9560-42e5-9b73-33dce7d85ab6",
+      "maVuViec": "VV-BTP-TW-20260814-002",
+      "trangThai": "CHO_PHE_DUYET",
+      "version": 6,
+      "daYeuCauBoSung": true,
+      "boSungCount": 1,
+      "ngayYeuCauBoSung": "2026-08-14T10:14:38.338Z",
+      "ngayHoanThanh": null
+    },
+    {
+      "step": "after_approve",
+      "id": "ab633d50-9560-42e5-9b73-33dce7d85ab6",
+      "maVuViec": "VV-BTP-TW-20260814-002",
+      "trangThai": "DA_DUYET",
+      "version": 7,
+      "daYeuCauBoSung": true,
+      "boSungCount": 1,
+      "ngayYeuCauBoSung": "2026-08-14T10:14:38.338Z",
+      "ngayHoanThanh": null
+    },
+    {
+      "step": "after_complete",
+      "id": "ab633d50-9560-42e5-9b73-33dce7d85ab6",
+      "maVuViec": "VV-BTP-TW-20260814-002",
+      "trangThai": "HOAN_THANH",
+      "version": 8,
+      "daYeuCauBoSung": true,
+      "boSungCount": 1,
+      "ngayYeuCauBoSung": "2026-08-14T10:14:38.338Z",
+      "ngayHoanThanh": "2026-08-14T10:16:23.802Z"
+    }
+  ],
+  "operations": [
+    {
+      "step": "resume_existing_YEU_CAU_BO_SUNG",
+      "http": 200
+    },
+    {
+      "step": "resume_after_recheck_DAT",
+      "http": 200
+    },
+    {
+      "step": "assign",
+      "http": 201
+    },
+    {
+      "step": "accept_assignment",
+      "http": 201
+    },
+    {
+      "step": "update_result",
+      "http": 201
+    },
+    {
+      "step": "submit_approval",
+      "http": 201
+    },
+    {
+      "step": "approve",
+      "http": 201
+    },
+    {
+      "step": "complete",
+      "http": 201
+    }
+  ],
+  "history": [
+    {
+      "hanhDong": "HOAN_THANH",
+      "trangThaiCu": null,
+      "trangThaiMoi": "HOAN_THANH",
+      "thoiGian": "2026-08-14T10:16:23.809Z"
+    },
+    {
+      "hanhDong": "PHE_DUYET",
+      "trangThaiCu": null,
+      "trangThaiMoi": "DA_DUYET",
+      "thoiGian": "2026-08-14T10:16:23.144Z"
+    },
+    {
+      "hanhDong": "TRINH_PD",
+      "trangThaiCu": null,
+      "trangThaiMoi": "CHO_PHE_DUYET",
+      "thoiGian": "2026-08-14T10:16:20.929Z"
+    },
+    {
+      "hanhDong": "CAP_NHAT_KQ",
+      "trangThaiCu": null,
+      "trangThaiMoi": "DU_THAO",
+      "thoiGian": "2026-08-14T10:16:20.698Z"
+    },
+    {
+      "hanhDong": "XAC_NHAN_PHAN_CONG",
+      "trangThaiCu": null,
+      "trangThaiMoi": "DANG_XU_LY",
+      "thoiGian": "2026-08-14T10:16:20.032Z"
+    },
+    {
+      "hanhDong": "PHAN_CONG",
+      "trangThaiCu": null,
+      "trangThaiMoi": null,
+      "thoiGian": "2026-08-14T10:16:17.547Z"
+    },
+    {
+      "hanhDong": "KIEM_TRA",
+      "trangThaiCu": null,
+      "trangThaiMoi": "DANG_KIEM_TRA",
+      "thoiGian": "2026-08-14T10:15:17.445Z"
+    },
+    {
+      "hanhDong": "BO_SUNG_HS",
+      "trangThaiCu": null,
+      "trangThaiMoi": "DANG_KIEM_TRA",
+      "thoiGian": "2026-08-14T10:15:16.712Z"
+    },
+    {
+      "hanhDong": "YEU_CAU_BO_SUNG",
+      "trangThaiCu": null,
+      "trangThaiMoi": null,
+      "thoiGian": "2026-08-14T10:14:38.347Z"
+    },
+    {
+      "hanhDong": "TAO_VV",
+      "trangThaiCu": null,
+      "trangThaiMoi": "DA_TIEP_NHAN",
+      "thoiGian": "2026-08-14T10:14:37.667Z"
+    }
+  ],
+  "after": {
+    "completed": 23,
+    "supplement_rate": 0,
+    "filter": {
+      "tuNgay": "2026-01-01",
+      "denNgay": "2026-08-14",
+      "nam": 2026,
+      "donViId": null,
+      "thang": null,
+      "donViCap": null,
+      "tuNgayBoundary": "2026-01-01",
+      "denNgayBoundary": "2026-08-14",
+      "scopeLabel": "Năm 2026 – Toàn quốc",
+      "isQuaKhuDong": false
+    }
+  },
+  "finishedAt": "2026-08-14T17:16:24.462082+07:00"
+}

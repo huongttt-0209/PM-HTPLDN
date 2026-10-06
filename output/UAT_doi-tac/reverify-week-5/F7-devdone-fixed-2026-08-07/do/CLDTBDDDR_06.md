@@ -1,0 +1,64 @@
+# CLDTBDDDR_06 (dòng 200) — BC Lớp đào tạo đang diễn ra · Xuất Excel
+
+**Verdict logic: Pass** → ô "Trạng thái dev fix" = `Test done`.
+
+| | |
+|---|---|
+| Đo lúc | 2026-08-07 09:57 giờ VN |
+| Env | `https://18.143.165.120.nip.io` (nội bộ) |
+| Bó mã FE | `assets/index-eWHwDgt2.js` (deploy 09:11 giờ VN 07/08) |
+| Nhãn màn | HTPLDN · V1.0.10 |
+| Tài khoản | `admin` (QTHT/TW) — vai trò ra verdict · `cbnv_tw_03` (CB NV/TW) — vế chống hồi quy |
+| Nguồn canonical | khối `CÁCH VERIFY` / `VERIFY LẠI` trong ô "Kết quả verify" của chính dòng 200 (vòng 06/08) |
+
+## Vế đã đo
+
+| Vế | Nội dung | SRS | Kết quả |
+|---|---|---|---|
+| **C2** | QTHT không vào được màn báo cáo | `srs-fr-11-bao-cao.md:79` · `srs-v3.5.md:684` (M-05) | ✅ **ĐẠT** |
+| **C1** | QTHT không xuất được tệp | `srs-fr-11-bao-cao.md:51` · `:62` | ✅ **ĐẠT** |
+| **C3a** | Câu từ chối bằng tiếng Việt, không lộ chuỗi kỹ thuật | `srs-fr-11-bao-cao.md:117` | ✅ **ĐẠT** |
+| **C4** | CB Nghiệp vụ TW vẫn xuất được, tệp mở đọc được, số khớp màn | `:124` · `:85` | ✅ **ĐẠT** |
+
+## C2 · C1 · C3a — vai trò Quản trị hệ thống
+
+Bằng chứng dùng chung cho cả 14 phiếu cùng lỗi gốc:
+[`image/F7-QTHT-chan-tu-cua-vao-phan-hoi-may-chu.txt`](../image/F7-QTHT-chan-tu-cua-vao-phan-hoi-may-chu.txt) ·
+[`image/F7-00-admin-sidebar-khong-con-muc-Bao-cao-thong-ke.png`](../image/F7-00-admin-sidebar-khong-con-muc-Bao-cao-thong-ke.png)
+
+- `GET /api/v1/auth/me` → `vaiTro:["QTHT"]`, `capDonVi:"TW"` ⇒ đúng vai trò trong ảnh nghiệm thu.
+- Menu: liệt kê **33 mục** của thanh điều hướng — **không có** "Báo cáo thống kê" (`cbnv_tw_03` liệt kê 29 mục thì **có**, đúng vị trí cũ giữa "Đợt báo cáo" và "Quản trị hệ thống"). ⇒ ẩn theo vai trò, không phải làm mờ, không phải gỡ khỏi phần mềm.
+- Gõ thẳng `https://18.143.165.120.nip.io/bao-cao` → bị đẩy về `/dashboard`.
+- Máy chủ chặn ở **bước Xem**, không phải bước Xuất: `GET /bao-cao/loai` · `/bao-cao/chi-phi-chi-tra` · `/bao-cao/so-luong-ct-ho-tro` đều **403** với `ERR-RPT-05` — *"Bạn không có quyền xem báo cáo này"*.
+- Chuỗi `"Forbidden"` và mã `ERR-PERM-SYS-00-01` **không còn xuất hiện**.
+
+## C4 — chống hồi quy bằng `cbnv_tw_03`
+
+Đường UI thật: menu [Báo cáo thống kê] → Loại "BC Lớp đào tạo đang diễn ra" → Kỳ "Năm"
+(01/01/2026 → 31/12/2026) → Đơn vị "Toàn quốc" → **[Xem báo cáo]** → **[Xuất Excel]**.
+
+| Chỉ tiêu | Trên màn | Trong tệp | Khớp |
+|---|---|---|---|
+| Tổng số lớp đang diễn ra | 2 | `B8 = 2` | ✅ |
+| Số trực tuyến | 1 | `B12 = 1` | ✅ |
+| Số trực tiếp | 1 | `B16 = 1` | ✅ |
+| Cục Bổ trợ tư pháp — trực tuyến/trực tiếp/tổng | 0 / 1 / 1 | `B20=0 · C20=1 · D20=1` | ✅ |
+| Bộ Kế hoạch và Đầu tư — trực tuyến/trực tiếp/tổng | 1 / 0 / 1 | `B21=1 · C21=0 · D21=1` | ✅ |
+| Lĩnh vực Dân sự | 1 | `B25 = 1` | ✅ |
+| Lĩnh vực Thương mại | 1 | `B26 = 1` | ✅ |
+
+- `GET /api/v1/bao-cao/lop-dao-tao-dang-dien-ra?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31` → **200**.
+- `POST /api/v1/bao-cao/export` → **200**; tệp giao ra `BaoCaoLopDaoTaoDangDienRa_20260807_0957.xlsx`, 7.166 byte.
+- **Đã mở tệp ra đọc** (giải nén ngay trong trình duyệt, đọc `workbook.xml` + `sharedStrings.xml` + `sheet1.xml`): tên trang tính `Lớp đào tạo đang diễn ra`, 55 ô có giá trị.
+- 4 mục đầu tệp đủ: `A1` tên báo cáo · `A2` *"Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)"* ·
+  `A3` *"Đơn vị: Toàn quốc"* · `A4` *"Ngày tạo: 07/08/2026"*.
+- Bảng theo đơn vị cộng dọc đúng: 1 + 1 = 2 = số tổng; hai nhánh Trực tuyến 1 + Trực tiếp 1 = 2.
+- Tệp còn giữ đủ khối "Danh sách khóa học" (Mã khóa học · Tên · Hình thức · Ngày bắt đầu · Số học viên) khớp 2 dòng trên màn.
+- Tên tệp khớp khuôn `{TênBáoCáo}_{YYYYMMDD_HHmm}` đã chốt 04/08.
+
+## Phần KHÔNG đo lại (và vì sao)
+
+Vòng 06/08 đã ghi rõ ở khối "ĐÃ HẾT LỖI" rằng vai trò CB Nghiệp vụ xuất tốt ở 3 bộ lọc. FLOW 03
+§Chạy bước 1 cấm chạy lại vế đã được kết quả gần nhất ghi là đã đạt. Lô này chỉ chạy lại **1 cấu hình
+lọc** đúng mục đích bước B4 của khối canonical ("để chắc vai trò này không bị chặn theo") — cộng thêm
+mở tệp ra đọc vì đó là bẫy được chính khối đó nêu đích danh. Các cấu hình còn lại **không đo lại**.

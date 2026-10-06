@@ -1,0 +1,153 @@
+LDTBDDDR_06 — NGUYÊN VĂN THÔNG BÁO TRÊN MÀN + PHẢN HỒI MÁY CHỦ
+Màn: Báo cáo thống kê → BC Lớp đào tạo ĐÃ diễn ra (FR-IX-07 / UC130)
+Môi trường: https://18.143.165.120.nip.io  ·  Bản dựng: HTPLDN V1.0.8
+  index.html etag W/"6a73f6a4-428" · last-modified Thu, 06 Aug 2026 02:51:16 GMT
+  bó mã assets/index-CNwX9JjX.js · 1 123 581 byte · md5 e0e4f737b1fb7ab9409f459a4d0fa051
+Ngày đo: 2026-08-06, 13:47 → 14:01 (giờ máy đo)
+
+Bộ bắt thông báo: output/UAT_doi-tac/tools/toast-capture.js (không lọc trùng, đọc innerText,
+đếm request song song). Tự kiểm trước MỖI phiên đo: soObserverDangSong = 1 (hợp lệ).
+Đo bù: lấy mẫu NỘI DUNG vùng thông báo mỗi 100 ms (vì thư viện giao diện THAY CHỮ trong
+node cũ — bộ bắt kiểu "nghe node mới" chỉ thấy chữ đầu tiên).
+
+================================================================================
+A. VAI TRÒ CB NGHIỆP VỤ TRUNG ƯƠNG — cbnv_tw_05 (CB_NV_TW, cấp TW, Toàn quốc)
+   (không dùng fallback Rule 7)
+================================================================================
+
+--- A1. Dạng 1 — không lọc Hình thức (trùng đúng điều kiện đối tác ở vòng 2) -----
+Màn trước khi bấm: Thời điểm tạo 06/08/2026 13:47 · Tổng khóa học 9 · Tổng học viên 17
+URL: /bao-cao?loai=lop-dao-tao-da-dien-ra&kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+     (TRÙNG KHÍT URL trong ảnh vòng 2 của đối tác, chỉ khác tên máy chủ)
+
+Bấm [Xuất Excel] bằng chuột thật:
+  SO_REQUEST = 1  →  POST /api/v1/bao-cao/export
+  SO_KHUNG_THONG_BAO (observer) = 1
+  Chữ observer bắt được : "Đang tạo file..."
+  Chữ lấy mẫu theo thời gian (2 mốc khác nhau, KHÔNG lọc trùng):
+        "Đang tạo file..."      (mẫu đầu, y = -31 → đang trượt vào)
+        "Tạo file thành công."  (mẫu cuối, x=0 y=8 w=1431 h=40, opacity 1)
+  → KHÔNG có câu "Không thể tạo file xuất. Vui lòng thử lại." (ERR-RPT-04, :116)
+  → KHÔNG có câu nào mang nghĩa từ chối quyền (:117)
+
+Phản hồi máy chủ (reqid 101):
+  HTTP/2 200
+  content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+  content-disposition: attachment; filename="BaoCaoLopDaoTaoDaDienRa_20260806_1348.xlsx"
+  Thân yêu cầu: {"loaiBaoCao":"BC_LOP_DAO_TAO_DA_DIEN_RA","kyBaoCao":"NAM",
+                 "tuNgay":"2026-01-01","denNgay":"2026-12-31","filterDacThu":{},"formatXuat":"XLSX"}
+
+TỆP RƠI VỀ MÁY THẬT: ~/Downloads/BaoCaoLopDaoTaoDaDienRa_20260806_1348.xlsx (6 822 byte)
+  → tên tệp người dùng thật thấy TRÙNG KHÍT content-disposition.
+
+Nội dung tệp (đọc bằng openpyxl, sheet "Lớp đào tạo đã diễn ra"):
+  A1  BC Lớp đào tạo đã diễn ra
+  A2  Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+  A3  Đơn vị: Toàn quốc
+  A4  Ngày tạo: 06/08/2026
+  A8  Tổng số khóa học | 9          ← khớp thẻ trên màn (9)
+  A12 Tổng số học viên | 17         ← khớp thẻ trên màn (17)
+  A15 Đơn vị | Số khóa học | Số học viên | Trực tuyến | Trực tiếp
+  A16 Cục Bổ trợ tư pháp - Bộ Tư pháp | 6 | 11 | 5 | 1
+  A17 Bộ Kế hoạch và Đầu tư         | 1 |  3 | 1 | 0
+  A18 Sở Tư pháp Hà Nội             | 2 |  3 | 2 | 0
+  Cộng khớp: 6+1+2 = 9 = tổng khóa học · 11+3+3 = 17 = tổng học viên
+             (5+1+2) + (1+0+0) = 8 + 1 = 9 = tổng khóa học
+
+--- A2. Dạng 2 — lọc Hình thức = Trực tuyến ------------------------------------
+Màn: Thời điểm tạo 06/08/2026 13:49 · Tổng khóa học 8 · Tổng học viên 15
+Bấm [Xuất Excel]: 1 request POST /api/v1/bao-cao/export · 1 khung thông báo ·
+  chữ theo thời gian: "Đang tạo file..." → "Tạo file thành công."
+Phản hồi (reqid 109): HTTP 200 ·
+  content-disposition: attachment; filename="BaoCaoLopDaoTaoDaDienRa_20260806_1350.xlsx"
+  Thân yêu cầu mang bộ lọc: "filterDacThu":{"hinhThuc":"TRUC_TUYEN"}
+Tệp về máy: BaoCaoLopDaoTaoDaDienRa_20260806_1350.xlsx (6 816 byte)
+Nội dung: Tổng số khóa học 8 · Tổng số học viên 15 · Cục Bổ trợ 5|9|5|0 ·
+          Bộ KH&ĐT 1|3|1|0 · Sở TP Hà Nội 2|3|2|0  → khớp từng con số với màn.
+
+--- A3. Dạng 3 — lọc Hình thức = Trực tiếp -------------------------------------
+Màn: Thời điểm tạo 06/08/2026 13:51 · Tổng khóa học 1 · Tổng học viên 2
+Bấm [Xuất Excel]: 1 request · 1 khung · "Đang tạo file..." → "Tạo file thành công."
+Tệp về máy: BaoCaoLopDaoTaoDaDienRa_20260806_1351.xlsx (6 709 byte)
+Nội dung: Tổng số khóa học 1 · Tổng số học viên 2 · Cục Bổ trợ 1|2|0|1 → khớp màn.
+
+TỆP BÁM BỘ LỌC (BR-DATA-06, :1280) — kiểm chéo bằng md5, 3 tệp KHÁC NHAU:
+  dạng 1 (không lọc) 2569fc2c8d771c2cf89cb0a1c075aa8d   → 9 / 17
+  dạng 2 (Trực tuyến) 15928d7bc1c7f5313341b3371c760468  → 8 / 15
+  dạng 3 (Trực tiếp)  2a64109979f04fa25c850f3cb9d284e4  → 1 / 2
+  Hai nhánh enum cộng khớp bản không lọc: 8+1 = 9 khóa học · 15+2 = 17 học viên.
+
+--- A4. Phép thử CHỐNG ĐÈ TỆP (lý do BA bắt buộc phần giờ-phút) ----------------
+Xuất dạng 1 (cùng bộ lọc, cùng ngày) hai lần ở hai phút khác nhau:
+  lần 1 13:48 → BaoCaoLopDaoTaoDaDienRa_20260806_1348.xlsx
+  lần 2 13:53 → BaoCaoLopDaoTaoDaDienRa_20260806_1353.xlsx
+  → HAI TÊN KHÁC NHAU, không tệp nào đè tệp nào.
+
+--- A5. Nút [Xuất PDF] ---------------------------------------------------------
+Bấm [Xuất PDF] KHÔNG tải ngay: mở hộp thoại "Tùy chọn in báo cáo PDF"
+  (Khổ giấy A4/A3/Letter · Hướng giấy Dọc/Ngang · [Hủy] [Xuất file]).
+Bấm [Xuất file] (giữ mặc định A4 + Dọc):
+  1 request POST /api/v1/bao-cao/export · 1 khung ·
+  chữ theo thời gian: "Đang tạo file..." → "Tạo file thành công."
+Tệp về máy: BaoCaoLopDaoTaoDaDienRa_20260806_1354.pdf (33 601 byte, %PDF-1.3, 1 trang)
+  → tên tệp ĐÚNG CÙNG KHUÔN, chỉ đổi đuôi.
+
+--- A6. Đo bằng ĐƯỜNG THỨ HAI (gọi thẳng máy chủ, ngoài trình duyệt, curl) ------
+GET /api/v1/bao-cao/lop-dao-tao-da-dien-ra?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+      → HTTP 200 · tongKhoaHoc 9  · tongHocVien 17   (khớp màn dạng 1)
+   ... &hinhThuc=TRUC_TUYEN  → HTTP 200 · tongKhoaHoc 8 · tongHocVien 15 (khớp màn dạng 2)
+   ... &hinhThuc=TRUC_TIEP   → HTTP 200 · tongKhoaHoc 1 · tongHocVien 2  (khớp màn dạng 3)
+POST /api/v1/bao-cao/export (cùng tham số dạng 1)
+      → HTTP 200 · content-disposition: attachment;
+        filename="BaoCaoLopDaoTaoDaDienRa_20260806_1355.xlsx" · 6 822 byte (bằng tệp giao diện)
+KẾT LUẬN: hai đường đo KHÔNG mâu thuẫn.
+
+================================================================================
+B. VAI TRÒ QUẢN TRỊ VIÊN · QTHT — admin (vai trò + đơn vị TRÙNG KHÍT ảnh vòng 2)
+   /api/v1/auth/me → vaiTro ["QTHT"] · hoTen "Quản trị hệ thống" · capDonVi "TW"
+   · donViId 00000000-0000-4000-8000-000000000001 (BTP)
+================================================================================
+
+Bước [Xem báo cáo]: CHẠY ĐƯỢC, ra ĐẦY ĐỦ số liệu.
+  Thời điểm tạo 06/08/2026 13:56 · Tổng khóa học 9 · Tổng học viên 17
+  Hai nút [Xuất Excel] / [Xuất PDF] ở trạng thái BẤM ĐƯỢC (disabled = false).
+
+Bước [Xuất Excel] — TÁI HIỆN 3/3 LƯỢT (2 lượt chuột thật + 1 lượt hẹn giờ để chụp ảnh):
+  SO_REQUEST = 1 mỗi lượt → POST /api/v1/bao-cao/export
+  Chữ observer bắt được : "Đang tạo file..."
+  Chữ lấy mẫu theo thời gian: "Đang tạo file..."  →  "Forbidden"
+  Khung "Forbidden": 33 mẫu liên tiếp, sống 3 201 ms,
+      x = 0 · y = 8 · w = 1431 · h = 40 · opacity 1  → người dùng NHÌN THẤY THẬT.
+  KHÔNG có tệp nào rơi về máy (đếm tệp ~/Downloads trước/sau: không thêm tệp nào).
+
+Phản hồi máy chủ (reqid 139):
+  HTTP/2 403
+  content-type: application/json; charset=utf-8
+  Thân phản hồi (nguyên văn):
+    {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+     "timestamp":"2026-08-06T06:57:29.480Z","requestId":"eae4abd3-80d0-4855-9de3-57e3276097cb"}}
+
+Đo bằng ĐƯỜNG THỨ HAI (curl, ngoài trình duyệt, cùng phiên QTHT):
+  GET  /api/v1/bao-cao/lop-dao-tao-da-dien-ra?... → HTTP 200 · tongKhoaHoc 9 · tongHocVien 17
+  POST /api/v1/bao-cao/export (cùng tham số)     → HTTP 403
+    {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+     "timestamp":"2026-08-06T06:59:24.858Z","requestId":"0f1c4d5a-dc79-4636-a682-fe3da349ca8a"}}
+KẾT LUẬN: hai đường đo KHỚP NHAU — xem được nhưng bị chặn ở bước xuất, và chữ trả cho
+người dùng là chuỗi tiếng Anh thô "Forbidden".
+
+Đối chiếu đặc tả (đã mở file đọc đúng dòng ngày 2026-08-06):
+  srs-fr-11-bao-cao.md:117 — E7 / ERR-RPT-05: khi không có quyền, phản hồi hệ thống phải là
+       "Bạn không có quyền xem báo cáo này" (tiếng Việt).
+  srs-fr-11-bao-cao.md:79  — bước 1 của luồng chung là "Kiểm tra quyền truy cập báo cáo +
+       phạm vi theo đơn vị" ⇒ kiểm quyền ở ĐẦU luồng, không phải sau khi đã cho xem hết số liệu.
+  srs-fr-11-bao-cao.md:1052 / :1053 — điều kiện hiển thị nút Xuất Excel / Xuất PDF chỉ là
+       "Sau khi đã 'Xem báo cáo'", KHÔNG kèm điều kiện vai trò.
+
+================================================================================
+C. GHI CHÚ VỀ CÁCH ĐO (để người đọc sau không hiểu nhầm)
+================================================================================
+- Mọi phép đo quyết định verdict đều bấm bằng CHUỘT THẬT trên giao diện.
+- Ảnh khung "Forbidden" chụp bằng mẹo hẹn giờ bấm sau 2 500 ms rồi mới gọi chụp
+  (khung chỉ sống ~3,2 giây, ngắn hơn độ trễ của công cụ chụp). Bắt được ngay lượt đầu.
+- Ảnh "ngay sau bấm Xuất Excel" ở nhánh CB nghiệp vụ (ảnh 02) KHÔNG bắt được khung thông báo
+  — bằng chứng thay thế là chữ bắt bằng bộ theo dõi + phản hồi máy chủ + tệp rơi về máy.

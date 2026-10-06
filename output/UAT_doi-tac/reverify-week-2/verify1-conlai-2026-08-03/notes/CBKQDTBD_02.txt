@@ -1,0 +1,6 @@
+☑️ Đã kiểm tra lại — lỗi không còn, chuyển Pass.
+- Ngày 03/08/2026 lúc 17:55, bảng học viên ở tab "Công bố kết quả" chỉ có 7 cột nên tổ kiểm thử mở dòng này. Lỗi khi đó là có thật (có ảnh chụp màn hình cùng khóa học, cùng tài khoản).
+- Kiểm lại lúc 20:00 cùng ngày trên đúng khóa học đó (Tập huấn pháp lý cấp Trung ương 2026, trạng thái Hoàn thành, 4 học viên đã duyệt kết quả): bảng đã hiển thị đủ 12 cột — Chọn dòng, STT, Họ tên, Email, Số điện thoại, Đơn vị, Đề kiểm tra, Điểm, Kết quả, Trạng thái công bố, Thời điểm công bố, Hành động. Đúng theo đặc tả FR-III-19 (UC38) §Đặc tả màn hình SCR-III-02 - Tab 8 "Công bố kết quả" (srs-fr-03-dao-tao.md dòng 1909).
+- Nguyên nhân khác biệt giữa hai lần đo: giao diện đã được triển khai lại. Gói giao diện lúc phát hiện lỗi là index-bJhJGCw4.js, lúc kiểm lại là index-RAuQ-eDH.js (máy chủ ghi thời điểm tạo gói 03/08/2026 19:51 giờ Việt Nam). Cả hai lần đều tải lại trang bỏ bộ nhớ đệm trước khi đo.
+- Đính chính nội dung dòng này: phần "thiếu 5 cột" nay KHÔNG còn đúng với bản đang chạy. Lưu ý cũ về cột "Đề kiểm tra" cũng đã được làm rõ — cột hiển thị vô điều kiện: khóa chưa gán đề thì hiện dấu "—", khóa đã gán đề thì hiện đúng tên đề (đã dựng đề kiểm tra thật "QA-DEKT-0803" để kiểm chứng trên 2 khóa học).
+- Tài khoản kiểm tra lại: cbnv_tw_05 (Cán bộ nghiệp vụ Trung ương, Cục Bổ trợ tư pháp). Bản dựng V1.0.5.

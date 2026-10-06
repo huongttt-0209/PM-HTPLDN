@@ -1,0 +1,4 @@
+⚠️ Cần BA xác nhận.
+- KPI-S-01 (UC1-9 bổ sung) §KPI bổ sung Dashboard (dòng 567-586) quy định “Drill-down: không có”; web hiện tại bấm thẻ “Tỷ lệ hồ sơ bổ sung” không chuyển màn hình.
+- Verify live bằng `cbnv_tw_02`, đúng phạm vi Toàn quốc/năm 2026: URL giữ nguyên `/dashboard`, không phát sinh request mở danh sách.
+- Đề nghị BA xác nhận có thay đổi đặc tả để bổ sung màn danh sách chi tiết cho KPI-S-01 hay giữ hành vi không drill-down theo SRS.

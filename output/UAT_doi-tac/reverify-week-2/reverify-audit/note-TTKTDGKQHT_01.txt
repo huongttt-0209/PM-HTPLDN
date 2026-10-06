@@ -1,0 +1,4 @@
+✅ Bug đúng – chuyển dev.
+• Tab "Kết quả kiểm tra" trong chi tiết khóa học KHÔNG hiển thị trường tìm kiếm / bộ lọc nào (chỉ có nút Xuất DOCX, Hủy công bố, ô Ghi chú).
+• SRS FR-III-06 (UC25) "Tìm kiếm kết quả" (dòng 616–635): tab phải có bộ lọc theo tên học viên, khóa học, kết quả (Đạt/Không đạt).
+• Verify: CB_NV_TW, khóa trạng thái "Hoàn thành". Bug ID: BUG-TTKTDGKQHT_01.

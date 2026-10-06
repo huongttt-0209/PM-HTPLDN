@@ -1,7 +1,7 @@
 # Workflow Test Report — Đánh giá Hiệu quả HTPLDN (FR-08)
 
 > **Module:** FR-08 Đánh giá Hiệu quả (Nhóm VI) · **SRS:** [`srs-update-2026-5-5/srs-fr-08-danh-gia.md`](../../../../../input/srs-update-2026-5-5/srs-fr-08-danh-gia.md) — FR-VI-01..10 + SCR-VI-01 + SM-DANHGIA v3.5 (8 state + HUY, line 1133-1136) · **Round:** R22 · **Date:** 2026-05-13 16:18:00 · **Tester:** QA Automation
-> **Bug:** [`Pass-bug-report-flow-danhgia.md`](../../bug-reports/danh-gia/Pass-bug-report-flow-danhgia.md) flow 15/15 Closed + [`bug-report-r22-fr-vi-10.md`](../../bug-reports/danh-gia/bug-report-r22-fr-vi-10.md) — BUG-FUNC-DG-013 Major Open R22 (BE check VPD theo donVi sở hữu thay vì coQuanDuocDanhGiaId).
+> **Bug:** [`Pass-bug-report-flow-danhgia.md`](../../bug-reports/danh-gia/Pass-bug-report-flow-danhgia.md) flow 15/15 Closed + [`Pass-bug-report-r22-fr-vi-10.md`](../../bug-reports/danh-gia/Pass-bug-report-r22-fr-vi-10.md) — BUG-FUNC-DG-013 Major Open R22 (BE check VPD theo donVi sở hữu thay vì coQuanDuocDanhGiaId).
 
 ---
 

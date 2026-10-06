@@ -1,0 +1,11 @@
+{
+ "Mã TC": "BCTK_QA12",
+ "Tên chức năng": "Báo cáo thống kê — tên tệp xuất khi xuất hai lần trong cùng một phút",
+ "Mô tả": "Báo cáo thống kê — QA phát hiện ngoài phạm vi (không thuộc case nào của bảng), phát sinh khi verify CLDTBDPL_06 (dòng 218).\n\nXuất báo cáo hai lần trong cùng một phút thì hệ thống giao ra hai tệp TRÙNG TÊN, không có hậu tố phân biệt. Trình duyệt tự thêm \" (1)\" nên người dùng thường không nhận ra; nhưng khi tệp được lưu bằng đường khác (công cụ tải, thư mục dùng chung) thì tệp sau đè tệp trước.",
+ "Các bước thực hiện": "1. Đăng nhập vai trò CB Nghiệp vụ Trung ương, vào menu \"Báo cáo thống kê\"\n2. Chọn Loại báo cáo \"BC Chất lượng đào tạo\", Kỳ báo cáo \"Năm\", Đơn vị \"Toàn quốc\"\n3. Nhấn [Xem báo cáo] rồi [Xuất Excel]; ghi lại tên tệp nhận được\n4. Trong CÙNG một phút, nhấn [Xuất Excel] lần nữa; so tên tệp lần hai với lần một\n5. Đối chứng: gọi lại cùng thao tác xuất vài lượt liên tiếp trong một phút và đọc tên tệp máy chủ đặt",
+ "Kết quả mong đợi": "Theo Phụ lục E mục H8 (srs-v3.5.md:6716, ghi rõ [BA chốt 2026-08-06]): tên tệp kết xuất theo khuôn {TenTep}_{YYYYMMDD_HHmm}.{đuôi}, và khi trùng tên do hai lần xuất trong cùng phút thì hệ thống tự thêm hậu tố _1, _2. Quy ước này áp cho tệp kết xuất ở mọi nhóm chức năng.",
+ "Kết quả thực tế": "Hai lượt xuất trong cùng phút qua giao diện đều nhận tên BaoCaoChatLuongDaoTao_20260806_1612.xlsx — trùng khít, không có hậu tố _1/_2; trình duyệt tự thêm \" (1)\" vào tệp thứ hai. Đối chứng bằng đường thứ hai: ba lượt xuất liên tiếp trong một phút đều được máy chủ đặt cùng tên BaoCaoChatLuongDaoTao_20260806_1613.xlsx.\n\nPhần còn lại của khuôn tên tệp đã đúng (tên báo cáo viết liền, có ngày và giờ-phút), và hai lượt xuất cách nhau sang phút khác thì tên khác nhau nên không đè.\n\nMôi trường 18.143.165.120.nip.io, bản dựng V1.0.8 (bó mã index-DIABnbIr.js), vai trò cbnv_tw_05.",
+ "Trạng thái": "Fail",
+ "Dopai": "bug",
+ "Ảnh/vieo 1": "https://drive.google.com/file/d/1A3bGOaP__Am-k1K0V0sVYbfAsEKKijhF/view?usp=drivesdk"
+}

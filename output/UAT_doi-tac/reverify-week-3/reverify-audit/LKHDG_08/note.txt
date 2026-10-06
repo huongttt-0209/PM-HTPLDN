@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: khi bấm lưu form "Tạo kế hoạch đánh giá" mà để trống "Mục tiêu", hệ thống KHÔNG hiển thị thông báo bắt buộc cho trường này, trong khi SRS quy định "Mục tiêu" là bắt buộc.
+- Đã verify env test (tài khoản CB Nghiệp vụ TW): mở form → bấm "Lưu & Chuyển tiêu chí" với form trống → 6 trường bắt buộc khác hiện thông báo lỗi ("Vui lòng nhập tên đợt", "Vui lòng chọn tần suất", "Vui lòng chọn đối tượng", "Vui lòng chọn cơ quan được đánh giá", "Vui lòng chọn ngày bắt đầu", "Vui lòng chọn ngày kết thúc"); riêng "Mục tiêu" KHÔNG có thông báo lỗi → form cho qua trường này.
+- Chuẩn: SRS FR-VI-01 (UC83) Lập kế hoạch — Inputs #2 muc_tieu Bắt buộc = Y (dòng 107); màn SCR-VI-01 Form tạo/sửa #22 "Mục tiêu | Bắt buộc" (dòng 836).
+- Mã lỗi nội bộ: BUG-LKHDG_08.

@@ -1,0 +1,4 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: Tại Tab Tiêu chí của đợt đánh giá, thanh nút thao tác chỉ gồm: "Quay lại danh sách", "Hủy đợt", "Thêm tiêu chí", "Nhập từ danh mục", "Lưu" (và "Hủy thay đổi" khi có chỉnh sửa). KHÔNG có nút "Lưu & Quay lại Kế hoạch".
+- Chuẩn: SRS SCR-VI-01, Tab Tiêu chí (mục #34) quy định thanh hành động gồm [Hủy] [Lưu] [Lưu & Quay lại KH]. Thiếu nút "Lưu & Quay lại KH".
+- Mã lỗi nội bộ: BUG-TLCTCDG_12.

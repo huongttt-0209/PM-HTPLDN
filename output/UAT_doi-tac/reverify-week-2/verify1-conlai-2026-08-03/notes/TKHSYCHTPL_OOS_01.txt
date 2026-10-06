@@ -1,0 +1,16 @@
+⚠️ Cần BA xác nhận.
+
+- Hiện trạng trên phần mềm: tại màn "Vụ việc HTPL / Danh sách", chọn "Mức SLA" = "Sắp hết hạn" thì hệ thống trả về đúng 2 hồ sơ là VV-BTP-TW-20260712-006 và VV-BTP-TW-20260712-005 (cùng tiếp nhận ngày 12/07/2026, thời hạn xử lý 31/07/2026). Cả 2 hồ sơ này đều đã kết thúc: một hồ sơ ở trạng thái "Từ chối", một hồ sơ ở trạng thái "Hoàn thành".
+- Điểm cần làm rõ: ngay trên 2 dòng đó, cột "Cảnh báo thời hạn" lại đang hiển thị "Đã hoàn thành", trong khi chính chúng vừa được bộ lọc "Sắp hết hạn" chọn ra. Người dùng nhìn màn hình sẽ thấy bộ lọc và cột hiển thị nói hai điều khác nhau, dễ hiểu nhầm là bộ lọc trả về sai bản ghi. Thực chất mức cảnh báo thời hạn của 2 hồ sơ vẫn được giữ nguyên ở mức "Sắp hết hạn" kể từ khi hồ sơ được đóng (lần cập nhật cuối lần lượt là 29/07/2026 và 24/07/2026) và không đổi nữa, dù mốc thời hạn 31/07/2026 đã trôi qua.
+- Vì sao cần BA quyết: đặc tả hiện KHÔNG quy định tình huống này.
+  + FR-V.I-CROSS-01 (srs-fr-05-vu-viec.md dòng 1436) nêu công việc tự động chỉ rà các hồ sơ ĐANG hoạt động (Đã tiếp nhận, Đang kiểm tra, Đã phân công, Đang xử lý, Chờ phê duyệt). Hồ sơ đã Hoàn thành hoặc Từ chối không nằm trong phạm vi rà, nên việc mức cảnh báo cũ được giữ lại là đúng phạm vi công việc tự động đã mô tả.
+  + BR-CALC-03 (dòng 2442) chỉ nêu công thức tính mức cảnh báo và chu kỳ chạy 30 phút, không nói phải xử lý ra sao với mức cảnh báo còn sót lại của hồ sơ đã đóng.
+  + SCR-V.I-01 (dòng 1656) mô tả cột "Cảnh báo thời hạn" chỉ gồm 4 mức: Bình thường / Sắp hết hạn / Quá hạn / Quá hạn nghiêm trọng. Nhãn "Đã hoàn thành" không nằm trong 4 mức này và cũng không được định nghĩa ở chỗ nào khác trong đặc tả.
+  + FR-V.I-08 (UC58, dòng 636) mô tả chức năng tìm kiếm và lọc hồ sơ, nhưng không nêu bộ lọc mức cảnh báo có loại trừ hồ sơ đã kết thúc hay không.
+- Câu hỏi gửi BA:
+  1. Khi hồ sơ đã kết thúc (Hoàn thành / Từ chối), mức cảnh báo thời hạn có phải được đặt lại hoặc xoá đi không, hay giữ nguyên giá trị tại thời điểm đóng hồ sơ?
+  2. Hồ sơ đã kết thúc có được phép xuất hiện trong kết quả lọc "Mức SLA = Sắp hết hạn" không? Nếu không thì bộ lọc cần loại trừ các trạng thái kết thúc.
+  3. Nhãn "Đã hoàn thành" ở cột "Cảnh báo thời hạn" có được bổ sung chính thức vào đặc tả như một mức hiển thị riêng không, hay với hồ sơ đã kết thúc thì cột này phải để trống / hiển thị dấu "—"?
+- Lưu ý: đây KHÔNG phải lỗi mới phát sinh do bản vá. Cách hiển thị này đã có từ trước lần sửa bộ lọc "Mức SLA", nên không phải hồi quy.
+- Điểm phát hiện: tổ kiểm thử ghi nhận thêm khi verify case TKHSYCHTPL_03 ngày 03/08/2026. Phiếu TKHSYCHTPL_03 chỉ nói về việc bộ lọc báo lỗi, không có dòng nào cho phần hiển thị cột "Cảnh báo thời hạn" nên mở dòng mới.
+- Kiểm tra bằng vai trò Cán bộ nghiệp vụ Trung ương, đơn vị Bộ Tư pháp - Trung ương, ngày 03/08/2026.

@@ -1,0 +1,4 @@
+Cần BA xác nhận.
+- Hiện trạng: Tại tab Phân công, mở "Thêm người đánh giá", chọn Người đánh giá + Vai trò rồi bấm [Hủy] → modal đóng ngay, KHÔNG hiển thị cửa sổ xác nhận "hủy bỏ thay đổi chưa lưu". Dữ liệu đang nhập (chưa lưu) bị bỏ đi. (Khớp mô tả đối tác.)
+- Vướng: SRS không quy định modal "Thêm người đánh giá" phải có bước xác nhận trước khi hủy input chưa lưu. Với modal thêm mới (dữ liệu chưa commit), hành vi đóng im lặng khi bấm Hủy là chuẩn UX phổ biến; nhưng đối tác kỳ vọng có cửa sổ xác nhận.
+- Đề nghị BA chốt: có yêu cầu hiển thị hộp thoại xác nhận "hủy bỏ thay đổi chưa lưu?" khi người dùng bấm Hủy trên modal Thêm người đánh giá hay không.

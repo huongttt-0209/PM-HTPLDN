@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Thực tế web đúng như đối tác quan sát: sau khi bấm "← Quay lại danh sách" từ màn Chi tiết, hệ thống về danh sách nhưng KHÔNG giữ bộ lọc đang áp dụng — thẻ trạng thái quay về mặc định "Đang hoạt động" và ô tìm kiếm bị xóa trắng.
+- Kiểm chứng cụ thể: đứng ở thẻ "Mới đăng ký" + tìm từ khóa "QA" (kết quả 1 bản ghi) → mở chi tiết → bấm "Quay lại danh sách" → danh sách trở về thẻ "Đang hoạt động", ô tìm kiếm rỗng, kết quả 4 bản ghi.
+- Tuy nhiên SRS hiện KHÔNG quy định yêu cầu này: FR-IV-05 (UC43) – SCR-IV-03, nút Quay lại (srs-fr-04-chuyen-gia-tvv.md, dòng 1540) chỉ ghi "Click → về màn Danh sách tư vấn viên"; phần Quy tắc tương tác của màn Danh sách (SCR-IV-01, dòng 1452–1459) cũng không có quy tắc ghi nhớ hay khôi phục bộ lọc.
+- Câu hỏi cần BA chốt: có bổ sung yêu cầu "giữ nguyên bộ lọc / thẻ trạng thái / trang đang xem khi quay lại danh sách" vào đặc tả không? Nếu có, phạm vi áp dụng gồm những gì (thẻ trạng thái, từ khóa, các bộ lọc nâng cao, số trang)?
+- Đã verify bằng đúng vai trò của phản ánh: tài khoản Cán bộ Nghiệp vụ Trung ương, cùng thao tác và cùng thẻ trạng thái như đối tác.

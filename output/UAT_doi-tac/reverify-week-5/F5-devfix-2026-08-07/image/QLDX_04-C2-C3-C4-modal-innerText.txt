@@ -1,0 +1,90 @@
+QLDX_04 — innerText NGUYÊN VĂN của hộp thoại cảnh báo sắp hết phiên
+=====================================================================
+Env        : https://18.143.165.120.nip.io  (env NỘI BỘ)
+Bó mã FE   : assets/index-DsMHK7Dp.js · assets/index-DVlgOkLg.css  (khớp BAN-DUNG.md)
+Phiên bản  : sidebar hiện "HTPLDN · V1.0.9"
+Tài khoản  : cbnv_tw_03 — "CB Nghiệp vụ - Trung ương #03" / "Cán bộ Nghiệp vụ Trung ương" / BTP · TW
+             (JWT: vaiTro=["CB_NV_TW"], capDonVi="TW", idleTtl=1800)
+Màn đang mở: /chuyen-gia-tvv/danh-sach  (Tư vấn viên / Chuyên gia — màn danh sách tĩnh, KHÔNG auto-refresh)
+Thời điểm  : modal bật 2026-08-07 02:08:28 giờ VN; đọc lại lúc 02:09:38 giờ VN
+
+PHƯƠNG PHÁP LẤY CHỮ
+-------------------
+Dùng `innerText` của phần tử modal ĐANG HIỂN THỊ. KHÔNG dùng `textContent`.
+Bộ lọc visible áp cho từng phần tử: getClientRects().length > 0
+  AND getComputedStyle: display != none, visibility != hidden, opacity != 0
+  AND (offsetParent !== null OR position === 'fixed').
+
+Hai phần tử cùng thoả bộ lọc visible (lồng nhau, cùng nội dung):
+  1) div.ant-modal-wrap.ant-modal-centered          (role = null)
+  2) div.ant-modal.css-ch9ese                        (role = "dialog")
+
+
+=== [1] innerText NGUYÊN VĂN (lúc bật, 02:08:28) ===
+Phiên làm việc sắp hết hạn
+
+Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc.
+
+Phiên sẽ tự đăng xuất sau 5:00.
+
+Đăng xuất
+Gia hạn phiên
+=== [hết trích] ===
+
+
+=== [2] innerText NGUYÊN VĂN (đọc lại 02:09:38, idle 26.183') ===
+Phiên làm việc sắp hết hạn
+
+Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc.
+
+Phiên sẽ tự đăng xuất sau 3:50.
+
+Đăng xuất
+Gia hạn phiên
+=== [hết trích] ===
+
+Chỉ khác nhau ở con số đồng hồ đếm ngược (5:00 -> 3:50) => đồng hồ đếm ngược CHẠY THẬT.
+(Ảnh chụp lúc 02:08:5x bắt được giá trị 4:37.)
+
+
+TÁCH THÀNH PHẦN
+---------------
+Tiêu đề hiển thị (.ant-modal-title, visible):
+  "Phiên làm việc sắp hết hạn"
+
+Câu thông báo chính (nguyên văn, 1 dòng):
+  "Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc."
+
+Dòng phụ (đồng hồ đếm ngược):
+  "Phiên sẽ tự đăng xuất sau <m:ss>."
+
+
+NÚT HIỂN THỊ TRONG MODAL (chỉ đếm trong modal, KHÔNG đếm cả trang)
+------------------------------------------------------------------
+Tổng số nút visible trong modal = 2
+
+  # | Nhãn nguyên văn | class                                   | disabled
+  1 | Đăng xuất       | ant-btn ... ant-btn-default ...          | false
+  2 | Gia hạn phiên   | ant-btn ... ant-btn-primary ...          | false
+
+=> Có mặt CẢ HAI: một hành động gia hạn ("Gia hạn phiên") và một hành động đăng xuất ("Đăng xuất").
+=> KHÔNG bấm nút nào trong case này (bấm "Gia hạn phiên" = QLDX_05, bấm "Đăng xuất" = QLDX_06).
+
+
+ĐỐI CHIẾU VỚI EXPECTED ĐỐI TÁC (chỉ GHI LẠI, không tự chấm vế BA)
+------------------------------------------------------------------
+Expected đối tác : "Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc."
+App hiện         : "Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc."
+=> TRÙNG KHỚP TỪNG KÝ TỰ với expected đối tác.
+
+Expected nhãn nút : "Gia hạn phiên"
+App hiện          : "Gia hạn phiên"
+=> TRÙNG KHỚP TỪNG KÝ TỰ.
+
+LƯU Ý KỶ LUẬT (chuan/QLDX_04-05-06.md §4 "Chặn PASS-oan"):
+C2b và C3b đã khóa quan hệ DIFF -> route BA. SRS v3.5 srs-fr-10-quan-tri.md:1891 chỉ ghi chuỗi NGẮN
+"Phien sap het han trong 5 phut." và nhãn [Gia han]. Dù app trùng khớp y nguyên expected đối tác,
+đây vẫn là chuỗi/nhãn KHÔNG có trong SRS => KHÔNG chấm Pass cho C2b/C3b, phải chuyển BA bổ sung đặc tả.
+
+GHI THÊM (bổ trợ §6 Q6): SRS v3.5 grep "đếm ngược/countdown" = 0 hit, nhưng app CÓ đồng hồ đếm ngược
+("Phiên sẽ tự đăng xuất sau 4:37"). Không tính là lỗi; là dữ kiện cho BA khi chốt Q6.

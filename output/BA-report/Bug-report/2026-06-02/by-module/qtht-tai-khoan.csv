@@ -1,0 +1,4 @@
+STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+79,Tài khoản: sửa mất Loại TK/Đơn vị,✅ Đạt,PASS,Cao,"R-verify-2 06-05 12:10: ĐÃ FIX (Closed) — Sửa TK lưu OK (PUT 200, version 2→3, danh sách cập nhật; Loại TK+Đơn vị giữ đúng). Bug: bugs/qtht-tai-khoan/Pass-bug-79-edit-save-version-422.md"
+80,Tài khoản: không gửi email mật khẩu,✅ Đạt,PASS,TB,"R2 06-02: tạo acct qa_verify_80 → MailHog có email ""Tài khoản hệ thống PM-HTPLDN đã được tạo"" đúng giờ — SRS:736"
+81,Cột Họ tên quá nhỏ,✅ Đạt,PASS,TB,"R2 06-02: cột Họ tên hiển thị đầy đủ tên dài (vd ""NHT BTP TW 02 Audit R30""), không cắt — SRS:1656"

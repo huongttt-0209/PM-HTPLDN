@@ -1,0 +1,632 @@
+[
+ {
+  "row": 448,
+  "id": "TC-CH-MPH-001",
+  "role": "CB_NV_TW",
+  "name": "CB_NV_TW tạo mẫu — auto-fill `pham_vi=TW_QUOC_GIA",
+  "pre": "cb_nv_tw_01`.",
+  "data": "ten_mau=\"Mẫu test TW\", linh_vuc=DAN_SU, noi_dung=\"Cảm ơn quý cơ quan...\", trang_thai=KICH_HOAT",
+  "steps": "1. Login. 2. Vào Tab 3. 3. Click [+ Thêm mẫu phản hồi]. 4. Fill modal: tên + lĩnh vực + nội dung. 5. Quan sát field \"Phạm vi áp dụng\" + \"Tác giả\" auto-fill read-only. 6. Click [Lưu].",
+  "expect": "**STATE**: BE POST `/api/mau-phan-hoi` với payload + auto `pham_vi_ap_dung=TW_QUOC_GIA`, `don_vi_id=user.don_vi_id`. **UI**: Modal \"Phạm vi áp dụng\" hiển thị badge 🟦 \"Khung quốc gia (TW)\" + tooltip *\"Phạm vi tự gán theo cấp đơn vị bạn (TW). Không thể thay đổi sau khi tạo.\"* — KHÔNG cho input. Sau Save: toast success, modal đóng, bảng refresh có row mới với cột Phạm vi=🟦. **PERSIST**: AUDIT_LOG `entity=MAU_PHAN_HOI`, `action=CREATE`, `chi_tiet` chứa pham_vi=TW_QUOC_GIA."
+ },
+ {
+  "row": 449,
+  "id": "TC-CH-MPH-002",
+  "role": "CB_NV_BN",
+  "name": "CB_NV_BN (Bộ TC) tạo mẫu — auto-fill `pham_vi=BN_RIENG",
+  "pre": "cb_nv_bn_01`.",
+  "data": "Tương tự TC-001",
+  "steps": "Same flow.",
+  "expect": "**UI**: Field \"Phạm vi\" hiển thị 🟩 \"Chuyên ngành Bộ Tài chính\". BE POST với pham_vi=BN_RIENG, don_vi_id=BoTC.id. **PERSIST**: Mẫu chỉ CB Bộ TC thấy được."
+ },
+ {
+  "row": 450,
+  "id": "TC-CH-MPH-003",
+  "role": "CB_NV_DP",
+  "name": "CB_NV_DP (Sở HN) tạo mẫu — auto-fill `pham_vi=DP_RIENG",
+  "pre": "cb_nv_dp_01`.",
+  "data": "Tương tự",
+  "steps": "Same flow.",
+  "expect": "**UI**: Field \"Phạm vi\" hiển thị 🟨 \"Địa phương Sở TP HN\". BE POST pham_vi=DP_RIENG."
+ },
+ {
+  "row": 451,
+  "id": "TC-CH-MPH-004",
+  "role": "CB_NV_TW",
+  "name": "Sanitize XSS — nội dung chứa `<script>",
+  "pre": "cb_nv_tw_01`.",
+  "data": "noi_dung=`<p>Test</p><script>alert('XSS')</script>",
+  "steps": "1. Modal create. 2. Paste vào rich-text editor. 3. Save.",
+  "expect": "**STATE**: BE F-38 sanitize: lưu chỉ `<p>Test</p>`, loại bỏ `<script>`. **UI**: Modal đóng. Reload xem mẫu — `<script>` đã loại. `list_console_messages` không có alert. **PERSIST**: BR-DATA-05 audit chỉ chứa nội dung sạch."
+ },
+ {
+  "row": 452,
+  "id": "TC-CH-MPH-005",
+  "role": "CB_NV_TW",
+  "name": "Nội dung max 10.000 ký tự plain",
+  "pre": "cb_nv_tw_01`.",
+  "data": "noi_dung 10.000 ký tự",
+  "steps": "1. Paste 10K. 2. Save.",
+  "expect": "**STATE**: BE accept. **UI**: Toast success. **PERSIST**: —"
+ },
+ {
+  "row": 453,
+  "id": "TC-CH-MPH-006",
+  "role": "CB_NV_TW",
+  "name": "ten_mau max 200 ký tự",
+  "pre": "cb_nv_tw_01`.",
+  "data": "ten_mau \"A\"×200",
+  "steps": "1. Save.",
+  "expect": "**STATE**: BE accept. **UI**: Toast success. (Boundary 201 → reject — paired TC-CH-MPH-064 ở Section F.)"
+ },
+ {
+  "row": 454,
+  "id": "TC-CH-MPH-007",
+  "role": "CB_NV_TW",
+  "name": "Field tu_khoa happy + dùng để search",
+  "pre": "cb_nv_tw_01`.",
+  "data": "tu_khoa=\"hợp đồng, lao động\"",
+  "steps": "1. Modal create. 2. Nhập tu_khoa. 3. Save. 4. Search box gõ \"lao động\".",
+  "expect": "**STATE**: BE lưu tu_khoa. Search có thể match cả ten_mau lẫn tu_khoa (verify spec). **UI**: Mẫu mới hiện trong bảng. Search \"lao động\" tìm thấy. **PERSIST**: —"
+ },
+ {
+  "row": 455,
+  "id": "TC-CH-MPH-008",
+  "role": "CB_NV_TW",
+  "name": "Field mo_ta happy — lưu + hiển thị",
+  "pre": "cb_nv_tw_01`.",
+  "data": "mo_ta=\"Mẫu phản hồi cho hỏi đáp về quyền lao động cơ bản\"",
+  "steps": "1. Modal. 2. Nhập mo_ta. 3. Save. 4. Click 👁 Xem mẫu vừa tạo.",
+  "expect": "**STATE**: BE lưu mo_ta. **UI**: Modal read-only hiển thị field \"Mô tả\" với giá trị nhập. **PERSIST**: —"
+ },
+ {
+  "row": 457,
+  "id": "TC-CH-MPH-011",
+  "role": "CB_NV_BN",
+  "name": "CB_NV_BN (Bộ TC) thấy TW + BN mình; KHÔNG thấy BN khác hay DP",
+  "pre": "cb_nv_bn_01`.",
+  "data": "—",
+  "steps": "1. Tab 3. 2. Quan sát bảng.",
+  "expect": "**STATE**: BE filter `WHERE pham_vi=TW_QUOC_GIA OR (pham_vi=BN_RIENG AND don_vi_id=BoTC.id)` (Permission matrix §3.4.2 MPH_READ — BA confirm 2026-05-08 file `phan-hoi-ba-review-srs-fr-02-hoi-dap.md` mục 3). **UI**: Bảng **5 dòng** = 3 TW + 2 BN BoTC. KHÔNG có mẫu Bộ KH&ĐT, KHÔNG có DP. **Note**: FR-II-NEW-02 Postcondition line 955 viết \"BN không thấy TW\" là **sai spec**, cần update SRS theo BA chốt mới — KHÔNG ảnh hưởng test. **PERSIST**: BR-AUTH-08 ngoại lệ áp dụng đúng."
+ },
+ {
+  "row": 458,
+  "id": "TC-CH-MPH-012",
+  "role": "CB_NV_DP",
+  "name": "CB_NV_DP (Sở HN) thấy TW + DP mình; KHÔNG thấy DP HCM hay BN",
+  "pre": "cb_nv_dp_01`.",
+  "data": "—",
+  "steps": "1. Tab 3. 2. Quan sát bảng.",
+  "expect": "**STATE**: BE filter `WHERE pham_vi=TW_QUOC_GIA OR (pham_vi=DP_RIENG AND don_vi_id=SoHN.id)`. **UI**: Bảng 5 dòng = 3 TW + 2 DP Sở HN. KHÔNG có Sở HCM, KHÔNG có BN. **PERSIST**: —"
+ },
+ {
+  "row": 459,
+  "id": "TC-CH-MPH-013",
+  "role": "QTHT",
+  "name": "QTHT thấy tất cả 9 mẫu (READ-only)",
+  "pre": "qtht_01`.",
+  "data": "—",
+  "steps": "1. Tab 3. 2. Quan sát.",
+  "expect": "**STATE**: BE return all (QTHT bypass). **UI**: Bảng 9 dòng đa cấp. Cột Hành động chỉ có nút 👁 Xem (KHÔNG có Sửa/Xóa per row vì QTHT chỉ READ — line 1691). Nút [+ Thêm mẫu phản hồi] **disabled** với tooltip giải thích. **PERSIST**: —"
+ },
+ {
+  "row": 460,
+  "id": "TC-CH-MPH-014",
+  "role": "CB_PD",
+  "name": "CB_PD_BN thấy READ scope cấp BN, không có nút CRUD",
+  "pre": "cb_pd_bn_01`.",
+  "data": "—",
+  "steps": "1. Tab 3. 2. Quan sát.",
+  "expect": "**STATE**: BE filter scope BN. **UI**: Bảng theo scope CB_PD_BN cấp BN. KHÔNG có nút Sửa/Xóa per row. KHÔNG có [+ Thêm mẫu]. **PERSIST**: —"
+ },
+ {
+  "row": 461,
+  "id": "TC-CH-MPH-020",
+  "role": "CB_NV_TW",
+  "name": "CB_NV_TW sửa mẫu của mình (cùng don_vi_id)",
+  "pre": "cb_nv_tw_01`. Mẫu TW của mình tồn tại.",
+  "data": "ten_mau mới + noi_dung mới",
+  "steps": "1. Hover row TW của mình. 2. Click ✏️ Sửa. 3. Modal hiển thị giá trị cũ. 4. Sửa + Save.",
+  "expect": "**STATE**: BE PATCH `/api/mau-phan-hoi/{id}`. AUDIT_LOG action=UPDATE chi_tiet old/new. **UI**: Toast success. Bảng refresh. **PERSIST**: pham_vi_ap_dung KHÔNG đổi (read-only)."
+ },
+ {
+  "row": 462,
+  "id": "TC-CH-MPH-021",
+  "role": "CB_NV_BN",
+  "name": "CB_NV_BN xóa mẫu của BN mình — confirm vì so_lan_su_dung > 0",
+  "pre": "cb_nv_bn_01`. Mẫu BN BoTC có `so_lan_su_dung=5`.",
+  "data": "—",
+  "steps": "1. Hover row BN của mình. 2. Click 🗑 Xóa. 3. Modal confirm \"Mẫu đã được dùng 5 lần. Vẫn xóa?\". 4. Click \"OK\".",
+  "expect": "**STATE**: BE soft delete `is_deleted=1` (BR-DATA-01). AUDIT_LOG action=DELETE. **UI**: Modal C12 nguyên văn. Sau OK, row biến mất khỏi bảng. **PERSIST**: GET reload không hiện."
+ },
+ {
+  "row": 463,
+  "id": "TC-CH-MPH-022",
+  "role": "CB_NV_TW",
+  "name": "Toggle trang_thai KICH_HOAT → VO_HIEU_HOA",
+  "pre": "cb_nv_tw_01`.",
+  "data": "—",
+  "steps": "1. Sửa mẫu của mình. 2. Toggle trang_thai. 3. Save.",
+  "expect": "**STATE**: BE PATCH `trang_thai=VO_HIEU_HOA`. **UI**: Cột Trạng thái cell hiển thị badge \"Vô hiệu hóa\". Khi user khác tạo phản hồi (FR-II-07), mẫu này không hiện trong dropdown. **PERSIST**: —"
+ },
+ {
+  "row": 464,
+  "id": "TC-CH-MPH-030",
+  "role": "CB_NV_TW",
+  "name": "ten_mau trống",
+  "pre": "cb_nv_tw_01`.",
+  "data": "ten_mau=\"\"",
+  "steps": "1. Modal create. 2. Bỏ trống ten_mau. 3. Save.",
+  "expect": "**STATE**: BE/FE reject. **UI**: Toast/inline error nguyên văn \"Tên mẫu là bắt buộc\" (srs-fr-02:934)."
+ },
+ {
+  "row": 465,
+  "id": "TC-CH-MPH-031",
+  "role": "CB_NV_TW",
+  "name": "noi_dung trống",
+  "pre": "cb_nv_tw_01`.",
+  "data": "noi_dung=\"\"",
+  "steps": "1. Modal. 2. Bỏ noi_dung. 3. Save.",
+  "expect": "Same — \"Nội dung mẫu là bắt buộc\" (srs-fr-02:935)."
+ },
+ {
+  "row": 466,
+  "id": "TC-CH-MPH-032",
+  "role": "CB_NV_TW",
+  "name": "linh_vuc_id không tồn tại",
+  "pre": "cb_nv_tw_01`.",
+  "data": "linh_vuc_id=`uuid-not-exist` (manipulate qua devtools)",
+  "steps": "1. Devtools console: PATCH với linh_vuc_id giả.",
+  "expect": "**STATE**: BE reject 400. **UI**: Toast \"Lĩnh vực pháp luật không hợp lệ\" (srs-fr-02:936)."
+ },
+ {
+  "row": 467,
+  "id": "TC-CH-MPH-033",
+  "role": "CB_NV_BN",
+  "name": "**CB_NV_BN cố tạo mẫu pham_vi=TW_QUOC_GIA qua API direct**",
+  "pre": "cb_nv_bn_01`.",
+  "data": "API payload: `{ten_mau:\"hack\", pham_vi_ap_dung:\"TW_QUOC_GIA\"}",
+  "steps": "1. Devtools console qua MCP `evaluate_script`: `fetch('/api/mau-phan-hoi', {method:'POST', body:JSON.stringify({ten_mau:'hack',linh_vuc_id:'...',noi_dung:'...',pham_vi_ap_dung:'TW_QUOC_GIA'}), headers:{Authorization:'Bearer '+token}})`.",
+  "expect": "**STATE**: BE check `MPH_CREATE_TW` permission (action-level srs-v3.md §3.4.2). User cấp BN không có quyền → reject 403. **UI**: Toast/HTTP 403 \"Bạn không có quyền tạo mẫu khung quốc gia. Chỉ Cán bộ Nghiệp vụ Trung ương được phép\" (srs-fr-02:937). **PERSIST**: KHÔNG có MAU_PHAN_HOI mới. AUDIT_LOG có thể log attempt failed."
+ },
+ {
+  "row": 468,
+  "id": "TC-CH-MPH-034",
+  "role": "CB_NV_DP",
+  "name": "CB_NV_DP cố tạo mẫu pham_vi=BN_RIENG qua API",
+  "pre": "cb_nv_dp_01`.",
+  "data": "pham_vi=BN_RIENG",
+  "steps": "Tương tự TC-033.",
+  "expect": "**STATE**: BE reject 403. **UI**: Cùng error pattern."
+ },
+ {
+  "row": 469,
+  "id": "TC-CH-MPH-035",
+  "role": "CB_NV_TW",
+  "name": "Cố sửa pham_vi_ap_dung qua API direct",
+  "pre": "cb_nv_tw_01`. Mẫu TW của mình.",
+  "data": "PATCH pham_vi=BN_RIENG",
+  "steps": "1. Devtools: PATCH với pham_vi_ap_dung mới.",
+  "expect": "**STATE**: BE reject 400 immutable. **UI**: Toast \"Phạm vi áp dụng không thể thay đổi sau khi tạo\" (srs-fr-02:938). **PERSIST**: pham_vi cũ giữ nguyên."
+ },
+ {
+  "row": 470,
+  "id": "TC-CH-MPH-036",
+  "role": "CB_NV_DP",
+  "name": "**CB_NV_DP cố sửa mẫu của TW (cross-cấp)**",
+  "pre": "cb_nv_dp_01`. Mẫu TW tồn tại id=`mph-tw-001`.",
+  "data": "PATCH `/api/mau-phan-hoi/mph-tw-001",
+  "steps": "1. Devtools: PATCH với JWT DP.",
+  "expect": "**STATE**: BE check `record.don_vi_id != user.don_vi_id` → reject 403. **UI**: Toast \"Bạn chỉ được sửa/xóa mẫu thuộc đơn vị mình\" (srs-fr-02:939)."
+ },
+ {
+  "row": 471,
+  "id": "TC-CH-MPH-037",
+  "role": "CB_NV_BN",
+  "name": "**CB_NV_BN (Bộ TC) cố xóa mẫu Bộ KH&ĐT (cross-BN)**",
+  "pre": "cb_nv_bn_01`. Mẫu BN Bộ KH&ĐT tồn tại.",
+  "data": "DELETE `/api/mau-phan-hoi/mph-bn-bkhdt",
+  "steps": "1. Devtools: DELETE.",
+  "expect": "Same TC-036 message. **PERSIST**: Mẫu BoKHDT vẫn còn."
+ },
+ {
+  "row": 472,
+  "id": "TC-CH-MPH-038",
+  "role": "CB_NV_DP",
+  "name": "CB_NV_DP (Sở HN) cố sửa mẫu Sở HCM (cross-ĐP ngang cấp)",
+  "pre": "cb_nv_dp_01`. Mẫu DP Sở HCM tồn tại.",
+  "data": "PATCH",
+  "steps": "Tương tự.",
+  "expect": "Same."
+ },
+ {
+  "row": 473,
+  "id": "TC-CH-MPH-040",
+  "role": "CB_NV_DP",
+  "name": "Filter \"Mẫu khung quốc gia (TW)\"",
+  "pre": "cb_nv_dp_01`.",
+  "data": "filter pham_vi=TW_QUOC_GIA",
+  "steps": "1. Dropdown \"Phạm vi\" → \"Mẫu khung quốc gia (TW)\".",
+  "expect": "**STATE**: BE filter `WHERE pham_vi=TW_QUOC_GIA`. **UI**: Bảng chỉ TW (3 dòng)."
+ },
+ {
+  "row": 474,
+  "id": "TC-CH-MPH-041",
+  "role": "CB_NV_DP",
+  "name": "Filter \"Mẫu của đơn vị tôi\" — DP user",
+  "pre": "cb_nv_dp_01`.",
+  "data": "filter \"Đơn vị tôi\"",
+  "steps": "1. Dropdown filter.",
+  "expect": "**STATE**: BE filter `WHERE pham_vi=DP_RIENG AND don_vi_id=SoHN.id`. **UI**: Bảng chỉ DP Sở HN (2 dòng)."
+ },
+ {
+  "row": 475,
+  "id": "TC-CH-MPH-042",
+  "role": "CB_NV_TW",
+  "name": "Filter linh_vuc=DAN_SU",
+  "pre": "cb_nv_tw_01`.",
+  "data": "linh_vuc=DAN_SU",
+  "steps": "1. Filter lĩnh vực.",
+  "expect": "**STATE**: BE WHERE linh_vuc_id=DAN_SU.id. **UI**: Bảng chỉ mẫu DAN_SU."
+ },
+ {
+  "row": 476,
+  "id": "TC-CH-MPH-043",
+  "role": "CB_NV_TW",
+  "name": "Filter trang_thai=VO_HIEU_HOA",
+  "pre": "cb_nv_tw_01`. ≥ 1 mẫu KICH_HOAT + 1 VO_HIEU_HOA.",
+  "data": "trang_thai=VO_HIEU_HOA",
+  "steps": "1. Filter trạng thái.",
+  "expect": "**UI**: Bảng chỉ mẫu vô hiệu hóa. Badge \"Vô hiệu hóa\"."
+ },
+ {
+  "row": 477,
+  "id": "TC-CH-MPH-044",
+  "role": "CB_NV_TW",
+  "name": "Search keyword substring",
+  "pre": "cb_nv_tw_01`.",
+  "data": "keyword=\"quốc gia\"",
+  "steps": "1. Gõ vào search box. 2. Wait debounce.",
+  "expect": "**STATE**: BE WHERE `ten_mau ILIKE '%quốc gia%'` (case-insensitive substring). **UI**: Bảng filter live."
+ },
+ {
+  "row": 478,
+  "id": "TC-CH-MPH-045",
+  "role": "CB_NV_TW",
+  "name": "Sort mặc định: pham_vi ASC, updated_at DESC",
+  "pre": "cb_nv_tw_01`.",
+  "data": "—",
+  "steps": "1. Mở Tab 3. 2. Quan sát thứ tự.",
+  "expect": "**STATE/UI**: Dòng đầu = mẫu TW (badge 🟦), tiếp BN (🟩), tiếp DP (🟨). Trong mỗi nhóm, bản updated_at mới nhất lên đầu."
+ },
+ {
+  "row": 479,
+  "id": "TC-CH-MPH-046",
+  "role": "CB_NV_TW",
+  "name": "Pagination 20/page",
+  "pre": "cb_nv_tw_01`. ≥ 50 mẫu seed.",
+  "data": "—",
+  "steps": "1. Footer pagination. 2. Click trang 2.",
+  "expect": "**STATE**: BE LIMIT 20 OFFSET 20. **UI**: 20 dòng/page."
+ },
+ {
+  "row": 480,
+  "id": "TC-CH-MPH-047",
+  "role": "CB_NV_DP",
+  "name": "DP user click [Xem] mẫu TW (read-only modal)",
+  "pre": "cb_nv_dp_01`.",
+  "data": "Mẫu TW.",
+  "steps": "1. Click 👁 Xem mẫu TW.",
+  "expect": "**STATE**: GET. **UI**: Modal đầy đủ field read-only, KHÔNG có nút [Lưu], chỉ [Đóng]."
+ },
+ {
+  "row": 482,
+  "id": "TC-CH-MPH-049",
+  "role": "CB_NV_DP",
+  "name": "DP user mới + CHƯA có mẫu nào trong scope (env clean DP)",
+  "pre": "cb_nv_dp_02` (Sở chưa có mẫu). Sở HCM seed 0 mẫu DP.",
+  "data": "—",
+  "steps": "1. Tab 3. 2. Quan sát.",
+  "expect": "**UI**: Bảng vẫn show 3 mẫu TW (read-only) + empty section \"Mẫu của đơn vị bạn\" với placeholder *\"Chưa có mẫu phản hồi nào trong phạm vi của bạn. Bấm '+ Thêm mẫu phản hồi' để tạo mới.\"*"
+ },
+ {
+  "row": 483,
+  "id": "TC-CH-MPH-050",
+  "role": "CB_NV_TW",
+  "name": "Empty state khi filter no-match (sau khi đã có data)",
+  "pre": "cb_nv_tw_01`. ≥ 9 mẫu seed.",
+  "data": "filter linh_vuc=KINH_TE (không có mẫu KINH_TE)",
+  "steps": "1. Filter linh_vuc = KINH_TE. 2. [Tìm kiếm].",
+  "expect": "**STATE**: BE trả 0 row. **UI**: Empty state placeholder, nhưng KHÁC empty state lúc DB clean — verify text khác hoặc thêm hint \"Thử bộ lọc khác\". (Verify behavior thực tế.) **PERSIST**: —"
+ },
+ {
+  "row": 484,
+  "id": "TC-CH-MPH-060",
+  "role": "CB_NV_TW",
+  "name": "Search SQL injection",
+  "pre": "cb_nv_tw_01`.",
+  "data": "keyword=`'; DROP TABLE MAU_PHAN_HOI; --",
+  "steps": "1. Search.",
+  "expect": "**STATE**: BE escape. MAU_PHAN_HOI còn nguyên. **UI**: Empty hoặc match literal. KHÔNG stack trace. **PERSIST**: Reload — bảng còn data."
+ },
+ {
+  "row": 485,
+  "id": "TC-CH-MPH-061",
+  "role": "CB_NV_TW",
+  "name": "Search XSS",
+  "pre": "cb_nv_tw_01`.",
+  "data": "keyword=`<script>alert(1)</script>",
+  "steps": "1. Search.",
+  "expect": "list_console_messages` không alert."
+ },
+ {
+  "row": 486,
+  "id": "TC-CH-MPH-062",
+  "role": "CB_NV_TW",
+  "name": "Search 200 ký tự",
+  "pre": "cb_nv_tw_01`.",
+  "data": "keyword=\"A\"×200",
+  "steps": "1. Search.",
+  "expect": "BE accept; 201 → reject."
+ },
+ {
+  "row": 487,
+  "id": "TC-CH-MPH-063",
+  "role": "CB_NV_BN",
+  "name": "Concurrent Edit 2 BN user trên cùng 1 mẫu BN",
+  "pre": "cb_nv_bn_01` + `cb_nv_bn_03` (cùng Bộ TC nếu có).",
+  "data": "Concurrent",
+  "steps": "1. 2 user mở edit cùng mẫu. 2. Save lệch nhau.",
+  "expect": "**STATE**: BE optimistic lock 409 cho user thứ 2. **UI**: Toast WARNING."
+ },
+ {
+  "row": 488,
+  "id": "TC-CH-MPH-064",
+  "role": "CB_NV_TW",
+  "name": "ten_mau 201 ký tự — reject",
+  "pre": "cb_nv_tw_01`.",
+  "data": "ten_mau \"A\"×201",
+  "steps": "1. Save.",
+  "expect": "**STATE**: BE reject 400. **UI**: Inline error \"Tên mẫu vượt quá 200 ký tự\" hoặc tương đương."
+ },
+ {
+  "row": 489,
+  "id": "TC-CH-MPH-065",
+  "role": "CB_NV_TW",
+  "name": "Sanitize XSS in ten_mau và mo_ta (ngoài noi_dung)",
+  "pre": "cb_nv_tw_01`.",
+  "data": "ten_mau=`<img src=x onerror=alert(1)>",
+  "steps": "1. Save. 2. Reload danh sách.",
+  "expect": "**STATE**: BE sanitize hoặc escape. **UI**: Cell ten_mau hiển thị literal text (escape) hoặc clean. KHÔNG execute."
+ },
+ {
+  "row": 490,
+  "id": "TC-CH-MPH-066",
+  "role": "CB_NV_TW",
+  "name": "DELETE mẫu so_lan_su_dung=0 — không hiện modal C12",
+  "pre": "cb_nv_tw_01`. Mẫu mới tạo so_lan_su_dung=0.",
+  "data": "—",
+  "steps": "1. Click 🗑.",
+  "expect": "**STATE**: BE soft delete. **UI**: KHÔNG hiện confirm \"đã dùng N lần\" (vì n=0). Có thể hiện confirm chung \"Bạn có chắc xóa?\"."
+ },
+ {
+  "row": 491,
+  "id": "TC-CH-MPH-067",
+  "role": "CB_NV_DP",
+  "name": "DP user GET mẫu của DP khác qua API direct (IDOR)",
+  "pre": "cb_nv_dp_01`. Mẫu DP HCM id=`mph-dp-hcm-001`.",
+  "data": "GET `/api/mau-phan-hoi/mph-dp-hcm-001",
+  "steps": "1. Devtools: GET.",
+  "expect": "**STATE**: BE check scope → reject 403 hoặc 404. **UI**: Network 403/404. **PERSIST**: KHÔNG leak data."
+ },
+ {
+  "row": 492,
+  "id": "TC-CH-MPH-068",
+  "role": "CB_NV_DP",
+  "name": "Verify mẫu xuất hiện đúng nhóm trong dropdown FR-II-07 — **DP user only**",
+  "pre": "cb_nv_dp_01`. Có 1 hỏi đáp đang soạn phản hồi.",
+  "data": "—",
+  "steps": "1. Vào màn hình soạn phản hồi (FR-II-07). 2. Click dropdown chèn mẫu.",
+  "expect": "**STATE**: BE GET mẫu theo MPH_READ scope. **UI**: Dropdown 2 nhóm: \"Mẫu khung quốc gia (TW)\" + \"Mẫu của Sở TP Hà Nội\". KHÔNG có Sở HCM, KHÔNG có BN. **DP scope đồng nhất giữa permission matrix + FR Postcondition** (cả 2 đều cho DP đọc TW), nên TC này KHÔNG ảnh hưởng SPEC-CLARIFY-CAUHINH-10. (Chéo TC FR-II-07.)"
+ },
+ {
+  "row": 493,
+  "id": "TC-CH-MPH-069",
+  "role": "CB_NV_BN",
+  "name": "Verify mẫu xuất hiện trong dropdown FR-II-07 cho **BN user**",
+  "pre": "cb_nv_bn_01`. Có 1 hỏi đáp đang soạn phản hồi.",
+  "data": "—",
+  "steps": "1. Vào màn hình soạn phản hồi. 2. Click dropdown chèn mẫu.",
+  "expect": "**STATE**: BE GET mẫu theo MPH_READ scope BN. **UI**: Dropdown **2 nhóm** giống pattern DP user: \"Mẫu khung quốc gia (TW)\" + \"Mẫu của Bộ Tài chính\". KHÔNG có mẫu Bộ KH&ĐT, KHÔNG có DP. (Cross-check pattern TC-CH-MPH-068 cho DP — BA confirm BN có quyền tương đương DP về việc đọc mẫu TW.) **PERSIST**: —"
+ },
+ {
+  "row": 512,
+  "id": "TC-CH-PERM-001",
+  "role": "QTHT",
+  "name": "QTHT thấy 3 tab functional + Tab 2 ẨN/banner",
+  "pre": "qtht_01`.",
+  "data": "—",
+  "steps": "1. Vào /quan-tri/cau-hinh. 2. Quan sát tab list.",
+  "expect": "**UI**: 2 behavior PASS theo CAUHINH-01 RESOLVED (FR-II-NEW-01 đã bỏ Q11): (a) Tab list hiển thị **3 tab functional** \"Thời hạn xử lý / SLA\", \"Mẫu phản hồi\", \"Quy trình hỗ trợ\" — Tab 2 ẨN hoàn toàn; (b) Tab list 4 tab nhưng Tab 2 \"Phân công mặc định\" disabled + deprecation banner \"Tính năng đã bỏ\". Tab 1 (SLA) active mặc định. **Behavior FAIL = render bảng CRUD Tab 2 cũ** = BUG implementation chưa update theo BA Q11."
+ },
+ {
+  "row": 513,
+  "id": "TC-CH-PERM-002",
+  "role": "CB_NV_TW",
+  "name": "CB_NV_TW chỉ thấy Tab 3",
+  "pre": "cb_nv_tw_01`.",
+  "data": "—",
+  "steps": "1. Vào URL.",
+  "expect": "**UI**: Tab list **chỉ Tab 3** \"Mẫu phản hồi\" (mặc định active). KHÔNG có Tab 1, 2, 4. **PERSIST**: Verify URL `?tab=1` bị reject hoặc redirect."
+ },
+ {
+  "row": 514,
+  "id": "TC-CH-PERM-003",
+  "role": "CB_NV_BN",
+  "name": "CB_NV_BN chỉ thấy Tab 3",
+  "pre": "cb_nv_bn_01` (Bộ TC).",
+  "data": "—",
+  "steps": "Tương tự.",
+  "expect": "**UI**: Tab list chỉ Tab 3."
+ },
+ {
+  "row": 515,
+  "id": "TC-CH-PERM-004",
+  "role": "CB_NV_DP",
+  "name": "CB_NV_DP chỉ thấy Tab 3",
+  "pre": "cb_nv_dp_01` (Sở HN).",
+  "data": "—",
+  "steps": "Tương tự.",
+  "expect": "**UI**: Tab list chỉ Tab 3."
+ },
+ {
+  "row": 516,
+  "id": "TC-CH-PERM-005",
+  "role": "CB_PD",
+  "name": "CB_PD_TW chỉ thấy Tab 3 (READ-only, không có nút CRUD)",
+  "pre": "cb_pd_tw_01`.",
+  "data": "—",
+  "steps": "1. Vào URL. 2. Quan sát Tab 3.",
+  "expect": "**UI**: Tab list chỉ Tab 3. Trong Tab 3: KHÔNG có nút [+ Thêm mẫu phản hồi]. KHÔNG có cột Hành động Sửa/Xóa per-row. Chỉ có 👁 Xem."
+ },
+ {
+  "row": 517,
+  "id": "TC-CH-PERM-006",
+  "role": "CB_PD",
+  "name": "CB_PD_BN chỉ thấy Tab 3 READ scope BN",
+  "pre": "cb_pd_bn_01`.",
+  "data": "—",
+  "steps": "Tương tự, scope BN.",
+  "expect": "**UI**: Bảng Tab 3 chỉ TW + BN cấp mình. KHÔNG có nút CRUD."
+ },
+ {
+  "row": 518,
+  "id": "TC-CH-PERM-007",
+  "role": "CB_PD",
+  "name": "CB_PD_DP chỉ thấy Tab 3 READ scope DP",
+  "pre": "cb_pd_dp_01`.",
+  "data": "—",
+  "steps": "Tương tự, scope DP.",
+  "expect": "**UI**: Bảng Tab 3 chỉ TW + DP cấp mình."
+ },
+ {
+  "row": 519,
+  "id": "TC-CH-PERM-010",
+  "role": "CB_NV_BN",
+  "name": "BN A (Bộ TC) KHÔNG thấy mẫu BN B (Bộ KH&ĐT)",
+  "pre": "cb_nv_bn_01` (Bộ TC). Seed mẫu BN của Bộ KH&ĐT id=`mph-bn-bkhdt-001`.",
+  "data": "—",
+  "steps": "1. Tab 3. 2. Search \"Bộ KH\".",
+  "expect": "**STATE**: BE filter `WHERE pham_vi=BN_RIENG AND don_vi_id=BoTC.id`. **UI**: Bảng KHÔNG có mẫu Bộ KH&ĐT. URL direct edit `mph-bn-bkhdt-001` → 403/404 (ERR-MPH-06). **PERSIST**: —"
+ },
+ {
+  "row": 520,
+  "id": "TC-CH-PERM-011",
+  "role": "CB_NV_DP",
+  "name": "DP A (Sở HN) KHÔNG thấy mẫu DP B (Sở HCM)",
+  "pre": "cb_nv_dp_01` (Sở HN).",
+  "data": "—",
+  "steps": "Tương tự.",
+  "expect": "**STATE/UI**: Bảng filter scope. URL direct → 403."
+ },
+ {
+  "row": 521,
+  "id": "TC-CH-PERM-012",
+  "role": "CB_PD",
+  "name": "CB_PD_BN (Bộ TC) KHÔNG thấy mẫu BN khác (cùng cấp khác BN)",
+  "pre": "cb_pd_bn_01`. Mẫu BN Bộ KH&ĐT.",
+  "data": "—",
+  "steps": "1. Tab 3 quan sát.",
+  "expect": "**UI**: Chỉ TW + Bộ TC. KHÔNG Bộ KH&ĐT."
+ },
+ {
+  "row": 523,
+  "id": "TC-CH-PERM-021",
+  "role": "?",
+  "name": "TVV/CG/NHT không truy cập",
+  "pre": "tvv_01`, `cg_01`, `nht_01` (3 lượt).",
+  "data": "—",
+  "steps": "URL direct.",
+  "expect": "3 lượt: 403/redirect."
+ },
+ {
+  "row": 524,
+  "id": "TC-CH-PERM-030",
+  "role": "QTHT",
+  "name": "QTHT — nút [+ Thêm mẫu] disabled với tooltip",
+  "pre": "qtht_01`.",
+  "data": "—",
+  "steps": "1. Tab 3. 2. Hover nút.",
+  "expect": "**UI**: Nút disabled (greyed). Tooltip giải thích \"QTHT chỉ READ, không tạo mẫu.\""
+ },
+ {
+  "row": 525,
+  "id": "TC-CH-PERM-031",
+  "role": "CB_PD",
+  "name": "CB_PD — nút [+ Thêm mẫu] disabled",
+  "pre": "cb_pd_tw_01`.",
+  "data": "—",
+  "steps": "Tương tự.",
+  "expect": "**UI**: Nút disabled."
+ },
+ {
+  "row": 526,
+  "id": "TC-CH-PERM-032",
+  "role": "CB_NV_BN",
+  "name": "CB_NV_BN — Sửa/Xóa chỉ với mẫu cùng don_vi_id",
+  "pre": "cb_nv_bn_01` (Bộ TC).",
+  "data": "—",
+  "steps": "1. Tab 3. 2. Quan sát hành động per row trên mẫu Bộ TC vs mẫu TW.",
+  "expect": "**UI**: Mẫu Bộ TC: có nút ✏️🗑. Mẫu TW: chỉ có 👁 (BN không sở hữu)."
+ },
+ {
+  "row": 527,
+  "id": "TC-CH-PERM-033",
+  "role": "CB_NV_DP",
+  "name": "Field \"Phạm vi áp dụng\" trong modal create — read-only auto-fill",
+  "pre": "cb_nv_dp_01`.",
+  "data": "—",
+  "steps": "1. Click [+ Thêm mẫu]. 2. Quan sát field \"Phạm vi\".",
+  "expect": "**UI**: Field hiển thị 🟨 \"Địa phương Sở TP HN\" + tooltip *\"Phạm vi tự gán theo cấp đơn vị bạn (DP). Không thể thay đổi sau khi tạo.\"*. KHÔNG cho input/click."
+ },
+ {
+  "row": 528,
+  "id": "TC-CH-PERM-040",
+  "role": "CB_NV_TW",
+  "name": "CB_NV_TW gọi API SLA direct với JWT của mình",
+  "pre": "cb_nv_tw_01`.",
+  "data": "PATCH `/api/cau-hinh-sla/{id}",
+  "steps": "1. Devtools console: PATCH với JWT TW.",
+  "expect": "**STATE**: BE check role QTHT only → reject 403. **UI**: HTTP 403. **PERSIST**: SLA không đổi."
+ },
+ {
+  "row": 529,
+  "id": "TC-CH-PERM-041",
+  "role": "CB_NV_DP",
+  "name": "CB_NV_DP gọi API CRUD ngày lễ direct",
+  "pre": "cb_nv_dp_01`.",
+  "data": "POST `/api/ngay-le",
+  "steps": "1. Devtools: POST.",
+  "expect": "**STATE**: BE 403 (ERR-NL-01). **UI**: 403."
+ },
+ {
+  "row": 530,
+  "id": "TC-CH-PERM-042",
+  "role": "CB_NV_BN",
+  "name": "CB_NV_BN bypass UI — POST mẫu pham_vi=DP_RIENG",
+  "pre": "cb_nv_bn_01`.",
+  "data": "API payload pham_vi=DP_RIENG",
+  "steps": "1. Devtools console: POST với pham_vi=DP_RIENG.",
+  "expect": "**STATE**: BE check MPH_CREATE_DP (BN cấp không có) → reject 403 (ERR-MPH-04 hoặc tương đương). **UI**: 403. **PERSIST**: KHÔNG insert."
+ },
+ {
+  "row": 531,
+  "id": "TC-CH-PERM-043",
+  "role": "QTHT",
+  "name": "JWT expired — toàn bộ tab bị block",
+  "pre": "qtht_01`. JWT đã expire (manual override).",
+  "data": "—",
+  "steps": "1. Modify token. 2. Refresh trang.",
+  "expect": "**STATE**: BE 401 Unauthorized. **UI**: Redirect login page."
+ }
+]

@@ -1,0 +1,39 @@
+🔁 Còn lỗi — chuyển lại dev.
+
+CÒN LỖI Ở ĐÂU
+Khi người được phân công bấm Từ chối và CÓ nhập lý do, nhật ký vụ việc chỉ ghi lại là "đã từ chối"
+(đúng người, đúng giờ) mà KHÔNG lưu lý do. Hồ sơ quay về trạng thái "Đã tiếp nhận", và từ lúc đó
+cán bộ phụ trách không còn chỗ nào trên hồ sơ để đọc được vì sao bị từ chối.
+
+ĐÚNG RA PHẢI THẾ NÀO
+Lý do từ chối là thông tin bắt buộc, nên phải được lưu vào nhật ký vụ việc và cán bộ phụ trách
+phải đọc lại được trên màn chi tiết vụ việc, kể cả sau khi hồ sơ đã quay về "Đã tiếp nhận".
+
+PHẦN ĐÃ CHẠY ĐÚNG — KHÔNG CẦN TEST LẠI
+Nút Từ chối chạy bình thường, không còn văng sang màn báo thiếu quyền như trước. Có thông báo xác
+nhận rồi tự quay về danh sách. Bản ghi phân công chuyển đúng sang "Từ chối" và có lưu lý do. Hồ sơ
+về đúng "Đã tiếp nhận" và giao lại được cho người khác. Cán bộ phụ trách vẫn nhận được thông báo
+kèm nguyên văn lý do, cả trên chuông lẫn email.
+
+AI SỬA
+Dev BE — phần ghi nhật ký vụ việc cho thao tác từ chối phân công.
+Dev FE — phần hiển thị lý do đó trên màn chi tiết vụ việc.
+
+CÁCH KIỂM LẠI SAU KHI SỬA
+Cho người được phân công từ chối một vụ việc kèm lý do, nhớ nguyên văn câu vừa nhập. Sau đó đăng
+nhập bằng tài khoản cán bộ phụ trách, mở chi tiết vụ việc đó và xem mục từ chối trong nhật ký có
+đúng câu đó không. Làm trên ít nhất 2 vụ việc.
+Đạt khi: nhật ký có lý do, khớp từng chữ, và cán bộ đọc được ngay trên hồ sơ.
+Chưa đạt khi: nhật ký vẫn trống lý do, hoặc dữ liệu đã có mà màn hình không cho đọc.
+Lưu ý: thấy lý do trong thông báo gửi cán bộ hoặc trong bản ghi phân công thì chưa tính là đạt —
+đó là hai chỗ khác, không phải nhật ký vụ việc.
+
+CÓ THỂ RỘNG HƠN MỘT THAO TÁC
+Thao tác "Yêu cầu bổ sung" cũng bắt buộc có lý do và cũng không thấy lý do trong nhật ký. Dev cân
+nhắc sửa chung một chỗ.
+
+ĐÃ ĐO: ngày 06/08/2026, bản dựng V1.0.8, trên 3 vụ việc tự dựng VV-BTP-TW-20260806-001, -002 và
+VV-STP-AG-20260806-004. Người bấm Từ chối: một tài khoản tư vấn viên cấp Trung ương và một tài
+khoản người hỗ trợ cấp địa phương. Kiểm cả trên màn hình lẫn dữ liệu máy chủ, hai đường cho kết
+quả như nhau. Không tạo, sửa hay xoá bản ghi nào khác.
+Tham chiếu đặc tả: srs-fr-05-vu-viec.md:2142 · :826-827 · :1735

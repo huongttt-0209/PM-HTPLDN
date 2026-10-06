@@ -1,0 +1,47 @@
+{
+  "ghi_chu": "Lượt đo trên GIAO DIỆN: đăng nhập admin (QTHT) rồi bấm nút 'Xuất Excel' thật trên màn Báo cáo thống kê.",
+  "thoi_diem": "2026-08-06 06:39:23 GMT (13:39 giờ máy)",
+  "ban_dung": "V1.0.8",
+  "request": {
+    "method": "POST",
+    "path": "/api/v1/bao-cao/export",
+    "referer": "https://18.143.165.120.nip.io/bao-cao?loai=vu-viec-tiep-nhan&kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31&donViId=00000000-0000-4000-8000-000000000001",
+    "body": {
+      "loaiBaoCao": "BC_VU_VIEC_TIEP_NHAN",
+      "kyBaoCao": "NAM",
+      "tuNgay": "2026-01-01",
+      "denNgay": "2026-12-31",
+      "donViId": "00000000-0000-4000-8000-000000000001",
+      "filterDacThu": {},
+      "formatXuat": "XLSX"
+    }
+  },
+  "vai_tro_trong_token_gui_kem": {
+    "vaiTro": [
+      "QTHT"
+    ],
+    "hoTen": "Quản trị hệ thống",
+    "capDonVi": "TW",
+    "donViId": "00000000-0000-4000-8000-000000000001"
+  },
+  "response": {
+    "http": 403,
+    "content_type": "application/json; charset=utf-8",
+    "body": {
+      "success": false,
+      "error": {
+        "code": "ERR-PERM-SYS-00-01",
+        "message": "Forbidden",
+        "timestamp": "2026-08-06T06:17:47.653Z",
+        "requestId": "e41217fb-9bb8-4852-bb91-b925a7175e1a"
+      }
+    }
+  },
+  "chot_kiem_phien": "GET /api/v1/auth/me ngay sau đó = 304 (còn hiệu lực) => 403 là chặn quyền thật, không phải hết phiên",
+  "doi_chung_cung_phien": "GET /api/v1/bao-cao/vu-viec-tiep-nhan cùng bộ lọc = 200/304, tổng vụ việc 34 => XEM được nhưng XUẤT bị chặn",
+  "thong_bao_bat_duoc_tren_man": [
+    "Đang tạo file... (06:39:23.182)",
+    "Đang tạo file... (06:39:23.183)"
+  ],
+  "han_che_cua_luot_do_nay": "Câu thông báo LỖI cuối cùng chưa chụp được: mã FE dùng cùng key 'export' nên AntD thay nội dung TẠI CHỖ, observer nghe addedNodes không bắt được; lượt đo lại bị phiên khác chiếm tài khoản admin nên dừng."
+}

@@ -1,0 +1,15 @@
+☑️ Đã kiểm tra lại — lỗi ĐÃ ĐƯỢC SỬA.
+
+Phạm vi kiểm tra: đo ngày 27/07/2026 trên môi trường được giao 18.143.165.120.nip.io, bằng đúng vai trò đối tác đã dùng là Cán bộ PD Trung ương, đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp, và đo lặp thêm bằng Cán bộ NV Trung ương. Lưu ý: lần này KHÔNG đo trên môi trường đối tác, nên kết luận này xác nhận phần hiển thị đã được sửa; đề nghị đội phát triển xác nhận thêm rằng bản sửa đã được triển khai lên môi trường đối tác.
+
+Kết quả đo bề rộng cột "Nội dung" trên cả 7 thẻ:
+- Bốn thẻ "Tất cả", "Mới", "Đang xử lý", "Chờ phê duyệt" (bảng 11 cột): cột "Nội dung" rộng 303, hiển thị bình thường.
+- Ba thẻ "Đã duyệt", "Công khai", "Hoàn thành" (bảng 13 cột): cột "Nội dung" nay cũng rộng 303 và hiển thị đầy đủ. Trước đây đúng ba thẻ này có bề rộng bằng 0 nên người dùng không nhìn thấy.
+
+Điều đáng chú ý: tiền đề gây ra lỗi vẫn còn nguyên, không phải do gỡ bớt cột đi mà hết lỗi. Ba thẻ nói trên vẫn là bảng 13 cột, vẫn có đủ hai cột "Người duyệt" và "Ngày duyệt" đã bổ sung sau vòng 1. Tổng bề rộng các cột là 1950 trong khi khung bảng chỉ rộng 1136, tức vẫn dôi ra như trước. Khác biệt là bảng nay cho cuộn ngang để chứa phần dôi ra, thay vì bóp một cột về 0. Đây đúng là cách xử lý mà báo cáo lỗi trước đó đã đề nghị.
+
+Đã kiểm tra dữ liệu thật sự hiện ra chứ không phải cột rỗng chỉ có bề rộng. Ví dụ ở thẻ "Đã duyệt", bản ghi HD-20260707-004 hiển thị nội dung "Seed UI QLCKPHCHVM_02: câu hỏi batch phê duyệt thuộc TW 02"; thẻ "Hoàn thành" hiển thị "Seed HUY verify BA confirm 2026-07-08...".
+
+Đo bằng hai tài khoản khác vai trò cho ra số liệu giống hệt nhau, xác nhận kết quả không phụ thuộc quyền.
+
+Bug ID: BUG-QLCHVMDXL-COT-NOIDUNG — trạng thái: đã đóng.

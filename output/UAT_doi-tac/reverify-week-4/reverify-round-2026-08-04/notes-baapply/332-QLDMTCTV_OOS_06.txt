@@ -1,0 +1,3 @@
+❌ Không phải lỗi (BA xác nhận 04/08/2026).
+- BA chốt: màn danh sách Tổ chức tư vấn có sáu thẻ trạng thái — Mới đăng ký, Chờ phê duyệt, Đã từ chối, Đang hoạt động, Tạm dừng, Vô hiệu hóa — đúng như tài liệu bàn giao mô tả và đúng như phần mềm đang làm. Chỗ ghi ba thẻ nằm ở một mục khác của tài liệu, là chỗ sót của bản cũ, BA sửa lại tài liệu chứ không đổi phần mềm. Thứ tự sắp xếp các thẻ không được quy định ràng buộc nên không chấm là sai.
+- Đây là dòng do tổ kiểm thử tự mở, không có Kết quả mong đợi nào của Quý đơn vị cần cập nhật.

@@ -1,0 +1,5 @@
+❌ Không phải bug.
+- Chức năng: Báo cáo thống kê › BC Số lượng CG/TVV › Xuất Excel (UC131).
+- Đối tác phản ánh: bấm Xuất Excel báo lỗi "Không thể tạo file xuất. Vui lòng thử lại.".
+- Kiểm tra lại (kỳ Năm 2026, đơn vị Cục Bổ trợ tư pháp, lĩnh vực Thuế, báo cáo đã có dữ liệu): bấm Xuất Excel → hệ thống báo "Tạo file thành công" và tải về file .xlsx đầy đủ (tiêu đề + kỳ + đơn vị + ngày tạo + số liệu đúng). Lỗi không xảy ra.
+→ Đối tác kiểm tra lại.

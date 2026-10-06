@@ -1,0 +1,71 @@
+PHÁT HIỆN NGOÀI PHẠM VI 02 — "BC Chi phí chi trả hỗ trợ" thiếu phần chia theo kỳ
+Env : https://18.143.165.120.nip.io   Bản dựng: V1.0.8   Ngày đo: 2026-08-06 14:46
+Tài khoản đo: cbnv_tw_03. Không tạo/sửa/xoá bản ghi nào.
+
+================================================================================
+1. ĐẶC TẢ ĐÒI GÌ
+================================================================================
+
+Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/srs-fr-11-bao-cao.md
+FR-IX-15 (UC138) "BC Chi phí chi trả hỗ trợ", bảng "Output đặc thù" dòng :718-724:
+
+    # | Tên               | Kiểu logic | Điều kiện | Format
+    1 | tong_chi_phi      | money      | Luôn      | Tổng chi phí (VND)
+    2 | tong_ho_so        | number     | Luôn      | Tổng số hồ sơ
+    3 | trung_binh_ho_so  | money      | Luôn      | Chi phí TB / hồ sơ
+    4 | theo_don_vi[]     | structured | Luôn      | {don_vi, ten, tong_cp, so_hs}
+    5 | theo_ky[]         | structured | Luôn      | {ky, tong_cp, so_hs}      <-- THIẾU
+
+Dòng :706 (Mô tả) cũng viết rõ: "Báo cáo tổng chi phí chi trả hỗ trợ đã thanh toán trong kỳ,
+phân theo đơn vị, KỲ." Dòng :714 (Dimensions): "Kỳ, Đơn vị, Tổng HS, Tổng chi phí, Trung bình/HS".
+
+Điều kiện của mục 5 là "Luôn" — tức không có tình huống nào được phép vắng.
+
+================================================================================
+2. THỰC TẾ ĐO ĐƯỢC
+================================================================================
+
+GET /api/v1/bao-cao/chi-phi-chi-tra?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+→ 200. Các mục trả về:
+
+    tenBaoCao · ngayTaoBc · kyBaoCao · tuNgay · denNgay
+    tongChiPhi        = 23.000.000      ✔ (mục 1 đặc tả đòi)
+    tongHoSo          = 2               ✔ (mục 2)
+    trungBinhHoSo     = 11.500.000      ✔ (mục 3)
+    theoDonVi[]       = 1 phần tử       ✔ (mục 4)
+    theoQuyMoDn[]     = 2 phần tử       <-- KHÔNG có trong bảng output của FR-IX-15
+    chartTypes        = ["BAR"]
+    (KHÔNG có mục nào tương ứng theo_ky[])   <-- THIẾU mục 5
+
+Trên giao diện: màn "BC Chi phí chi trả hỗ trợ" hiện ô Tổng chi phí, Tổng hồ sơ, Trung bình/hồ
+sơ, bảng theo đơn vị và bảng theo quy mô doanh nghiệp — KHÔNG có bảng nào chia theo kỳ.
+
+Tệp xuất Excel của báo cáo này (image/CPHTCT_06-xuat-excel.xlsx, lượt đo cùng ngày) cũng không
+có phần chia theo kỳ.
+
+⇒ Thiếu ở CẢ BA nơi: dữ liệu máy chủ trả về, màn hình, và tệp xuất.
+
+================================================================================
+3. HỆ QUẢ NGƯỜI DÙNG NHÌN THẤY
+================================================================================
+
+Người dùng chọn kỳ Năm rồi muốn biết chi phí rơi vào tháng/quý nào trong năm thì báo cáo này
+không trả lời được, dù mô tả nghiệp vụ của chính báo cáo có chữ "phân theo đơn vị, kỳ".
+(Báo cáo "BC Chi phí theo thời gian" — UC142 — có phần theo kỳ, nhưng đó là một báo cáo khác,
+không thay được mục output mà FR-IX-15 đòi.)
+
+================================================================================
+4. CÁCH TÁI HIỆN NGẮN
+================================================================================
+
+1. Đăng nhập cbnv_tw_03. Vào Báo cáo thống kê.
+2. Loại báo cáo "BC Chi phí chi trả hỗ trợ", Kỳ Năm 01/01/2026 → 31/12/2026, Đơn vị Toàn quốc.
+3. Bấm [Xem báo cáo]. Rà toàn màn: có bảng theo đơn vị, có bảng theo quy mô DN, KHÔNG có bảng
+   nào chia theo kỳ.
+4. Bấm [Xuất Excel], mở tệp ra: cũng không có phần theo kỳ.
+
+================================================================================
+5. TỆP LIÊN QUAN
+================================================================================
+
+image/CPHTCT_06-xuat-excel.xlsx — tệp xuất của báo cáo này, để đối chiếu các mục có/không có

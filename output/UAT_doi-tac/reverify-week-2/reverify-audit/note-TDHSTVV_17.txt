@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG – chuyển dev. Cả 3 ý đối tác nêu đều tái hiện được.
+- Ý 1 (không hiển thị thông báo): ĐÚNG. Bấm "Trình duyệt" -> hồ sơ chuyển "Chờ phê duyệt" nhưng không hiện thông báo thành công nào (theo dõi giao diện liên tục 4 giây). Vi phạm quy định giao diện UI-04 (srs-v3.5.md, dòng 571: "Toast notification cho thao tác thành công").
+- Ý 2 (Nhận xét không hiển thị sau khi tải lại): ĐÚNG. Sau khi tải lại, cả 3 ô Nhận xét (Nhóm 2, 3, 4) đều trống, trong khi Kết luận thẩm định vẫn còn. Nguyên nhân: giao diện KHÔNG gửi nội dung Nhận xét lên máy chủ, nên nhận xét bị mất hẳn (cùng gốc với BUG-TDHSTVV_08). Theo FR-IV-06 (UC44) - SCR-IV-03 (srs-fr-04-chuyen-gia-tvv.md, dòng 1557-1559), ô nhận xét của Nhóm 2/3/4 là một phần kết quả thẩm định, phải được lưu.
+- Ý 3 (Cán bộ phê duyệt không nhận được thông báo): ĐÚNG. Đã đăng nhập tài khoản cbpd_tw (Cán bộ Phê duyệt cùng đơn vị) kiểm tra ngay sau thao tác: hồ sơ CÓ nằm trong danh sách "Chờ phê duyệt" của họ, nhưng quét 50 thông báo gần nhất thì không có thông báo nào về hồ sơ này. Trái với FR-IV-06 §Processing bước 4 (dòng 518) và Tiêu chí chấp nhận (dòng 551): trình duyệt phải gửi thông báo đến Cán bộ Phê duyệt cùng đơn vị.
+- Phát hiện thêm: (a) bấm "Trình duyệt" không hiện hộp thoại xác nhận, trong khi SRS dòng 1565 + 1396 quy định phải có hộp thoại "Xác nhận trình phê duyệt?"; (b) hệ thống không ghi nhận người trình và ngày trình vào hồ sơ.
+- Verify: tài khoản cbnv_tw (CB Nghiệp vụ Trung ương) trên hồ sơ TVV-BTP-TW-0005 tự tạo; kiểm thông báo bằng tài khoản cbpd_tw cùng đơn vị.
+- Bug ID: BUG-TDHSTVV_17.

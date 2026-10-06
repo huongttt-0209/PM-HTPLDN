@@ -1,0 +1,74 @@
+PHÁT HIỆN NGOÀI PHẠM VI 03 — bấm [Xem báo cáo] lần thứ hai thì hai nút Xuất bị khoá
+Env : https://18.143.165.120.nip.io   Bản dựng: V1.0.8   Ngày đo: 2026-08-06 14:23
+Tài khoản đo: cbnv_tw_03. Không tạo/sửa/xoá bản ghi nào.
+
+================================================================================
+1. HIỆN TƯỢNG
+================================================================================
+
+Trên màn Báo cáo thống kê, sau khi bấm [Xem báo cáo] LẦN ĐẦU thì báo cáo hiện ra và hai nút
+[Xuất Excel] / [Xuất PDF] bật sáng, bấm được. Nhưng chỉ cần bấm [Xem báo cáo] THÊM MỘT LẦN NỮA
+(không đổi gì trong bộ lọc) thì hai nút Xuất chuyển sang mờ, không bấm được — dù báo cáo vẫn
+đang hiện đầy đủ số liệu ngay bên dưới.
+
+Bấm [Xem báo cáo] tiếp lần 3, lần 4 cũng không mở lại được. Đổi bộ lọc rồi xem lại cũng không
+mở lại được. Chỉ có tải lại trang (hoặc bấm [Làm mới] rồi chọn lại bộ lọc từ đầu) mới lấy lại
+được nút Xuất, và vẫn theo đúng luật cũ: bấm [Xem báo cáo] đúng MỘT lần.
+
+Người dùng gặp phải sẽ tưởng hệ thống không cho mình xuất báo cáo.
+
+================================================================================
+2. SỐ ĐO
+================================================================================
+
+Đo trên loại báo cáo "BC Chi phí theo thời gian", Kỳ Năm 01/01/2026 → 31/12/2026, Đơn vị Toàn
+quốc. Trạng thái hai nút Xuất (disabled = bị khoá):
+
+    Sau [Xem báo cáo] lần 1  : Xuất Excel = bật · Xuất PDF = bật   (báo cáo hiện 23.000.000 / 2 hồ sơ)
+    Sau [Xem báo cáo] lần 2  : Xuất Excel = KHOÁ · Xuất PDF = KHOÁ (báo cáo VẪN hiện đủ số liệu)
+    Sau [Xem báo cáo] lần 3  : vẫn KHOÁ
+    Sau khi đổi kỳ rồi xem lại: vẫn KHOÁ
+    Sau khi tải lại trang + chọn lại bộ lọc + xem 1 lần: bật lại
+
+Đã lặp lại hiện tượng 2 lần trong cùng buổi, trong đó một lần bắt đầu từ phiên đăng nhập hoàn
+toàn mới. Nút không ở trạng thái "đang xử lý" (không có vòng quay chờ), chỉ đơn giản là bị khoá.
+
+================================================================================
+3. ĐẶC TẢ ĐÒI GÌ
+================================================================================
+
+Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/srs-fr-11-bao-cao.md
+- :1052 — nút [Xuất Excel (.xlsx)]: điều kiện hiện là "sau khi đã Xem báo cáo".
+- :1053 — nút [Xuất PDF (.pdf)]: điều kiện hiện là "sau khi đã Xem báo cáo".
+
+Đặc tả không đặt thêm điều kiện nào về số lần bấm [Xem báo cáo]. Đang có báo cáo trên màn thì
+phải xuất được.
+
+================================================================================
+4. CÁCH TÁI HIỆN NGẮN
+================================================================================
+
+1. Đăng nhập cbnv_tw_03. Vào Báo cáo thống kê.
+2. Chọn Loại báo cáo bất kỳ có dữ liệu (vd "BC Chi phí theo thời gian"), Kỳ Năm 01/01/2026 →
+   31/12/2026, Đơn vị Toàn quốc.
+3. Bấm [Xem báo cáo] → quan sát hai nút Xuất: bật.
+4. Bấm [Xem báo cáo] LẦN NỮA, không đổi gì → quan sát hai nút Xuất: mờ, không bấm được, dù báo
+   cáo vẫn hiện đủ số liệu.
+5. Thử bấm [Xem báo cáo] thêm vài lần và thử đổi bộ lọc rồi xem lại: nút vẫn mờ.
+6. Tải lại trang, chọn lại bộ lọc, bấm [Xem báo cáo] đúng một lần: nút bật lại.
+
+================================================================================
+5. PHẠM VI CHƯA KIỂM HẾT (nói thẳng)
+================================================================================
+
+Mới đo trên loại báo cáo "BC Chi phí theo thời gian". Vì hai nút Xuất là thành phần dùng chung
+của màn Báo cáo thống kê nên nhiều khả năng mọi loại báo cáo đều dính, nhưng QA CHƯA đo hết các
+loại còn lại — dev nên kiểm cả màn thay vì chỉ một loại báo cáo.
+
+================================================================================
+6. TỆP LIÊN QUAN
+================================================================================
+
+image/CPCTHTTTG_QA01-bam-xem-bao-cao-lan-2-nut-xuat-bi-khoa-V108.png
+    — ảnh chụp đúng lúc: báo cáo hiện đủ 23.000.000 / 2 hồ sơ, bảng theo kỳ có dòng, mà hai nút
+      [Xuất Excel] / [Xuất PDF] ở góc phải đang mờ.

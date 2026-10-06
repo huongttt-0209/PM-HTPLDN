@@ -1,0 +1,4 @@
+☑️ Đã kiểm tra lại — không tái hiện.
+- Khi chọn tệp `.webm` tại chức năng Gửi yêu cầu hỗ trợ pháp lý, hệ thống từ chối ngay và hiển thị rõ định dạng được chấp nhận.
+- Trang và form vẫn hoạt động bình thường, không phát sinh hồ sơ hoặc yêu cầu tải tệp.
+- Lỗi “This page couldn’t load” trong bằng chứng cũ không còn tái hiện trên bản hiện tại.

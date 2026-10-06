@@ -1,0 +1,56 @@
+# QLDX_05 — row 165 (tab `bug`)
+
+## [2] Tuần
+
+Tuần 3
+
+## [3] Mã TC
+
+QLDX_05
+
+## [6] Mô tả
+
+Gia hạn phiên
+
+## [7] Điều kiện
+
+1. Đăng nhập hệ thống thành công
+
+## [9] Các bước thực hiện
+
+1. Không thao tác suốt 25 phút kể từ lần thao tác cuố
+2. Bấm "Gia hạn phiên"
+
+## [10] Kết quả mong đợi
+
+Hệ thống đặt lại đồng hồ đếm 30 phút và đóng hộp thoại.
+
+## [13] Trạng thái
+
+Fail
+
+## [14] Dopai
+
+Open
+
+## [17] Trạng thái dev fix
+
+Test done
+
+## [19] Kết quả verify
+
+✅ Đã hết lỗi — verify lại 07/08/2026 02:19–02:30 trên env nội bộ 18.143.165.120.nip.io, bó mã FE index-DsMHK7Dp.js (chân sidebar HTPLDN · V1.0.9), vai trò Cán bộ Nghiệp vụ Trung ương (cbnv_tw_03). Không dùng tài khoản quản trị để chấm.
+
+- Hộp thoại ĐÓNG ngay khi bấm [Gia hạn phiên]: bấm lúc 02:22:28.831, hộp thoại hết hiển thị lúc 02:22:29.218 — dưới 0,4 giây. Kiểm bằng trạng thái hiển thị thật của phần tử (kích thước hiển thị + thuộc tính hiển thị) chứ không chỉ xem thẻ còn tồn tại: sau khi đóng, thẻ vẫn còn trong trang nhưng không hiển thị. Theo dõi tiếp 1.608 lần đo tới 02:30:13, hộp thoại không bật lại.
+
+- Đồng hồ 30 phút ĐƯỢC ĐẶT LẠI THẬT, không phải chỉ tắt hộp thoại. Mốc tính không-thao-tác chuyển từ 01:56:53 sang đúng thời điểm bấm 02:22:28. Phép thử quyết định: để đồng hồ thật chạy qua mốc tự đăng xuất CŨ 02:26:53 — hệ thống không đá về trang đăng nhập, vẫn đứng nguyên màn "Tư vấn viên / Chuyên gia"; hai lượt chờ thụ động rình form đăng nhập (tổng 265 giây) đều không thấy form.
+
+- Đối chứng độc lập phía máy chủ: gọi /api/v1/auth/me lúc 02:28:46 (sau mốc cũ 113 giây) trả HTTP 200 và phân giải đúng cbnv_tw_03 — phiên còn hiệu lực thật ở máy chủ, không phải chỉ hộp thoại đóng ở phía giao diện.
+
+Chuẩn đối chiếu: srs-v3.5.md:5527 và srs-fr-10-quan-tri.md:2369 (BR-AUTH-06 — "Session CMS: 30 phút idle timeout") cùng srs-fr-10-quan-tri.md:1891 khai báo nút [Gia han] trên hộp thoại cảnh báo. Hai chỗ này cùng nhau xác định: bấm gia hạn thì mốc tính không-thao-tác phải được đặt lại 30 phút — đúng như phiếu yêu cầu.
+
+Đề nghị BA bổ sung đặc tả (không chặn bàn giao, không phải lỗi dev): :1891 khai báo nút [Gia han] nhưng ô "Hành vi" của chính dòng đó để trống "—", nên hành vi khi bấm chưa được viết thành câu trong đặc tả; và chưa chỗ nào quy định có giới hạn số lần gia hạn liên tiếp hay không — phần này QA không đo vì ngoài phạm vi phiếu.
+
+Dữ kiện thêm cho BA: thao tác gia hạn CÓ gửi yêu cầu xuống máy chủ (GET /auth/me đúng 02:22:28) nhưng hệ thống không có đường gia hạn riêng và token không được phát hành lại (giữ nguyên jti/iat).
+
+Bằng chứng (output/UAT_doi-tac/reverify-week-5/F5-devfix-2026-08-07/): image/QLDX_05-C1-truoc-khi-bam-gia-han.png · image/QLDX_05-C1-sau-khi-bam-gia-han.png · image/QLDX_05-C2-sau-moc-logout-goc.png · image/QLDX_05-timeline.txt · image/QLDX_05-doi-chung-api.txt · do/QLDX_05.md

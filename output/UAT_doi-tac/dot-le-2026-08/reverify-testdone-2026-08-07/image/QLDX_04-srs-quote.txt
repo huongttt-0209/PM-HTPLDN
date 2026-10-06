@@ -1,0 +1,23 @@
+QLDX_04 — trich dan dac ta (nguon duy nhat: Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/)
+
+[1] srs-fr-10-quan-tri.md:1959  (SCR-VIII-09 "Dang xuat" — Quy tac tuong tac)
+- Dang xuat tu dong: 25 phut idle → Modal canh bao → 30 phut → Auto invalidate → Redirect MH-10.8b
+
+[2] srs-fr-10-quan-tri.md:1891  (SCR-VIII-07, bang thanh phan man hinh, dong 12)
+| 12 | modal | Session Warning | modal | "Phien sap het han trong 5 phut. [Gia han] [Dang xuat]" | — | 30 phut idle |
+
+=> MAU THUAN NOI TAI CUA DAC TA: :1959 ghi nguong hien modal la 25 phut idle;
+   :1891 ghi dieu kien hien thi la "30 phut idle". Hai dong nay khong the cung dung.
+   Ban dang chay lam theo :1959 (25 phut) — va do cung la dieu phieu QLDX_04 yeu cau.
+   Ghi nhan de BA chot lai cau chu :1891, KHONG cham dev sai.
+
+[3] srs-fr-10-quan-tri.md:2369 (BR-AUTH-06)
+| BR-AUTH-06 | Session CMS: 30 phút idle timeout. API JWT: TTL 15 phút, refresh token 24 giờ | ...
+=> 30 phut la moc HET phien (auto invalidate), khop :1959. Khong phai moc hien modal.
+
+[4] Cau chu hien thi: grep toan bo srs-v3.5 cho "gia hạn để tiếp tục" / "sắp hết hạn trong 5 phút"
+   => CHI trung :1891 (chuoi rut gon khong dau). Dac ta KHONG quy dinh cau chu day du cua modal.
+   Chuan cau chu duy nhat co the doi chieu = "Ket qua mong doi" trong phieu QLDX_04.
+
+[5] CHANGELOG-v3-to-v3.5.md — soat lai SCR-VIII-07 chi o dong 2 (:1212) va dong 11 (:1240).
+   Dong 12 (Session Warning) KHONG nam trong pham vi soat lai => :1891 la dong ton dong ban cu.

@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Web: tab "Lịch sử hỗ trợ" màn Chi tiết DN — danh sách vụ việc liên kết có 4 cột: Mã, Tiêu đề, Trạng thái, Ngày tiếp nhận; kèm 3 KPI (Tổng VV, VV hoàn thành, Tổng chi phí). KHÔNG có cột "Lĩnh vực" và "Tư vấn viên" — đúng như đối tác báo.
+- SRS v3.5 SCR-V.III-02 (FR-V.III-01, UC81, dòng 468) chỉ đặc tả tab này là "Danh sách VV liên kết + 3 KPI", KHÔNG quy định danh sách cột (không nêu cột Lĩnh vực/Tư vấn viên). 3 KPI hiển thị đủ.
+- Đối tác kỳ vọng có cột "Lĩnh vực" + "Tư vấn viên" theo thiết kế (HTPLDN-PTYC-CT-v2.0); SRS không quy định các cột này.
+- Hỏi BA: danh sách VV ở tab Lịch sử hỗ trợ có bắt buộc thêm cột "Lĩnh vực" + "Tư vấn viên" theo thiết kế đối tác không, hay bộ cột hiện tại (Mã/Tiêu đề/Trạng thái/Ngày tiếp nhận) là đạt?
+- Verify: cbnv_tw (CB_NV_TW), DN-SEED-0001.

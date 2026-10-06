@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+• Form Thêm giảng viên: nhập SĐT sai định dạng vẫn cho lưu (không báo lỗi). Các trường có ràng buộc vẫn validate đúng: Email sai → "Email không hợp lệ"; bỏ trống Lĩnh vực → "Vui lòng chọn ít nhất 1 lĩnh vực".
+• Đối tác kỳ vọng validate định dạng SĐT. Theo SRS FR-III-11 (UC30) §Inputs (dòng 965): so_dien_thoai là text, không bắt buộc, KHÔNG ràng buộc định dạng; §Error Handling (dòng 973) không có lỗi định dạng SĐT.
+• Câu hỏi BA: có bổ sung ràng buộc kiểm tra định dạng số điện thoại (và có thành bắt buộc) không?
+• Verify: CB_NV_TW, form Thêm mới giảng viên.

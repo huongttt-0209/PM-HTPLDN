@@ -1,0 +1,4 @@
+⚠️ Cần BA xác nhận.
+- KPI-S-02 (UC1-9 bổ sung) §KPI bổ sung Dashboard (dòng 596-615) quy định “Drill-down: không có”; web hiện tại bấm thẻ “Thời gian xử lý trung bình” không chuyển màn hình.
+- Verify live bằng `cbnv_tw_02`, đúng phạm vi Toàn quốc/năm 2026: URL giữ nguyên `/dashboard`, không phát sinh request mở danh sách.
+- Đề nghị BA xác nhận có thay đổi đặc tả để bổ sung màn danh sách chi tiết cho KPI-S-02 hay giữ hành vi không drill-down theo SRS.

@@ -1,0 +1,25 @@
+✅ Là bug — chuyển dev · ⚠️ Có ý cần BA xác nhận
+
+Cả 3 ý đều tái hiện đúng. 2 ý đã chuyển dev, 1 ý nhỏ cần BA chốt.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), trên màn trả lời 2 cột, đo cả kích thước từng nhãn của thanh tiến trình.
+
+✅ 1) Thanh tiến trình hiển thị lỗi — đã chuyển dev.
+- Chữ bị bẻ dọc từng ký tự: "Mới" thành "M / ở / i", "Đã gợi ý" thành "Đã / gợi / ý", "CB trả lời" thành "CB / trả / lời".
+- Số đo: nhãn "Mới" rộng 11,9 px nhưng cao 66 px, tức mỗi ký tự nằm một dòng.
+- Đã tách được nguyên nhân: mở cùng phiên ở bố cục 1 cột toàn chiều rộng (màn chi tiết phiên đã hoàn thành) thì thanh tiến trình hiển thị bình thường trên một dòng. Vậy chữ chỉ vỡ khi thanh này bị nhồi vào cột trái hẹp của chế độ trả lời — thông tin định vị lỗi cho dev.
+- Bug ID: BUG-QLKCHTV_26A.
+
+✅⚠️ 2) Thiếu thông tin doanh nghiệp — phần MST đã chuyển dev, phần còn lại cần BA chốt.
+- Giao diện có nhãn "MST" nhưng để trống. Đã cố ý chọn doanh nghiệp CÓ mã số thuế (0198877665) và CÓ thư điện tử trong hồ sơ để loại trừ khả năng "trống vì doanh nghiệp không khai".
+- Truy tầng dữ liệu: khối doanh nghiệp mà máy chủ trả về cho màn này chỉ có 2 trường là mã và tên doanh nghiệp, không kèm mã số thuế, không kèm thư điện tử. Nghĩa là giao diện dựng đúng nhãn nhưng máy chủ không trả dữ liệu — đề nghị dev bổ sung ở tầng trả dữ liệu.
+- Riêng hai mục "thư điện tử liên hệ" và "người gửi câu hỏi": đặc tả chỉ ghi chung "Thông tin DN", không liệt kê trường cụ thể, nên cần BA chốt danh sách trường bắt buộc.
+- Bug ID: BUG-QLKCHTV_26B.
+
+✅ 3) Thiếu Lịch sử trao đổi — đã chuyển dev.
+- Màn trả lời không có mục "Lịch sử trao đổi" nào.
+- Đặc tả (srs-fr-13-tv-nhanh.md dòng 571) ghi rõ cột trái phải có "Lịch sử trao đổi (bong bóng hội thoại)".
+- Lưu ý khối lượng: bảng dữ liệu phiên tư vấn nhanh hiện chỉ lưu 1 câu hỏi và 1 nội dung trả lời, chưa có bảng lượt trao đổi. Vì vậy đây không phải chỉnh giao diện đơn thuần mà cần bổ sung cả mô hình dữ liệu — đề nghị dev ước lượng theo hướng đó.
+- Bug ID: BUG-QLKCHTV_26C.
+
+4) Bằng chứng.
+- Ảnh chụp màn trả lời (thấy rõ cả 3 hiện tượng) và ảnh chụp màn chi tiết bố cục 1 cột để đối chứng, kèm trong hồ sơ lỗi.

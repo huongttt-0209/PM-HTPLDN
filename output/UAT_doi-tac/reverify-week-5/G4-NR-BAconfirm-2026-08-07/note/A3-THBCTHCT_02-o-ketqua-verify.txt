@@ -1,0 +1,39 @@
+✅ ĐẠT — bấm "Tổng hợp" đã hiện đủ biểu mẫu 21a và 21b, số liệu gợi ý đúng bằng tổng và sửa được.
+
+Kiểm tra lại ngày 07/08/2026, khung giờ 21:25–21:46, trên bản dựng V1.0.10, bằng tài khoản Cán bộ Nghiệp vụ Trung ương. Phiếu này Quý đơn vị chưa chạy được lượt nào (ô Kết quả thực tế để trống, không có ảnh) nên không có ảnh cũ để đối chiếu; chúng tôi chấm theo đúng nội dung "Kết quả mong đợi" của phiếu.
+
+Trong khi đo, tài khoản Cán bộ Nghiệp vụ Trung ương số 05 bị một tiến trình khác đăng nhập cùng lúc làm rớt phiên, nên phần cuối chuyển sang tài khoản số 04. Hai tài khoản cùng vai trò, cùng cấp Trung ương, cùng đơn vị Cục Bổ trợ tư pháp nên phạm vi dữ liệu không đổi; kết quả hai đoạn trùng khớp nhau.
+
+TIỀN ĐỀ — PHẢI DỰNG MỚI MỚI ĐO ĐƯỢC ĐÚNG Ý CỦA PHIẾU
+
+Phiếu mong đợi biểu mẫu tổng hợp hiện cả 21a và 21b. Toàn bộ đợt báo cáo đang có sẵn trên hệ thống đều chỉ áp dụng biểu 21a, nên nếu đo bằng dữ liệu sẵn có rồi kết luận "thiếu 21b" thì sẽ oan cho phần mềm. Vì vậy chúng tôi dùng đợt báo cáo kỳ Tròn năm có áp dụng CẢ HAI biểu mẫu, gồm đúng 2 đơn vị là Sở Tư pháp Hà Nội và Sở Tư pháp An Giang, rồi cho từng đơn vị lập báo cáo, trình duyệt nội bộ, được duyệt và gửi lên Trung ương. Mỗi đơn vị dùng phiên đăng nhập riêng của chính mình.
+
+Số liệu gốc của hai báo cáo được chọn có chủ đích: 13/13 chỉ tiêu của hai đơn vị đều khác nhau và đều khác 0, tổng của từng cặp cũng khác cả hai số hạng — nên nếu hệ thống chỉ chép lại số của một đơn vị hoặc hiện số cố định thì phép đối chiếu sẽ lộ ra ngay.
+
+CÁC PHẦN CỦA PHIẾU ĐỀU ĐẠT
+
+1) Hệ thống GỢI Ý SỐ LIỆU ĐÚNG BẰNG TỔNG của các báo cáo được chọn.
+- Chọn menu "Đợt báo cáo", vào bảng danh sách báo cáo chờ tổng hợp, tick đúng 2 báo cáo của hai đơn vị rồi bấm "Tổng hợp (2)". Hệ thống hiện bảng gợi ý ghi rõ "Số đơn vị: 2" kèm dòng giải thích "Hệ thống đã cộng các chỉ tiêu tương ứng từ báo cáo của những đơn vị được chọn. Cán bộ có thể chỉnh sửa, bổ sung trước khi lưu."
+- Đối chiếu tay từng chỉ tiêu một: Số TVV kiện toàn 11+5=16, Cuộc tập huấn 6+2=8, Hội nghị đối thoại 4+1=5, VB trả lời UBND 9+3=12, VB TV mạng lưới TVV 7+6=13, HS tiếp nhận 31+14=45, HS giải quyết tổng 23+10=33, DN vừa 8+4=12, DN nhỏ 12+5=17, DN siêu nhỏ 3+1=4, KP hỗ trợ TVPL 610.000.000+235.000.000=845.000.000, KP chi HĐ khác 145.000.000+60.000.000=205.000.000, KP xã hội hóa 22.000.000+18.000.000=40.000.000. Đủ 13/13 chỉ tiêu khớp khít với phép cộng tay.
+- Kiểm thêm bằng cách đổi bộ chọn: bỏ chọn Sở Tư pháp An Giang, chỉ để lại Sở Tư pháp Hà Nội rồi bấm lại. Bảng đổi thành "Số đơn vị: 1" và toàn bộ 13 giá trị đổi đúng thành số của riêng Hà Nội — tức hệ thống cộng thật theo bộ chọn, không hiện con số cố định và không giữ lại số của lượt trước.
+
+2) Biểu mẫu tổng hợp HIỆN ĐỦ CẢ 21a VÀ 21b.
+- Dòng "Biểu mẫu" trên đầu bảng tổng hợp ghi rõ "Biểu mẫu 21a + 21b/TP/HTPLDN", đúng bằng biểu mẫu mà đợt báo cáo và cả hai báo cáo nguồn đang áp dụng.
+- Đây là điểm mấu chốt của phiếu, và nó chỉ kiểm được khi có đợt áp dụng cả hai biểu: với đợt chỉ áp dụng biểu 21a thì bảng tổng hợp chỉ hiện "Biểu mẫu 21a/TP/HTPLDN" — vắng 21b trong tình huống đó là đúng, không phải lỗi. Vì vậy chúng tôi dựng đúng tiền đề "cả hai biểu" rồi mới chấm.
+- Kiểm lại bằng đường thứ hai (đọc thẳng số liệu nguồn của chính chức năng này, không qua giao diện): với các báo cáo dùng cả hai biểu, nguồn trả về đúng nhãn "cả hai biểu" và đúng 13 con số như trên màn; với các báo cáo chỉ dùng 21a, nguồn trả về nhãn "biểu 21a". Nghĩa là nhãn biểu mẫu bám theo biểu mà các báo cáo được chọn thực sự sử dụng.
+
+3) Biểu mẫu tổng hợp CHO CÁN BỘ TRUNG ƯƠNG SỬA VÀ BỔ SUNG ĐƯỢC.
+- Gõ thật bằng bàn phím một giá trị mốc giờ (21550807) vào ô chỉ tiêu 13 "KP xã hội hóa": ô nhận giá trị, 12 ô còn lại giữ nguyên.
+- Ô "Nhận xét, kiến nghị" nhập được chữ và đọc lại đúng nguyên văn, tức đáp ứng cả vế "bổ sung".
+- Kiểm lại bằng đường thứ hai (đọc thuộc tính của cả 13 ô trên trang): không ô nào bị khóa, không ô nào bị vô hiệu hóa. Hai đường đo khớp nhau.
+
+ẢNH BẰNG CHỨNG
+- Đã tick đúng 2 báo cáo đang ở trạng thái "Đã gửi TW", nút đổi thành "Tổng hợp (2)": https://drive.google.com/file/d/1J6cZdIcoUzv4xIBD3kO5ISbobST5jggr/view?usp=drivesdk
+- Ngay sau khi bấm "Tổng hợp (2)": bảng ghi rõ "Biểu mẫu 21a + 21b/TP/HTPLDN", "Số đơn vị: 2" và các số 16, 8, 5, 12, 13, 45 đúng bằng tổng hai báo cáo nguồn: https://drive.google.com/file/d/1TFcIPQugXl97YweaoD1ZCcNKeovpfZrR/view?usp=drivesdk
+- Phần cuối bảng: các chỉ tiêu 8 đến 13 và ô nhận xét, kiến nghị: https://drive.google.com/file/d/1T4FR4SIITn14RWwwqq4VNcysI0dSB30j/view?usp=drivesdk
+- Biểu mẫu sửa được: ô chỉ tiêu 13 nhận giá trị vừa gõ, ô nhận xét nhập được chữ, các ô khác giữ nguyên: https://drive.google.com/file/d/1XAEqTbujXUl2V1EGrzbSG2Os7TFg0Qho/view?usp=drivesdk
+- Đổi bộ chọn còn 1 đơn vị: "Số đơn vị: 1" và toàn bộ 13 giá trị đổi đúng thành số của riêng đơn vị đó: https://drive.google.com/file/d/1Z-dqHS5ExA-HINNRMQ8xuUdOoGQWwesr/view?usp=drivesdk
+
+Lưu ý về dữ liệu: phép đo của phiếu này KHÔNG ghi gì xuống hệ thống — bấm "Tổng hợp" chỉ là bước gợi ý số liệu, giá trị gõ thử và câu nhận xét chỉ nằm trên màn rồi đã bấm "Hủy". Kiểm lại sau đó: đợt báo cáo và hai báo cáo giữ nguyên trạng thái cũ. Riêng phần tiền đề thì có ghi: hai báo cáo của Sở Tư pháp Hà Nội và Sở Tư pháp An Giang trong đợt kỳ Tròn năm đã được lập, duyệt nội bộ và gửi lên Trung ương — đây là dữ liệu kiểm thử do chúng tôi dựng, có thể xóa sau khi Quý đơn vị đọc xong kết quả.
+
+KẾT LUẬN: các bước của phiếu chạy thông; hệ thống gợi ý số liệu đúng bằng tổng của các báo cáo được chọn, hiển thị biểu mẫu tổng hợp toàn quốc đủ cả 21a và 21b, và cho cán bộ Trung ương chỉnh sửa, bổ sung. Đề nghị đóng phiếu.

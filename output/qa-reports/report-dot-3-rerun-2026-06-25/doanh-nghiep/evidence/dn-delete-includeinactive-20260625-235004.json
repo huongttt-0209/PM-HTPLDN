@@ -1,0 +1,45 @@
+{
+  "deleted_id": "3432cef7-66a7-414e-95a8-2912a13e4fa2",
+  "mst": "7706252347",
+  "results": {
+    "/doanh-nghieps?page=1&pageSize=100&includeInactive=true&search=7706252347": [
+      200,
+      {
+        "success": true,
+        "data": [],
+        "meta": {
+          "total": 0,
+          "page": 1,
+          "pageSize": 100,
+          "totalPages": 0
+        }
+      }
+    ],
+    "/doanh-nghieps?page=1&pageSize=100&includeDeleted=true&search=7706252347": [
+      200,
+      {
+        "success": true,
+        "data": [],
+        "meta": {
+          "total": 0,
+          "page": 1,
+          "pageSize": 100,
+          "totalPages": 0
+        }
+      }
+    ],
+    "/doanh-nghieps?page=1&pageSize=100&search=7706252347": [
+      200,
+      {
+        "success": true,
+        "data": [],
+        "meta": {
+          "total": 0,
+          "page": 1,
+          "pageSize": 100,
+          "totalPages": 0
+        }
+      }
+    ]
+  }
+}

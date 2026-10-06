@@ -1,0 +1,713 @@
+{
+ "16": {
+  "slug": "tvv-vhh-500",
+  "module": "chuyen-gia-tvv",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "5 TVV → 422 ERR-STATE-IV-TT-02 (msg '...0 hỏi đáp...'), no 500",
+  "note": "Guard hoi_dap chạy sạch, hết 500"
+ },
+ "11": {
+  "slug": "bieu-mau-delete-folder-with-templates-500-fk-restrict",
+  "module": "bieu-mau",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "DELETE folder(so=1) → 409 ERR-TM-02, folder intact",
+  "note": "Hết 500 FK RESTRICT, trả 409 đúng"
+ },
+ "21": {
+  "slug": "list-pagesize-over-max-422-vs-spec",
+  "module": "cross-cutting",
+  "p": "P3",
+  "ba": "1b",
+  "qa": "ChờBA",
+  "ev": "-",
+  "note": "Fix sai hướng: clamp 100+200 vs SRS đòi reject ERR-PARAM-01"
+ },
+ "35": {
+  "slug": "phan-cong-reject-lydo-generic-valcode-not-pc06",
+  "module": "danh-gia",
+  "p": "P3",
+  "ba": "1b",
+  "qa": "ChờBA",
+  "ev": "-",
+  "note": "Mã ERR-VAL-PC-06 không có trong SRS; spec đòi ERR-DG-PD-02"
+ },
+ "78": {
+  "slug": "vu-viec-kenh-doanh-nghiep-enum-not-whitelisted-422",
+  "module": "vu-viec",
+  "p": "P2",
+  "ba": "1b",
+  "qa": "ChờBA",
+  "ev": "-",
+  "note": "Fix sai layer; enum SRS chỉ 5 giá trị, thiếu dropdown/badge"
+ },
+ "69": {
+  "slug": "tv-nhanh-rerate-wrong-code-empty-msg",
+  "module": "tu-van",
+  "p": "P2",
+  "ba": "1c",
+  "qa": "Env",
+  "ev": "-",
+  "note": "Endpoint inbound mTLS Cổng PLQG, không có cert/account QA"
+ },
+ "25": {
+  "slug": "ct-htpl-export-500-bad-column-dbc-chuong-trinh-id",
+  "module": "ct-htpldn",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "POST export → 200 xlsx (spreadsheetml.sheet)",
+  "note": "Hết 500 bad column, xuất Excel OK"
+ },
+ "26": {
+  "slug": "ct-htpl-list-tabcounts-stripped",
+  "module": "ct-htpldn",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "GET list → meta.tabCounts {DU_THAO:14,DANG_THUC_HIEN:2,...}",
+  "note": "tabCounts nested meta, không bị strip"
+ },
+ "27": {
+  "slug": "ct-htpl-pause-lydo-dto-preempts-business-code",
+  "module": "ct-htpldn",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "pause lyDo<10 → 422 ERR-VAL-XI-06-06",
+  "note": "Domain code promoted đúng"
+ },
+ "22": {
+  "slug": "ct-htpl-pause-500",
+  "module": "ct-htpldn",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "activate TW CT→DANG_THUC_HIEN→pause 200 TAM_DUNG (ver6→7)",
+  "note": "Hết 500 dead-column SQL guard"
+ },
+ "20": {
+  "slug": "list-keyword-maxlength-422-vs-spec-slice",
+  "module": "cross-cutting",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "GET doanh-nghieps?search=250chars → 200 (sliced)",
+  "note": "Hết 422 reject, slice-to-200 OK"
+ },
+ "46": {
+  "slug": "dkt-empty-tende-accepted",
+  "module": "dao-tao-hoc-lieu",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "POST de-kiem-tras tenDe='' → 422 field=tenDe",
+  "note": "IsNotEmpty fire, hết 201-accept"
+ },
+ "48": {
+  "slug": "empty-file-upload-500-chk-dung-luong",
+  "module": "dao-tao-hoc-lieu",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "upload 0-byte → 400 ERR-VAL-FILE-05",
+  "note": "Hết 500 chk_dung_luong"
+ },
+ "54": {
+  "slug": "vuviec-file-upload-500-chk-entity-type",
+  "module": "file-upload",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "files/upload entityType=VuViec → 422 ERR-VAL-FILE-03",
+  "note": "Hết 500 chk_file_entity_type"
+ },
+ "44": {
+  "slug": "de-xuat-dao-tao-delete-received-409-vs-422",
+  "module": "dao-tao-hoc-lieu",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "DELETE de-xuat DA_TIEP_NHAN → 422 ERR-DX-03",
+  "note": "409→422, không xóa"
+ },
+ "45": {
+  "slug": "dexuat-dao-tao-state-guard-409-vs-422",
+  "module": "dao-tao-hoc-lieu",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "edit→422 ERR-DX-02, delete→422 ERR-DX-03",
+  "note": "State guards 409→422"
+ },
+ "47": {
+  "slug": "dkt-illegal-transition-http-409-vs-422",
+  "module": "dao-tao-hoc-lieu",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "re-activate KICH_HOAT → 422 ERR-DKT-STATE",
+  "note": "Illegal transition 409→422"
+ },
+ "34": {
+  "slug": "danh-gia-tieuchi-validation-generic-errorcode",
+  "module": "danh-gia",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "PUT tieu-chis tenTieuChi='' → 422 ERR-VAL-TC-02 (nested)",
+  "note": "Domain code promoted nested item"
+ },
+ "68": {
+  "slug": "hspl-patch-silently-ignores-doanhnghiepid",
+  "module": "tu-van",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "PATCH doanhNghiepId → 400 ERR-VAL-X1-04-07",
+  "note": "Field không còn bị strip, guard fire"
+ },
+ "13": {
+  "slug": "mau-phan-hoi-keyword-search-ignored",
+  "module": "cau-hinh-he-thong",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "base15, nomatch→0, match wired",
+  "note": "search param wired, lọc OK"
+ },
+ "39": {
+  "slug": "khoa-hoc-list-search-accent-insensitive",
+  "module": "dao-tao-core",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "'Khóa'→4 = 'Khoa'→4, nomatch→0",
+  "note": "Accent-insensitive OK"
+ },
+ "42": {
+  "slug": "de-kiem-tra-search-param-mismatch",
+  "module": "dao-tao-hoc-lieu",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "base6, nomatch→0, 'kiểm'→1",
+  "note": "keyword param wired"
+ },
+ "43": {
+  "slug": "bai-giang-search-param-ignored",
+  "module": "dao-tao-hoc-lieu",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "base10, nomatch→0, 'Test'→1",
+  "note": "keyword param wired"
+ },
+ "73": {
+  "slug": "kho-cau-hoi-search-param-mismatch-and-accent",
+  "module": "tv-nhanh",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "keyword: base33 nomatch→0 'Tính'→5 'Tinh'→5",
+  "note": "param wired + accent-insensitive"
+ },
+ "75": {
+  "slug": "kho-cau-hoi-view-counter-not-incrementing",
+  "module": "tv-nhanh",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "soLuotXem 0→3 sau detail GET",
+  "note": "counter increments (RLS-pinned UPDATE)"
+ },
+ "15": {
+  "slug": "tabcounts-stripped-by-response-interceptor",
+  "module": "chi-tra",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "GET ho-so-chi-tras → meta.tabCounts {TAT_CA:5,...}",
+  "note": "tabCounts nested meta, không bị strip"
+ },
+ "17": {
+  "slug": "chuyen-gia-tvv-edit-save-files-404-blocks-patch",
+  "module": "chuyen-gia-tvv",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "POST tu-van-viens/:id/files → 201",
+  "note": "Hết false 404 ERR-TVV-02, resolveHoSoId RLS-pinned"
+ },
+ "40": {
+  "slug": "rls-write-500-giang-vien-create",
+  "module": "dao-tao-hoc-lieu",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "create 201 (GV-BTP-TW-0009) + PATCH 200 + DELETE 204",
+  "note": "RLS write OK, hết 500"
+ },
+ "77": {
+  "slug": "vu-viec-already-rated-generic-409-not-vi-16-02",
+  "module": "vu-viec",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "FAIL",
+  "ev": "409 nhưng error.code=ERR-STATE-SYS-00-01 (generic); ERR-VAL-VI-16-02 chỉ trong message",
+  "note": "Fix branch/message OK nhưng error.code vẫn generic (2/2 vv)"
+ },
+ "41": {
+  "slug": "rls-write-500-nganhang-import-confirm",
+  "module": "dao-tao-hoc-lieu",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "upload template→validate hopLe:1→confirm 201 {imported:1}",
+  "note": "RLS write import confirm OK, hết 500"
+ },
+ "12": {
+  "slug": "bieu-mau-import-confirm-rls-write-500",
+  "module": "bieu-mau",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "Corroborated via sibling #41 (identical import-confirm RLS-QR fix, PASS 201) + dev live BM-20260606-003",
+  "note": "bieu-mau import multi-step file contract không dựng được raw-API; pattern RLS-write confirm verified trực tiếp ở #41"
+ },
+ "2": {
+  "slug": "api-consumer-notfound-wrong-code",
+  "module": "api-consumer",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "GET api-consumers/{missing} → 404 ERR-NOT-FOUND-ADM-00-01",
+  "note": "Resource code đúng, hết generic"
+ },
+ "19": {
+  "slug": "qtht-manage-all-exceeds-srs",
+  "module": "cross-cutting",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "QTHT POST mau-phan-hoi/export/approve → 403; GET mau-phan-hoi → 200",
+  "note": "SoD enforced, write gated"
+ },
+ "63": {
+  "slug": "thong-bao-keyword-accent",
+  "module": "thong-bao",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "keyword 'khoan'→24 = 'khoản', nomatch→0",
+  "note": "Accent-insensitive OK"
+ },
+ "64": {
+  "slug": "thong-bao-empty-title-accepted",
+  "module": "thong-bao",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "POST thong-baos tieuDe='' → 422 field=tieuDe",
+  "note": "IsNotEmpty fire"
+ },
+ "65": {
+  "slug": "tieu-chi-catalog-danh-muc-read-empty",
+  "module": "tieu-chi-danh-gia",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "tieu-chi-danh-gias/danh-muc → 200, 8 master rows (dv=null)",
+  "note": "RLS read NULL master OK, không empty"
+ },
+ "3": {
+  "slug": "audit-log-search-ignored",
+  "module": "audit-log",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "audit-logs base735 nomatch→0 'TAI_KHOAN'→3",
+  "note": "search param wired (keyword→search ILIKE)"
+ },
+ "66": {
+  "slug": "tieu-chi-rls-write-500",
+  "module": "tieu-chi-danh-gia",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "create 201 + PATCH 200 + DELETE 204",
+  "note": "RLS write master tieu-chi OK, hết 500"
+ },
+ "4": {
+  "slug": "audit-log-lock-account-null-endpoint-responsecode",
+  "module": "audit-log",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "lock/unlock acct → audit LOCK/UNLOCK_ACCOUNT rows có endpoint + responseCode=200",
+  "note": "Hết null endpoint/response_code; acct restored"
+ },
+ "62": {
+  "slug": "concurrent-create-race-generic-23505-409-code",
+  "module": "quan-tri/don-vi",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "POST don-vi dup ma → 409 ERR-VAL-VIII-103-03 DV_DUPLICATE_MA",
+  "note": "Code path đúng; race sub-ms HTTP-unreproducible (dev unit-verified)"
+ },
+ "1": {
+  "slug": "api-consumer-log-drawer-meta-null-crash",
+  "module": "api-consumer",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "Drawer 'Log tích hợp' mở OK + empty-state; console không có null TypeError [screenshot]",
+  "note": "Hết white-screen, guard meta null OK"
+ },
+ "33": {
+  "slug": "qtht-readonly-upload-control-not-disabled",
+  "module": "danh-gia",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "QTHT/LAP_KE_HOACH: input[type=file].disabled=true + dragger ant-upload-disabled [screenshot]",
+  "note": "readOnly enforced theo canMutate"
+ },
+ "30": {
+  "slug": "tieu-chi-batchupsert-rls-write-500",
+  "module": "danh-gia",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "PUT ke-hoach-danh-gias/{id}/tieu-chis batchUpsert → 200",
+  "note": "RLS write batchupsert OK, hết 500"
+ },
+ "32": {
+  "slug": "ke-hoach-danh-gia-create-409-unique-collision",
+  "module": "danh-gia",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "POST ke-hoach 2x same day cùng đơn vị → DG-20260607-0004,-0005 both 201",
+  "note": "Atomic ma_sequence, hết 409 collision"
+ },
+ "72": {
+  "slug": "kho-cau-hoi-ma-counter-collision-409",
+  "module": "tv-nhanh",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "BKH→QA-20260607-0003 + BTC→QA-20260607-0004 cùng ngày, both 201",
+  "note": "Counter atomic cross-đơn-vị, mã tuần tự, hết 409"
+ },
+ "55": {
+  "slug": "ho-so-phap-ly-dn-ma-counter-collision-409",
+  "module": "tu-van",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "BKH→HSPL-20260607-0003 + BTC→HSPL-20260607-0004 cùng ngày, both 201",
+  "note": "Counter atomic cross-đơn-vị, mã tuần tự, hết 409"
+ },
+ "67": {
+  "slug": "tieu-chi-danh-gia-ma-counter-collision-409",
+  "module": "tieu-chi-danh-gia",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "PUT tieu-chis BTC plan → TC-20260607-0004 (200), mã tuần tự global",
+  "note": "Counter date-based atomic OK, hết 409"
+ },
+ "71": {
+  "slug": "noi-dung-tu-van-cs-ma-counter-collision-409",
+  "module": "tvcs",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "BKH→TVCS-20260607-0003 + BTC→TVCS-20260607-0004 cùng ngày, both 201",
+  "note": "Counter atomic cross-đơn-vị, mã tuần tự, hết 409"
+ },
+ "57": {
+  "slug": "hop-dong-tu-van-ma-counter-collision-409",
+  "module": "hop-dong-tv",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "cb_nv_tw_01: 2 HDTV same-day (chủ thể Kappa + Io) → HDTV-20260607-0003 + -0004 both 201, mã tuần tự, hết 409 collision",
+  "note": "HDTV counter atomic (ma_sequence namespace). Đã seed 2 chủ thể HOAT_DONG; cross-đơn-vị corroborate #55/#71/#72"
+ },
+ "31": {
+  "slug": "bao-cao-danh-gia-ma-counter-collision-409",
+  "module": "danh-gia",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "Equivalence: cùng ma_sequence(namespace) verified LIVE 7 F2 sibling hôm nay (#32/#55/#57/#67/#71/#72) + #29 bao_cao get-or-create 200. Seed plan DG-20260607-0006+tiêu chí OK nhưng allocation point cần workflow đa-role dev cũng defer",
+  "note": "PASS gián tiếp (equivalence). Fix note dev: 'mechanism identical to LIVE-verified HSPL/TVCS; Live HTTP not run'. Allocation BCDG ở BAO_CAO-state — phân công ĐG viên endpoint không có trong docs"
+ },
+ "59": {
+  "slug": "hop-dong-tv-giatri-zero-dto-preempts-err-hdtv-05",
+  "module": "hop-dong-tv",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "POST hdtv giaTriHopDong=0 → 422 error.code ERR-HDTV-05 'Giá trị HĐ phải lớn hơn 0'",
+  "note": "Domain code promoted, hết generic ERR-VAL-SYS"
+ },
+ "60": {
+  "slug": "hop-dong-tv-subresource-404-code-inconsistent",
+  "module": "hop-dong-tv",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "POST moc-tien-dos + thanh-toans HĐ không tồn tại → 404 ERR-VAL-X3-159-02 (cả 2)",
+  "note": "Mã 404 đồng nhất domain HDTV, hết generic HOI_DAP code"
+ },
+ "49": {
+  "slug": "dashboard-aggregate-cache-key-omits-donvicap",
+  "module": "dashboard",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "GET dashboard?donViCap=DP vs BN → appliedFilter.donViCap khác nhau (DP/BN), data differ=true",
+  "note": "Cache key gồm donViCap, không còn stale cross-cap"
+ },
+ "50": {
+  "slug": "dashboard-empty-period-ignores-hasData-shows-zero-bars",
+  "module": "dashboard",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "?nam=2020 hasData=false+infoCode INFO-DASH-02; UI chart 'Chất lượng đào tạo' hiện 'Chưa có dữ liệu trong kỳ' [screenshot]",
+  "note": "Empty-period gate OK, hiện placeholder không render cột 0"
+ },
+ "51": {
+  "slug": "dashboard-scope-chip-dp-label-css-truncated",
+  "module": "dashboard",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "Chip 'Phạm vi: Toàn quốc' render đầy đủ; textOverflow=clip (không ellipsis), không overflow [screenshot]",
+  "note": "CSS clip thay ellipsis, label không bị cắt"
+ },
+ "52": {
+  "slug": "doanh-nghiep-create-button-hidden-cb-nv-tw",
+  "module": "doanh-nghiep",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "/auth/me có create_doanh_nghiep; nút 'Thêm mới' hiện+enabled → mở /doanh-nghiep/them-moi [screenshot]",
+  "note": "Quyền grant đúng, nút create hiện + mở form"
+ },
+ "24": {
+  "slug": "ct-htpl-detail-no-error-state",
+  "module": "ct-htpldn",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "UUID không tồn tại → skeleton=0, Result 'Chương trình HTPL không tồn tại' subtitle ERR-VAL-XI-01-00 + nút Quay lại [screenshot]",
+  "note": "Thoát Skeleton, render error Result đúng mã"
+ },
+ "38": {
+  "slug": "khoa-hoc-edit-no-editable-form-readonly-detail",
+  "module": "dao-tao-core",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "Route /chinh-sua mở form 'Sửa khóa học' 15 input editable + Lưu; PATCH giangVienIds same-đơn-vị → junction=1 persist; version 1→2 [screenshot]",
+  "note": "Form editable + giảng viên persist (GV cross-đơn-vị bị filter đúng)"
+ },
+ "36": {
+  "slug": "diem-danh-recalc-param-type-500",
+  "module": "dao-tao-hoc-lieu",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "batch-update payload hợp lệ → 403 state-guard ERR-BIZ-III-05-01 (CHO_DUYET_KQ); input sai → 422; KHÔNG còn 500 param-type",
+  "note": "SQL param bind OK, query prep hết crash 'parameter $2'"
+ },
+ "37": {
+  "slug": "rls-write-500-diem-danh-batch-update",
+  "module": "dao-tao-hoc-lieu",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "batch-update data hợp lệ (lich+5hv) → 403 guard trong RLS context lành mạnh, KHÔNG 500; 200-write seed-gap (không khóa DANG_DIEN_RA có buổi+học viên writable)",
+  "note": "RLS-write crash hết; 200-write chưa cô lập được do thiếu seed khóa đúng state"
+ },
+ "18": {
+  "slug": "fe-create-no-double-submit-guard-duplicate-records",
+  "module": "ct-htpldn",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "3 click Lưu liên tiếp → chỉ 1 POST chuong-trinh-htpls (201), chỉ 1 record CT-20260607-0002 tạo",
+  "note": "Guard double-submit chặn request thứ 2+, không tạo trùng"
+ },
+ "14": {
+  "slug": "chi-tra-trinh-phe-duyet-thamdinh-read-rls-context-409",
+  "module": "chi-tra",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "BLOCKED",
+  "ev": "Pool chi-tra chỉ YEU_CAU_BO_SUNG/TU_CHOI/DA_THANH_TOAN — 0 HS walkable (không CHO_TIEP_NHAN/DANG_THAM_DINH). QA KHÔNG tạo được HS gốc: entity HO_SO_CHI_TRA chỉ tạo qua DVC/LGSP inbound mTLS, CB NV không có nút Thêm mới",
+  "note": "Nhóm D (env/infra) — cần Dev BE/DBA inject 1 HS chi-tra hoặc LGSP gateway. RLS context fix corroborate 8+ sibling. KHÔNG seed được bằng tài khoản QA"
+ },
+ "61": {
+  "slug": "nht-vohieuhoa-guard-bypass-rls-pool-count-0",
+  "module": "vu-viec",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "Seed NHT active VV (nhan-phan-cong→DANG_XU_LY); cb_nv_tw_01 VHH NHT 27f82e31 → 422 ERR-NHT-04 'đang phân công 1 vụ việc', NHT giữ HOAT_DONG",
+  "note": "Guard count active VV chạy RLS-pinned đúng (count=1, hết bypass count=0). soVuViecDangXuLy denorm=0 stale nhưng guard live count đúng"
+ },
+ "28": {
+  "slug": "danh-gia-addassignment-trongso-read-rls-context-422",
+  "module": "danh-gia",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "cb_nv_dp_01 (DP): GET tieu-chi-danh-gias/cho-ke-hoach → 8 rows; /trong-so → 200 (2 nhóm); master NULL-đơn-vị không bị strip",
+  "note": "listCatalog RLS read trả master rows cho DP (hết empty→false 422)"
+ },
+ "58": {
+  "slug": "hop-dong-tv-export-500-typeorm-orderby-databasename",
+  "module": "hop-dong-tv",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "cb_nv_dp_01: POST hop-dong-tu-vans/export → 200, OOXML magic 50 4b 03 04 (7041 bytes)",
+  "note": "Hết 500 TypeORM orderBy, xuất xlsx OK"
+ },
+ "76": {
+  "slug": "vu-viec-assignedtome-guard-rejects-assigned-tvv",
+  "module": "vu-viec",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "nht_btp_tw_audit_r30 (assigned actor) POST nhan-phan-cong VV-BTP-TW-20260526-005 → 201, DA_PHAN_CONG→DANG_XU_LY (KHÔNG còn 403 ERR-PERM-VI-10-01)",
+  "note": "AssignedToMeGuard fix (runAsSystem self-scoping isAssigned) holds. Dev verify TVV; verify lại bằng NHT — cùng guard policy nguoi_ho_tro_id/nguoi_xu_ly_id"
+ },
+ "23": {
+  "slug": "ct-htpl-complete-500-bad-column-chuong-trinh-id",
+  "module": "ct-htpldn",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "cb_pd_tw_01: POST chuong-trinh-htpls/{id}/complete → 200, DANG_THUC_HIEN→HOAN_THANH, version 4→5",
+  "note": "Hết 500 bad column chuong_trinh_id, complete OK"
+ },
+ "7": {
+  "slug": "vneid-callback-error-masked-by-global-401-interceptor",
+  "module": "auth",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "callback?code=invalid → giữ /auth/vneid/callback (không bounce /login), Result 'Đăng nhập VNeID thất bại...nội bộ' + Quay lại [screenshot]",
+  "note": "Lỗi VNeID không bị global 401 interceptor mask, render đúng thông báo"
+ },
+ "74": {
+  "slug": "tu-van-nhanh-ma-counter-collision-409",
+  "module": "tv-nhanh",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "Env",
+  "ev": "POST /inbound/tu-van-nhanh → 404 trên app origin (Cổng PLQG mTLS gateway không reachable từ QA, như #69)",
+  "note": "Nhóm D mTLS inbound. F2 ma_sequence(tu_van_nhanh) corroborate 7 entity sibling PASS"
+ },
+ "5": {
+  "slug": "auth-lockout-retry-after-stripped",
+  "module": "auth",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "cb_nv_tw_08 sai pass 5 lần → 401 ERR-AUTH-LOCKED-01 có retry_after_seconds=1800; lần 6 → 429 retry-after 60",
+  "note": "retry_after_seconds không còn bị strip (machine-readable). Acct lock ~30p (throwaway)"
+ },
+ "6": {
+  "slug": "password-cp02-weak-dto-preempts-service-code",
+  "module": "auth",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "POST change-password newPassword='weak' → 422 error.code ERR-VAL-VIII-CP-02 'Mật khẩu mới chưa đủ mạnh'",
+  "note": "Domain code promoted, hết generic; password không đổi (rejected)"
+ },
+ "53": {
+  "slug": "doanh-nghiep-default-sort-ngaytao-vs-ngaycapnhat",
+  "module": "doanh-nghiep",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "GET doanh-nghieps không sortBy → sort ngayCapNhat DESC (DN ngayTao 05-07 nhưng capNhat 06-02 đứng đầu)",
+  "note": "Default sort = ngayCapNhat DESC đúng"
+ },
+ "79": {
+  "slug": "vu-viec-tenant-isolation-shared-rls-code-not-module-code",
+  "module": "vu-viec",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "GET vu-viecs/{non-existent} → 404 ERR-VAL-VI-03-02 'Vụ việc không tồn tại'",
+  "note": "Mã domain vu-viec, không leak HOI_DAP ERR-VAL-VII-02-01"
+ },
+ "29": {
+  "slug": "rls-write-500-baocao-danhgia-getorcreate",
+  "module": "danh-gia",
+  "p": "P1",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "GET ke-hoach HOAN_THANH/bao-cao → 200 get-or-create BCDG-20260513-0002; LAP_KE_HOACH → 409 guard (không 500)",
+  "note": "RLS-write get-or-create OK, hết 500"
+ },
+ "70": {
+  "slug": "tvcs-material-create-404-validateNoiDungTv",
+  "module": "tvcs",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "POST tu-lieu-phap-ly-vvs noiDungTvId hợp lệ → 201; id không tồn tại → 404 ERR-TLPL-01",
+  "note": "Tạo tư liệu OK với noiDungTv hợp lệ, miss thật vẫn 404 (không che)"
+ },
+ "56": {
+  "slug": "hoi-dap-lacongkhai-filter-ignored",
+  "module": "hoi-dap",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "cb_nv_tw_01: GET hoi-daps/da-xu-ly?congKhai=true → 2 (all CONG_KHAI), ?congKhai=false → 7 (all DA_DUYET/HOAN_THANH), 2+7=9=total",
+  "note": "Filter congKhai partitions đúng (data BTP-TW sẵn có). Block trước là false-block do query nhầm endpoint singular /hoi-dap (mTLS) + sai role"
+ },
+ "8": {
+  "slug": "bao-cao-export-no-double-submit-guard",
+  "module": "bao-cao",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "3 click Xuất Excel liên tiếp → chỉ 1 POST /bao-cao/export (200)",
+  "note": "Guard double-submit export, không tạo 2 job/audit-row"
+ },
+ "9": {
+  "slug": "bao-cao-filter-controls-not-hydrated-from-url",
+  "module": "bao-cao",
+  "p": "P2",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "Reload deep-link ?loai&kyBaoCao=NAM&tuNgay&denNgay → Loại/Kỳ/Thời gian hydrate đúng + report auto-render [screenshot]",
+  "note": "Control hydrate từ URL params đúng"
+ },
+ "10": {
+  "slug": "bao-cao-lam-moi-does-not-clear-report-view",
+  "module": "bao-cao",
+  "p": "P3",
+  "ba": "1a",
+  "qa": "PASS",
+  "ev": "Click Làm mới → URL clear, table/chart/result mất, Loại+Kỳ reset placeholder, Xem báo cáo disabled lại",
+  "note": "Làm mới reset toàn bộ view + filter + URL"
+ }
+}

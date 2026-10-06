@@ -1,0 +1,34 @@
+{
+  "ts": "2026-06-25T17:27:29.268Z",
+  "login": {
+    "status": 200,
+    "body": {
+      "success": true
+    }
+  },
+  "close": {
+    "before": {
+      "status": 200,
+      "version": 1,
+      "trangThai": "DA_DUYET"
+    },
+    "close": {
+      "status": 403,
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-PERM-SYS-00-01",
+          "message": "Forbidden",
+          "timestamp": "2026-06-25T17:27:30.161Z",
+          "requestId": "a65c74fe-7c94-463f-8767-8d2a2e7a75a6"
+        }
+      }
+    },
+    "after": {
+      "status": 200,
+      "version": 1,
+      "trangThai": "DA_DUYET",
+      "ngayHoanThanh": null
+    }
+  }
+}

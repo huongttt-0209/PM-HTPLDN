@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Đối tác báo: bấm vào tên cột trên danh sách Chi trả chi phí, hệ thống không thực hiện sắp xếp.
+- Kiểm tra lại trên màn Danh sách hồ sơ chi trả (tài khoản CB Nghiệp vụ TW, data thật CT-SEED-101→110): đúng là bấm vào tên cột (Mã HS, Số tiền đề nghị, Trạng thái, Ngày nộp...) KHÔNG sắp xếp. Kiểm tra DOM: không cột nào có marker sắp xếp (0 phần tử có class sort / aria-sort / ant-table-column-sorter). Bấm header "Số tiền đề nghị" → thứ tự dòng và giá trị giữ nguyên (8.000.000 / 7.000.000 / 8.500.000 / 6.000.000 / 9.000.000 — không sắp).
+- Đối chiếu SRS SCR-V.II-01 (FR-06, UC69) — bảng cột danh sách (srs-fr-06-chi-tra.md:918-938): cột "Hành vi" của mọi cột = "—" (không mô tả tương tác click-sort); chỉ có "Sắp xếp mặc định: ngày cập nhật DESC" (:958). Tức SRS module Chi trả KHÔNG yêu cầu sắp xếp theo click cột → xét riêng module này, app đúng spec, không phải bug.
+- Tuy nhiên các module tương tự CÓ hỗ trợ click-sort cột: Vụ việc HTPL (srs-fr-05:1654), Quản trị hệ thống (srs-fr-10:1573), Hỏi đáp pháp lý (srs-fr-02:1043). Không đồng nhất giữa các module.
+- Cần BA quyết: click-sort cột có phải yêu cầu chung toàn hệ thống (khi đó Chi trả thiếu = bug), hay chỉ áp dụng cho các màn có "Hành vi=sắp xếp" trong SRS (khi đó Chi trả đúng spec). Chi tiết: ../../ba-confirm/vu-viec/ba-confirmation-needed-vu-viec.md §QLHSDNHTCP_19.

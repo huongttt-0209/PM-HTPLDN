@@ -1,0 +1,62 @@
+# QLNDTVVCG_26 — dòng 323 (tab `UAT_TGPL Doanh Nghiệp-tuần 3`)
+
+## Tuần
+
+Tuần 3
+
+## Mã TC
+
+QLNDTVVCG_26
+
+## Mô tả
+
+Từ chối thành công
+
+## Điều kiện
+
+1. Đăng nhập Chuyên gia được phân công cho yêu cầu
+
+## Các bước thực hiện
+
+1. Chọn menu "Tư vấn" => "Tư vấn chuyên sâu"
+2. Bấm nút "Từ chối phân công"
+3. Nhập lý do và Xác nhận
+
+## Kết quả mong đợi
+
+- NSD nhập lý do và bấm "Xác nhận từ chối", hệ thống hiển thị thông báo "Đã từ chối yêu cầu" và quay về danh sách.
++ Chuyển trạng thái yêu cầu: Đã phân công → Tiếp nhận.
++ Gỡ liên kết chuyên gia khỏi yêu cầu.
++ Gửi thông báo cho cán bộ nghiệp vụ phụ trách kèm lý do từ chối để phân công lại.
+
+## Kết quả thực tế
+
+Hệ thống không gửi thông báo tới cán bộ nghiệp vụ phụ trách kèm lý do từ chối
+
+## Ảnh/vieo 1
+
+QLNDTVVCG_26.webm
+
+## Trạng thái 1
+
+Fail
+
+## Trạng thái dev fix 1
+
+dev done
+
+## Verify
+
+Pass
+
+## DEV phản hồi lần 1
+
+Đã kiểm tra lại — lỗi đã được khắc phục. Khi chuyên gia bấm "Từ chối nhiệm vụ" và nhập lý do, cán bộ nghiệp vụ phụ trách CÓ nhận được thông báo, và thông báo đó CÓ kèm nguyên văn lý do từ chối. Đội kiểm thử tách riêng hai vế để chấm, không gộp chung.
+• Vế 1 — có nhận được thông báo: TRƯỚC khi bấm, hộp thông báo của cán bộ có 44 mục, chuông hiện 43 chưa đọc, và không có mục nào liên quan yêu cầu này. NGAY SAU khi chuyên gia từ chối, hộp thông báo tăng lên 45 mục, chuông tự nhảy lên 44 chưa đọc (không cần tải lại trang) và mục mới nằm trên cùng với tiêu đề "Chuyên gia từ chối phân công: TVCS-20260803-0003".
+• Vế 2 — thông báo có kèm lý do: để kiểm chính xác, đội kiểm thử nhập một lý do có chuỗi nhận dạng riêng rồi tìm lại đúng chuỗi đó. Nội dung thông báo hiển thị đầy đủ: "Mã: TVCS-20260803-0003. Chuyên gia đã từ chối, cần phân công lại. Lý do: QA-LY-DO-TU-CHOI-20260803-1325Z chuyen gia ban lich khong nhan nhiem vu nay". Chuỗi lý do trùng khớp tuyệt đối với những gì chuyên gia đã nhập.
+• Lưu ý khi đối chiếu: hộp xổ nhanh của chuông chỉ hiện đoạn xem trước nên câu bị cắt ở "…cần phân công…". Đây là cách rút gọn chung cho mọi loại thông báo. Bấm "Xem tất cả thông báo" là thấy đủ cả phần lý do.
+• Đúng người nhận, đúng thời điểm: thông báo được gán cho đúng tài khoản cán bộ đã tạo yêu cầu rồi phân công chuyên gia, chứ không phải gửi nhầm người. Thời điểm ghi nhận thông báo trùng khớp tới từng giây với thời điểm bấm nút.
+• Chờ đủ lâu rồi kiểm lại: ngoài lần kiểm ngay sau thao tác, đội kiểm thử kiểm thêm ở phút thứ 4 và phút thứ 6 để loại trừ khả năng thông báo tới muộn. Kết quả không đổi: đúng một thông báo, có lý do, không bị lặp và không bị mất.
+• Các kết quả còn lại của thao tác cũng đúng: hệ thống bắt buộc nhập lý do mới cho từ chối; sau khi từ chối, yêu cầu quay về bước "Tiếp nhận", ô Chuyên gia đổi thành "Chưa phân công" và cán bộ thấy lại nút "Phân công" để chọn chuyên gia khác. Mỗi lần bấm chỉ gửi đi một lượt, không bị lặp.
+• Verify: đội kiểm thử tự dựng dữ liệu mới cho lần kiểm này bằng tài khoản nghiệp vụ, không dùng tài khoản quản trị và không dùng lại yêu cầu cũ. Yêu cầu dùng để đo là TVCS-20260803-0003 của doanh nghiệp "Cong ty TNHH QA UAT Kiem Thu", được cán bộ nghiệp vụ trung ương tạo lúc 20:19 và phân công chuyên gia lúc 20:21; chuyên gia bấm từ chối lúc 20:24 cùng ngày 03/08/2026. Trang đã được tải lại trước khi đo để chắc chắn kiểm trên bản mới nhất.
+• Lưu ý cách kiểm để đối tác đối chiếu: thông báo này chỉ vào hộp của đúng cán bộ đang phụ trách yêu cầu đó, tức người đã tạo và phân công. Nếu mở chuông bằng một tài khoản cán bộ khác thì sẽ không thấy, dù hệ thống vẫn gửi đúng.

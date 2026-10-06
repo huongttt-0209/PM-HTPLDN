@@ -1,0 +1,3 @@
+Không phải bug.
+- Kiểm tra: Tại modal "Thêm tiêu chí", để trống các trường bắt buộc rồi bấm "Thêm mới" → hệ thống KHÔNG lưu, modal vẫn mở và hiển thị lỗi rõ ràng: "Vui lòng nhập tên tiêu chí", "Vui lòng chọn nhóm tiêu chí". (Trường Trọng số và Điểm tối đa có giá trị mặc định nên không phát sinh lỗi.)
+- Kết luận: Thiếu trường bắt buộc đã bị chặn đúng, không có chuyện "lưu thành công khi thiếu trường bắt buộc". Không tái hiện được lỗi.

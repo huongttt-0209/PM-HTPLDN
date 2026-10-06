@@ -1,0 +1,8 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi do QA phát hiện thêm khi verify KTDGKQHT_02 ngày 03/08/2026, không nằm trong phạm vi phiếu gốc nên mở dòng riêng.
+- Web đang sai: bảng học viên ở tab "Kết quả" (màn chi tiết khóa học) không có cột "Đề kiểm tra", nên cán bộ không biết điểm của học viên là điểm của đề nào. Bảng chỉ có 10 cột: STT, Họ tên, Email, Số điện thoại, Đơn vị, Chuyên cần, Điểm kiểm tra, Kết quả, Xếp loại, Ghi chú. Đã cuộn ngang hết cỡ và kiểm cả cột ẩn, không phải do cột bị che.
+- Đúng theo đặc tả phải có: FR-III-05 (UC24) §Đặc tả màn hình SCR-III-02 – Tab 5 "Kết quả kiểm tra" (srs-fr-03-dao-tao.md dòng 1901) liệt kê đủ các cột STT, Họ tên, Email, Số điện thoại, Đơn vị, Đề kiểm tra, Điểm, Xếp loại (auto BR-KQ-01), Kết quả (auto BR-KQ-02), Ghi chú. Trường "đề kiểm tra ứng với điểm" cũng là trường bắt buộc khi nhập điểm kiểm tra theo bảng Inputs FR-III-05 (dòng 550).
+- Đã loại trừ khả năng "cột chỉ hiện khi khóa có đề": QA tự tạo đề kiểm tra "QA-DEKT-0803" (trạng thái Kích hoạt), gán vào 2 khóa học ở 2 trạng thái khác nhau, rồi nhập điểm để bản ghi kết quả trỏ đúng vào đề. Cột "Đề kiểm tra" vẫn không xuất hiện ở cả 4 tình huống đo.
+- Đối chứng ngay trên cùng bản dựng, cùng khóa học: tab "Công bố kết quả" CÓ cột "Đề kiểm tra" và hiển thị đúng tên đề vừa gán, chứng tỏ dữ liệu đề đã sẵn sàng cho giao diện; riêng tab "Kết quả" không dựng cột này.
+- Không tính vào lỗi này: cột "Chuyên cần" mà bản dựng thêm vào tab, vì việc gộp số buổi có mặt / tổng buổi / tỷ lệ vào một ô đang là câu hỏi chờ BA xác nhận ở phiếu KTDGKQHT_02.
+- Tài khoản kiểm tra: cbnv_tw_05 (Cán bộ nghiệp vụ Trung ương, Cục Bổ trợ tư pháp). Dữ liệu: khóa KH-QAW7-HOINGHI (Đang diễn ra) và AAA-KH-TW (Hoàn thành). Bản dựng V1.0.5, gói giao diện index-RAuQ-eDH.js. Bug ID: BUG-KTDGKQHT_21.

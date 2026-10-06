@@ -1,0 +1,5 @@
+✅ Bug đúng – chuyển dev.
+• Tab "Kết quả" chỉ có cột Họ tên, Chuyên cần, Điểm kiểm tra, Kết quả → thiếu Email, Số điện thoại, Đơn vị, Xếp loại.
+• Tab "Điểm danh" thiếu cột Email, Số điện thoại.
+• SRS FR-III-05 (UC24) §Outputs (dòng 574–590): bắt buộc hiển thị Email/SĐT/Đơn vị (ghi rõ "Yêu cầu đối tác mục 05/05b") và Xếp loại.
+• Verify: CB_NV_TW, khóa AAA-KH-TW. Bug ID: BUG-KTDGKQHT_01.

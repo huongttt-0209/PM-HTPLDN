@@ -1,0 +1,4 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: Bấm nút Xóa (icon thùng rác) trên một dòng tiêu chí → tiêu chí bị xóa NGAY LẬP TỨC, không có hộp thoại xác nhận ("Bạn có chắc chắn muốn xóa..."), không popup, không bước hỏi lại. Rủi ro mất tiêu chí do bấm nhầm.
+- Chuẩn: SRS SCR-VI-01, Tab Tiêu chí (mục #29) quy định thao tác Xóa tiêu chí thuộc nhóm thành phần C12; SRS mô tả C12 là bước "confirm" (xác nhận) — ví dụ nút Phê duyệt phân công (#39) cũng "→ C12 confirm". Thao tác xóa dữ liệu cần một bước xác nhận trước khi thực thi.
+- Mã lỗi nội bộ: BUG-TLCTCDG_08.

@@ -1,0 +1,13 @@
+Bang chung ERR-KQ-09 — phan hoi may chu khi nap tep mau cua buoi hoc khac
+Thoi diem: 2026-08-07 12:46:14 UTC (19:46 gio VN)
+Yeu cau: POST /api/v1/khoa-hocs/a7480002-.../diem-danhs/import/preview
+  form-data: file=nap_sai_buoi_tepbuoi4.xlsx (metadata lich_hoc_id = Buoi 4)
+             lichHocId = 2b643da6-7a79-470a-8228-b941827594d1 (Buoi 5 dang chon tren man)
+Ma trang thai: 422
+Than phan hoi:
+{"success":false,"error":{"code":"ERR-KQ-09","message":"Tệp mẫu không khớp buổi học / đề kiểm tra đang chọn. Vui lòng tải mẫu đúng và thử lại","timestamp":"2026-08-07T12:46:14.019Z","requestId":"3d6bb6d2-d62f-4fbc-bd0d-28df7262e30f"}}
+
+Bo bat thong bao (toast-capture.js, tu kiem soObserverDangSong = 1) ghi nhan:
+  SO_REQUEST = 1 · SO_KHUNG_THONG_BAO = 1
+  Chu tren thong bao: "Tệp mẫu không khớp buổi học / đề kiểm tra đang chọn. Vui lòng tải mẫu đúng và thử lại"
+(Anh chup truot vi thong bao tu tat ~3s; theo huong dan toast-capture.js thi lay phan hoi yeu cau lam bang chung.)

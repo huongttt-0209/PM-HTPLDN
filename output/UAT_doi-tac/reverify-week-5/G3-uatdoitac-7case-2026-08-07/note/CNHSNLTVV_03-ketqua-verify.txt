@@ -1,0 +1,17 @@
+✅ Đã hết lỗi — Pass.
+
+Điều kiện đo: https://htpldn-uat.ospgroup.vn, bản dựng HTPLDN · V1.0.10, ngày 07/08/2026 lúc 18:44–19:00, đăng nhập vai trò Người hỗ trợ pháp lý (đúng tác nhân đặc tả quy định — srs-fr-04-chuyen-gia-tvv.md:375, :377, :1576); hồ sơ đo TVV-BTP-TW-0063, trạng thái Đang hoạt động.
+
+Phạm vi đã kiểm: đã bấm Lưu thật trên form Cập nhật năng lực với dữ liệu hợp lệ và CÓ đính tệp chứng chỉ PDF; không kiểm và không kết luận về các nhánh thao tác khác.
+
+Số đo quyết định:
+- Không còn thông báo "Lỗi hệ thống, vui lòng thử lại sau." — 0 lần trên cả 2 lượt bấm Lưu; mỗi lượt 1 lần bấm sinh đúng 1 lời gọi và 1 thông báo, không lặp.
+- Thao tác lưu dữ liệu hợp lệ trả mã thành công (HTTP 200), thông báo "Cập nhật năng lực thành công".
+- Tải lại trang rồi đọc lại: dữ liệu đã ghi thật (phiên bản hồ sơ 14 → 15) và tệp chứng chỉ vừa đính đã được gắn vào hồ sơ, hiển thị đúng tên tệp ở mục Chứng chỉ chi tiết.
+- Lượt bấm đầu bị từ chối bằng thông báo nghiệp vụ rõ nghĩa "Số thẻ hành nghề là bắt buộc đối với Tư vấn viên" — đúng quy định tại srs-fr-04-chuyen-gia-tvv.md:1507, không phải lỗi hệ thống; bổ sung trường này thì lưu được ngay.
+
+Dữ liệu đã khôi phục: đã gỡ chứng chỉ vừa gắn và xoá tệp đã nạp, hồ sơ trở lại đúng hiện trạng ban đầu; riêng Số thẻ hành nghề không xoá lại được vì hệ thống bắt buộc trường này với Tư vấn viên (đã ghi giá trị nhận diện QA-G3-20260807).
+
+Phạm vi hiệu lực: kết luận áp dụng cho môi trường và bản dựng nêu trên.
+
+Ảnh bằng chứng: https://drive.google.com/file/d/1np3bHdjz6edlMu07TS_iGTJr4MLfmYRA/view?usp=drivesdk (form đã đính tệp chứng chỉ trước khi bấm Lưu) · https://drive.google.com/file/d/19nG83Su5649Cx5v3NUQXQBr3-6jaKPOi/view?usp=drivesdk (sau khi bấm Lưu — lưu thành công) · https://drive.google.com/file/d/1zZhohixSgBlTOBQsFWJdC-ihQPlzPoIC/view?usp=drivesdk (sau khi khôi phục dữ liệu).

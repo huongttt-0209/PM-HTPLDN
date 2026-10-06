@@ -1,0 +1,52 @@
+🔁 Còn lỗi — chuyển lại dev.
+
+Đo lại ngày 06/08/2026 trên bản dựng V1.0.8, màn Báo cáo thống kê → BC Đánh giá hiệu quả HTPL.
+
+1) Phần đã hết lỗi: với tài khoản CB Nghiệp vụ Trung ương (cbnv_tw_05), bấm [Xuất Excel] và [Xuất PDF] đều
+   ra tệp bình thường, không còn thông báo "Không thể tạo file xuất. Vui lòng thử lại.". Đã mở tệp đọc nội
+   dung: đủ 4 mục đầu tệp (tên báo cáo · kỳ báo cáo · đơn vị · ngày tạo) theo srs-fr-11-bao-cao.md:1092, số
+   liệu khớp từng con số với màn hình (Tổng đợt đánh giá 4 · Tổng lượt đánh giá 8 · Tổng số vụ việc đã đánh
+   giá 7), bảng theo đơn vị cộng dọc đúng bằng các số tổng (số lượt 1+4+3 = 8 · số vụ việc 1+4+2 = 7), và
+   điểm trung bình chung nằm đúng trong khoảng điểm của các đơn vị thành phần. Đã đo 4 dạng (đợt để trống ·
+   lọc đợt A · lọc đợt B · thu hẹp đơn vị = Sở Tư pháp Hà Nội) + 1 lượt lặp + 1 lượt PDF + 2 lượt gọi thẳng
+   máy chủ, tổng cộng 8 lượt xuất đều nhận được tệp.
+
+2) Tên tệp ĐẠT: hệ thống giao ra BaoCaoDanhGiaHieuQua_20260806_1514.xlsx — đúng khuôn
+   {TênBáoCáo}_{YYYYMMDD_HHmm} mà đặc tả quy định (srs-fr-11-bao-cao.md:85, :86 và Phụ lục E §H8,
+   srs-v3.5.md:6716), có đủ phần giờ-phút và mang đúng tên loại báo cáo "đánh giá hiệu quả". Hai lượt xuất
+   trong cùng ngày ra hai tên khác nhau nên không đè tệp của nhau. Đặc tả chỉ quy định khuôn tên với phần
+   tên là tên loại báo cáo, không ấn định đúng chuỗi "BaoCaoDanhGia"; tên hệ thống dùng chỉ dài hơn chứ vẫn
+   đúng loại báo cáo này, nên phần này không tính là lỗi.
+
+3) Phần CÒN LỖI (lý do chuyển lại dev): với vai trò Quản trị hệ thống (QTHT), bấm [Xem báo cáo] thì hệ thống
+   hiện ĐẦY ĐỦ số liệu (Tổng đợt đánh giá 4 · Tổng lượt đánh giá 8 · Tổng số vụ việc đã đánh giá 7 · Điểm
+   trung bình chung 33) và hai nút [Xuất Excel] / [Xuất PDF] vẫn ở trạng thái bấm được, nhưng bấm [Xuất
+   Excel] thì bị từ chối, không nhận được tệp nào, và chữ hiện ra cho người dùng chỉ là "Forbidden" — chuỗi
+   tiếng Anh thô của máy chủ. Tái hiện 13/13 lượt, cả định dạng Excel lẫn PDF (nhánh PDF mở được hộp thoại
+   tuỳ chọn in rồi mới báo lỗi ở bước cuối).
+
+   Đặc tả yêu cầu:
+   - srs-fr-11-bao-cao.md:117 (E7 / ERR-RPT-05): khi từ chối vì thiếu quyền, hệ thống phải cho người dùng
+     biết bằng tiếng Việt rằng họ không có quyền xem báo cáo.
+   - srs-fr-11-bao-cao.md:79: việc kiểm quyền nằm ở đầu luồng, nên bước Xem và bước Xuất phải nhất quán —
+     không cho xem đủ số liệu rồi mới chặn ở bước xuất.
+   - srs-fr-11-bao-cao.md:1052 và :1053: điều kiện hiển thị nút Xuất Excel / Xuất PDF chỉ là "Sau khi đã Xem
+     báo cáo", không kèm điều kiện vai trò.
+
+4) Ghi nhận thêm trong lúc đo (ngoài phần đối tác nêu, không tính vào kết luận của case): báo cáo này đang
+   thiếu hẳn phần kết quả chia theo đợt đánh giá — đặc tả srs-fr-11-bao-cao.md:507 ghi phần đó có điều kiện
+   hiển thị "Luôn", nhưng cả dữ liệu máy chủ trả về lẫn tệp xuất đều không có bảng nào theo đợt. Ngoài ra,
+   thẻ "Điểm trung bình chung" trên màn đang cắt phần thập phân (hiện 33 trong khi tệp và máy chủ là 33,9),
+   còn bảng theo đơn vị trên màn thì làm tròn 1 chữ số — ba cách hiển thị khác nhau cho cùng một con số, dễ
+   làm người dùng tưởng tệp lệch màn. Đề nghị dev xem cùng lần sửa.
+
+   Bộ lọc "Đợt đánh giá" của màn này chạy đúng: chọn hai đợt khác nhau cho hai kết quả khác hẳn, và tệp xuất
+   bám đúng bộ lọc đang chọn.
+
+Tài khoản và dữ liệu đã dùng: cbnv_tw_05 (CB Nghiệp vụ - Trung ương, cấp TW) và admin (Quản trị hệ thống,
+cấp TW, cùng đơn vị Cục Bổ trợ tư pháp) — hai tài khoản chỉ khác nhau ở vai trò; kỳ Năm 01/01/2026 -
+31/12/2026, đơn vị Toàn quốc, dữ liệu sẵn có trên môi trường. Môi trường không có đợt đánh giá tên "TKM
+kiểm thử 2" nên đã đo bằng hai đợt khác đang có dữ liệu. Không tạo, sửa hay xoá bản ghi nào.
+
+Người xử lý tiếp: Dev BE (thống nhất quy tắc quyền giữa bước xem và bước xuất, trả thông báo từ chối theo
+:117) và Dev FE (không đẩy nguyên chuỗi kỹ thuật của máy chủ ra màn hình người dùng).

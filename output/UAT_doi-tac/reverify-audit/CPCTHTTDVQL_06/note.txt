@@ -1,0 +1,5 @@
+❌ Không phải bug.
+- Đối tác báo: bấm Xuất Excel ở báo cáo "Chi phí theo đơn vị" hiện lỗi "Không thể tạo file xuất. Vui lòng thử lại.".
+- Kiểm tra lại (vai trò Cán bộ nghiệp vụ Trung ương, kỳ Năm 2026, phạm vi Toàn quốc, báo cáo đã có dữ liệu trước khi xuất): bấm Xuất Excel tải về file .xlsx bình thường, không hiện lỗi.
+- Mở file kiểm tra: có đủ tiêu đề báo cáo, kỳ báo cáo, đơn vị, ngày tạo và bảng số liệu khớp với màn hình.
+→ Đối tác kiểm tra lại.

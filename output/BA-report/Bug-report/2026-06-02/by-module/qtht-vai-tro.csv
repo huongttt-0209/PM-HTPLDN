@@ -1,0 +1,4 @@
+STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+76,"Vai trò Cấp filter ""ALL""",✅ Đạt,PASS,Thấp,"R2 06-02: filter Cấp hiện ""Tất cả cấp (ALL)"" — có nhãn Việt, đồng dạng (TW)/(BN)/(DP); cột Cấp QTHT = ""Tất cả cấp"" — SRS:2107"
+77,Phân quyền: số quyền chưa cập nhật,✅ Đạt,PASS,Thấp,"R2 06-02: màn /quyen-han LOAD OK (KHÔNG 404, override BA 1c); toggle quyền role test → Lưu OK + Số quyền cập nhật 73→74 — SRS:813/647"
+78,Phân quyền dữ liệu lỗi khi lưu,✅ Đạt,PASS,Cao,"R2 06-02: chọn đơn vị role test → Lưu cấu hình → PUT /phan-quyen-du-lieu/batch 200 + toast ""Đã lưu"" (đã restore) — SRS:796"

@@ -1,0 +1,6 @@
+Cần BA xác nhận wording thông báo.
+- Tái hiện: upload file hỏng (corrupt.docx, bytes rác đuôi .docx) → web báo "Nội dung file không khớp định dạng. Vui lòng tải lên file gốc đúng loại đã chọn." (chặn file, không đính kèm).
+- Đối chiếu SRS ERR-BM-04 (srs-fr-09 dòng 345) "File không hợp lệ hoặc bị hỏng" / ERR-BM-01 (dòng 342): app truyền tải ĐÚNG ý (file không hợp lệ) và cụ thể hơn, chỉ khác cách diễn đạt.
+- Lỗi generic "Upload file thất bại" đối tác báo KHÔNG tái hiện trên build hiện tại.
+- Đề nghị BA quyết: có bắt buộc đúng nguyên văn ERR-BM-04 không.
+- Verify: cbnv_tw (CB Nghiệp vụ - TW), form Thêm biểu mẫu, 20/07/2026.

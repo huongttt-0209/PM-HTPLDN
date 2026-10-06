@@ -1,0 +1,6 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Yêu cầu theo đặc tả: SCR-IV-02 "Thêm mới / Chỉnh sửa Tư vấn viên" §Danh sách trường dòng 1507 — "Số thẻ hành nghề | ô văn bản | Bắt buộc nếu Loại = Tư vấn viên (theo NĐ 77/2008 Đ.20)".
+- Dòng 1508 ngay kế bên đặt cùng điều kiện cho "File thẻ hành nghề" và đã được cài đúng (chặn được, có thông báo riêng), nên đây là bỏ sót đúng 1 ô chứ không phải thiếu cơ chế.
+- Bằng chứng: hồ sơ TVV-BTP-TW-0031 lưu được với Loại = Tư vấn viên và số thẻ hành nghề rỗng.
+- Mã lỗi nội bộ: BUG-DKTGMLTVV_OOS_01. Tài khoản kiểm tra: nht_qa_tw (Người hỗ trợ pháp lý, cấp Trung ương, đơn vị Cục Bổ trợ tư pháp). Bản dựng V1.0.5, kiểm tra ngày 03/08/2026.
+- Lỗi phát hiện ngoài phạm vi các dòng TC có sẵn (không dòng DKTGMLTVV nào kiểm ràng buộc bắt buộc theo Loại) nên mở dòng mới.

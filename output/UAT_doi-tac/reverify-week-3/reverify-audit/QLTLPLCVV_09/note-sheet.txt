@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Sửa tư liệu đang "Công khai" (vai trò CB Nghiệp vụ): khi bấm Lưu, hệ thống báo lỗi kỹ thuật "Tư liệu đã công khai, chỉ cho phép cập nhật: moTa, fileDinhKemIds" — lộ tên trường nội bộ cho người dùng cuối.
+- Theo SRS FR-X.1-06 (UC152) §Chỉnh sửa tư liệu (dòng 888): khi tư liệu đã công khai, hệ thống phải từ chối sửa và hướng dẫn "hủy công khai trước", không được lộ tên trường kỹ thuật.
+- Còn mâu thuẫn: dòng thông báo nói "được cập nhật mô tả và file" nhưng ô Mô tả bị khóa; mọi thao tác Lưu (kể cả chỉ đổi file) đều bị từ chối.
+- Verify: tài khoản cbnv_tw (CB_NV_TW), tư liệu TL-BF-0721-CK ở trạng thái Công khai. Bug ID: BUG-QLTLPLCVV_09.

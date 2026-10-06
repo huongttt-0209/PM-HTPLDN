@@ -1,0 +1,20 @@
+✅ Là bug — chuyển dev
+
+Đã kiểm tra lại bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW) — đúng vai trò đối tác đã dùng; riêng ý "ô chọn hàng loạt" kiểm thêm bằng cbpd_tw (CB Phê duyệt - Trung ương) vì đó là vai trò thực hiện thao tác duyệt.
+
+✅ 1) Thiếu cột "Câu trả lời" → Open, chuyển dev.
+- Web hiển thị 12 cột: Mã | Câu hỏi | Lĩnh vực | Từ khóa | Nguồn | Trạng thái | Hiệu lực | Công khai | Lượt xem | Đánh giá | Ngày tạo | Hành động — không có cột "Câu trả lời".
+- Theo FR-X.2-01 (UC 154, UC 157) §3 SCR-X2-01 bảng kho Q&A (srs-fr-13-tv-nhanh.md dòng 531), tập cột phải có "Cau tra loi (cat 100 ky tu)"; phần Outputs (dòng 132) cũng khai câu trả lời luôn hiển thị, cắt 100 ký tự ở danh sách.
+- Dữ liệu không thiếu: API danh sách vẫn trả về trường câu trả lời cho mọi bản ghi — thiếu ở tầng hiển thị.
+- Bug ID: BUG-QLKCHTV_03.
+
+✅ 2) Cột điểm đặt tên "Đánh giá" thay vì "Điểm TB" → Open, chuyển dev.
+- Theo srs-fr-13-tv-nhanh.md dòng 531, cột này tên "Diem TB" (Điểm trung bình); phần Outputs dòng 138 dùng trường diem_tb.
+- Web đang đặt nhãn "Đánh giá" — không khớp tên cột đặc tả.
+- Bug ID: BUG-QLKCHTV_03 (gộp chung, cùng màn hình).
+
+❌ 3) "Thiếu cột Ô chọn hàng loạt" → KHÔNG phải lỗi.
+- Cột này CÓ trên hệ thống, nhưng chỉ hiện với vai trò Cán bộ phê duyệt và ở thẻ "Chờ duyệt" — nơi thực sự dùng để duyệt nhiều câu hỏi cùng lúc.
+- Đã kiểm chứng: đăng nhập cbpd_tw, mở thẻ "Chờ duyệt" → bảng có ô chọn ở từng dòng và ô "chọn tất cả" ở dòng tiêu đề, kèm nút Duyệt và Từ chối.
+- Đặc tả cũng gắn ô chọn với thao tác duyệt hàng loạt ở thẻ "Chờ duyệt" (srs-fr-13-tv-nhanh.md dòng 537), không yêu cầu hiện thường trực cho Cán bộ nghiệp vụ.
+- → Đối tác kiểm tra lại với vai trò Cán bộ phê duyệt, thẻ "Chờ duyệt".

@@ -1,0 +1,20 @@
+✅ Là bug — chuyển dev · ⚠️ Có ý cần BA xác nhận
+
+Đã kiểm tra lại bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, đơn vị BTP · TW) — đúng vai trò đối tác đã dùng. Tái hiện đủ cả 3 ý.
+
+✅ 1) Danh sách "Trạng thái" ở thanh lọc sai so với đặc tả → Open, chuyển dev.
+- Web đang hiển thị 5 mục: Bị từ chối / Chờ duyệt / Đã duyệt / Công khai / Hết hiệu lực.
+- Theo FR-X.2-01 (UC 154, UC 157) §3 SCR-X2-01 thanh lọc (srs-fr-13-tv-nhanh.md dòng 530): "Trang thai: NHAP/CHO_DUYET/DA_DUYET/CONG_KHAI/HET_HIEU_LUC"; §2 Inputs (dòng 103) cũng liệt kê đúng 5 trạng thái này.
+- Nghĩa là web thiếu "Nháp" và thừa "Bị từ chối" — đặc tả không định nghĩa trạng thái "Bị từ chối" ở bất kỳ mục nào. Dòng 536 quy định từ chối phải đưa câu hỏi VỀ trạng thái "Nháp", không sinh trạng thái mới.
+- Bằng chứng bổ sung: chính giao diện gọi API đếm badge tab "Chờ duyệt" với tham số trangThai=CHO_DUYET,NHAP — tức "Nháp" là trạng thái có thật đang được dùng, chỉ bị thiếu trong ô lọc.
+- Bug ID: BUG-QLKCHTV_02.
+
+⚠️ 2) Ô lọc chưa có giá trị mặc định "Tất cả" → cần BA xác nhận, chưa chuyển dev.
+- Web: cả 3 ô Lĩnh vực / Nguồn / Trạng thái đều đang là chữ mờ gợi ý, chưa chọn giá trị nào.
+- Đặc tả không quy định ô lọc chọn đơn phải mặc định "Tất cả": quy ước UI-11 (srs-v3.5.md dòng 580) chỉ ràng buộc ô lọc dạng chọn nhiều. Chữ "Tất cả" duy nhất trong mục này là tên thẻ (tab), không phải giá trị mặc định của ô lọc.
+- Câu hỏi cho BA: có bổ sung yêu cầu 3 ô lọc này mặc định "Tất cả" không?
+
+⚠️ 3) Nguồn nhập kho hiển thị "Import" → cần BA xác nhận, chưa chuyển dev.
+- Đặc tả chỉ định mã nội bộ TU_DONG / THU_CONG / IMPORT (dòng 102, 530, 532) và không quy định nhãn tiếng Việt hiển thị cho từng giá trị.
+- Trên web hai giá trị kia đã được dịch ("Tự động", "Thủ công") nhưng riêng "Import" giữ nguyên tiếng Anh — không đồng nhất ngôn ngữ hiển thị.
+- Câu hỏi cho BA: nhãn hiển thị của nguồn IMPORT chốt là "Nhập Excel" hay giữ "Import"?

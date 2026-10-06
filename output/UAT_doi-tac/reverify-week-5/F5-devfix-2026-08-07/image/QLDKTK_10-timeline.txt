@@ -1,0 +1,152 @@
+QLDKTK_10 — TIMELINE ĐO (Giai đoạn B, FLOW 04)
+=================================================
+Env đo:        https://18.143.165.120.nip.io   (env NỘI BỘ, không phải env nghiệm thu đối tác)
+MailHog:       http://18.143.165.120:8025      (IP thô, không qua nip.io)
+Bó mã FE:      assets/index-D4Buvu4S.js  ·  assets/index-DVlgOkLg.css
+FE etag:       W/"6a74df15-428"  ·  last-modified Thu, 06 Aug 2026 19:23:01 GMT (= 02:23:01 giờ VN 07/08)
+Nhãn app:      HTPLDN · V1.0.9  (đọc trên sidebar sau khi đăng nhập)
+Bó mã thực chạy trong tab lúc đo: xác nhận lại lúc 03:33 VN qua
+  document.querySelectorAll('script[src]') → ["/assets/index-D4Buvu4S.js"]  ⇒ đúng bản dựng sau deploy 02:23:01.
+
+DỮ LIỆU QA ĐÃ TẠO (mutate môi trường — khai đầy đủ)
+---------------------------------------------------
+Bản ghi #1 (lượt đo C1 lần 1 + spare)
+  Tên DN         : QA W5 QLDKTK10 Cong ty TNHH Kiem Thu
+  Mã số thuế     : 9908070101        (= tên đăng nhập, auto)
+  Email          : qa.w5.qldktk10.01@htpldn.test
+  Điện thoại DN  : 0912345678
+  Tỉnh/TP        : Hà Nội   ·  Loại DN: Công ty trách nhiệm hữu hạn
+  Ngành nghề     : Thương mại và dịch vụ  ·  Quy mô: Siêu nhỏ
+  Người đại diện : Nguyen Van QA
+  MẬT KHẨU A     : QaW5FormA@2026     (nhập ở FORM ĐĂNG KÝ — SCR-VIII-08)
+  MẬT KHẨU B     : QaW5LinkB@2026     (DỰ ĐỊNH đặt ở màn kích hoạt — KHÔNG đặt được, xem C1)
+  id TAI_KHOAN   : dcd3fb30-e5be-40cf-9b2e-48fb928cd8e1
+
+Bản ghi #2 (bản ghi CHÍNH của case — đo đủ C1→C4)
+  Tên DN         : QA W5 QLDKTK10 lan 2 Cong ty TNHH Kiem Thu
+  Mã số thuế     : 9908070102        (= tên đăng nhập, auto)
+  Email          : qa.w5.qldktk10.02@htpldn.test
+  Điện thoại DN  : 0912345679
+  Tỉnh/TP        : Hà Nội   ·  Loại DN: Công ty trách nhiệm hữu hạn
+  Ngành nghề     : Thương mại và dịch vụ  ·  Quy mô: Siêu nhỏ
+  Người đại diện : Nguyen Van QA Hai
+  MẬT KHẨU A     : QaW5FormA@2026     (nhập ở FORM ĐĂNG KÝ — SCR-VIII-08)
+  MẬT KHẨU B     : QaW5LinkB@2026     (DỰ ĐỊNH đặt ở màn kích hoạt — KHÔNG đặt được)
+  id TAI_KHOAN   : 0675c1d7-0bd9-4d39-af03-d07516d7071a
+  id DOANH_NGHIEP: b0d23c98-6978-4bd7-a9b7-c4c63be870f9
+
+  Vì sao phải tạo bản ghi #2: liên kết kích hoạt CHỈ DÙNG ĐƯỢC MỘT LẦN. Lượt đo #1 đã tiêu token
+  trước khi kịp chụp màn kích hoạt (màn đó chỉ hiện ~3 giây rồi tự chuyển /login). Bản ghi #2 dựng
+  để chụp đúng màn đó. Cả 2 bản ghi đều là dữ liệu QA mới, KHÔNG đụng dữ liệu đối tác.
+
+Cả 2 bản ghi đều để lại trên env ở trạng thái HOAT_DONG. Nếu cần dọn: username 9908070101 / 9908070102.
+
+MỐC THỜI GIAN (giờ VN, 07/08/2026)
+----------------------------------
+03:18:11  Đo vân tay bản dựng bằng curl GET / → etag W/"6a74df15-428", last-modified 19:23:01 GMT.
+03:19:05  Mở /login, bấm "Đăng ký tài khoản doanh nghiệp" → điều hướng /register/doanh-nghiep.
+03:20:xx  Điền 13 trường bắt buộc bản ghi #1. Ô "Tên đăng nhập" (disabled, placeholder "Tự động theo
+          Mã số thuế") tự hiện 9908070101 — khớp yêu cầu username = MST.
+          5 dòng quy tắc mật khẩu dưới ô Mật khẩu đều tick ✓ (Ít nhất 8 ký tự / Chữ hoa / Chữ thường /
+          Chữ số / Ký tự đặc biệt).
+03:21:04  Bấm [Đăng ký]. POST /api/v1/auth/register-doanh-nghiep → 201.
+          Đếm request kèm toast: ĐÚNG 1 request POST register (không double-submit).
+          Toast (observer, không lọc trùng): "Đăng ký thành công, vui lòng kiểm tra email kích hoạt"
+          → 1 khối .ant-message-notice-wrapper.
+          Response body: {"id":"dcd3fb30-...","trangThai":"CHO_KICH_HOAT",
+                          "message":"Đăng ký doanh nghiệp thành công. Vui lòng kiểm tra email để kích
+                          hoạt tài khoản (link có hiệu lực vĩnh viễn)."}
+          Request body FE gửi kèm: "password":"QaW5FormA@2026","passwordConfirm":"QaW5FormA@2026",
+                                   "captchaToken":"mock-captcha"
+          URL sau submit: /login
+03:21:04  MailHog nhận thư → mailbox qa.w5.qldktk10.01@htpldn.test
+          Tiêu đề: "Kích hoạt tài khoản doanh nghiệp HTPLDN"
+          LIÊN KẾT KÍCH HOẠT THẬT (lấy nguyên văn từ thân thư, không tự ghép):
+            http://18.143.165.120.nip.io/auth/verify-email?token=0da3fccf-610a-4b92-b489-1d651a986d90
+          Thư ghi rõ: "Tên đăng nhập của bạn là mã số thuế: 9908070101" ·
+                      "Link kích hoạt có hiệu lực vĩnh viễn và chỉ dùng được một lần." ·
+                      "Vui lòng kích hoạt sớm để tránh tài khoản bị thu hồi sau 7 ngày không hoạt động."
+          (Thư có ĐÚNG 1 liên kết, không phải chọn giữa nhiều link.)
+03:21:58  MỞ LIÊN KẾT #1 (đây là hành động "bấm liên kết kích hoạt" của case).
+          GET /auth/verify-email?token=... → 200 (document)
+          POST /api/v1/auth/verify-email  → 200 · request body CHỈ có {"token":"0da3fccf-..."}
+                                            (KHÔNG có field mật khẩu nào)
+          Response: {"message":"Tài khoản đã được kích hoạt. Vui lòng đăng nhập để tiếp tục.",
+                     "trangThai":"HOAT_DONG"}
+          URL đích cuối: https://18.143.165.120.nip.io/login
+          Số ô input[type=password] trên màn kích hoạt: 0
+03:22:xx  Mở lại CHÍNH liên kết #1 lần 2 để kiểm tính 1-lần-dùng → màn hiện (và ĐỨNG YÊN, không tự
+          chuyển): "Link không hợp lệ / Link có thể đã được sử dụng trước đó hoặc không hợp lệ. /
+          Nếu tài khoản của bạn đã được kích hoạt, vui lòng đăng nhập. / Nếu chưa, vui lòng kiểm tra
+          lại email hoặc liên hệ quản trị viên."
+          ⇒ token 1-lần-dùng đúng như thư mô tả.
+03:24:39  Đăng ký bản ghi #2 (cùng cách, 13 trường). POST register → 201, trangThai CHO_KICH_HOAT.
+          Thư kích hoạt #2, mailbox qa.w5.qldktk10.02@htpldn.test:
+            http://18.143.165.120.nip.io/auth/verify-email?token=0b57c2ca-4025-494a-a015-625bfd88c400
+03:25:24  MỞ LIÊN KẾT #2, có gắn dụng cụ chụp (khai rõ, xem mục KỸ THUẬT CHỤP bên dưới).
+          Chuỗi màn thực tế đo được (innerText phần tử visible, KHÔNG dùng textContent):
+            t=+362ms  "Đang kích hoạt tài khoản..."                       input[type=password] = 0
+            t=+483ms  "Kích hoạt thành công!
+                       Tài khoản của bạn đã được kích hoạt. Đang chuyển đến trang đăng nhập..."
+                                                                          input[type=password] = 0
+            t=+18482ms (sau khi hết hẹn giờ đã kéo dài) → /login           input[type=password] = 1
+          Hẹn giờ THẬT của app trước khi tự chuyển /login: 3000 ms (đọc được từ lời gọi setTimeout).
+          POST /api/v1/auth/verify-email → 200, body request CHỈ {"token":"0b57c2ca-..."},
+          response {"message":"Tài khoản đã được kích hoạt. Vui lòng đăng nhập để tiếp tục.",
+                    "trangThai":"HOAT_DONG"}
+          ⇒ TRÊN CẢ 2 LƯỢT: KHÔNG CÓ MÀN ĐẶT MẬT KHẨU. Không có ô nhập mật khẩu, không có nút lưu
+            mật khẩu, không có request nào nhận mật khẩu. Mật khẩu B KHÔNG BAO GIỜ ĐẶT ĐƯỢC.
+03:28:17  (ĐỐI CHỨNG) Đăng nhập admin trong browser context RIÊNG BIỆT tên "adminreadonly"
+          (cookie/localStorage tách hoàn toàn khỏi tab đo DN → không nhiễm phiên).
+          admin / Secret@123 → bước mã xác thực 6 số, lấy OTP 228979 ở MailHog (admin@htpldn.gov.vn)
+          → vào /dashboard.
+03:29:xx  Đọc lại trạng thái 2 bản ghi bằng GET /api/v1/tai-khoan?...&search=<MST> (fetch trong trang,
+          credentials:'include'). Kết quả nguyên văn: xem QLDKTK_10-doi-chung-trangthai.txt
+          + QLDKTK_10-doi-chung-raw.json.
+03:29:xx  Đăng xuất admin: POST /api/v1/auth/logout → 200 + clear localStorage/sessionStorage.
+03:29:46  (C3 vế 1 — PHÉP THỬ QUYẾT ĐỊNH) Tab DN (context mặc định, chưa từng đăng nhập).
+          Đăng nhập UI thật: 9908070102 + MẬT KHẨU B (QaW5LinkB@2026)
+          POST /api/v1/auth/login → 401
+          Thông báo thật (observer): "Tên đăng nhập hoặc mật khẩu không đúng."
+          URL vẫn /login. (Đúng 1 lần thử sai — không chạm ngưỡng khóa 5 lần.)
+03:30:33  (C3 vế 2) Xóa sạch 2 ô bằng native value setter (fill của MCP APPEND vào value cũ),
+          rồi đăng nhập: 9908070102 + MẬT KHẨU A (QaW5FormA@2026)
+          POST /api/v1/auth/login → 200 → chuyển bước 2 "Nhập mã xác thực", 6 ô số,
+          nhãn "Mã 6 chữ số đã gửi đến email qa.***@htpldn.test", "Hiệu lực 4:35"
+          OTP ở MailHog (mailbox qa.w5.qldktk10.02@htpldn.test): 833015
+03:31:16  Nhập OTP → POST /api/v1/auth/verify-otp → 200 · GET /api/v1/auth/me → 200
+          URL sau đăng nhập: https://18.143.165.120.nip.io/dao-tao/chuong-trinh/danh-sach
+          (KHÔNG còn ở /login). Header hiện "Nguyen Van QA Hai · Doanh nghiệp".
+          /auth/me trả vaiTro:["DN"], doanhNghiepId b0d23c98-..., authMethod LOCAL.
+          ⇒ ĐĂNG NHẬP ĐƯỢC BẰNG MẬT KHẨU A (mật khẩu đặt ở FORM ĐĂNG KÝ), KHÔNG PHẢI MẬT KHẨU B.
+03:32:xx  (C4 — đo tối thiểu, MỘT lần) Bấm mục sidebar "Doanh nghiệp" (không tải lại trang).
+          URL app tự chuyển tới: https://18.143.165.120.nip.io/doanh-nghiep/me/sua
+          Màn "Hồ sơ doanh nghiệp — QA W5 QLDKTK10 lan 2 Cong ty TNHH Kiem Thu · MST: 9908070102",
+          4 nhóm (Thông tin liên hệ / Người đại diện / Lao động & tài chính / Lĩnh vực kinh doanh),
+          dữ liệu đúng của chính DN mình. GET /api/v1/doanh-nghieps/me → 200.
+          Không 403, không trang trắng. DỪNG ở đây, không quét thêm menu/chức năng.
+03:33:xx  Kiểm lại bó mã đang chạy trong tab: /assets/index-D4Buvu4S.js ✓
+
+TỔNG REQUEST 4xx/5xx GẶP TRONG CẢ LƯỢT ĐO
+------------------------------------------
+- GET /api/v1/auth/me → 401  (nhiều lần, khi CHƯA đăng nhập — hành vi bình thường của app)
+- POST /api/v1/auth/login → 401 (đúng 1 lần, do QA CHỦ ĐỘNG thử mật khẩu B — là phép thử của case)
+Không có 5xx. Không có 4xx ngoài dự kiến trong các bước bắt buộc của C1→C4.
+
+KỸ THUẬT CHỤP CÓ CAN THIỆP — KHAI RÕ
+------------------------------------
+Màn "Kích hoạt thành công!" chỉ hiện ~3 giây (hẹn giờ 3000 ms của chính app) rồi app tự chuyển /login,
+nên chụp trực tiếp rất dễ trượt. Ở lượt #2, khi mở liên kết có nạp trước 1 đoạn script làm 2 việc:
+ (a) ghi lại innerText của #root mỗi 120 ms (chỉ ĐỌC, không đổi gì);
+ (b) nhân 6 lần mọi hẹn giờ setTimeout có độ trễ >= 1000 ms, để màn thành công ở lâu hơn cho kịp chụp.
+Can thiệp này CHỈ làm chậm thời điểm tự chuyển trang; nội dung màn, số ô nhập, và các request
+gọi lên máy chủ KHÔNG bị đổi. Độ trễ THẬT của app (3000 ms) đọc được từ chính lời gọi đó và đã ghi ở
+mốc 03:25:24. Lượt #1 chạy KHÔNG can thiệp và cho cùng kết luận (0 ô mật khẩu, kết thúc ở /login).
+
+TÀI KHOẢN ĐÃ DÙNG
+-----------------
+- 9908070102 / QaW5FormA@2026 — tài khoản DN tự dựng, dùng để RA VERDICT C1/C2/C3/C4.
+- 9908070101 / QaW5FormA@2026 — tài khoản DN tự dựng, lượt đo C1 lần 1 (spare).
+- admin / Secret@123 — CHỈ dùng ĐỌC đối chứng trạng thái ở bước 03:29, trong browser context riêng,
+  đã đăng xuất ngay sau khi đọc. KHÔNG dùng admin để ra verdict cho bất kỳ vế nào.
+- KHÔNG dùng bộ tài khoản _03 (case này không cần).

@@ -1,0 +1,201 @@
+========================================================================
+SỐ ĐO ĐẦY ĐỦ — CNHSNLTVV_03 (tab `bug` dòng 36 · Tuần 2)
+"Lưu thành công khi nhập dữ liệu hợp lệ" — màn Cập nhật năng lực TVV/CG
+========================================================================
+
+MÔI TRƯỜNG + BẢN DỰNG (đọc lại sau khi TẢI LẠI TRANG, đầu lượt đo)
+  URL              https://18.143.165.120.nip.io   (env NỘI BỘ, không phải env
+                   nghiệm thu htpldn-uat.ospgroup.vn của đối tác)
+  Chuỗi phiên bản  HTPLDN · V1.0.8
+  Bó mã FE         assets/index-DIABnbIr.js  (+ assets/index-DVlgOkLg.css)
+  GET / last-modified  Thu, 06 Aug 2026 07:13:15 GMT  (14:13:15 giờ VN)
+  GET / etag       W/"6a74340b-428"
+  ⇒ KHÁC bản dựng dev khai đã verify (V1.0.6 ngày 04/08) và KHÁC bản dựng
+    trong ảnh của đối tác (V1.0.3, env nghiệm thu) ⇒ đo lại từ đầu, không kế thừa.
+
+TÀI KHOẢN ĐO
+  nht_qa_tw / Test@1234
+  /api/v1/auth/me → hoTen "QA NHT Trung uong" · vaiTro ["NHT"] ·
+  donViId 00000000-0000-4000-8000-000000000001 (Cục Bổ trợ tư pháp - Bộ Tư pháp) ·
+  capDonVi "TW"
+  Vai trò NHT TRÙNG KHÍT đối tác (ảnh: huy hiệu NHT). Đã NỚI cấp/đơn vị:
+  đối tác hiển thị "BTP · DP", mình đo ở "BTP · TW" — lý do khai ở mục 6 file tiêu chí.
+  Không có lượt đăng nhập fail, không phải dùng Rule 7 fallback.
+
+BỘ BẮT THÔNG BÁO
+  output/UAT_doi-tac/tools/toast-capture.js — cài LẠI trước mỗi chặng đo
+  (mỗi lần tải lại trang là mất observer). TỰ KIỂM trước mọi chặng:
+  soObserverDangSong = 1 ở CẢ 4 chặng ⇒ số liệu hợp lệ.
+  Đếm thông báo theo MỐC GIỜ KHÁC NHAU (không đếm số phần tử). Không lọc trùng.
+  Đọc chữ bằng innerText.
+
+========================================================================
+N = 2 HỒ SƠ  ×  M = 5 DẠNG THAO TÁC LƯU   → 7 lượt bấm [Lưu] thật
+========================================================================
+
+--- N1 = TVV-BTP-TW-0002 "QA TVV Seed28 Active" (hồ sơ CÓ SẴN) -----------
+    id 98cfd963-3cd3-4c8a-bfa9-625460824d6d · trạng thái Đang hoạt động
+    (chính hồ sơ dev khai đã verify E2E PASS)
+
+M1 — chỉ sửa TRƯỜNG CHỮ/SỐ, không đụng tệp, không đổi lĩnh vực
+  Nhập: trinhDo "Thạc sĩ" · soNamKinhNghiem 13 · chuyenNganh "Luat Thuong mai QA R2 0806"
+        kinhNghiem "QA B7 CNHSNLTVV03 R2 - M1 chi sua truong chu 2026-08-06"
+        soTheHanhNghe "STHN-QA-28-R2" · ghiChuCapNhat "QA R2 M1 - chi sua truong chu"
+  ĐO:  SO_REQUEST_GHI = 1   → PATCH /api/v1/tu-van-viens/{id}/nang-luc
+       SO_KHUNG = 1 · SO_THONG_BAO_THEO_MOC_GIO = 1
+       chữ nguyên văn: "Cập nhật năng lực thành công"
+  TẢI LẠI TRANG + ĐỌC LẠI (bắt buộc, không Pass bằng quan sát tĩnh):
+       Trên màn : Trình độ "Thạc sĩ" · Số năm 13 năm · Số thẻ "STHN-QA-28-R2" ·
+                  Kinh nghiệm "QA B7 CNHSNLTVV03 R2 - M1 chi sua truong chu 2026-08-06" ·
+                  Chuyên ngành "Luat Thuong mai QA R2 0806"
+       Máy chủ  : GET .../tu-van-viens/{id} → 200, version 24→25, mọi trường khớp từng chữ
+  ⇒ ĐẠT
+
+M2 — ĐỔI LĨNH VỰC PHÁP LUẬT (thêm 2 + bớt 1)
+  Thao tác: thêm "Hành chính" + "Sở hữu trí tuệ", bỏ "Đất đai"
+            → còn Thương mại · Thuế · Lao động · Hành chính · Sở hữu trí tuệ
+  ĐO:  SO_REQUEST_GHI = 1 → PATCH .../nang-luc
+       SO_KHUNG = 1 · SO_THONG_BAO_THEO_MOC_GIO = 1
+       chữ: "Cập nhật năng lực thành công"
+  TẢI LẠI + ĐỌC LẠI: trên màn đúng 5 thẻ như trên · máy chủ linhVucIds độ dài 5
+  ⇒ ĐẠT
+
+M3 — DANH SÁCH CHI TIẾT: thêm 1 bằng cấp + thêm 1 chứng chỉ + SỬA 1 chứng chỉ cũ
+  Nhập: bằng cấp #2 "Hoc vien Tu phap QA R2 / Luat Kinh doanh / 2018"
+        chứng chỉ #2 "Chung chi dao tao QA R2 / Hoc vien Tu phap / 2020-06-01"
+        sửa nơi cấp chứng chỉ #1 "Bo Tu phap" → "So Tu phap Ha Noi (QA R2 sua)"
+  ĐO:  SO_REQUEST_GHI = 1 → PATCH .../nang-luc
+       SO_KHUNG = 1 · SO_THONG_BAO_THEO_MOC_GIO = 1
+       chữ: "Cập nhật năng lực thành công"
+  TẢI LẠI + ĐỌC LẠI:
+       Trên màn: 2 dòng Bằng cấp chi tiết + 2 dòng Chứng chỉ chi tiết, đúng nội dung
+       Máy chủ : hoSo.bangCapChiTiet có 2 phần tử · hoSo.chungChiChiTiet có 2 phần tử,
+                 noiCap #1 = "So Tu phap Ha Noi (QA R2 sua)"
+  ⇒ ĐẠT
+
+M4 — TẢI LÊN TỆP CHỨNG CHỈ MỚI, tên tệp có KÝ TỰ ĐẶC BIỆT (giống hệt đối tác)
+     + đồng thời là M5 (kết hợp như ảnh đối tác: lĩnh vực đã đổi + 1 tệp + ghi chú "a")
+  Tệp: "2K15 T3 (4.8) & CN (9.8).pdf" (638 B) — TRÙNG KHÍT tên tệp trong ảnh đối tác
+       (dấu cách + ngoặc đơn + dấu &). Ghi chú cập nhật = "a" (trùng khít đối tác).
+  Bước đính tệp: POST /api/v1/tu-van-viens/{id}/files → 201, KHÔNG sinh thông báo.
+                 Tệp hiện trong form: "2K15 T3 (4.8) & CN (9.8).pdf (638 B)".
+  ĐO khi bấm [Lưu]:
+       SO_REQUEST_GHI = 1 → PATCH .../nang-luc
+       SO_KHUNG = 1 · SO_THONG_BAO_THEO_MOC_GIO = 1   (KHÔNG double-toast)
+       chữ nguyên văn: "Lỗi hệ thống, vui lòng thử lại sau."
+       ⇒ TRÙNG KHÍT nguyên văn ô "Kết quả thực tế" của đối tác.
+  PHẢN HỒI MÁY CHỦ (nguyên văn, lưu tại evidence/CNHSNLTVV_03-R2-M4-patch-nang-luc-500.network-response):
+       HTTP 500
+       {"success":false,"error":{"code":"ERR-SYS-00-00-01",
+        "message":"Lỗi hệ thống, vui lòng thử lại sau",
+        "timestamp":"2026-08-06T10:15:49.864Z",
+        "requestId":"e10bfc79-6b1b-48b2-a543-5444d8f072e5"}}
+  THÂN YÊU CẦU (lưu tại ...-R2-M4-patch-nang-luc-500.network-request):
+       khác thân của 3 lượt ĐẠT ở trên ĐÚNG MỘT trường:
+         "chungChiMoiIds": ["8f7214ee-68f7-453b-a709-b86a9a823b0a"]
+       (mọi trường còn lại — trinhDo, soNamKinhNghiem, chuyenNganh, soTheHanhNghe,
+        bangCapChiTiet, chungChiChiTiet, linhVucIds, ghiChuCapNhat, version — đều
+        nằm trong ràng buộc §Inputs :383–:393)
+  TẢI LẠI + ĐỌC LẠI: version GIỮ NGUYÊN 25 · ghiChuCapNhat null · hồ sơ không đổi
+       ⇒ KHÔNG lưu được gì, đúng như đối tác phản ánh.
+  ⇒ KHÔNG ĐẠT — TÁI HIỆN
+
+M4b — cùng thao tác, nhưng TÊN TỆP THƯỜNG (loại trừ giả thuyết "lỗi do tên tệp")
+  Tệp: "B7-CNHSNLTVV03-chungchi-A.pdf" (624 B) — chỉ chữ, số, gạch nối
+  ĐO:  SO_REQUEST_GHI = 1 → PATCH .../nang-luc
+       SO_KHUNG = 1 · SO_THONG_BAO_THEO_MOC_GIO = 1
+       chữ: "Lỗi hệ thống, vui lòng thử lại sau."
+  ⇒ KHÔNG ĐẠT — TÁI HIỆN. Ký tự đặc biệt trong tên tệp KHÔNG phải nguyên nhân.
+
+--- N2 = TVV-BTP-TW-0038 "QA B7 CNHSNLTVV03 Ho So Moi" (hồ sơ QA TỰ TẠO MỚI) --
+    id 7c9107b3-9476-4aba-8225-3765ed848635 · trạng thái Mới đăng ký
+    (dựng để loại trừ khả năng "chỉ hồ sơ dev đụng vào mới lưu được")
+
+N2-M1 — chỉ sửa trường chữ
+  Nhập: trinhDo "Thạc sĩ" · kinhNghiem "QA B7 N2 R2 - M1 khong dinh tep 2026-08-06"
+  ĐO:  1 request PATCH · SO_KHUNG 1 · 1 mốc giờ · "Cập nhật năng lực thành công"
+  TẢI LẠI + ĐỌC LẠI: trên màn + máy chủ đều đúng giá trị mới, version 4
+  ⇒ ĐẠT
+
+N2-M4 — đính tệp chứng chỉ mới "B7-CNHSNLTVV03-chungchi-B.pdf" (624 B)
+  ĐO:  1 request PATCH · SO_KHUNG 1 · 1 mốc giờ
+       chữ: "Lỗi hệ thống, vui lòng thử lại sau."
+  Lặp lần 2 để chụp được thông báo: kết quả y hệt (1 request / 1 thông báo / cùng chữ).
+  TẢI LẠI + ĐỌC LẠI: hoSo.chungChiChiTiet = [] · không có gì được lưu
+  ⇒ KHÔNG ĐẠT — TÁI HIỆN
+
+========================================================================
+TỔNG KẾT SỐ ĐO
+========================================================================
+  7 lượt bấm [Lưu] thật  ·  2 hồ sơ  ·  5 dạng thao tác
+  ĐẠT      4/7 lượt : M1 · M2 · M3 · N2-M1   (mọi lượt KHÔNG đính tệp chứng chỉ mới)
+  KHÔNG ĐẠT 3/7 lượt : M4 (tên tệp đặc biệt) · M4b (tên tệp thường) · N2-M4
+                       (mọi lượt CÓ đính tệp chứng chỉ mới)
+  Tỉ lệ: 3/3 lượt có đính tệp chứng chỉ mới đều hỏng — 100%, không phải ngẫu nhiên.
+  Mọi lượt: đúng 1 request ghi / đúng 1 thông báo theo mốc giờ. Không double-toast,
+  không gửi 2 lần.
+
+ĐƯỜNG ĐO THỨ HAI (đối chứng, tách biến)
+  Gọi thẳng PATCH .../nang-luc với THÂN Y HỆT lượt M4 nhưng BỎ trường
+  "chungChiMoiIds" → HTTP 200, success true, hồ sơ cập nhật thật (version 26→27).
+  ⇒ Cùng bản ghi, cùng phiên, cùng tài khoản, chỉ khác đúng 1 trường: có
+    "chungChiMoiIds" thì 500, bỏ ra thì 200.
+  HAI ĐƯỜNG ĐO KHÔNG MÂU THUẪN: giao diện báo lỗi ⇔ máy chủ trả 500.
+
+QUAN SÁT KÈM THEO (cùng thao tác, không mở dòng bảng mới)
+  Lượt lưu hỏng vẫn để lại BẢN GHI TỆP ĐÍNH KÈM trên hồ sơ: POST .../files trả 201
+  trước, PATCH .../nang-luc trả 500 sau, nhưng tệp KHÔNG được gỡ.
+  Đo được: sau các lượt hỏng, TVV-BTP-TW-0002 có thêm 2 tệp rác và
+  TVV-BTP-TW-0038 có 4 tệp rác (3 bản trùng tên do bấm lưu lại).
+  Tệp lại KHÔNG hiện ở khối "Chứng chỉ hiện có" (vẫn "Chưa có chứng chỉ nào.")
+  vì bước gắn chứng chỉ nằm trong chính lượt PATCH đã hỏng.
+  Đã dọn sạch toàn bộ tệp rác (xem mục HOÀN NGUYÊN).
+
+ẢNH CHỤP
+  image/CNHSNLTVV_03-R2-01-M4-truoc-khi-bam-Luu-tep-va-ghichu-a.png
+     Form Cập nhật năng lực của TVV-BTP-TW-0002 NGAY TRƯỚC khi bấm [Lưu]:
+     "Chứng chỉ hiện có → Chưa có chứng chỉ nào.", vùng kéo thả, hàng tệp
+     "2K15 T3 (4.8) & CN (9.8).pdf (638 B)" với 2 điều khiển Xem/Xóa, ô Ghi chú
+     cập nhật = "a" (1/2000), 2 nút [Làm lại] [Lưu] — dựng lại đúng cảnh ảnh đối tác.
+  image/CNHSNLTVV_03-R2-02-M4-thong-bao-Loi-he-thong-vui-long-thu-lai-sau.png
+     Cùng màn đó SAU khi bấm [Lưu]: thông báo đỏ "Lỗi hệ thống, vui lòng thử lại sau."
+     nổi giữa trên, tệp và ghi chú vẫn nguyên trong form (chưa lưu được).
+  image/CNHSNLTVV_03-R2-03-N2-form-truoc-khi-bam-Luu-tep-chungchi-B.png
+     Hồ sơ QA tự tạo TVV-BTP-TW-0038, form trước khi bấm [Lưu], đang đính
+     "B7-CNHSNLTVV03-chungchi-B.pdf (624 B)", ghi chú "QA R2 N2-M4 dinh tep chung chi".
+  image/CNHSNLTVV_03-R2-04-N2-thong-bao-Loi-he-thong-tren-hoso-QA-tu-tao.png
+     Cùng màn N2 sau khi bấm [Lưu]: cùng thông báo "Lỗi hệ thống, vui lòng thử lại sau."
+     ⇒ không phải chuyện riêng của hồ sơ dev đã đụng vào.
+  image/CNHSNLTVV_03-R2-05-da-hoan-nguyen-TVV-BTP-TW-0002.png
+     Tab Năng lực của TVV-BTP-TW-0002 SAU khi hoàn nguyên: Trình độ "Cử nhân",
+     Số năm "—", 1 bằng cấp, 1 chứng chỉ (nơi cấp "Bo Tu phap"), Số thẻ "STHN-QA-28",
+     4 lĩnh vực Thương mại/Thuế/Lao động/Đất đai — khớp mốc gốc.
+
+  Số lượt phải chụp lại: 1 (lượt N2 đầu, hẹn giờ 2500ms chụp trượt thông báo →
+  đã ĐỔI TÊN tệp ảnh cho khớp đúng nội dung nó chụp được, rồi bấm lại với hẹn
+  giờ 1500ms để bắt được thông báo). Không có ảnh nào tên lệch nội dung.
+
+========================================================================
+HOÀN NGUYÊN DỮ LIỆU
+========================================================================
+TVV-BTP-TW-0002 (hồ sơ CÓ SẴN, không phải của QA) — đã trả về ĐÚNG mốc gốc
+  (mốc gốc đọc từ evidence/CNHSNLTVV_03-baseline-TVV-BTP-TW-0002.json,
+   chụp lúc bản ghi còn ngayCapNhat 2026-08-06T02:18:28Z / hoSo 2026-08-04T15:44:00Z)
+                          trước khi đo          sau khi hoàn nguyên
+  trinhDo                 Cử nhân               Cử nhân            ✔
+  chuyenNganh             ""                    ""                 ✔
+  soNamKinhNghiem         null                  null               ✔
+  soTheHanhNghe           STHN-QA-28            STHN-QA-28         ✔
+  moTaKinhNghiem          "Kinh nghiem ... 10 nam (QA re-verify)"  ✔
+  linhVucIds              4 (TM/Thuế/LĐ/ĐĐ)     4 (TM/Thuế/LĐ/ĐĐ)  ✔
+  bangCapChiTiet          1 phần tử             1 phần tử          ✔
+  chungChiChiTiet         1 phần tử, nơi cấp "Bo Tu phap"          ✔
+  fileDinhKems            ["the-hanh-nghe-qa.pdf"]                 ✔
+  Chỉ `version` là tăng (22 → 27) — không tránh được, mọi lần ghi đều tăng.
+  Đã đọc lại bằng cả giao diện (ảnh -R2-05) và máy chủ để xác nhận.
+
+TVV-BTP-TW-0038 — hồ sơ do QA tự tạo trong lô này, GIỮ LẠI để dev tái hiện.
+  Đã xoá sạch 4 bản ghi tệp rác sinh ra từ các lượt lưu hỏng (DELETE
+  /api/v1/tu-van-viens/{id}/files/{fileId} → 204 × 4, đọc lại: fileDinhKems rỗng).
+
+KHÔNG đụng bản ghi nào khác. KHÔNG thao tác trên env nghiệm thu của đối tác.

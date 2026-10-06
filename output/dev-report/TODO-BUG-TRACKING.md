@@ -335,7 +335,7 @@
 - `BUG-REPORT-TONG-HOP-FR08-2026-05-11.md` — FR-08 Phase B (7 BUG + 8 OBS + 11 SPEC-CLARIFY)
 - `BUG-REPORT-TONG-HOP-MULTI-FR-2026-05-11.md` — FR-01 + FR-06 + FR-11 + FR-12
 - `Pass-bug-report-flow-danhgia.md` — Đánh giá HTPL R6→R11 (15 BUG)
-- `bug-report-flow-vu-viec.md` + `bug-report-r7-7-3-functional-vu-viec.md` — Vụ việc R7 (17 BUG)
+- `bug-report-flow-vu-viec.md` + `Pass-bug-report-r7-7-3-functional-vu-viec.md` — Vụ việc R7 (17 BUG)
 - `Pass-bug-report-r7-7-13-bao-cao.md` — Báo cáo R7 (9 BUG)
 - `Pass-bug-report-r7-7-5-tvcs-r16.md` — TVCS R16→R19 (8 BUG)
 - `bug-report-r7-7-11-tvn.md` — Tư vấn nhanh R7 (7 BUG)

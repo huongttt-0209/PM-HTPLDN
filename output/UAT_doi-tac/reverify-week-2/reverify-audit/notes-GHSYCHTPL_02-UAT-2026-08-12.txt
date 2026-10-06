@@ -1,0 +1,4 @@
+⚠️ Cần BA xác nhận.
+- Trên UAT, form Gửi yêu cầu hỗ trợ pháp lý đã không còn phần “Thông tin người gửi” và không còn cho doanh nghiệp tự chọn “Độ ưu tiên/Lý do ưu tiên”; hai nội dung này hiện đã phù hợp FR-V.I-02 (UC52) §Inputs/Processing (dòng 179-196).
+- Form hiện vẫn không hiển thị Tên doanh nghiệp và Mã số thuế. FR-V.I-02 (UC52) dòng 179 và 187 chỉ quy định lấy thông tin doanh nghiệp từ phiên đăng nhập, nhưng chưa quy định có phải hiển thị hai trường này ở dạng chỉ đọc trên form hay không.
+- Nhờ BA xác nhận: form cần hiển thị Tên doanh nghiệp/Mã số thuế chỉ đọc như kỳ vọng đối tác, hay giữ như UAT hiện tại và chỉ lấy doanh nghiệp từ phiên đăng nhập?

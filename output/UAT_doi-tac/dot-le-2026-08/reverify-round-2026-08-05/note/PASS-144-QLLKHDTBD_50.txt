@@ -1,0 +1,5 @@
+- Đã kiểm tra lại ngày 05/08/2026 trên bản mới nhất của môi trường nghiệm thu: cả 5 nội dung phản ánh đều đã được khắc phục.
+- Bảng danh sách Kế hoạch đào tạo nay có ô tích chọn dòng; tích ở dòng tiêu đề thì toàn bộ 14/14 dòng đang hiển thị được chọn theo.
+- Đã bổ sung cột "Người tạo" (hiện đúng người lập kế hoạch) và cột "Ngày tạo" (đúng dạng ngày/tháng/năm).
+- Cột ngân sách hiển thị đúng định dạng dấu chấm kèm đơn vị (100.000.000 đ, 2.000.000 đ, 1.000.000 đ); kế hoạch chưa nhập ngân sách hiện dấu "—", không còn dòng nào ra số thô.
+- Cột "Số chương trình" đếm khớp dữ liệu thực tế trên cả 14 dòng; chúng tôi tạo thêm một chương trình đào tạo gắn vào một kế hoạch thì số của kế hoạch đó tăng theo ngay, nên cột này đúng cả với dữ liệu mới phát sinh.

@@ -1,0 +1,11 @@
+⚠️ Cần BA xác nhận.
+- Đã kiểm tra lại đúng điều kiện phản ánh: cán bộ phê duyệt cấp Trung ương mở kế hoạch đào tạo đang "Chờ duyệt" do đơn vị cấp Địa phương lập (kiểm thêm biến thể kế hoạch của đơn vị cấp Bộ ngành, kết quả như nhau).
+- Phần hệ thống làm ĐÚNG: kế hoạch không bị duyệt, giữ nguyên "Chờ duyệt". Việc chặn là đúng quy định — FR-III-15 (UC34) §Điều kiện tiên quyết (dòng 1217) và §Xử lý (dòng 1221) yêu cầu cán bộ phê duyệt phải cùng đơn vị với kế hoạch; BR-AUTH-05 (dòng 5480) ghi rõ không cho phép cấp trên duyệt kế hoạch của cấp dưới.
+- Phần đúng như đối tác phản ánh: màn hình không hiện bất kỳ thông báo nào cho biết vì sao không phê duyệt được. Hệ thống đang chọn cách ẩn hẳn nút "Phê duyệt"/"Từ chối". Đối chiếu: cùng tài khoản đó, với kế hoạch cùng đơn vị thì nút vẫn hiện và duyệt được bình thường.
+⚠️ Vướng ở đặc tả nên chuyển BA quyết, 3 câu hỏi:
+⚠️  1) FR-III-15 (UC34) (dòng 1208–1229) không có mục xử lý lỗi và không quy định thông báo nào cho tình huống này; câu "Không có quyền phê duyệt kế hoạch này" mà phiếu mong đợi cũng không có trong tài liệu. Vậy hệ thống có BẮT BUỘC hiển thị thông báo giải thích không, hay ẩn nút là đủ?
+⚠️  1b) Cách "ẩn nút là đủ" thường được dẫn theo quy ước giao diện M-05 (srs-v3.5.md dòng 683), nhưng nguyên văn M-05 chỉ nói về MENU: "menu item chỉ hiện nếu vai trò có quyền truy cập ≥ 1 chức năng trong đó. Ẩn (không disable) nếu không có quyền". Áp cho nút thao tác trong màn chi tiết là suy rộng ngoài phạm vi câu chữ — BA xác nhận có được suy rộng không, nếu có thì đề nghị sửa lại câu chữ M-05 cho rõ.
+⚠️  2) Cùng tình huống "phê duyệt khác đơn vị", tài liệu đã có sẵn câu thông báo cho Chương trình đào tạo (dòng 277) và cho Khóa học (dòng 283), riêng Kế hoạch đào tạo thì chưa có. BA có bổ sung tương tự cho FR-III-15 không?
+⚠️  3) Đặc tả màn hình Kế hoạch đào tạo (dòng 1774) ghi nút "Phê duyệt/Từ chối" hiện theo trạng thái "Chờ duyệt" + vai trò cán bộ phê duyệt, không nêu điều kiện đơn vị — chỗ này lệch với BR-AUTH-05. BA xác nhận sửa lại cho khớp không?
+⚠️ Trạng thái: ĐANG CHỜ BA XÁC NHẬN — chưa kết luận đúng/sai cho tới khi BA trả lời 3 câu hỏi trên.
+- Dữ liệu kiểm tra: tài khoản cán bộ phê duyệt cấp Trung ương; kế hoạch KH-20260803-0004 (đơn vị cấp Địa phương, trạng thái Chờ duyệt).

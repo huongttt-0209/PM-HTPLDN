@@ -1,0 +1,5 @@
+❌ Không phải bug – chức năng Tìm kiếm bài giảng đang chạy đúng.
+• CB_NV_TW → Kho tài liệu / Bài giảng → nhập từ khóa → Tìm kiếm.
+• Hệ thống trả về danh sách bài giảng phù hợp, phân trang 20 bản ghi/trang, không gặp "Lỗi hệ thống".
+• Đã thử tìm theo tên và kết hợp lọc Loại tài liệu (khi kho đã có dữ liệu) — đều hiển thị đúng. Khớp đặc tả Tìm kiếm tài liệu (UC27).
+→ Đối tác kiểm tra lại.

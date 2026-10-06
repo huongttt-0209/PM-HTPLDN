@@ -1,0 +1,20 @@
+{
+  "case": "KTHSYCHTPL_15",
+  "retest": "2026-07-15 R2-reverify",
+  "role": "CB_NV_TW (cbnv_tw, cấp TW, đơn vị 00000000-0000-4000-8000-000000000001)",
+  "vuViec": "VV-STP-AG-20260712-002 (đơn vị Sở Tư pháp An Giang — KHÁC đơn vị người thao tác)",
+  "stateBefore": "Đã tiếp nhận",
+  "action": "Mở [Kiểm tra hồ sơ] → 6/6 hạng mục = Đạt → Kết luận 'Đạt — chuyển sang phân công' → bấm Xác nhận 1 lần",
+  "capture_method": "MutationObserver trên document.body, cài TRƯỚC click, đếm node .ant-message-notice-wrapper",
+  "result": {
+    "toastCountFromOneClick": 1,
+    "toastText": "Bạn không có quyền kiểm tra vụ việc của đơn vị khác",
+    "stateAfter": "Đã tiếp nhận (không đổi — hệ thống chặn đúng)"
+  },
+  "verdict": "PASS — cả 3 điểm của bug gốc đã fix",
+  "so_sanh_bug_goc": {
+    "1_chan": "ĐẠT ở cả bug gốc lẫn retest (state giữ nguyên)",
+    "2_noi_dung": "bug gốc: 'Đơn vị của người phê duyệt khác đơn vị của bản ghi' (sai vai trò + jargon 'bản ghi') → nay: 'Bạn không có quyền kiểm tra vụ việc của đơn vị khác' (đúng thao tác kiểm tra, tiếng Việt thuần)",
+    "3_so_lan": "bug gốc: 2 lần → nay: 1 lần"
+  }
+}

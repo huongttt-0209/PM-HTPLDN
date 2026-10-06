@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Web: màn Chi tiết DN, tab "Thông tin" — khối "Thông tin khác" hiển thị trường "Ghi chú".
+- SRS v3.5 SCR-V.III-02 (FR-V.III-01, UC81) nhóm cuối gồm Ghi chú (dòng 492) + File đính kèm (dòng 493, "Luôn hiển thị"). App khối "Thông tin khác" hiện chỉ có Ghi chú; trường "File đính kèm" có thể đã chuyển sang tab "Hồ sơ pháp lý" (gộp theo v2.1) — cần dev/BA xác nhận vị trí.
+- Đối tác chấm theo thiết kế "Nhóm 4" (HTPLDN-PTYC-CT-v2.0), khác cách gom nhóm; không nêu trường cụ thể thiếu.
+- Hỏi BA: (1) bố cục "Nhóm 4" có bắt buộc theo thiết kế đối tác không; (2) trường "File đính kèm" (SRS dòng 493) đặt ở màn Chi tiết cơ bản hay đã chuyển hẳn sang tab Hồ sơ pháp lý?
+- Verify: cbnv_tw (CB_NV_TW), DN-SEED-0001.

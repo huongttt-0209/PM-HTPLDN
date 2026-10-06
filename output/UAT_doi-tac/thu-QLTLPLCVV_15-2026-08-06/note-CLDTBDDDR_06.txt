@@ -1,0 +1,34 @@
+🔁 Còn lỗi — chuyển lại dev.
+
+Đo lại ngày 06/08/2026 trên bản dựng V1.0.8, màn Báo cáo thống kê → BC Lớp đào tạo đang diễn ra.
+
+1) Phần đã hết lỗi: với tài khoản CB Nghiệp vụ Trung ương (cbnv_tw_05), bấm [Xuất Excel] và [Xuất PDF] đều
+   ra tệp bình thường, không còn thông báo "Không thể tạo file xuất. Vui lòng thử lại.". Đã mở tệp đọc nội
+   dung: đủ 4 mục đầu tệp (tên báo cáo · kỳ báo cáo · đơn vị · ngày tạo) theo srs-fr-11-bao-cao.md:1092, số
+   liệu khớp từng con số với màn hình, đổi bộ lọc thì tệp đổi theo. Đã đo 3 bộ lọc khác nhau + 1 lượt PDF.
+
+2) Tên tệp ĐẠT: hệ thống giao ra BaoCaoLopDaoTaoDangDienRa_20260806_1308.xlsx — đúng khuôn
+   {TênBáoCáo}_{YYYYMMDD_HHmm} mà đặc tả quy định (srs-fr-11-bao-cao.md:85 và Phụ lục E §H8,
+   srs-v3.5.md:6716), có đủ phần giờ-phút. Hai lượt xuất trong cùng ngày ra hai tên khác nhau nên không đè
+   tệp của nhau. Đặc tả chỉ quy định khuôn tên, không ấn định chuỗi "BaoCaoDaoTao", nên phần này không tính
+   là lỗi.
+
+3) Phần CÒN LỖI (lý do chuyển lại dev): với vai trò Quản trị hệ thống (QTHT), bấm [Xem báo cáo] thì hệ thống
+   hiện ĐẦY ĐỦ số liệu (Tổng số 2 · Trực tuyến 1 · Trực tiếp 1) và hai nút [Xuất Excel] / [Xuất PDF] vẫn ở
+   trạng thái bấm được, nhưng bấm [Xuất Excel] thì bị từ chối, không nhận được tệp nào, và chữ hiện ra cho
+   người dùng chỉ là "Forbidden" — chuỗi tiếng Anh thô của máy chủ. Tái hiện 4/4 lượt.
+
+   Đặc tả yêu cầu:
+   - srs-fr-11-bao-cao.md:117 (E7 / ERR-RPT-05): khi từ chối vì thiếu quyền, hệ thống phải cho người dùng
+     biết bằng tiếng Việt rằng họ không có quyền xem báo cáo.
+   - srs-fr-11-bao-cao.md:79: việc kiểm quyền nằm ở đầu luồng, nên bước Xem và bước Xuất phải nhất quán —
+     không cho xem đủ số liệu rồi mới chặn ở bước xuất.
+   - srs-fr-11-bao-cao.md:1052: điều kiện hiển thị nút Xuất Excel chỉ là "Sau khi đã Xem báo cáo", không
+     kèm điều kiện vai trò.
+
+Tài khoản và dữ liệu đã dùng: cbnv_tw_05 (CB Nghiệp vụ - Trung ương, cấp TW) và admin (Quản trị hệ thống,
+cấp TW); kỳ Năm 01/01/2026 - 31/12/2026, đơn vị Toàn quốc, dữ liệu sẵn có trên môi trường. Không tạo, sửa
+hay xoá bản ghi nào.
+
+Người xử lý tiếp: Dev BE (thống nhất quy tắc quyền giữa bước xem và bước xuất, trả thông báo từ chối theo
+:117) và Dev FE (không đẩy nguyên chuỗi kỹ thuật của máy chủ ra màn hình người dùng).

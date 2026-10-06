@@ -1,0 +1,17 @@
+✅ Là bug — chuyển dev
+
+Đã kiểm tra lại bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW) — đúng vai trò đối tác đã dùng, và là vai trò duy nhất có quyền Sửa. Đã tự dựng bản ghi cùng loại với bản ghi trong ảnh (nguồn Import, trạng thái Chờ duyệt, có từ khóa).
+
+Web sai gì:
+- Cửa sổ "Sửa câu hỏi" chỉ có 2 nút ở đáy: [Hủy] và [Lưu]. Đọc trực tiếp mã giao diện xác nhận toàn bộ nút trong cửa sổ là "Dùng ảnh hệ thống mặc định", "Hủy", "Lưu" — tức [Lưu nháp] và [Gửi duyệt] không bị khuất do cuộn mà thực sự không tồn tại.
+
+Kết quả mong đợi theo đặc tả:
+- Đặc tả bắt buộc trạng thái "Nháp" phải tồn tại và dùng được: srs-fr-13-tv-nhanh.md dòng 103 (danh sách trạng thái hợp lệ có NHAP), dòng 530 (thanh lọc phải có NHAP), dòng 534 (cửa sổ nhập Q&A có [Lưu nháp] [Gửi duyệt]).
+- Đặc biệt dòng 536: khi Cán bộ phê duyệt bấm Từ chối thì bản ghi được đưa VỀ TRẠNG THÁI NHÁP. Sau đó Cán bộ nghiệp vụ phải sửa rồi gửi duyệt lại — nhưng ở cửa sổ Sửa hiện tại chỉ có [Lưu], không có đường nghiệp vụ để giữ nháp hay gửi duyệt lại.
+- Lỗi này cùng gốc với BUG-QLKCHTV_04 (cửa sổ Thêm) và BUG-QLKCHTV_02 (ô lọc thiếu "Nháp"). Đề nghị dev xử lý một lần cho cả 3.
+
+Lưu ý để dev không sửa nhầm phạm vi: các TRƯỜNG của cửa sổ Sửa đã đúng và nạp đúng dữ liệu hiện tại (Câu hỏi, Câu trả lời, Lĩnh vực, Từ khóa, Ảnh đại diện công khai, Mô tả công khai, Tệp đính kèm công khai). Sai lệch chỉ nằm ở vùng nút.
+
+Ghi chú minh bạch: đặc tả v3.5 mô tả cửa sổ Thêm (dòng 534) nhưng không mô tả riêng cửa sổ Sửa. Vì vậy yêu cầu ở đây là về NGHIỆP VỤ — phải có đường giữ / đưa bản ghi về trạng thái Nháp — chứ không bắt buộc dev đặt đúng tên 2 nút.
+
+Bug ID: BUG-QLKCHTV_16.

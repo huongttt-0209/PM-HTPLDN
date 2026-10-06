@@ -1,0 +1,23 @@
+⚠️ Cần BA xác nhận
+
+Cần BA chốt — hiện tượng tái hiện đúng, nhưng đặc tả v3.5 không quy định hành vi bấm vào mã câu hỏi.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), trên màn trả lời có 4 kết quả tra cứu.
+
+⚠️ 1) Hiện tượng tái hiện đúng.
+- Bấm 1 lần và bấm đúp vào mã câu hỏi trong kết quả tra cứu: không mở cửa sổ nào, địa chỉ trang không đổi, không xuất hiện nút "Đóng" nào.
+- Kiểm cấu trúc phần tử: mã là chữ thường (kiểu chữ phụ, màu xám mờ), con trỏ chuột giữ dạng chữ thay vì dạng bàn tay, không phải liên kết, không gắn hàm xử lý bấm — kể cả phần tử bao ngoài.
+
+2) Vì sao chưa chuyển dev được.
+- Đặc tả (srs-fr-13-tv-nhanh.md dòng 572) chỉ liệt kê THÀNH PHẦN hiển thị của mỗi kết quả: mã câu hỏi, câu hỏi in đậm, câu trả lời rút gọn, lĩnh vực, từ khóa, điểm phù hợp, nút Chọn. Hành vi duy nhất được mô tả là "bấm [Chọn] thì chép câu trả lời vào ô soạn".
+- Đã đọc trọn phần xử lý nghiệp vụ của chức năng này — không có câu nào về cửa sổ chi tiết trong màn tra cứu, cũng không có nút "Đóng". Cửa sổ chi tiết câu hỏi chỉ được đặc tả ở màn Kho câu hỏi, là màn khác.
+
+3) Thông tin bổ sung để BA cân nhắc — phần lớn nội dung phiếu test muốn xem thì thẻ kết quả ĐÃ hiển thị sẵn.
+- Trên mỗi thẻ đã có: mã câu hỏi, câu hỏi, câu trả lời (rút gọn), lĩnh vực pháp lý, nguồn, điểm phù hợp.
+- Thứ còn thiếu thực sự là xem được câu trả lời ĐẦY ĐỦ, vì trên thẻ nội dung bị cắt bớt.
+
+⚠️ 4) Đề nghị BA chốt.
+- Bấm vào mã câu hỏi trong kết quả tra cứu có phải mở cửa sổ chi tiết không? Nếu có thì cửa sổ gồm những trường nào và có cần nút "Đóng" riêng không? Hay chỉ cần cho phép mở rộng phần câu trả lời ngay trên thẻ?
+
+5) Bằng chứng.
+- Ảnh chụp danh sách kết quả tra cứu kèm trong hồ sơ lỗi.
+- Video của đối tác cho kết quả trùng khớp: cụm số trong mã bị bôi đen như chữ thường khi bấm đúp, không có cửa sổ nào mở ra.

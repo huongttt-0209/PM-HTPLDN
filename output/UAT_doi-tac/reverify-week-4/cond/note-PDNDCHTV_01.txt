@@ -1,0 +1,25 @@
+✅ Là bug — chuyển dev
+
+Tái hiện đúng, đã chuyển dev.
+Đã kiểm bằng 2 tài khoản đúng vai: cbpd_tw (CB Phê duyệt - Trung ương, BTP · TW) thực hiện duyệt, cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW) là người tạo câu hỏi và là người kiểm thông báo.
+
+❌ 1) Phần chạy ĐÚNG, đề nghị dev không sửa nhầm.
+- Trạng thái chuyển Chờ duyệt sang Đã duyệt: đúng.
+- Hiệu lực tự bật sau khi duyệt: đúng (bản ghi trả về hieuLuc = true).
+- Có lưu vết người duyệt và thời điểm duyệt: đúng (27/07/2026 12:47).
+
+✅ 2) Phần LỖI: cán bộ tạo câu hỏi không nhận được thông báo nào.
+- Đặc tả (srs-fr-13-tv-nhanh.md dòng 536) yêu cầu hành động Duyệt phải: đặt trạng thái Đã duyệt, bật hiệu lực, VÀ thông báo cho cán bộ nghiệp vụ. Vế thứ ba không chạy.
+- Đếm trực tiếp hộp thông báo của người tạo: trước thao tác 253 mục, sau thao tác vẫn 253 mục. Chênh lệch bằng 0. Mục mới nhất vẫn là mục cũ lúc 12:43, trong khi thao tác duyệt lúc 12:47.
+- Bug ID: BUG-PD-THONG-BAO.
+
+3) Đã loại trừ khả năng "hệ thống thông báo hỏng chung" — đây là phép thử quyết định.
+- Rà toàn bộ 253 thông báo hiện có của chính tài khoản này: vẫn đang nhận thông báo phê duyệt từ 8 nhóm chức năng khác (Chương trình HTPL, Vụ việc, Kế hoạch đánh giá, Đăng ký đào tạo, Hỏi đáp, Khóa học, Đề xuất đào tạo, Tài khoản).
+- Riêng nhóm Kho câu hỏi: 0 thông báo, chưa từng có mục nào.
+- Vậy đường truyền thông báo và tài khoản đều bình thường; chỉ chức năng phê duyệt Kho câu hỏi chưa gắn bước gửi thông báo. Thông tin này giúp dev khoanh vùng đúng chỗ cần sửa.
+
+4) Đã chọn dữ liệu chặt hơn phiếu test để loại trừ nhầm lẫn.
+- Câu hỏi đem duyệt do CHÍNH tài khoản đang kiểm thông báo tạo ra (đã đối chiếu mã người tạo). Nên không thể có tình huống "thông báo có gửi nhưng gửi cho người khác".
+
+5) Bằng chứng.
+- Ảnh chụp hộp thông báo của cán bộ tạo sau khi duyệt và ảnh chụp hộp thoại xác nhận duyệt, kèm trong hồ sơ lỗi.

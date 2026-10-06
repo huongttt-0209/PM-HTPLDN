@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+- Web hiện tại (kiểm tra 21/07, tài khoản QTHT): form Sửa "Tiêu chí đánh giá hiệu quả" có trường "Danh mục cha" (dạng tùy chọn, không chặn lưu).
+- Theo SRS mẫu dùng chung TPL-DM-CRUD (FR-VIII-11 / UC109) §Inputs, đây là danh mục phẳng, KHÔNG có trường "Danh mục cha". (Các trường Trọng số / Thang điểm tối thiểu / Thang điểm tối đa bắt buộc là ĐÚNG spec.)
+- Câu hỏi BA: có bổ sung "Danh mục cha" vào đặc tả cho danh mục phẳng, hay yêu cầu ẩn trường này?
+Ref: FR-VIII-11 (UC109); TPL-DM-CRUD §Inputs (dòng 77-83); SCR-VIII-01 §Thành phần đặc biệt TCDGHQ (dòng 1594).

@@ -1,0 +1,15 @@
+⚠️ Cần BA xác nhận.
+- Đã kiểm tra lại đúng điều kiện phản ánh: vai trò Cán bộ nghiệp vụ Trung ương, khóa học ở trạng thái "Đang diễn ra", có học viên, có 3 buổi trong lịch học và đã điểm danh 1 buổi.
+- Quan sát của tổ kiểm thử là ĐÚNG: tab "Kết quả" chỉ có 10 cột (STT, Họ tên, Email, Số điện thoại, Đơn vị, Chuyên cần, Điểm kiểm tra, Kết quả, Xếp loại, Ghi chú), không có 4 cột Số buổi có mặt / Số buổi vắng có phép / Số buổi vắng không phép / Tổng số buổi. Đã cuộn hết thanh ngang, cột khuất duy nhất là "Ghi chú". Bộ cột này giữ nguyên ở cả 3 trạng thái Đang diễn ra, Đã kết thúc và Hoàn thành.
+- Phản hồi trước đó cho rằng 4 cột đó nằm ở tab "Điểm danh" là KHÔNG chính xác: tab "Điểm danh" chỉ có 7 cột (STT, Họ tên, Email, Số điện thoại, Đơn vị, Trạng thái, Ghi chú), và FR-III-05 (UC24) §Đặc tả màn hình SCR-III-02 (dòng 1896) cũng không liệt kê 4 cột đó cho tab Điểm danh.
+⚠️ Vướng mắc đặc tả — đây là lý do cần BA quyết:
+⚠️  + FR-III-05 (UC24) §Đặc tả màn hình SCR-III-02 (dòng 1901) liệt kê cột của tab "Kết quả kiểm tra" và KHÔNG có 4 trường trên. Phần Tiêu chí chấp nhận (dòng 628-637) cũng không có tiêu chí nào đòi hiển thị 4 trường này.
+⚠️  + Nhưng FR-III-05 (UC24) §Outputs (dòng 600-603) lại liệt kê đủ 4 trường so_buoi_co_mat, so_buoi_vang_phep, so_buoi_vang_khong_phep, tong_buoi; và dòng 520 gắn UC24 cho đúng 2 tab Điểm danh + Kết quả kiểm tra.
+⚠️  + Thực tế phần mềm: "Số buổi có mặt" và "Tổng số buổi" đã có trong file kết quả xuất ra và được gộp hiển thị trong ô "Chuyên cần" dạng x/y (z%); còn "Số buổi vắng có phép" và "Số buổi vắng không phép" thì chưa có ở bất kỳ đâu.
+⚠️ Câu hỏi cho BA:
+⚠️  1. Bốn trường tại FR-III-05 (UC24) §Outputs (dòng 600-603) có bắt buộc hiển thị thành cột riêng trên tab "Kết quả kiểm tra" không?
+⚠️  2. Nếu không, danh sách cột tại dòng 1901 có phải là danh sách đóng (hiển thị đủ là đạt) không?
+⚠️  3. Việc gộp Số buổi có mặt + Tổng số buổi + % chuyên cần vào một ô "Chuyên cần" có được chấp nhận thay cho 3 cột riêng không?
+⚠️  4. Hai trường "Số buổi vắng có phép" và "Số buổi vắng không phép" tại dòng 601-602 hiện chưa có ở đâu — cần bổ sung hay gỡ khỏi Outputs của UC24?
+⚠️ Trạng thái: ĐANG CHỜ BA XÁC NHẬN — chưa kết luận đúng/sai cho tới khi BA trả lời 4 câu hỏi trên.
+- Tài khoản kiểm tra: cbnv_tw (Cán bộ nghiệp vụ Trung ương, đơn vị Cục Bổ trợ tư pháp). Bản dựng V1.0.5.

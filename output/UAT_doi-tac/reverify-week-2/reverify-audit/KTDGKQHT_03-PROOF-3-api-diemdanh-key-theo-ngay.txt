@@ -1,0 +1,33 @@
+!!! ĐÍNH CHÍNH 2026-07-16 — FILE NÀY CÓ KẾT LUẬN SAI, ĐÃ BỊ THAY THẾ !!!
+    Kết luận "điểm danh key theo NGÀY, BE không có lich_hoc_id" ở dưới là SUY LUẬN từ response GET,
+    và đã bị BÁC BỎ khi test tầng GHI (POST):
+      - BE ĐÃ hỗ trợ lichHocId: khi 1 ngày có >=2 buổi, BE trả 422 ERR-BIZ-III-05-04
+        "Có nhiều buổi học cùng ngày — cần truyền lichHocId" + kèm danh sách lichHocIds.
+      - Lỗi thật nằm ở FE: không có UI chọn buổi + không truyền lichHocId khi lưu.
+    => DÙNG FILE NÀY THAY THẾ: KTDGKQHT_03-PROOF-api-fe-thieu-lichHocId.txt
+    (Giữ file này chỉ để lưu vết quan sát GET ban đầu.)
+================================================================
+
+BẰNG CHỨNG API — KTDGKQHT_03 (verify 2026-07-16, cbnv_tw, khóa AAA-KH-TW)
+
+Seed: thêm buổi thứ 2 cùng ngày 10/02/2026 trên AAA-KH-TW (cùng đơn vị cbnv_tw):
+  - Buổi 1 (có sẵn): 10/02/2026 08:00–11:00 Trực tiếp
+  - Buổi 2 (QA seed):  10/02/2026 14:00–17:00 Trực tuyến (id b472ef9e-8882-4d19-b09c-fbc9702d96c6)
+
+Endpoint app gọi khi chọn ngày điểm danh:
+  GET /api/v1/khoa-hocs/{id}/diem-danhs?ngayDiemDanh=2026-02-10   → 200
+
+Response (4 học viên), shape mỗi bản ghi:
+  {
+    "id":"cef8926a-...","hocVienId":"aaaa1111-0000-4000-8001-000000000001",
+    "hoTen":"Học viên TW 01","email":"hv.aaaa1@htpldn.local",
+    "ngayDiemDanh":"2026-02-10T00:00:00.000Z",
+    "trangThai":"CO_MAT","coMat":true,"ghiChu":null
+  }
+
+KẾT LUẬN:
+  - Điểm danh key theo `ngayDiemDanh` (NGÀY), KHÔNG có field `lich_hoc_id`/`lichHocId` (BUỔI).
+  - Ngày 10/02/2026 có 2 buổi nhưng chỉ trả về 1 bản ghi/học viên/ngày → không tách được buổi sáng vs chiều.
+  - Trái SRS srs-fr-03-dao-tao.md dòng 538 (input lich_hoc_id bắt buộc — "điểm danh phải gắn với 1 buổi cụ thể")
+    và dòng 540 (ngay_diem_danh derived từ lich_hoc_id).
+  - UI: tab Điểm danh chỉ có ô "Chọn ngày điểm danh", 0 dropdown chọn buổi, bảng không có cột "Buổi học" (trái dòng 1822).

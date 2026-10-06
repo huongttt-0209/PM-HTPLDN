@@ -1,0 +1,23 @@
+✅ Là bug — chuyển dev
+
+Tái hiện đúng, đã chuyển dev.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), đếm số nút trong cột Hành động bằng mã lệnh, đo trên nhiều trạng thái khác nhau.
+
+✅ 1) Hiện tượng tái hiện đúng.
+- Cột "Hành động" chỉ có duy nhất một nút: biểu tượng con mắt, nhãn trợ năng "Xem chi tiết tư vấn {mã phiên}".
+- Không có nút "Trả lời" ở bất kỳ dòng nào.
+- Bug ID: BUG-QLKCHTV_24.
+
+2) Đã quét toàn bộ trạng thái để loại trừ khả năng "nút bị ẩn theo điều kiện".
+- Đo ở nhóm chưa xong (3 phiên trạng thái "CB trả lời") và nhóm đã xong (1 phiên "Hoàn thành"), cả ở thẻ "Tất cả" lẫn thẻ "Hoàn thành".
+- Mọi dòng đều chỉ có một nút con mắt. Không trạng thái nào làm xuất hiện nút thứ hai, nên đây là chưa được dựng chứ không phải ẩn theo điều kiện.
+
+3) Căn cứ đặc tả.
+- srs-fr-13-tv-nhanh.md dòng 569 quy định cột Hành động gồm hai hành động: "Xem" và "Trả lời".
+
+4) Hệ quả nghiệp vụ.
+- Vì không có nút "Trả lời", đường duy nhất để cán bộ vào soạn trả lời là bấm nút "Xem" — chính là hiện tượng được phản ánh ở QLKCHTV_23. Đề nghị dev xử lý hai case này chung một lần.
+
+5) Bằng chứng.
+- Ảnh chụp bảng danh sách kèm trong hồ sơ lỗi.
+- Video của đối tác cho thấy dòng ở trạng thái "CB trả lời" cũng chỉ có một biểu tượng con mắt, chú thích hiện chữ "Xem".

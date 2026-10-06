@@ -1,0 +1,5 @@
+- Đã kiểm tra lại ngày 05/08/2026 trên bản mới nhất của môi trường nghiệm thu: nội dung phản ánh đã được khắc phục.
+- Tab Tiêu chí nay có dải cảnh báo nêu rõ tổng trọng số hiện tại và mốc phải đạt, ví dụ "Tổng trọng số hiện tại: 75%. Cần đảm bảo = 100% trước khi trình phê duyệt".
+- Khi bấm Lưu, hệ thống hiện đồng thời thông báo lưu thành công và thông điệp trọng số nêu trên — đúng nội dung phiếu yêu cầu.
+- Có thêm dải cảnh báo chuẩn thang điểm, nêu tổng điểm tối đa có trọng số hiện tại và mốc cần đạt.
+- Vẫn giữ nhãn tổng màu đỏ khi chưa đủ 100% và vẫn cho phép lưu, không chặn thao tác lưu.

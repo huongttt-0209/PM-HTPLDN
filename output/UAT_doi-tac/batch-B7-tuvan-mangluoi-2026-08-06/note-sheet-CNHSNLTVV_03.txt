@@ -1,0 +1,6 @@
+🔁 CÒN LỖI Ở ĐÂU: Màn Cập nhật năng lực tư vấn viên — lượt lưu có đính tệp ở khối "Thêm chứng chỉ mới" vẫn báo "Lỗi hệ thống, vui lòng thử lại sau." và không lưu được gì. Tái hiện 3/3 lượt.
+VÌ SAO LÀ LỖI: srs-fr-04-chuyen-gia-tvv.md:433 đòi lưu thành công khi cập nhật thông tin/chứng chỉ có kèm tệp tải lên; :425-:429 chỉ cho phép từ chối trong 5 tình huống dữ liệu/quyền cụ thể, không có tình huống này.
+ĐÃ HẾT LỖI: 4/4 lượt lưu không đính tệp đều thành công, dữ liệu còn nguyên sau khi tải lại trang (trường chữ/số, lĩnh vực, bằng cấp và chứng chỉ chi tiết).
+AI SỬA: Dev BE.
+ĐÃ ĐO: nht_qa_tw (NHT). 2 hồ sơ × 5 dạng = 7 lượt bấm Lưu, mỗi lượt 1 request/1 thông báo. Lỗi không phụ thuộc tên tệp hay hồ sơ; bỏ trường tệp thì lưu được.
+CÁCH VERIFY SAU DEV FIX: Vai trò NHT, tab Năng lực trên 2 hồ sơ (1 Đang hoạt động, 1 Mới đăng ký), bấm Lưu 6 lượt (2 lượt không tệp, 4 lượt có tệp, đủ 2 kiểu tên tệp); tải lại trang, tệp phải hiện ở "Chứng chỉ hiện có". Chỉ lượt không tệp chạy được thì chưa đạt.

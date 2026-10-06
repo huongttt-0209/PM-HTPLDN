@@ -1,0 +1,141 @@
+NHẬT KÝ ĐO LẠI — "Nút [Xuất Excel]/[Xuất PDF] bị khoá dù báo cáo đang có dữ liệu"
+Màn: Báo cáo thống kê → BC Chương trình theo lĩnh vực (/bao-cao?loai=ct-theo-linh-vuc)
+Env: https://18.143.165.120.nip.io · Bản dựng hiện ở thanh bên trái: HTPLDN · V1.0.8
+Tài khoản: cbnv_tw_04 (CB Nghiệp vụ - Trung ương #04, vai trò CB_NV_TW, cấp TW)
+Thời gian đo: 06/08/2026 14:52 – 15:01
+Mục đích: đóng "cửa ③ — đo lại bằng đường thứ hai" cho phát hiện ghi lúc 13:38.
+
+======================================================================
+0) DANH TÍNH PHIÊN — kiểm trước và sau phép đo quyết định
+======================================================================
+GET /api/v1/auth/me (trước, 14:53):
+  userId 9101c6bb-6b1d-4f00-8c3c-2247f5b22e07
+  hoTen  "CB Nghiệp vụ - Trung ương #04"
+  vaiTro ["CB_NV_TW"] · capDonVi "TW" · donViId 00000000-0000-4000-8000-000000000001
+
+GET /api/v1/auth/me (sau, 15:01, gọi ngay sau phép đo đường thứ hai):
+  userId 9101c6bb-6b1d-4f00-8c3c-2247f5b22e07
+  hoTen  "CB Nghiệp vụ - Trung ương #04"
+  vaiTro ["CB_NV_TW"]
+
+=> Danh tính KHÔNG đổi trước/sau. Không lẫn với phiên song song.
+   (Tab chạy trong ngăn trình duyệt riêng, tên ngăn: cttlg04-qa.)
+
+======================================================================
+1) LOẠI TRỪ TRẠNG THÁI CŨ CỦA ỨNG DỤNG MỘT TRANG
+   Mỗi nhánh đều TẢI LẠI TRANG /bao-cao từ đầu trước khi bắt đầu.
+   Mọi thao tác chọn/xoá/bấm đều bằng chuột thật trên giao diện.
+======================================================================
+
+--- NHÁNH ① — chuỗi thao tác y hệt lần ghi nhận 13:38 -----------------
+Tải lại trang → Loại báo cáo "BC Chương trình theo lĩnh vực" → Kỳ "Năm"
+  → Lĩnh vực "Lao động" → [Xem báo cáo]
+      URL: ...&fd_linhVucId=bbbbbbbb-0000-4000-8000-000000000013
+      Kết quả: Tổng chương trình 1 · bảng: Lao động 1
+      Nút: Xem báo cáo ON | Xuất Excel ON | Xuất PDF ON
+  → bấm dấu × XOÁ bộ lọc Lĩnh vực (ô về "Chọn Lĩnh vực") → [Xem báo cáo]
+      URL: ...&kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31 (không còn fd_linhVucId)
+      Kết quả: Tổng chương trình 7 · Thời điểm tạo 06/08/2026 14:54
+               bảng: Chưa phân loại 3 | Lao động 1 | Đất đai 1 | Thuế 1 | Thương mại 1
+      Nút: Xem báo cáo ON | Xuất Excel ON | Xuất PDF ON      <<< VẪN BẬT
+
+  => KHÔNG tái hiện. Mô tả "khoá do xoá bộ lọc Lĩnh vực" là SAI.
+  Ảnh: CTTLV_05-C1-nhanh1-tai-lai-trang-chon-roi-xoa-linhvuc-nut-xuat-VAN-BAT-V108.png
+
+--- NHÁNH ② — chưa từng chạm ô Lĩnh vực ------------------------------
+Tải lại trang (GET /api/v1/auth/me xác nhận vẫn cbnv_tw_04)
+  → Loại báo cáo "BC Chương trình theo lĩnh vực" → Kỳ "Năm"
+  → ĐỂ TRỐNG Lĩnh vực → [Xem báo cáo]
+      Kết quả: Tổng chương trình 7 · Thời điểm tạo 06/08/2026 14:56
+               bảng: Chưa phân loại 3 | Lao động 1 | Đất đai 1 | Thuế 1 | Thương mại 1
+      Nút: Xem báo cáo ON | Xuất Excel ON | Xuất PDF ON      <<< BẬT
+
+  => Không khoá. Vậy cũng không phải "khoá mọi lúc khi để trống lĩnh vực".
+  Ảnh: CTTLV_05-C2-nhanh2-chua-tung-chon-linhvuc-nut-xuat-VAN-BAT-V108.png
+
+--- NHÁNH ③ — TÌM RA NGUYÊN NHÂN THẬT --------------------------------
+Lượt 1 (nối tiếp nhánh ②, trong cùng phiên):
+  → Lĩnh vực "Lao động" → [Xem báo cáo] (Tổng 1, tạo 14:57) — nút xuất ON
+  → bấm [Xuất Excel] thật trên giao diện
+       Mạng: POST /api/v1/bao-cao/export → 200
+       Theo dõi nút 10 mẫu trong 9 giây ngay sau khi bấm:
+         t=0.0 … t=8.1  Xem báo cáo:ON | Xuất Excel:ON | Xuất PDF:ON   (không hề khoá lúc đang xuất)
+  → xoá bộ lọc Lĩnh vực → [Xem báo cáo] (Tổng 7, tạo 14:58)
+       Theo dõi 8 mẫu trong 4,9 giây:
+         t=0.0 … t=4.9  Xem báo cáo:ON | Xuất Excel:OFF | Xuất PDF:OFF  <<< KHOÁ
+  → bấm [Xem báo cáo] thêm lần nữa (không đổi gì): vẫn OFF (tạo 14:58)
+  → chọn lại Lĩnh vực "Lao động" → [Xem báo cáo]: Tổng 1, tạo 14:59, vẫn OFF
+       => khoá DÍNH, không tự mở lại, không phụ thuộc bộ lọc.
+
+Lượt 2 (repro tối giản — KHÔNG đụng bộ lọc Lĩnh vực một lần nào):
+  → Tải lại trang /bao-cao từ đầu
+  → Loại "BC Chương trình theo lĩnh vực" + Kỳ "Năm", để trống Lĩnh vực → [Xem báo cáo]
+       Tổng 7 · tạo 15:00 · Nút: Xuất Excel ON | Xuất PDF ON
+  → bấm [Xuất Excel] thật → sau 5 giây: Xuất Excel ON | Xuất PDF ON (có tệp về)
+  → bấm [Xem báo cáo] lần 2, KHÔNG đổi một bộ lọc nào
+       Tổng 7 vẫn hiện đủ · tạo 15:00
+       Nút: Xem báo cáo ON | Xuất Excel OFF | Xuất PDF OFF   <<< KHOÁ
+  Ảnh: CTTLV_05-C3-nhanh3-sau-khi-xuat-excel-thanh-cong-bam-xem-bao-cao-lan-2-nut-xuat-bi-KHOA-V108.png
+
+  => NGUYÊN NHÂN THẬT: sau khi xuất tệp thành công một lần, lần bấm [Xem báo cáo]
+     KẾ TIẾP làm hai nút xuất bị khoá; khoá giữ nguyên cho tới khi TẢI LẠI TRANG.
+     Bộ lọc "Lĩnh vực" không liên quan.
+     Tác động thực tế: người dùng chỉ xuất được 1 tệp cho mỗi lần tải trang.
+
+======================================================================
+2) ĐƯỜNG ĐO THỨ HAI — gọi thẳng máy chủ ĐÚNG LÚC NÚT ĐANG KHOÁ
+======================================================================
+Trạng thái giao diện ngay trước khi gọi: Xuất Excel:OFF | Xuất PDF:OFF
+
+Yêu cầu (cùng phiên cbnv_tw_04, cookie của chính phiên đang mở; đúng bộ tiêu chí
+lúc nút bị khoá: kỳ Năm 2026, đơn vị như lúc đo, KHÔNG truyền lĩnh vực):
+  POST /api/v1/bao-cao/export
+  {
+    "loaiBaoCao": "BC_CT_THEO_LINH_VUC",
+    "kyBaoCao":   "NAM",
+    "tuNgay":     "2026-01-01",
+    "denNgay":    "2026-12-31",
+    "filterDacThu": {},
+    "formatXuat": "XLSX"
+  }
+
+Phản hồi:
+  HTTP 200
+  content-type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+  content-disposition: attachment; filename="BaoCaoCtTheoLinhVuc_20260806_1501.xlsx"
+  Kích thước: 6 673 byte · 4 byte đầu: "PK.."  => đúng định dạng .xlsx
+
+MỞ TỆP RA ĐỌC (giải nén, đọc trang tính đầu tiên) — nguyên văn từng dòng:
+  BC Chương trình theo lĩnh vực
+  Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+  Đơn vị: Toàn quốc
+  Ngày tạo: 06/08/2026
+  Tổng số chương trình
+  Chỉ tiêu | Số lượng
+  Tổng số chương trình | 7
+  Theo lĩnh vực pháp luật
+  Lĩnh vực PL | Số chương trình
+  Chưa phân loại | 3
+  Lao động | 1
+  Đất đai | 1
+  Thuế | 1
+  Thương mại | 1
+
+Đối chiếu với màn hình ĐANG BỊ KHOÁ NÚT (Tổng 7; Chưa phân loại 3 · Lao động 1 ·
+Đất đai 1 · Thuế 1 · Thương mại 1): KHỚP ĐÚNG TỪNG HÀNG, cộng dọc 3+1+1+1+1 = 7 = tổng.
+
+GET /api/v1/auth/me ngay sau đó: vẫn cbnv_tw_04 (xem mục 0).
+
+======================================================================
+3) KẾT LUẬN
+======================================================================
+Máy chủ trả 200 kèm tệp hợp lệ, nội dung đầy đủ và đúng số, ĐÚNG THỜI ĐIỂM giao diện
+đang khoá nút xuất với cùng bộ tiêu chí đó.
+=> Đây là LỖI TRẠNG THÁI NÚT PHÍA GIAO DIỆN (FE), không phải máy chủ từ chối.
+
+Mô tả cũ ghi lúc 13:38 ("nút xuất bị khoá sau khi XOÁ bộ lọc Lĩnh vực") là quy kết
+sai nguyên nhân và đã được sửa trong tieuchi/CTTLV_05.md mục 7.
+Ảnh cũ CTTLV_05-A5-... vẫn đúng về hiện tượng (nút khoá khi màn có dữ liệu), chỉ sai
+ở phần chú thích nguyên nhân.
+
+Chưa mở phiếu trên bảng theo dõi — chờ phiên chính duyệt mã case.

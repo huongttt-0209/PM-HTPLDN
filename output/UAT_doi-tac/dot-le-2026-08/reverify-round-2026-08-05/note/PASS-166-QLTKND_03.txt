@@ -1,0 +1,4 @@
+- Đã kiểm tra lại ngày 05/08/2026 trên bản mới nhất của môi trường nghiệm thu: nội dung phản ánh đã được khắc phục.
+- Màu ở cột "Trạng thái" của danh sách tài khoản nay đúng cả bốn trạng thái: "Chờ kích hoạt" màu vàng, "Tạm khóa" màu đỏ, "Vô hiệu hóa" màu đen, "Hoạt động" màu xanh.
+- Để đọc được đủ bốn màu, chúng tôi đã tạm khóa một tài khoản kiểm thử rồi mở khóa trả lại nguyên trạng sau khi đo.
+- Phần thẻ lọc trạng thái đã đạt ở lần trước vẫn giữ nguyên, số liệu trên từng thẻ khớp với danh sách lọc ra.

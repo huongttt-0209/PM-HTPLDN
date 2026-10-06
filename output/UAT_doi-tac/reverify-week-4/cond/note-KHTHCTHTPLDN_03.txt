@@ -1,0 +1,20 @@
+❌ Không phải bug
+
+Điểm phiếu nêu thì hệ thống đang làm đúng theo bản đặc tả hiện hành, nên QA để là không phải lỗi. Nhưng khi kiểm thì phát hiện một thiếu sót khác trên cùng bảng, QA đã mở dòng riêng.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), có kiểm lại bằng cbpd_tw để chắc tập cột không đổi theo quyền.
+
+❌ 1) Vì sao cột Số đợt BC là đúng chứ không phải thiếu cột Đợt báo cáo.
+- Bản đặc tả đang có hiệu lực liệt kê 10 cột của bảng, trong đó cột thứ 9 ghi rõ là Số đợt BC. Không có mục nào tên Đợt báo cáo và cũng không mô tả liên kết nhanh nào từ dòng chương trình.
+- Bản đặc tả còn ghi thêm: từ phiên bản 3.5.2, màn Đợt báo cáo là tab độc lập, không mở từ chương trình nữa. Nghĩa là hướng liên kết nhanh mà phiếu mong đợi đã được bỏ ở bản mới.
+- Kiểm trên hệ thống: menu bên trái có mục Đợt báo cáo đứng độc lập ngang hàng với Chương trình HTPLDN, đúng theo hướng mới. Cột Số đợt BC vẫn hiển thị số đếm.
+- Nhiều khả năng phiếu đối chiếu theo bản đặc tả trước 3.5.2. Nhờ đối tác xác nhận lại giúp bản đang dùng để hai bên thống nhất.
+
+✅ 2) Phát hiện thêm ngoài phiếu: bảng thiếu cột Lĩnh vực pháp lý.
+- Ghép từng mục một giữa tập cột thực tế và 10 cột trong đặc tả: khớp 9, thiếu đúng mục Lĩnh vực pháp lý.
+- Đã loại khả năng do chưa có dữ liệu: dữ liệu lĩnh vực có sẵn cho từng chương trình, và chính tệp Excel xuất từ màn này in ra đủ ba giá trị Đất đai, Thuế, Lao động.
+- Lĩnh vực pháp lý là trường bắt buộc khi tạo chương trình và là chiều gom số liệu khi làm báo cáo, nên thiếu cột này là thiếu thật chứ không phải chi tiết trang trí.
+- QA đã tách thành dòng riêng mã KHTHCTHTPLDN_OOS_05 để dev xử lý.
+- Bug ID: BUG-CT-BANG-THIEU-COT-LINHVUC.
+
+3) Bằng chứng.
+- Ảnh tiêu đề bảng trên môi trường kiểm thử, đọc rõ thứ tự các cột. Ảnh của chính đối tác ở case này cũng cho thấy bảng không có cột Lĩnh vực pháp lý, tức hai bên quan sát trùng nhau. Tệp Excel xuất ra có cột Lĩnh vực để đối chứng. Kèm trong hồ sơ lỗi.

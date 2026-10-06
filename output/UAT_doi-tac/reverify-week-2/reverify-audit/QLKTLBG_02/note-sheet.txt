@@ -1,0 +1,9 @@
+⚠️ Cần BA xác nhận.
+- Quan sát của anh/chị là ĐÚNG: bảng danh sách Kho tài liệu / Bài giảng hiện chỉ có 6 cột (Tên bài giảng, Loại tài liệu, Dung lượng, Ngày tạo, Công khai, Thao tác) – không có cột Ảnh xem trước, Lĩnh vực, Người tạo.
+- Nhưng đặc tả đang quy định khác với kỳ vọng, nên QA không tự kết luận đúng/sai được:
+  + Ảnh xem trước: SCR-III-03 (srs-fr-03-dao-tao.md:1906) quy định "Ảnh đại diện" hiển thị ở PANEL CHI TIẾT / XEM TRƯỚC, không phải cột trong bảng. Đã kiểm: bấm biểu tượng con mắt ở cột Thao tác thì panel "Xem trước" có đủ mục Ảnh đại diện, Ngày công khai, Công khai, Mô tả công khai. Tức phần mềm đang làm đúng chỗ mà đặc tả chỉ định.
+  + Lĩnh vực: FR-III-07 (UC26) chỉ quy định "linh_vuc_ids" là trường NHẬP khi thêm/sửa bài giảng (dòng 739), không nằm trong danh sách trường đầu ra (dòng 760-768) và không được SCR-III-03 nêu là cột danh sách. Màn hình hiện có bộ lọc "Lĩnh vực pháp lý" nhưng không có cột.
+  + Người tạo: không xuất hiện trong cả phần trường nhập, trường đầu ra lẫn mô tả màn hình của đặc tả.
+- Điểm liên quan xin BA chốt luôn: FR-III-07 §Outputs dòng 765 có trường "khoa_hoc" (Khóa học liên kết) nhưng bảng danh sách cũng không hiển thị – cho thấy đặc tả chưa chốt dứt điểm bộ cột của màn này.
+- Câu hỏi BA: Danh sách cột chuẩn của màn Kho tài liệu / Bài giảng (SCR-III-03) gồm những cột nào? Có bổ sung Ảnh xem trước, Lĩnh vực, Người tạo, Khóa học liên kết vào bảng không, hay giữ nguyên 6 cột và để Ảnh đại diện ở panel xem trước như đặc tả hiện hành? BA chốt xong QA sẽ cập nhật lại kết quả mong đợi của test case cho khớp.
+- Kiểm bằng: tài khoản CB Nghiệp vụ Trung ương, cùng màn hình và cùng bộ lọc mặc định như trong ảnh anh/chị gửi.

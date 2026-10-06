@@ -1,0 +1,15 @@
+✅ Là bug — chuyển dev
+
+Đã kiểm tra lại bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW) — đúng vai trò đối tác đã dùng, và cũng là vai trò duy nhất có quyền tạo câu hỏi.
+
+Web sai gì:
+- Cửa sổ "Thêm câu hỏi" chỉ có 2 nút ở đáy: [Hủy] và [Lưu]. Đọc trực tiếp mã giao diện xác nhận toàn bộ nút trong cửa sổ là "Dùng ảnh hệ thống mặc định", "Hủy", "Lưu" — tức [Lưu nháp] và [Gửi duyệt] không bị khuất do cuộn mà thực sự không tồn tại.
+
+Kết quả mong đợi theo đặc tả:
+- FR-X.2-01 (UC 154) §3 SCR-X2-01, cửa sổ thêm Q&A (srs-fr-13-tv-nhanh.md dòng 534) quy định đúng 3 nút: "[Huy] [Luu nhap] [Gui duyet]".
+- Hệ quả nghiệp vụ: không có [Lưu nháp] thì không tạo được câu hỏi ở trạng thái "Nháp". Đã đo bằng thao tác thật — bấm [Lưu] với dữ liệu hợp lệ thì bản ghi ra thẳng trạng thái "Chờ duyệt" (1 request tạo, 1 thông báo "Tạo câu hỏi thành công, đang chờ duyệt"), tức [Lưu] đang gánh vai trò của [Gửi duyệt].
+- Lỗi này cùng gốc với BUG-QLKCHTV_02: trạng thái "Nháp" vắng mặt cả ở ô lọc lẫn ở nút tạo.
+
+Lưu ý để dev không sửa nhầm phạm vi: các TRƯỜNG của cửa sổ đã đúng đủ 7 mục theo dòng 534 (Câu hỏi, Câu trả lời, Lĩnh vực, Từ khóa, Ảnh đại diện công khai, Mô tả công khai, Tệp đính kèm công khai). Sai lệch chỉ nằm ở vùng nút.
+
+Bug ID: BUG-QLKCHTV_04.

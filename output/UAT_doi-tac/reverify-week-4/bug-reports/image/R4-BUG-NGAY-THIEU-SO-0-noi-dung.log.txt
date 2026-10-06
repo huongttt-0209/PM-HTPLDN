@@ -1,0 +1,44 @@
+R4 RE-VERIFY — BUG-HIENTHI-NGAY-THIEU-SO-0 (HIENTHI_OOS_15)
+Ngay chay: 29/07/2026 ~15:50  |  Env: https://18.143.165.120.nip.io  |  Tai khoan: cbnv_tw_01
+Doc gia tri bang innerText tung o trong .ant-table-tbody (khong goi API).
+==============================================================================
+
+PHAN 1 — MAN "Chuong trinh HTPLDN > Danh sach", cot "Thoi gian"
+------------------------------------------------------------------------------
+ Ma CT                | R3 (29/07 sang)      | R4 (29/07 chieu)        | KQ
+ ---------------------+----------------------+-------------------------+------
+ CT-20260729-0001     | 1/9/2026 - 31/12/2026| 01/09/2026 - 31/12/2026 | DAT
+ CT-20260728-0005     | 1/1/2026 - 31/12/2026| 01/01/2026 - 31/12/2026 | DAT
+ CT-20260728-0004     | 1/4/2026 - 31/10/2026| 01/04/2026 - 31/10/2026 | DAT
+ CT-20260728-0003     | 1/3/2026 - 30/9/2026 | 01/03/2026 - 30/09/2026 | DAT (ca 2 moc)
+ CT-20260728-0002     | 1/2/2026 - 30/11/2026| 01/02/2026 - 30/11/2026 | DAT
+ CT-20260721-0003     | 1/3/2026 - 31/10/2026| 01/03/2026 - 31/10/2026 | DAT
+
+ Ra HET 14 chuong trinh tren bang (toan bo danh sach, khong con trang sau):
+   tong o ngay doc duoc: 28   |   o thieu so 0: 0
+
+PHAN 2 — MAN "Chuong trinh HTPLDN > Dot bao cao", cot "Khoang thoi gian"
+------------------------------------------------------------------------------
+ Ma dot                    | R3                      | R4                       | KQ
+ --------------------------+-------------------------+--------------------------+-----
+ DOT-SO_BO_NAM-2026-1      | 1/1/2026 - 31/12/2026   | 01/01/2026 - 31/12/2026  | DAT
+ DOT-SO_BO_6_THANG-2026-1  | 1/7/2026 - 31/12/2026   | 01/07/2026 - 31/12/2026  | DAT
+
+PHAN 3 — DOI CHUNG: MAN CHI TIET (truoc gio van dung, kiem lai xem co bi hong nguoc)
+------------------------------------------------------------------------------
+ Dot DOT-SO_BO_NAM-2026-1 (/ct-htpldn/dot-bao-cao/e9909d96-...):
+    "Tu ngay  01/01/2026"     -> DUNG
+    "Den ngay 31/12/2026"     -> DUNG
+    "Han nop  31/12/2026"     -> DUNG
+ => man chi tiet van dung, khong bi hong nguoc sau khi sua man danh sach.
+
+PHAN 4 — DO PHU CUA PHEP DO
+------------------------------------------------------------------------------
+ Loi cu la "thieu so 0 khi ngay hoac thang < 10". Du lieu hien co phu ca 2 chieu:
+   - NGAY < 10  : moi ban ghi deu bat dau ngay 01  -> nay ghi "01"
+   - THANG < 10 : co thang 01, 02, 03, 04, 07, 09  -> nay ghi "01".."09"
+ Khong can seed them du lieu vi khong gian loi da duoc phu.
+ Cac moc nhu 31/12/2026 khong dung lam bang chung (ngay va thang deu >= 10
+ nen trong dung ca khi loi chua sua).
+
+KET LUAN: DAT — dong bug nay.

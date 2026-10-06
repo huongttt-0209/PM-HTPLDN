@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+- Hiện trạng web: Danh sách đợt đánh giá CÓ cột "Tên đợt", nhưng cột bị thu hẹp quá mức — ngay cả tiêu đề cột cũng bị cắt thành "Tên đ...", giá trị tên đợt (vd "Đợt đánh giá seed 2026") hiển thị thành "Đợt đánh...".
+- Theo SRS FR-VI-01 (UC83), màn hình danh sách (SCR-VI-01) quy định cột "Tên đợt" hiển thị dạng cắt bớt kèm "..." — tức cắt bớt là đúng thiết kế; nhưng SRS không quy định độ rộng cột hay mức cắt.
+- Phản ánh đối tác: Tên đợt là thông tin quan trọng nhưng bị cắt quá nhiều nên khó quan sát — kỳ vọng về mức độ hiển thị mà SRS chưa quy định.
+- Đề nghị BA xác nhận: có mở rộng cột "Tên đợt" hoặc bổ sung tooltip hiện đầy đủ tên khi rê chuột để đọc được, hay giữ nguyên cắt bớt như hiện tại?

@@ -1,0 +1,23 @@
+✅ ĐÃ HẾT LỖI — bấm [Gia hạn phiên] vừa đóng hộp thoại vừa đặt lại đồng hồ đếm 30 phút, đúng cả hai vế phiếu yêu cầu.
+
+- Phạm vi đo: env nghiệm thu htpldn-uat.ospgroup.vn, bản dựng V1.0.10 (chân sidebar "HTPLDN · V1.0.10"), vai trò Cán bộ Nghiệp vụ Trung ương. Đo ngày 07/08/2026, khoảng 20:49–20:54.
+
+- CÁCH RÚT NGẮN THỜI GIAN CHỜ (khai rõ để đối tác và dev đối chiếu): KHÔNG ngồi chờ đủ 25 phút thật. Thay vào đó đặt mốc "lần thao tác cuối" mà trình duyệt đang giữ lùi về quá khứ 25 phút 5 giây, để hệ thống tự tính ra là đã không thao tác 25 phút. Trước khi làm vậy đã kiểm chứng mốc này KHÔNG bị hệ thống tự làm mới ngầm: đọc mốc, để yên 10 giây rồi đọc lại, giá trị giữ nguyên không đổi. Nhờ vậy con số đo được phản ánh đúng hành vi thật của hệ thống.
+
+- Hộp thoại cảnh báo bật đúng như thiết kế: "Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc.", kèm đồng hồ đếm ngược tự đăng xuất và hai nút [Đăng xuất] [Gia hạn phiên].
+
+- Vế 1 — HỘP THOẠI ĐÓNG: bấm [Gia hạn phiên] lúc 20:53:58.640, hộp thoại hết hiển thị lúc 20:53:58.882 — sau 242 mili-giây. Kiểm bằng trạng thái hiển thị thật của phần tử (kích thước hiển thị và thuộc tính hiển thị) chứ không chỉ xem thẻ còn tồn tại trong trang. Theo dõi liên tục thêm 16 giây (800 lần đo, mỗi 20 mili-giây): hộp thoại KHÔNG bật lại lần nào — đây là dấu hiệu cho thấy đồng hồ đã thực sự được đặt lại, chứ không phải chỉ tắt hộp thoại rồi mốc cũ vẫn còn.
+
+- Vế 2 — ĐỒNG HỒ ĐƯỢC ĐẶT LẠI THẬT: mốc "lần thao tác cuối" trước khi bấm là 20:28:21, ngay sau khi bấm nhảy về 20:53:58 — trùng đúng thời điểm bấm, chênh lệch 0 giây. Tức là đồng hồ 30 phút được tính lại từ đầu.
+
+- Phép thử quyết định (chứng minh cơ chế cảnh báo còn sống, không bị vô hiệu hóa sau khi gia hạn): sau khi gia hạn xong và hộp thoại đã đóng, đặt mốc lùi 25 phút thêm một lần nữa — hộp thoại cảnh báo BẬT LẠI sau 358 mili-giây với đúng nội dung và đồng hồ đếm ngược. Vậy tính năng cảnh báo vẫn hoạt động bình thường cho các chu kỳ tiếp theo, không phải dùng được một lần rồi hỏng.
+
+- Đối chứng độc lập phía máy chủ: sau khi gia hạn, hệ thống vẫn xác nhận phiên còn hiệu lực và phân giải đúng người dùng "Cán bộ NV Trung ương" vai trò Cán bộ Nghiệp vụ Trung ương — phiên còn sống thật ở máy chủ, không phải chỉ đóng hộp thoại ở phía giao diện. Màn hình giữ nguyên trang Tổng quan hệ thống, không bị đá về trang đăng nhập.
+
+- Thao tác gia hạn không phát sinh thông báo nào và cũng không tạo yêu cầu ghi dữ liệu nào xuống máy chủ (0 thông báo ứng với 0 yêu cầu ghi) — đúng bản chất một thao tác chỉ làm mới đồng hồ phiên, không thay đổi dữ liệu nghiệp vụ.
+
+Chuẩn đối chiếu: srs-v3.5.md dòng 5527 và srs-fr-10-quan-tri.md dòng 2369 (BR-AUTH-06 — "Session CMS: 30 phút idle timeout"), cùng srs-fr-10-quan-tri.md dòng 1891 khai báo hộp thoại cảnh báo "Phiên sắp hết hạn trong 5 phút. [Gia hạn] [Đăng xuất]" ở mốc 30 phút không thao tác. Kết quả đo khớp với kết quả mong đợi của phiếu.
+
+Ghi nhận cho BA (không chặn bàn giao, không phải lỗi của dev): dòng 1891 có khai báo nút [Gia hạn] nhưng ô "Hành vi" của chính dòng đó để trống, nên đặc tả IM LẶNG về việc bấm nút này thì hệ thống phải làm gì; đặc tả cũng chưa quy định có giới hạn số lần gia hạn liên tiếp hay không. Phần này QA không suy diễn và không đo vì ngoài phạm vi phiếu. Kết luận Đã hết lỗi ở trên căn cứ trực tiếp vào kết quả mong đợi ghi trong phiếu.
+
+Bằng chứng: image/QLDX_05-1-hop-thoai-canh-bao.png (hộp thoại cảnh báo trước khi bấm) · image/QLDX_05-2-sau-khi-bam-gia-han.png (hộp thoại đã đóng, vẫn ở màn Tổng quan) · image/QLDX_05-3-phep-thu-hop-thoai-bat-lai.png (phép thử: hộp thoại bật lại sau khi gia hạn).

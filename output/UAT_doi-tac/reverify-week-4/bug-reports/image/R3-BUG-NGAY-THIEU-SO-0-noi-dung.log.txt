@@ -1,0 +1,62 @@
+R3 — BUG-HIENTHI-NGAY-THIEU-SO-0 (HIENTHI_OOS_15)
+Ngay chay: 29/07/2026  |  Env: https://18.143.165.120.nip.io  |  Tai khoan: cbnv_tw_01
+Doc gia tri bang cach lay innerText cua tung o trong .ant-table-tbody (khong goi API).
+==============================================================================
+
+PHAN 1 — MAN "Chuong trinh HTPLDN > Danh sach", cot "Thoi gian"
+------------------------------------------------------------------------------
+ Ma CT                | Cot "Thoi gian" tren man     | Dat chuan dd/MM/yyyy?
+ ---------------------+------------------------------+----------------------
+ CT-20260729-0001     | 1/9/2026 - 31/12/2026        | KHONG (thieu so 0)
+ CT-20260728-0005     | 1/1/2026 - 31/12/2026        | KHONG
+ CT-20260728-0004     | 1/4/2026 - 31/10/2026        | KHONG
+ CT-20260728-0003     | 1/3/2026 - 30/9/2026         | KHONG (ca 2 moc)
+ CT-20260728-0002     | 1/2/2026 - 30/11/2026        | KHONG
+ CT-20260721-0003     | 1/3/2026 - 31/10/2026        | KHONG
+
+ -> Moc nao co ngay/thang < 10 deu bi bo so 0 dung truoc.
+    Moc "31/12/2026" dung vi ca ngay lan thang deu >= 10 — khong phai da sua.
+
+PHAN 2 — MAN "Chuong trinh HTPLDN > Dot bao cao", cot "Khoang thoi gian"
+------------------------------------------------------------------------------
+ Ma dot                    | Cot "Khoang thoi gian"   | Dat chuan?
+ --------------------------+--------------------------+-----------
+ DOT-SO_BO_NAM-2026-1      | 1/1/2026 - 31/12/2026    | KHONG
+ DOT-SO_BO_6_THANG-2026-1  | 1/7/2026 - 31/12/2026    | KHONG
+
+PHAN 3 — DOI CHUNG: CHO NAO DANG GHI DUNG
+------------------------------------------------------------------------------
+ Man "Dot bao cao > Chi tiet" (dot DOT-SO_BO_NAM-2026-1):
+    "Tu ngay:  01/01/2026"        -> DUNG
+    "Den ngay: 31/12/2026"        -> DUNG
+    "Han nop:  31/12/2026"        -> DUNG
+
+ => Cung mot moc thoi gian cua cung mot ban ghi: man CHI TIET ghi dung,
+    man DANH SACH ghi thieu so 0. Loi nam o cho do bang danh sach,
+    khong phai loi toan he thong.
+
+PHAN 4 — DOI CHIEU DAC TA
+------------------------------------------------------------------------------
+ srs-v3.5.md:4617  (I18N-03, trang thai: CDT xac nhan)
+   | I18N-03 | Dinh dang ngay | dd/MM/yyyy (vi du: 25/03/2026). ... |
+
+ srs-v3.5.md:575  (UI-06, trang thai: CDT xac nhan)
+   | UI-06 | Localization | Tieng Viet la ngon ngu duy nhat. Unicode UTF-8.
+     Dinh dang ngay: dd/MM/yyyy. So: dau cham phan cach hang nghin |
+
+ srs-v3.5.md:950  (DG-01 — quy tac du lieu chung, ap cho bang danh sach)
+   | DG-01 | Dinh dang ngay | dd/mm/yyyy HH:mm hoac dd/mm/yyyy |
+
+PHAN 5 — RANH GIOI VOI BUG DA CO (de khong dong nham)
+------------------------------------------------------------------------------
+ BUG-XUAT-TEP-LECH-MUI-GIO (XUATTEP_OOS_08, row 43, dang Reopen)
+   co san mot dong bang ghi "thieu so 0 o ngay va thang" — NHUNG do la noi ve
+   NOI DUNG TEP XUAT. Kiem tra lai lan 3 ngay 29/07/2026 da xac nhan tep xuat
+   nay DAT: 12 man, 1.549 o ngay, 100% ghi dd/MM/yyyy, 0 o sai.
+
+   Bug hien tai noi ve MAN HINH, khong phai tep xuat. Hai be mat khac nhau.
+   -> Khong duoc dong bug nay bang ly do "tep xuat da sua roi".
+
+ BUG-CT-XUAT-EXCEL-SAI-NGAY (da dong) tung LAY chinh chuoi "1/1/2026" tren man
+   lam moc chuan de doi chieu voi tep. Tuc lan do QA chi soi tep, chua soi man.
+   Nay ghi nhan bo sung phan man hinh.

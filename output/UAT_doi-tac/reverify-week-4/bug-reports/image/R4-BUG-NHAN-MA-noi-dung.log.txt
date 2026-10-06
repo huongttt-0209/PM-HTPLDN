@@ -1,0 +1,113 @@
+R4 RE-VERIFY — BUG-NHAN-MA-KY-THUAT-THO (HIENTHI_OOS_10)
+Ngay chay: 29/07/2026 ~17:55  |  Env: https://18.143.165.120.nip.io
+Tai khoan: cbnv_tw_01 (4 cho dau) · admin (cho thu 5 — Nhat ky he thong)
+Thao tac tren giao dien; tep lay bang chinh nut [Xuat Excel] cua man hinh.
+================================================================================
+
+BOI CANH: luot 3 con dung 1/5 cho — tep Excel Nhat ky he thong, tieu de cot 9 va 10
+ghi 'Don vi' / 'Vai tro' (bo dau).
+
+--------------------------------------------------------------------------------
+[1/5] Man Dot bao cao — Ky BC / Trang thai / duong dan / suon trai   -> DA SUA
+--------------------------------------------------------------------------------
+ Danh sach (Chuong trinh HTPLDN > Dot bao cao):
+   DOT-SO_BO_NAM-2026-1     Ky BC 'So bo nam'      Trang thai 'Tao dot'
+   DOT-SO_BO_6_THANG-2026-1 Ky BC 'So bo 6 thang'  Trang thai 'Tao dot'
+ Chi tiet DOT-SO_BO_NAM-2026-1:
+   O "Ky BC"        : "So bo nam"      (co dau)
+   O "Trang thai"   : "Tao dot"        (co dau)
+   Duong dan dau trang: "Trang chu / Chuong trinh HTPLDN / Dot bao cao / Chi tiet"
+   Suon trai        : "Vu viec HTPL"   (co dau)
+ Quet toan bo chu HOA_GACH_DUOI con lai tren man: chi con 'SO_BO_NAM' nam trong
+ chinh MA cua dot (DOT-SO_BO_NAM-2026-1) — do la ma ban ghi, khong phai nhan.
+
+--------------------------------------------------------------------------------
+[2/5] Tep xuat Tu van vien / Chuyen gia — cot trinh do                -> DA SUA
+--------------------------------------------------------------------------------
+ sheet 'DS Tu van vien'
+   dong 5  'Thac si Luat kinh te QD-8018/QD-STPAG'
+   dong 6  'Cu nhan QD-SEED28-2026'
+   dong 7  'Thac si'
+   dong 8  'Thac si'
+ Quet ca tep tim chuoi dang MA_KY_THUAT: khong con o nao.
+
+--------------------------------------------------------------------------------
+[3+4/5] Tep bao cao danh gia hieu qua — cot "Vu viec" + nhan chi tieu -> DA SUA
+--------------------------------------------------------------------------------
+ Quet lai TOAN BO 23 tep .xlsx cua man Bao cao thong ke da xuat trong ngay
+ (bao gom BC Danh gia hieu qua HTPL), tim 3 loai loi cung luc:
+   - chuoi dinh danh noi bo (dang 8-4-4-4-12 ky tu)
+   - ma ky thuat dang CHU_HOA_GACH_DUOI
+   - nhan tieng Viet bi bo dau
+ Ket qua: 0 o dinh loi tren ca 23 tep.
+
+--------------------------------------------------------------------------------
+[5/5] Tep Excel Nhat ky he thong — tieu de cot                        -> DA SUA
+--------------------------------------------------------------------------------
+ Quan tri he thong > Nhat ky he thong > [Xuat Excel]  (tai khoan admin)
+ Tep: audit-log-2026-07-29.xlsx   276.115 B   1.436 dong
+
+   cot  1: 'Thời gian'          cot  9: 'Đơn vị'          <<< LUOT 3: 'Don vi'   -> DA CO DAU
+   cot  2: 'Module'             cot 10: 'Vai trò'         <<< LUOT 3: 'Vai tro'  -> DA CO DAU
+   cot  3: 'Entity type'        cot 11: 'Nguồn hệ thống'
+   cot  4: 'Entity ID'          cot 12: 'Consumer'
+   cot  5: 'Hành động'          cot 13: 'IP'
+   cot  6: 'Chi tiết thay đổi'  cot 14: 'Endpoint'
+   cot  7: 'Username'           cot 15: 'Mã phản hồi'
+   cot  8: 'Họ và tên'          cot 16: 'Session'
+
+ Gia tri trong cot 'Hanh dong' cung deu la chu tieng Viet co dau:
+   'Cho xac minh OTP' 287 · 'Dang nhap' 260 · 'Cap nhat' 240 · 'Dang xuat' 180 ·
+   'Tao moi' 141 · 'Xuat du lieu' 71 · 'Tham dinh' 30 · 'Phe duyet' 27
+
+================================================================================
+CHO CON LAI — TEN TRANG TINH (sheet) CUA CHINH TEP NHAT KY VAN BO DAU
+================================================================================
+ Tep Nhat ky he thong chi co 1 trang tinh, ten hien o the duoi cung khi mo tep:
+
+     'Nhat ky he thong'     <-- bo dau
+
+ So voi cac tep xuat khac cung san pham, xuat trong cung ngay:
+
+   CO DAU   'Điểm danh'                     (Khoa hoc > tab Diem danh)
+   CO DAU   'DS Tư vấn viên'                (Mang luoi TV > Tu van vien / Chuyen gia)
+   CO DAU   'BC Chất lượng đào tạo'         (Bao cao thong ke)
+   CO DAU   'Chương trình theo lĩnh vực'    (Bao cao thong ke)
+   CO DAU   'Chương trình theo đơn vị'      (Bao cao thong ke)
+   CO DAU   'Chương trình theo thời gian'   (Bao cao thong ke)
+   CO DAU   'BC Chi phí chi trả'            (Bao cao thong ke)
+   MAT DAU  'Nhat ky he thong'              (Quan tri he thong > Nhat ky he thong)
+
+ => Dung mot dinh dang tep, cung mot san pham: 8/9 trang tinh co dau day du, rieng
+    trang tinh cua Nhat ky he thong thi khong. Giong het lap luan da dung o hai luot
+    truoc: khong phai han che cua dinh dang Excel hay loi phong chu, ma la chu duoc
+    dat sai ngay tu luc sinh tep. Day la dung mot tep ma ban sua vua dong den —
+    tieu de cot da sua nhung ten trang tinh thi chua.
+
+--------------------------------------------------------------------------------
+GHI NHAN THEM (khong de xuat sua trong lan nay, ghi de theo doi)
+--------------------------------------------------------------------------------
+ a) Cot 'Entity type' ghi ten bang dang TAI_KHOAN / TU_VAN_VIEN / BIEU_MAU...
+    KHONG tinh la loi: dac ta SCR-VIII-10 muc 7 dinh nghia o loc "Entity" la
+    "Ten bang hoac ma ban ghi", tuc chinh dac ta yeu cau hien ten bang. Man hinh
+    cung hien dung nhu vay.
+ b) Cot 'Nguon he thong' co 9 o ghi ma cong viec nen: EXPIRE_UNACTIVATED_ACCOUNTS_JOB,
+    ACCOUNT_UNLOCK_JOB, LOCK_ACCOUNT_AUTO, VU_VIEC_BO_SUNG_TIMEOUT.
+ c) Mot so tieu de cot dung tu tieng Anh: 'Entity type', 'Entity ID', 'Username',
+    'Consumer', 'IP', 'Endpoint', 'Session'. Da ton tai tu luot 1, khong nam trong
+    pham vi da mo cua loi nay.
+ d) Cot 'Ho va ten' co 98 o ghi ten tai khoan khong dau ('QA CB Nghiep vu Ha Noi').
+    Day la du lieu do QA nhap tu truoc, khong phai loi ung dung.
+
+--------------------------------------------------------------------------------
+CAN CU DAC TA
+--------------------------------------------------------------------------------
+ Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/
+  srs-v3.5.md:575   — UI-06 Localization: "Tieng Viet la ngon ngu duy nhat.
+                      Unicode UTF-8..."   (trang thai: CDT xac nhan)
+  srs-v3.5.md:4615  — I18N-01: "Tieng Viet la ngon ngu duy nhat cho giao dien CMS"
+  srs-fr-10-quan-tri.md:1974 — SCR-VIII-10 muc 7: o loc "Entity" = "Ten bang hoac
+                      ma ban ghi"  (can cu cho ghi nhan a)
+
+KET LUAN: 5/5 cho da mo truoc day deu sach. Con lai duy nhat ten trang tinh cua
+chinh tep Nhat ky he thong van bo dau -> giu mo, cho sua not.

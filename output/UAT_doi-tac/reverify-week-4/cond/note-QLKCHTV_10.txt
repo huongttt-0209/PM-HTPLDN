@@ -1,0 +1,19 @@
+✅ Là bug — chuyển dev · ⚠️ Có ý cần BA xác nhận
+
+Đã kiểm tra lại bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW) — đúng vai trò đối tác đã dùng. Đã tự dựng tiền đề: tải "File mẫu" của chính hệ thống rồi nhập 5 dòng (3 hợp lệ + 2 sai mã lĩnh vực).
+
+✅ 1) Nhãn nguồn hiển thị "Import" → Open, chuyển dev.
+- Web hiển thị "Import" ở cả 3 nơi: bảng danh sách, màn chi tiết, và file Excel xuất ra.
+- Dữ liệu KHÔNG sai: máy chủ trả đúng mã IMPORT theo đặc tả (srs-fr-13-tv-nhanh.md dòng 102 và 688 khai đúng 3 giá trị TU_DONG / THU_CONG / IMPORT). Sai lệch nằm ở chữ hiển thị cho người dùng.
+- Căn cứ để coi là lỗi: cùng một cột "Nguồn", hai giá trị kia đã Việt hoá thành "Tự động" và "Thủ công", riêng giá trị này để nguyên tiếng Anh — không nhất quán trong cùng một cột của phần mềm tiếng Việt.
+- Bug ID: BUG-QLKCHTV_10.
+
+⚠️ 2) Cần BA chốt: chữ hiển thị tiếng Việt cho nguồn IMPORT.
+- Đặc tả dòng 532 CHỈ quy định màu thẻ ("IMPORT (tim)") — và web đang hiển thị đúng thẻ màu tím. Đặc tả KHÔNG quy định chữ hiển thị.
+- Vì vậy chữ "Nhập Excel" mà phiếu test kỳ vọng chưa có căn cứ trong đặc tả v3.5. Đề nghị BA chốt chính thức (ví dụ "Nhập Excel" hay "Nhập từ Excel") để dev sửa một lần.
+
+❌ 3) Phần kỳ vọng còn lại ĐẠT — không phải lỗi.
+- Bản ghi nhập vào đúng trạng thái "Chờ duyệt" (đo thực tế: 3 bản ghi QA-20260727-0002/-0003/-0004 đều "Chờ duyệt", thông báo "Đã nhập 3 câu hỏi, chờ duyệt"), khớp đặc tả dòng 116 và 535.
+
+✅ 4) Phát hiện thêm khi test (ngoài phạm vi phiếu) — đã tách bug riêng.
+- File Excel mẫu do chính hệ thống cấp ("Tải file mẫu") liệt kê những mã lĩnh vực mà hệ thống từ chối khi nhập (ví dụ KINH_DOANH_TM báo "Không tìm thấy lĩnh vực với mã 'KINH_DOANH_TM'"). Đây nhiều khả năng là nguyên nhân các dòng bị bỏ qua. Bug ID: BUG-KCH-TEMPLATE-LINHVUC.

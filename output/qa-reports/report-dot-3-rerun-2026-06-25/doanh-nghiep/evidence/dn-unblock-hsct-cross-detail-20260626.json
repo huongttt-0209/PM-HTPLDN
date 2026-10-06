@@ -1,0 +1,368 @@
+{
+  "base": "http://103.172.236.130:3000/api/v1",
+  "started_at": "2026-06-26T00:40:37+0700",
+  "steps": {
+    "tw_detail_control": {
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/ho-so-chi-tras/f0000000-0000-4000-8001-000000000066",
+      "body": null,
+      "status": 200,
+      "json": {
+        "success": true,
+        "data": {
+          "id": "f0000000-0000-4000-8001-000000000066",
+          "nguoiTaoId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "nguoiCapNhatId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "ngayTao": "2026-04-05T08:00:00.000Z",
+          "ngayCapNhat": "2026-05-10T10:43:50.280Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "seqId": "66",
+          "version": 5,
+          "trangThai": "YEU_CAU_BO_SUNG",
+          "nguoiGuiDuyetId": null,
+          "ngayGuiDuyet": null,
+          "nguoiDuyetId": null,
+          "ngayDuyet": null,
+          "ghiChuPheDuyet": null,
+          "maHoSo": "HSCT000066",
+          "vuViecId": null,
+          "doanhNghiepId": "e0000000-0000-4000-8000-000000000011",
+          "tuVanVienId": null,
+          "soHopDongTvpl": null,
+          "ngayHopDong": null,
+          "phiTuVan": "9481422.00",
+          "soTienDeNghi": "4740711.00",
+          "quyMoDn": "NHO",
+          "mucHoTroPhanTram": 30,
+          "tranHoTroNam": "5000000.00",
+          "soTienDuocDuyet": null,
+          "soTienThucTra": null,
+          "ngayThanhToan": "2026-04-14",
+          "soBienNhan": null,
+          "maHoSoDvc": "DVC000066",
+          "ketQuaKiemTra": "YEU_CAU_BO_SUNG",
+          "ngayNop": "2026-04-05",
+          "ngayTiepNhan": "2026-05-09T11:04:41.445Z",
+          "nguoiTiepNhanId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "deadlineSla": "2026-04-15",
+          "hoSoJson": {
+            "daThongBaoDvc": true,
+            "kiemTraHistory": [
+              {
+                "ghiChu": "B4 R7.6.1 R1: Yêu cầu bổ sung tờ khai thuế năm gần nhất + hợp đồng tư vấn pháp luật chi tiết.",
+                "ketQua": "YEU_CAU_BO_SUNG",
+                "timestamp": "2026-05-09T11:05:43.037Z",
+                "checklistItems": [
+                  {
+                    "field": "mau_01_nd55",
+                    "status": "THIEU"
+                  },
+                  {
+                    "field": "cndkkd",
+                    "status": "THIEU"
+                  },
+                  {
+                    "field": "to_khai_thue",
+                    "status": "THIEU"
+                  },
+                  {
+                    "field": "hd_tvpl",
+                    "status": "THIEU"
+                  },
+                  {
+                    "field": "van_ban_tvpl",
+                    "status": "THIEU"
+                  }
+                ],
+                "nguoiKiemTraId": "169244eb-bbd8-4a35-bec3-2096f57a62f6"
+              }
+            ],
+            "thoiDiemThongBao": "2026-05-09T11:05:43.055Z"
+          },
+          "soLanBoSung": 1,
+          "thoiGianTuChoi": null,
+          "nguoiTuChoiId": null,
+          "lyDoTuChoi": null,
+          "lyDoHuy": null,
+          "ngayYeuCauBoSung": null,
+          "mucDoCanhBao": "QUA_HAN",
+          "hoanThanhDungHan": true,
+          "danhGia": null,
+          "thamDinhList": [],
+          "thamDinh": null,
+          "lichSu": [
+            {
+              "id": "a4b93e6f-a42a-4521-8a79-9ec3d69a2166",
+              "hanhDong": "TIEP_NHAN",
+              "trangThaiTruoc": null,
+              "trangThaiSau": "DANG_KIEM_TRA",
+              "nguoiThucHien": "CB Nghiệp vụ TW 07",
+              "ngayThucHien": "2026-05-09T11:04:41.437Z",
+              "ghiChu": null
+            },
+            {
+              "id": "016e122f-a740-4cad-94ec-8871d4062552",
+              "hanhDong": "KIEM_TRA",
+              "trangThaiTruoc": null,
+              "trangThaiSau": "YEU_CAU_BO_SUNG",
+              "nguoiThucHien": "CB Nghiệp vụ TW 07",
+              "ngayThucHien": "2026-05-09T11:05:43.029Z",
+              "ghiChu": null
+            },
+            {
+              "id": "b7ef3455-fc8c-49c9-9441-454d2395631c",
+              "hanhDong": "KIEM_TRA",
+              "trangThaiTruoc": null,
+              "trangThaiSau": null,
+              "nguoiThucHien": "CB Nghiệp vụ TW 01",
+              "ngayThucHien": "2026-06-25T14:23:48.205Z",
+              "ghiChu": null
+            },
+            {
+              "id": "837a4b51-b8bd-40f6-8426-ada1c4d4f10c",
+              "hanhDong": "TRINH_PHE_DUYET",
+              "trangThaiTruoc": null,
+              "trangThaiSau": null,
+              "nguoiThucHien": "CB Nghiệp vụ TW 01",
+              "ngayThucHien": "2026-06-25T14:23:48.324Z",
+              "ghiChu": null
+            },
+            {
+              "id": "acdc50bf-a881-46bd-8d9b-13713772a771",
+              "hanhDong": "CAP_NHAT_THANH_TOAN",
+              "trangThaiTruoc": null,
+              "trangThaiSau": null,
+              "nguoiThucHien": "CB Nghiệp vụ TW 01",
+              "ngayThucHien": "2026-06-25T14:23:48.445Z",
+              "ghiChu": null
+            },
+            {
+              "id": "2235d366-b122-4a5b-b33e-362fd62f699d",
+              "hanhDong": "KIEM_TRA",
+              "trangThaiTruoc": null,
+              "trangThaiSau": null,
+              "nguoiThucHien": "CB Nghiệp vụ TW 02",
+              "ngayThucHien": "2026-06-25T14:30:23.094Z",
+              "ghiChu": null
+            },
+            {
+              "id": "e37e2df7-6755-4071-a36f-afa7d8fee77b",
+              "hanhDong": "TRINH_PHE_DUYET",
+              "trangThaiTruoc": null,
+              "trangThaiSau": null,
+              "nguoiThucHien": "CB Nghiệp vụ TW 02",
+              "ngayThucHien": "2026-06-25T14:30:23.219Z",
+              "ghiChu": null
+            },
+            {
+              "id": "b23ef214-4af9-4f0b-9ada-ee378ff29ffc",
+              "hanhDong": "CAP_NHAT_THANH_TOAN",
+              "trangThaiTruoc": null,
+              "trangThaiSau": null,
+              "nguoiThucHien": "CB Nghiệp vụ TW 02",
+              "ngayThucHien": "2026-06-25T14:30:23.386Z",
+              "ghiChu": null
+            },
+            {
+              "id": "3163c964-8726-4d8d-8e04-06b6a6921c99",
+              "hanhDong": "KIEM_TRA",
+              "trangThaiTruoc": null,
+              "trangThaiSau": null,
+              "nguoiThucHien": "CB Nghiệp vụ TW 02",
+              "ngayThucHien": "2026-06-25T14:30:51.771Z",
+              "ghiChu": null
+            }
+          ],
+          "fileDinhKem": [],
+          "vuViec": null,
+          "doanhNghiep": {
+            "id": "e0000000-0000-4000-8000-000000000011",
+            "ten": "Công ty TNHH Hữu Nghị TW",
+            "maSoThue": "0400000004"
+          },
+          "tuVanVien": null,
+          "donVi": {
+            "id": "00000000-0000-4000-8000-000000000001",
+            "ten": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "cap": "TW"
+          },
+          "_links": {}
+        },
+        "meta": null
+      }
+    },
+    "dp_detail_cross": {
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/ho-so-chi-tras/f0000000-0000-4000-8001-000000000066",
+      "body": null,
+      "status": 404,
+      "json": {
+        "success": false,
+        "error": {
+          "code": "ERR-VAL-VII-02-01",
+          "message": "Bản ghi không tồn tại",
+          "timestamp": "2026-06-25T17:40:37.604Z",
+          "requestId": "26a0ec5d-4fa1-4009-94f1-ddcc0d75bf1a"
+        }
+      }
+    },
+    "audit_hsct_cross_entity": {
+      "method": "GET",
+      "url": "http://103.172.236.130:3000/api/v1/audit-logs?entityType=HO_SO_CHI_TRA&entityId=f0000000-0000-4000-8001-000000000066&limit=50",
+      "body": null,
+      "status": 200,
+      "json": {
+        "success": true,
+        "data": [
+          {
+            "id": "3163c964-8726-4d8d-8e04-06b6a6921c99",
+            "entityType": "HO_SO_CHI_TRA",
+            "entityId": "f0000000-0000-4000-8001-000000000066",
+            "hanhDong": "KIEM_TRA",
+            "nguoiThucHienId": "facdea31-96a6-4e09-9acf-f871052faa68",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T14:30:51.771Z",
+            "ipAddress": "::ffff:127.0.0.1",
+            "endpoint": "POST /api/v1/ho-so-chi-tras/f0000000-0000-4000-8001-000000000066/kiem-tra",
+            "responseCode": 409,
+            "sessionId": "f47e9a59-a148-4ce0-9906-4f3e808e66cf",
+            "module": "HO_SO_CHI_TRA",
+            "nguoiThucHienUsername": "cb_nv_tw_02",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 02",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          },
+          {
+            "id": "b23ef214-4af9-4f0b-9ada-ee378ff29ffc",
+            "entityType": "HO_SO_CHI_TRA",
+            "entityId": "f0000000-0000-4000-8001-000000000066",
+            "hanhDong": "CAP_NHAT_THANH_TOAN",
+            "nguoiThucHienId": "facdea31-96a6-4e09-9acf-f871052faa68",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T14:30:23.386Z",
+            "ipAddress": "::ffff:127.0.0.1",
+            "endpoint": "POST /api/v1/ho-so-chi-tras/f0000000-0000-4000-8001-000000000066/cap-nhat-thanh-toan",
+            "responseCode": 409,
+            "sessionId": "f47e9a59-a148-4ce0-9906-4f3e808e66cf",
+            "module": "HO_SO_CHI_TRA",
+            "nguoiThucHienUsername": "cb_nv_tw_02",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 02",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          },
+          {
+            "id": "e37e2df7-6755-4071-a36f-afa7d8fee77b",
+            "entityType": "HO_SO_CHI_TRA",
+            "entityId": "f0000000-0000-4000-8001-000000000066",
+            "hanhDong": "TRINH_PHE_DUYET",
+            "nguoiThucHienId": "facdea31-96a6-4e09-9acf-f871052faa68",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T14:30:23.219Z",
+            "ipAddress": "::ffff:127.0.0.1",
+            "endpoint": "POST /api/v1/ho-so-chi-tras/f0000000-0000-4000-8001-000000000066/trinh-phe-duyet",
+            "responseCode": 409,
+            "sessionId": "f47e9a59-a148-4ce0-9906-4f3e808e66cf",
+            "module": "HO_SO_CHI_TRA",
+            "nguoiThucHienUsername": "cb_nv_tw_02",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 02",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          },
+          {
+            "id": "2235d366-b122-4a5b-b33e-362fd62f699d",
+            "entityType": "HO_SO_CHI_TRA",
+            "entityId": "f0000000-0000-4000-8001-000000000066",
+            "hanhDong": "KIEM_TRA",
+            "nguoiThucHienId": "facdea31-96a6-4e09-9acf-f871052faa68",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T14:30:23.094Z",
+            "ipAddress": "::ffff:127.0.0.1",
+            "endpoint": "POST /api/v1/ho-so-chi-tras/f0000000-0000-4000-8001-000000000066/kiem-tra",
+            "responseCode": 422,
+            "sessionId": "f47e9a59-a148-4ce0-9906-4f3e808e66cf",
+            "module": "HO_SO_CHI_TRA",
+            "nguoiThucHienUsername": "cb_nv_tw_02",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 02",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          },
+          {
+            "id": "acdc50bf-a881-46bd-8d9b-13713772a771",
+            "entityType": "HO_SO_CHI_TRA",
+            "entityId": "f0000000-0000-4000-8001-000000000066",
+            "hanhDong": "CAP_NHAT_THANH_TOAN",
+            "nguoiThucHienId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T14:23:48.445Z",
+            "ipAddress": "::ffff:127.0.0.1",
+            "endpoint": "POST /api/v1/ho-so-chi-tras/f0000000-0000-4000-8001-000000000066/cap-nhat-thanh-toan",
+            "responseCode": 422,
+            "sessionId": "bbb05b0c-bd22-441b-9ed7-9793cabf570c",
+            "module": "HO_SO_CHI_TRA",
+            "nguoiThucHienUsername": "cb_nv_tw_01",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 01",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          },
+          {
+            "id": "837a4b51-b8bd-40f6-8426-ada1c4d4f10c",
+            "entityType": "HO_SO_CHI_TRA",
+            "entityId": "f0000000-0000-4000-8001-000000000066",
+            "hanhDong": "TRINH_PHE_DUYET",
+            "nguoiThucHienId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T14:23:48.324Z",
+            "ipAddress": "::ffff:127.0.0.1",
+            "endpoint": "POST /api/v1/ho-so-chi-tras/f0000000-0000-4000-8001-000000000066/trinh-phe-duyet",
+            "responseCode": 422,
+            "sessionId": "bbb05b0c-bd22-441b-9ed7-9793cabf570c",
+            "module": "HO_SO_CHI_TRA",
+            "nguoiThucHienUsername": "cb_nv_tw_01",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 01",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          },
+          {
+            "id": "b7ef3455-fc8c-49c9-9441-454d2395631c",
+            "entityType": "HO_SO_CHI_TRA",
+            "entityId": "f0000000-0000-4000-8001-000000000066",
+            "hanhDong": "KIEM_TRA",
+            "nguoiThucHienId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T14:23:48.205Z",
+            "ipAddress": "::ffff:127.0.0.1",
+            "endpoint": "POST /api/v1/ho-so-chi-tras/f0000000-0000-4000-8001-000000000066/kiem-tra",
+            "responseCode": 422,
+            "sessionId": "bbb05b0c-bd22-441b-9ed7-9793cabf570c",
+            "module": "HO_SO_CHI_TRA",
+            "nguoiThucHienUsername": "cb_nv_tw_01",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 01",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          }
+        ],
+        "meta": {
+          "page": 1,
+          "pageSize": 50,
+          "total": 7,
+          "totalPages": 1
+        }
+      }
+    }
+  },
+  "finished_at": "2026-06-26T00:40:37+0700"
+}

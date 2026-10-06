@@ -1,0 +1,107 @@
+R3 RE-VERIFY — BUG-XUAT-TEP-THIEU-COT-SO-VOI-MAN-HINH (XUATTEP_OOS_13)
+Ngay chay: 29/07/2026  |  Env: https://18.143.165.120.nip.io
+Tai khoan: cbnv_tw_01 (3 man dau), admin (man Nhat ky he thong)
+Cach lay tep: bam nut [Xuat Excel] tren giao dien, doc Blob do chinh UI sinh ra.
+Doi chieu TUNG TEN COT (khong so so luong cot).
+========================================================================================
+
+----------------------------------------------------------------------------------------
+Tu van > Kho cau hoi   (tep kho-cau-hoi-R3.xlsx, sheet 'Kho câu hỏi')
+----------------------------------------------------------------------------------------
+   MAN HINH (12 cot du lieu): Mã · Câu hỏi · Câu trả lời · Lĩnh vực · Từ khóa · Nguồn · Trạng thái · Hiệu lực · Công khai · Lượt xem · Điểm TB · Ngày tạo
+   TEP      (12 cot)          : Mã câu hỏi · Câu hỏi · Câu trả lời · Lĩnh vực · Từ khóa · Nguồn · Trạng thái · Hiệu lực · Công khai · Số lượt xem · Điểm TB · Ngày tạo
+   Cot TUNG BI MAT o lan truoc  : Từ khóa · Hiệu lực · Công khai · Điểm TB · Ngày tạo
+   Kiem tra tung cot man hinh co mat trong tep:
+      Mã                       -> CO  (trong tep ten la 'Mã câu hỏi')
+      Câu hỏi                  -> CO
+      Câu trả lời              -> CO
+      Lĩnh vực                 -> CO
+      Từ khóa                  -> CO
+      Nguồn                    -> CO
+      Trạng thái               -> CO
+      Hiệu lực                 -> CO
+      Công khai                -> CO
+      Lượt xem                 -> CO  (trong tep ten la 'Số lượt xem')
+      Điểm TB                  -> CO
+      Ngày tạo                 -> CO
+   => DAT — khong con cot nao bi mat.
+
+----------------------------------------------------------------------------------------
+Bieu mau > Thu vien bieu mau   (tep thu-vien-bieu-mau-R3.xlsx, sheet 'Thư mục biểu mẫu')
+----------------------------------------------------------------------------------------
+   MAN HINH (6 cot du lieu): Tên thư mục · Lĩnh vực · Số biểu mẫu · Trạng thái · Đồng bộ · Ngày tạo
+   TEP      (10 cot)          : STT · Tên thư mục · Số biểu mẫu · Mô tả · Lĩnh vực · Thứ tự · Trạng thái · Đồng bộ · Ngày tạo · Ngày cập nhật
+   Cot TUNG BI MAT o lan truoc  : Số biểu mẫu · Đồng bộ
+   Kiem tra tung cot man hinh co mat trong tep:
+      Tên thư mục              -> CO
+      Lĩnh vực                 -> CO
+      Số biểu mẫu              -> CO
+      Trạng thái               -> CO
+      Đồng bộ                  -> CO
+      Ngày tạo                 -> CO
+   => DAT — khong con cot nao bi mat.
+
+----------------------------------------------------------------------------------------
+Chi tra chi phi > Danh sach   (tep chi-tra-R3.xlsx, sheet 'Danh sách hồ sơ chi trả')
+----------------------------------------------------------------------------------------
+   MAN HINH (9 cot du lieu): Mã HS · Tên DN · Quy mô DN · Số tiền đề nghị · Số tiền được duyệt · Mức HT % · Trạng thái · SLA · Ngày nộp
+   TEP      (10 cot)          : Mã hồ sơ · Doanh nghiệp · Quy mô DN · Số tiền đề nghị · Số tiền được duyệt · Mức HT % · Trạng thái · Mức cảnh báo · Ngày nộp · Deadline SLA
+   Cot TUNG BI MAT o lan truoc  : Mức HT %
+   Kiem tra tung cot man hinh co mat trong tep:
+      Mã HS                    -> CO  (trong tep ten la 'Mã hồ sơ')
+      Tên DN                   -> CO  (trong tep ten la 'Doanh nghiệp')
+      Quy mô DN                -> CO
+      Số tiền đề nghị          -> CO
+      Số tiền được duyệt       -> CO
+      Mức HT %                 -> CO
+      Trạng thái               -> CO
+      SLA                      -> CO  (trong tep ten la 'Mức cảnh báo')
+      Ngày nộp                 -> CO
+   => DAT — khong con cot nao bi mat.
+
+----------------------------------------------------------------------------------------
+QTHT > Nhat ky he thong   (tep audit-log-R3.xlsx, sheet 'Nhat ky he thong')
+----------------------------------------------------------------------------------------
+   MAN HINH (8 cot du lieu): Thời gian · Người dùng · Đơn vị · Module · Entity · Mã bản ghi · Loại thao tác · Chi tiết thay đổi
+   TEP      (16 cot)          : Thời gian · Module · Entity type · Entity ID · Hành động · Chi tiết thay đổi · Username · Họ và tên · Don vi · Vai tro · Nguồn hệ thống · Consumer · IP · Endpoint · Mã phản hồi · Session
+   Cot TUNG BI MAT o lan truoc  : Chi tiết thay đổi
+   Kiem tra tung cot man hinh co mat trong tep:
+      Thời gian                -> CO
+      Người dùng               -> CO  (trong tep ten la 'Họ và tên')
+      Đơn vị                   -> CO  (trong tep ten la 'Don vi')
+      Module                   -> CO
+      Entity                   -> CO  (trong tep ten la 'Entity type')
+      Mã bản ghi               -> CO  (trong tep ten la 'Entity ID')
+      Loại thao tác            -> CO  (trong tep ten la 'Hành động')
+      Chi tiết thay đổi        -> CO
+   => DAT — khong con cot nao bi mat.
+
+========================================================================================
+TONG KET
+ Man                                 Cot tung bi mat                                     Ket qua
+ ----------------------------------- --------------------------------------------------- --------
+ Tu van > Kho cau hoi                Tu khoa · Hieu luc · Cong khai · Diem TB · Ngay tao  DA SUA
+ Bieu mau > Thu vien bieu mau        So bieu mau · Dong bo                                DA SUA
+ Chi tra chi phi > Danh sach         Muc HT %                                             DA SUA
+ QTHT > Nhat ky he thong             Chi tiet thay doi                                    DA SUA
+
+ => Ca 4 man deu da co du cot dang hien tren giao dien.
+
+========================================================================================
+KIEM THEM — cot moi co DU LIEU that hay chi co tieu de rong
+(doi chieu so o co noi dung trong tep voi so dong co gia tri tren man hinh)
+----------------------------------------------------------------------------------------
+   Man                  Cot                  Trong tep      Doi chieu man hinh
+   Kho cau hoi          Từ khóa              13/28 o co noi dung man hinh: 13 dong co tu khoa
+   Kho cau hoi          Hiệu lực             28/28          man hinh: moi dong deu co ('Co')
+   Kho cau hoi          Công khai            28/28          man hinh: moi dong deu co
+   Kho cau hoi          Ngày tạo             28/28          man hinh: moi dong deu co
+   Kho cau hoi          Điểm TB              0/28           man hinh: CA 28 DONG deu hien '—' (chua co diem) -> KHOP
+   Thu vien bieu mau    Số biểu mẫu          13/13          man hinh: moi dong deu co (ke ca gia tri 0)
+   Thu vien bieu mau    Đồng bộ              7/13           man hinh: dung 7 dong 'Da dong bo', 6 dong '—' -> KHOP
+   Chi tra chi phi      Mức HT %             11/13          man hinh: dung 11 dong co %, 2 dong '—' -> KHOP
+   Nhat ky he thong     Chi tiết thay đổi    407/1379       cot co noi dung that (vd: 'Moi: {...}'), khong phai tieu de rong
+
+   => Khong co cot nao chi co tieu de rong. Cac o trong trong tep deu ung voi
+      o '—' tren man hinh, tuc dung la 'chua co du lieu' chu khong phai mat du lieu.
+

@@ -1,0 +1,4 @@
+✅ ĐÃ HẾT LỖI: Thẻ "Hồ sơ pháp lý DN" nay có bộ lọc khoảng ngày và chặn đúng trường hợp ngày bắt đầu sau ngày kết thúc.
+VÌ SAO ĐẠT: FR-X.1-04 ràng buộc tu_ngay <= den_ngay (srs-fr-12-tv-chuyen-sau.md:596) và quy định nhánh lỗi E6 trả mã ERR-HSPL-06 với câu "Ngày bắt đầu phải trước ngày kết thúc", mức ERROR (:700).
+ĐÃ ĐO: Tài khoản cbnv_tw_02 (CB Nghiệp vụ Trung ương), doanh nghiệp DN-HNI-0001 thẻ Hồ sơ pháp lý; đặt Từ ngày 31/12/2026 và Đến ngày 01/01/2026 rồi bấm Tìm kiếm thì bắt được đúng 1 thông báo nguyên văn "Ngày bắt đầu phải trước ngày kết thúc" (bộ bắt cài trước khi bấm, không lọc trùng), bấm lặp lần 2 vẫn đúng 1 thông báo, đối chứng đếm lượt gọi máy chủ ra 0 lượt nên hệ thống chặn trước khi truy vấn.
+HIỆU LỰC: Env https://18.143.165.120.nip.io, bản dựng HTPLDN V1.0.9, bó mã assets/index-CxS5qW_0.js, last-modified 06/08/2026 12:48:25 GMT.

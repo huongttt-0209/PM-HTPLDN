@@ -1,0 +1,9 @@
+✅ Đã đạt — cả 4 nội dung của phiếu đều hết lỗi.
+
+- Đã kiểm lại trên bản dựng mới nhất, ở trạng thái khách vãng lai (không đăng nhập), đúng như phiếu mô tả.
+- Các trường trên biểu mẫu: đủ 28 mục nhập liệu cùng 2 nút Hủy và Đăng ký, khớp tài liệu; ô "Tên đăng nhập" chỉ đọc và tự điền theo mã số thuế vừa nhập. Điểm khác biệt duy nhất còn lại là mục "Doanh nghiệp do nữ làm chủ" đang vẽ bằng công tắc gạt thay vì ô tích — chỉ là cách thể hiện, không cản trở việc điền và lưu.
+- Nội dung còn lỗi ở lần trước — chọn Tỉnh/Thành phố là Hà Nội thì bị chặn bằng câu "Mã số thuế đã tồn tại trong hệ thống" — nay đã hết. Đã chạy 2 lượt đăng ký liên tiếp với mã số thuế hoàn toàn mới, đều chọn Hà Nội, cả 2 lượt đăng ký chạy trọn và được cấp mã doanh nghiệp liền mạch.
+- Xin lưu ý để anh/chị yên tâm là lỗi đã được sửa thật: dãy mã doanh nghiệp của Hà Nội hiện vẫn còn khoảng trống ở giữa, tức đúng tình huống gây lỗi lần trước vẫn còn nguyên, nhưng đăng ký vẫn chạy bình thường.
+- Sau khi đăng ký: hiện đúng thông báo "Đăng ký thành công, vui lòng kiểm tra email kích hoạt", tài khoản được tạo ở trạng thái chờ kích hoạt với tên đăng nhập là mã số thuế, và thư kích hoạt về đúng hòm thư đã khai. Bấm liên kết trong thư thì tài khoản chuyển sang đang hoạt động và đăng nhập được ngay bằng mã số thuế.
+- Trường hợp mã số thuế trùng thật: hệ thống báo đúng "Mã số thuế này đã có trong hệ thống. Vui lòng dùng chức năng Quên mật khẩu…" kèm nút "Quên mật khẩu", đồng thời báo đỏ ngay dưới ô Mã số thuế — khác hẳn câu báo sai bản chất của lần trước.
+- Kết luận: nội dung anh/chị phản ánh đã được khắc phục; luồng doanh nghiệp tự đăng ký tài khoản hoạt động bình thường trên bản hiện tại.

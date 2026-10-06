@@ -1,0 +1,5 @@
+❌ Không phải bug – chức năng Thêm mới bài giảng đang chạy đúng.
+• CB_NV_TW → Kho tài liệu / Bài giảng → Thêm mới → nhập thông tin hợp lệ → Lưu.
+• Hệ thống lưu thành công, hiện thông báo "Tạo bài giảng thành công", bản ghi vào danh sách.
+• Đã thử 3 trường hợp hợp lệ: PDF (công khai + không công khai) và Video (URL YouTube) — đều lưu OK, không gặp "Lỗi hệ thống". Khớp đặc tả Quản lý kho tài liệu, bài giảng (UC26).
+→ Đối tác kiểm tra lại.

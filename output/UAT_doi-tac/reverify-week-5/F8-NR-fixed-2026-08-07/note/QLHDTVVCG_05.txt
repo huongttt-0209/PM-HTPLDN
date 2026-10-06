@@ -1,0 +1,48 @@
+📌 KẾT QUẢ CHUNG: ĐẠT — hệ thống chặn thao tác tìm kiếm khi khoảng ngày bị nhập ngược, và báo đúng nguyên văn câu "Ngày bắt đầu phải trước ngày kết thúc".
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-BbPPdate.js (bản lên lúc 13:47 ngày 07/08/2026), đo lúc 15:45-15:49 ngày 07/08/2026, cửa sổ trình duyệt 1440x900.
+
+TÀI KHOẢN THỰC DÙNG: cbnv_tw_05 (Cán bộ Nghiệp vụ Trung ương). Ban đầu dùng cbnv_tw_03 nhưng phiên bị hệ thống thu hồi giữa chừng do có phiên khác đăng nhập cùng tài khoản, nên đã chuyển sang tài khoản dự phòng CÙNG vai trò, CÙNG cấp, CÙNG đơn vị - phạm vi dữ liệu nhìn thấy không đổi.
+
+ĐƯỜNG VÀO THỰC TẾ VÀ VỊ TRÍ ĐO
+
+Bước 1 của phiếu ghi "Chọn menu Hợp đồng Tư vấn". Thanh bên KHÔNG có mục đó - đúng theo quyết định nghiệp vụ ngày 11/05/2026 (bỏ menu riêng). Đây là đường đi, không phải điểm chấm.
+
+Đã đo trên MÀN 1: Chi tiết vụ việc VV-BTP-TW-20260804-002 > mục "HĐ tư vấn liên kết", đúng cặp ô Từ ngày / Đến ngày TRÊN THANH LỌC. Lưu ý cho người đọc sau: trong phần mềm có HAI chỗ cùng dùng câu báo lỗi này - thanh lọc của danh sách và biểu mẫu thêm/sửa hợp đồng - nhưng đặc tả đánh hai mã lỗi khác nhau cho hai chỗ. Bước thực hiện của phiếu là thanh lọc, nên đã đo đúng thanh lọc; biểu mẫu thêm/sửa KHÔNG được mở trong lượt đo này.
+
+✅ ĐÃ ĐẠT - vế 1: hệ thống chặn thao tác
+
+Đã nhập Từ ngày 20/08/2026 và Đến ngày 10/08/2026 (lệch nhau 10 ngày, cố ý không dùng hai ngày bằng nhau vì đặc tả cho phép trường hợp bằng nhau), rồi bấm nút Tìm kiếm.
+
+Kết quả: KHÔNG có yêu cầu tìm kiếm nào được gửi đi. Đã đếm trong suốt cả ba lần bấm nút Tìm kiếm với khoảng ngày ngược - số yêu cầu gửi đi là 0. Bảng giữ nguyên kết quả cũ (2 hợp đồng, "1-2 / 2 mục"), không bị thay bằng danh sách khác cũng không bị làm rỗng.
+
+Đây là điểm cần nói rõ vì có một cách chấm sai rất dễ mắc: nhiều bộ chọn ngày tự khoá sẵn không cho chọn ngày ngược, khi đó không tạo được tình huống lỗi và người kiểm dễ kết luận nhầm là "hệ thống đã chặn". Ở đây đã kiểm: sau khi đặt Từ ngày là 20/08, lịch của ô Đến ngày VẪN cho chọn các ngày 8, 9, 10, 11, 12 tháng 8 - không ô nào bị khoá. Tức tình huống lỗi được tạo ra thật, và việc chặn là do phần mềm chủ động chặn khi bấm tìm.
+
+✅ ĐÃ ĐẠT - vế 2: hiển thị thông báo cho người dùng
+
+Ngay khi bấm Tìm kiếm, phần mềm báo lỗi bằng HAI kênh cùng lúc:
+- Thông báo nổi ở đầu màn hình, nội dung "Ngày bắt đầu phải trước ngày kết thúc".
+- Chữ đỏ cố định ngay dưới CẢ HAI ô ngày, cùng nội dung đó, kèm viền đỏ quanh ô nhập.
+
+Câu chữ trùng TỪNG KÝ TỰ với kỳ vọng ghi trong phiếu và với đặc tả srs-fr-14-hop-dong-tv.md:250 (mã thông báo ERR-HDTV-TK-01, mức lỗi).
+
+Thông báo nổi loại này tự tắt sau khoảng 3 giây nên rất dễ trượt mất; vì vậy đã cài bộ bắt thông báo trên toàn trang TRƯỚC khi bấm nút, không lọc trùng, đếm theo mốc giờ. Kết quả: mỗi lần bấm sinh đúng 1 thông báo nổi, không có thông báo hiện lặp hai lần, không có thông báo nào bị bỏ sót. Kênh chữ đỏ dưới ô ngày thì hiện cố định nên đã chụp được ảnh.
+
+GHI NHẬN (không thuộc phạm vi chấm của phiếu này)
+
+- Phần mềm báo lỗi ở thời điểm BẤM NÚT TÌM KIẾM chứ không báo ngay lúc vừa đổi ngày. Đặc tả mô tả thanh lọc theo hướng lọc ngay khi đổi giá trị, nên cách làm hiện tại là lỏng hơn một chút, nhưng vế mà phiếu chấm là "chặn thao tác" - và thao tác vẫn bị chặn hoàn toàn, nên không tính là lỗi.
+- Trường hợp Từ ngày BẰNG Đến ngày: đặc tả cho phép (điều kiện là ngày kết thúc lớn hơn HOẶC BẰNG ngày bắt đầu), tức hệ thống phải cho tìm bình thường. Trường hợp này KHÔNG nằm trong phạm vi phiếu và lượt đo này không mở rộng sang nó, nên chưa có số liệu. Ghi lại để đợt kiểm sau biết là điểm này còn trống, không suy đoán.
+
+🔎 PHẠM VI ĐÃ ĐO: môi trường nội bộ · 07/08/2026 15:45-15:49 · Cán bộ Nghiệp vụ Trung ương · thanh lọc của mục HĐ tư vấn liên kết trên Chi tiết vụ việc · 3 lần bấm Tìm kiếm với khoảng ngày ngược, có bộ bắt thông báo cài trước và bộ đếm yêu cầu gửi đi.
+
+DỮ LIỆU ĐÃ THAY ĐỔI: KHÔNG có. Chỉ nhập giá trị vào thanh lọc rồi bấm tìm; thao tác bị chặn nên không có truy vấn nào chạy. Không tạo, không sửa, không xóa bản ghi nào, và không mở biểu mẫu thêm/sửa hợp đồng.
+
+Ảnh bằng chứng:
+- Đã nhập khoảng ngày ngược trên thanh lọc (Từ ngày 20/08/2026, Đến ngày 10/08/2026), chưa bấm Tìm kiếm nên chưa có báo lỗi: https://drive.google.com/file/d/1oBcxO_V3yPumDvUPrTVtJH79zl9YBZQu/view?usp=drivesdk
+- Sau khi bấm Tìm kiếm: hai ô ngày viền đỏ, dưới mỗi ô hiện câu "Ngày bắt đầu phải trước ngày kết thúc", bảng giữ nguyên kết quả cũ: https://drive.google.com/file/d/1PoMR_VyQt75x6JTnbWH-v3LssdS_zAba/view?usp=drivesdk
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.

@@ -1,0 +1,212 @@
+uid=24_0 RootWebArea "Phần mềm Hỗ trợ pháp lý doanh nghiệp" url="https://18.143.165.120.nip.io/dashboard"
+  uid=26_0 link "Bỏ qua đến nội dung chính" url="https://18.143.165.120.nip.io/dashboard#main-content"
+    uid=26_1 StaticText "Bỏ qua đến nội dung chính"
+  uid=26_2 complementary
+    uid=26_3 image "Logo HTPLDN" url="https://18.143.165.120.nip.io/logo.svg"
+    uid=26_4 StaticText "BỘ TƯ PHÁP"
+    uid=26_5 StaticText "Hỗ trợ pháp lý doanh nghiệp"
+    uid=26_6 StaticText "HTPLDN · V1.0.8"
+    uid=26_7 menu orientation="vertical"
+      uid=26_8 menuitem "dashboard Tổng quan"
+      uid=26_9 menuitem "question-circle Hỏi đáp pháp lý"
+      uid=26_10 menuitem "read Đào tạo, tập huấn" expandable expanded haspopup="menu"
+      uid=26_11 menu orientation="vertical"
+        uid=26_12 menuitem "schedule Kế hoạch đào tạo"
+        uid=26_13 menuitem "folder-open Chương trình đào tạo"
+        uid=26_14 menuitem "read Khóa học"
+        uid=26_15 menuitem "book Kho tài liệu / Bài giảng"
+        uid=26_16 menuitem "database Ngân hàng câu hỏi & Đề kiểm tra"
+        uid=26_17 menuitem "team Giảng viên / Trợ giảng"
+      uid=26_18 menuitem "user-switch Mạng lưới Tư vấn viên" expandable expanded haspopup="menu"
+      uid=26_19 menu orientation="vertical"
+        uid=26_20 menuitem "solution Tư vấn viên / Chuyên gia"
+        uid=26_21 menuitem "apartment Tổ chức tư vấn"
+        uid=26_22 menuitem "customer-service Người hỗ trợ pháp lý"
+      uid=26_23 menuitem "file-search Vụ việc HTPL"
+      uid=26_24 menuitem "wallet Chi trả chi phí"
+      uid=26_25 menuitem "bank Doanh nghiệp"
+      uid=26_26 menuitem "bar-chart Đánh giá hiệu quả"
+      uid=26_27 menuitem "file-text Biểu mẫu" expandable expanded haspopup="menu"
+      uid=26_28 menu orientation="vertical"
+        uid=26_29 menuitem "folder-open Thư viện biểu mẫu"
+        uid=26_30 menuitem "unordered-list Danh sách biểu mẫu"
+      uid=26_31 menuitem "message Tư vấn" expandable expanded haspopup="menu"
+      uid=26_32 menu orientation="vertical"
+        uid=26_33 menuitem "bulb Tư vấn chuyên sâu"
+        uid=26_34 menuitem "container Kho câu hỏi"
+        uid=26_35 menuitem "thunderbolt Tư vấn nhanh"
+      uid=26_36 menuitem "folder-open Chương trình HTPLDN"
+      uid=26_37 menuitem "file-text Đợt báo cáo"
+      uid=26_38 menuitem "line-chart Báo cáo thống kê"
+      uid=26_39 menuitem "setting Quản trị hệ thống" expandable expanded haspopup="menu"
+      uid=26_40 menu orientation="vertical"
+        uid=26_41 menuitem "tags Danh mục dùng chung"
+        uid=26_42 menuitem "tool Cấu hình hệ thống"
+        uid=26_43 menuitem "idcard Tài khoản & phân quyền"
+        uid=26_44 menuitem "safety-certificate Vai trò"
+        uid=26_45 menuitem "history Nhật ký hệ thống"
+    uid=26_46 StaticText "Bộ Tư Pháp · Cục Bổ trợ tư pháp"
+  uid=26_47 banner
+    uid=26_48 button "Thu gọn menu điều hướng"
+    uid=26_49 navigation
+      uid=26_50 StaticText "Tổng quan hệ thống"
+    uid=26_51 StaticText "BTP · TW"
+    uid=26_52 button "Thông báo, 86 chưa đọc"
+    uid=26_53 StaticText "8"
+    uid=26_54 StaticText "6"
+    uid=26_55 StaticText "QT"
+    uid=26_56 StaticText "Quản trị hệ thống"
+    uid=26_57 StaticText "Quản trị hệ thống"
+  uid=26_58 main
+    uid=26_59 heading "Tổng quan hệ thống" level="1"
+    uid=26_60 image "environment"
+    uid=26_61 StaticText "Phạm vi: Toàn quốc"
+    uid=26_62 StaticText "Cập nhật lúc "
+    uid=26_63 StaticText "19:24"
+    uid=26_64 button "reload Làm mới"
+    uid=26_65 form
+      uid=26_66 StaticText "Năm"
+      uid=26_67 StaticText ":"
+      uid=26_68 StaticText "2026"
+      uid=26_69 combobox "Năm" autocomplete="list" expandable haspopup="listbox"
+      uid=26_70 image "down"
+      uid=26_71 StaticText "Tháng"
+      uid=26_67 StaticText ":"
+      uid=26_72 StaticText "Cả năm"
+      uid=26_73 combobox "Tháng" autocomplete="list" expandable haspopup="listbox"
+      uid=26_74 image "down"
+      uid=26_75 StaticText "Cấp đơn vị"
+      uid=26_67 StaticText ":"
+      uid=26_67 StaticText " "
+      uid=26_76 StaticText "Toàn quốc"
+      uid=26_77 combobox "Cấp đơn vị" autocomplete="list" expandable haspopup="listbox"
+      uid=26_78 image "down"
+      uid=26_79 StaticText "Đơn vị"
+      uid=26_67 StaticText ":"
+      uid=26_67 StaticText " "
+      uid=26_80 StaticText "Tất cả"
+      uid=26_81 combobox "Đơn vị" autocomplete="list" expandable haspopup="listbox"
+      uid=26_82 image "down"
+      uid=26_83 button "Áp dụng"
+      uid=26_84 button "Xóa bộ lọc"
+    uid=26_85 button "Hỏi đáp mới: 9 yêu cầu, xem chi tiết"
+    uid=26_86 button "Vụ việc tiếp nhận: 56 vụ việc, xem chi tiết"
+    uid=26_87 button "Vụ việc đang xử lý: 28 vụ việc, xem chi tiết"
+    uid=26_88 button "Vụ việc hoàn thành: 21 vụ việc, xem chi tiết"
+    uid=26_89 button "Đào tạo đang diễn ra: 2 khóa học, xem chi tiết"
+    uid=26_90 button "Đào tạo hoàn thành: 1 khóa học, xem chi tiết"
+    uid=26_91 button "Chuyên gia / Tư vấn viên: 6 người, xem chi tiết"
+    uid=26_92 StaticText "Tỷ lệ hồ sơ bổ sung"
+    uid=26_93 StaticText "0"
+    uid=26_94 StaticText "%"
+    uid=26_95 StaticText "Chưa có dữ liệu"
+    uid=26_96 StaticText "—"
+    uid=26_97 StaticText "Thời gian xử lý trung bình"
+    uid=26_98 StaticText "12,2"
+    uid=26_99 StaticText "ngày"
+    uid=26_100 StaticText "—"
+    uid=26_101 StaticText "Điểm đánh giá hiệu quả hỗ trợ pháp lý"
+    uid=26_102 heading "16.6/100" level="3"
+    uid=26_103 StaticText "—"
+    uid=26_104 StaticText "Dựa trên"
+    uid=26_105 StaticText " "
+    uid=26_106 StaticText "11"
+    uid=26_107 StaticText " "
+    uid=26_108 StaticText "đánh giá"
+    uid=26_109 application
+      uid=26_110 group
+      uid=26_111 group
+      uid=26_112 group
+      uid=26_113 group
+      uid=26_114 group
+      uid=26_115 group
+      uid=26_116 group
+      uid=26_117 group
+      uid=26_118 group
+      uid=26_119 group
+      uid=26_120 group
+      uid=26_121 group
+        uid=26_122 StaticText "07/2026"
+        uid=26_123 StaticText "16.6"
+        uid=26_124 StaticText "41.6"
+        uid=26_125 StaticText "66.6"
+        uid=26_126 StaticText "100"
+        uid=26_127 StaticText "16.6"
+    uid=26_128 StaticText "Tỷ lệ tuân thủ thời hạn xử lý"
+    uid=26_129 heading "38.7%" level="3"
+    uid=26_130 StaticText "—"
+    uid=26_131 StaticText "Tính trên"
+    uid=26_132 StaticText " "
+    uid=26_133 StaticText "31"
+    uid=26_134 StaticText " "
+    uid=26_135 StaticText "vụ việc"
+    uid=26_136 application
+      uid=26_137 group
+      uid=26_138 group
+      uid=26_139 group
+      uid=26_140 group
+      uid=26_141 group
+      uid=26_142 group
+      uid=26_143 group
+      uid=26_144 group
+      uid=26_145 group
+      uid=26_146 group
+      uid=26_147 group
+      uid=26_148 group
+        uid=26_149 StaticText "07/2026"
+        uid=26_150 StaticText "02/2026"
+        uid=26_151 StaticText "03/2026"
+        uid=26_152 StaticText "04/2026"
+        uid=26_153 StaticText "05/2026"
+        uid=26_154 StaticText "08/2026"
+        uid=26_155 StaticText "16.7%"
+        uid=26_156 StaticText "41.7%"
+        uid=26_157 StaticText "66.7%"
+        uid=26_158 StaticText "100%"
+        uid=26_159 StaticText "33.3%"
+        uid=26_160 StaticText "33.3%"
+        uid=26_161 StaticText "20.0%"
+        uid=26_162 StaticText "60.0%"
+        uid=26_163 StaticText "16.7%"
+        uid=26_164 StaticText "100.0%"
+    uid=26_165 StaticText "Chất lượng đào tạo, bồi dưỡng pháp lý"
+    uid=26_166 application
+      uid=26_167 group
+      uid=26_168 group
+      uid=26_169 group
+        uid=26_170 group
+          uid=26_171 group
+            uid=26_172 graphics-symbol
+          uid=26_173 group
+            uid=26_174 graphics-symbol
+      uid=26_175 group
+      uid=26_176 group
+      uid=26_177 group
+      uid=26_178 group
+      uid=26_179 group
+      uid=26_180 group
+      uid=26_181 group
+      uid=26_182 group
+      uid=26_183 group
+        uid=26_184 StaticText "80%"
+        uid=26_185 StaticText "20%"
+    uid=26_186 StaticText "Điểm trung bình"
+    uid=26_187 StaticText "6.8"
+    uid=26_188 StaticText "/10"
+    uid=26_189 StaticText "Tỷ lệ đạt chứng nhận"
+    uid=26_190 StaticText "80"
+    uid=26_191 StaticText "%"
+    uid=26_192 StaticText "—"
+    uid=26_193 StaticText "Đạt ("
+    uid=26_194 StaticText "80"
+    uid=26_195 StaticText "%)"
+    uid=26_196 StaticText "Không đạt ("
+    uid=26_197 StaticText "20"
+    uid=26_198 StaticText "%)"
+    uid=26_199 StaticText "Điểm kiểm tra trung bình"
+    uid=26_200 StaticText "6.8"
+    uid=26_201 StaticText "/10"
+    uid=26_202 StaticText "—"
+    uid=26_203 StaticText "Dựa trên "
+    uid=26_204 StaticText "15"
+    uid=26_205 StaticText " học viên"

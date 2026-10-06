@@ -1,0 +1,25 @@
+✅ Là bug — chuyển dev
+
+Tái hiện đúng, đã chuyển dev.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), trên phiên đã có đánh giá thật của doanh nghiệp.
+
+✅ 1) Hiện tượng tái hiện đúng, và còn thiếu nhiều hơn phiếu test nêu.
+- Khu vực "Đánh giá" không có nút "Xuất Excel".
+- Ngoài ra còn thiếu luôn thẻ tổng hợp mà đặc tả yêu cầu: Tổng đánh giá, Điểm trung bình, Phân bố điểm. Khối Đánh giá hiện chỉ hiển thị 3 dòng: Điểm đánh giá, Ngày đánh giá, Nhận xét.
+- Bug ID: BUG-QLKCHTV_37.
+
+2) Đã kiểm CẢ HAI nơi mà đặc tả cho phép hiển thị — đây là phép thử quyết định.
+- Đặc tả (srs-fr-13-tv-nhanh.md dòng 574) ghi khối Đánh giá gồm điểm, nhận xét, ngày đánh giá, kèm thẻ tổng hợp và nút Xuất Excel, "hiển thị trong tab Hoàn thành hoặc chi tiết phiên".
+- Phiếu test của đối tác chỉ đi theo đường bấm "Trả lời" — đặc tả không đặt nút ở đó. Nên QA kiểm bổ sung đúng 2 vị trí đặc tả nêu: màn chi tiết phiên và thẻ "Hoàn thành" ở danh sách. Cả hai đều không có nút, cũng không có thẻ tổng hợp nào. Kết luận không đổi.
+
+3) Đã loại trừ khả năng "không có nút vì chưa có dữ liệu để xuất".
+- Phiên test có bản ghi đánh giá thật: 5 sao, nhận xét "QA tuần 4 — nội dung tư vấn rõ ràng, phản hồi nhanh.", ngày 27/07/2026. Dữ liệu đủ, vẫn không có nút.
+
+4) Kiểm tầng máy chủ để dev ước lượng đúng khối lượng.
+- Nhóm tư vấn nhanh có 10 đường dẫn, không đường nào cho xuất tệp. Đối chiếu: Kho câu hỏi CÓ đường xuất tệp và chạy được (đã kiểm ở case khác cùng đợt). Vậy với Tư vấn nhanh, chức năng chưa dựng ở cả giao diện lẫn máy chủ.
+
+⚠️ 5) Điểm cần BA chốt kèm theo khi dev dựng.
+- Phiếu test kỳ vọng tên tệp dạng "danh-gia-tv-nhanh-{mã phiên}{ngày giờ}.xlsx". Đã tìm toàn bộ đặc tả v3.5 — không có quy tắc đặt tên nào cho tệp này, cũng chưa chốt tập cột. Đề nghị BA chốt tên tệp và tập cột cùng lúc với quy tắc đặt tên tệp xuất của Kho câu hỏi (câu hỏi BA-03).
+
+6) Bằng chứng.
+- Ảnh chụp khối Đánh giá ở màn chi tiết phiên kèm trong hồ sơ lỗi.

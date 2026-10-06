@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+• Form "Thêm câu hỏi", trường Trạng thái có 2 giá trị: Kích hoạt / Vô hiệu hóa.
+• Đối tác kỳ vọng bộ trạng thái "Nháp / Công khai / Ẩn". Theo SRS FR-III-09 (UC28) §Inputs field trang_thai (dòng 848): chỉ KICH_HOAT / VO_HIEU_HOA; bộ NHAP/CONG_KHAI/AN là bộ CŨ đã được BA bỏ ở v3.5 (chốt 2026-05-07). Web đang đúng quyết định hiện hành.
+• Câu hỏi BA: xác nhận giữ 2 trạng thái Kích hoạt/Vô hiệu hóa (cập nhật lại Expected đối tác), hay khôi phục bộ 3 trạng thái?
+• Verify: CB_NV_TW, form Thêm mới câu hỏi.

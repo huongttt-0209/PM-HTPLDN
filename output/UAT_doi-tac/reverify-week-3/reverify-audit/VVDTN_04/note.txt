@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web (BC Vụ việc đã tiếp nhận) KHÔNG hiển thị mục tổng hợp "theo lĩnh vực" — thiếu cả bảng lẫn biểu đồ theo lĩnh vực. API backend đã trả dữ liệu lĩnh vực (Thương mại: 14) nhưng giao diện không dựng → lỗi hiển thị FE.
+- Theo SRS FR-IX-02 (UC125) §Output, báo cáo phải luôn có phần thống kê theo lĩnh vực pháp luật. Các mục theo kênh, theo đơn vị, xu hướng theo kỳ đã hiển thị đúng.
+- Đối tác báo "thiếu cột Theo kênh": web thực tế ĐÃ có bảng "Kênh tiếp nhận" (Trực tiếp: 14) → phần này không thiếu; chỉ thiếu phần "theo lĩnh vực".
+- Verify: tài khoản cbnv_tw (Toàn quốc), Kỳ Năm 2026, 14 vụ việc. Bug ID: BUG-VVDTN_04.

@@ -1,0 +1,8 @@
+✅ Đã hết lỗi — verify lại 06/08/2026 trên bản dựng V1.0.8.
+
+- Tải tệp PDF hợp lệ có chứa chữ ký thử mã độc chuẩn (EICAR) trong cửa sổ chỉnh sửa tư liệu, vai trò Cán bộ Nghiệp vụ Trung ương: hệ thống từ chối kèm thông báo nêu rõ nguyên nhân và tên tệp — "Tệp «A-eicar-nhung-trong-pdf-hop-le.pdf» chứa mã độc, không thể tải lên".
+- Đóng và mở lại tư liệu sau khi tải lại trang: tệp chứa mã độc không có trong danh sách đính kèm (cột File = 1, chỉ còn tệp sạch).
+- Tệp PDF sạch vẫn đính kèm bình thường, không bị chặn oan.
+- Tệp vượt 20MB báo bằng câu khác hẳn ("Kích thước vượt quá giới hạn 20MB.") — đối chiếu này xác nhận tệp mã độc bị chặn đúng ở bước quét virus, không phải do bộ lọc dung lượng hay định dạng.
+
+Đã đo bằng hai đường (thao tác trên giao diện và gọi thẳng máy chủ), kết quả khớp nhau. Đối chiếu đặc tả: srs-fr-12-tv-chuyen-sau.md:872 (bước Quét virus) và :969 (lỗi tệp chứa mã độc).

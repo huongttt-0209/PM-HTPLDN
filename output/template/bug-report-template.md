@@ -70,6 +70,8 @@ Phát hiện **[N]** lỗi có SRS reference cụ thể trong quá trình test [
 > **Meta:** Severity, Priority, Type, Status, TC Ref, SRS Reference đã có ở **Bug Summary Table** trên. Không lặp lại trong từng bug detail.
 >
 > **🚫 STRICT 6 SECTIONS ONLY (2026-05-02 R11 — user nhắc lần 2):** Mỗi bug entry chỉ có 6 sections theo thứ tự dưới đây. **CẤM** thêm các section: `Tác động`, `Đề xuất fix`, `Đề xuất dev fix`, `SRS verification`, `Phân biệt module`. Mọi info thuộc các section bị cấm: gộp vào Mô tả nếu cần thiết, hoặc đẩy sang `workflow-test-report.md`. Hook `check-bug-template-sections.py` enforce. Memory ref: [`feedback_bug_report_template_strict.md`](../../../.claude/projects/-Users-teamai-Downloads-antigravity-QA-skilkk/memory/feedback_bug_report_template_strict.md).
+>
+> **🔎 Bug dạng "absence" (thiếu nút/field/menu/data, "không thấy", dropdown trống) — checklist BẮT BUỘC trước khi log** (Rule 5 cross-project): đã loại trừ (1) phân quyền — test ĐÚNG role có quyền theo SCR, (2) sai màn hình, (3) sai state, (4) thiếu seed, (5) tái hiện đúng note gốc; **+** đã retry method 2 (UI fail → curl / API fail → reload). **Bước tái hiện #1 PHẢI ghi rõ role đăng nhập + quyền role đó theo SCR** — bug "absence" thiếu thông tin role = invalid, không nhận.
 
 ### Mô tả
 
@@ -77,8 +79,8 @@ Phát hiện **[N]** lỗi có SRS reference cụ thể trong quá trình test [
 
 ### Các bước tái hiện
 
-1. [Bước 1 — cụ thể, có thể làm theo ngay]
-2. [Bước 2]
+1. [Bước 1 — **Đăng nhập role `<tên role>` (quyền `<quyền liên quan>` theo `<SCR/permission-matrix>`)**. BẮT BUỘC khai báo role + quyền, nhất là bug dạng "absence" (thiếu nút/UI).]
+2. [Bước 2 — cụ thể, có thể làm theo ngay]
 3. [Bước 3]
 4. [Quan sát: ...]
 
@@ -94,9 +96,9 @@ Phát hiện **[N]** lỗi có SRS reference cụ thể trong quá trình test [
 
 ### Bằng chứng
 
-> **BẮT BUỘC:** Mỗi bug phải có **≥1 screenshot inline** chứng minh hiện tượng. Không có ảnh = không log bug. API response / log chỉ là phụ trợ.
+> **BẮT BUỘC:** Mỗi bug phải có **≥1 screenshot** chứng minh hiện tượng. Không có ảnh = không log bug. API response / log chỉ là phụ trợ.
 
-**1. Ảnh chụp** *(bắt buộc, embed inline — không chỉ link relative)*:
+**1. Ảnh chụp** *(bắt buộc — dùng link tới file ảnh trong `image/`, gửi kèm cả folder khi chuyển file)*:
 
 ![BUG-XXX-001 — Mô tả ngắn ảnh chụp gì, ở đâu](image/bug-xxx-001-screenshot.png)
 
@@ -118,7 +120,7 @@ Phát hiện **[N]** lỗi có SRS reference cụ thể trong quá trình test [
 - Đặt ảnh trong thư mục `image/` cùng cấp với file `bug-report.md`.
 - Tên file: `bug-{xxx}-{nnn}-{mo-ta-ngan-tieng-viet-khong-dau}.png`.
 - Trong markdown dùng cú pháp `![alt](image/filename.png)` — KHÔNG dùng HTML `<img>` tag.
-- Khi gửi cho dev qua chat / email chỉ 1 file `.md`, nhớ đính kèm cả folder `image/` hoặc convert ảnh sang base64 inline (`![](data:image/png;base64,...)`) cho bug Critical/Major Active.
+- **KHÔNG nhúng ảnh base64 inline** (`![](data:image/png;base64,...)`): viewer của dự án render data-URI thành lỗi `ENAMETOOLONG` (coi cả chuỗi base64 là đường dẫn file → ảnh không hiện). Luôn dùng `![](image/filename.png)` và **gửi kèm cả folder `image/`** (hoặc nén zip cả thư mục report) khi chuyển file cho dev/BA.
 
 ### So sánh (Comparison) — *optional, dùng cho bug phân quyền*
 
@@ -127,6 +129,27 @@ Phát hiện **[N]** lỗi có SRS reference cụ thể trong quá trình test [
 | Role 1 | ✅ | ✅ | ✅ |
 | Role 2 | ✅ | ❌ 403 | ❌ 403 |
 | Role 3 | ❌ (BUG!) | — | — |
+
+### Cách verify sau khi fix — *CHỈ dùng cho bug **Reopen***
+
+> Bug Pass / không phải lỗi / chờ BA → **bỏ hẳn mục này**, đừng để trống.
+> Ghi **giống hệt từng chữ** với ô note trên bảng theo dõi — dev chỉ mở bảng, QA vòng sau mới mở repo.
+> Viết đủ để người **chưa từng chạm case này** chạy lại được mà không phải hỏi ai.
+
+```
+── CÁCH VERIFY sau Dev fix ──
+Precondition: [tài khoản + vai trò] + [màn hình / URL cụ thể].
+  [Dữ liệu phải có sẵn: bao nhiêu bản ghi · ở trạng thái nào · đủ mấy biến thể.
+   Chưa có mà TẠO ĐƯỢC thì bắt buộc tạo — ghi luôn cách tạo, đừng để người sau tắc.]
+1) [Thao tác cụ thể — ghi rõ đọc số liệu ở đâu trên màn]
+2) [Thao tác tiếp — nếu cần lặp với biến thể khác thì nói rõ biến thể nào]
+3) [Đo bằng đường thứ hai: gọi thẳng API · đọc lại bản ghi · mở file xuất ra đếm]
+✅ PASS khi: [tiêu chí ĐO ĐƯỢC — con số / tập giá trị / so khớp cái gì với cái gì]
+❌ FAIL nếu: [ngưỡng ngược lại, nêu cả ca "đúng một phần"]
+⚠️ Đừng chấm Fail vì [thứ đặc tả không quy định] — chỉ chấm đúng phần [đặc tả: <file>:<dòng>]
+⚠️ Đừng kết luận "đã fix" khi chỉ thấy [dấu hiệu bề mặt dễ đánh lừa] — phải [phép đo quyết định]
+   (dòng ⚠️ = bẫy học được trong lúc đo; không gặp bẫy nào thì bỏ dòng)
+```
 
 ---
 

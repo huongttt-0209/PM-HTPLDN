@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+• Thanh tìm kiếm Kho tài liệu / Bài giảng có 5 bộ lọc: Tên bài giảng, Loại tài liệu, Công khai, Từ ngày, Đến ngày. Đúng là không có bộ lọc "Lĩnh vực pháp lý" như đối tác quan sát.
+• Đối tác kỳ vọng thêm bộ lọc "Lĩnh vực pháp lý". Theo SRS FR-III-08 (UC27) §Inputs–Bộ lọc (dòng 782–788): chỉ 5 tiêu chí trên, KHÔNG có lọc theo lĩnh vực pháp lý.
+• Câu hỏi BA: có bổ sung bộ lọc "Lĩnh vực pháp lý" cho tìm kiếm tài liệu không?
+• Verify: CB_NV_TW, màn Kho tài liệu / Bài giảng.

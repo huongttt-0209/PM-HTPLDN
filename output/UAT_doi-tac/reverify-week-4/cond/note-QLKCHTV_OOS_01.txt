@@ -1,0 +1,6 @@
+✅ Là bug — chuyển dev
+Dòng này do QA mở thêm, không thuộc case nào của phiếu đối tác. Phát sinh khi verify QLKCHTV_12, QLKCHTV_14 và QLKCHTV_18.
+
+Nội dung "Câu trả lời" hiển thị nguyên văn thẻ đánh dấu HTML ở màn chi tiết và trong tệp Excel xuất ra. Lặp lại trên nhiều bản ghi nguồn "Tự động", không phải lỗi ngẫu nhiên một lần.
+
+Mã bug trong báo cáo: BUG-KCH-HTML-THO. Các bước tái hiện, kết quả mong đợi và bằng chứng đã ghi đầy đủ ở các cột bên trái của chính dòng này.

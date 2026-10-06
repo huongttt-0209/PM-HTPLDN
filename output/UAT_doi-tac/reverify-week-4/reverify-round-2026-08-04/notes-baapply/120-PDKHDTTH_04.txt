@@ -1,0 +1,3 @@
+❌ Không phải lỗi (BA xác nhận 04/08/2026).
+- BA chốt: theo tài liệu bàn giao, nút Phê duyệt và Từ chối của kế hoạch đào tạo chỉ hiển thị với cán bộ phê duyệt cùng đơn vị với kế hoạch. Cán bộ khác đơn vị không nhìn thấy nút nên không phát sinh thao tác, do đó cũng không có thông báo từ chối quyền. Phần mềm đang chạy đúng như vậy.
+- Đề nghị Quý đơn vị cập nhật lại Kết quả mong đợi của phiếu này cho khớp tài liệu bàn giao.

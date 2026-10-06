@@ -1,0 +1,4 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Trên đợt `DOT-THBC01-UAT`, tài khoản `cbnv_tw_01` bấm `Tổng hợp` thì hệ thống chỉ mở hộp xác nhận chuyển sang `Đã tổng hợp`; không có ô nào cho chỉnh sửa/bổ sung.
+- Theo FR-XI-09 (UC170) §Mô tả/Processing/Acceptance Criteria (dòng 984-1008, 1042-1043), hệ thống phải mở form tổng hợp TT17 cho CBNV TW chỉnh sửa/bổ sung trước khi lưu.
+- Bug ID: BUG-THBCTHCT_02.

@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+- Web tái hiện đúng như đối tác phản ánh: form Thêm mới danh mục "Loại tài khoản" có thêm trường "Danh mục cha" (để tùy chọn, không bắt buộc).
+- Theo SRS mẫu CRUD dùng chung TPL-DM-CRUD + FR-VIII-13 (UC111), màn SCR-VIII-01: bảng trường của danh mục chỉ gồm Mã, Tên, Mô tả, Thứ tự, Trạng thái — KHÔNG có "Danh mục cha".
+- Điểm khác: "Loại tài khoản" là danh mục dạng phẳng (không phân cấp cha-con) nên trường "Danh mục cha" là thừa so với SRS; tuy nhiên để tùy chọn nên không chặn lưu.
+- Câu hỏi BA: có yêu cầu bỏ trường "Danh mục cha" ở các danh mục phẳng (chỉ giữ ở danh mục có cấu trúc cây như Cơ quan đơn vị) hay chấp nhận cách hiển thị hiện tại? Nếu BA chốt bỏ → chuyển Dev FE.

@@ -1,0 +1,13 @@
+Verify 06/08/2026, bản dựng V1.0.8 (đối tác đo trên V1.0/V1.0.3). Đo cả hai vai trò trên chính màn BC Vụ việc theo thời gian, kết quả TRÁI NGƯỢC nhau nên chưa chốt được, cần BA xác nhận phạm vi vai trò. Đã đo lại độc lập trên màn này, không suy từ VVDTN_06 / VVDHT_06.
+
+- Với vai trò thuộc đúng nhóm tác nhân của đặc tả (Cán bộ Phê duyệt Trung ương): XUẤT ĐƯỢC bình thường. Bấm nút Xuất Excel thật trên giao diện, tệp BaoCaoVuViecTheoThoiGian_20260806_1432.xlsx tải về và MỞ ĐỌC được: đủ tiêu đề báo cáo, kỳ, đơn vị, ngày tạo; có bảng "Theo kỳ" ghi rõ từng mốc thời gian (Năm 2026, từ 01/01/2026 đến 31/12/2026, tiếp nhận 50, hoàn thành 18) và bảng "Theo đơn vị" cộng lại đúng 50 — khớp màn từng con số. Đổi Kỳ báo cáo từ Năm sang Tháng rồi xuất lại thì mốc trong tệp đổi theo đúng kỳ mới (Tháng 8/2026, tổng 20). Tên tệp đúng khuôn quy định.
+
+- Với Quản trị viên QTHT (ĐÚNG vai trò đối tác đã dùng khi báo lỗi): TÁI HIỆN y hệt triệu chứng vòng 2. Cùng một phiên, cùng bộ lọc: xem báo cáo trả về bình thường (HTTP 200, tổng toàn kỳ 50) nhưng bấm Xuất Excel thì bị chặn HTTP 403 và trên màn hiện đúng thông báo "Forbidden" (đã chụp được ảnh thông báo trên nền màn đang có dữ liệu). Kiểm tra phiên cả trước lẫn sau cú chặn đều còn sống, nên đây là chặn quyền thật chứ không phải hết phiên. Nút Xuất vẫn hiện và bấm được với vai trò này.
+
+=> Cần BA chốt: vai trò QTHT có được dùng chức năng Báo cáo thống kê (xem VÀ xuất tệp) không? SRS mâu thuẫn — mục Tác nhân của báo cáo này không liệt kê QTHT (srs-fr-11-bao-cao.md:325), nhưng quy tắc phân quyền BR-AUTH-08 (:1268) ghi ngoại lệ "QTHT bypass" áp cho toàn bộ nhóm báo cáo, và luồng xử lý chỉ có một bước kiểm quyền chung cho cả xem lẫn xuất (:79). Hiện trạng cho xem mà chặn xuất thì không khớp cách hiểu nào.
+
+Quan trọng: cả BA case xuất tệp (VVDTN_06, VVDHT_06, VVTTG_05) đã được đo độc lập trên BA màn khác nhau và cho kết quả GIỐNG HỆT — vai trò đúng tác nhân thì xuất được, vai trò QTHT thì bị chặn. Vậy đây là MỘT quyết định phạm vi vai trò áp cho cả nhóm, và nếu BA chọn mở quyền thì sửa một chỗ ở tầng phân quyền là đóng cả ba. Chi tiết 2 hướng xử lý + đề xuất trả lời đối tác: ba-confirmation-needed-BCTK-B1-2026-08-06.md mục VVTTG_05.
+
+Ghi chú: thông báo chặn quyền đang trả "Forbidden" (tiếng Anh, mã ERR-PERM-SYS-00-01) trong khi đặc tả (:117) quy định phải là "Bạn không có quyền xem báo cáo này" — điểm này đã tách thành dòng lỗi riêng, không phụ thuộc BA chọn hướng nào.
+
+Lưu ý hiệu lực: đo trên môi trường nội bộ 18.143.165.120.nip.io bản V1.0.8, chưa phải môi trường đối tác.

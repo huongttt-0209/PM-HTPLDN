@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: trên form "Tạo kế hoạch đánh giá", trường "Mục tiêu" KHÔNG được đánh dấu bắt buộc (thiếu dấu * đỏ), trong khi SRS quy định trường này bắt buộc.
+- Đã verify env test (tài khoản CB Nghiệp vụ TW): mở form Tạo kế hoạch đánh giá → nhãn "Mục tiêu" không có dấu *; 6 trường bắt buộc khác (Tên đợt đánh giá, Tần suất, Đối tượng, Cơ quan được đánh giá, Thời gian bắt đầu, Thời gian kết thúc) đều có dấu *.
+- Chuẩn: SRS FR-VI-01 (UC83) Lập kế hoạch — Inputs #2 muc_tieu Bắt buộc = Y (dòng 107); màn SCR-VI-01 Form tạo/sửa #22 "Mục tiêu | Bắt buộc" (dòng 836).
+- Mã lỗi nội bộ: BUG-LKHDG_07.

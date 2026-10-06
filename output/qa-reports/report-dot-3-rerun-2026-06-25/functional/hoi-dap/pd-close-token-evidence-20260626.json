@@ -1,0 +1,40 @@
+{
+  "ts": "2026-06-26T00:25:00+07:00",
+  "crossCloseCbPdTw": {
+    "detailStatus": 401,
+    "version": null,
+    "status": 401,
+    "body": {
+      "success": false,
+      "error": {
+        "code": "ERR-AUTH-COMMON-01",
+        "message": "Phiên đăng nhập đã hết hạn do không hoạt động",
+        "timestamp": "2026-06-25T17:24:10.132Z",
+        "requestId": "369fb7df-8456-4796-beeb-c22b014889ad"
+      }
+    }
+  },
+  "closeCbNvDp": {
+    "beforeStatus": 401,
+    "before": {
+      "version": null,
+      "trangThai": null
+    },
+    "closeStatus": 401,
+    "closeBody": {
+      "success": false,
+      "error": {
+        "code": "ERR-AUTH-COMMON-01",
+        "message": "Phiên đăng nhập đã hết hạn do không hoạt động",
+        "timestamp": "2026-06-25T17:24:10.172Z",
+        "requestId": "c08d34ce-f50b-44bb-adae-249d9feda4be"
+      }
+    },
+    "afterStatus": 401,
+    "after": {
+      "version": null,
+      "trangThai": null,
+      "ngayHoanThanh": null
+    }
+  }
+}

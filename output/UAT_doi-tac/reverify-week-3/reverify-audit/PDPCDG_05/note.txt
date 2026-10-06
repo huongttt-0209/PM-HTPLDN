@@ -1,0 +1,4 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: Tại tab Phân công (chế độ phê duyệt), Cán bộ phê duyệt bấm "Từ chối phân công", nhập lý do hợp lệ và xác nhận → hệ thống hiển thị "Đã từ chối phân công", lưu lý do và chuyển đợt từ "Chờ duyệt phân công" về "Phân công" (ĐÚNG). Tuy nhiên Cán bộ nghiệp vụ (người trình phân công) KHÔNG nhận được thông báo kèm lý do từ chối: kiểm tra hộp thông báo của CB nghiệp vụ — không có thông báo từ chối nào cho đợt này.
+- Chuẩn: SRS FR-VI-04 quy định business rule "Phê duyệt/Từ chối (cả PC và BC) → gửi thông báo cho CB NV trình. Từ chối bắt buộc lý do >= 10 ký tự" (dòng 901) và Postconditions "Thông báo gửi CB NV" (dòng 366). KQ mong đợi của đối tác cũng ghi đúng người nhận: "Gửi thông báo kèm lý do cho Cán bộ nghiệp vụ". Hệ thống thiếu bước gửi thông báo kèm lý do cho cán bộ nghiệp vụ.
+- Mã lỗi nội bộ: BUG-PDPCDG_05.

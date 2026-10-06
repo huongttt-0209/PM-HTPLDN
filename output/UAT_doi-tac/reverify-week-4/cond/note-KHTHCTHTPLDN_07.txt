@@ -1,0 +1,21 @@
+⚠️ Cần BA xác nhận
+
+Tên tệp đúng là khác với phiếu mong đợi, nhưng bản đặc tả không quy định tên tệp cho nhóm này nên QA chuyển câu hỏi cho BA chốt thay vì chấm thẳng là lỗi. Đổi lại, khi mở tệp ra đọc thì phát hiện một lỗi nặng hơn, QA đã mở dòng riêng.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW).
+
+⚠️ 1) Về tên tệp.
+- Thực tế tải về: ct-htpldn-2026-07-27.xlsx. Phiếu mong: DanhSachChuongTrinh_{YYYYMMDD_HHmm}.xlsx.
+- Đã rà toàn bộ đặc tả của nhóm Chương trình HTPLDN: phần mô tả chức năng xuất Excel có đủ các bước kiểm quyền, truy vấn theo bộ lọc, giới hạn số dòng, tạo tệp với 10 cột, trả tệp về, nhưng không có dòng nào quy định tên tệp.
+- Quy ước dạng tên mà đối tác mong đợi thì có thật, nhưng thuộc nhóm Hỏi đáp chứ không phải nhóm này.
+- Vì vậy QA gửi BA chốt: hoặc áp quy ước chung cho toàn hệ thống, hoặc giữ tên hiện tại và bổ sung vào đặc tả để lần sau không bị chấm là lỗi. QA nghiêng phương án áp quy ước chung, vì tên hiện tại thiếu phần giờ phút nên xuất hai lần trong ngày sẽ bị trình duyệt thêm hậu tố vào tên.
+
+✅ 2) Phần quan trọng hơn: QA đã mở tệp ra đọc nội dung, không chỉ kiểm tệp có tải được.
+- Đủ 10 cột bắt buộc theo đặc tả, không thiếu cột nào. Thêm 2 cột ngoài danh sách là Là công bố và Ngày tạo. Cột thời gian được tách làm hai cột bắt đầu và kết thúc.
+- Số dòng trong tệp khớp đúng số bản ghi đang hiển thị trên màn.
+- Nhưng hai cột thời gian bị lệch 1 ngày so với màn hình. Ví dụ chương trình trên màn ghi bắt đầu 01/01/2026 thì trong tệp thành 31/12/2025. Kiểm thêm 2 chương trình nữa đều lệch đúng 1 ngày về trước.
+- Đã truy nguyên: dữ liệu gốc lưu đúng, màn hình quy đổi đúng, chỉ khâu ghi ra tệp không quy đổi múi giờ. Sai lệch này ảnh hưởng trực tiếp tới báo cáo và đối chiếu số liệu.
+- QA đã tách thành dòng riêng mã KHTHCTHTPLDN_OOS_06 và đề nghị ưu tiên hơn việc đổi tên tệp.
+- Bug ID: BUG-CT-XUAT-EXCEL-SAI-NGAY.
+
+3) Bằng chứng.
+- Tệp Excel tải về đã được mở đọc bằng công cụ đọc bảng tính, đối chiếu từng cột và từng giá trị ngày với màn hình. Kèm trong hồ sơ lỗi.

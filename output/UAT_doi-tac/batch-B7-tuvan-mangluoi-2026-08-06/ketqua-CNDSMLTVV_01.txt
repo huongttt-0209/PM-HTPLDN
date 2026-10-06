@@ -1,0 +1,171 @@
+CNDSMLTVV_01 — "Công khai hàng loạt tư vấn viên lên Cổng pháp luật quốc gia"
+tab `bug` dòng 37 · Tuần 2 · STT 46 · case GỘP 2 VẾ
+================================================================================
+KẾT LUẬN: 🔁 REOPEN  — vế (1) giao diện nhập ĐÃ HẾT LỖI · vế (2) kết quả nghiệp vụ CÒN LỖI
+          (flow 04: case gộp nhiều vế — còn ≥1 vế lỗi ⇒ Reopen)
+
+MÔI TRƯỜNG / BẢN DỰNG (đọc lại đầu giai đoạn B, trùng khít đầu file bug-report)
+  https://18.143.165.120.nip.io  (env NỘI BỘ, KHÔNG phải htpldn-uat.ospgroup.vn của đối tác)
+  HTPLDN · V1.0.8 · bó mã FE assets/index-DIABnbIr.js (+ assets/index-DVlgOkLg.css)
+  GET / last-modified: Thu, 06 Aug 2026 07:13:15 GMT (14:13:15 giờ VN) · etag W/"6a74340b-428"
+  Ảnh của đối tác chụp trên env nghiệm thu, bản dựng HTPLDN · V1.0, 25/07/2026 17:41 ⇒ KHÁC env + KHÁC bản dựng.
+
+TÀI KHOẢN ĐO
+  cbnv_tw_02 / Test@1234 — vai trò CB_NV_TW (Cán bộ Nghiệp vụ Trung ương), cấp TW,
+  đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp (hiển thị "BTP · TW").
+  ⇒ TRÙNG KHÍT vai trò + cấp + đơn vị đọc được trên ảnh đối tác. KHÔNG nới chiều nào.
+  Đăng nhập 1 lượt, không phải dùng tài khoản dự phòng.
+
+TIỀN ĐỀ ĐÃ DỰNG (ô Điều kiện của phiếu: "Đang hoạt động" + CHƯA công khai)
+  Tab "Đang hoạt động" có 6 hồ sơ. Trạng thái cờ công khai TRƯỚC khi đo:
+    CG-QLND38-UAT     Đang hoạt động · Chưa công khai   (loại Chuyên gia)
+    TVV-STP-AG-0001   Đang hoạt động · Chưa công khai   (loại Tư vấn viên, số thẻ THN-DP-2026-018)
+    TVV-SEED-0001     Đang hoạt động · Chưa công khai   (loại Tư vấn viên, KHÔNG có số thẻ)
+    TVV-BTP-TW-0002   Đang hoạt động · Công khai        (mượn cho nhánh ngược)
+    DDD-TVV-022       Đang hoạt động · Công khai        (mượn cho nhánh ngược)
+    DDD-TVV-021       Đang hoạt động · Công khai
+  ⇒ N = 3 hồ sơ "Đang hoạt động + chưa công khai" (đạt ngưỡng ≥3 của mục 3 tiêu chí)
+    + 2 hồ sơ "đã công khai" mượn cho M4 + 2 tab khác cho M5.
+
+ĐỘ PHỦ: M = 5/5 dạng (thêm 2 dạng phụ M2b/M2c tách biệt từng hồ sơ trong lô)
+  = 9 lượt bấm xác nhận THẬT + 2 lượt "Hủy công khai" (hoàn nguyên) + 7 lượt đối chứng máy chủ.
+  Bộ bắt thông báo tools/toast-capture.js cài TRƯỚC mỗi lượt bấm, tự kiểm soObserverDangSong = 1
+  ở cả 3 lần cài. Đếm thông báo theo MỐC GIỜ khác nhau, đọc bằng innerText, KHÔNG lọc trùng,
+  đếm request ghi (phi-GET) song song.
+
+================================================================================
+VẾ (1) — GIAO DIỆN NHẬP MÔ TẢ CÔNG KHAI      ⇒ ĐÃ HẾT LỖI (không tái hiện)
+================================================================================
+M1 · tích 1 hồ sơ hợp lệ (CG-QLND38-UAT)
+  Sau khi tích: thanh thao tác hàng loạt hiện 3 nút — "Công khai lên Cổng PLQG" · "Hủy công khai" ·
+    "Bỏ chọn tất cả".
+  Bấm [Công khai lên Cổng PLQG] → MỞ CỬA SỔ NHẬP, 0 request, 0 thông báo chặn.
+    Tiêu đề cửa sổ : "Công khai hàng loạt lên Cổng PLQG"
+    Câu xác nhận   : "Công khai 1 tư vấn viên đã chọn lên Cổng pháp luật quốc gia?"   ← N = 1 ĐÚNG
+    Ô nhập         : "Mô tả công khai"  0 / 5000
+    Tệp đính kèm   : "Tệp đính kèm (tùy chọn)" — tối đa 10 tệp, ≤20MB/tệp, .pdf/.doc/.docx/.xls/.xlsx
+    Cảnh báo PULL  : "Sau khi công khai, các hồ sơ được đánh dấu công khai ngay…"
+    Nút            : [Hủy] · [Công khai]
+  ⇒ khớp srs-fr-04:1464 ("→ mở MD-CONG-KHAI"), :656 ("CB Nghiệp vụ nhập trong modal MD-CONG-KHAI"),
+    :1406 ("Form nhập trước khi xác nhận").
+  Ảnh: image/CNDSMLTVV_01-01-M1-da-chon-1-muc-thanh-thao-tac-hang-loat.png
+       image/CNDSMLTVV_01-02-M1-cua-so-nhap-mo-ta-cong-khai-N1.png
+
+M2 · tích 2 hồ sơ hợp lệ (TVV-STP-AG-0001 + TVV-SEED-0001)
+  Câu xác nhận: "Công khai 2 tư vấn viên đã chọn lên Cổng pháp luật quốc gia?"        ← N = 2 ĐÚNG
+  Ảnh: image/CNDSMLTVV_01-05-M2-cua-so-nhap-cau-xac-nhan-N2.png
+
+M3 · BỎ TRỐNG ô mô tả rồi bấm [Công khai]
+  → bị CHẶN TẠI CHỖ, cửa sổ vẫn mở, dòng đỏ ngay dưới ô nhập, NGUYÊN VĂN:
+      "Mô tả công khai là bắt buộc trước khi công khai lên Cổng pháp luật quốc gia"
+    ⇒ trùng từng chữ srs-fr-04:682 (ERR-CK-02).
+  Đo được: 0 request phi-GET · 0 thông báo nổi · không hồ sơ nào bị công khai.
+  Ảnh: image/CNDSMLTVV_01-03-M3-bo-trong-mo-ta-bi-chan-dung-cho.png
+
+  >>> PHÂN BIỆT 2 TÌNH HUỐNG CỦA CÙNG MỘT CÂU THÔNG BÁO <<<
+  (a) Đối tác gặp — SAI: bấm nút hàng loạt thì câu đó BẮN RA THAY CHO cửa sổ nhập,
+      người dùng không có chỗ nào để nhập mô tả ⇒ bế tắc. Chữ trên ảnh đối tác là
+      "…trước khi ĐẨY LÊN Cổng pháp luật quốc gia".
+  (b) Đo lần này — ĐÚNG: cửa sổ nhập mở bình thường; câu đó CHỈ hiện khi đã ở TRONG cửa sổ
+      mà để trống ô mô tả rồi bấm xác nhận. Chữ hiện nay là
+      "…trước khi CÔNG KHAI LÊN Cổng pháp luật quốc gia" — đúng nguyên văn :682.
+  ⇒ Tình huống (a) KHÔNG còn tái hiện trên bản dựng này. Vế (1) hết lỗi.
+
+M5 · tab không phải "Đang hoạt động"
+  Tab "Mới đăng ký" (8 hồ sơ) và tab "Vô hiệu hóa" (0 hồ sơ): KHÔNG có cột ô chọn
+  (coOChonTrenHang = false), KHÔNG có nút công khai hàng loạt — chỉ còn
+  ["Thêm mới","Xuất Excel","Bộ lọc nâng cao (2)","Xóa bộ lọc","Tìm kiếm"].
+  ⇒ ĐÚNG srs-fr-04:1464 ("Chỉ áp dụng cho dòng có trạng thái Đang hoạt động").
+
+================================================================================
+VẾ (2) — 4 KẾT CỤC NGHIỆP VỤ                 ⇒ CÒN LỖI (Reopen nằm ở đây)
+================================================================================
+M1 (1 hồ sơ, hợp lệ) — ĐẠT 4/4 kết cục
+  Mô tả nhập: "QA UAT B7 CNDSMLTVV_01 - M1 cong khai 1 tu van vien luc 2026-08-06"
+  Bấm [Công khai] → 1 request POST /api/v1/tu-van-viens/batch-cong-khai
+                  → 1 thông báo (1 mốc giờ): "Đã công khai tư vấn viên thành công"
+  Phản hồi: results[0] {id 38383838-…-038, success true, laCongKhai true}
+  TẢI LẠI TRANG rồi đọc lại:
+    (1) mô tả công khai lưu đúng nguyên văn   ✔  (2) cờ công khai đã đặt: cột "Công khai"  ✔
+    (3) nhóm "Thông tin công khai" HIỆN RA ở màn chi tiết (chỉ hiện khi cong_khai=1, :1564) ✔
+    (4) Thời gian đăng tải = 06/08/2026        ✔
+  Ảnh: image/CNDSMLTVV_01-04-M1-sau-tai-lai-nhom-Thong-tin-cong-khai.png
+
+M2 (2 hồ sơ hợp lệ) — HỎNG. Chạy 2 lượt (17:48 và 18:20), kết quả GIỐNG HỆT.
+  Cả 2 hồ sơ trước khi bấm đều "Đang hoạt động" + "Chưa công khai" (đọc trên bảng).
+  Bấm [Công khai] → 1 request · 1 thông báo (1 mốc giờ): "Đã công khai tư vấn viên thành công"
+  Phản hồi HTTP 200, vỏ ngoài success:true, nhưng BÊN TRONG có bản ghi thất bại:
+    results[0] {4c1d3aab-… , success true , laCongKhai true}
+    results[1] {5eed0003-… , success FALSE, error "new row for relation \"tu_van_vien\"
+                violates check constraint \"CHK_tu_van_vien_tvv_so_the_hanh_nghe\""}
+  TẢI LẠI TRANG (bỏ qua bộ nhớ đệm) → 0/2 hồ sơ được công khai.
+    Cả bản ghi mà máy chủ tự báo success:true cũng KHÔNG được công khai:
+    đọc lại 4c1d3aab qua máy chủ → thời gian đăng tải = null, mô tả công khai vẫn là chuỗi
+    của lượt đo TRƯỚC ĐÓ (M2b), không phải chuỗi vừa nhập ⇒ CẢ LÔ BỊ HOÀN TÁC.
+  Ảnh: image/CNDSMLTVV_01-07-M2-sau-tai-lai-ca-2-ho-so-van-Chua-cong-khai.png
+  Tệp phản hồi: evidence/CNDSMLTVV_01-M2-batch-cong-khai-2ho-so.network-response
+
+M2b (tách riêng — chỉ TVV-STP-AG-0001) — công khai được, tải lại = "Công khai".
+  ⇒ chứng minh bản ghi này tự nó HỢP LỆ; nó hỏng ở M2 chỉ vì đứng CHUNG LÔ với bản ghi kia.
+
+M2c (tách riêng — chỉ TVV-SEED-0001) — 1 request · 1 thông báo THÀNH CÔNG,
+  nhưng phản hồi results[0].success = false (cùng lỗi ràng buộc); tải lại vẫn "Chưa công khai".
+  ⇒ Báo thành công SAI xảy ra cả khi chỉ chọn 1 dòng, không riêng thao tác nhiều dòng.
+  Tệp phản hồi: evidence/CNDSMLTVV_01-M2c-batch-cong-khai-1ho-so-that-bai.network-response
+
+DẤU HIỆU CHUNG (đối chứng bằng đọc lại từng bản ghi qua máy chủ — đường thứ hai)
+  CG-QLND38-UAT    loại CG  · số thẻ hành nghề null              → công khai ĐƯỢC
+  TVV-STP-AG-0001  loại TVV · số thẻ "THN-DP-2026-018"           → công khai ĐƯỢC
+  TVV-SEED-0001    loại TVV · số thẻ null                        → LUÔN bị máy chủ từ chối
+  DDD-TVV-022      loại TVV · số thẻ null                        → LUÔN bị máy chủ từ chối
+  ⇒ hồ sơ loại "Tư vấn viên" mà thiếu Số thẻ hành nghề thì lượt công khai bị máy chủ chặn
+    (ràng buộc CHK_tu_van_vien_tvv_so_the_hanh_nghe). Giao diện KHÔNG hề cho biết,
+    vẫn báo thành công; và nếu hồ sơ đó nằm chung lô thì kéo đổ CẢ LÔ.
+
+M4 (hồ sơ ĐÃ công khai) — 2 lượt đo
+  Lượt nhiễu (DDD-TVV-022, hồ sơ thiếu số thẻ): request gửi đi, phản hồi success:false cùng lỗi
+    ràng buộc, giao diện vẫn báo thành công, dữ liệu không đổi ⇒ không tách bạch được hành vi.
+  Lượt SẠCH (CG-QLND38-UAT, loại Chuyên gia — QA tự dựng tiền đề "đã công khai" trước):
+    hồ sơ đã công khai VẪN chọn được và VẪN bấm công khai lần nữa được; cửa sổ nhập mở bình thường
+    ("Công khai 1 tư vấn viên đã chọn…"); xác nhận → ghi đè mô tả mới + đặt lại thời gian đăng tải
+    (11:06:02.513Z → 11:06:29.440Z).
+  ⇒ KHÔNG chấm lỗi: BR-PUBLIC-03 (srs-v3.5.md:5697) định nghĩa thời gian đăng tải là "thời điểm
+    CUỐI CÙNG set cong_khai = 1"; điều kiện "AND chưa công khai" ở :1557 là của NÚT trên màn chi tiết
+    SCR-IV-03, không phải của thao tác hàng loạt SCR-IV-01; :1464 không cấm. Chỉ ghi nhận hành vi.
+
+================================================================================
+BAR THÔNG BÁO (đếm theo mốc giờ khác nhau — 1 thông báo = 2 phần tử cùng mốc giờ)
+================================================================================
+  M1        1 request / 1 thông báo — "Đã công khai tư vấn viên thành công"
+  M2 ×2     1 request / 1 thông báo mỗi lượt — cùng câu trên (dù máy chủ trả 1 bản ghi thất bại)
+  M2b       1 request / 1 thông báo — cùng câu trên
+  M2c       1 request / 1 thông báo — cùng câu trên (máy chủ trả THẤT BẠI 100%)
+  M3        0 request / 0 thông báo nổi — chỉ dòng đỏ tại chỗ dưới ô nhập
+  M4 ×2     1 request / 1 thông báo mỗi lượt — cùng câu trên
+  Hủy công khai ×2   1 request / 1 thông báo — "Đã hủy công khai tư vấn viên thành công"
+  Không lượt nào sinh thông báo lỗi, không lượt nào sinh 2 thông báo cùng lúc.
+  Ghi nhận phụ (KHÔNG kéo verdict, đối tác không nêu): câu thông báo thành công thực tế
+  "Đã công khai tư vấn viên thành công" khác mẫu chuẩn srs-v3.5.md:6728
+  ("Đã công khai {ten_doi_tuong} '{ma_hoac_ten}' lên Cổng Pháp luật Quốc gia.") — thiếu mã/tên đối tượng.
+
+================================================================================
+HOÀN NGUYÊN (bắt buộc theo tiêu chí mục 3)
+================================================================================
+  Đã gỡ công khai bằng chính luồng chuẩn "Hủy công khai" (srs-fr-04:1465), làm TỪNG hồ sơ một:
+    CG-QLND38-UAT    → Chưa công khai · thời gian đăng tải null   (đọc lại sau khi tải lại trang)
+    TVV-STP-AG-0001  → Chưa công khai · thời gian đăng tải null   (đọc lại sau khi tải lại trang)
+  Bảng sau hoàn nguyên trùng khít bảng trước khi đo (6/6 hàng, cả cột trạng thái lẫn cột công khai).
+  Ảnh: image/CNDSMLTVV_01-06-sau-hoan-nguyen-2-ho-so-ve-chua-cong-khai.png
+  CÒN LƯU LẠI (không gỡ được qua giao diện): chuỗi mô tả công khai QA nhập vẫn nằm trong 2 bản ghi
+  trên — đúng đặc tả :1406 ("mô tả + file vẫn được giữ lại để tái công khai sau"). Đã khai ở bảng seed.
+  TVV-SEED-0001 và DDD-TVV-022 KHÔNG đổi gì (mọi lượt đều bị máy chủ từ chối).
+
+================================================================================
+GHI NHẬN NGOÀI PHẠM VI CASE (không mở dòng bảng mới — báo lại phiên chính)
+================================================================================
+  DDD-TVV-022 đang có cờ công khai = bật nhưng thời gian đăng tải = null.
+  Lệch BR-PUBLIC-03 (srs-v3.5.md:5697 — "Auto fill = thời điểm cuối cùng set cong_khai = 1").
+  Là dữ liệu CÓ SẴN trên env, không do lượt đo này sinh ra; đối tác không nêu vế này.
+
+HIỆU LỰC: kết quả chỉ có giá trị cho env nội bộ + bản dựng ghi ở đầu tệp; phải xác nhận lại khi
+bản dựng này lên env nghiệm thu htpldn-uat.ospgroup.vn.

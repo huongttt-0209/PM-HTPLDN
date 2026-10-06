@@ -1,0 +1,65 @@
+R4 RE-VERIFY — BUG-KCH-HTML-THO (QLKCHTV_OOS_01)
+Ngay chay: 29/07/2026 ~17:05  |  Env: https://18.143.165.120.nip.io  |  Tai khoan: cbnv_tw_01
+Thao tac tren giao dien; tep Excel lay bang nut [Xuat Excel] cua chinh man hinh.
+================================================================================
+
+BOI CANH: luot 3 con dung 1 trong 4 be mat — o "Noi dung tra loi" sau khi bam [Chon]
+tren the ket qua tra cuu. Day la be mat CHAM TOI DOANH NGHIEP (noi dung se gui di).
+
+PHAN 1 — DO LAI CA 4 BE MAT
+--------------------------------------------------------------------------------
+ Be mat                                   | Luot 3          | Luot 4
+ -----------------------------------------+-----------------+------------------
+ 1. Man chi tiet Kho cau hoi              | sach            | sach
+    (QA-20260708-0001, Nguon = Tu dong)   |                 |
+ 2. Tep Excel xuat tu Kho cau hoi         | sach (0 o loi)  | sach (0/29 o loi)
+ 3. The ket qua tra cuu o man tra loi TVN | sach            | sach (12 the)
+ 4. O "Noi dung tra loi" sau khi bam [Chon]| CON LOI        | SACH
+--------------------------------------------------------------------------------
+
+PHAN 2 — PHEP THU QUYET DINH (be mat 4)
+--------------------------------------------------------------------------------
+ Cach dung du lieu: tao phien tu van nhanh MOI thay vi mo lai phien cu, de chac
+ chan dang do hanh vi hien tai chu khong phai noi dung da luu tu truoc.
+
+   Phien   : TVN-20260729-0001 (va TVN-20260729-0002 dung chup anh)
+   Cau hoi : "[QA-T4-L4] Thu tuc dang ky kinh doanh online gom nhung buoc nao?"
+   Tra cuu : tu khoa "dang ky kinh doanh" -> 12 the ket qua
+   Bam     : [Chon] tren the QA-20260706-0001
+             (ban ghi nay von luu cau tra loi duoi dang <p>...</p>)
+
+ Gia tri o "Noi dung tra loi" ngay sau khi bam [Chon]:
+   Luot 3: "<p>Noi dung phan hoi test PHCHVM_09 de kiem tra double toast.</p>"   65 / 5000
+   Luot 4: "Noi dung phan hoi test PHCHVM_09 de kiem tra double toast."          58 / 5000
+   -> chenh dung 7 ky tu la do bo cap the <p></p>.
+   Kiem bang bieu thuc tim <p / </p / <br / <div / <span : khong khop o nao.
+
+PHAN 3 — CHAY HET LUONG, KHONG DUNG O CHO NHIN O SOAN
+--------------------------------------------------------------------------------
+ Bam [Gui tra loi] tren phien TVN-20260729-0001:
+   - Thong bao: "Gui tra loi thanh cong"
+   - Lenh gui di: POST .../tu-van-nhanhs/{id}/tra-loi   (1 lan, khong lap)
+   - Man hinh sau do khong con chuoi "<p>" nao.
+
+PHAN 4 — SO DO BE MAT 1 VA 2 (kiem xem co hong nguoc khong)
+--------------------------------------------------------------------------------
+ Be mat 1 — man chi tiet QA-20260708-0001 (Nguon = Tu dong):
+    Cau tra loi hien: "Phan hoi verify QLCKPHCHVM_01 round2: noi dung tu van
+    phap ly dung de kiem tra notification sau phe duyet."
+    Kiem the HTML hien thanh chu (ca dang &lt;p&gt; lan <p>): khong co.
+
+ Be mat 2 — tep kho-cau-hoi xuat moi trong luot 4:
+    sheet "Kho cau hoi", cot C "Cau tra loi"
+    so o co du lieu = 29  |  so o con the HTML tho = 0
+    3 o dau:
+      QA-20260729-0002 | "Ho so gom van ban de nghi, giay to chung minh tu cach..."
+      QA-20260729-0001 | "Can bo mo hop thoai Cong khai de soat lai ba hang muc..."
+      QA-20260728-0013 | "Anh dai dien dinh dang jpg/png/gif duoi 5MB; tep dinh kem..."
+
+PHAN 5 — CAN CU DAC TA
+--------------------------------------------------------------------------------
+ Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/srs-fr-13-tv-nhanh.md:545
+ — chi tiet Q&A: cau tra loi la rich text (chu da dinh dang), khong phai chuoi
+ the HTML de nguyen cho nguoi dung doc.
+
+KET LUAN: DAT — ca 4 be mat deu sach. Dong bug nay.

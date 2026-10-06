@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+• Danh sách Giảng viên / Trợ giảng không hỗ trợ sắp xếp theo tiêu chí/cột (bấm tiêu đề cột không đổi thứ tự) — đúng như đối tác quan sát.
+• Đối tác kỳ vọng sắp xếp theo tiêu chí (tăng/giảm luân phiên). Theo SRS FR-III-12 (UC31) §Inputs (dòng 992) + §Processing (dòng 994): chỉ lọc theo điều kiện + phân trang, KHÔNG quy định sắp xếp theo tiêu chí.
+• Câu hỏi BA: có bổ sung sắp xếp theo tiêu chí cho danh sách giảng viên không?
+• Verify: CB_NV_TW, màn Giảng viên / Trợ giảng.

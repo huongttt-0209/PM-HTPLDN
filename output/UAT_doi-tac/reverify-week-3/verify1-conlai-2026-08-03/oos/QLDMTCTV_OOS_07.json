@@ -1,0 +1,16 @@
+{
+  "STT": "03/08/2026",
+  "Tuần": "Tuần 3",
+  "Mã TC": "QLDMTCTV_OOS_07",
+  "Mô tả": "Danh sách Tổ chức tư vấn — màn hình rỗng chỉ hiện chữ \"Trống\", thiếu câu hướng dẫn theo đặc tả",
+  "Điều kiện": "1. Đăng nhập tài khoản Cán bộ Nghiệp vụ cấp Trung ương (cbnv_tw_04), đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp.\n2. Chọn menu \"Mạng lưới Tư vấn viên\" -> \"Tổ chức tư vấn\".",
+  "Dữ liệu đầu vào": "Thẻ \"Đã từ chối\" chưa có tổ chức nào (thẻ \"Tạm dừng\" và \"Vô hiệu hóa\" cũng vậy).",
+  "Các bước thực hiện": "1. Bấm vào thẻ \"Đã từ chối\".\n2. Đọc nội dung hiển thị ở vùng bảng khi không có bản ghi.\n3. Lặp lại với thẻ \"Tạm dừng\" và \"Vô hiệu hóa\".",
+  "Kết quả mong đợi": "Màn hình SCR-IV-NEW-01 dòng 1649 quy định khi thẻ không có bản ghi thì hiển thị hình minh họa kèm câu \"Chưa có tổ chức tư vấn nào trong mục này\", và có nút \"+ Thêm tổ chức tư vấn\" ở thẻ \"Mới đăng ký\".",
+  "Kết quả thực tế": "Vùng bảng chỉ hiện hình minh họa kèm đúng một chữ \"Trống\" — là chữ mặc định của thư viện giao diện, không phải câu tiếng Việt mà đặc tả yêu cầu. Không có câu hướng dẫn nào cho người dùng.\nĐã kiểm ở thẻ \"Đã từ chối\"; thẻ \"Tạm dừng\" và \"Vô hiệu hóa\" hiển thị y hệt.",
+  "Ảnh/vieo 1": "QLDMTCTV_OOS-man-rong-hien-chu-Trong-thay-vi-cau-huong-dan.png",
+  "Trạng thái 1": "Fail",
+  "Verify": "Open",
+  "DEV phản hồi lần 1": "✅ Bug ĐÚNG - chuyển dev.\n- Khi một thẻ trạng thái chưa có hồ sơ nào, vùng bảng chỉ hiện hình minh họa kèm đúng một chữ \"Trống\".\n- Theo màn hình SCR-IV-NEW-01 (dòng 1649), phải hiển thị câu \"Chưa có tổ chức tư vấn nào trong mục này\", kèm nút \"+ Thêm tổ chức tư vấn\" ở thẻ \"Mới đăng ký\".\n- Chữ \"Trống\" là văn bản mặc định của thư viện giao diện, không phải nội dung tiếng Việt đã duyệt, nên người dùng không được hướng dẫn phải làm gì tiếp.\n- Đã kiểm ở cả ba thẻ đang trống: Đã từ chối, Tạm dừng, Vô hiệu hóa — đều giống nhau.\n- Ghi chú tham chiếu: chức năng \"Quản lý Tổ chức tư vấn\" (FR-IV-NEW-01) trong đặc tả KHÔNG được cấp mã UC (dòng 1029 ghi \"chưa có trong CSV\"), nên chỉ nêu tên chức năng và số dòng, không có mã UC để dẫn.\n- Lỗi do QA phát hiện thêm khi kiểm 4 phiếu QLDMTCTV_02 / _05 / _06 / _09 ngày 03/08/2026, không nằm trong phạm vi 4 phiếu đó nên mở dòng riêng để chuyển dev.\n- Môi trường kiểm: bản dựng HTPLDN V1.0.5.",
+  "Trạng thái dev fix 1": "Open"
+}

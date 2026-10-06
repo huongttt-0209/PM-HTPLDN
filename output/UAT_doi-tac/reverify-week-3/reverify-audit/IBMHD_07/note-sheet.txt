@@ -1,0 +1,23 @@
+IBMHD_07 (dòng 119) — Verdict: BA confirm — 2026-07-20
+Verify: Chrome DevTools MCP, tài khoản cbnv_bn (CB Nghiệp vụ - Bộ ngành), URL /bieu-mau/nhap-hang-loat.
+
+Claim đối tác: import lô có tệp lỗi → không hiện "{Y} tệp lỗi: xem chi tiết" + bảng chi tiết.
+
+Quan sát:
+ - App validate định dạng/kích thước SỚM ở bước chọn → tệp lỗi không tới bước Import → kết quả chỉ hiện
+   "Đã nhập thành công 2 biểu mẫu" (chỉ success).
+ - Import trùng tên (duplicate): ĐƯỢC chấp nhận, không coi là lỗi → không sinh nhánh lỗi.
+ - Không reproduce được lỗi phát sinh TẠI bước import trong luồng thường.
+ - GIỚI HẠN (honest): chưa thử loại lỗi chỉ phát sinh ở import (file đúng đuôi nhưng nội dung hỏng / lỗi DB).
+   Nhánh "{M} tệp lỗi" có thể vẫn tồn tại cho các lỗi này — chưa reproduce.
+
+SRS: E2 WRN-IMP-01 (:479) "Import thành công {N} file. {M} file lỗi: xem chi tiết"; Outputs chi_tiet_loi (:489);
+AC (:498-499) "báo cáo lỗi chi tiết" + "tổng hợp N thành công, M lỗi".
+→ BA chốt: mô hình kiểm-sớm này có đạt AC không.
+
+Vai trò: case "CB Nghiệp vụ"; dùng cbnv_bn do cbnv_tw bị chiếm session. Luồng import không phụ thuộc đơn vị.
+
+Evidence web: ../../bug-reports/image/BUG-IBMHD_07-step3-ket-qua-import.png
+Condition table: ../../cond/IBMHD_07.md
+BA doc: ../../ba-confirmation-needed-week-3-bieu-mau-batch6.md
+Sheet: dòng 119, P="BA confirm".

@@ -1,0 +1,143 @@
+DUMP NOI DUNG TEP EXCEL XUAT - PHIEN DO R2 NGAY 2026-07-28
+Env: https://18.143.165.120.nip.io  |  Tai khoan: cbnv_tw_01
+Gio may (VN) tai thoi diem bam Luu: 2026-07-28 15:21:16 -> 15:21:22 (+0700)
+Server Date header cua POST tao CT: Tue, 28 Jul 2026 08:21:19 GMT
+API response ngayTao: 2026-07-28T08:21:19.443Z
+Ma CT sinh ra: CT-20260728-0005 (id 6226882c-cf76-4644-a256-a0e19e73936d)
+
+==============================================================================
+MAN CHUONG TRINH HTPLDN  ::  ct-htpldn-2026-07-28.xlsx
+==============================================================================
+Kich thuoc: 8470 bytes | mtime: 2026-07-28 15:22:33.188386
+sha256: ba3d52d5552388724109d62ffc630277c517cf757b7e629741abe7292710a07c
+Sheets: ['Chương trình HTPL']
+So cot: 13 | So dong du lieu: 13
+Tieu de cot:
+   1. Mã CT
+   2. Tên CT
+   3. Mục tiêu
+   4. Đối tượng
+   5. Trạng thái
+   6. Lĩnh vực
+   7. Đơn vị
+   8. Thời gian bắt đầu
+   9. Thời gian kết thúc
+  10. Ngân sách
+  11. Là công bố
+  12. Số đợt BC
+  13. Ngày tạo
+
+-- Thuoc tinh o (dong 2) --
+  [Mã CT] A2: value='CT-20260728-0005' type=str data_type='s' number_format='General' is_date=False
+  [Tên CT] B2: value='R2 KIEM TRA MUI GIO NGAY TAO' type=str data_type='s' number_format='General' is_date=False
+  [Mục tiêu] C2: value='Kiem tra mui gio truong Ngay tao tren tep Excel xuat' type=str data_type='s' number_format='General' is_date=False
+  [Đối tượng] D2: value='Doanh nghiep nho va vua' type=str data_type='s' number_format='General' is_date=False
+  [Trạng thái] E2: value='Dự thảo' type=str data_type='s' number_format='General' is_date=False
+  [Lĩnh vực] F2: value='Lao động' type=str data_type='s' number_format='General' is_date=False
+  [Đơn vị] G2: value='Cục Bổ trợ tư pháp - Bộ Tư pháp' type=str data_type='s' number_format='General' is_date=False
+  [Thời gian bắt đầu] H2: value='01/01/2026' type=str data_type='s' number_format='General' is_date=False
+  [Thời gian kết thúc] I2: value='31/12/2026' type=str data_type='s' number_format='General' is_date=False
+  [Ngân sách] J2: value=9000000 type=int data_type='n' number_format='General' is_date=False
+  [Là công bố] K2: value='Không' type=str data_type='s' number_format='General' is_date=False
+  [Số đợt BC] L2: value=0 type=int data_type='n' number_format='General' is_date=False
+  [Ngày tạo] M2: value=datetime.datetime(2026, 7, 28, 8, 21, 19, 443000) type=datetime data_type='d' number_format='mm-dd-yy' is_date=True
+
+-- Toan bo du lieu --
+  r2: CT-20260728-0005 | R2 KIEM TRA MUI GIO NGAY TAO | Kiem tra mui gio truong Ngay tao tren... | Doanh nghiep nho va vua | Dự thảo | Lao động | Cục Bổ trợ tư pháp - Bộ Tư pháp | 01/01/2026 | 31/12/2026 | 9000000 | Không | 0 | 2026-07-28 08:21:19.443000
+  r3: CT-20260728-0004 | R2 SEED - CT trang thai Cho phe duyet | Kiem thu bo loc trang thai Cho phe duyet | Doanh nghiep nho va vua | Chờ phê duyệt | Lao động | Cục Bổ trợ tư pháp - Bộ Tư pháp | 01/04/2026 | 31/10/2026 | 7000000 | Không | 0 | 2026-07-28 07:14:24.648000
+  r4: CT-20260728-0003 | R2 SEED - CT trang thai Du thao | Kiem thu bo loc trang thai Du thao | Doanh nghiep nho va vua | Dự thảo | Lao động | Cục Bổ trợ tư pháp - Bộ Tư pháp | 01/03/2026 | 30/09/2026 | 7000000 | Không | 0 | 2026-07-28 07:14:24.453000
+  r5: CT-20260728-0002 | R2 SEED - CT trang thai Da huy | Kiem thu bo loc trang thai Da huy | Doanh nghiep nho va vua | Đã hủy | Lao động | Cục Bổ trợ tư pháp - Bộ Tư pháp | 01/02/2026 | 30/11/2026 | 5000000 | Không | 0 | 2026-07-28 07:14:10.595000
+  r6: CT-20260728-0001 | R2 SEED - CT trang thai Tam dung | Kiem thu bo loc trang thai Tam dung | Doanh nghiep nho va vua | Tạm dừng | Lao động | Cục Bổ trợ tư pháp - Bộ Tư pháp | 01/01/2026 | 31/12/2026 | 10000000 | Có | 0 | 2026-07-28 07:13:53.845000
+  r7: CT-20260725-0002 | QA CTTLV 25/07 B - Kiem tra linh vuc ... | Kiem thu bao cao CT theo linh vuc | Doanh nghiep nho va vua | Đã duyệt | Đất đai | Cục Bổ trợ tư pháp - Bộ Tư pháp | 01/01/2026 |  |  | Không | 0 | 2026-07-25 02:26:11.646000
+  r8: CT-20260725-0001 | QA CTTLV 25/07 A - Kiem tra linh vuc ... | Kiem thu bao cao CT theo linh vuc | Doanh nghiep nho va vua | Đã duyệt | Thuế | Cục Bổ trợ tư pháp - Bộ Tư pháp | 01/01/2026 |  |  | Không | 0 | 2026-07-25 02:25:48.795000
+  r9: CT-20260724-0001 | QA CTTLV 01 - Chương trình Lao động 2026 | Dữ liệu kiểm thử báo cáo chương trình... | Doanh nghiệp nhỏ và vừa | Đã duyệt | Lao động | Cục Bổ trợ tư pháp - Bộ Tư pháp | 01/01/2026 | 31/12/2026 | 50000000 | Không | 0 | 2026-07-23 18:29:59.348000
+  r10: CT-20260721-0004 | BCTK-B4 CT khong linh vuc test Khong ... | Seed test nhom Khong xac dinh - CT kh... | Doanh nghiep | Đã duyệt |  | Cục Bổ trợ tư pháp - Bộ Tư pháp | 01/01/2026 | 31/12/2026 | 50000000 | Không | 0 | 2026-07-21 08:45:05.680000
+  r11: CT-20260721-0003 | CT Seed QA-B (verify SLCTHT) | Seed phục vụ QA verify - dự kiến HOAN... | Doanh nghiệp siêu nhỏ | Hoàn thành |  | Cục Bổ trợ tư pháp - Bộ Tư pháp | 01/03/2026 | 31/10/2026 | 50000000 | Có | 0 | 2026-07-21 08:44:35.713000
+  r12: CT-20260721-0002 | CT Seed QA-A (verify SLCTHT) | Seed phục vụ QA verify báo cáo Số lượ... | Doanh nghiệp nhỏ và vừa | Đang thực hiện |  | Cục Bổ trợ tư pháp - Bộ Tư pháp | 01/02/2026 | 30/11/2026 | 100000000 | Có | 0 | 2026-07-21 08:42:36.538000
+  r13: CT-20260721-0001 | BCTK-B4 CT verify bao cao Thuong mai | Seed verify bao cao CT theo don vi/li... | Doanh nghiep nho va vua | Đã duyệt | Thương mại | Cục Bổ trợ tư pháp - Bộ Tư pháp | 01/01/2026 | 31/12/2026 | 100000000 | Không | 0 | 2026-07-21 08:36:47.949000
+  r14: CTHTPL-SEED-0001 | Chương trình HTPL doanh nghiệp seed 2026 | Nâng cao nhận thức pháp luật cho doan... | Doanh nghiệp nhỏ và vừa toàn quốc. | Đã công bố | Thương mại |  | 01/01/2026 | 31/12/2026 |  | Có | 0 | 2026-06-30 12:28:23.186000
+
+==============================================================================
+MAN KHO CAU HOI  ::  kho-cau-hoi-20260728.xlsx
+==============================================================================
+Kich thuoc: 9248 bytes | mtime: 2026-07-28 15:23:37.430629
+sha256: cd34b97369b937592febce5a3dc83b490be1539a0b50a6a1d4bb5743dddd52dd
+Sheets: ['Kho câu hỏi']
+So cot: 7 | So dong du lieu: 27
+Tieu de cot:
+   1. Mã câu hỏi
+   2. Câu hỏi
+   3. Câu trả lời
+   4. Lĩnh vực
+   5. Nguồn
+   6. Trạng thái
+   7. Số lượt xem
+
+-- Thuoc tinh o (dong 2) --
+  [Mã câu hỏi] A2: value='QA-20260728-0013' type=str data_type='s' number_format='General' is_date=False
+  [Câu hỏi] B2: value='QA R2 BUG-CK: Doanh nghiep can chuan bi anh dai dien va tep dinh kem the nao khi cong khai cau hoi len Cong PLQG?' type=str data_type='s' number_format='General' is_date=False
+  [Câu trả lời] C2: value='Anh dai dien dinh dang jpg/png/gif duoi 5MB; tep dinh kem cong khai dinh dang pdf/doc/docx/xls/xlsx duoi 20MB moi tep, toi da 10 tep. Ban ghi nay duoc QA tao de kiem tra hop thoai xac nhan Cong khai c' type=str data_type='s' number_format='General' is_date=False
+  [Lĩnh vực] D2: value='Thuế' type=str data_type='s' number_format='General' is_date=False
+  [Nguồn] E2: value='Thủ công' type=str data_type='s' number_format='General' is_date=False
+  [Trạng thái] F2: value='Đã duyệt' type=str data_type='s' number_format='General' is_date=False
+  [Số lượt xem] G2: value=5 type=int data_type='n' number_format='General' is_date=False
+
+-- Toan bo du lieu --
+  r2: QA-20260728-0013 | QA R2 BUG-CK: Doanh nghiep can chuan ... | Anh dai dien dinh dang jpg/png/gif du... | Thuế | Thủ công | Đã duyệt | 5
+  r3: QA-20260728-0005 | [R2-TPL-03] Doanh nghiep can chuan bi... | Noi dung tra loi kiem thu R2 cho ma l... | Đất đai | Import | Đã duyệt | 0
+  r4: QA-20260728-0004 | [R2-TPL-02] Doanh nghiep can chuan bi... | Noi dung tra loi kiem thu R2 cho ma l... | Lao động | Import | Đã duyệt | 0
+  r5: QA-20260728-0003 | [R2-TPL-01] Doanh nghiep can chuan bi... | Noi dung tra loi kiem thu R2 cho ma l... | Thuế | Import | Nháp | 0
+  r6: QA-20260728-0007 | [R2-TPL-05] Doanh nghiep can chuan bi... | Noi dung tra loi kiem thu R2 cho ma l... | Thương mại | Import | Chờ duyệt | 0
+  r7: QA-20260728-0006 | [R2-TPL-04] Doanh nghiep can chuan bi... | Noi dung tra loi kiem thu R2 cho ma l... | Dân sự | Import | Chờ duyệt | 0
+  r8: QA-20260728-0012 | [R2-TPL-10] Doanh nghiep can chuan bi... | Noi dung tra loi kiem thu R2 cho ma l... | Đầu tư | Import | Chờ duyệt | 0
+  r9: QA-20260728-0011 | [R2-TPL-09] Doanh nghiep can chuan bi... | Noi dung tra loi kiem thu R2 cho ma l... | Doanh nghiệp | Import | Chờ duyệt | 0
+  r10: QA-20260728-0010 | [R2-TPL-08] Doanh nghiep can chuan bi... | Noi dung tra loi kiem thu R2 cho ma l... | Sở hữu trí tuệ | Import | Chờ duyệt | 0
+  r11: QA-20260728-0009 | [R2-TPL-07] Doanh nghiep can chuan bi... | Noi dung tra loi kiem thu R2 cho ma l... | Hành chính | Import | Chờ duyệt | 0
+  r12: QA-20260728-0008 | [R2-TPL-06] Doanh nghiep can chuan bi... | Noi dung tra loi kiem thu R2 cho ma l... | Hình sự | Import | Chờ duyệt | 0
+  r13: QA-20260728-0002 | QA re-verify R2 QLKCHTV_04 (gui duyet... | Doanh nghiep chuan bi giay dang ky ki... | Thuế | Thủ công | Nháp | 0
+  r14: QA-20260728-0001 | QA re-verify R2 QLKCHTV_04: Doanh ngh... | Doanh nghiep gui van ban de nghi ho t... | Lao động | Thủ công | Đã duyệt | 0
+  r15: QA-20260727-0005 | QA tuần 4 (kiểm tra công khai): Doanh... | Can chuan bi anh dai dien dinh dang j... | Thuế | Thủ công | Đã duyệt | 3
+  r16: QA-20260727-0004 | QA-T4-IMPORT-04: Dang ky nhan hieu ha... | Ho so dang ky nhan hieu gom to khai, ... | Thương mại | Import | Đã duyệt | 1
+  r17: QA-20260727-0002 | QA-T4-IMPORT-01: Doanh nghiep nho va ... | Theo Luat Ho tro doanh nghiep nho va ... | Thuế | Import | Nháp | 2
+  r18: QA-20260727-0003 | QA-T4-IMPORT-02: Thoi gian thu viec t... | Theo Dieu 25 Bo luat Lao dong 2019, t... | Lao động | Import | Đã duyệt | 1
+  r19: QA-20260727-0001 | QA tuần 4: Doanh nghiệp nhỏ và vừa cầ... | Doanh nghiep chuan bi giay dang ky ki... | Thuế | Thủ công | Công khai | 6
+  r20: QA-20260708-0001 | Seed UI PCXLCHVM_01: câu hỏi dùng để ... | Phản hồi verify QLCKPHCHVM_01 round2:... | Lao động | Tự động | Đã duyệt | 5
+  r21: QA-20260707-0002 | Seed UI QLCKPHCHVM_02: câu hỏi batch ... | Nội dung phản hồi seed cho batch appr... | Thuế | Tự động | Đã duyệt | 0
+  r22: QA-20260707-0006 | Doanh nghiệp hỏi về thủ tục đăng ký k... | AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA... | Thương mại | Tự động | Đã duyệt | 0
+  r23: QA-20260707-0005 | Seed UI TKCHVMDXL_11: cau hoi ve thue... | Nội dung phản hồi seed cho batch appr... | Thuế | Tự động | Đã duyệt | 0
+  r24: QA-20260707-0004 | Seed UI TKCHVMDXL_11 đúng kênh: câu h... | Nội dung phản hồi seed cho batch appr... | Thuế | Tự động | Đã duyệt | 0
+  r25: QA-20260707-0003 | Seed UI QLCKPHCHVM_02: câu hỏi batch ... | Nội dung phản hồi seed cho batch appr... | Thuế | Tự động | Đã duyệt | 0
+  r26: QA-20260707-0001 | Doanh nghiệp hỏi về thủ tục đăng ký k... | BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB... | Thương mại | Tự động | Đã duyệt | 0
+  r27: QA-20260706-0002 | Doanh nghiệp hỏi về thủ tục đăng ký k... | Phản hồi test PHCHVM_01/03: đính kèm ... | Thương mại | Tự động | Đã duyệt | 0
+  r28: QA-20260706-0001 | Doanh nghiệp hỏi về thủ tục đăng ký k... | Nội dung phản hồi test PHCHVM_09 để k... | Thương mại | Tự động | Đã duyệt | 0
+
+==============================================================================
+BANG DOI CHIEU COT 'Ngay tao' - MAN CHUONG TRINH HTPLDN
+==============================================================================
+Ma CT                Gia tri trong tep              +7h = gio VN           number_format
+CT-20260728-0005     2026-07-28 08:21:19.443000     28/07/2026 15:21:19    'mm-dd-yy'
+CT-20260728-0004     2026-07-28 07:14:24.648000     28/07/2026 14:14:24    'mm-dd-yy'
+CT-20260728-0003     2026-07-28 07:14:24.453000     28/07/2026 14:14:24    'mm-dd-yy'
+CT-20260728-0002     2026-07-28 07:14:10.595000     28/07/2026 14:14:10    'mm-dd-yy'
+CT-20260728-0001     2026-07-28 07:13:53.845000     28/07/2026 14:13:53    'mm-dd-yy'
+CT-20260725-0002     2026-07-25 02:26:11.646000     25/07/2026 09:26:11    'mm-dd-yy'
+CT-20260725-0001     2026-07-25 02:25:48.795000     25/07/2026 09:25:48    'mm-dd-yy'
+CT-20260724-0001     2026-07-23 18:29:59.348000     24/07/2026 01:29:59    'mm-dd-yy'
+CT-20260721-0004     2026-07-21 08:45:05.680000     21/07/2026 15:45:05    'mm-dd-yy'
+CT-20260721-0003     2026-07-21 08:44:35.713000     21/07/2026 15:44:35    'mm-dd-yy'
+CT-20260721-0002     2026-07-21 08:42:36.538000     21/07/2026 15:42:36    'mm-dd-yy'
+CT-20260721-0001     2026-07-21 08:36:47.949000     21/07/2026 15:36:47    'mm-dd-yy'
+CTHTPL-SEED-0001     2026-06-30 12:28:23.186000     30/06/2026 19:28:23    'mm-dd-yy'
+
+==============================================================================
+GHI CHU
+==============================================================================
+1. CT-20260728-0005 tao luc 15:21:19 gio VN; tep ghi 08:21:19 -> lech dung 7 gio (UTC).
+2. Cot 'Ngay tao' number_format = 'mm-dd-yy' (dinh dang thang-ngay-nam kieu My),
+   khac voi cot 'Thoi gian bat dau'/'Thoi gian ket thuc' da duoc ghi thanh chuoi 'dd/MM/yyyy'.
+3. CT-20260724-0001: ma CT ghi ngay 2026-07-24 nhung cot Ngay tao trong tep ghi 2026-07-23 18:29:59
+   -> lui sang ngay hom truoc do bi tru 7 gio.
+4. Tep man Kho cau hoi chi co 7 cot va KHONG co cot ngay/gio nao,
+   trong khi giao dien Kho cau hoi CO cot 'Ngay tao' hien 'dd/MM/yyyy HH:mm' theo gio VN.
+5. Quy uoc cua ung dung (doi chieu Kho cau hoi): API tra UTC ('2026-07-28T04:52:46.710Z'),
+   giao dien hien '28/07/2026 11:52' = UTC+7 -> FE co quy doi mui gio, tep xuat thi khong.

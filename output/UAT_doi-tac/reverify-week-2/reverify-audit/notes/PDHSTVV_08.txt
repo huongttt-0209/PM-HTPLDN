@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Đã từ chối hồ sơ TVV-BTP-TW-0007 bằng tài khoản cbpd_tw với lý do hợp lệ. Hệ thống hiển thị "Đã từ chối hồ sơ TVV", chuyển trạng thái "Từ chối" và ghi nhận người từ chối + thời điểm + lý do vào hồ sơ (phần này ĐẠT).
+- Lỗi: CHỦ HỒ SƠ không nhận được bất kỳ thông báo nào về việc bị từ chối — hộp thư của chủ hồ sơ không có mail sau thao tác. Đối chứng ngay trong cùng phiên: khi phê duyệt một hồ sơ khác thì chủ hồ sơ NHẬN được mail bình thường, chứng tỏ kênh gửi hoạt động và chỉ luồng từ chối bị thiếu.
+- Theo FR-IV-07 (UC45) §Processing bước 4 (srs-fr-04 dòng 593), §Acceptance Criteria (dòng 627) và nội dung hộp thoại xác nhận từ chối (dòng 1398 — "lý do sẽ được gửi đến chủ hồ sơ"), hệ thống phải gửi thông báo kèm lý do đến chủ hồ sơ khi từ chối.
+- Về ý "không gửi thông báo đến Cán bộ nghiệp vụ đã thẩm định": đúng như phản ánh (Cán bộ nghiệp vụ không nhận được thông báo), nhưng SRS FR-IV-07 hiện KHÔNG quy định gửi thông báo cho Cán bộ nghiệp vụ ở bước phê duyệt/từ chối → đã chuyển sang mục BA xác nhận, không tính là lỗi.
+- Verify: tài khoản cbpd_tw (CB Phê duyệt - Trung ương), hồ sơ ở trạng thái "Chờ phê duyệt" trước thao tác, lý do từ chối 83 ký tự.
+- Bug ID: BUG-PDHSTVV_08.

@@ -1,0 +1,85 @@
+QLDX_04 — ĐỐI CHỨNG ĐỘC LẬP (đúng 1 đường): không có 401 tại thời điểm modal bật
+=================================================================================
+Mục đích: phân biệt HAI modal dễ lẫn (chuan/QLDX_04-05-06.md §3 "Bẫy đo" #1)
+  (a) modal cảnh báo CHỦ ĐỘNG ở phút 25  — srs-fr-10-quan-tri.md:1891 + :1959  <= cái ta cần đo
+  (b) modal PHẢN ỨNG khi nhận HTTP 401   — srs-fr-02-hoi-dap.md:1135, tiêu đề "Phiên đăng nhập đã hết hạn"
+Nếu có 401 tại thời điểm modal bật => là modal (b) => phép đo KHÔNG hợp lệ.
+
+Tool: mcp__chrome-devtools__list_network_requests
+      (resourceTypes = xhr, fetch, document; includePreservedRequests = true)
+Mốc thời gian cần đối chiếu: modal bật lúc 2026-08-07 02:08:28 giờ VN = 19:08:28 GMT
+
+DUMP ĐẦY ĐỦ — 19/19 request (Page 1 of 1, không bị cắt trang)
+-------------------------------------------------------------
+reqid=1   GET  /login                                                     [200]
+reqid=18  GET  /api/v1/auth/me                                            [401]   <-- 401 DUY NHẤT
+reqid=19  POST /api/v1/auth/login                                         [200]
+reqid=21  POST /api/v1/auth/verify-otp                                     [200]
+reqid=22  GET  /api/v1/auth/me                                            [200]
+reqid=38  GET  /api/v1/thong-baos/unread-count                            [200]
+reqid=49  GET  /api/v1/don-vi/public                                      [200]
+reqid=50  GET  /api/v1/dashboard?nam=2026                                  [200]
+reqid=51  GET  /api/v1/dashboard/chart/hieu-qua-ho-tro?nam=2026            [200]
+reqid=52  GET  /api/v1/dashboard/chart/chat-luong-dao-tao?nam=2026         [200]
+reqid=107 GET  /api/v1/to-chuc-tu-vans?tuKhoa=&trangThai=HOAT_DONG&...     [200]
+reqid=108 GET  /api/v1/danh-muc/tree?loaiDanhMuc=LINH_VUC_PL&...           [200]
+reqid=109 GET  /api/v1/tu-van-viens?page=1&pageSize=20&trangThai=HOAT_DONG [200]
+reqid=110 GET  /api/v1/tu-van-viens?trangThai=MOI_DANG_KY&page=1&...       [200]
+reqid=111 GET  /api/v1/tu-van-viens?trangThai=YEU_CAU_BO_SUNG&page=1&...   [200]
+reqid=112 GET  /api/v1/thong-baos/unread-count                            [304]
+reqid=113 GET  /api/v1/thong-baos/unread-count                            [304]
+reqid=114 GET  /api/v1/thong-baos/unread-count                            [304]
+reqid=115 GET  /api/v1/thong-baos/unread-count                            [304]   <-- SAU khi modal bật
+
+Thống kê status: 401 x1 · 200 x14 · 304 x4.  Không có 5xx, không có 4xx nào khác.
+
+
+401 DUY NHẤT LÀ TRƯỚC KHI ĐĂNG NHẬP — CHỨNG MINH BẰNG TIMESTAMP
+----------------------------------------------------------------
+mcp__chrome-devtools__get_network_request(reqid=18):
+  URL              : GET https://18.143.165.120.nip.io/api/v1/auth/me
+  Status           : 401
+  Response header  : date: Thu, 06 Aug 2026 19:05:51 GMT   => 02:05:51 giờ VN
+  Request referer  : https://18.143.165.120.nip.io/login    => phát ra TỪ TRANG LOGIN
+  Response body    : {"success":false,"error":{"code":"ERR-AUTH-SYS-00-01",
+                      "message":"Yêu cầu đăng nhập (thiếu token xác thực)", ...}}
+
+=> Bản chất: cú "probe" FE tự gọi khi vừa mở /login để xem có sẵn phiên hay chưa. Chưa có token
+   nên BE trả 401 kèm mã ERR-AUTH-SYS-00-01 "thiếu token xác thực". Đây là hành vi bình thường
+   của trang đăng nhập, KHÔNG phải phiên bị đá.
+=> Thứ tự reqid cũng khẳng định: 18 (401) đứng TRƯỚC 19 (POST login 200) và 21 (verify-otp 200).
+=> Khoảng cách tới lúc modal bật: 02:05:51 -> 02:08:28 = TRƯỚC 2 phút 37 giây.
+
+
+TẠI THỜI ĐIỂM MODAL BẬT, PHIÊN VẪN CÒN HIỆU LỰC — CHỨNG MINH XUÔI
+------------------------------------------------------------------
+mcp__chrome-devtools__get_network_request(reqid=115):
+  URL             : GET /api/v1/thong-baos/unread-count
+  Status          : 304  (không phải 401)
+  Response header : date: Thu, 06 Aug 2026 19:08:54 GMT  => 02:08:54 giờ VN
+  Request referer : https://18.143.165.120.nip.io/chuyen-gia-tvv/danh-sach
+  Request cookie  : access_token=<JWT> có mặt
+  Response body   : {"success":true,"data":{"count":56},"meta":null}
+  JWT payload giải ra: vaiTro=["CB_NV_TW"], capDonVi="TW",
+                       hoTen="CB Nghiệp vụ - Trung ương #03", authMethod="LOCAL",
+                       idleTtl=1800 (=30 phút), iat=1786043214
+
+=> reqid=115 xảy ra 26 giây SAU khi modal bật và vẫn trả 304 (đã xác thực OK).
+   Vậy lúc modal bật, server vẫn coi phiên là hợp lệ.
+
+BRACKET quanh mốc modal bật (02:08:28):
+  trước : reqid=112/113/114  /thong-baos/unread-count  [304]  (đều KHÔNG 401)
+  sau   : reqid=115          /thong-baos/unread-count  [304]  @ 02:08:54  (KHÔNG 401)
+
+
+KẾT LUẬN ĐỐI CHỨNG
+------------------
+1. KHÔNG có request 401 nào tại/quanh thời điểm modal bật (02:08:28). 401 duy nhất của cả phiên
+   nằm ở 02:05:51, trên trang /login, TRƯỚC khi đăng nhập.
+2. Request ngay sau khi modal bật trả 304 => phiên còn hiệu lực phía server.
+=> Modal quan sát được ĐÚNG là modal (a) — cảnh báo CHỦ ĐỘNG do đồng hồ idle phía FE bật,
+   KHÔNG phải modal (b) phản ứng 401. Phép đo QLDX_04 HỢP LỆ.
+3. Bổ sung: nhóm request nền /thong-baos/unread-count (poll định kỳ) chạy xuyên suốt mà
+   localStorage["auth-last-activity"] KHÔNG hề bị ghi lại (xem QLDX_04-timeline-idle.txt,
+   cột lsEqualsBaseline = true ở toàn bộ 49 mẫu). => FE tính idle theo event người dùng,
+   KHÔNG theo hoạt động mạng => loại trừ luôn "Bẫy đo #3" (màn tự làm mới).

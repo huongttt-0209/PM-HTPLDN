@@ -1,0 +1,25 @@
+{
+  "case": "LCNHTCVV_08",
+  "retest": "2026-07-15 R2-reverify",
+  "role": "CB_NV_TW (cbnv_tw)",
+  "vuViec": "VV-BTP-TW-20260712-005 (cùng đơn vị TW) — seed sang 'Đang kiểm tra' bằng Kiểm tra hồ sơ 6/6 Đạt",
+  "action": "[Phân công] → chọn [TVV] QA TVV Seed28 Active → Xác nhận 1 lần",
+  "capture_method": "MutationObserver .ant-message-notice-wrapper (phân biệt success/error) + list_network_requests",
+  "result": {
+    "toastCountFromOneClick": 1,
+    "successCount": 1,
+    "errorCount": 0,
+    "toastText": "Đã phân công vụ việc cho QA TVV Seed28 Active. Hệ thống đã gửi thông báo.",
+    "stateAfter": "Đã phân công"
+  },
+  "network": {
+    "POST /phan-cong": 201,
+    "GET /goi-y-tvv (reload pool phụ)": 409,
+    "ghi_chu": "Request phụ goi-y-tvv vẫn trả 409 nội bộ (vì VV đã sang 'Đã phân công' nên không còn gợi ý) NHƯNG FE nay KHÔNG bắn 409 này ra toast cho người dùng"
+  },
+  "verdict": "PASS",
+  "so_sanh_bug_goc": {
+    "1_toast_loi_thua": "bug gốc: hiện đồng thời toast xanh 'Đã phân công' + toast đỏ 'ERR-STATE-VI-10-01' → nay: CHỈ 1 toast success, 0 toast lỗi",
+    "2_thieu_ten_nguoi": "bug gốc: 'Đã phân công' (thiếu tên) → nay: 'Đã phân công vụ việc cho QA TVV Seed28 Active. Hệ thống đã gửi thông báo.' (đúng SRS dòng 1768, có tên người)"
+  }
+}

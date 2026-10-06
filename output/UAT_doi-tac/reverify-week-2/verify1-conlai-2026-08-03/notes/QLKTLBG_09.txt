@@ -1,0 +1,14 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Đã kiểm tra lại đúng điều kiện phản ánh: vai trò Cán bộ nghiệp vụ Trung ương, màn Đào tạo, tập huấn > Kho tài liệu / Bài giảng, bài giảng có Loại tài liệu = Slide, tệp PowerPoint đuôi .pptx, trạng thái Đã công khai, có ảnh đại diện. Tổ kiểm thử tự tạo bài giảng mới bằng luồng Thêm mới để đúng điều kiện, không dùng lại dữ liệu cũ.
+- Web đang sai: bấm xem trước bài giảng Slide thì hộp thoại "Xem trước" mở ra nhưng khu vực xem trước TRẮNG HOÀN TOÀN, không trình chiếu nội dung slide. Hộp thoại chỉ hiển thị Công khai, Ngày công khai, Ảnh đại diện, Mô tả công khai và đúng một nút đóng.
+- Ngoài ra hệ thống không hiện thông báo thay thế "Không thể xem trực tuyến", cũng không có nút "Tải về" trong hộp thoại xem trước, và cột Thao tác của bảng cũng chỉ có xem trước / Sửa / Xóa. Vì vậy người dùng không có cách nào tiếp cận nội dung bài giảng từ màn này.
+- Yêu cầu theo đặc tả:
+  + FR-III-07 (UC26) §Mô tả (dòng 726): tài liệu gồm 3 loại Slide (PPTX), PDF, Video (nhúng YouTube) và phải xem trước ngay trong trang.
+  + FR-III-07 (UC26) §Tiêu chí chấp nhận (dòng 792): khi người dùng chọn xem trước thì hệ thống phải hiển thị nội dung tệp trên trình duyệt.
+  + SCR-III-03 §Thành phần 6 – Bảng xem trước (dòng 1955): Slide/PDF xem trực tiếp trong trình duyệt; nếu định dạng không xem được thì phải hiển thị "Không thể xem trực tuyến" kèm nút "Tải về".
+  + SCR-III-03 §Thành phần 4 – Bảng tài liệu, cột Hành động (dòng 1951): phải có "Xem trực tuyến" và "Tải về (chỉ Slide/PDF)" là hai hành động tách bạch.
+  + FR-III-07 (UC26) §Inputs dòng 743 quy định tệp Slide đúng là .pptx, nên .pptx thuộc nhóm bắt buộc xem được, không phải định dạng lạ.
+- Nghĩa là dù hiểu theo hướng nào thì hiện tại vẫn chưa đạt: hoặc phải trình chiếu được nội dung slide, hoặc tối thiểu phải báo "Không thể xem trực tuyến" kèm nút "Tải về".
+- Đối chứng trên cùng màn, cùng tài khoản: bài giảng loại Video vẫn hiển thị được khung YouTube, chứng tỏ khu vực xem trước hoạt động; riêng tệp lưu trên hệ thống thì không hiển thị được.
+- Lưu ý so với phản ánh ban đầu: trên bản dựng hiện tại hệ thống không còn tự tải tệp xuống máy nữa, nhưng vẫn không trình chiếu inline, tức yêu cầu chính vẫn chưa đạt.
+- Mã lỗi nội bộ: BUG-QLKTLBG_09. Tài khoản kiểm tra: cbnv_tw (Cán bộ nghiệp vụ Trung ương, đơn vị Cục Bổ trợ tư pháp). Bản dựng V1.0.5, kiểm tra ngày 03/08/2026.

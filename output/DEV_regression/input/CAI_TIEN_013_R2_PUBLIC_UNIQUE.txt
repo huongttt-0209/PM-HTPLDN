@@ -1,0 +1,2 @@
+CAI_TIEN-013 DEV R2 PUBLIC PDF UNIQUE
+Tệp công khai dành riêng cho vòng regression R2 ngày 2026-08-15.

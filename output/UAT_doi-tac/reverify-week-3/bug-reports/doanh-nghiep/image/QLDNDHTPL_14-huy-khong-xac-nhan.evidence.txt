@@ -1,0 +1,23 @@
+Evidence hành vi — QLDNDHTPL_14 (Hủy khi có thay đổi chưa lưu, KHÔNG xác nhận)
+Env: https://18.143.165.120.nip.io | Role: CB_NV_TW | Màn: /doanh-nghiep/them-moi
+Ngày verify: 2026-07-20
+
+Kịch bản:
+1. Mở form Thêm mới Doanh nghiệp.
+2. Nhập Tên doanh nghiệp = "DN Kiem Tra Huy Xac Nhan" bằng input thật qua trình duyệt (form ở trạng thái dirty — đã có thay đổi chưa lưu).
+3. Cài MutationObserver trên document.body bắt mọi .ant-modal / .ant-modal-confirm / [role=dialog] được thêm; đồng thời hook window.confirm để bắt native confirm.
+4. Bấm nút "Hủy" (footer form) bằng click thật.
+
+Kết quả quan sát (JSON trả về sau khi bấm Hủy):
+{
+  "url": "https://18.143.165.120.nip.io/doanh-nghiep/danh-sach",
+  "modalSeen": [],            // KHÔNG có modal/confirm dialog nào xuất hiện
+  "nativeConfirm": false,     // KHÔNG có window.confirm() được gọi
+  "navigatedToList": true     // điều hướng thẳng về Danh sách
+}
+
+Kết luận: Hệ thống KHÔNG yêu cầu xác nhận khi có thay đổi chưa lưu — điều hướng thẳng về Danh sách.
+Đối chiếu SRS: srs-fr-07-doanh-nghiep.md dòng 597 (SCR-V.III-03 §Bố cục form, footer):
+"Nút 'Hủy' | Xác nhận nếu có thay đổi → quay về SCR-V.III-01".
+
+Bổ trợ: lần chạy đầu (input qua React setter, form đã dirty — chứng minh bởi check trùng MST đọc đúng giá trị) cũng cho kết quả điều hướng thẳng, không confirm.

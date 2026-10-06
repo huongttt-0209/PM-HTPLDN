@@ -1,0 +1,100 @@
+R3 RE-VERIFY — BUG-XUAT-TEP-LECH-MUI-GIO (XUATTEP_OOS_08)
+Ngay chay: 29/07/2026  |  Env: https://18.143.165.120.nip.io
+Cach lay tep: bam nut [Xuat Excel] tren giao dien (khong goi API), doc Blob do chinh UI sinh ra.
+==============================================================================
+
+PHAN 1 — DINH DANG NGAY TRONG TEP XUAT (12 man)
+------------------------------------------------------------------------------
+
+Vu viec HTPL  (vu-viec-export-R3.xlsx, 30 ban ghi)
+   "Ngày tiếp nhận": 29 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 29}]
+
+Thu vien bieu mau  (thu-vien-bieu-mau-R3.xlsx, 13 ban ghi)
+   "Ngày tạo": 13 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 13}]
+   "Ngày cập nhật": 13 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 13}]
+
+Ke hoach danh gia  (ke-hoach-danh-gia-R3.xlsx, 16 ban ghi)
+   "Từ ngày": 16 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 16}]
+   "Đến ngày": 16 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 16}]
+   "Ngày tạo": 16 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 16}]
+
+Chi tra chi phi  (chi-tra-R3.xlsx, 13 ban ghi)
+   "Ngày nộp": 13 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 13}]
+   "Deadline SLA": 13 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 13}]
+
+Hoi dap phap ly  (hoi-dap-R3.xlsx, 14 ban ghi)
+   "Ngày tiếp nhận": 10 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 10}]
+   "Deadline": 10 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 10}]
+   "Ngày tạo": 14 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 14}]
+
+To chuc tu van  (to-chuc-tv-R3.xlsx, 3 ban ghi)
+   "Ngày cấp ĐKHĐ": 2 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 2}]
+   "Ngày QĐ công bố": 2 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 2}]
+
+Ke hoach dao tao  (ke-hoach-dao-tao-R3.xlsx, 7 ban ghi)
+   "Từ ngày": 7 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 7}]
+   "Đến ngày": 7 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 7}]
+
+Chuong trinh dao tao  (ct-dao-tao-R3.xlsx, 3 ban ghi)
+   "Ngày tạo": 3 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 3}]
+
+Tu van nhanh — danh gia  (tvn-danhgia-R3.xlsx, 1 ban ghi)
+   "Ngày đánh giá": 1 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 1}]
+
+Tu van chuyen sau  (tv-chuyen-sau-R3.xlsx, 5 ban ghi)
+   "Ngày bắt đầu": 5 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 5}]
+   "Ngày tạo": 5 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 5}]
+   "Ngày hoàn thành": 0 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {}]
+
+Ngan hang cau hoi  (ngan-hang-ch-R3.xlsx, 1 ban ghi)
+   "Ngày tạo": 1 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 1}]
+
+Nhat ky he thong  (audit-log-R3.xlsx, 1379 ban ghi)
+   "Thời gian": 1379 o dung / 0 o sai  -> OK dd/MM/yyyy   [format o: {'General': 1379}]
+
+==============================================================================
+PHAN 2 — GIA TRI NGAY: MAN HINH vs TEP (cac ban ghi tung SAI o lan truoc)
+------------------------------------------------------------------------------
+VU VIEC HTPL — cot 'Ngay tiep nhan'
+   Ma vu viec                 Man hinh     Tep R2 (cu)  Tep R3 (nay) KQ
+   VV-QAW7-TV-MANGLUOI        12/04/2026   11/4/2026    12/04/2026   KHOP
+   VV-QAW7-TRALOI-UBND        10/04/2026   9/4/2026     10/04/2026   KHOP
+   VV-QAW7-DG01               01/03/2026   28/2/2026    01/03/2026   KHOP
+   VV-QA-010                  22/04/2026   21/4/2026    22/04/2026   KHOP
+   VV-QA-002                  01/04/2026   31/3/2026    01/04/2026   KHOP
+   VV-QA-001                  20/03/2026   19/3/2026    20/03/2026   KHOP
+
+THU VIEN BIEU MAU — cot 'Ngay tao' (3 thu muc tung lech)
+   QA-IMPORT-KQ         man hinh 25/07/2026  |  tep R2 (cu) 2026-07-24 19:59:48  |  tep R3 (nay) 25/07/2026 02:59  -> KHOP
+   QA-DESELECT-B        man hinh 25/07/2026  |  tep R2 (cu) 2026-07-24 19:08:30  |  tep R3 (nay) 25/07/2026 02:08  -> KHOP
+   QA-CK-DU             man hinh 25/07/2026  |  tep R2 (cu) 2026-07-24 19:08:11  |  tep R3 (nay) 25/07/2026 02:08  -> KHOP
+
+NHAT KY HE THONG — 1.379 ban ghi trong tep, dem o co gio < 07:00
+   Tong o ngay doc duoc: 1379   |   o co gio < 07:00: 349   vi du: ['25/07/2026 05:26', '25/07/2026 04:47', '25/07/2026 04:47']
+   (Lan truoc: 629/1.635 o co gio < 07:00 vi tep ghi theo gio quoc te.
+    Lan nay cac o gio rang sang van con la vi do la gio Viet Nam THAT — da doi chieu voi man hinh, khop.)
+
+==============================================================================
+PHAN 3 — BO LOC NGAY TREN MAN 'NHAT KY HE THONG' (VAN CON LOI)
+------------------------------------------------------------------------------
+
+Thao tac tren giao dien (tai khoan admin — Quan tri he thong):
+   Quan tri he thong > Nhat ky he thong > Bo loc nang cao
+   Go tay vao o 'Tu ngay' va 'Den ngay' roi bam nut [Tim kiem].
+
+ Loc              | So ket qua | Ngay HIEN THI cua ban ghi tra ve
+ -----------------+------------+---------------------------------------------
+ 22/07 -> 22/07   | 201        | trang 1 (moi nhat) TOAN BO la 23/07/2026
+                  |            | dong dau 23/07/2026 05:36:42
+                  |            | dong cuoi trang 23/07/2026 00:12:19
+                  |            | KHONG co dong nao hien 22/07/2026
+ 23/07 -> 23/07   | 195        | trang 1 tu 24/07/2026 02:03:04 xuong 23/07/2026 11:57:16
+                  |            | -> lot ca ban ghi cua ngay 24/07
+ 29/07 -> 29/07   | 32         | 29/07/2026 (hom nay chua co ban ghi truoc 07:00
+                  |            |  nen loi khong lo ra o moc nay)
+
+ Doi chung dong ho: dang nhap admin luc 10:19 gio Viet Nam
+   -> nhat ky hien '29/07/2026 10:19:26'  => phan HIEN THI dung gio Viet Nam.
+   => Sai nam o cho khoanh vung ngay cua bo loc: bien do bi day di 7 tieng,
+      cua so thuc te chay tu 07:00 ngay duoc chon den 06:59 ngay hom sau.
+

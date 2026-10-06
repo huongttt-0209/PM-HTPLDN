@@ -1,0 +1,2 @@
+﻿STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+28,File đính kèm TVV không preview,✅ Đạt,PASS,Cao,"R2 06-02: Tab Hồ sơ TVV → File đính kèm ""Danh sách tư vấn viên 1.pdf"" nút ""Xem"" mở tab MinIO PDF inline (disposition=inline) — SRS:1558"

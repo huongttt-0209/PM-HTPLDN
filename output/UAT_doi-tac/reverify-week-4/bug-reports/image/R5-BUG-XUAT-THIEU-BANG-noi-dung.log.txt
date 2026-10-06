@@ -1,0 +1,176 @@
+R5 RE-VERIFY — BUG-BCTK-XUAT-THIEU-BANG (XUATTEP_OOS_09)
+Ngay chay: 30/07/2026 ~11:30  |  Env: https://18.143.165.120.nip.io  |  Ban dung: V1.0.3
+Tai khoan: cbnv_tw_02 (CB Nghiep vu - Trung uong #02)
+Ky bao cao: Nam (01/01/2026 - 31/12/2026)  |  Don vi: Toan quoc
+Thao tac hoan toan tren giao dien: bam [Xem bao cao] -> [Xuat Excel] -> [Xuat PDF].
+================================================================================
+
+BOI CANH: luot 4 quet du 23 loai bao cao, 11/22 loai co du lieu con MAT het the so
+lieu va/hoac bang phu trong ca Excel lan PDF.
+
+--------------------------------------------------------------------------------
+PHAN 1 — QUET LAI DU 23 LOAI: THE SO LIEU VA BANG DA VE DU
+--------------------------------------------------------------------------------
+ Cach do: doc so the + so bang tren man hinh, roi mo tep dem lai. Voi Excel, tep
+ duoc chia thanh cac "phan" (khoi dong lien tiep khong rong) — moi the so lieu la
+ 1 phan, moi bang la 1 phan. Voi PDF dem so bang bang cong cu doc bang cua tep.
+
+ A. DOI CHIEU GIA TRI TUNG THE SO LIEU (khong chi dem so luong)
+    Tong so the do tren 22 loai co du lieu : 45
+    So the KHONG tim thay gia tri trong Excel : 0
+    So the KHONG tim thay gia tri trong PDF   : 0
+    => 45/45 the co mat, dung gia tri, o CA HAI dinh dang.
+
+ B. DOI CHIEU SO DONG TUNG BANG (man hinh vs Excel)
+    22/22 loai khop. So loai lech = 0.
+    (Quy tac doi: 1 phan bang trong Excel = 1 dong tieu de muc + 1 dong dau bang
+     + N dong du lieu, nen N phai bang so dong bang tren man.)
+
+ C. 11 LOAI TUNG HONG O LUOT 4 — NAY DU CA THE LAN BANG
+    Loai                              | Luot 4              | Luot 5
+    ----------------------------------+---------------------+---------------------
+    BC Danh gia hieu qua HTPL         | 0 the, 1/2 bang     | 4 the, 2/2 bang
+    BC So luong CG/TVV                | 0 the, 1/2 bang     | 3 the, 2/2 bang
+    BC Chat luong dao tao             | 0 the, 1 bang       | 4 the, 1 bang
+    BC Chi phi chi tra ho tro         | 0 the, 1 bang       | 3 the, 1 bang (+1 bang them)
+    BC Chi phi theo don vi            | 0 the, 1 bang       | 2 the, 1 bang
+    BC Chi phi theo loai hinh DN      | 0 the, 1 bang       | 2 the, 1 bang
+    BC Chi phi theo thoi gian         | 0 the, 1 bang       | 2 the, 1 bang
+    BC So luong chuong trinh ho tro   | 0 the, 1 bang       | 3 the, 1 bang (+2 bang them)
+    BC Chuong trinh theo don vi       | 0 the, 1 bang       | 2 the, 1 bang
+    BC Chuong trinh theo linh vuc     | 0 the, 1 bang       | 1 the, 1 bang
+    BC Chuong trinh theo thoi gian    | 0 the, 1 bang       | 3 the, 1 bang
+
+ D. HAI CA QUYET DINH — DOI CHIEU TUNG O
+    BC Danh gia hieu qua HTPL
+      Man hinh : 4 the (3 / 5 / 4 / 49) + 2 bang (Theo don vi 3 dong · Theo tieu chi 5 dong)
+      Excel    : 7 phan = tieu de + 4 the (3 / 5 / 4 / 49.32) + Theo don vi (3 dong)
+                 + Theo tieu chi (5 dong)
+      PDF      : 6 bang = 4 chi tieu + Theo don vi + Theo tieu chi
+      Bang "Theo don vi" khop tung o: Cuc Bo tro 90|1|1 · Bo KH&DT 80|1|1 ·
+      So TP Ha Noi 25.53|3|2  (man ghi 90,0 / 80,0 / 25,5 — cung so, khac cach lam tron)
+
+    BC So luong CG/TVV
+      Man hinh : 3 the (5 / 4 / 1) + 2 bang (Theo don vi 4 dong · Theo linh vuc 2 dong)
+      Excel    : 6 phan = tieu de + 3 the (5 / 4 / 1) + Theo don vi (4 dong)
+                 + Theo linh vuc (2 dong)
+      PDF      : 5 bang
+      Bang "Theo don vi" khop tung o: 1|1|2 · 1|0|1 · 1|0|1 · 1|0|1
+      Bang "Theo linh vuc": Thuong mai 2 · Doanh nghiep 1
+
+ => O MUC BANG VA THE SO LIEU, loi da duoc sua tren toan bo 22 loai co du lieu.
+
+--------------------------------------------------------------------------------
+PHAN 2 — CHO CON LAI: 2 BAO CAO DANG BANG CHEO BI THU VE 1 COT TONG
+--------------------------------------------------------------------------------
+ Luot 4 cham 4 bao cao "BC Vu viec theo ..." la DA DU vi chi dem SO BANG (man 1 bang,
+ tep 1 bang). Luot 5 do them TUNG COT thi lo ra 2 bao cao van mat noi dung.
+
+ [1] BC Vu viec theo linh vuc
+   MAN HINH — bang cheo 6 cot x 3 dong:
+     Linh vuc PL | Cuc Bo tro tu phap - Bo Tu phap | Bo Ke hoach va Dau tu |
+                 | So Tu phap Ha Noi | So Tu phap An Giang | Tong so
+     Dan su      |  13 | 0 | 0 | 0 | 13
+     Thue        |   1 | 0 | 0 | 0 |  1
+     Thuong mai  |   6 | 4 | 2 | 3 | 15
+     => 15 o so lieu.
+
+   TEP EXCEL (sheet 'Vu viec theo linh vuc', vung A1:B14) va TEP PDF — chi 2 cot:
+     Linh vuc phap luat | Tong so
+     Dan su     | 13
+     Thue       |  1
+     Thuong mai | 15
+     => 3 o so lieu. MAT 12 o = toan bo phan chia theo don vi.
+
+ [2] BC Vu viec theo loai hinh DN
+   MAN HINH — bang cheo 6 cot x 2 dong:
+     Loai hinh DN | So Tu phap An Giang | Cuc Bo tro tu phap | Bo KH&DT |
+                  | So Tu phap Ha Noi | Tong so
+     Nho       | 3 | 0 | 0 | 0 |  3
+     Sieu nho  | 0 | 7 | 4 | 2 | 13
+     => 10 o so lieu.
+
+   TEP EXCEL (sheet 'Vu viec theo loai hinh DN', vung A1:B13) va TEP PDF:
+     Quy mo DN | Tong so
+     Nho       |  3
+     Sieu nho  | 13
+     => 2 o so lieu. MAT 8 o.
+
+ KHONG CO DAU HIEU NAO trong tep bao rang phan chia theo don vi da bi luoc bo.
+
+ [3] PHEP THU DOI CHUNG — HAI BAO CAO CHEO KHAC LAI XUAT DUNG DU 6 COT
+   Man Bao cao thong ke co 4 bao cao dang bang cheo. Hai cai con lai xuat DUNG:
+
+   BC Vu viec theo don vi quan ly
+     Man hinh : Don vi | Moi | Tiep nhan | Dang ho tro | Hoan thanh | Tong so  (4 dong)
+     Tep Excel: Don vi | Moi | Tiep nhan | Dang ho tro | Hoan thanh | Tong so  (4 dong)
+       Bo KH&DT                        | 0 | 0 | 2 |  2 |  4
+       Cuc Bo tro tu phap - Bo Tu phap | 1 | 0 | 2 | 14 | 20
+       So Tu phap An Giang             | 0 | 1 | 1 |  0 |  3
+       So Tu phap Ha Noi               | 0 | 0 | 1 |  1 |  2
+     => du 6 cot, khop tung o.
+
+   BC Vu viec theo thoi gian chi tiet
+     Man hinh : Ky | Moi | Tiep nhan | Dang ho tro | Hoan thanh | Tong so
+     Tep Excel: Nam 2026 | 1 | 1 | 6 | 17 | 29   => du 6 cot, khop tung o.
+
+   => 2/4 bao cao cheo xuat du, 2/4 chi con cot Tong so. Tuc bo may ket xuat LAM DUOC
+      bang cheo; day la thieu sot rieng cua hai bao cao kia, khong phai han che dinh dang.
+
+--------------------------------------------------------------------------------
+PHAN 3 — CAN CU DAC TA CHO PHAN CON LAI
+--------------------------------------------------------------------------------
+ Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/srs-fr-11-bao-cao.md
+
+ FR-IX-12 — BC Vu viec theo linh vuc (UC135)
+   :602 Mo ta   — "Bao cao cross-tab vu viec theo linh vuc PL: hang = linh vuc,
+                   cot = don vi."
+   :608 Cong thuc — "... Dang cross-tab don vi"
+   :619 Output #4 — theo_don_vi[]  | structured | Dieu kien "LUON" | {don_vi, ten, so_luong}
+   :622 AC      — "Given CB tao BC When hien thi Then cross-tab: hang = linh vuc,
+                   cot = don vi"
+
+ FR-IX-13 — BC Vu viec theo loai hinh DN (UC136)
+   :635 Mo ta   — "Bao cao cross-tab vu viec theo loai doanh nghiep ..., phan theo don vi"
+   :658 Output #4 — theo_don_vi[]  | structured | Dieu kien "LUON" | {don_vi, ten, so_luong}
+   :661 AC      — "... cross-tab: hang = loai DN, cot = don vi"
+
+ Ca hai deu ghi dieu kien "Luon" cho theo_don_vi[], tuc phan chia theo don vi la
+ bat buoc co trong ket qua bao cao, khong phai tuy chon. Tep xuat dang bo han muc nay.
+ Them nua :86 yeu cau ban PDF "giu nguyen dinh dang trinh bay", nen mot bang cheo
+ 6 cot khong the ra thanh bang 2 cot.
+
+--------------------------------------------------------------------------------
+PHAN 4 — GHI NHAN THEM, KHONG DE XUAT SUA
+--------------------------------------------------------------------------------
+ a) Cot "Ty le" tren man co ma tep khong co, o 4 bao cao: BC So luong CG/TVV
+    (Linh vuc PL 66,7%/33,3%), BC Vu viec da tiep nhan, BC Vu viec dang ho tro,
+    BC Vu viec da hoan thanh (Ket qua 88,2%/11,8%).
+    KHONG tinh la loi: dac ta FR-IX-08 :465 dinh nghia theo_linh_vuc[] =
+    {linh_vuc, ten, so_luong} — KHONG co ty_le. Tuc man hinh dang hien thua mot cot
+    dan xuat, chu khong phai tep thieu. Ty le cung tinh duoc tu so luong / tong.
+
+ b) BC Danh gia hieu qua — bang "Theo tieu chi": man hinh dat ten cot la
+    "So luong" / "Ty le" nhung MOI O deu la dau '-'; trong khi tep ghi
+    "Trong so" / "Diem TB" co so thuc (100|8 · 40|9 · 30|8 · 20|9 · 10|8).
+    O day MAN HINH moi la ben thieu, khong phai tep. Ghi de theo doi rieng.
+
+ c) Mot so tep co THEM muc man hinh khong hien (khong phai loi, tep nhieu hon man):
+    BC Chi phi chi tra -> them bang "Theo quy mo doanh nghiep";
+    BC So luong chuong trinh -> them "Theo trang thai" + "Theo ky";
+    BC Vu viec da tiep nhan -> them "Theo ky";
+    BC Vu viec theo thoi gian -> tep co them cot Tu ngay / Den ngay.
+
+ d) BC Chi phi theo linh vuc: man hinh bao "Khong co du lieu bao cao cho ky va don vi
+    da chon", hai nut Xuat bi khoa -> khong do duoc, khong tinh vao phep dem.
+    (Giong luot 4.)
+
+================================================================================
+KET LUAN: VAN CON LOI (giu mo).
+ - Phan chinh DA SUA: 45/45 the so lieu va 22/22 loai co du lieu nay co du moi bang
+   nhu man hinh, dung gia tri, tren ca Excel lan PDF.
+ - Con lai HAI bao cao dang bang cheo (BC Vu viec theo linh vuc · BC Vu viec theo
+   loai hinh DN): tep bo toan bo phan chia theo don vi, chi giu cot Tong so
+   (mat 12 o va 8 o so lieu). Dac ta ghi theo_don_vi[] dieu kien "Luon".
+ - Luu y cho dev: hai bao cao nay luot 4 duoc cham "da du" vi khi do chi dem SO BANG
+   chu chua doi chieu TUNG COT. Day KHONG phai loi moi phat sinh tu ban sua lan nay.

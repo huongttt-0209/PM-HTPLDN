@@ -1,0 +1,5 @@
+- Đã kiểm tra lại danh sách Tổ chức tư vấn ở thẻ "Đang hoạt động", đặt cửa sổ trình duyệt ở bề ngang 1440 điểm ảnh.
+- Phần đã được sửa: bảng nay còn đúng 10 cột, cột "Đơn vị quản lý" đã được gỡ khỏi bảng. Bộ lọc "Đơn vị quản lý" phía trên bảng vẫn còn và vẫn lọc đúng (chọn "Sở Tư pháp An Giang" thì ra đúng 1 tổ chức thuộc đơn vị đó). Cột "Hành động" nay được ghim cố định bên phải nên luôn nhìn thấy.
+- Phần còn lỗi: bảng vẫn rộng hơn khung nhìn, phải kéo thanh cuộn ngang mới đọc được hai cột "Trạng thái" và "Công khai". Khi chưa cuộn, khung nhìn chỉ tới hết cột "Người đại diện" rồi nhảy thẳng sang cột "Hành động".
+- Hệ quả với người dùng: vẫn chưa xem được trạng thái và tình trạng công khai của tổ chức trong một lần nhìn, đúng điểm bất tiện đã phản ánh ban đầu.
+- Đề nghị thu gọn bề rộng các cột (hoặc bỏ bớt khoảng trống thừa) để cả ba cột cuối cùng nằm trọn trong khung nhìn ở bề ngang 1440 điểm ảnh.

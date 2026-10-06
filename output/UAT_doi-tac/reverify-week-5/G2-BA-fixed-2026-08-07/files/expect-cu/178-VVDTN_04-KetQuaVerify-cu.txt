@@ -1,0 +1,9 @@
+Verify 06/08/2026, bản dựng V1.0.8 (đối tác đo trên V1.0/V1.0.2), tài khoản cbnv_tw (CB Nghiệp vụ TW — đúng tác nhân), đối chứng thêm chính vai trò QTHT của đối tác.
+
+- Vế "bảng thiếu cột Theo kênh / Theo lĩnh vực": KHÔNG còn tái hiện. Màn hiện đủ bảng "Kênh tiếp nhận" (Trực tiếp 41, Doanh nghiệp 3) và bảng "Thống kê theo lĩnh vực pháp luật" (Thương mại 16, Dân sự 13, Lao động 12, Thuế 3). Hai chiều cộng khớp tổng 44; đếm lại độc lập từ danh sách vụ việc (45 bản ghi trừ 1 từ chối = 44, đúng công thức SRS) ra y hệt từng con số. Vai trò QTHT gọi trực tiếp API báo cáo cũng nhận đủ 2 chiều này.
+
+- Vế "không có biểu đồ tròn theo lĩnh vực": hiện trạng đúng là KHÔNG có biểu đồ tròn — màn render biểu đồ cột theo kênh + biểu đồ đường theo kỳ. Điểm này QA không tự chốt được vì kỳ vọng của đối tác NGƯỢC với đặc tả: SRS v3.5 (srs-fr-11-bao-cao.md:1065) chốt loại BC này dùng "Bar + Trend", trong khi cùng bảng đó lại gán Donut cho UC124 (:1064) và UC127 (:1067) — tức đặc tả cố ý không gán biểu đồ tròn cho báo cáo này. Đặc tả chỉ bắt buộc CÓ dữ liệu theo lĩnh vực (:215, điều kiện "Luôn"), không quy định phải trình bày bằng biểu đồ hay bảng.
+
+=> Cần BA chốt: giữ đặc tả (trả lời đối tác rằng bảng theo lĩnh vực là đủ) hay sửa đặc tả để bổ sung biểu đồ tròn. Chi tiết đối chiếu + đề xuất câu trả lời cho đối tác: cau-hoi-BA.md mục VVDTN_04.
+
+Lưu ý hiệu lực: đo trên môi trường nội bộ 18.143.165.120.nip.io bản V1.0.8, chưa phải môi trường đối tác.

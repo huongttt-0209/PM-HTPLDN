@@ -1,0 +1,21 @@
+⚠️ Cần BA xác nhận
+
+Cần BA chốt — hiện tượng tái hiện đúng, nhưng đặc tả v3.5 không có yêu cầu cảnh báo này.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), đo 2 lần bằng bộ bắt thông báo dùng chung (đã tự kiểm: đúng 1 bộ đo đang chạy nên số liệu hợp lệ).
+
+⚠️ 1) Hiện tượng tái hiện đúng, đo được 2 lần.
+- Lần 1: ô trả lời đang có 128 ký tự (nội dung lấy từ kho + đoạn cán bộ tự gõ thêm). Bấm "Chọn" ở một câu hỏi khác thì ô còn 53 ký tự — đúng bằng nội dung câu hỏi mới, đoạn tự gõ mất sạch. Không có hộp thoại xác nhận nào.
+- Lần 2 (đo chặt hơn): ô trả lời có 94 ký tự do cán bộ tự gõ HOÀN TOÀN, không lấy từ kho. Bấm "Chọn" ở câu hỏi khác thì nội dung vẫn bị ghi đè ngay. Đo được: 0 hộp thoại xác nhận, 0 thông báo, 0 lần gọi máy chủ.
+- Đã đếm bằng lớp cấu trúc trang chứ không chỉ nhìn màn hình, để loại trừ khả năng "hộp thoại có hiện nhưng tự tắt quá nhanh".
+
+2) Vì sao chưa chuyển dev được.
+- Đặc tả chỉ mô tả thao tác này là sao chép nội dung vào ô soạn: srs-fr-13-tv-nhanh.md dòng 572 ghi "Bấm [Chọn] thì chép câu trả lời vào ô soạn"; phần xử lý nghiệp vụ (bước 6) cũng chỉ ghi "chọn một câu hỏi phù hợp thì chép câu trả lời vào ô soạn; cán bộ được chỉnh sửa trước khi gửi".
+- Đã tìm toàn bộ đặc tả v3.5 cụm "Bạn đang thay thế" và các biến thể — không có kết quả nào. Câu cảnh báo mà phiếu test nêu không tồn tại trong đặc tả v3.5.
+- Quy ước chung của hệ thống có yêu cầu hỏi xác nhận, nhưng phạm vi là khi người dùng RỜI hoặc HỦY một biểu mẫu đang nhập dở, không phủ tình huống ghi đè một ô ngay trong biểu mẫu.
+
+⚠️ 3) Đề nghị BA chốt.
+- Khi cán bộ đã soạn nội dung riêng mà bấm chọn câu hỏi khác từ kho, hệ thống có phải hỏi xác nhận trước khi ghi đè không? Nếu có thì câu chữ chuẩn là gì?
+- Đây là rủi ro mất công soạn có thật, và liên quan trực tiếp tới QLKCHTV_36 (hệ thống cũng chưa có lưu nháp) — đề nghị BA cân nhắc hai điểm cùng lúc.
+
+4) Ghi chú trung thực về một thông báo lẫn vào lần đo đầu.
+- Lần 1 bộ đo có bắt được một khung chữ "Lỗi máy chủ, vui lòng thử lại sau.". Đã truy ra khung này đến từ lời gọi nền đếm thông báo chưa đọc bị lỗi tạm thời, hoàn toàn không liên quan thao tác chọn câu hỏi (thao tác này không gọi máy chủ lần nào). Gọi lại 3 lần sau đó đều bình thường. Không tính là lỗi, và lần đo thứ 2 chạy sạch với 0 thông báo.

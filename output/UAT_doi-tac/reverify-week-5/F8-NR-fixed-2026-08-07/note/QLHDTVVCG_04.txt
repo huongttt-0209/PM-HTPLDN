@@ -1,0 +1,43 @@
+📌 KẾT QUẢ CHUNG: ĐẠT — cả hai yêu cầu của phiếu đều đúng: bảng không còn dòng dữ liệu nào và hệ thống hiển thị đúng nguyên văn câu "Không tìm thấy hợp đồng phù hợp".
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-BbPPdate.js (bản lên lúc 13:47 ngày 07/08/2026), đo lúc 15:40-15:44 ngày 07/08/2026, cửa sổ trình duyệt 1440x900.
+
+TÀI KHOẢN THỰC DÙNG: cbnv_tw_05 (Cán bộ Nghiệp vụ Trung ương). Ban đầu dùng cbnv_tw_03 nhưng phiên bị hệ thống thu hồi giữa chừng do có phiên khác đăng nhập cùng tài khoản, nên đã chuyển sang tài khoản dự phòng CÙNG vai trò, CÙNG cấp, CÙNG đơn vị - phạm vi dữ liệu nhìn thấy không đổi.
+
+ĐƯỜNG VÀO THỰC TẾ VÀ MÀN ĐÃ CHẤM
+
+Bước 1 của phiếu ghi "Chọn menu Hợp đồng Tư vấn". Thanh bên KHÔNG có mục đó - đúng theo quyết định nghiệp vụ ngày 11/05/2026 (bỏ menu riêng), như phản hồi của bộ phận phát triển. Đây là đường đi, không phải điểm chấm, nên không tính là lỗi.
+
+Đã chấm trên MÀN 1: Chi tiết vụ việc VV-BTP-TW-20260804-002 > mục "HĐ tư vấn liên kết".
+
+✅ ĐÃ ĐẠT - vế 1: bảng dữ liệu để trống
+
+Trước khi thao tác, ô tìm kiếm để trống và bảng đang có 2 hợp đồng thật, phân trang hiện "1-2 / 2 mục". Sau khi gõ một chuỗi chắc chắn không tồn tại (ZZZKHONGTONTAI) rồi bấm nút Tìm kiếm, bảng KHÔNG còn dòng dữ liệu nào. Việc so trước/sau là bắt buộc để phân biệt "rỗng do lọc" với "rỗng do vốn chưa có dữ liệu" - ở đây chắc chắn là rỗng do lọc.
+
+Bảng vẫn giữ đủ 11 tiêu đề cột và khung bảng; đây là đúng, phiếu chỉ đòi bảng DỮ LIỆU để trống chứ không đòi ẩn cả bảng. Bộ đếm phân trang ẩn đi khi không có kết quả.
+
+Kiểm lại bằng đường thứ hai: đọc thẳng dữ liệu tìm kiếm từ máy chủ với cùng từ khóa - tổng số bản ghi trả về là 0, danh sách rỗng, số trang là 0. Khớp với những gì bảng đang hiển thị.
+
+✅ ĐÃ ĐẠT - vế 2: có hiển thị thông báo cho người dùng
+
+Vùng trống của bảng hiện đúng nguyên văn câu "Không tìm thấy hợp đồng phù hợp" - trùng TỪNG CHỮ với kỳ vọng ghi trong phiếu và với đặc tả srs-fr-14-hop-dong-tv.md:251 (mã thông báo INF-HDTV-TK-01).
+
+Đây là điểm dễ chấm sai nhất của phiếu nên đã làm kỹ: thông báo loại này thường là dạng nổi tự tắt sau vài giây, nếu chỉ nhìn màn sau khi thao tác xong thì rất dễ trượt mất rồi kết luận nhầm là "hệ thống im lặng". Vì vậy đã cài bộ bắt thông báo trên toàn trang TRƯỚC khi bấm nút, không lọc trùng, và đếm số thông báo theo mốc giờ chứ không theo số phần tử. Kết quả: đúng 1 thông báo tại 1 mốc giờ duy nhất, ứng với đúng 1 lượt gửi yêu cầu tìm kiếm. Tức không có thông báo nào bị trượt mất, cũng không có thông báo hiện lặp hai lần.
+
+Ghi nhận cho nghiệp vụ (không ảnh hưởng kết quả phiếu): chính đặc tả ghi câu thông báo theo hai cách khác nhau - dòng :251 ghi "Không tìm thấy hợp đồng phù hợp", dòng :258 ghi "Không tìm thấy hợp đồng". Phần mềm đang chạy theo dòng :251, tức đúng bằng câu mà phiếu kỳ vọng. Chênh lệch câu chữ nằm trong chính đặc tả, đề nghị nghiệp vụ chỉnh cho thống nhất một câu.
+
+🔎 PHẠM VI ĐÃ ĐO: môi trường nội bộ · 07/08/2026 15:40-15:44 · Cán bộ Nghiệp vụ Trung ương · mục HĐ tư vấn liên kết trên Chi tiết vụ việc · 1 lượt bấm Tìm kiếm trên giao diện với chuỗi không tồn tại, có bộ bắt thông báo cài trước, kèm đối chiếu với số liệu máy chủ.
+
+Lưu ý khi đọc cùng phiếu QLHDTVVCG_03: từ khóa dùng ở phiếu này là chuỗi KHÔNG DẤU, cố ý chọn như vậy để lỗi "không tìm được bằng từ khóa tiếng Việt có dấu" ghi ở phiếu QLHDTVVCG_03 không làm sai lệch phép đo này. Hai phiếu đo hai chuyện khác nhau và không mâu thuẫn nhau.
+
+DỮ LIỆU ĐÃ THAY ĐỔI: KHÔNG có. Phiếu này chỉ đọc, đúng như đặc tả ghi chức năng tìm kiếm không làm thay đổi dữ liệu. Không tạo, không sửa, không xóa bản ghi nào.
+
+Ảnh bằng chứng:
+- Trước khi tìm: ô tìm kiếm để trống, bảng có 2 dòng dữ liệu, phân trang "1-2 / 2 mục": https://drive.google.com/file/d/1SPLMPZxlVc4FyU_a859y_sUK0WeeqUrv/view?usp=drivesdk
+- Sau khi tìm bằng chuỗi không tồn tại: bảng không còn dòng dữ liệu nào, hiện câu "Không tìm thấy hợp đồng phù hợp", vẫn giữ tiêu đề cột: https://drive.google.com/file/d/1zobehZhkOEpmvB3zLT-z67yZjLetCRbO/view?usp=drivesdk
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.

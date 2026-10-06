@@ -1,0 +1,358 @@
+DGHQHTPL_06 — NGUYÊN VĂN thông báo trên màn + phản hồi máy chủ
+Màn: Báo cáo thống kê → BC Đánh giá hiệu quả HTPL (FR-IX-09, loai=danh-gia-hieu-qua)
+Env đo: https://18.143.165.120.nip.io   |   Ngày đo: 2026-08-06, 15:05 → 15:39 (giờ máy)
+Bản dựng TỰ ĐO (đo 2 lần: đầu phiên 15:06 và cuối phiên 15:36 — GIỐNG NHAU, không trôi):
+        index.html      etag W/"6a74340b-428"  · last-modified Thu, 06 Aug 2026 07:13:15 GMT
+        gói giao diện   assets/index-DIABnbIr.js
+                        md5 3904131cf562e0349890ac1bd058eb1f · 1.123.565 B
+                        etag W/"6a74340b-1124ed" · last-modified Thu, 06 Aug 2026 07:13:15 GMT
+        nhãn trong ứng dụng: HTPLDN · V1.0.8
+        ⇒ nhãn ứng dụng KHÔNG đổi qua lần dựng lại 07:13 GMT, nên nhãn không dùng để nhận
+          diện bản dựng. Verdict dưới đây chỉ có hiệu lực cho đúng bó mã md5 ghi trên.
+
+Bộ bắt thông báo: output/UAT_doi-tac/tools/toast-capture.js, cài lại TRƯỚC mỗi lần bấm,
+tự kiểm số bộ đo đang sống = 1 ở mọi lượt, KHÔNG lọc trùng, đọc innerText (không dùng
+textContent). Bổ sung bộ lấy mẫu NỘI DUNG 100 ms/lần (innerText + hình học + thời điểm)
+vì thư viện giao diện thay CHỮ ngay trong node cũ — bộ nghe "node mới thêm" bỏ sót chữ
+thứ hai (bài học đã ghi ở tieuchi/SLHDVM_06.md §8 và tieuchi/CGTVPL_06.md §3).
+Đếm thông báo theo MỐC GIỜ khác nhau, không theo số phần tử.
+
+===============================================================================
+PHẦN 1 — VAI TRÒ ĐẶC TẢ: cbnv_tw_05 (CB_NV_TW · cấp TW · donViId …0001)
+        (đây là vai trò ra verdict cho vế a + vế c)
+===============================================================================
+
+Xác nhận danh tính lấy từ /api/v1/auth/me của CHÍNH phiên đo:
+  hoTen "CB Nghiệp vụ - Trung ương #05" · vaiTro ["CB_NV_TW"] · capDonVi "TW"
+  donViId "00000000-0000-4000-8000-000000000001"
+  (KHÔNG dùng fallback Rule 7 — đăng nhập thẳng cbnv_tw_05 thành công ngay lần đầu.)
+
+--- Dạng 1 — không lọc đợt (Toàn quốc · Kỳ Năm 01/01→31/12/2026) ---
+Màn trước khi bấm : Tổng đợt đánh giá 4 · Tổng lượt đánh giá 8 · Tổng số vụ việc đã đánh
+                    giá 7 · Điểm trung bình chung 33
+                    Thời điểm tạo: 06/08/2026 15:13
+                    (ảnh DGHQHTPL_06-01)
+Bấm [Xuất Excel] → bộ đo trả:
+  SO_REQUEST = 1   → POST /api/v1/bao-cao/export
+  SO_KHUNG   = 1   (đếm theo mốc giờ)
+  MAU_NOI_DUNG (nguyên văn chữ NHÌN THẤY, theo thời gian):
+    "Đang tạo file..."     → "Tạo file thành công."
+  Không có chữ nào mang nghĩa "không tạo được tệp" (:116), không có chữ nào mang nghĩa
+  "từ chối quyền" (:117).
+Tệp người dùng nhận được: BaoCaoDanhGiaHieuQua_20260806_1514.xlsx (7.358 B)
+  md5 12cddfb63d6cb252ec522eeafc88eaed
+
+--- Dạng 2 — Đợt đánh giá = "Đợt đánh giá seed 2026" (Toàn quốc) ---
+Màn: 1 đợt · 3 lượt · 3 vụ việc · điểm TB 76 · Thời điểm tạo 06/08/2026 15:16
+     (ảnh DGHQHTPL_06-02)
+Bấm [Xuất Excel] → 1 request · chữ trên màn: "Đang tạo file..." → "Tạo file thành công."
+Tệp: BaoCaoDanhGiaHieuQua_20260806_1517.xlsx (7.018 B)
+  md5 c88241d652bbfe82d22b14dfbdf97c29
+
+--- Dạng 3 — Đợt đánh giá = "QA-THDG05-partial-save-te…" (Toàn quốc) ---
+Màn: 1 đợt · 3 lượt · 3 vụ việc · điểm TB 8 · Thời điểm tạo 06/08/2026 15:20
+     (ảnh DGHQHTPL_06-03 — số liệu ĐỔI so với dạng 2, cùng chiều lọc)
+Bấm [Xuất Excel] → 1 request · chữ trên màn: "Đang tạo file..." → "Tạo file thành công."
+Tệp: BaoCaoDanhGiaHieuQua_20260806_1521.xlsx (7.128 B)
+  md5 8a6e7ef29889de553298dd8a934533a5
+
+--- Dạng 4 — Đơn vị = Sở Tư pháp Hà Nội (STP-HN), đợt để trống ---
+Màn: 2 đợt · 3 lượt · 2 vụ việc · điểm TB 25 · Thời điểm tạo 06/08/2026 15:22
+     (ảnh DGHQHTPL_06-04)
+Bấm [Xuất Excel] → 1 request · chữ trên màn: "Đang tạo file..." → "Tạo file thành công."
+Tệp: BaoCaoDanhGiaHieuQua_20260806_1523.xlsx (7.166 B)
+  md5 2042ed1b0c7300b6678be4d12d610f06
+
+--- Phép thử chống đè tệp (§H8 bắt buộc có giờ-phút) ---
+Xuất LẠI dạng 4, cùng cấu hình, lúc 15:25:
+  BaoCaoDanhGiaHieuQua_20260806_1525.xlsx (7.167 B, md5 c1efcc2640d48254d1810eb240e95b42)
+  15:23 vs 15:25 → HAI tên tệp KHÁC NHAU, tệp cũ không bị đè.
+  Nội dung số liệu giống hệt nhau (đúng, vì cùng cấu hình); md5 khác do dấu thời gian
+  bên trong tệp.
+
+--- Nút [Xuất PDF] ---
+Bấm [Xuất PDF] → KHÔNG tải ngay, mở hộp thoại "Tùy chọn in báo cáo PDF"
+  (ảnh DGHQHTPL_06-05: Khổ giấy A4/A3/Letter · Hướng giấy Dọc/Ngang · nút [Hủy] [Xuất file]).
+  Bấm [Xuất file] trong hộp thoại → tệp về máy:
+  BaoCaoDanhGiaHieuQua_20260806_1524.pdf (34.996 B, %PDF, khổ A4, có quốc hiệu)
+⚠️ Bẫy đã lường trước và tránh được: hộp thoại còn mở sẽ nuốt cú bấm kế tiếp — đã đóng
+   hộp thoại trước khi bấm nút khác.
+
+--- ĐƯỜNG THỨ HAI cho vai trò đặc tả: gọi thẳng máy chủ, cùng phiên (15:39) ---
+  POST /api/v1/bao-cao/export
+    thân gửi {"loaiBaoCao":"BC_DANH_GIA_HIEU_QUA","kyBaoCao":"NAM","tuNgay":"2026-01-01",
+              "denNgay":"2026-12-31","filterDacThu":{},"formatXuat":"XLSX"}
+    → 200 · content-type application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      content-disposition: attachment; filename="BaoCaoDanhGiaHieuQua_20260806_1539.xlsx"
+      thân trả về 7.358 B nhị phân  (đúng bằng dạng 1 — cùng cấu hình)
+  POST /api/v1/bao-cao/export
+    thân gửi {… "filterDacThu":{"dotDanhGiaId":"5eed0006-0000-4000-8000-000000000001"} …}
+    → 200 · content-disposition: attachment; filename="BaoCaoDanhGiaHieuQua_20260806_1539.xlsx"
+      thân trả về 7.018 B  (đúng bằng dạng 2 — tệp BÁM bộ lọc, không trả bản không lọc)
+
+TỔNG VAI TRÒ ĐẶC TẢ: 7 lượt xuất (4 dạng + 1 xuất lại + 1 PDF + 1 gọi thẳng… và thêm 1
+lượt gọi thẳng có lọc) → 8/8 đều RA TỆP THẬT. Không lượt nào hiện chữ mang nghĩa
+"không tạo được tệp" hay "bị từ chối quyền".
+
+===============================================================================
+PHẦN 2 — VAI TRÒ ĐỐI TÁC DÙNG: Quản trị viên · QTHT · BTP · TW
+        (đây là vai trò ra verdict cho vế b)
+===============================================================================
+
+Tài khoản đăng nhập: `admin` (tài khoản quản trị hệ thống của môi trường).
+Danh tính lấy từ /api/v1/auth/me của CHÍNH phiên đo:
+  hoTen "Quản trị hệ thống" · vaiTro ["QTHT"] · capDonVi "TW"
+  donViId "00000000-0000-4000-8000-000000000001"  ← TRÙNG đơn vị với cbnv_tw_05
+Đọc thêm từ thẻ đăng nhập trong yêu cầu (giải mã phần giữa của access_token):
+  sub "00000000-0000-4000-8000-000000000099" · vaiTro ["QTHT"] · capDonVi "TW"
+  donViId "00000000-0000-4000-8000-000000000001" · hoTen "Quản trị hệ thống"
+Hai phiên chạy ở HAI ngữ cảnh trình duyệt tách biệt để không lẫn phiên của nhau.
+
+--- Bước 1: XEM báo cáo — CHẠY ĐƯỢC ---
+GET /api/v1/bao-cao/danh-gia-hieu-qua?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+  → 200
+Màn render đầy đủ: Tổng đợt đánh giá 4 · Tổng lượt đánh giá 8 · Tổng số vụ việc đã đánh
+giá 7 · Điểm trung bình chung 33 · Thời điểm tạo: 06/08/2026 15:31
+Hai nút [Xuất Excel] và [Xuất PDF] đều HIỆN và BẬT (disabled = false):
+  [{"text":"Xem báo cáo","disabled":false},{"text":"Xuất Excel","disabled":false},
+   {"text":"Xuất PDF","disabled":false}]
+Ảnh: DGHQHTPL_06-06-vaitro-QTHT-xem-duoc-bao-cao-nut-xuat-bat-V108.png
+Cấu hình bộ lọc đúng VÒNG 2 của đối tác: Kỳ Năm 01/01→31/12/2026 · Đơn vị Toàn quốc ·
+Đợt đánh giá để trống (URL không có tham số đợt).
+
+--- Bước 2: bấm [Xuất Excel] — LẦN 1 (15:32) ---
+Bộ đo trả:
+  SO_REQUEST = 1   → POST /api/v1/bao-cao/export
+  MAU_NOI_DUNG (nguyên văn chữ NHÌN THẤY, theo thời gian, gốc t0 = lúc hẹn giờ bấm):
+    t = 2618 ms  "Forbidden"   w=1432 h=41   (khung vừa trượt vào)
+    t = 2718 ms  "Forbidden"   w=1432 h=51
+    t = 2817 ms  "Forbidden"   w=1432 h=56
+    t = 2918 ms  "Forbidden"   w=1432 h=56   (khung đứng yên)
+    t = 5619 ms  "Forbidden"   (bắt đầu trượt ra)
+    t = 5918 ms  <<biến mất>>
+  ⇒ khung thông báo SỐNG ~3,3 s; chữ hiện ra cho người dùng là chuỗi tiếng Anh thô
+    "Forbidden". Không có câu tiếng Việt nào.
+
+NGUYÊN VĂN phản hồi máy chủ của CHÍNH cú bấm đó (reqid 141):
+  POST https://18.143.165.120.nip.io/api/v1/bao-cao/export
+  Thân gửi lên:
+    {"loaiBaoCao":"BC_DANH_GIA_HIEU_QUA","kyBaoCao":"NAM","tuNgay":"2026-01-01",
+     "denNgay":"2026-12-31","filterDacThu":{},"formatXuat":"XLSX"}
+  Mã trả về: 403
+  Header trả về: content-type: application/json; charset=utf-8 · content-length: 167
+                 (KHÔNG có content-disposition ⇒ không có tệp đính kèm)
+  Thân trả về (nguyên văn):
+    {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+     "timestamp":"2026-08-06T08:32:44.008Z",
+     "requestId":"8c55457f-5e95-4fc7-8f9e-be7d5d91b029"}}
+
+--- Bước 3: bấm [Xuất Excel] — LẦN 2 (15:33) ---
+  MAU_NOI_DUNG: t = 461 ms "Đang tạo file..." → t = 561 ms "Forbidden" → t = 3861 ms biến mất
+  ⇒ giao diện có hiện "Đang tạo file..." rất ngắn rồi thay bằng "Forbidden" TRONG CÙNG
+    khung thông báo (đúng lý do phải dùng bộ lấy mẫu nội dung, không dùng bộ nghe node mới).
+
+--- Bước 4: bấm [Xuất Excel] — 6 LẦN LIÊN TIẾP (15:34, cách nhau 3,4 s) ---
+  Cả 6 lượt lặp lại y hệt: "Đang tạo file..." → "Forbidden" → biến mất sau ~3,3 s.
+  Ảnh chụp đúng lúc khung còn sống:
+    DGHQHTPL_06-07-vaitro-QTHT-thong-bao-Forbidden-khi-xuat-excel-V108.png
+    (khung ĐỎ chữ "Forbidden" ở đỉnh màn, báo cáo vẫn hiện 4 · 8 · 7 · 33)
+  Cộng dồn ở bước 2+3+4: 8 cú bấm [Xuất Excel] → 8 POST /api/v1/bao-cao/export → 8 lần 403.
+
+--- Bước 5: nút [Xuất PDF] của vai trò QTHT (15:35) ---
+  Bấm [Xuất PDF] → mở hộp thoại "Tùy chọn in báo cáo PDF" bình thường (A4 · Dọc mặc định).
+  Bấm [Xuất file] → 3 lượt gọi, cả 3 đều 403. Thân gửi lên (reqid 154):
+    {"loaiBaoCao":"BC_DANH_GIA_HIEU_QUA","kyBaoCao":"NAM","tuNgay":"2026-01-01",
+     "denNgay":"2026-12-31","filterDacThu":{},"formatXuat":"PDF","khoGiay":"A4",
+     "huongGiay":"portrait"}
+  Thân trả về:
+    {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+     "timestamp":"2026-08-06T08:35:00.178Z",
+     "requestId":"bb894495-d34a-422f-a408-02fa6f556ccd"}}
+  Chữ trên màn: "Forbidden" (ảnh DGHQHTPL_06-08-vaitro-QTHT-thong-bao-Forbidden-khi-xuat-pdf).
+
+--- Bước 6: ĐƯỜNG THỨ HAI — gọi thẳng máy chủ, cùng phiên QTHT (15:35) ---
+  POST /api/v1/bao-cao/export  formatXuat "XLSX" → 403
+    content-disposition: (không có) · content-type: application/json
+    {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+     "timestamp":"2026-08-06T08:35:38.808Z","requestId":"a07c61b9-ae3b-47b1-bbb0-c02cea529967"}}
+  POST /api/v1/bao-cao/export  formatXuat "PDF"  → 403
+    {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+     "timestamp":"2026-08-06T08:35:38.865Z","requestId":"6ced9049-6f85-4e01-9720-f96ae8aa06bd"}}
+  ⇒ 13/13 lượt của vai trò QTHT (11 bấm chuột + 2 gọi thẳng) đều 403, cùng một mã lỗi
+    ERR-PERM-SYS-00-01. Không phải chập chờn.
+
+--- Bước 7: ĐỐI CHỨNG — cùng yêu cầu, cùng đơn vị, KHÁC VAI TRÒ ---
+  Phiên cbnv_tw_05, POST /api/v1/bao-cao/export với THÂN Y HỆT → 200
+    content-disposition: attachment; filename="BaoCaoDanhGiaHieuQua_20260806_1539.xlsx"
+    thân trả về 7.358 B nhị phân
+  ⇒ đường xuất tệp KHÔNG hỏng; đúng vai trò thì chạy. Chỉ vai trò QTHT bị chặn.
+
+--- Bước 8: có tệp nào về máy cho QTHT không? ---
+  Quét thư mục tải xuống với mốc "mới hơn 2026-08-06 15:29": KHÔNG có tệp .xlsx/.pdf nào
+  (đếm được 0 tệp). ⇒ 0 tệp qua 13 lượt thử của QTHT. Người dùng ra về tay trắng.
+
+--- Đối chiếu với bằng chứng đối tác ---
+  Vòng 2 của đối tác (31/07, ảnh DGHQHTPL_06_v2.jpg): cùng vai trò QTHT · BTP·TW, cùng
+  cấu hình (Năm 2026, Toàn quốc, đợt trống), báo cáo đã render, khung thông báo đỏ chữ
+  "Forbidden" ở đỉnh màn. ⇒ TÁI HIỆN NGUYÊN VẸN, cả chữ lẫn vị trí khung.
+
+===============================================================================
+PHẦN 3 — TÊN TỆP: đo theo KHUÔN §H8, không đo theo chuỗi đối tác viết
+===============================================================================
+
+Nguồn tên tệp (nguồn người dùng thật thấy — 2 nguồn độc lập, có kiểm chéo):
+  ① tệp rơi về thư mục tải xuống của máy
+  ② content-disposition của chính phản hồi thao tác đó
+  Kiểm chéo: md5 của tệp tải về và md5 của thân phản hồi TRÙNG NHAU từng lượt
+  (vd dạng 1 cùng 12cddfb63d6cb252ec522eeafc88eaed; dạng 2 cùng c88241d652bbfe82d22b14dfbdf97c29)
+  ⇒ hai nguồn nói về CÙNG một tệp, không phải hai thứ khác nhau.
+
+Bảng tên tệp thu được:
+  BaoCaoDanhGiaHieuQua_20260806_1514.xlsx   (dạng 1 — không lọc đợt)
+  BaoCaoDanhGiaHieuQua_20260806_1517.xlsx   (dạng 2 — lọc đợt "seed 2026")
+  BaoCaoDanhGiaHieuQua_20260806_1521.xlsx   (dạng 3 — lọc đợt "QA-THDG05…")
+  BaoCaoDanhGiaHieuQua_20260806_1523.xlsx   (dạng 4 — đơn vị STP-HN)
+  BaoCaoDanhGiaHieuQua_20260806_1525.xlsx   (xuất lại dạng 4 — phép thử chống đè)
+  BaoCaoDanhGiaHieuQua_20260806_1524.pdf    (nút [Xuất PDF])
+  BaoCaoDanhGiaHieuQua_20260806_1539.xlsx   (từ content-disposition, gọi thẳng máy chủ)
+
+Đối chiếu từng điều kiện của khuôn {TenBaoCao}_{YYYYMMDD_HHmm}.{đuôi}:
+  8a. có "_20260806_1514" = 8 chữ số ngày + "_" + 4 chữ số giờ-phút            → ĐẠT
+      giá trị khớp thời điểm xuất thật (tệp rơi về máy lúc 15:14-15:15)        → ĐẠT
+      7 tệp, 6 mốc giờ-phút khác nhau, không có hằng số / ngày cũ              → ĐẠT
+  8b. "BaoCaoDanhGiaHieuQua" chỉ gồm chữ cái không dấu + chữ số; không gạch nối,
+      không khoảng trắng, không dấu tiếng Việt, không dấu câu; gạch dưới chỉ ngăn đoạn → ĐẠT
+  8c. "DanhGiaHieuQua" = tên của CHÍNH loại báo cáo này (BC Đánh giá hiệu quả HTPL) → ĐẠT
+      Không mang tên loại báo cáo khác (không phải SoLuongCgTvv / DaoTao / ChiPhi / VuViec).
+      ⚠️ Đối tác viết kỳ vọng "BaoCaoDanhGia_…" — tên thực tế "BaoCaoDanhGiaHieuQua_…" DÀI
+      HƠN nhưng vẫn đúng nghĩa "tên loại báo cáo", nên theo mục 4 điều 8c là ĐẠT.
+      (Đòi đúng y hệt chuỗi của đối tác là prescribe — mục 4 đã cấm trước khi đo.)
+  8d. đuôi .xlsx khi bấm [Xuất Excel], .pdf khi bấm [Xuất PDF];
+      độ dài 40 ký tự ≤ 255                                                    → ĐẠT
+  Chống đè: 15:23 vs 15:25 → hai tên khác nhau, tệp cũ còn nguyên              → ĐẠT
+
+Số đo cũ 03/08/2026 (bản dựng V1.0.4, ghi trong B5-CONTEXT §4) để so:
+  bao-cao-<slug>-YYYY-MM-DD.xlsx   ← gạch nối + ngày có gạch + KHÔNG có giờ-phút
+  ⇒ khuôn tên tệp đã được sửa xong ở bản dựng đang đo.
+
+===============================================================================
+PHẦN 4 — NỘI DUNG BÊN TRONG TỆP (đọc bằng openpyxl, không dừng ở "200 + có bytes")
+===============================================================================
+
+Cả 5 tệp .xlsx đều mở được bằng openpyxl.load_workbook(), 1 sheet "BC Đánh giá hiệu quả".
+
+Header tệp — 4 thông tin :1092 đòi, có ĐỦ ở MỌI tệp:
+  ① "BC Đánh giá hiệu quả HTPL"                              (tiêu đề báo cáo)
+  ② "Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)"          (kỳ + khoảng thời gian)
+  ③ "Đơn vị: Toàn quốc"  /  "Đơn vị: Sở Tư pháp Hà Nội"       (đơn vị — ĐỔI theo bộ lọc)
+  ④ "Ngày tạo: 06/08/2026"                                    (ngày tạo)
+
+Dạng 1 — …_1514.xlsx (md5 12cddfb63d6cb252ec522eeafc88eaed, 7.358 B):
+  Tổng số đợt đánh giá 4 · Tổng số lượt đánh giá 8 · Số vụ việc được đánh giá 7
+  Điểm trung bình chung 33.9
+  Theo đơn vị: Bộ Kế hoạch và Đầu tư 80 | 1 | 1
+               Cục Bổ trợ tư pháp - Bộ Tư pháp 28.65 | 4 | 4
+               Sở Tư pháp Hà Nội 25.53 | 3 | 2
+    cộng cột số lượt : 1 + 4 + 3 = 8  = tổng số lượt ✓
+    cộng cột số vụ việc: 1 + 4 + 2 = 7 = số vụ việc được đánh giá ✓
+    điểm TB tổng 33.9 nằm trong [25.53 , 80] ✓ (đúng tính chất trung bình có trọng số :495)
+  Theo tiêu chí: 9 dòng, trọng số 100/40/40/30/30/20/20/10/10, điểm TB 8 … 9
+  Đối chiếu MÀN ↔ TỆP: 4 ↔ 4 · 8 ↔ 8 · 7 ↔ 7  (khớp)
+    điểm TB: thẻ trên màn hiện "33", tệp và máy chủ đều 33.9 (xem PHẦN 6 — ghi nhận,
+    không chấm, vì đặc tả im lặng về cách làm tròn).
+
+Dạng 2 — …_1517.xlsx (md5 c88241d652bbfe82d22b14dfbdf97c29, 7.018 B):
+  1 đợt · 3 lượt · 3 vụ việc · điểm TB 76.67
+  Theo đơn vị: Cục Bổ trợ tư pháp 90 | 1 | 1 · Bộ KH&ĐT 80 | 1 | 1 · Sở TP Hà Nội 60 | 1 | 1
+    cộng: 1+1+1 = 3 lượt ✓ · 1+1+1 = 3 vụ việc ✓ · (90+80+60)/3 = 76.67 ✓
+  Theo tiêu chí: bảng có tiêu đề nhưng KHÔNG có dòng (đợt này chưa gắn bộ tiêu chí) —
+    đặc tả không cấm, không chấm.
+  Đối chiếu MÀN ↔ TỆP: 1 ↔ 1 · 3 ↔ 3 · 3 ↔ 3 (khớp)
+
+Dạng 3 — …_1521.xlsx (md5 8a6e7ef29889de553298dd8a934533a5, 7.128 B):
+  1 đợt · 3 lượt · 3 vụ việc · điểm TB 8.2
+  Theo đơn vị: chỉ còn Cục Bổ trợ tư pháp - Bộ Tư pháp 8.2 | 3 | 3
+  Theo tiêu chí: 4 dòng (40/30/20/10 — 8.67 / 7.67 / 8.67 / 7)
+  Đối chiếu MÀN ↔ TỆP: 1 ↔ 1 · 3 ↔ 3 · 3 ↔ 3 (khớp)
+  ⇒ Dạng 2 và dạng 3 cùng chiều lọc nhưng cho HAI kết quả KHÁC HẲN (76.67 vs 8.2;
+    3 đơn vị vs 1 đơn vị) ⇒ bộ lọc "Đợt đánh giá" thật sự thu hẹp về đúng đợt được chọn,
+    đúng câu AC :511.
+
+Dạng 4 — …_1523.xlsx (md5 2042ed1b0c7300b6678be4d12d610f06, 7.166 B):
+  Header ③ đổi thành "Đơn vị: Sở Tư pháp Hà Nội"  ← tệp bám bộ lọc đơn vị
+  2 đợt · 3 lượt · 2 vụ việc · điểm TB 25.53
+  Theo đơn vị: chỉ 1 dòng Sở Tư pháp Hà Nội 25.53 | 3 | 2  (khớp dòng tương ứng ở dạng 1)
+  Đối chiếu MÀN ↔ TỆP: 2 ↔ 2 · 3 ↔ 3 · 2 ↔ 2 (khớp)
+
+Xuất lại dạng 4 — …_1525.xlsx (md5 c1efcc2640d48254d1810eb240e95b42): từng ô giống
+  …_1523.xlsx (đúng, cùng cấu hình); tên tệp khác ⇒ không đè.
+
+Kiểm chéo "tệp có bám bộ lọc không" (điều 6 mục 4):
+  4 dạng → 4 md5 KHÁC NHAU và số liệu bên trong khác nhau đúng theo cấu hình;
+  KHÔNG có cặp nào "màn khác số mà tệp giống hệt".
+  Kiểm thêm bằng kích thước tệp khi gọi thẳng máy chủ: không lọc 7.358 B ·
+  lọc dotDanhGiaId 7.018 B (đúng bằng dạng 2).
+
+Tệp PDF — BaoCaoDanhGiaHieuQua_20260806_1524.pdf: 34.996 B, %PDF, khổ A4, mở được,
+  có quốc hiệu. (Nội dung bên trong PDF ngoài vế đối tác nêu — chỉ ghi nhận.)
+
+===============================================================================
+PHẦN 5 — PHÉP ĐO BỘ LỌC ĐẶC THÙ "ĐỢT ĐÁNH GIÁ" (điều 7 của mục 4)
+        Cùng một phiên, cùng kỳ, cùng khoảng thời gian; chỉ đổi TÊN KHOÁ tham số.
+        Đợt dùng để đo = "Đợt đánh giá seed 2026" (5eed0006-0000-4000-8000-000000000001)
+===============================================================================
+
+GET /api/v1/bao-cao/danh-gia-hieu-qua?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31[+khoá]
+
+  khoá gửi lên                    | mã  | số VV | điểm TB | ngayTaoBc
+  --------------------------------+-----+-------+---------+----------------------
+  (không có)                      | 200 |   7   |  33.9   | 08:37:40.580Z
+  dotDanhGiaId   ← GIAO DIỆN GỬI  | 200 |   3   |  76.67  | 08:37:40.679Z  ← MỚI
+  fd_dotDanhGiaId                 | 200 |   7   |  33.9   | 08:37:40.580Z
+  keHoachDanhGiaId                | 200 |   7   |  33.9   | 08:37:40.580Z
+  ke_hoach_danh_gia_id (tên trong đặc tả :493) | 200 | 7 | 33.9 | 08:37:40.580Z
+
+BẰNG CHỨNG PHỤ — không phải do bộ nhớ đệm che kết quả:
+  4 dòng cho ra 7 / 33.9 đều dùng CHUNG một ngayTaoBc "08:37:40.580Z" ⇒ máy chủ coi chúng
+  là CÙNG MỘT khoá nhớ đệm, tức các khoá fd_dotDanhGiaId / keHoachDanhGiaId /
+  ke_hoach_danh_gia_id bị BỎ QUA hoàn toàn. Riêng dotDanhGiaId sinh ngayTaoBc MỚI ⇒ được
+  máy chủ NHẬN. Hai hành vi khác hẳn nhau, không thể giải thích bằng nhớ đệm.
+
+Đối chiếu MÀN ↔ MÁY CHỦ (đường thứ hai của điều 7):
+  Màn dạng 2 hiện 1/3/3/76  ↔  máy chủ trả 3 vụ việc / 76.67  → khớp
+  Màn dạng 3 hiện 1/3/3/8   ↔  máy chủ trả 3 vụ việc / 8.2    → khớp
+  "Thời điểm tạo" trên màn nhảy theo từng lượt bấm: 15:13 → 15:16 → 15:20 → 15:22
+  ⇒ không phải màn đang hiện bản nhớ đệm cũ.
+
+KẾT LUẬN PHÉP ĐO: bộ lọc "Đợt đánh giá" của màn FR-IX-09 CHẠY ĐÚNG — giao diện gửi khoá
+`dotDanhGiaId`, máy chủ nhận đúng khoá đó, cả trong lượt XEM lẫn trong `filterDacThu`
+của lượt XUẤT. KHÔNG có lỗi lệch tên khoá như phiên chính cảnh báo cho các màn khác
+(FR-IX-06 gửi `linhVuc`, FR-IX-08 gửi `linhVucCm`, máy chủ nhận `linhVucId`).
+Ghi chú: tên `ke_hoach_danh_gia_id` viết trong đặc tả :493 chỉ là tên khái niệm; máy chủ
+đặt tên khoá là `dotDanhGiaId` và giao diện gửi đúng khoá đó, nên KHÔNG phải lỗi.
+
+===============================================================================
+PHẦN 6 — GHI NHẬN NGOÀI VẾ ĐỐI TÁC NÊU (không kéo verdict, không mở dòng bug mới)
+===============================================================================
+
+(a) Đặc tả :507 liệt kê output `theo_dot[]` {dot_id, ten_dot, diem_tb} với điều kiện hiển
+    thị "Luôn". Phản hồi máy chủ có các khoá:
+      ["tenBaoCao","ngayTaoBc","tuNgay","denNgay","tongDotDanhGia","tongLuotDanhGia",
+       "soVuViecDanhGia","diemTrungBinhChung","theoDonVi","theoTieuChi","chartTypes"]
+    KHÔNG có `theoDot`; tệp xuất cũng không có bảng "Theo đợt" (chỉ có "Theo đơn vị" và
+    "Theo tiêu chí"). ⇒ thiếu 1 nhóm output điều kiện "Luôn". Đây là vế NGOÀI phạm vi 3 vế
+    đối tác nêu (đối tác nêu: không xuất được tệp / Forbidden / tên tệp) ⇒ chỉ ghi nhận.
+
+(b) Thẻ "Điểm trung bình chung" trên màn CẮT phần thập phân: 33.9 → hiện "33";
+    76.67 → "76"; 8.2 → "8"; 25.53 → "25". Bảng "Theo đơn vị" trên màn thì làm tròn 1 chữ
+    số (80,0 · 28,7 · 25,5) còn tệp giữ đủ (80 · 28.65 · 25.53). Đặc tả không nêu công
+    thức làm tròn ⇒ mục 4 đã ghi trước là KHÔNG chấm Fail; chỉ ghi nhận.
+
+===============================================================================
+PHẦN 7 — PHẠM VI
+===============================================================================
+
+Không seed, không sửa, không xoá bất kỳ dữ liệu nào trên môi trường. Toàn bộ thao tác chỉ
+đọc: xem báo cáo + xuất tệp. Đăng nhập 2 tài khoản (cbnv_tw_05 và tài khoản quản trị
+`admin`) ở hai ngữ cảnh trình duyệt tách biệt để hai vai trò không lẫn phiên của nhau.
+Tất cả tệp thu được lưu ở thu-QLTLPLCVV_15-2026-08-06/testfiles/ (tiền tố DGHQHTPL_06-).

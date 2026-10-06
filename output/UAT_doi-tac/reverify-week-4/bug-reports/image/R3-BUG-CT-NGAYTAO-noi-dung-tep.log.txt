@@ -1,0 +1,32 @@
+TEP : ct-htpldn-2026-07-29.xlsx
+SHA256: b2568855e66a2737e3c0b71c1d670725753aae3bd92a6060b7cab44ca2818da8
+SHEET: Chương trình HTPL | so dong: 15 | so cot: 13
+TIEU DE COT: ['Mã CT', 'Tên CT', 'Mục tiêu', 'Đối tượng', 'Trạng thái', 'Lĩnh vực', 'Đơn vị', 'Thời gian bắt đầu', 'Thời gian kết thúc', 'Ngân sách', 'Là công bố', 'Số đợt BC', 'Ngày tạo']
+
+=== Cot "Ngay tao" — doi chieu voi ngay nam trong ma CT ===
+CT-20260729-0001     ngay trong ma=29/07/2026             Ngay tao='29/07/2026'   kieu=str      dinh dang o='General'  OK
+CT-20260728-0005     ngay trong ma=28/07/2026             Ngay tao='28/07/2026'   kieu=str      dinh dang o='General'  OK
+CT-20260728-0004     ngay trong ma=28/07/2026             Ngay tao='28/07/2026'   kieu=str      dinh dang o='General'  OK
+CT-20260728-0003     ngay trong ma=28/07/2026             Ngay tao='28/07/2026'   kieu=str      dinh dang o='General'  OK
+CT-20260728-0002     ngay trong ma=28/07/2026             Ngay tao='28/07/2026'   kieu=str      dinh dang o='General'  OK
+CT-20260728-0001     ngay trong ma=28/07/2026             Ngay tao='28/07/2026'   kieu=str      dinh dang o='General'  OK
+CT-20260725-0002     ngay trong ma=25/07/2026             Ngay tao='25/07/2026'   kieu=str      dinh dang o='General'  OK
+CT-20260725-0001     ngay trong ma=25/07/2026             Ngay tao='25/07/2026'   kieu=str      dinh dang o='General'  OK
+CT-20260724-0001     ngay trong ma=24/07/2026             Ngay tao='24/07/2026'   kieu=str      dinh dang o='General'  OK
+CT-20260721-0004     ngay trong ma=21/07/2026             Ngay tao='21/07/2026'   kieu=str      dinh dang o='General'  OK
+CT-20260721-0003     ngay trong ma=21/07/2026             Ngay tao='21/07/2026'   kieu=str      dinh dang o='General'  OK
+CT-20260721-0002     ngay trong ma=21/07/2026             Ngay tao='21/07/2026'   kieu=str      dinh dang o='General'  OK
+CT-20260721-0001     ngay trong ma=21/07/2026             Ngay tao='21/07/2026'   kieu=str      dinh dang o='General'  OK
+CTHTPL-SEED-0001     ngay trong ma=(ma khong chua ngay)   Ngay tao='30/06/2026'   kieu=str      dinh dang o='General'  OK
+
+So dong LECH = 0
+
+=== Ban ghi tao moi ngay trong phien do ===
+Dong ho may luc bam Luu : 2026-07-29 10:07:20 +07 -> 10:07:25 +07
+Ma CT he thong sinh ra  : CT-20260729-0001
+O "Ngay tao" trong tep  : '29/07/2026' | kieu = str | dinh dang o = 'General'
+
+=== Dinh dang toan bo cac cot ngay ===
+Thời gian bắt đầu      {'dd/MM/yyyy': 14}
+Thời gian kết thúc     {'dd/MM/yyyy': 12, '(trong)': 2}
+Ngày tạo               {'dd/MM/yyyy': 14}

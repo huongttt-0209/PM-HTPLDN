@@ -1,0 +1,32 @@
+✅ HIỆN TẠI ĐẠT — đúng yêu cầu của phiếu ở cả hai vế.
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-eWHwDgt2.js (bản lên lúc 09:11 ngày 07/08/2026), đo lúc 12:55–13:02 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Địa phương cbnv_dp_03 (Sở Tư pháp An Giang) - đúng vai trò lập báo cáo của đơn vị nộp, không dùng tài khoản quản trị.
+
+TIỀN ĐỀ ĐÃ DỰNG (để "báo cáo chưa đầy đủ" là thật, không phải do hệ thống tự coi là thiếu)
+
+Dùng đợt DOT-SO_BO_6_THANG-2026-1, biểu mẫu 21a, báo cáo của Sở Tư pháp An Giang. Trên bảng 13 chỉ tiêu, có 11 chỉ tiêu do hệ thống tự tính (không có ô nhập, hiển thị kèm chữ HT) và 2 chỉ tiêu cuối có ô nhập tay. Cán bộ đã điền chỉ tiêu 12 "KP chi HĐ khác" = 40.000.000 kèm ghi chú mốc giờ QA-F8-341-20260807-1300, và CỐ Ý ĐỂ TRỐNG chỉ tiêu 13 "KP xã hội hóa", rồi bấm "Lưu nháp". Tải lại trang bằng địa chỉ để xác minh: chỉ tiêu 13 vẫn trống trong dữ liệu đã lưu. Đây đúng nghĩa "chưa đầy đủ" mà đặc tả quy định (srs-fr-15-ct-htpldn.md:802 - ô để trống là chưa điền, giá trị 0 vẫn tính là đã điền).
+
+ĐÃ ĐẠT — 2 phần
+
+1) Hệ thống CHẶN thao tác trình duyệt khi báo cáo còn chỉ tiêu bỏ trống. Bấm nút "Trình duyệt KQ" trên giao diện rồi xác nhận "Đồng ý" lúc 13:00:18: thao tác không đi lọt. Kiểm lại bằng đường thứ hai (đọc lại chính bản ghi từ máy chủ bằng phiên đăng nhập của cán bộ đó, lúc 13:02): trạng thái đợt, trạng thái nộp của đơn vị và trạng thái bản báo cáo đều GIỮ NGUYÊN (đơn vị vẫn "Đang lập báo cáo", báo cáo vẫn ở bản nháp), không có mốc thời gian trình duyệt nào được ghi. Trên màn hình, thanh tiến trình vẫn dừng ở bước 2 "Đang lập BC". Hai đường đo khớp nhau. Yêu cầu của đặc tả tại srs-fr-15-ct-htpldn.md:830 (báo cáo còn chỉ tiêu bỏ trống thì phải chặn khi cán bộ nhấn trình phê duyệt).
+
+2) Câu chữ hiển thị ĐÚNG NGUYÊN VĂN như phiếu yêu cầu. Người dùng nhìn thấy thông báo "Vui lòng hoàn chỉnh báo cáo trước khi trình" - trùng khít từng chữ với chuỗi đặc tả quy định tại srs-fr-15-ct-htpldn.md:825. Bộ bắt thông báo được cài trước thao tác và không lọc trùng: một lượt bấm sinh đúng một yêu cầu gửi đi và đúng một thông báo (hai nút hiển thị bắt được là khung ngoài và phần thân của cùng một thông báo, cùng một mốc giờ), không có hiện tượng thông báo hiện hai lần. Đối chiếu với phản hồi của máy chủ cho chính lượt bấm đó: cùng câu chữ, kèm mã lỗi ERR-XI-07-01 đúng như đặc tả khai, và phần chi tiết chỉ rõ chỉ tiêu còn thiếu là "13. KP xã hội hóa".
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Mã lỗi trả về nay đúng đặc tả (ERR-XI-07-01). Ở đợt kiểm trước, hệ thống trả mã khác (ERR-VAL-XI-07-02) và đội đã gửi ghi nhận; điểm này coi như đã xử lý.
+- Danh sách "chỉ tiêu còn thiếu" nay chỉ liệt kê đúng ô mà cán bộ bỏ trống, không còn kéo theo các chỉ tiêu do hệ thống tự tính; đồng thời giao diện đã gửi đủ các chỉ tiêu tự tính khi lưu nháp. Đây là thông tin liên quan tới phiếu TPDBCKQTHCT_01 (lập báo cáo đầy đủ rồi trình), đề nghị bên đó kiểm lại.
+- Một điểm nhỏ về giao diện, chưa đủ căn cứ để coi là lỗi vì đặc tả không quy định: hộp xác nhận "Trình duyệt kết quả?" không tự đóng sau khi máy chủ từ chối, người dùng thấy thông báo lỗi nhưng vẫn phải tự bấm "Hủy" để đóng hộp thoại.
+
+Ảnh bằng chứng:
+- Tiền đề: bảng chỉ tiêu sau khi lưu và tải lại trang, chỉ tiêu 13 "KP xã hội hóa" để trống, chỉ tiêu 12 đã điền kèm ghi chú mốc giờ: https://drive.google.com/file/d/1OPCSjZpBVBKNrI_93PQTeu6Zioq8togv/view?usp=drivesdk
+- Ngay sau khi bấm trình duyệt và xác nhận, thao tác bị chặn, thanh tiến trình vẫn ở bước 2 "Đang lập BC": https://drive.google.com/file/d/1lpmUNNvzda78DvYl8IC9nDYmyp3TtMYi/view?usp=drivesdk
+- Sau khi đóng hộp xác nhận, ô Trạng thái vẫn là "Đang lập báo cáo" - trạng thái không đổi: https://drive.google.com/file/d/1MpBJjfrdpSE0iYHzgechpHHj5lZEkgPz/view?usp=drivesdk
+
+Lưu ý về dữ liệu: để có tiền đề "báo cáo chưa đầy đủ", lượt đo này đã ghi số liệu vào bản báo cáo đang lập của Sở Tư pháp An Giang trong đợt DOT-SO_BO_6_THANG-2026-1 trên môi trường nội bộ (điền chỉ tiêu 12, để trống chỉ tiêu 13). Báo cáo vẫn ở bản nháp, không chuyển trạng thái, không đụng tới đợt DOT-THBC01-UAT của các phiếu tổng hợp.
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay đúng yêu cầu, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.

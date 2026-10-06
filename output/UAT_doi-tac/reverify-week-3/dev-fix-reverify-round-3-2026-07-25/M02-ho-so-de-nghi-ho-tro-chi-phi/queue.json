@@ -1,0 +1,47 @@
+[
+ {
+  "row": 16,
+  "Mã TC": "QLHSDNHTCP_03",
+  "Tên chức năng": "",
+  "Mô tả": "Kiểm tra Cột dữ liệu trong bảng kết quả",
+  "Điều kiện": "1. Đăng nhập tài khoản",
+  "Dữ liệu đầu vào": "",
+  "Các bước thực hiện": "1. Chọn menu \"Chi trả chi phí\"",
+  "Kết quả mong đợi": "- Hệ thống hiển thị các trường thông tin giống với thiết kế\n- Dữ liệu hiển thị đúng định dạng và trường thông tin\n- Dữ liệu hiển thị không bị tràn/đè lên nhau, đồng nhất ngôn ngữ hiển thị\n- Mặc định: hệ thống sắp xếp theo ngày cập nhật mới nhất trước, 20 bản ghi mỗi trang.",
+  "Kết quả thực tế": "Cột thông tin Mức cảnh báo thời hạn không giống với thiết kế",
+  "Trạng thái dev fix 1": "dev done",
+  "Verify": "Open",
+  "DEV phản hồi lần 1": "✅ Bug đúng (BA 24/07/2026) — Loại 2: BA chốt chuẩn hóa cảnh báo thời hạn và ĐÃ cập nhật đặc tả, Dev sửa hiển thị theo đặc tả mới. Cột SLA của danh sách hồ sơ chi trả phải hiển thị 4 mức cảnh báo theo BR-SLA-02 — Bình thường (còn > 50% thời lượng) / Sắp hết hạn (còn < 50%) / Quá hạn (> 100%) / Quá hạn nghiêm trọng (> 200%) — kèm số ngày còn lại; app hiện chỉ đếm ngày + tô màu, không thuộc bộ nhãn nào. Toàn hệ thống dùng chung một mô hình BR-SLA-02, bỏ mô hình 70/85 riêng của Chi trả. Căn cứ: srs-fr-06-chi-tra.md:1058 (cột #16 SLA = 4 mức theo BR-SLA-02), :1311 (trường mức cảnh báo với 4 giá trị + ngưỡng 50/100/200, BA điều chỉnh 24/07/2026), :1514-1523 (bảng ngưỡng + quy tắc ưu tiên mức). Tên cột \"SLA\" của app đã khớp đặc tả, không đổi. Mức Minor.\n\n── CÁCH VERIFY sau Dev fix ──\nPrecondition: cbnv_tw / Test@1234, mở danh sách \"Hồ sơ Đề nghị Hỗ trợ Chi phí\". Cần dữ liệu phủ đủ mức: ít nhất 1 hồ sơ còn > 50% thời lượng, 1 hồ sơ còn < 50%, 1 hồ sơ đã quá hạn, 1 hồ sơ trễ vượt 200% (căn theo ngày nộp của hồ sơ).\n1) Đọc cột SLA của từng dòng trong danh sách.\n2) Với mỗi dòng, lấy ngày nộp + thời hạn cấu hình (mặc định 10 ngày làm việc) tính ra hạn, đối chiếu mức đang hiển thị.\n3) Lọc/duyệt qua các tab trạng thái để chắc chắn cả 4 mức đều xuất hiện ít nhất 1 lần.\n✅ PASS khi: cột SLA hiện đúng 1 trong 4 nhãn \"Bình thường / Sắp hết hạn / Quá hạn / Quá hạn nghiêm trọng\" cùng số ngày còn lại hoặc quá hạn, và nhãn của từng dòng khớp ngưỡng 50% / 100% / 200% tính từ dữ liệu thực.\n❌ FAIL nếu: cột chỉ còn đếm ngày và màu, không có nhãn mức; hoặc dùng bộ nhãn cũ (warning / urgent / critical / overdue, ngưỡng 70% - 85%); hoặc nhãn sai ngưỡng (ví dụ còn 60% thời lượng mà báo Sắp hết hạn).\n⚠️ Giữ số ngày bên cạnh nhãn là ĐÚNG yêu cầu — đừng FAIL vì vẫn thấy chuỗi \"Quá hạn 58 ngày LV\", miễn có kèm nhãn mức. Thời hạn đếm từ NGÀY NỘP chứ không phải ngày cán bộ tiếp nhận (srs-fr-06-chi-tra.md:119) — đối chiếu sai mốc sẽ ra kết luận sai.\nẢnh lỗi cũ: QLHSDNHTCP_03.jpg (ảnh UAT đối tác — cột SLA chỉ hiện \"Quá hạn N ngày LV\" + tô màu, không có nhãn mức).",
+  "Tác nhân": ""
+ },
+ {
+  "row": 18,
+  "Mã TC": "QLHSDNHTCP_09",
+  "Tên chức năng": "",
+  "Mô tả": "Kiểm tra hiển thị thanh tiến trình và tiêu đề trang",
+  "Điều kiện": "1. Đăng nhập tài khoản",
+  "Dữ liệu đầu vào": "",
+  "Các bước thực hiện": "1. Chọn menu \"Chi trả chi phí\"\n2. Nhấn vào liên kết tại bản ghi",
+  "Kết quả mong đợi": "- Thanh tiến trình — 6 bước: Tiếp nhận → Kiểm tra → Đánh giá → Thẩm định → Phê duyệt → Thanh toán.\r\n- Tiêu đề trang: \"Chi tiết hồ sơ #{mã hồ sơ}\".",
+  "Kết quả thực tế": "Tiêu đề trang không giống với thiết kế",
+  "Trạng thái dev fix 1": "dev done",
+  "Verify": "Open",
+  "DEV phản hồi lần 1": "✅ Bug đúng một phần (BA 24/07/2026) — Loại 1 ở đường dẫn, phần tiêu đề KHÔNG phải lỗi.\n- Ý 1 = lỗi: dòng đường dẫn (breadcrumb) của màn Chi tiết hồ sơ chi trả phải kèm mã hồ sơ đang mở — đặc tả thành phần #1: \"Trang chủ > Chi trả chi phí > Chi tiết #{ma_ho_so}\" (srs-fr-06-chi-tra.md:1100); app đang dừng ở \"Chi tiết\" nên không nhận ra đang mở hồ sơ nào từ đường dẫn. Dev bổ sung mã hồ sơ. Mức Cosmetic.\n- Ý 2 = không phải lỗi: tiêu đề lớn hiển thị TÊN DOANH NGHIỆP là chấp nhận được — khối thông tin đầu trang chỉ quy định phải có đủ các trường Mã hồ sơ / Tên DN / Quy mô / Trạng thái / cảnh báo thời hạn, KHÔNG ép tiêu đề phải là chuỗi \"Chi tiết hồ sơ #mã\" (:1102), và app vẫn hiện Mã hồ sơ trong khối này.\n\n── CÁCH VERIFY sau Dev fix ──\nPrecondition: cbnv_tw / Test@1234, mở danh sách hồ sơ chi trả và ghi lại mã của 2 hồ sơ khác nhau trước khi vào chi tiết.\n1) Bấm mã hồ sơ thứ nhất để vào màn Chi tiết, đọc dòng đường dẫn trên cùng.\n2) Quay lại danh sách, mở hồ sơ thứ hai, đọc lại dòng đường dẫn.\n3) Bấm từng cấp trên đường dẫn để kiểm tra vẫn quay về đúng màn.\n✅ PASS khi: đường dẫn hiện đủ 3 cấp và cấp cuối kèm mã hồ sơ đang mở; mã đổi đúng theo từng hồ sơ ở bước 1 và 2; các cấp trên vẫn bấm quay lại được.\n❌ FAIL nếu: cấp cuối vẫn chỉ là \"Chi tiết\" không có mã; hoặc có mã nhưng không khớp hồ sơ đang mở / không đổi khi sang hồ sơ khác.\n⚠️ KHÔNG chấm tiêu đề lớn — BA đã kết luận hiển thị tên doanh nghiệp ở tiêu đề là không phải lỗi, báo FAIL vì tiêu đề là sai.\nẢnh lỗi cũ: QLHSDNHTCP_09.jpg (ảnh UAT đối tác — đường dẫn \"Trang chủ / Chi trả chi phí / Chi tiết\" không có mã hồ sơ).",
+  "Tác nhân": ""
+ },
+ {
+  "row": 19,
+  "Mã TC": "QLHSDNHTCP_10",
+  "Tên chức năng": "",
+  "Mô tả": "Nhóm 0 — Thanh thông tin tổng quan hồ sơ",
+  "Điều kiện": "1. Đăng nhập tài khoản",
+  "Dữ liệu đầu vào": "",
+  "Các bước thực hiện": "1. Chọn menu \"Chi trả chi phí\"\n2. Nhấn vào liên kết tại bản ghi",
+  "Kết quả mong đợi": "- Hệ thống hiển thị các trường thông tin giống với thiết kế\n- Dữ liệu hiển thị đúng định dạng và trường thông tin\n- Dữ liệu hiển thị không bị tràn/đè lên nhau, đồng nhất ngôn ngữ hiển thị",
+  "Kết quả thực tế": "Mức cảnh báo thời hạn không giống với thiết kế",
+  "Trạng thái dev fix 1": "dev done",
+  "Verify": "Open",
+  "DEV phản hồi lần 1": "✅ Bug đúng (BA 24/07/2026) — Loại 2, cùng gốc với QLHSDNHTCP_03 nhưng ở MÀN CHI TIẾT. BA chốt chuẩn hóa và đã cập nhật đặc tả: trường SLA trên thanh thông tin tổng quan của màn Chi tiết hồ sơ chi trả phải hiển thị 4 mức cảnh báo BR-SLA-02 — Bình thường (còn > 50%) / Sắp hết hạn (còn < 50%) / Quá hạn (> 100%) / Quá hạn nghiêm trọng (> 200%) — kèm số ngày còn lại, thống nhất với màn danh sách để một hồ sơ không hiện hai kiểu cảnh báo ở hai màn. Căn cứ: srs-fr-06-chi-tra.md:1102 (khối thông tin đầu trang, trường SLA = 4 mức theo BR-SLA-02), :1311 (4 giá trị mức cảnh báo + ngưỡng 50/100/200, BA điều chỉnh 24/07/2026), :1514-1523 (bảng ngưỡng). Mức Minor.\n\n── CÁCH VERIFY sau Dev fix ──\nPrecondition: cbnv_tw / Test@1234. Chọn sẵn 2 hồ sơ chi trả ở 2 mức khác nhau (1 hồ sơ chưa quá hạn, 1 hồ sơ đã quá hạn), ghi lại mã của cả hai.\n1) Mở màn Chi tiết hồ sơ chưa quá hạn, đọc trường SLA trên thanh thông tin tổng quan đầu màn.\n2) Mở màn Chi tiết hồ sơ đã quá hạn, đọc lại trường SLA.\n3) Quay ra danh sách, tìm đúng 2 hồ sơ đó và so nhãn SLA ở danh sách với nhãn vừa đọc ở màn chi tiết.\n✅ PASS khi: trường SLA ở thanh tổng quan hiện nhãn mức BR-SLA-02 kèm số ngày; nhãn khớp ngưỡng tính từ dữ liệu thực của từng hồ sơ; và cùng một hồ sơ cho CÙNG một nhãn ở cả màn danh sách lẫn màn chi tiết.\n❌ FAIL nếu: màn chi tiết vẫn chỉ đếm ngày + tô màu không có nhãn mức; hoặc cùng một hồ sơ ra hai nhãn khác nhau ở hai màn; hoặc dùng bộ nhãn cũ 70% - 85%.\n⚠️ Nhãn của ô đang là \"SLA\" — đúng đặc tả, KHÔNG yêu cầu đổi thành \"Hạn xử lý\", đừng FAIL vì tên nhãn. Trường hợp này chấm chính THANH TỔNG QUAN màn Chi tiết (QLHSDNHTCP_03 mới là màn danh sách) — chụp lại màn danh sách không đủ để kết luận.\nẢnh lỗi cũ: QLHSDNHTCP_10.jpg (ảnh UAT đối tác — thanh tổng quan màn Chi tiết, nhãn SLA = \"Quá hạn 58 ngày LV\" không có mức).",
+  "Tác nhân": ""
+ }
+]

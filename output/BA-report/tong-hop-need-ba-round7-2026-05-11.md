@@ -32,7 +32,7 @@ Khi doanh nghiệp thiếu các field dùng để tính ưu tiên, hệ thống 
 
 **Cần BA xác nhận:** Có chấp nhận fallback mặc định về ưu tiên 3 không, hay bắt buộc phải cảnh báo/chặn tạo vụ việc cho đến khi doanh nghiệp cập nhật đủ hồ sơ?
 
-**Nguồn:** `vu-viec/bug-report-r7-7-3-functional-vu-viec.md`, `vu-viec/non-dev-followup-vu-viec.md`
+**Nguồn:** `vu-viec/Pass-bug-report-r7-7-3-functional-vu-viec.md`, `vu-viec/non-dev-followup-vu-viec.md`
 
 ### 3. Phân công NHT khác đơn vị với vụ việc
 

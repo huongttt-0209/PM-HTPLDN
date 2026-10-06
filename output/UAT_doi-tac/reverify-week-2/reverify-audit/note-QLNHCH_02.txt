@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+• Màn "Ngân hàng câu hỏi & Đề kiểm tra" gồm 2 tab (Câu hỏi / Đề kiểm tra), mỗi tab có thanh lọc + danh sách phân trang. Đúng là không có thẻ thống kê tổng quan như đối tác quan sát.
+• Đối tác kỳ vọng có "Thẻ thống kê tổng quan". Theo SRS FR-III-09 (UC28) §Outputs (dòng 868–877) + §AC (dòng 892): màn chỉ hiển thị danh sách câu hỏi phân trang, KHÔNG có thẻ thống kê tổng quan.
+• Câu hỏi BA: có bổ sung thẻ thống kê tổng quan cho màn ngân hàng câu hỏi không?
+• Verify: CB_NV_TW, màn Ngân hàng câu hỏi & Đề kiểm tra.

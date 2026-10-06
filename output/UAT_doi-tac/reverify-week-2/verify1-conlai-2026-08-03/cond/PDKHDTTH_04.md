@@ -1,0 +1,14 @@
+# PDKHDTTH_04 — Bảng đối chiếu điều kiện (verify vòng 1, 2026-08-03)
+
+> Bug phụ thuộc **vai trò + đơn vị + trạng thái** ⇒ KHÔNG phải bug tĩnh, bắt buộc điền bảng.
+> Môi trường QA: `https://18.143.165.120.nip.io` · bản dựng `HTPLDN · V1.0.5`.
+> Kết quả đo chi tiết + đối chiếu SRS (Cổng 3): [`../reverify-audit/PDKHDTTH_04.md`](../reverify-audit/PDKHDTTH_04.md)
+
+| Điều kiện có thể đổi kết quả | Đối tác (từ evidence full-res) | Mình test | GAP? |
+|---|---|---|:-:|
+| Vai trò / tài khoản | `CB_PD_TW` — "Cán bộ PD Trung ương", badge đơn vị `BTP · TW` (đọc từ `partner-evidence/PDKHDTTH_04.jpg` + crop `frames/PDKHDTTH_04/crop-header-right.png`) | `cbpd_tw_01` — vai trò `CB_PD_TW`, badge đơn vị `BTP · TW`, `donViId=00000000-0000-4000-8000-000000000001`, `capDonVi=TW`, có quyền `approve_ke_hoach_dao_tao`. (`cbpd_tw` login FAIL 401 → fallback Rule 7 cùng vai trò + cùng cấp) | Không |
+| Entity + trạng thái (state machine) | Kế hoạch đào tạo `KH-20260725-0002` — "Test phê duyệt không cùng cấp", badge + stepper bước 2 = Chờ duyệt (`CHO_DUYET`) | Kế hoạch đào tạo `KH-20260803-0004` — "QA PDKHDTTH_04 - Test phe duyet khac cap (DP)", stepper bước 2 = Chờ duyệt (`CHO_DUYET`, xác nhận lại qua tầng dữ liệu) | Không |
+| Dữ liệu tiền đề — đơn vị của kế hoạch vs đơn vị của người duyệt | Màn Chi tiết KHÔNG hiển thị trường Đơn vị lập / Người lập / Cấp nên không đọc được trực tiếp từ ảnh. Suy ra từ tên kế hoạch "Test phê duyệt KHÔNG CÙNG CẤP" + cột Mô tả của phiếu ("Cán bộ phê duyệt khác cấp với người lập") ⇒ lệch CẤP: người duyệt cấp TW, kế hoạch của cấp thấp hơn | Lệch CẤP — kế hoạch do `cbnv_dp_01` (`CB_NV_DP`, `donViId=…8002-000000000006`, `capDonVi=DP`) lập + trình duyệt; người bấm duyệt là `cbpd_tw_01` (`capDonVi=TW`). Test thêm biến thể lệch cấp thứ hai (`KH-20260803-0002`, đơn vị cấp Bộ ngành `…8001-000000000001`) → cùng kết quả. GAP "không đọc được đơn vị từ ảnh" ĐÃ ĐÓNG BẰNG TEST THẬT: cùng tài khoản `cbpd_tw_01` mở kế hoạch CÙNG đơn vị TW (`KH-20260803-0001`, `donViId=…8000-000000000001`) thì nút Phê duyệt/Từ chối CÓ hiện và duyệt được ⇒ biến số duy nhất tạo ra khác biệt là đơn vị/cấp, đúng điều kiện đối tác | Không |
+| Input / thao tác | Vào `Đào tạo, tập huấn → Kế hoạch đào tạo`, mở kế hoạch đang Chờ duyệt rồi thực hiện Phê duyệt (theo cột "Các bước thực hiện" của phiếu) | Thử cạn kiệt cả 2 bề mặt: (a) màn Danh sách — cột Hành động chỉ có "Xem" trên toàn bộ 14 dòng, kể cả 3 dòng Chờ duyệt; (b) màn Chi tiết — thanh hành động dưới cùng rỗng hoàn toàn. Đo 2 lần độc lập, mỗi lần cài `tools/toast-capture.js` TRƯỚC (tự kiểm `soObserverDangSong = 1`): 0 request ghi → 0 khung thông báo; mọi kênh hiển thị khác cũng = 0. Đo lại bằng phương pháp thứ hai (gọi thẳng thao tác duyệt ở tầng dữ liệu): bị từ chối, trạng thái giữ nguyên Chờ duyệt | Không |
+
+**Kết luận bảng:** 0 GAP — đã dựng lại đúng vai trò, đúng cấp/đơn vị lệch, đúng trạng thái và đúng thao tác của đối tác.

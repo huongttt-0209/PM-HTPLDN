@@ -1,0 +1,22 @@
+POST /api/v1/khoa-hocs/a7480002-0000-4000-8000-000000000002/dang-ky-dao-taos/import  -> 201
+file: A-hyperlink-giong-doi-tac.xlsx  (o Email co hyperlink mailto:, gia tri o = "linh@gmail.com")
+
+{"success":true,"data":{"total":3,"success":0,"skipped":0,"errors":3,"details":[
+  {"row":2,"email":"[object Object]","status":"error","reason":"Email không hợp lệ"},
+  {"row":3,"email":"[object Object]","status":"error","reason":"Email không hợp lệ"},
+  {"row":4,"email":"[object Object]","status":"error","reason":"Email không hợp lệ"}]},"meta":null}
+
+--- DOI CHUNG 1: cung 3 email, o Email de TEXT THUONG (B-text-thuong-du-sdt.xlsx) ---
+Tong dong 3 | Thanh cong 2 | Bo qua (trung) 1 | Loi 0   -> bang hien du hoc vien
+
+--- DOI CHUNG 2: cung email linh@gmail.com qua luong nhap tay (khong qua Excel) ---
+POST /api/v1/khoa-hocs/.../dang-ky-dao-taos -> 201 Created, trangThai=CHO_DUYET
+=> email hop le theo chinh rule cua he thong; loi nam o buoc doc o Email trong file Excel.
+
+--- Do dem thong bao (tools/toast-capture.js, soObserverDangSong=1) ---
+SO_REQUEST=1 (POST .../import) | SO_KHUNG_THONG_BAO=1 | chu="Import hoan tat"
+=> khong co double-toast; thong bao thanh cong "Import hoan tat" van hien du 100% dong loi.
+
+--- Du lieu test con lai tren env (khong xoa duoc qua UI, chi co Phe duyet/Tu choi) ---
+Khoa hoc KH-QAW7-HOINGHI (a7480002-...-002) nay co 3 dang ky CHO_DUYET do QA tao:
+QA Probe Email / Nguyen Van Ngoc / Nguyen Van A.

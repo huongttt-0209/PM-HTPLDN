@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web hiện tại: đăng nhập vai trò Người hỗ trợ pháp lý, mở Chi tiết tư vấn viên thì thẻ "Thẩm định" VẪN hiển thị. Với tư vấn viên ở trạng thái "Mới đăng ký", thẻ này còn mở được và hiện đầy đủ biểu mẫu chấm điểm 4 nhóm (Pháp lý / Năng lực chuyên môn / Hiệu quả & uy tín / Mạng lưới) cùng phần Kết luận thẩm định — đây là nội dung nhận xét nội bộ của cán bộ.
+- Theo SRS: FR-IV-05 (UC43) – SCR-IV-03, thẻ "Thẩm định" (srs-fr-04-chuyen-gia-tvv.md, dòng 1555) quy định điều kiện hiển thị: vai trò là Cán bộ Nghiệp vụ HOẶC Cán bộ Phê duyệt cùng đơn vị, VÀ hồ sơ đang ở trạng thái "Đang thẩm định" hoặc "Chờ phê duyệt". Vai trò Người hỗ trợ không nằm trong danh sách được xem ⇒ thẻ phải ẩn hoàn toàn. Trạng thái "Mới đăng ký" cũng không nằm trong 2 trạng thái được hiển thị.
+- Đã verify bằng đúng vai trò và đúng trạng thái của phản ánh: tài khoản Người hỗ trợ pháp lý, tư vấn viên trạng thái "Mới đăng ký" (giống hệt ảnh đối tác gửi).
+- Bug ID: BUG-QLHSTVV_05.

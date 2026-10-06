@@ -1,0 +1,31 @@
+{
+  "case": "CKTMBMHDLCTT_10 (row 95) — Selection không xóa sau ẩn hàng loạt",
+  "env": "https://18.143.165.120.nip.io",
+  "account": "cbnv_tw (CB_NV_TW)",
+  "timestamp": "2026-07-20 ~22:50",
+  "action": "Tab 'Tất cả' → chọn 2 thư mục Đã công khai [QA Hidden Folder 715 (1 BM) + Thư mục biểu mẫu seed (2 BM)] → Ẩn hàng loạt",
+  "selection_before": "Đã chọn 2 thư mục + [Công khai hàng loạt][Ẩn hàng loạt][Xóa hàng loạt][Bỏ chọn]",
+  "confirm_modal": "Ẩn 2 thư mục? Các thư mục sẽ được ẩn khỏi Cổng PLQG. [Hủy] [Ẩn]",
+  "clicked_confirm": "Ẩn",
+  "toast_observer": {
+    "so_toast": 1,
+    "chu": ["Đã ẩn 2 thư mục."],
+    "note": "MutationObserver toast-capture (không lọc trùng, innerText). 1 toast."
+  },
+  "network": {
+    "so_request_non_get": 1,
+    "requests": ["POST /api/v1/thu-muc-bieu-maus/batch-an"]
+  },
+  "after_state": {
+    "QA Hidden Folder 715": "Đã ẩn (AN) — action đổi thành Công khai",
+    "Thư mục biểu mẫu seed": "Đã ẩn (AN) — action đổi thành Công khai"
+  },
+  "SELECTION_AFTER": {
+    "selBar": "Đã chọn 2 thư mục",
+    "bulkButtons": ["Công khai hàng loạt", "Ẩn hàng loạt", "Xóa hàng loạt", "Bỏ chọn"],
+    "anyRowChecked": true,
+    "note": "BUG: selection KHÔNG xóa sau khi ẩn hàng loạt hoàn tất — thanh + nút bulk + checkbox vẫn tồn tại."
+  },
+  "verdict": "BA confirm",
+  "ly_do_verdict": "Ẩn hàng loạt THÀNH CÔNG (không chặn luồng). SRS FR-VII-03/SCR-VII-01 KHÔNG có clause nào bắt buộc xóa selection sau bulk (row 14 chỉ định điều kiện hiển thị 'khi chọn nhiều'; Postconditions UC94 không nhắc UI selection). Kỳ vọng đối tác (deselect sau bulk) = chuẩn UX nhưng SRS im lặng → BA confirm, không Open (tránh quote sai SRS #14)."
+}

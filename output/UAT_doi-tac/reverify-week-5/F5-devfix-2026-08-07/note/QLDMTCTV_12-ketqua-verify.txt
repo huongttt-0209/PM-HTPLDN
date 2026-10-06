@@ -1,0 +1,29 @@
+❌ Không phải lỗi, ⚠️ Cần BA xác nhận — verify lại 07/08/2026 03:44–03:53 trên bản dựng ngày 07/08 (app V1.0.9). Phần đối tác báo "Màn hình không có nút chức năng" thì KHÔNG tái hiện: nút có, bấm được, chạy trọn luồng và lưu đúng dữ liệu. Riêng mốc "tối đa 5.000 ký tự" thì bản dựng đang chặn ở 1.000 mà đặc tả lại không quy định mốc tối đa, nên phần này để BA chốt.
+
+VÌ SAO KHÔNG TÁI HIỆN ĐƯỢC "MÀN HÌNH KHÔNG CÓ NÚT CHỨC NĂNG"
+- Ảnh bằng chứng được chụp bằng tài khoản Quản trị hệ thống ở Bộ Tư pháp cấp Trung ương, nhưng bản ghi trong ảnh (TC-STP-HN-0001) lại là bản ghi của Sở Tư pháp Hà Nội. Đặc tả srs-fr-04-chuyen-gia-tvv.md:1721 chốt nút "Cập nhật trạng thái" chỉ hiện với vai trò Cán bộ Nghiệp vụ CÙNG ĐƠN VỊ với bản ghi, và :1705–:1706 chỉ cấp quyền màn chi tiết cho Cán bộ Nghiệp vụ + Cán bộ Phê duyệt cùng đơn vị. Tiền đề trong ảnh lệch hai chiều cùng lúc (khác vai trò + khác đơn vị) nên thẻ "Thao tác" rỗng là hệ quả của phân quyền, không đủ căn cứ kết luận màn hình thiếu nút.
+- Đo lại đúng tiền đề (Cán bộ Nghiệp vụ cùng đơn vị với bản ghi, bản ghi đang ở trạng thái Đang hoạt động): thẻ "Thao tác" có đủ 4 mục — Chỉnh sửa, Cập nhật trạng thái, công tắc Công khai, Xóa.
+
+ĐÃ ĐẠT — bốn điểm trong kết quả mong đợi
+- Mở được cửa sổ: bấm "Cập nhật trạng thái" mở đúng một hộp thoại tên "Cập nhật trạng thái hoạt động", có cả hai trường mà phiếu yêu cầu.
+- Trường Trạng thái mới: đúng dạng danh sách chọn (chỗ giữ chỗ "Chọn trạng thái mới"), và chỉ hiện những trạng thái chuyển được theo máy trạng thái — bản ghi Đang hoạt động chỉ hiện "Tạm dừng" và "Vô hiệu hóa"; đưa bản ghi sang Tạm dừng thì đổi thành "Đang hoạt động" và "Vô hiệu hóa". Không lẫn trạng thái ngoài luồng (không có Mới đăng ký / Chờ phê duyệt / Đã từ chối). Đếm bằng nội dung hiển thị thật, không đếm các phần tử ẩn.
+- Lý do thay đổi là bắt buộc: để trống thì không xác nhận được, hệ thống không gửi yêu cầu ghi nào và bản ghi giữ nguyên trạng thái cũ. Cách chặn là làm mờ nút xác nhận (không hiện câu báo lỗi).
+- Tối thiểu 10 ký tự: nhập 9 ký tự thì bị chặn; nhập đúng 10 ký tự thì được nhận và lưu nguyên vẹn. Đã thử cả hai phía mốc, không chỉ một phía.
+- Chức năng chạy thật, không chỉ mở được cửa sổ: đã đổi Đang hoạt động → Tạm dừng thành công, thông báo "Cập nhật trạng thái thành công", và đối chứng bằng tab "Lịch sử" của chính bản ghi — có dòng ghi đúng thời gian, đúng người thực hiện và đúng từng chữ chuỗi lý do vừa nhập. Chỉ một yêu cầu ghi được gửi, không gửi trùng.
+
+CẦN BA XÁC NHẬN — mốc "tối đa 5.000 ký tự"
+- Hiện trạng: ô Lý do thay đổi bị giới hạn cứng ở 1.000 ký tự (bộ đếm hiện "1000 / 1000"). Cố nhập 5.001 ký tự thì ô chỉ nhận 1.000 và phần vượt bị cắt âm thầm, không có câu nào báo cho người dùng biết đã bị cắt.
+- Đặc tả không có mốc tối đa để so: srs-fr-04-chuyen-gia-tvv.md:984 chỉ ghi "ly_do | text (long) | Y | Min 10 ký tự"; srs-v3.5.md:805 cũng không đặt mốc tối đa mặc định cho kiểu text (long). Trường ly_do_tu_choi giới hạn 2.000 ký tự là trường khác, dùng cho luồng từ chối phê duyệt. Nhóm Hỏi đáp lại có tiền lệ đặt mốc 10–500 ký tự (srs-fr-02-hoi-dap.md:421).
+- CÂU HỎI CHO BA: mốc tối đa của "Lý do thay đổi trạng thái Tổ chức tư vấn" là bao nhiêu — 5.000 như phiếu, 1.000 như bản dựng đang làm, 2.000 cho đồng bộ với lý do từ chối, hay không giới hạn? Chốt xong xin bổ sung vào :984 để có căn cứ chấm. Nếu BA chốt 5.000 thì đây là điểm cần dev sửa; nếu chốt 1.000 thì xin sửa lại mốc trong phiếu, và đề nghị hiển thị một câu nhắc khi người dùng nhập vượt mốc thay vì cắt âm thầm.
+- Ghi thêm để BA có đủ dữ kiện: đặc tả cũng không quy định danh sách trạng thái mới phải lọc theo trạng thái hiện tại ở màn Tổ chức tư vấn (:1721 liệt kê phẳng, chốt kiểm tra đặt ở phía xử lý :991), trong khi màn Tư vấn viên :1554 lại quy định rất rõ. Bản dựng hiện ĐANG lọc — tức là làm nhiều hơn đặc tả yêu cầu và khớp mong đợi trong phiếu. Không có gì phải sửa, chỉ nên bổ sung câu lọc vào :1721 cho khỏi lệch giữa hai màn.
+
+MỘT ĐIỂM PHÁT HIỆN THÊM TRONG LÚC VERIFY (không thuộc phiếu này)
+- Ở lượt khôi phục Tạm dừng → Đang hoạt động, lý do nhập vào là "KhoiPhuc07080353 - hoan nguyen sau do QLDMTCTV_12" nhưng dòng nhật ký ở tab "Lịch sử" lại hiện nội dung của trường mô tả công khai cũ, không phải lý do vừa nhập. Ở lượt Tạm dừng thì hiện đúng. Ngoài phạm vi phiếu QLDMTCTV_12 nên chỉ ghi nhận, chưa mở phiếu riêng.
+- Cột "Hành động" của tab Lịch sử ghi "Cập nhật" cho cả lượt tạm dừng và lượt khôi phục, trong khi :1731 liệt kê bộ nhãn có riêng "Tạm dừng" / "Khôi phục". Ghi nhận, không phải lỗi chặn nghiệp vụ.
+
+DỮ LIỆU ĐÃ TÁC ĐỘNG VÀ ĐÃ HOÀN NGUYÊN (khai để minh bạch)
+- Dùng lại bản ghi có sẵn TC-TW-DEMO-001 "Công ty Luật TNHH Demo Kiểm Thử" (đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp, đang hoạt động, 0 tư vấn viên liên kết). KHÔNG tạo bản ghi mới. KHÔNG đụng bản ghi trong ảnh đối tác (TC-STP-HN-0001, đơn vị Sở Tư pháp Hà Nội).
+- Đã đổi sang Tạm dừng để đo rồi đưa lại về Đang hoạt động ngay trong phiên; đọc lại bản ghi xác nhận đã về đúng trạng thái ban đầu. Tab "Lịch sử" còn giữ 2 dòng nhật ký của lượt đo — đúng bản chất nhật ký thao tác, không xóa được và không nên xóa.
+- Tài khoản dùng để chấm: Cán bộ Nghiệp vụ Trung ương (cbnv_tw_03). KHÔNG dùng tài khoản quản trị ở bất kỳ bước nào, kể cả bước chuẩn bị dữ liệu.
+
+Bằng chứng (output/UAT_doi-tac/reverify-week-5/F5-devfix-2026-08-07/): image/QLDMTCTV_12-C1-chi-tiet-co-nut.png · image/QLDMTCTV_12-C2-C3-cua-so-trang-thai-moi.png · image/QLDMTCTV_12-C4-lydo-bat-buoc.png · image/QLDMTCTV_12-C5-bien-9-va-10.png · image/QLDMTCTV_12-C5-bien-10-duoc-nhan.png · image/QLDMTCTV_12-C6-5001-ky-tu.png · image/QLDMTCTV_12-doi-chung-lich-su.png · image/QLDMTCTV_12-hoan-nguyen-dang-hoat-dong.png · image/QLDMTCTV_12-do-chi-tiet.txt · image/QLDMTCTV_12-cap-nhat-tam-dung-response.network-response · image/QLDMTCTV_12-hoan-nguyen-response.network-response · do/QLDMTCTV_12.md

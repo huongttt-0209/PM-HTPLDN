@@ -1,0 +1,13 @@
+✅ Bug ĐÚNG – chuyển dev.
+
+[1] Tái hiện đúng bản chất. Đăng nhập vai trò Người hỗ trợ pháp lý, mở hồ sơ tư vấn viên CÙNG ĐƠN VỊ: màn chi tiết nay mở được (khác video đối tác). Nhưng chỉ cần bấm thêm một thẻ trên chính màn đó — thẻ "Lịch sử hỗ trợ" — thì cả trang bị đẩy sang đúng trang lỗi đối tác chụp được: 403 Forbidden, mã ERR-PERM-SYS-00-01, "Vai trò hiện tại: NHT". Lặp trên cả 3 hồ sơ của đơn vị (Đang hoạt động / Từ chối / Mới đăng ký) đều như nhau.
+
+[2] Theo SRS SCR-IV-03 (srs-fr-04-chuyen-gia-tvv.md:1569), thẻ "Lịch sử hỗ trợ" có điều kiện hiển thị là "Luôn" — không giới hạn vai trò. Thẻ này đang trở thành rào chắn làm người dùng mất luôn cả màn đang xem.
+
+[3] Cùng màn còn 2 sai lệch khác QA đo được:
+- Nút "Bắt đầu thẩm định" HIỆN với vai trò Người hỗ trợ pháp lý trên hồ sơ "Mới đăng ký", trong khi SRS (:1545) chỉ cho Cán bộ Nghiệp vụ cùng đơn vị. Bấm vào thì bị từ chối, hồ sơ không đổi trạng thái.
+- Thông báo từ chối khi bấm nút đó hiện đúng một chữ tiếng Anh "Forbidden", không phải thông báo nghiệp vụ tiếng Việt như các tình huống lỗi khác trong SRS.
+
+[4] Tiêu chí gốc của ca (thẻ "Thẩm định" phải ẩn hoàn toàn với Người hỗ trợ) hiện đã ĐẠT: danh sách thẻ khi đăng nhập vai trò này chỉ có Hồ sơ · Năng lực · Lịch sử hỗ trợ · Đánh giá, không còn thẻ "Thẩm định". Phần đối tác báo ở vòng 1 đã được sửa thật.
+
+[5] Hồ sơ để dev tái hiện: TVV-STP-AG-0003 (Sở Tư pháp An Giang, trạng thái Mới đăng ký).

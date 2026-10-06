@@ -1,0 +1,6 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web (BC Vụ việc theo thời gian, UC128) có 2 lỗi con so SRS FR-IX-05 §Output:
+  (1) Biểu đồ trend chỉ có 1 chuỗi "Số vụ việc" (soVuViec). SRS §Output dòng 337 quy định trend_data mỗi kỳ gồm {ky_label, tiếp nhận, hoàn thành} — tức 2 chuỗi (số tiếp nhận + số hoàn thành). BE chỉ trả soVuViec → thiếu chiều tiếp nhận/hoàn thành.
+  (2) KHÔNG có bảng chi tiết/tổng hợp dưới biểu đồ. SRS §Output dòng 338 yêu cầu theo_don_vi[] {don_vi, ten, trend_data[]} "Luôn" (BE không trả — hasTheoDonVi=false; UI không hiện bảng nào); AC dòng 342 yêu cầu "biểu đồ trend + bảng chi tiết".
+- Đối tác báo "biểu đồ không thể hiện xu hướng": do chọn Kỳ=Năm (1 điểm/năm) hoặc Kỳ=Tháng mặc định range 1 tháng (1 điểm). Kiểm tra API Kỳ=Tháng khoảng cả năm (tuNgay=2026-01-01→denNgay=2026-12-31) trả 12 điểm T01..T12 → đường trend CÓ dựng nhiều điểm. Vậy "không có xu hướng" là do khoảng kỳ/range mặc định, KHÔNG phải lỗi render → không tính là lỗi con Open riêng.
+- Tổng verdict: Open (2 lỗi con: thiếu chuỗi tiếp nhận/hoàn thành + thiếu bảng). Verify: cbnv_tw (Toàn quốc). Bug ID: BUG-VVTTG_03.

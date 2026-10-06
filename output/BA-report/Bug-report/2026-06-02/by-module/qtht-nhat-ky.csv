@@ -1,0 +1,2 @@
+﻿STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+82,Nhật ký Loại thao tác hiển thị mã,✅ Đạt,PASS,Thấp,"R2 06-02: SCR-VIII-10 cột Loại thao tác = badge ant-tag tiếng Việt (Đăng nhập/Đăng xuất/Tạo mới/Cập nhật/Xóa/Phân công), 50/50 dòng, rawEnumLeak=0 — SRS:1909"

@@ -1,0 +1,62 @@
+🔁 CÒN LỖI — chuyển lại dev.
+
+■ LỖI Ở ĐÂU
+Ai     : Vai trò Quản trị hệ thống (tài khoản admin) — đúng vai trò trong ảnh nghiệm thu
+Màn    : Báo cáo thống kê → "BC Chi phí theo thời gian"
+Làm gì : [Xem báo cáo] hiện đủ số liệu và biểu đồ, hai nút Xuất bật sáng → bấm [Xuất Excel]
+Hỏng   : KHÔNG ra tệp. Màn hiện đúng một từ tiếng Anh "Forbidden"
+         (máy chủ trả 403 · mã ERR-PERM-SYS-00-01). Đúng hiện tượng ô "TKM phản hồi lần 1"
+         đã ghi; lần này đã chụp được ảnh khung thông báo.
+
+■ SAI CHỖ NÀO (srs-fr-11-bao-cao.md)
+:117 — khi từ chối vì thiếu quyền phải hiện câu TIẾNG VIỆT báo người dùng không có quyền xem báo
+       cáo, không ném chuỗi kỹ thuật của máy chủ ra màn.
+:79  — kiểm quyền nằm ở ĐẦU luồng: không được phép thì chặn ngay ở [Xem báo cáo], đừng cho xem
+       hết số liệu rồi mới chặn lúc xuất.
+Không phải chờ BA mới sửa được: BA trả lời hướng nào thì vẫn là lỗi — không được xuất thì phải
+chặn từ bước Xem và báo bằng tiếng Việt; được xuất thì đang chặn nhầm.
+
+■ ĐÃ CHẠY ĐÚNG — ĐỪNG TEST LẠI
+Vai trò CB Nghiệp vụ TW xuất Excel tốt: tệp mở đọc được, đầu tệp đủ tên báo cáo + kỳ + đơn vị +
+ngày tạo, bảng "Theo kỳ" đủ 3 thông tin nghiệp vụ đòi (nhãn kỳ · số hồ sơ · tổng chi phí), số
+khớp màn. Đổi kỳ sang Khoảng tùy chọn 01/06–30/06/2026 thì nhãn kỳ và khoảng ngày trong tệp đổi
+theo — tệp bám bộ lọc, không xuất cứng. Kỳ Quý không có dữ liệu thì màn rỗng và nút Xuất tự tắt,
+đúng mong đợi. Hết câu "Không thể tạo file xuất. Vui lòng thử lại." (đối tác báo 16/07).
+
+■ LỖI KHÁC GẶP LÚC ĐO — đã tách phiếu riêng, KHÔNG tính vào phiếu này
+BCTK_QA07 (dòng 370) nút Xuất bị khoá sau lần [Xem báo cáo] thứ 2 · BCTK_QA08 (dòng 371) không
+chọn được nhiều điểm kỳ nên biểu đồ đường luôn 1 điểm · BCTK_QA09 (dòng 372) tệp in mã kỹ thuật
+"KHOANG" thay cho chữ tiếng Việt.
+
+■ AI SỬA
+Dev BE — bước Xem và bước Xuất dùng chung một quy tắc quyền; từ chối thì trả thông báo theo :117.
+Dev FE — không đẩy chuỗi lỗi kỹ thuật của máy chủ ra màn hình người dùng.
+BA     — chốt "QTHT có được xuất báo cáo không" để dev chọn hướng sửa.
+
+■ VERIFY LẠI SAU KHI FIX
+Cần trước: tài khoản admin (QTHT/TW) · màn /bao-cao · kỳ báo cáo phải CÓ dữ liệu (báo cáo trống
+  thì nút Xuất tự tắt, đo vô nghĩa).
+B1. admin → "BC Chi phí theo thời gian" · Kỳ Năm 01/01–31/12/2026 · Toàn quốc → [Xem báo cáo]
+    (bấm đúng 1 lần). Ghi lại Tổng chi phí · Tổng hồ sơ và các dòng bảng "Theo kỳ".
+B2. [Xuất Excel] → chép nguyên văn chữ hiện ra, kiểm có tệp về máy không.
+B3. Kiểm đường thứ hai: tab Network xem lời gọi xuất trả mã gì. Có tệp thì MỞ RA ĐỌC, so với B1.
+B4. Lặp B1–B3 bằng cbnv_tw_03, thêm 1 lượt đổi kỳ (Khoảng tùy chọn 01/06–30/06/2026) để chắc
+    nhãn kỳ trong tệp đổi theo bộ lọc.
+✅ ĐẠT — một trong hai:
+   a) admin nhận được tệp .xlsx mở đọc được, số khớp màn, không thông báo từ chối nào; HOẶC
+   b) nếu BA chốt QTHT không được xuất → chặn NGAY ở [Xem báo cáo] kèm câu tiếng Việt báo không
+      có quyền.
+❌ CHƯA ĐẠT: còn "Forbidden" hay bất kỳ chuỗi tiếng Anh / mã kỹ thuật nào · vẫn cho xem đủ rồi mới
+   chặn lúc xuất · chỉ làm mờ nút Xuất mà bước Xem vẫn vào được · CB Nghiệp vụ bị chặn theo ·
+   tệp thiếu thông tin so với màn.
+⚠️ Bẫy: (1) CB Nghiệp vụ xuất được KHÔNG chứng minh đã fix — phép đo quyết định phải chạy bằng
+   chính admin. (2) Tải được tệp chưa đủ, phải MỞ TỆP RA ĐỌC. (3) Nút Xuất mờ dù màn đang hiện số
+   liệu là do đã bấm [Xem báo cáo] từ 2 lần trở lên (lỗi riêng BCTK_QA07) — tải lại trang, bấm
+   đúng 1 lần. (4) Khung thông báo sống ~3 giây và ĐỔI CHỮ ngay trong khung cũ, không mọc khung
+   mới; theo dõi nội dung khung theo thời gian, đừng chỉ đếm khung mới rồi kết luận "im lặng".
+   (5) Đừng chấm hỏng vì tên tệp BaoCaoChiPhiTheoThoiGian_… hay vì số liệu khác ảnh nghiệm thu —
+   điều phải đúng là TỆP KHỚP MÀN.
+
+Đo 06/08/2026 · V1.0.8 · admin (QTHT/TW) + cbnv_tw_03 (CB Nghiệp vụ/TW) · Kỳ Năm 2026 · Toàn quốc
+· thêm 2 cấu hình kỳ · 3 lượt bấm xuất · không tạo/sửa/xoá bản ghi nào.
+Ảnh: ô "Ảnh/video verify" cùng dòng.

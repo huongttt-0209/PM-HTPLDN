@@ -1,0 +1,4 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: Tại tab Phân công của đợt đánh giá (đã có ≥1 người đánh giá + ≥1 Trưởng nhóm, tổng trọng số tiêu chí = 100%), bấm "Trình phê duyệt" → hệ thống hiển thị "Đã trình phê duyệt phân công" và chuyển đợt sang trạng thái "Chờ duyệt phân công" (ĐÚNG). Tuy nhiên Cán bộ phê duyệt cùng đơn vị KHÔNG nhận được thông báo nào về việc có phân công cần duyệt: kiểm tra hộp thông báo của CB phê duyệt cùng đơn vị — thông báo mới nhất vẫn là từ nhiều ngày trước, không có thông báo nào về đợt vừa trình.
+- Chuẩn: SRS SCR-VI-01 (mục #38, dòng 864) quy định nút "Trình phê duyệt" phải "gửi TB CB PD"; chính hộp xác nhận của hệ thống cũng ghi "Phân công sẽ được gửi cho cán bộ phê duyệt". Hệ thống thiếu bước gửi thông báo cho cán bộ phê duyệt.
+- Mã lỗi nội bộ: BUG-PCNTHDG_11.

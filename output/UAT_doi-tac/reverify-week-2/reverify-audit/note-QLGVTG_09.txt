@@ -1,0 +1,5 @@
+✅ Bug đúng – chuyển dev (lỗi trùng thông báo).
+• Ở màn Sửa giảng viên, khi bỏ trống Lĩnh vực rồi lưu, thông báo "Vui lòng chọn ít nhất 1 lĩnh vực" hiển thị 2 lần (trùng lặp). Màn Thêm mới chỉ hiện 1 lần.
+• SRS FR-III-11 (UC30 – Error Handling, dòng 973): mỗi trường lỗi hiển thị một thông báo tương ứng.
+• Riêng Điện thoại nhập sai không báo lỗi: đúng đặc tả (so_dien_thoai là text, không bắt buộc, không ràng buộc định dạng; dòng 965) → không phải lỗi.
+• Verify: CB_NV_TW, màn Sửa giảng viên. Bug ID: BUG-QLGVTG_09.

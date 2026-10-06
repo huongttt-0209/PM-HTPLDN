@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG (một phần) – chuyển dev.
+- Cột "Cơ quan ban hành": web THIẾU. Theo SRS FR-VII-04 (UC95), màn Quản lý biểu mẫu SCR-VII-02 (dòng 657): cột "Cơ quan ban hành" phải LUÔN hiển thị. Danh sách hiện có 11 cột (Mã BM, Tên biểu mẫu, Loại TL, Thư mục, Kích thước, Trạng thái, Đã công khai, Ảnh đại diện, Ngày tạo, Sync Cổng, Hành động) — không có cột này. Bug BUG-QLBMHD_02.
+- Bộ lọc "Định dạng": thực tế ĐÃ CÓ trên thanh lọc (Thư mục/Lĩnh vực/Loại hình/Định dạng) — đúng SRS dòng 640, không thiếu.
+- "Ô chọn biểu mẫu" (checkbox chọn dòng): SRS SCR-VII-02 không quy định thao tác chọn hàng loạt cho biểu mẫu → cần BA xác nhận có bổ sung không.
+- Verify: tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương), màn Danh sách biểu mẫu, 20/07/2026.

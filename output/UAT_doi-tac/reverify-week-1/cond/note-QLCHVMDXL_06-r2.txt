@@ -1,0 +1,24 @@
+✅ Bug ĐÚNG – chuyển dev. Đã đo lại 27/07/2026 trên chính môi trường đối tác, bằng đúng tài khoản Cán bộ PD Trung ương như đối tác dùng: LỖI VẪN CÒN NGUYÊN, đúng 3 tab đối tác nêu.
+
+1) Hiện tượng người dùng thấy:
+- Ở 3 tab "Đã duyệt", "Công khai", "Hoàn thành": bảng danh sách đi thẳng từ cột "Mã HD" sang cột "Lĩnh vực PL" — mất hẳn cột "Nội dung". Cán bộ chỉ còn thấy mã và lĩnh vực, phải mở từng bản ghi mới biết câu hỏi là gì.
+- Ở 4 tab còn lại ("Tất cả", "Mới", "Đang xử lý", "Chờ phê duyệt"): cột "Nội dung" hiển thị bình thường.
+- Dữ liệu KHÔNG mất: cột vẫn nằm trong bảng và vẫn mang nội dung, chỉ bị đặt bề rộng bằng 0 nên người dùng không nhìn thấy. Cũng không phải do bảng bị cuộn ngang (vị trí cuộn bằng 0).
+
+2) Số đo cụ thể (bề rộng khai báo của cột "Nội dung"):
+- Tab Tất cả / Mới / Đang xử lý / Chờ phê duyệt: bảng 11 cột, cột "Nội dung" rộng 268.
+- Tab Đã duyệt / Công khai / Hoàn thành: bảng 13 cột, cột "Nội dung" rộng 0.
+- Đúng 3 tab hỏng là 3 tab có nhiều hơn 2 cột, chính là "Người duyệt" và "Ngày duyệt" bổ sung sau vòng 1. Tổng bề rộng khai báo của 13 cột là 1632 trong khi khung bảng chỉ rộng 1128 — phần dôi ra rơi đúng vào cột "Nội dung".
+- Đã đo 2 lần bằng 2 tài khoản khác vai trò (Cán bộ PD Trung ương và Cán bộ NV Trung ương): số liệu giống hệt nhau, lỗi không phụ thuộc quyền.
+- Đối chiếu cùng tập dữ liệu với ảnh đối tác: 6 bản ghi tab "Đã duyệt" trùng khít cả mã lẫn thứ tự (HD-20260702-013, HD-20260702-002, HD-QA-R7-064, HD-20260510-006, HD-20260510-002, HD-20260509-010).
+
+3) Kết quả mong đợi theo đặc tả:
+- srs-fr-02-hoi-dap.md dòng 1036, màn hình SCR-II-01 thành phần 21: cột "Nội dung" — cắt bớt còn 200 ký tự kèm dấu ba chấm, di chuột hiện chú thích 500 ký tự — điều kiện hiển thị ghi là "luôn hiển thị". Không dòng nào cho phép bỏ cột này ở riêng tab nào.
+- 3 tab bị lỗi đều thuộc cùng danh sách đó, chỉ khác điều kiện lọc trạng thái: dòng 1023 tab "Đã duyệt", dòng 1024 tab "Công khai", dòng 1025 tab "Hoàn thành".
+- Khi bổ sung cột cho một số tab, tổng bề rộng các cột không được đẩy một cột về 0 — cần bố trí lại để mọi cột đều đọc được trong khung nhìn.
+
+4) Phần vòng 1 ghi nhận ĐÃ SỬA XONG: 3 tab này nay đã có đủ 2 cột "Người duyệt" và "Ngày duyệt" mà vòng 1 báo thiếu (ví dụ HD-20260702-013 → "Cán bộ PD Trung ương", 21/07/2026 17:17). Lỗi lần này phát sinh kèm theo chính lần bổ sung đó.
+
+Ghi chú tài khoản: tài khoản cbnv_tw_02 không tồn tại trên môi trường đối tác (máy chủ báo sai tên đăng nhập hoặc mật khẩu), đã dùng tài khoản cùng vai trò cùng đơn vị là cbnv_tw và cbpd_tw.
+
+Bug ID: BUG-QLCHVMDXL-COT-NOIDUNG.

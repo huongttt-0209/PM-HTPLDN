@@ -1,0 +1,81 @@
+# LKHDG_16 — row 127 (tab `bug`)
+
+## [1] STT
+
+11/07/2026
+
+## [2] Tuần
+
+Tuần 3
+
+## [3] Mã TC
+
+LKHDG_16
+
+## [6] Mô tả
+
+"Sửa"
+
+## [7] Điều kiện
+
+1. Đăng nhập tài khoản
+
+## [9] Các bước thực hiện
+
+1. Chọn menu "Đánh giá hiệu quả"
+2. Bấm "Sửa"
+
+## [10] Kết quả mong đợi
+
+- Chỉ hiển thị khi đợt đang ở trạng thái "Lập kế hoạch" hoặc "Phân công", và Cán bộ nghiệp vụ thuộc đơn vị sở hữu đợt.
+- Hệ thống mở màn hình chi tiết đợt đánh giá ở chế độ chỉnh sửa.
+
+## [11] Kết quả thực tế
+
+- Các trường thông tin không được chỉnh sửa
+- Breadcrum hiển thị đường dẫn là Trang chủ/Đánh giá hiệu quả/Kế hoạch đánh giá/Chi tiết
+
+## [12] Ảnh/vieo 1
+
+LKHDG_16.jpg
+
+## [13] Trạng thái
+
+Fail
+
+## [14] Dopai
+
+dev done
+
+## [17] Trạng thái dev fix
+
+Test done
+
+## [19] Kết quả verify
+
+✅ ĐÃ HẾT LỖI — Đợt đánh giá ở trạng thái "Phân công" nay sửa được.
+
+Đã kiểm lại ngày 07/08/2026 tại Đánh giá hiệu quả → Kế hoạch đánh giá → Danh sách, tài khoản Cán bộ nghiệp vụ Trung ương, trên đợt thuộc đúng đơn vị của tài khoản.
+
+Yêu cầu nghiệp vụ được kiểm: đợt đang ở "Lập kế hoạch" hoặc "Phân công" thì cán bộ nghiệp vụ của đơn vị sở hữu phải vào được chế độ chỉnh sửa, và thay đổi phải lưu lại được.
+
+Đã đo trên cả hai trạng thái bắt buộc:
+• Đợt "Phân công": dòng trong danh sách nay có thao tác chỉnh sửa (trước đây chỉ còn xem). Mở ra, đổi trường Ghi chú, lưu lại, rồi ĐÓNG và MỞ LẠI để đối chiếu — giá trị mới đã được ghi nhận thật, đợt vẫn giữ nguyên trạng thái "Phân công". Trước đây hệ thống từ chối cập nhật với lý do đợt đang ở trạng thái này; nay không còn bị từ chối.
+• Đợt "Lập kế hoạch": vẫn tốt như lần trước — các trường nhập/sửa được và nạp sẵn giá trị cũ, thao tác Sửa không làm rời khỏi màn Danh sách, lưu lại được và mở lại thấy đúng giá trị mới.
+
+Ba điểm đối tác từng nêu đều không tái phát:
+• Các trường thông tin chỉnh sửa được bình thường.
+• Không còn bị chuyển sang màn Chi tiết khi bấm Sửa.
+• Danh sách tệp đính kèm hiển thị đầy đủ, kèm thao tác xem và gỡ bỏ từng tệp; lưu biểu mẫu mà không đụng tới phần đính kèm thì tệp cũ không bị mất. Kiểm trên cả đợt có 1 tệp và đợt có 2 tệp khác định dạng (.pdf và .docx).
+
+Riêng điểm trước đây phải hỏi Ban phân tích nghiệp vụ (về hai mục "Cơ quan được đánh giá" và "Tài liệu đính kèm" trên biểu mẫu) nay đã được chốt trong đặc tả ngày 06/08. Đã kiểm lại: biểu mẫu chỉnh sửa vẫn có đủ cả hai mục đúng như đặc tả yêu cầu, không bị gỡ bỏ.
+
+Số lượng đã đo: 2 đợt đại diện cho 2 trạng thái bắt buộc, cùng 3 tệp đính kèm ở 2 định dạng; đồng thời rà cột thao tác của toàn bộ 20 đợt trong danh sách để chắc chắn quyền sửa không bị mở nhầm sang các trạng thái khác.
+
+Ghi nhận thêm (không thuộc phạm vi phiếu này, không ảnh hưởng kết luận): trên biểu mẫu chỉnh sửa của đợt đã ở trạng thái "Phân công", nút lưu vẫn mang tên "Lưu nháp" trong khi đợt không còn là bản nháp; và danh sách chọn "Trạng thái" ở thanh lọc dùng một số tên gọi khác với bộ trạng thái mô tả trong đặc tả, đồng thời thiếu mục "Hủy". Sẽ theo dõi riêng.
+
+Phạm vi hiệu lực: đo trên môi trường nội bộ, khoảng 02:05-02:25 ngày 07/08/2026, trên bản dựng đang chạy tại thời điểm đó (màn hình hiển thị V1.0.9, khác bản đã đo ngày 06/08). Lưu ý: môi trường nội bộ này được cập nhật nhiều lần trong cùng một ngày — riêng đêm 06 rạng 07/08 đã thay 4 lần, lần gần nhất lúc 02:23 tức rơi vào chính lượt đo này. Vì vậy kết luận "đã hết lỗi" gắn với bản dựng nêu trên; khi chuyển sang môi trường nghiệm thu của đối tác cần xác nhận lại trên bản dựng thực tế ở đó.
+
+## [20] Ảnh/video verify
+
+ LKHDG_16.webm

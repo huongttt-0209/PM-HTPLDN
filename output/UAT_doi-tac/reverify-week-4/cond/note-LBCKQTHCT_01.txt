@@ -1,0 +1,38 @@
+✅ Là bug — chuyển dev
+
+Case vẫn HỎNG nên giữ Open, nhưng điểm hỏng khác chỗ đối tác ghi hình. Nhờ dev đọc kỹ mục 1 và 2 để không sửa nhầm chỗ.
+Đã kiểm bằng tài khoản cbnv_dp (CB Nghiệp vụ - Địa phương), đúng vai trò trong video của đối tác.
+
+❌ 1) Bước đối tác báo lỗi thì nay chạy được.
+- Video của đối tác dừng ở bước mở màn chi tiết đợt báo cáo, hệ thống trả về trang 403 với thông báo đơn vị không nằm trong phạm vi truy cập.
+- Khi QA kiểm lại, bước này mở được bình thường: vào thẳng màn chi tiết, hiện đủ thanh tiến trình 6 bước, thông tin đợt và biểu mẫu 21a với 13 chỉ tiêu. Không gặp trang 403.
+
+✅ 2) Nhưng đi tiếp đúng kịch bản thì tắc ở bước ngay sau.
+- Bấm nút Lập báo cáo, xác nhận Đồng ý trên hộp thoại, hệ thống từ chối với thông báo Bản ghi đã tồn tại, vui lòng thử lại.
+- Không tạo được báo cáo nháp nên không nhập được số liệu 21a hay 21b, không lưu nháp được, trạng thái nộp không chuyển sang Đang lập.
+- Vì vậy kết quả mong đợi của phiếu vẫn không đạt, QA giữ nguyên Open.
+- Bug ID: BUG-BC-KHONG-LAP-DUOC-BAO-CAO.
+
+3) Điểm mâu thuẫn rõ nhất, đề nghị dev xem trước.
+- Cùng lúc bị báo là đã tồn tại, chính hệ thống lại cho biết đơn vị CHƯA nộp và CHƯA có báo cáo nào, đồng thời vẫn mở thao tác bắt đầu lập cho người dùng.
+- Hai thông tin này không thể cùng đúng. Người dùng bị chặn hoàn toàn, không có đường đi vòng vì màn chi tiết chỉ có duy nhất nút Lập báo cáo, mà cũng không có báo cáo nào để mở ra làm tiếp.
+
+4) Đã loại các khả năng không phải lỗi.
+- Loại khả năng đơn vị không nằm trong phạm vi: đọc danh sách đơn vị thuộc phạm vi của từng đợt rồi đối chiếu với đơn vị của tài khoản, có mặt ở cả hai đợt.
+- Loại khả năng sai vai trò: đặc tả giao chức năng lập báo cáo cho cán bộ nghiệp vụ cấp địa phương và bộ ngành thuộc phạm vi đợt, đúng vai trò đang dùng.
+- Loại khả năng hỏng dữ liệu của một bản ghi: thử trên cả hai đợt đang có, kết quả giống hệt nhau, cùng một thông báo từ chối.
+- Loại khả năng lỗi dựng giao diện: thao tác qua giao diện và gọi thẳng dịch vụ dữ liệu đều cho cùng kết quả từ chối.
+
+5) Ba điều kiện tiên quyết theo đặc tả đều đang thoả.
+- Người dùng là cán bộ nghiệp vụ cấp địa phương.
+- Đơn vị nằm trong phạm vi đợt báo cáo đã phát hành.
+- Bản ghi nộp của cặp đợt và đơn vị đang ở trạng thái chưa nộp.
+- Đủ cả ba nên hệ thống phải cho lập báo cáo nháp. Nếu hệ thống cho rằng đã có báo cáo thì phải mở báo cáo đó ra cho cán bộ làm tiếp, chứ không nên vừa báo đã tồn tại vừa không cho vào.
+
+✅ 6) Một lỗi phụ phát hiện khi đo, đã tách dòng riêng trong hồ sơ lỗi.
+- Một lần bấm chỉ gửi một yêu cầu nhưng giao diện hiện hai thông báo lỗi chồng nhau.
+- Xếp nhẹ, nhưng nên sửa vì người dùng dễ tưởng mình đã bấm nhiều lần.
+- Bug ID: BUG-BC-TOAST-LOI-HIEN-2-LAN.
+
+7) Bằng chứng.
+- Ảnh màn chi tiết đợt báo cáo mở được bằng tài khoản địa phương. Ảnh hộp thoại xác nhận trước khi bấm Đồng ý. Kèm bản ghi phản hồi của hệ thống cho thao tác bị từ chối. Tất cả trong hồ sơ lỗi.

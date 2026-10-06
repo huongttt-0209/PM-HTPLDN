@@ -1,0 +1,73 @@
+🔁 CÒN LỖI — chuyển lại dev.
+
+■ CÒN LỖI Ở ĐÂU
+Vai trò Quản trị hệ thống (tài khoản admin) — đúng vai trò trong ảnh nghiệm thu:
+   [Xem báo cáo] → OK. Hiện đủ số liệu và biểu đồ, hai nút Xuất bật sáng.
+   [Xuất Excel]  → KHÔNG ra tệp. Màn hiện đúng một chữ "Forbidden"
+                   (máy chủ trả 403 · mã ERR-PERM-SYS-00-01)
+Đúng hiện tượng ô "TKM phản hồi lần 1" đã ghi. Lần này đã CHỤP ĐƯỢC ẢNH khung thông báo đó.
+
+■ VÌ SAO LÀ LỖI (đặc tả srs-fr-11-bao-cao.md)
+1. Dòng :79 — kiểm quyền phải nằm ở ĐẦU luồng, nên bước Xem và bước Xuất phải cùng một quy
+   tắc quyền. Hiện đang cho xem đủ số liệu rồi mới chặn ở bước xuất.
+2. Dòng :117 — khi từ chối phải hiện câu tiếng Việt báo người dùng không có quyền xem báo
+   cáo. Hiện đang ném thẳng chuỗi kỹ thuật tiếng Anh của máy chủ ra cho người dùng cuối.
+KHÔNG phải chờ BA mới sửa được: câu hỏi "QTHT có được xuất báo cáo không" đã gửi BA, nhưng
+trả lời hướng nào thì vẫn là lỗi — nếu không được xuất thì phải chặn từ bước Xem và báo bằng
+tiếng Việt; nếu được xuất thì đang chặn nhầm.
+
+■ ĐÃ HẾT LỖI — ĐỪNG ĐỤNG LẠI
+Cán bộ Nghiệp vụ Trung ương xuất Excel tốt: tệp mở đọc được, đầu tệp đủ tên báo cáo + kỳ +
+đơn vị + ngày tạo, bảng "Theo kỳ" đủ 3 thông tin nghiệp vụ đòi (nhãn kỳ · số hồ sơ · tổng chi
+phí), số khớp đúng số trên màn. Đổi kỳ sang Khoảng tùy chọn 01/06–30/06/2026 thì nhãn kỳ và
+khoảng ngày trong tệp đổi theo — tệp bám bộ lọc, không xuất cứng. Chọn kỳ Quý (quý không có
+dữ liệu) thì màn ra rỗng và nút Xuất tự tắt, đúng mong đợi. Hai lượt xuất ra hai tên tệp khác
+nhau. Hết câu "Không thể tạo file xuất. Vui lòng thử lại." (đối tác báo 16/07).
+
+■ AI SỬA
+Dev BE — cho bước Xem và bước Xuất dùng chung quy tắc quyền; từ chối thì trả thông báo theo :117.
+Dev FE — không đẩy chuỗi máy chủ trả về ra thẳng màn hình người dùng.
+BA     — chốt "QTHT có được xuất báo cáo không" để dev chọn hướng sửa.
+
+■ ĐÃ ĐO
+06/08/2026 · bản dựng V1.0.8 · admin (QTHT/TW) + cbnv_tw_03 (CB Nghiệp vụ/TW) · BC Chi phí
+theo thời gian · Kỳ Năm 2026 · Toàn quốc · thêm 2 cấu hình kỳ (Khoảng tùy chọn tháng 6; Quý
+không có dữ liệu) · 3 lượt bấm xuất · không tạo/sửa/xoá bản ghi nào. Bằng chứng: ô "Ảnh/video
+verify" cùng dòng.
+Ba lỗi khác gặp lúc đo, đã tách phiếu riêng, KHÔNG tính vào phiếu này:
+   · BCTK_QA07 (dòng 370) — bấm [Xem báo cáo] lần 2 thì hai nút Xuất bị khoá cả phiên
+   · BCTK_QA08 (dòng 371) — giao diện không chọn được nhiều điểm kỳ, biểu đồ đường luôn 1 điểm
+   · BCTK_QA09 (dòng 372) — tệp xuất in mã kỹ thuật "KHOANG" thay cho chữ tiếng Việt
+
+────────── CÁCH VERIFY SAU KHI DEV FIX ──────────
+Cần trước: tài khoản admin (QTHT, cấp TW) · màn Báo cáo thống kê (/bao-cao) · kỳ báo cáo phải
+CÓ dữ liệu (báo cáo trống thì nút Xuất tự tắt, đo vô nghĩa).
+
+B1. admin → BC Chi phí theo thời gian · Kỳ Năm 01/01–31/12/2026 · Toàn quốc → [Xem báo cáo]
+    (bấm đúng 1 lần). Ghi lại Tổng chi phí · Tổng hồ sơ và các dòng bảng "Theo kỳ".
+B2. [Xuất Excel] → chép nguyên văn chữ hiện ra; kiểm có tệp về máy không.
+B3. Đối chiếu bằng đường thứ 2: tab Network xem lời gọi xuất trả mã gì. Có tệp thì MỞ RA ĐỌC,
+    so với số ở B1.
+B4. Lặp B1–B3 bằng cbnv_tw_03; thêm 1 lượt đổi kỳ (vd Khoảng tùy chọn 01/06–30/06/2026) để
+    chắc nhãn kỳ trong tệp đổi theo bộ lọc.
+
+✅ PASS — đạt 1 trong 2:
+   a) admin xuất được tệp .xlsx mở đọc được, số khớp màn, không thông báo từ chối; HOẶC
+   b) nếu BA chốt QTHT không được xuất → chặn NGAY ở bước [Xem báo cáo], kèm câu tiếng Việt.
+❌ FAIL nếu: còn "Forbidden" hay bất kỳ chuỗi tiếng Anh / mã kỹ thuật nào cho người dùng cuối ·
+   vẫn cho xem đủ rồi mới chặn ở bước Xuất · chỉ ẩn/làm mờ nút Xuất mà bước Xem vẫn vào được ·
+   Cán bộ Nghiệp vụ bị chặn theo · tệp xuất thiếu thông tin so với màn.
+
+⚠️ BẪY
+1. Cán bộ Nghiệp vụ xuất được KHÔNG chứng minh đã fix — vai trò đó vốn đã tốt từ 06/08. Phép đo
+   quyết định là chạy bằng chính tài khoản admin.
+2. Tải được tệp chưa đủ — phải MỞ TỆP RA ĐỌC mới chốt.
+3. Nút Xuất bị mờ dù báo cáo đang hiện số liệu = do đã bấm [Xem báo cáo] từ 2 lần trở lên (lỗi
+   riêng BCTK_QA07). Tải lại trang, chọn lại bộ lọc, bấm đúng 1 lần.
+4. Đừng chấm Fail vì tên tệp BaoCaoChiPhiTheoThoiGian_… (khuôn tên đã chốt 04/08/2026); vì số
+   liệu khác ảnh nghiệm thu (25 hồ sơ / 226.308.268 đ); hay vì bảng chỉ có một dòng kỳ — điều
+   phải đúng là TỆP KHỚP MÀN.
+5. Khung thông báo sống ~3 giây và đổi chữ NGAY TRONG khung cũ, không mọc khung mới → công cụ
+   đếm "khung mới" chỉ thấy "Đang tạo file..." rồi báo nhầm là im lặng. Phải theo dõi nội dung
+   khung theo thời gian; muốn chụp ảnh thì hẹn giờ bấm nút sau ~2500 mili-giây rồi mới gọi lệnh
+   chụp. Ứng dụng gửi lời gọi xuất qua XHR chứ không qua fetch. Tải lại trang trước khi đo.

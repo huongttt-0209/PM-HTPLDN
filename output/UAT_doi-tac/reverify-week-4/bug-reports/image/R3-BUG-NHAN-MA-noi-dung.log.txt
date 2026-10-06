@@ -1,0 +1,80 @@
+R3 RE-VERIFY — BUG-NHAN-MA-KY-THUAT-THO (HIENTHI_OOS_10)
+Ngay chay: 29/07/2026  |  Env: https://18.143.165.120.nip.io
+Tai khoan: cbnv_tw_01 (5 cho dau), admin (cho thu 5 — Nhat ky he thong)
+Cach lay tep: bam nut [Xuat Excel]/[Xuat XLSX] tren giao dien, doc Blob do chinh UI sinh ra.
+==============================================================================
+
+[1/5] Man Chuong trinh HTPLDN > Dot bao cao > Chi tiet (DOT-SO_BO_NAM-2026-1)  -> DA SUA
+------------------------------------------------------------------------------
+   Vi tri                     Lan truoc          Lan nay
+   -------------------------- ------------------ --------------------
+   O 'Ky BC'                  SO_BO_NAM          So bo nam      (chu tieng Viet co dau)
+   O 'Trang thai'             TAO_DOT            Tao dot        (chu tieng Viet co dau)
+   Duong dan dau trang        Dot Bao Cao        Dot bao cao    (co dau day du)
+   Muc suon trai              Vu viec HTPL       Vu viec HTPL   (co dau day du)
+   (Anh chup: R3-BUG-NHAN-MA-dot-bao-cao-da-co-chu-viet.png)
+   Man danh sach Dot bao cao cung da doi: cot 'Ky BC' = 'So bo nam' / 'So bo 6 thang',
+   cot 'Trang thai' = 'Tao dot'.
+
+------------------------------------------------------------------------------
+[2/5] Mang luoi TV > Tu van vien / Chuyen gia > [Xuat Excel] — cot trinh do  -> DA SUA
+------------------------------------------------------------------------------
+   Tep: 'DS Tư vấn viên' A1:J9
+   Tieu de (dong 4): STT | Họ và tên | Năm sinh | Thông tin liên hệ (SĐT, địa chỉ, email) | Chức danh vị trí | Trình độ chuyên môn + số văn bằng | Chứng chỉ (tên + ngày cấp) | Lĩnh vực chuyên ngành | Kinh nghiệm (số năm + nơi công tác) | Ghi chú
+   r5: 'Thạc sĩ\nLuat kinh te\nQĐ-8018/QĐ-STPAG'
+   r6: 'Cử nhân\nQD-SEED28-2026'
+   r7: 'Thạc sĩ'
+   r8: 'Thạc sĩ'
+   r9: 'Thạc sĩ'
+   => Lan truoc: THAC_SI (3 o) va CU_NHAN (1 o). Lan nay: 'Thac si' / 'Cu nhan' — chu tieng Viet.
+
+------------------------------------------------------------------------------
+[3+4/5] Bao cao danh gia hieu qua (DG-20260722-0001) > [Xuat XLSX]  -> DA SUA
+------------------------------------------------------------------------------
+   Cot 'Vu viec' (truoc day ghi chuoi dinh danh noi bo dang 8e259653-e0a5-...):
+      r20: VV-BTP-TW-20260712-001
+      r21: EEE-VH-012
+      r22: EEE-VH-011
+   Nhan chi tieu (truoc day bo dau):
+      r24: III. CHỈ TIÊU HOẠT ĐỘNG HTPLDN (Nhóm VI)
+      r25: 1. Số TVV kiện toàn/công bố
+      r13: Tổng số vụ việc
+   => Ca 2 diem deu da co chu tieng Viet dung.
+
+------------------------------------------------------------------------------
+[5/5] Quan tri he thong > Nhat ky he thong > [Xuat Excel] — tieu de cot  -> VAN CON LOI
+------------------------------------------------------------------------------
+   cot  1: 'Thời gian'
+   cot  2: 'Module'
+   cot  3: 'Entity type'
+   cot  4: 'Entity ID'
+   cot  5: 'Hành động'
+   cot  6: 'Chi tiết thay đổi'
+   cot  7: 'Username'
+   cot  8: 'Họ và tên'
+   cot  9: 'Don vi'   <<< VAN MAT DAU
+   cot 10: 'Vai tro'   <<< VAN MAT DAU
+   cot 11: 'Nguồn hệ thống'
+   cot 12: 'Consumer'
+   cot 13: 'IP'
+   cot 14: 'Endpoint'
+   cot 15: 'Mã phản hồi'
+   cot 16: 'Session'
+
+   => 2 tieu de 'Don vi' va 'Vai tro' van bo dau, trong khi cac tieu de ngay canh
+      ('Thoi gian', 'Hanh dong', 'Ho va ten', 'Nguon he thong', 'Ma phan hoi') deu co dau day du.
+      => Khong phai loi phong chu hay ma hoa, ma la chu duoc dat sai tu luc sinh tep.
+
+==============================================================================
+TONG KET
+
+ Cho                                                        Ket qua
+ ---------------------------------------------------------- ----------
+ 1. Man Dot bao cao — Ky BC / Trang thai / duong dan / suon  DA SUA
+ 2. Tep Tu van vien / Chuyen gia — cot Trinh do              DA SUA
+ 3. Tep bao cao danh gia — cot Vu viec (chuoi dinh danh)     DA SUA
+ 4. Tep bao cao danh gia — nhan chi tieu bo dau              DA SUA
+ 5. Tep Nhat ky he thong — tieu de cot 'Don vi' / 'Vai tro'  VAN CON LOI
+
+ => 4/5 cho da sua. Con 1 cho chua sua.
+

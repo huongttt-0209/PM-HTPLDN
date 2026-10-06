@@ -1,0 +1,4 @@
+✅ ĐÃ HẾT LỖI: Thẻ "Hồ sơ pháp lý DN" nay có nút Xuất Excel và xuất ra tệp .xlsx đúng danh sách đang hiển thị.
+VÌ SAO ĐẠT: FR-X.1-04 quy định khối xử lý Xuất Excel áp dụng bộ lọc hiện tại, giới hạn 10.000 dòng và tạo tệp .xlsx đủ 8 cột mã hồ sơ, tên, DN, loại, ngày cấp, hết hạn, trạng thái, cơ quan cấp (srs-fr-12-tv-chuyen-sau.md:657-665, cột ở :664).
+ĐÃ ĐO: Tài khoản cbnv_tw_02 (CB Nghiệp vụ Trung ương), doanh nghiệp DN-HNI-0001 thẻ Hồ sơ pháp lý đang có 8 hồ sơ; bấm Xuất Excel tải về tệp ho-so-phap-ly-dn-1786036166247.xlsx 7007 byte, mở nội dung tệp thấy hàng tiêu đề đủ 8 cột đúng thứ tự đặc tả và thân tệp 8 dòng khớp 8 bản ghi trên màn; riêng ngưỡng 10.000 dòng chưa đo được vì môi trường chỉ có 12 hồ sơ pháp lý.
+HIỆU LỰC: Env https://18.143.165.120.nip.io, bản dựng HTPLDN V1.0.9, bó mã assets/index-CxS5qW_0.js, last-modified 06/08/2026 12:48:25 GMT.

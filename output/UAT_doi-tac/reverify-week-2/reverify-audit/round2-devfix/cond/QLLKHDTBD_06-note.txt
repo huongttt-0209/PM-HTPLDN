@@ -1,0 +1,3 @@
+- Tạo mới Kế hoạch đào tạo: nếu có NHẬP "Ngân sách dự kiến" thì lưu được (thành công).
+- Nhưng nếu ĐỂ TRỐNG "Ngân sách dự kiến" (trường này không bắt buộc nhập) → hệ thống báo "Lỗi hệ thống, vui lòng thử lại sau." và không tạo được kế hoạch.
+- Đề nghị: cho phép tạo kế hoạch khi bỏ trống Ngân sách, đúng như trường không bắt buộc (FR-III-14 / UC33 – Thêm mới kế hoạch đào tạo).

@@ -1,0 +1,110 @@
+================================================================================
+ BANG CHUNG — BUG-API-TIM-VUVIEC-BAO-LOI-UUID  (TKVVHTPLDN_01, row 35)
+ Loai bang chung: doi chieu HOP DONG API cua chinh ban trien khai
+ Nguon: GET https://18.143.165.120.nip.io/api/docs-json  (HTTP 200, 1.529.509 byte,
+        530 duong dan, KHONG can xac thuc) — nguon DOC LAP voi phieu doi tac.
+ Thoi diem do: 2026-07-27 15:05
+================================================================================
+
+!! LUU Y TRUNG THUC: QA KHONG thuc thi lai duoc loi goi API nay (bi chan o lop
+   chung thu so phia khach). Tep nay KHONG phai ket qua QA tai hien. Day la phan
+   doi chieu hop dong — dung de xac dinh loi goi trong phieu co hop le hay khong.
+   Bang cac huong vao da thu can kiet: xem BLOCKER-TKVVHTPLDN_01-cong-api-cong-khai-mtls.log.txt
+
+--------------------------------------------------------------------------------
+### 1. DIEU DOI TAC DA GOI (doc tu ban ghi hinh trong phieu, 8 khung hinh trich)
+--------------------------------------------------------------------------------
+
+Cong cu     : Postman, thu muc "7. Ho tro phap ly Doanh nghiep", request "uc176.
+              API tim kiem vu viec ho tro phap ly cho doanh nghiep"
+Phuong thuc : GET
+Duong dan   : /api/v1/public/vu-viecs/search
+Tham so     : keyword
+
+Lan 1 (khung t015.44s):  keyword = "tieu de vu viec"       -> 400 Bad Request, 867 B, 46 ms
+Lan 2 (khung t022.17s):  keyword = "Tieu de vu viec"       -> 400 Bad Request, 867 B, 24 ms
+   (lan 2 la tu khoa TRUNG KHOP tieu de mot vu viec dang co, doc duoc o khung t009.38s)
+
+Than phan hoi (giong nhau ca 2 lan, khac requestId + timestamp):
+   {
+     "success": false,
+     "error": {
+       "code": "ERR-VAL-SYS-00-00",
+       "message": "Validation failed (uuid is expected)",
+       "timestamp": "2026-07-23T03:35:22.265Z",   /  ".735Z" o lan 2
+       "requestId": "49e00921-d3fd-4e2c-b764-884124e6eb1a"
+     }
+   }
+
+DOI CHUNG trong cung phien lam viec (khung t000.00s + t009.38s):
+   GET /api/v1/public/vu-viecs   -> 200 OK, 1.16 KB, tra ve items[] co du lieu that
+   (id 9d44d0dc-44e9-4bb0-aebd-4928f4496f69, maVuViec VV-BKH-20260526-001,
+    tieuDe "Tieu de vu viec", linhVuc "Thue", trangThai DA_DUYET)
+   => xac thuc cua ben goi HOAT DONG BINH THUONG; loi 400 KHONG phai loi xac thuc.
+
+Khung hinh da trich va doc: reverify-week-4/reverify-audit/TKVVHTPLDN_01/frames/
+   t000.00s.jpg  t003.00s.jpg  t006.05s.jpg  t009.38s.jpg
+   t012.41s.jpg  t015.44s.jpg  t019.14s.jpg  t022.17s.jpg
+
+--------------------------------------------------------------------------------
+### 2. HOP DONG API DANG CONG BO CHO CHINH CHUC NANG DO
+--------------------------------------------------------------------------------
+
+  /api/v1/public/vu-viecs/search  [VuViecPublicController_search[0]]
+     tom tat : Tìm kiếm vụ việc công khai
+     mo ta   : Tìm kiếm toàn văn vụ việc công khai theo từ khóa (search_vector/tsquery), input qua VuViecPublicSearchQueryDto, kết quả xếp hạng theo ts_rank. Ghi keyword vào audit context của request. Endpoint Public API, yêu cầu scope htpldn:vu-viec:search; áp dụng cùng publish guard như list().
+     pham vi : [{"PublicApiOAuth2": ["htpldn:vu-viec:search"]}, {"LgspApiKey": []}]
+     tham so keyword        vi tri=query BAT BUOC=True  kieu={"minLength": 2, "type": "string"}
+     tham so linhVucId      vi tri=query BAT BUOC=False kieu={"format": "uuid", "type": "string"}
+     tham so trangThai      vi tri=query BAT BUOC=False kieu={"type": "string", "enum": ["HOAN_THANH", "DA_DUYET", "DA_DANH_GIA"]}
+     tham so doanhNghiepId  vi tri=query BAT BUOC=False kieu={"format": "uuid", "type": "string"}
+
+  /api/v1/public/vu-viecs/{id}  [VuViecPublicController_detail[0]]
+     tom tat : Chi tiết vụ việc theo quyền sở hữu
+     mo ta   : Trả về chi tiết đầy đủ một vụ việc theo id (FR-XII-20). Bắt buộc doanhNghiepId (chủ hồ sơ do Cổng PLQG forward) qua VuViecPublicDetailQueryDto, thread thêm donViId (hàng rào L11). Object-level authz (ownership + đơn-vị fence) ép trong service; id sai/không thuộc DN/bị fence trả 404 để không rò rỉ sự
+     pham vi : [{"PublicApiOAuth2": ["htpldn:vu-viec:read"]}, {"LgspApiKey": []}]
+     tham so id             vi tri=path  BAT BUOC=True  kieu={"type": "string"}
+     tham so doanhNghiepId  vi tri=query BAT BUOC=True  kieu={"format": "uuid", "type": "string"}
+
+--------------------------------------------------------------------------------
+### 3. KET LUAN RUT RA TU SO LIEU TREN
+--------------------------------------------------------------------------------
+
+ 1. Duong dan doi tac goi LA duong dan co that trong hop dong API dang cong bo.
+    => khong phai truong hop goi sai duong dan.
+
+ 2. Tham so BAT BUOC duy nhat cua chuc nang tim kiem la 'keyword', kieu chuoi,
+    do dai toi thieu 2. Ca hai gia tri doi tac gui deu hop le (15 va 15 ky tu).
+    => khong phai truong hop thieu tham so hoac tham so sai dinh dang.
+
+ 3. Chuc nang nay KHONG co bat ky tham so BAT BUOC nao kieu uuid. Hai tham so kieu
+    uuid (linhVucId, doanhNghiepId) deu KHONG bat buoc, va doi tac KHONG gui chung.
+    => thong bao "uuid is expected" KHONG THE phat sinh tu du lieu nguoi goi nhap.
+       Day la diem then chot: da loai het kha nang loi do nguoi dung.
+
+ 4. Loi thuoc tang KIEM TRA THAM SO (ma ERR-VAL-...), tuc phat sinh TRUOC khi truy
+    van du lieu. Vi vay ket qua KHONG phu thuoc vai tro nguoi goi, khong phu thuoc
+    trang thai/so luong ban ghi vu viec, khong phu thuoc du lieu tien de.
+    => day la co so de cham verdict du QA chua thuc thi lai duoc (bug tinh).
+    => cung duoc doi tac chung minh gian tiep: 2 tu khoa khac nhau, cung 1 loi.
+
+ 5. GOI Y HUONG TRUY NGUYEN (gia thuyet, dev tu quyet cach sua):
+    duong dan lien ke /api/v1/public/vu-viecs/{id} doi BAT BUOC tham so
+    'doanhNghiepId' kieu uuid. Dev nen kiem xem loi goi .../search co bi xu ly nham
+    sang nhanh xem chi tiet theo dinh danh hay khong.
+
+ 6. YEU CAU THEO DAC TA (SRS v3.5, Docs-PM-HTPLDN/.../srs-v3.5/):
+    srs-fr-16-api.md:665  "### FR-XII-08: API Tim kiem vu viec (UC178)"
+    srs-fr-16-api.md:671  "**Endpoint:** `GET /api/v1/vu-viec/search`"
+    srs-fr-16-api.md:681  "**Inputs:** keyword (text, Y) + linh_vuc_id + trang_thai
+                           + page + size."
+    srs-fr-16-api.md:683  "**Processing:** Xac thuc JWT -> rate limit -> tim kiem
+                           toan van tren linh vuc, don vi, ma vu viec -> loai tru
+                           thong tin nhay cam -> sap relevance, phan trang -> ghi log."
+    srs-fr-16-api.md:690  "- **Given** consumer gui keyword \"hop dong\" **When**
+                           search **Then** tra DS VV lien quan den hop dong"
+    danh-sach-api.md:67   "FR-XII-08 | UC178 | API Tim kiem vu viec HTPL | Tim vu viec
+                           theo tu khoa | ... Dau vao: tu khoa, linh vuc, trang thai,
+                           phan trang."
+    => he thong phai tra ve danh sach vu viec khop tu khoa; hien khong dat.
+

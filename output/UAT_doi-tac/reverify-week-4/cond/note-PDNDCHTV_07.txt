@@ -1,0 +1,25 @@
+✅ Là bug — chuyển dev
+
+Tái hiện đúng, đã chuyển dev. Cùng một nguyên nhân gốc với phiếu PDNDCHTV_01, đề nghị sửa một lần cho cả hai.
+Đã kiểm bằng 2 tài khoản đúng vai: cbpd_tw (CB Phê duyệt - Trung ương, BTP · TW) duyệt hàng loạt, cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW) là người tạo cả 2 câu hỏi và là người kiểm thông báo.
+
+❌ 1) Phần chạy ĐÚNG, đề nghị dev không sửa nhầm.
+- Tích chọn 2 câu hỏi, hệ thống hiện đúng "Đã chọn 2 câu hỏi" và nút Duyệt hàng loạt.
+- Có hộp thoại xác nhận trước khi duyệt, và đúng như đặc tả là KHÔNG có từ chối hàng loạt.
+- Cả 2 câu hỏi đều chuyển sang Đã duyệt, có hiệu lực, có lưu vết người duyệt. Chỉ tốn 1 lần gọi xử lý cho cả 2, không phải 2 lần lẻ.
+
+✅ 2) Phần LỖI: cả 2 câu hỏi được duyệt nhưng cán bộ tạo nhận 0 thông báo.
+- Hộp thông báo của người tạo: trước thao tác 253 mục, sau thao tác vẫn 253 mục. Chênh lệch bằng 0. Đã chờ thêm hơn 30 giây phòng trường hợp gửi chậm, vẫn không có mục mới.
+- Mục mới nhất vẫn là mục cũ lúc 12:43, trong khi thao tác duyệt hàng loạt lúc 12:53.
+- Đã loại trừ "hệ thống thông báo hỏng chung": chính tài khoản này vẫn nhận thông báo phê duyệt từ 8 nhóm chức năng khác; riêng Kho câu hỏi chưa từng có mục nào.
+- Bug ID: BUG-PD-THONG-BAO.
+
+3) Căn cứ đặc tả — nêu rõ để đối tác và BA phản biện được nếu không đồng ý.
+- Dòng mô tả nút Duyệt hàng loạt (srs-fr-13-tv-nhanh.md dòng 537) chỉ nói: có hộp thoại xác nhận, không có từ chối hàng loạt. Dòng này KHÔNG nhắc lại việc gửi thông báo.
+- Nhưng bản thân hành động Duyệt được định nghĩa ở dòng 536: đặt trạng thái Đã duyệt, bật hiệu lực, VÀ thông báo cho cán bộ nghiệp vụ.
+- Duyệt hàng loạt tạo ra đúng cùng một chuyển trạng thái đó cho nhiều bản ghi, nên QA áp dụng cùng yêu cầu thông báo. Đã rà quy trình phê duyệt trong đặc tả, không có câu nào miễn trừ thông báo cho thao tác hàng loạt.
+- Nếu BA muốn duyệt hàng loạt được phép không gửi thông báo, đề nghị nêu rõ để QA điều chỉnh kết luận.
+
+4) Bằng chứng.
+- Ảnh chụp trước khi bấm: 2 dòng đã tích chọn, thanh công cụ hiện Đã chọn 2 câu hỏi và nút Duyệt hàng loạt.
+- Ảnh chụp hộp thông báo của cán bộ tạo sau thao tác. Kèm trong hồ sơ lỗi.

@@ -1,0 +1,63 @@
+🔁 CÒN LỖI — chuyển lại dev.
+
+■ LỖI Ở ĐÂU
+Ai     : Vai trò Quản trị hệ thống (tài khoản admin)
+Màn    : Báo cáo thống kê → "BC Chương trình theo thời gian"
+Làm gì : [Xem báo cáo] hiện đủ số liệu (6 chương trình · ngân sách 250.000.000) kèm biểu đồ và
+         bảng theo kỳ → bấm [Xuất Excel]
+Hỏng   : KHÔNG có tệp nào về máy. Màn hiện đúng một từ tiếng Anh "Forbidden"
+         (máy chủ trả 403 · mã ERR-PERM-SYS-00-01). Tái hiện 2 lần, đúng hiện tượng ô
+         "TKM phản hồi lần 1" đã ghi.
+
+■ SAI CHỖ NÀO (srs-fr-11-bao-cao.md)
+:117 — khi từ chối vì thiếu quyền phải hiện câu TIẾNG VIỆT báo người dùng không có quyền xem báo
+       cáo, không ném chuỗi kỹ thuật của máy chủ ra màn.
+:79  — kiểm quyền nằm ở ĐẦU luồng: không được phép thì chặn ngay ở [Xem báo cáo], đừng cho xem
+       hết số liệu rồi mới chặn lúc xuất.
+Không phải chờ BA mới sửa được: BA trả lời hướng nào thì vẫn là lỗi — không được xuất thì phải
+chặn từ bước Xem và báo bằng tiếng Việt; được xuất thì đang chặn nhầm. (:1268 BR-AUTH-08 ghi
+ngoại lệ "QTHT bypass" cho toàn nhóm FR-IX, tức đang nghiêng về hướng ĐƯỢC xuất.)
+
+■ ĐÃ CHẠY ĐÚNG — ĐỪNG TEST LẠI
+Vai trò CB Nghiệp vụ TW xuất Excel tốt: tệp BaoCaoCtTheoThoiGian_20260806_1430.xlsx tải về và mở
+đọc được, đầu tệp đủ tên báo cáo + kỳ + khoảng thời gian + đơn vị + ngày tạo, bảng mỗi hàng một kỳ
+kèm nhãn kỳ và số chương trình, khớp đúng từng hàng với màn, cộng dọc bằng đúng số tổng. Đổi bộ
+lọc thì tệp đổi theo — chọn kỳ Tháng phủ cả năm ra đủ 12 hàng. Hết câu "Không thể tạo file xuất.
+Vui lòng thử lại.".
+
+■ ĐỪNG CHẤM HỎNG VÌ
+Tên tệp. Ô "Kết quả mong đợi" ghi "BaoCaoChuongTrinh_…", hệ thống đặt "BaoCaoCtTheoThoiGian_…".
+Khuôn tên nghiệp vụ chốt 04/08/2026 là {TênBáoCáo}_{YYYYMMDD_HHmm}.xlsx với phần tên suy từ tên
+loại báo cáo — tên đang dùng khớp khuôn này.
+
+■ AI SỬA
+Dev BE — bước Xem và bước Xuất dùng chung một quy tắc quyền; từ chối thì trả thông báo theo :117.
+Dev FE — không đẩy chuỗi lỗi kỹ thuật của máy chủ ra màn hình người dùng.
+BA     — chốt "QTHT có được xuất báo cáo không" để dev chọn hướng sửa.
+
+■ VERIFY LẠI SAU KHI FIX
+Cần trước: tài khoản admin (QTHT/TW) · màn /bao-cao · ≥1 chương trình HTPLDN đã duyệt / đang thực
+  hiện / hoàn thành nằm trong năm 2026 (báo cáo trống thì đo vô nghĩa).
+B1. admin → "BC Chương trình theo thời gian" · Kỳ Năm · Toàn quốc → [Xem báo cáo] (bấm đúng 1
+    lần). Ghi lại Tổng chương trình toàn kỳ và toàn bộ bảng "Theo kỳ".
+B2. [Xuất Excel] → chép nguyên văn chữ hiện ra, kiểm có tệp về máy không.
+B3. Kiểm đường thứ hai: tab Network xem lời gọi xuất trả mã gì. Có tệp thì MỞ RA ĐỌC, so số tổng
+    và TỪNG HÀNG kỳ với B1, kiểm cộng dọc bằng đúng số tổng.
+✅ ĐẠT — một trong hai:
+   a) admin nhận được tệp .xlsx mở đọc được, bảng mỗi hàng một kỳ kèm nhãn kỳ và số chương trình,
+      khớp bảng trên màn, không thông báo từ chối nào; HOẶC
+   b) nếu BA chốt QTHT không được xuất → chặn NGAY ở [Xem báo cáo] kèm câu tiếng Việt báo không
+      có quyền.
+❌ CHƯA ĐẠT: còn "Forbidden" hay bất kỳ chuỗi tiếng Anh / mã kỹ thuật nào · vẫn cho xem đủ rồi mới
+   chặn lúc xuất. Đúng một nửa cũng tính là chưa đạt.
+⚠️ Bẫy: (1) CB Nghiệp vụ xuất được KHÔNG chứng minh đã fix — vai trò đó vốn đã tốt từ 06/08, phép
+   đo quyết định phải chạy bằng chính admin. (2) Tải được tệp chưa đủ, phải MỞ TỆP RA ĐỌC.
+   (3) Ghi kèm tên bó mã assets/index-XXXX.js, đừng chỉ ghi V1.0.8 — ngày 06/08 bó mã đã đổi
+   index-CNwX9JjX.js → index-DIABnbIr.js mà chuỗi phiên bản vẫn in V1.0.8; hai vai trò phải đo
+   trên cùng bó mã mới so được. (4) Đừng chấm hỏng vì tên sheet, thứ tự cột, cách viết nhãn kỳ,
+   màu sắc, dòng tổng cuối bảng, kỳ rỗng hiện 0 hay bị bỏ, tệp không nhúng biểu đồ — đặc tả không
+   quy định những thứ đó.
+
+Đo 06/08/2026 · V1.0.8 · admin (QTHT/TW) + cbnv_tw_04 (CB Nghiệp vụ/TW) · 6 chương trình trong kỳ
+Năm 2026 (Tháng 1 có 5, Tháng 3 có 1) · 4 cấu hình bộ lọc · không tạo/sửa/xoá bản ghi nào.
+Ảnh: ô "Ảnh/video verify" cùng dòng.

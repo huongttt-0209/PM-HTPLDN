@@ -1,0 +1,7 @@
+⚠️ Cần BA xác nhận.
+- Verify lại bằng CB Nghiệp vụ TW (cbnv_tw_03), mở màn Chi tiết TVCS bản "Đã duyệt" (TVCS-SEED-0001).
+- Phần "hiển thị 7 nhóm" KHÔNG tái hiện: web hiện đúng 6 nhóm cho bản Đã duyệt (5 nhóm cơ bản + nhóm Công khai — nhóm này chỉ hiện khi trạng thái Đã duyệt). KHÔNG có nhóm "Vụ việc liên kết" như ảnh đối tác.
+- Còn vướng: nhãn nhóm giữa 2 chỗ trong SRS đang khác nhau. Bố cục màn (FR-X.1-01/UC147, SCR-X1-02 §Bố cục tổng quan, dòng 1133) ghi nhãn ngắn "Nhật ký", "Tư liệu PL"; còn bảng Thành phần màn hình (dòng 1144/1146/1147) ghi nhãn dài "Tư liệu PL liên kết", "Nhật ký thao tác", "Công khai chuyên trang".
+- Web hiện: "Nhật ký" (khớp dòng 1133), "Tư liệu pháp luật", "Trạng thái công khai".
+- Đối tác kỳ vọng: "Tư liệu pháp lý liên kết", "Nhật ký thao tác".
+- Đề nghị BA chốt: nhãn chuẩn của các nhóm accordion màn Chi tiết TVCS lấy theo bản ngắn (dòng 1133) hay bản dài (bảng Thành phần)? Riêng "Tư liệu pháp luật" — theo tên chức năng FR-X.1-06 là "tư liệu pháp lý", đề nghị xác nhận đúng chữ "pháp lý" hay "pháp luật".

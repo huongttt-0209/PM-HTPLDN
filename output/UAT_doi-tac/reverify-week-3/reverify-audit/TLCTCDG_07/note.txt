@@ -1,0 +1,4 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: Tại Tab Tiêu chí của đợt đánh giá (trạng thái Lập kế hoạch), mỗi dòng tiêu chí CHỈ có nút Xóa (icon thùng rác), KHÔNG có nút Sửa. Thử bấm vào ô "Tên tiêu chí", bấm đúp, bấm cả dòng đều không mở ô nhập inline hay màn hình sửa → không có cách nào chỉnh sửa một tiêu chí đã tạo (chỉ có thể xóa rồi thêm lại).
+- Chuẩn: SRS SCR-VI-01, Tab Tiêu chí (mục #29) quy định bảng tiêu chí là bảng Editable với cột "Hành động (Sửa/Xóa)" và hỗ trợ sửa trực tiếp trên ô (inline edit). Hệ thống thiếu cả nút Sửa lẫn khả năng sửa inline.
+- Mã lỗi nội bộ: BUG-TLCTCDG_07.

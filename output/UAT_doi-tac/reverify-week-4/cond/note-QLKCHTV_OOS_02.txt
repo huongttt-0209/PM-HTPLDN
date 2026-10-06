@@ -1,0 +1,6 @@
+✅ Là bug — chuyển dev
+Dòng này do QA mở thêm, không thuộc case nào của phiếu đối tác. Phát sinh khi verify QLKCHTV_10.
+
+Tệp Excel mẫu do chính hệ thống cấp liệt kê mã lĩnh vực mà khi nhập lại thì hệ thống từ chối. Cán bộ làm đúng theo mẫu vẫn không nhập được.
+
+Mã bug trong báo cáo: BUG-KCH-TEMPLATE-LINHVUC. Các bước tái hiện, kết quả mong đợi và bằng chứng đã ghi đầy đủ ở các cột bên trái của chính dòng này.

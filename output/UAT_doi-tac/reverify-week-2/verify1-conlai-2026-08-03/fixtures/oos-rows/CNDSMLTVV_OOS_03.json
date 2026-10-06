@@ -1,0 +1,15 @@
+{
+  "STT": "03/08/2026",
+  "Tuần": "Tuần 2",
+  "Mã TC": "CNDSMLTVV_OOS_03",
+  "Mô tả": "Công nhận / công khai danh sách mạng lưới — bỏ trống mô tả công khai hiện 2 thông báo lỗi trùng nghĩa",
+  "Điều kiện": "1. Đăng nhập tài khoản Cán bộ nghiệp vụ cấp Trung ương, đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp\n2. Đang mở hộp thoại công khai lên Cổng pháp luật quốc gia của một hồ sơ tư vấn viên",
+  "Dữ liệu đầu vào": "Ô \"Mô tả công khai\" để trống (0 / 5000 ký tự). Hồ sơ dùng để mở hộp thoại: TVV-SEED-0001 \"Nguyễn Văn Seed\".",
+  "Các bước thực hiện": "1. Chọn menu \"Mạng lưới Tư vấn viên\" -> \"Tư vấn viên / Chuyên gia\", tab \"Đang hoạt động\"\n2. Tích chọn 1 dòng, bấm \"Công khai lên Cổng PLQG\" để mở hộp thoại công khai\n3. Để trống ô \"Mô tả công khai\"\n4. Bấm nút xác nhận \"Công khai\"\n5. Đếm số dòng báo lỗi hiện ra dưới ô nhập",
+  "Kết quả mong đợi": "Hệ thống chặn thao tác và báo cho người dùng đúng một lần về việc thiếu mô tả công khai. FR-IV-08 §Xử lý lỗi dòng 682 định nghĩa duy nhất một mã lỗi cho tình huống này: ERR-CK-02 — \"Mô tả công khai là bắt buộc trước khi công khai lên Cổng pháp luật quốc gia\".",
+  "Kết quả thực tế": "Hệ thống chặn đúng (không gửi lệnh nào ra máy chủ, hộp thoại vẫn mở) nhưng hiện 2 dòng báo lỗi cùng nghĩa cho cùng một ô nhập, xếp chồng ngay dưới ô \"Mô tả công khai\":\n- \"Vui lòng nhập mô tả công khai\"\n- \"Mô tả công khai không được để trống\"\n\nĐã kiểm cả 2 dòng đều thực sự hiển thị trên màn hình: mỗi dòng chiếm một vùng riêng 592x22 điểm ảnh, không phải chữ ẩn dành cho trình đọc màn hình. Ảnh chụp kèm theo cho thấy cả 2 dòng chữ đỏ.\n\nNgoài việc lặp, cả 2 câu đều không dùng nội dung thông báo mà đặc tả quy định ở dòng 682.",
+  "Ảnh/vieo 1": "BUG-CNDSMLTVV_OOS_03-hai-thong-bao-loi-trung-nghia.png",
+  "Trạng thái 1": "Fail",
+  "Verify": "Open",
+  "DEV phản hồi lần 1": "✅ Bug ĐÚNG – chuyển dev.\n- Yêu cầu theo đặc tả: FR-IV-08 \"Công khai mạng lưới TVV (UC46)\" §Xử lý lỗi dòng 682 — trường hợp E2 \"Thiếu mô tả công khai khi CONG_KHAI\" có duy nhất một mã lỗi ERR-CK-02 với nội dung \"Mô tả công khai là bắt buộc trước khi công khai lên Cổng pháp luật quốc gia\".\n- Bằng chứng đo: 2 dòng báo lỗi cùng hiển thị (mỗi dòng 592x22 điểm ảnh, đã loại trừ khả năng chữ ẩn dành cho trình đọc màn hình); 0 lệnh gửi ra máy chủ.\n- Mã lỗi nội bộ: BUG-CNDSMLTVV_OOS_03. Tài khoản kiểm tra: cbnv_tw_02 (Cán bộ nghiệp vụ Trung ương, đơn vị Cục Bổ trợ tư pháp). Bản dựng V1.0.5, kiểm tra ngày 03/08/2026.\n- Lỗi phát hiện ngoài phạm vi các dòng TC có sẵn nên mở dòng mới."
+}

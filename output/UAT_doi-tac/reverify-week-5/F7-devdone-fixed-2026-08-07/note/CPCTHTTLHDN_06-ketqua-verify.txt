@@ -1,0 +1,15 @@
+✅ Đã hết lỗi.
+
+VAI TRÒ QUẢN TRỊ HỆ THỐNG — nay chặn ngay ở cửa vào
+- Mục "Báo cáo thống kê" đã ẩn hẳn khỏi thanh điều hướng của tài khoản quản trị (đếm 33 mục, không còn mục này) — ẩn chứ không làm mờ, đúng srs-v3.5.md:684 (M-05). Tài khoản Cán bộ Nghiệp vụ vẫn thấy mục này ở vị trí cũ ⇒ ẩn theo vai trò, không phải gỡ chức năng.
+- Gõ thẳng địa chỉ màn báo cáo cũng không vào được. Việc chặn nay nằm ở BƯỚC XEM chứ không phải bước xuất: cả yêu cầu lấy danh sách loại báo cáo lẫn yêu cầu lấy số liệu đều bị từ chối, kèm câu tiếng Việt "Bạn không có quyền xem báo cáo này" (srs-fr-11-bao-cao.md:117). Hết chữ "Forbidden" và mã kỹ thuật.
+⇒ Đúng hướng nghiệp vụ chốt 06/08/2026, nay đã ghi vào đặc tả (srs-fr-11-bao-cao.md:79): quản trị hệ thống không phải tác nhân của báo cáo thống kê nên không vào màn và không xuất tệp.
+
+CÁN BỘ NGHIỆP VỤ TRUNG ƯƠNG KHÔNG HỎNG THEO — BC Chi phí theo loại hình DN
+- Xem báo cáo ra đủ số liệu: Tổng hồ sơ 2 · Tổng chi phí 23.000.000 ₫; bảng đủ 7 cột với 2 dòng quy mô — Nhỏ (1 hồ sơ · 15.000.000 ₫ · 30,0%) và Siêu nhỏ (1 hồ sơ · 8.000.000 ₫ · 100,0%).
+- Xuất được tệp BaoCaoChiPhiTheoLoaiDn_20260807_1009.xlsx; hết câu "Không thể tạo file xuất. Vui lòng thử lại." mà đối tác báo 16/07.
+- Đã mở tệp ra đọc, không dừng ở "tải được tệp": đủ 4 mục đầu tệp; bảng trong tệp có ĐỦ 7/7 cột nghiệp vụ (Quy mô DN · Số hồ sơ · Tổng chi phí · Mức hỗ trợ % · Trần mỗi hồ sơ · Trần chi phí · Chênh lệch) — đây là điều kiện chấm của phiếu; từng ô số khớp đúng ô tương ứng trên màn.
+
+Phạm vi: chạy lại 2 trong 3 cấu hình lọc — cấu hình gốc (để trống ô Loại DN) và biến thể mà bước kiểm vòng trước gọi tên riêng (chọn Loại DN có dữ liệu). Cấu hình Loại DN = "Siêu nhỏ" vòng 06/08 đã ghi là đạt nên không chạy lại.
+Ghi nhận, không đổi kết luận phiếu này: lượt 06/08 chọn Loại DN = "Nhỏ" ra màn rỗng do hồ sơ 15.000.000 ₫ bị xếp nhầm sang quy mô Siêu nhỏ (đã có phiếu riêng BCTK_QA05, dòng 368). Lượt hôm nay hồ sơ đó đã nằm đúng dòng "Nhỏ" — xin nhờ người phụ trách phiếu BCTK_QA05 kiểm theo phiếu đó.
+Chi tiết: do/CPCTHTTLHDN_06.md

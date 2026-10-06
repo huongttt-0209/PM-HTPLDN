@@ -1,0 +1,14 @@
+✅ Bug ĐÚNG – chuyển dev (một lỗi KHÁC trên cùng form) + ⚠️ Cần BA xác nhận (phần anh/chị phản ánh).
+
+[1] ⚠️ Cần BA xác nhận — phần anh/chị phản ánh về bộ trường nhóm 2:
+- Quan sát của anh/chị ĐÚNG: nhóm "Nghề nghiệp" trên form Thêm mới Tư vấn viên đang hiển thị 11 trường (Trình độ học vấn, Chuyên ngành, Chức vụ, Nơi công tác, Số năm kinh nghiệm, Mô tả kinh nghiệm, Chứng chỉ hành nghề, Số thẻ hành nghề, File thẻ hành nghề, Bằng cấp chi tiết, Chứng chỉ chi tiết).
+- Nhưng câu "SRS quy định chỉ hiển thị Trình độ chuyên môn, Chuyên ngành đào tạo, Số năm kinh nghiệm" không khớp với bản đặc tả SRS v3.5 mà QA đang dùng: SCR-IV-02 nhóm 2 (srs-fr-04-chuyen-gia-tvv.md:1495-1503) liệt kê 9 mục, và FR-IV-03 (UC41) §Inputs còn quy định thêm chuyen_nganh (dòng 304) + so_nam_kinh_nghiem (dòng 305) là trường Người hỗ trợ phải nhập. Nghĩa là 11 trường trên web đều có căn cứ trong SRS. Có lẽ anh/chị đang đối chiếu với bản thiết kế màn hình, còn QA đối chiếu SRS — đây là bất đồng về NGUỒN đặc tả nên QA không tự kết luận đúng/sai.
+- Xin lưu ý thêm: vòng 1 của chính case này anh/chị báo nhóm 2 THIẾU "Chứng chỉ hành nghề" và "Mô tả kinh nghiệm", dev đã bổ sung theo SRS; vòng 2 lại báo THỪA. Nên rất cần BA chốt một nguồn duy nhất để dev không phải sửa qua sửa lại.
+- Câu hỏi BA: Bộ trường chuẩn của nhóm "Nghề nghiệp" trên form Thêm/Sửa Tư vấn viên gồm những trường nào — lấy theo SRS (11 trường như hiện tại) hay theo bản thiết kế màn hình (3 trường)? Kèm 2 điểm SRS đang tự lệch nhau, xin BA chốt luôn: (a) SCR-IV-02 không liệt kê "Chuyên ngành" và "Số năm kinh nghiệm" trong bảng thành phần nhưng FR-IV-03 lại bắt buộc nhập 2 trường này — web hiện để tùy chọn; (b) SRS mô tả biểu mẫu có 5 nhóm (dòng 1476) nhưng web có 6 nhóm, thêm nhóm "Quyết định công bố" (Số QĐ công bố, Ngày QĐ công bố) — 2 trường này có trong entity Tư vấn viên (dòng 155-156) và trong mẫu xuất Phụ lục 1 (dòng 2212-2213). BA chốt xong QA sẽ cập nhật lại kết quả mong đợi của test case cho khớp.
+
+[2] ✅ Bug ĐÚNG – chuyển dev — lỗi QA phát hiện thêm khi soi cùng form này:
+- Trường "Tổ chức hành nghề chính" đang bị đặt BẮT BUỘC: để trống rồi bấm Lưu thì hệ thống chặn với thông báo "Tổ chức chính là bắt buộc".
+- Theo đặc tả, trường này là TÙY CHỌN và ghi rõ lý do "tư vấn viên tự do để trống": SCR-IV-02 nhóm 3 mục 4.1 (srs-fr-04-chuyen-gia-tvv.md:1506), và FR-IV-03 (UC41) §Inputs #14 (dòng 307) cũng ghi to_chuc_id là không bắt buộc. Hệ quả: hiện KHÔNG đăng ký được tư vấn viên hành nghề tự do vào mạng lưới.
+- Bug ID: BUG-DKTGMLTVV_03
+
+- Kiểm bằng: tài khoản Người hỗ trợ pháp lý, badge đơn vị "BTP · DP" đúng như trong ảnh anh/chị gửi; cùng màn Thêm mới Tư vấn viên. Phép thử bấm Lưu chạy trên form trống nên không tạo dữ liệu rác trên hệ thống.

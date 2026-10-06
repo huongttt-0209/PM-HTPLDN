@@ -1,0 +1,30 @@
+📌 KẾT QUẢ CHUNG: CÒN LỖI (REOPEN) + CẦN BA XÁC NHẬN
+
+❌ CÒN LỖI — Danh sách đang sắp sai thứ tự mặc định
+- Vì sao thuộc case: chính Kết quả mong đợi của QLHSDNHTCP_03 yêu cầu danh sách sắp theo ngày cập nhật mới nhất trước; SRS cũng quy định “ngày cập nhật DESC” (srs-fr-06-chi-tra.md:1081). Đây là yêu cầu của phiếu, không phải kiểm tra mở rộng ngoài bug.
+- Thực tế: danh sách đang sắp theo ngày tạo. Hồ sơ CT-SEED-102 vừa cập nhật trong ngày đo nằm ở dòng 11, trong khi hồ sơ cập nhật cũ hơn nằm phía trên; kết quả giống nhau ở cả 2 vai trò đã đo.
+- Dev cần sửa: khi người dùng mới mở danh sách và chưa chọn cách sắp xếp, hồ sơ có ngày cập nhật mới nhất phải đứng trước.
+
+❓ CẦN BA XÁC NHẬN — Hồ sơ đã kết thúc có hiển thị nhãn “Đã hoàn thành” ở cột SLA không?
+- SRS hiện tại chỉ quy định 4 mức cảnh báo SLA và chưa nói cách hiển thị với hồ sơ đã kết thúc (srs-fr-06-chi-tra.md:1058, 1523).
+- Web hiện hiển thị nhãn thứ 5 “Đã hoàn thành” cho 4 hồ sơ Đã thanh toán/Từ chối/Hủy, dù máy chủ trả mức “Bình thường”.
+- BA cần chốt với hồ sơ đã kết thúc: giữ nhãn “Đã hoàn thành”, hiển thị một trong 4 mức SLA, hay không hiển thị SLA? Trước khi BA trả lời, điểm này chưa được chấm là đạt hoặc lỗi.
+
+✅ ĐÃ HẾT LỖI — 2 lỗi đối tác đã báo về cột SLA
+- Thiếu nhãn mức: cột SLA hiện đủ 4 mức “Bình thường”, “Sắp hết hạn”, “Quá hạn” và “Quá hạn nghiêm trọng”, kèm số ngày làm việc.
+- Tràn/đè sang cột Ngày nộp: đo 14 hồ sơ × 2 vai trò (28 lượt dòng); chồng lấn lớn nhất 0 px, không dòng nào bị tràn, và Ngày nộp đọc đủ 10 ký tự ở 14/14 hồ sơ.
+
+🔎 PHẠM VI ĐÃ ĐO: môi trường nội bộ · 07/08/2026 10:42–10:58 · CB Nghiệp vụ TW và CB Phê duyệt TW · 14 hồ sơ.
+
+---
+── CÁCH VERIFY sau Dev fix ──
+Phạm vi: chỉ kiểm yêu cầu sắp xếp mặc định theo ngày cập nhật giảm dần (Kết quả mong đợi của phiếu; srs-fr-06-chi-tra.md:1081). Không đo lại hai lỗi SLA đã đạt.
+Precondition: đăng nhập lần lượt `cbnv_tw` và `cbpd_tw_01` → mở màn Chi trả chi phí, tab Tất cả; không nhập từ khóa, không bật bộ lọc và không chọn cách sắp xếp. Trang 1 phải có ít nhất 2 hồ sơ có thứ tự ngày cập nhật khác thứ tự ngày tạo.
+1) Với từng tài khoản, tải lại màn và ghi thứ tự mã hồ sơ đang hiển thị ở trang 1.
+2) Quan sát thứ tự mặc định trên màn, không chủ động chọn lại cách sắp xếp.
+Đối chứng độc lập: đọc ngày cập nhật của chính các mã đang hiển thị từ phản hồi danh sách, rồi so theo đúng thứ tự trên màn.
+✅ PASS khi: ở cả hai vai trò, ngày cập nhật giảm dần từ dòng đầu tới dòng cuối; hồ sơ cập nhật mới hơn luôn đứng trên hồ sơ cập nhật cũ hơn.
+❌ FAIL nếu: có bất kỳ cặp dòng nào hồ sơ cập nhật mới hơn lại đứng dưới hồ sơ cập nhật cũ hơn, hoặc danh sách vẫn khớp thứ tự ngày tạo thay vì ngày cập nhật.
+⏸ CHƯA CHỐT khi: một vai trò không có đủ dữ liệu phân biệt hai cách sắp xếp, không đọc được ngày cập nhật tương ứng, hoặc quan sát UI và đối chứng cho kết quả mâu thuẫn.
+⚠️ Không dùng nhãn “Đã hoàn thành” để chấm PASS/FAIL cho tới khi BA trả lời câu hỏi ở trên.
+Artifact lỗi lần này: `do/QLHSDNHTCP_03.md` — mục “Vế KHÔNG đạt — thứ tự sắp xếp mặc định”.

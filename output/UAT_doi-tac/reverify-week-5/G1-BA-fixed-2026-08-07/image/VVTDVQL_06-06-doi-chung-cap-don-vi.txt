@@ -1,0 +1,31 @@
+VVTDVQL_06 — Đối chứng: hệ thống CÓ dữ liệu "cấp đơn vị" nhưng báo cáo không mang theo
+Đo 07/08/2026, bản dựng V1.0.10, môi trường nội bộ 18.143.165.120.nip.io
+
+1) DANH MỤC ĐƠN VỊ CỦA HỆ THỐNG — mỗi đơn vị đều có sẵn mã và cấp:
+   { maDonVi: "BCA",   tenDonVi: "Bộ Công an",              cap: "BN" }
+   { maDonVi: "BCT",   tenDonVi: "Bộ Công Thương",          cap: "BN" }
+   { maDonVi: "BGDDT", tenDonVi: "Bộ Giáo dục và Đào tạo",  cap: "BN" }
+   { maDonVi: "BGTVT", tenDonVi: "Bộ Giao thông vận tải",   cap: "BN" }
+   => Dữ liệu cấp đơn vị (TW / BN / ĐP) đã có sẵn trong hệ thống.
+
+2) DỮ LIỆU BÁO CÁO "BC Vụ việc theo đơn vị quản lý" TRẢ VỀ (kỳ Năm 2026, Toàn quốc):
+   { donViId: "...-8001-000000000001", tenDonVi: "Bộ Kế hoạch và Đầu tư",           moi:0, tiepNhan:0,  dangHoTro:2, hoanThanh:2,  tongSo:4  }
+   { donViId: "...-8000-000000000001", tenDonVi: "Cục Bổ trợ tư pháp - Bộ Tư pháp", moi:2, tiepNhan:13, dangHoTro:4, hoanThanh:17, tongSo:40 }
+   { donViId: "...-8002-000000000006", tenDonVi: "Sở Tư pháp An Giang",             moi:0, tiepNhan:2,  dangHoTro:4, hoanThanh:1,  tongSo:8  }
+   { donViId: "...-8002-000000000001", tenDonVi: "Sở Tư pháp Hà Nội",               moi:0, tiepNhan:3,  dangHoTro:3, hoanThanh:1,  tongSo:7  }
+   => KHÔNG có cấp đơn vị trong dữ liệu báo cáo.
+
+3) MÀN HÌNH: bảng chỉ có các cột Đơn vị / Mới / Tiếp nhận / Đang hỗ trợ / Hoàn thành / Tổng số
+   => KHÔNG có cột cấp đơn vị.
+
+4) TỆP EXCEL (cả 2 lượt xuất, đã mở đọc bằng 2 cách độc lập - openpyxl và đọc thẳng phần
+   xl/worksheets/sheet1.xml trong tệp nén):
+   hàng tiêu đề = Đơn vị | Mới | Tiếp nhận | Đang hỗ trợ | Hoàn thành | Tổng số
+   Tìm chuỗi "cấp" / "TW" / "BN" / "ĐP" trong toàn bộ nội dung đọc được của 2 tệp: 0 lần xuất hiện.
+   => KHÔNG có cấp đơn vị trong tệp.
+
+KẾT LUẬN ĐỐI CHỨNG: hệ thống có sẵn dữ liệu cấp đơn vị (mục 1) nhưng báo cáo vụ việc theo
+đơn vị quản lý không mang theo ở cả ba nơi (dữ liệu báo cáo, màn hình, tệp xuất).
+Trong khi đó bảng đang trộn lẫn đơn vị Trung ương (Cục Bổ trợ tư pháp - Bộ Tư pháp),
+đơn vị Bộ/Ngành (Bộ Kế hoạch và Đầu tư) và đơn vị Địa phương (Sở Tư pháp Hà Nội,
+Sở Tư pháp An Giang) trong cùng một danh sách phẳng, không có cách nào phân biệt cấp.

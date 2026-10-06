@@ -1,0 +1,5 @@
+❌ Không phải bug.
+- Chức năng: Báo cáo thống kê › BC Vụ việc theo đơn vị quản lý › Xuất Excel (FR-IX-11 / UC134).
+- Đối tác phản ánh: bấm Xuất Excel báo lỗi "Không thể tạo file xuất. Vui lòng thử lại.".
+- Kiểm tra lại (kỳ Năm 2026, đơn vị Toàn quốc, báo cáo đã có dữ liệu: 4 đơn vị / tổng 17 vụ việc): bấm Xuất Excel → hệ thống báo "Tạo file thành công" và tải về file .xlsx đầy đủ (tiêu đề + kỳ + đơn vị + ngày tạo + số liệu 4 đơn vị đúng). Lỗi không xảy ra.
+→ Đối tác kiểm tra lại.

@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: màn chỉnh sửa đợt KHÔNG có nút "Hủy" của biểu mẫu (nút hủy bỏ thay đổi + đóng biểu mẫu + quay về danh sách). Nguyên nhân gốc: bấm "Sửa" không mở form chỉnh sửa mà mở màn chi tiết read-only nên không có thanh hành động của form.
+- Đã verify env test (tài khoản CB Nghiệp vụ TW): bấm Sửa đợt DG-20260720-0002 (Lập kế hoạch) → màn chi tiết read-only, chỉ có nút "Quay lại danh sách" và "Hủy đợt" (đây là hủy/chấm dứt đợt sang trạng thái Hủy, KHÁC với nút "Hủy" hủy bỏ thay đổi của biểu mẫu chỉnh sửa). Không có nút [Hủy] của form → không có cửa sổ xác nhận hủy bỏ thay đổi.
+- Chuẩn: SRS SCR-VI-01 thanh hành động form (#27): "[Hủy] [Lưu nháp] [Lưu & Chuyển tiêu chí]" — form sửa phải có nút [Hủy]; hủy → đóng biểu mẫu, quay về danh sách.
+- Mã lỗi nội bộ: BUG-LKHDG-EDIT (gộp LKHDG_16/20/21/22).

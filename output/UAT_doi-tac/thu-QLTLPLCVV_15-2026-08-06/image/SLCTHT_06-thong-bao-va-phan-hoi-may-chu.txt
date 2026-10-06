@@ -1,0 +1,134 @@
+SLCTHT_06 — Nguyên văn thông báo trên màn + phản hồi máy chủ
+Màn: Báo cáo thống kê → BC Số lượng chương trình hỗ trợ (?loai=so-luong-ct-ho-tro)
+Môi trường: https://18.143.165.120.nip.io — bản dựng HTPLDN · V1.0.8 (bó mã /assets/index-CNwX9JjX.js)
+Thời điểm đo: 2026-08-06 12:24 → 12:33
+Bộ bắt thông báo: script dùng chung tools/toast-capture.js (không lọc trùng · đọc innerText · đếm request).
+Tự kiểm trước mỗi lượt: soObserverDangSong = 1 (số liệu hợp lệ).
+⚠️ Đếm thông báo theo MỐC GIỜ khác nhau, không theo số phần tử.
+
+
+==============================================================================
+NHÁNH A — tài khoản cbnv_tw_04 (CB_NV_TW, cấp TW, BTP · TW) — vai trò đặc tả
+==============================================================================
+
+Bộ lọc dạng ① (khớp khít cấu hình 2 ảnh đối tác):
+  Loại BC = BC Số lượng chương trình hỗ trợ · Kỳ = Năm · 01/01/2026 → 31/12/2026
+  Đơn vị = Toàn quốc · Trạng thái chương trình = để trống
+Số trên màn: Tổng chương trình 7 · Đang thực hiện 1 · Hoàn thành 1
+Thời điểm tạo BC hiển thị trên màn: 06/08/2026 12:24 (mỗi lượt Xem báo cáo đều đổi
+  → không phải số cũ từ bộ nhớ đệm máy chủ)
+
+Bấm [Xuất Excel]:
+  SỐ REQUEST (khác GET)      : 1  → POST /api/v1/bao-cao/export
+  Mã trả về (list_network)   : 200
+  SỐ KHUNG THÔNG BÁO         : 1  (1 mốc giờ duy nhất → không có double-toast)
+  Chữ observer bắt lúc thêm  : "Đang tạo file..."
+  Chữ đo được lúc kết thúc   : "Tạo file thành công."
+     (khung thông báo AntD được cập nhật TẠI CHỖ, không thêm khung mới → observer
+      chỉ ghi được chữ lúc node ra đời; chữ cuối đọc bằng vòng đo DOM 120ms/lần)
+  KHÔNG có thông báo lỗi nào. KHÔNG xuất hiện "Không thể tạo file xuất. Vui lòng
+  thử lại." (câu đối tác chụp vòng 1) và KHÔNG xuất hiện "Forbidden" (vòng 2).
+
+  Đo khung thông báo hiển thị THẬT với người dùng (vì ảnh không bắt được lớp nổi):
+     position = fixed · khung x=0 y=8 w=1432 h=42 · opacity chạy 0.12 → 1 → 0.02
+     sống ≥ 2.279 giây (20 lần đo liên tiếp, 120ms/lần)
+
+  TỆP HỆ THỐNG GIAO RA:
+     Tên tệp : BaoCaoSoLuongCtHoTro_20260806_1224.xlsx
+     Kích cỡ : 6.959 byte
+     Kiểu    : application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+     Magic   : PK\x03\x04 (zip thật) — mở được bằng openpyxl
+
+  NỘI DUNG TỆP (đọc bằng openpyxl, sheet "Số lượng chương trình hỗ trợ"):
+     A1  BC Số lượng chương trình hỗ trợ
+     A2  Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+     A3  Đơn vị: Toàn quốc
+     A4  Ngày tạo: 06/08/2026
+     A8  Tổng số chương trình = 7          ← khớp thẻ trên màn (7)
+     A12 Đang thực hiện       = 1          ← khớp thẻ trên màn (1)
+     A16 Hoàn thành           = 1          ← khớp thẻ trên màn (1)
+     Theo trạng thái : Đã phê duyệt 5 · Đang thực hiện 1 · Hoàn thành 1
+                       (5 + 1 + 1 = 7 → cộng khớp tổng)
+     Theo đơn vị     : Cục Bổ trợ tư pháp - Bộ Tư pháp | 7 | 1 | 1
+                       (khớp đúng hàng duy nhất của bảng trên màn)
+     Theo kỳ         : Năm 2026 | 01/01/2026 | 31/12/2026 | 7
+
+Bộ lọc dạng ③ (như ① nhưng Trạng thái chương trình = Hoàn thành):
+  URL: ...&fd_trangThaiCt=HOAN_THANH
+  Số trên màn: Tổng 1 · Đang thực hiện 0 · Hoàn thành 1
+  Bấm [Xuất Excel]: 1 request POST /api/v1/bao-cao/export → 200 · 1 khung thông báo
+    ("Đang tạo file...") · KHÔNG có thông báo lỗi
+  Tên tệp : BaoCaoSoLuongCtHoTro_20260806_1227.xlsx  (6.912 byte)
+    → phần giờ-phút ĐỔI so với lượt 12:24 ⇒ xuất 2 lần trong ngày không đè tệp
+  Nội dung: A8 Tổng = 1 · A12 Đang thực hiện = 0 · A16 Hoàn thành = 1
+            Theo trạng thái CHỈ CÒN 1 dòng "Hoàn thành 1" (mất hẳn 2 dòng
+            "Đã phê duyệt 5" và "Đang thực hiện 1" của dạng ①)
+            Theo đơn vị: Cục Bổ trợ tư pháp - Bộ Tư pháp | 1 | 0 | 1
+            Theo kỳ: Năm 2026 | 1
+  ⇒ Nội dung tệp ĐỔI THEO bộ lọc, khớp đúng màn của chính bộ lọc đó.
+
+Bộ lọc dạng ② (như ① nhưng Đơn vị = Cục Bổ trợ tư pháp - Bộ Tư pháp (BTP-TW)):
+  URL: ...&donViId=00000000-0000-4000-8000-000000000001
+  Số trên màn: 7 · 1 · 1 (giống dạng ① vì TOÀN BỘ chương trình trên env này đều
+     thuộc đúng đơn vị đó — xem hạn chế ở mục 5/7 file tiêu chí)
+  Bấm [Xuất Excel]: 1 request POST /api/v1/bao-cao/export → 200 · 1 khung thông báo
+  Tên tệp : BaoCaoSoLuongCtHoTro_20260806_1228.xlsx  (6.953 byte)
+  Nội dung: A3 "Đơn vị: Cục Bổ trợ tư pháp - Bộ Tư pháp"
+            (dạng ① là "Đơn vị: Toàn quốc") ⇒ bộ lọc đơn vị CÓ vào tệp
+  Số liệu giống dạng ①: đúng, vì tập bản ghi giống nhau.
+
+Bộ lọc dạng ②b (đối chứng, Đơn vị = Bộ Công an (BCA) — đơn vị không có chương trình):
+  URL: ...&donViId=00000000-0000-4000-8001-000000000016
+  Trên màn: "Không có dữ liệu báo cáo cho kỳ và đơn vị đã chọn"
+  Nút [Xuất Excel] bị khoá.
+  ⇒ chứng minh bộ lọc đơn vị thật sự lọc DỮ LIỆU, không chỉ đổi chữ ở phần đầu tệp.
+
+
+==============================================================================
+NHÁNH B — tài khoản admin (QTHT, BTP · TW) — TRÙNG KHÍT vai trò 2 ảnh đối tác
+==============================================================================
+
+Vai trò hiển thị trên màn: "Quản trị hệ thống" · avatar QT · "BTP · TW"
+Nội dung access_token (giải mã phần payload):
+  vaiTro = ["QTHT"] · capDonVi = "TW"
+  donViId = 00000000-0000-4000-8000-000000000001
+  hoTen = "Quản trị hệ thống"
+
+BƯỚC 1 — [Xem báo cáo], cùng bộ lọc dạng ①:
+  GET /api/v1/bao-cao/so-luong-ct-ho-tro?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+     → 200
+  Màn hiện ĐẦY ĐỦ báo cáo: Tổng chương trình 7 · Đang thực hiện 1 · Hoàn thành 1
+     + bảng theo đơn vị + 2 biểu đồ. Thời điểm tạo: 06/08/2026 12:32
+  SỐ KHUNG THÔNG BÁO khi Xem = 0 (không có cảnh báo, không bị chặn)
+  ⇒ QTHT XEM ĐƯỢC báo cáo này.
+
+BƯỚC 2 — [Xuất Excel], vẫn bộ lọc đó:
+  SỐ REQUEST (khác GET)   : 1  → POST /api/v1/bao-cao/export
+  Mã trả về               : 403
+  SỐ KHUNG THÔNG BÁO      : 1  (1 mốc giờ duy nhất)
+  Chữ observer bắt lúc thêm : "Đang tạo file..."
+  CHỮ NGƯỜI DÙNG THẤY CUỐI : "Forbidden"      ← ĐÚNG chữ đối tác chụp ở vòng 2
+  Khung thông báo: x=0 y=-30→8 w=1432 h=41 · sống ≥ 3.241 giây (đo DOM 120ms/lần)
+  KHÔNG có tệp nào được giao (0 blob, 0 thẻ tải xuống).
+
+  THÂN PHẢN HỒI MÁY CHỦ (nguyên văn):
+  {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+   "timestamp":"2026-08-06T05:32:36.886Z",
+   "requestId":"08e57ea9-1b56-4c28-9fe0-70a05ad37850"}}
+
+  THÂN YÊU CẦU đã gửi:
+  {"loaiBaoCao":"BC_SO_LUONG_CT_HO_TRO","kyBaoCao":"NAM","tuNgay":"2026-01-01",
+   "denNgay":"2026-12-31","filterDacThu":{},"formatXuat":"XLSX"}
+
+
+==============================================================================
+GHI CHÚ VỀ ẢNH CHỤP
+==============================================================================
+Đã thử 4 lượt chụp lớp thông báo (chụp ngay sau khi bấm · hẹn giờ bấm sau 2500ms
+rồi mới chụp · hẹn giờ 1500ms · bấm bằng JS rồi chụp ngay) — công cụ chụp KHÔNG
+bắt được lớp nổi do thư viện giao diện dựng qua portal. Đây là hạn chế đã có tiền
+lệ trong đợt này (xem bug entry QLTLPLCVV_15 cùng thư mục).
+Bằng chứng thay thế = chữ đọc bằng innerText + số đo chứng minh khung thông báo
+hiển thị thật (vị trí · kích thước · thời gian sống) + nguyên văn phản hồi máy chủ
+ở trên. Ảnh kèm theo chỉ dùng để chứng minh CẤU HÌNH BỘ LỌC, VAI TRÒ và SỐ LIỆU
+trên màn tại thời điểm bấm nút.

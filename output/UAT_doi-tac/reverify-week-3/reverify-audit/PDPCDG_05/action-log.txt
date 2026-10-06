@@ -1,0 +1,18 @@
+PDPCDG_05 — Từ chối phân công → gửi thông báo kèm lý do cho CB NV — ACTION LOG (env 18.143)
+
+[cbpd_tw] đợt DG-20260720-0002 (Chờ duyệt PC), tab Phân công (chế độ phê duyệt): 2 nút "Phê duyệt" / "Từ chối".
+- Bấm "Từ chối" → modal "Lý do từ chối" (0/1000) có ô nhập lý do.
+- Nhập lý do "QA verify PDPCDG_05 - từ chối để kiểm tra thông báo cho CB nghiệp vụ" → "Xác nhận từ chối".
+- Toast: "Đã từ chối phân công".
+- Trạng thái đợt: Chờ duyệt PC → Phân công (PHAN_CONG) — đúng SRS (từ chối → về Phân công).
+- Thời điểm: ~2026-07-20 13:44.
+
+CẦN VERIFY (phía cbnv_tw — người trình): notification "từ chối phân công" KÈM LÝ DO có xuất hiện trong /api/v1/thong-baos của cbnv_tw không.
+
+=== VERIFY (phía cbnv_tw — người trình phân công) ===
+- GET /api/v1/thong-baos (cbnv_tw, pageSize=30): 30 thông báo ngày 2026-07-20 ĐỀU là "Tài khoản vừa đăng nhập ở nơi khác" (do QA switch account nhiều lần).
+- rejectMatch (lọc "từ chối|phân công|đánh giá|DG-20260720-0002") = [] → KHÔNG có thông báo "đã từ chối phân công" kèm lý do.
+- Reject thực hiện ~13:44; danh sách có mốc 13:46:16 và 13:38:27 (login-elsewhere) nhưng KHÔNG có entry đánh giá ~13:44.
+
+KẾT LUẬN: Sau khi CB PD từ chối phân công kèm lý do, CB nghiệp vụ (người trình) KHÔNG nhận được thông báo kèm lý do.
+SRS FR-VI (PDPCDG_05): "Gửi thông báo kèm lý do cho Cán bộ nghiệp vụ" (dòng 366 "Thông báo gửi CB NV"). → thiếu thông báo = Open. Khớp báo cáo đối tác.

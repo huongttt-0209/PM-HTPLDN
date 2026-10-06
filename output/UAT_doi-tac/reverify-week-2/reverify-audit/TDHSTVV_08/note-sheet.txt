@@ -1,0 +1,14 @@
+✅ Bug ĐÚNG – chuyển dev (xin đọc kỹ 3 ý dưới vì phạm vi rộng hơn phiếu).
+
+[1] ✅ Ý "bấm Lưu nháp mà trạng thái đổi sang Đang thẩm định" — anh/chị phản ánh ĐÚNG. QA xem lại video từng khung: ở giây thứ 21 con trỏ nằm đúng trên nút "Lưu nháp" và nút đã có viền tiêu điểm, sau đó trạng thái đổi thật (badge ở màn chi tiết thành "Đang thẩm định", đồng thời tab "Mới đăng ký" ở danh sách giảm từ 27 xuống 26 bản ghi). Theo đặc tả, nút "Lưu nháp" chỉ được lưu kết quả thẩm định tạm và KHÔNG được chuyển trạng thái (srs-fr-04-chuyen-gia-tvv.md dòng 1565). Vì vậy QA chuyển dev.
+- Lưu ý khi kiểm lại: QA chạy lại đúng kịch bản của anh/chị (cùng vai trò Cán bộ Nghiệp vụ Trung ương, hồ sơ đang ở "Mới đăng ký", nhập y hệt 4 nhóm tiêu chí như trong video) trên 2 hồ sơ khác nhau và cả 2 lần trạng thái đều GIỮ NGUYÊN "Mới đăng ký". Vì bằng chứng của anh/chị rất rõ nên QA vẫn chuyển dev để dev rà và xử lý dứt điểm.
+- Bug ID: BUG-TDHSTVV_08
+
+[2] ℹ️ Riêng ý "hệ thống không lưu nháp" thì chính video của anh/chị lại cho thấy ngược lại: đến giây thứ 54, sau khi rời màn và quay lại thẻ Thẩm định, toàn bộ nội dung đã nhập (Nhóm 1 tick đủ, Kết luận Pháp lý "Đạt", điểm nhóm 2 = 3, nhận xét "tốt") vẫn còn nguyên. Bản QA kiểm cũng lưu và nạp lại đúng. Nên phần "lưu" đang chạy được — vấn đề thực sự chỉ nằm ở việc trạng thái bị đổi ngoài ý muốn. QA ghi rõ như vậy để dev sửa đúng chỗ.
+
+[3] ⚠️ Nhân lúc kiểm case này, QA phát hiện thêm 3 điểm lệch đặc tả trên cùng màn Thẩm định, đã gộp vào cùng bug ở trên để dev xử lý một lượt:
+- Hồ sơ ở trạng thái "Mới đăng ký" KHÔNG có nút "Bắt đầu thẩm định", trong khi đặc tả quy định phải có nút này cho Cán bộ Nghiệp vụ cùng đơn vị và bấm vào thì hồ sơ mới chuyển sang "Đang thẩm định" (dòng 1545).
+- Thẻ "Thẩm định" hiện ra và thao tác được ngay khi hồ sơ còn "Mới đăng ký", trong khi đặc tả quy định thẻ này chỉ hiển thị khi hồ sơ đã ở "Đang thẩm định" hoặc "Chờ phê duyệt" (dòng 1557).
+- Bấm "Gửi KQ" với kết luận "ĐẠT" thì hồ sơ nhảy thẳng từ "Mới đăng ký" sang "Chờ phê duyệt". Theo đặc tả, "Gửi kết quả" khi kết luận "Đạt" chỉ bật nút "Trình phê duyệt", và phải bấm tiếp nút đó (có hộp thoại xác nhận) thì hồ sơ mới sang "Chờ phê duyệt" (dòng 1566, 1567, 1581). Hệ quả là hồ sơ không bao giờ đi qua trạng thái "Đang thẩm định" như quy trình quy định (dòng 2283–2286).
+
+- Kiểm bằng: tài khoản Cán bộ Nghiệp vụ Trung ương, badge đơn vị "BTP · TW" đúng như trong video anh/chị gửi; cùng màn chi tiết tư vấn viên, thẻ "Thẩm định". Mỗi lần bấm đều đọc lại trạng thái hồ sơ ngay trước và ngay sau thao tác nên kết quả không phụ thuộc vào việc màn hình có kịp vẽ lại hay không. Hồ sơ dùng để thử là dữ liệu do QA tự tạo, không đụng vào hồ sơ nào của anh/chị.

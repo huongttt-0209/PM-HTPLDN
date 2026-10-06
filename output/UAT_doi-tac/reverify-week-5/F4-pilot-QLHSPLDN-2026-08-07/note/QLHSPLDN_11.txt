@@ -1,0 +1,4 @@
+✅ ĐÃ HẾT LỖI: Thẻ "Hồ sơ pháp lý DN" nay có ô tìm kiếm và bộ lọc, chạy tìm kiếm ra đúng danh sách kết quả.
+VÌ SAO ĐẠT: FR-X.1-04 quy định tìm kiếm với 5 điều kiện lọc (srs-fr-12-tv-chuyen-sau.md:589-597), áp dụng tất cả bộ lọc theo AND logic (:643, :644) và tiêu chí chấp nhận :710 đòi kết quả khớp từ khóa trong phạm vi đơn vị.
+ĐÃ ĐO: Tài khoản cbnv_tw_02 (CB Nghiệp vụ Trung ương), doanh nghiệp DN-HNI-0001 thẻ Hồ sơ pháp lý có 8 hồ sơ; đếm thô trong vùng thẻ ra 5 ô nhập + 2 khung chọn (Loại hồ sơ, Trạng thái) + nút Tìm kiếm và Xóa bộ lọc; gõ từ khóa "QA-W5" rồi bấm Tìm kiếm thì bảng còn 2 dòng HSPL-20260806-0001 và HSPL-20260803-0001, đối chứng phản hồi máy chủ của chính lệnh tìm kiếm trả total = 2 đúng 2 mã đó.
+HIỆU LỰC: Env https://18.143.165.120.nip.io, bản dựng HTPLDN V1.0.9, bó mã assets/index-CxS5qW_0.js, last-modified 06/08/2026 12:48:25 GMT.

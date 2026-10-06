@@ -1,0 +1,5 @@
+❌ Không phải bug.
+- Đối tác phản ánh: bảng danh sách màn Tư vấn chuyên sâu (UC147) thiếu cột "Tiêu đề" và thừa cột "Mô tả".
+- Kiểm tra lại bằng vai trò Cán bộ Nghiệp vụ Trung ương: bảng đã có cột "Tiêu đề" hiển thị đúng tiêu đề bản ghi, và KHÔNG còn cột "Mô tả"/"Tóm tắt" nào.
+- Các cột hiển thị hiện tại: Mã tư vấn · Doanh nghiệp · Chuyên gia · Lĩnh vực · Tiêu đề · Trạng thái · Ngày bắt đầu · Ngày tạo · Hành động.
+→ Đối tác kiểm tra lại.

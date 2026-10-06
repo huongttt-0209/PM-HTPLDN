@@ -1,0 +1,19 @@
+{
+  "case": "LCNHTCVV_07",
+  "retest": "2026-07-15 R2-reverify",
+  "role": "CB_NV_TW (cbnv_tw, đơn vị TW)",
+  "vuViec": "VV-STP-AG-20260712-001 (Sở Tư pháp An Giang — KHÁC đơn vị), trạng thái 'Đang kiểm tra'",
+  "action": "[Phân công] → chọn [TVV] QA TVV Seed28 Active → Xác nhận 1 lần",
+  "capture_method": "MutationObserver .ant-message-notice-wrapper (phân biệt success/error)",
+  "result": {
+    "toastCountFromOneClick": 1,
+    "toastType": "error",
+    "toastText": "Bạn không có quyền phân công vụ việc của đơn vị khác",
+    "stateAfter": "Đang kiểm tra (không đổi — chặn đúng)"
+  },
+  "verdict": "PASS — cả 2 điểm của bug gốc đã fix",
+  "so_sanh_bug_goc": {
+    "1_noi_dung": "bug gốc: 'Đơn vị của người phê duyệt khác đơn vị của bản ghi' (sai vai trò + jargon 'bản ghi') → nay: 'Bạn không có quyền phân công vụ việc của đơn vị khác' (đúng thao tác phân công, tiếng Việt thuần)",
+    "2_so_lan": "bug gốc: 2 toast → nay: 1 toast"
+  }
+}

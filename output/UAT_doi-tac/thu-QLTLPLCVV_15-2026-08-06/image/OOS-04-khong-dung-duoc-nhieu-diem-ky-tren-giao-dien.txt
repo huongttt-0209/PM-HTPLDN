@@ -1,0 +1,80 @@
+PHÁT HIỆN NGOÀI PHẠM VI 04 — "BC Chi phí theo thời gian" trên giao diện luôn chỉ ra MỘT điểm kỳ
+Env : https://18.143.165.120.nip.io   Bản dựng: V1.0.8   Ngày đo: 2026-08-06 14:15
+Tài khoản đo: cbnv_tw_03. Không tạo/sửa/xoá bản ghi nào.
+
+================================================================================
+1. ĐẶC TẢ ĐÒI GÌ
+================================================================================
+
+Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/srs-fr-11-bao-cao.md
+FR-IX-19 (UC142) "BC Chi phí theo thời gian":
+
+  :855  Mô tả: "Báo cáo trend chi phí theo thời gian dạng line chart."
+  :861  Công thức: "Tính tổng chi phí theo kỳ thời gian. Biểu đồ line chart"
+  :869  Output: trend_data[] — {ky_label, tong_chi_phi, so_ho_so} — điều kiện "Luôn"
+  :874  Acceptance Criteria: "Given CB chọn 12 tháng When tạo BC Then hiển thị line chart
+        12 điểm trend chi phí"
+  :1048 Bộ lọc kỳ trên màn: Tuần / Tháng / Quý / Năm / Khoảng tùy chọn
+
+================================================================================
+2. THỰC TẾ TRÊN GIAO DIỆN — không có đường nào ra 12 điểm
+================================================================================
+
+  Kỳ chọn            | Ô "Thời gian" trên màn                 | Số điểm kỳ hiện ra
+  Năm                | Từ 01/01/2026 — Đến 31/12/2026 (chữ tĩnh) | 1  ("Năm 2026")
+  Quý                | Từ 01/07/2026 — Đến 30/09/2026 (chữ tĩnh) | 1  (quý hiện tại, kỳ này rỗng)
+  Khoảng tùy chọn    | hai ô ngày NHẬP ĐƯỢC                       | 1  ("01/01/2026 - 31/12/2026")
+
+- Chọn Tháng / Quý / Năm: hệ thống TỰ đặt lại khoảng thời gian về đúng MỘT kỳ hiện tại, và ô
+  "Thời gian" là chữ tĩnh — người dùng không sửa được. Vì vậy không thể yêu cầu "12 tháng".
+- Chỉ "Khoảng tùy chọn" mới cho nhập ngày, nhưng kỳ này GỘP cả khoảng thành đúng một điểm mang
+  nhãn "01/01/2026 - 31/12/2026", không tách theo tháng.
+
+⇒ Biểu đồ đường luôn chỉ có một điểm. AC :874 không có đường nào thực hiện được từ giao diện.
+
+================================================================================
+3. MÁY CHỦ THÌ LÀM ĐÚNG — nên khuyết nằm ở tầng giao diện
+================================================================================
+
+GET /api/v1/bao-cao/chi-phi-theo-thoi-gian?kyBaoCao=THANG&tuNgay=2026-01-01&denNgay=2026-12-31
+→ 200, data[] có ĐÚNG 12 phần tử:
+
+    Tháng 1/2026  01/01-31/01  0 hồ sơ         0 ₫
+    Tháng 2/2026  01/02-28/02  0 hồ sơ         0 ₫
+    Tháng 3/2026  01/03-31/03  0 hồ sơ         0 ₫
+    Tháng 4/2026  01/04-30/04  0 hồ sơ         0 ₫
+    Tháng 5/2026  01/05-31/05  0 hồ sơ         0 ₫
+    Tháng 6/2026  01/06-30/06  2 hồ sơ  23.000.000 ₫
+    Tháng 7/2026  01/07-31/07  0 hồ sơ         0 ₫
+    Tháng 8/2026  01/08-31/08  0 hồ sơ         0 ₫
+    Tháng 9/2026  01/09-30/09  0 hồ sơ         0 ₫
+    Tháng 10/2026 01/10-31/10  0 hồ sơ         0 ₫
+    Tháng 11/2026 01/11-30/11  0 hồ sơ         0 ₫
+    Tháng 12/2026 01/12-31/12  0 hồ sơ         0 ₫
+
+Tệp xuất cũng dựng đúng 12 dòng khi nhận tham số đó:
+    image/CPCTHTTTG_05-xuat-excel-api-ky-Thang-12-diem.xlsx  (7.082 byte)
+
+⇒ Phần tính toán và phần dựng tệp đều đã sẵn sàng. Chỉ thiếu chỗ để người dùng chọn "12 tháng":
+giao diện đang khoá cứng khoảng thời gian theo kỳ.
+
+================================================================================
+4. CÁCH TÁI HIỆN NGẮN
+================================================================================
+
+1. Đăng nhập cbnv_tw_03. Vào Báo cáo thống kê.
+2. Loại báo cáo "BC Chi phí theo thời gian".
+3. Lần lượt chọn Kỳ = Tháng, Quý, Năm — mỗi lần quan sát ô "Thời gian": hệ thống tự đặt lại về
+   một kỳ và không cho sửa.
+4. Chọn Kỳ = "Khoảng tùy chọn", nhập 01/01/2026 → 31/12/2026, bấm [Xem báo cáo]: bảng chỉ có
+   một dòng "01/01/2026 - 31/12/2026", biểu đồ chỉ một điểm.
+5. Không có tổ hợp nào cho ra 12 điểm như yêu cầu nghiệp vụ mô tả.
+
+================================================================================
+5. TỆP LIÊN QUAN
+================================================================================
+
+image/CPCTHTTTG_05-xuat-excel-api-ky-Thang-12-diem.xlsx — tệp 12 dòng tháng do chính hệ thống
+    dựng ra khi nhận tham số kỳ Tháng cho cả năm (bằng chứng phần tính toán đã làm được)
+image/CPCTHTTTG_05-xuat-excel-dang1.xlsx — tệp xuất từ giao diện, kỳ Năm: chỉ 1 dòng
+image/CPCTHTTTG_05-thong-bao-va-phan-hoi-may-chu.txt — mục D1 ghi chi tiết phép đo này

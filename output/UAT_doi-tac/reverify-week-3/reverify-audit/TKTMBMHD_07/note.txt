@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+- Web hiện tại: trên màn tìm kiếm thư mục, khi đang ở tab phân loại khác "Tất cả" (vd tab "Nháp") và bấm nút "Xóa bộ lọc": hệ thống xoá sạch từ khóa + các bộ lọc (lĩnh vực/trạng thái/ngày) nhưng GIỮ NGUYÊN tab đang chọn (không đưa về "Tất cả"), nên danh sách vẫn bị lọc theo tab.
+- SRS FR-VII-02 (UC93) và màn hình SCR-VII-01 KHÔNG mô tả nút "Xóa bộ lọc", cũng không quy định nút này phải đưa tab phân loại về "Tất cả".
+- Đối tác kỳ vọng: "Xóa bộ lọc" đưa tab về "Tất cả" và hiển thị lại toàn bộ danh sách mặc định.
+- Hỏi BA: nút "Xóa bộ lọc" có phải reset tab phân loại về "Tất cả" (khôi phục danh sách mặc định) không, hay chỉ xoá các trường trong thanh lọc và giữ nguyên tab đang chọn?

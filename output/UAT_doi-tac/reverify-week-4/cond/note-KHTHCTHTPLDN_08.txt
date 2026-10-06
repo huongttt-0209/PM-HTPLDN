@@ -1,0 +1,29 @@
+❌ Không phải bug
+
+Quan sát của phiếu là đúng, nhưng theo bản đặc tả hiện hành thì các nút đó không nằm trên dòng danh sách mà nằm ở trang chi tiết chương trình. QA đã kiểm và các nút này có đủ, đúng theo từng trạng thái và đúng theo vai trò. Không thiếu chức năng nghiệp vụ nào, nên QA để là không phải lỗi.
+Đã kiểm bằng cả hai tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương) và cbpd_tw (CB Phê duyệt - Trung ương), vì đặc tả phân quyền khác nhau cho từng nút.
+
+1) Đúng như phiếu mô tả: cột Hành động trên dòng chỉ có nút Xem.
+- QA xác nhận quan sát này. Không tranh cãi phần mô tả hiện trạng.
+
+❌ 2) Nhưng đặc tả đặt các nút vòng đời ở thanh hành động của trang chi tiết.
+- Nút Kích hoạt, nút Tạm dừng, nhóm nút khi Dự thảo đều được mô tả trong bảng thành phần của trang chi tiết chương trình.
+- Cột Hành động của bảng danh sách chỉ được mô tả ngắn là hành động tùy điều kiện, không liệt kê nút cụ thể nào.
+- Chính ảnh của đối tác cũng cho thấy cột này có thay đổi theo trạng thái: dòng ở Dự thảo có thêm nút xóa, các dòng khác thì không. Tức phần tùy điều kiện đang hoạt động.
+
+3) Đã mở trang chi tiết từng trạng thái để kiểm các nút phiếu nêu.
+- Chương trình Đã duyệt: có nút Công bố lên Cổng PLQG và nút Bắt đầu thực hiện.
+- Chương trình Đã công bố: có nút Hủy công bố và nút Bắt đầu thực hiện.
+- Chương trình Đang thực hiện: có nút Tạm dừng. Với tài khoản Cán bộ phê duyệt thì có thêm nút Hoàn thành.
+- Chương trình Hoàn thành: không có nút, đúng vì đây là trạng thái kết thúc.
+- Nút Bắt đầu thực hiện chính là nút Kích hoạt mà phiếu nhắc tới, đặc tả ghi nguyên văn nhãn nút là Bắt đầu thực hiện.
+
+4) Một điểm QA suýt kết luận nhầm, ghi lại để dev khỏi mất công.
+- Lần đọc đầu chỉ quét trong vùng nội dung chính thì không thấy nút nào, dễ hiểu nhầm là mất hết chức năng. Thực tế các nút nằm trong thanh cố định ở đáy màn hình, ngoài vùng nội dung.
+- Ngoài ra với tài khoản Cán bộ nghiệp vụ thì chương trình Đang thực hiện không thấy nút Hoàn thành, thoạt nhìn giống lỗi. Nhưng đặc tả ghi rõ chỉ Cán bộ phê duyệt mới được hoàn thành chương trình. Đăng nhập lại bằng tài khoản phê duyệt thì nút xuất hiện đúng như đặc tả.
+
+5) Nếu đối tác vẫn muốn có nút nhanh trên dòng.
+- Đây là đề xuất cải tiến trải nghiệm, không phải sai đặc tả. QA đề nghị đối tác nêu thành yêu cầu thay đổi để BA cân nhắc, thay vì để ở dạng lỗi.
+
+6) Bằng chứng.
+- Ảnh trang chi tiết chương trình Đang thực hiện, thấy rõ nút Tạm dừng ở thanh cố định góc dưới bên phải. Kèm trong hồ sơ lỗi.

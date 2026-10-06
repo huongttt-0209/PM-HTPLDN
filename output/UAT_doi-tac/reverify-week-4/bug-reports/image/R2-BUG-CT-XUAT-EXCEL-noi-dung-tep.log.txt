@@ -1,0 +1,36 @@
+DOC NOI DUNG TEP EXCEL XUAT TU MAN CHUONG TRINH HTPLDN — re-verify R2 28/07/2026
+Tep   : ct-htpldn-2026-07-28.xlsx (8351 bytes)
+Sheet : Chương trình HTPL | 12 dong du lieu x 13 cot
+Tieu de: Mã CT | Tên CT | Mục tiêu | Đối tượng | Trạng thái | Lĩnh vực | Đơn vị | Thời gian bắt đầu | Thời gian kết thúc | Ngân sách | Là công bố | Số đợt BC | Ngày tạo
+
+DOI CHIEU NGAY: MAN HINH  vs  TEP EXCEL  (cot "Thoi gian bat dau" / "Thoi gian ket thuc")
+Ma CT              Man hinh (cot Thoi gian)   Excel batDau  Excel ketThuc Ket luan
+CT-20260728-0004   1/4/2026 — 31/10/2026      01/04/2026    31/10/2026    KHOP
+CT-20260728-0003   1/3/2026 — 30/9/2026       01/03/2026    30/09/2026    KHOP
+CT-20260728-0002   1/2/2026 — 30/11/2026      01/02/2026    30/11/2026    KHOP
+CT-20260728-0001   1/1/2026 — 31/12/2026      01/01/2026    31/12/2026    KHOP
+CT-20260725-0002   1/1/2026 — Chưa xác định   01/01/2026    (trong)       KHOP
+CT-20260725-0001   1/1/2026 — Chưa xác định   01/01/2026    (trong)       KHOP
+CT-20260724-0001   1/1/2026 — 31/12/2026      01/01/2026    31/12/2026    KHOP
+CT-20260721-0004   1/1/2026 — 31/12/2026      01/01/2026    31/12/2026    KHOP
+CT-20260721-0003   1/3/2026 — 31/10/2026      01/03/2026    31/10/2026    KHOP
+CT-20260721-0002   1/2/2026 — 30/11/2026      01/02/2026    30/11/2026    KHOP
+CT-20260721-0001   1/1/2026 — 31/12/2026      01/01/2026    31/12/2026    KHOP
+CTHTPL-SEED-0001   1/1/2026 — 31/12/2026      01/01/2026    31/12/2026    KHOP
+
+Ket qua: 12/12 dong KHOP tuyet doi, 0 dong lech.
+Khong con phan gio "17:00" trong hai cot thoi gian; gia tri ghi dang chuoi dd/MM/yyyy.
+
+TOAN BO DU LIEU DOC TU TEP:
+- CT-20260728-0004 || R2 SEED - CT trang thai Cho phe duyet || Kiem thu bo loc trang thai Cho phe duyet || Doanh nghiep nho va vua || Chờ phê duyệt || Lao động || Cục Bổ trợ tư pháp - Bộ Tư pháp || 01/04/2026 || 31/10/2026 || 7000000 || Không || 0 || 2026-07-28 07:14:24.648000
+- CT-20260728-0003 || R2 SEED - CT trang thai Du thao || Kiem thu bo loc trang thai Du thao || Doanh nghiep nho va vua || Dự thảo || Lao động || Cục Bổ trợ tư pháp - Bộ Tư pháp || 01/03/2026 || 30/09/2026 || 7000000 || Không || 0 || 2026-07-28 07:14:24.453000
+- CT-20260728-0002 || R2 SEED - CT trang thai Da huy || Kiem thu bo loc trang thai Da huy || Doanh nghiep nho va vua || Đã hủy || Lao động || Cục Bổ trợ tư pháp - Bộ Tư pháp || 01/02/2026 || 30/11/2026 || 5000000 || Không || 0 || 2026-07-28 07:14:10.595000
+- CT-20260728-0001 || R2 SEED - CT trang thai Tam dung || Kiem thu bo loc trang thai Tam dung || Doanh nghiep nho va vua || Tạm dừng || Lao động || Cục Bổ trợ tư pháp - Bộ Tư pháp || 01/01/2026 || 31/12/2026 || 10000000 || Có || 0 || 2026-07-28 07:13:53.845000
+- CT-20260725-0002 || QA CTTLV 25/07 B - Kiem tra linh vuc bat buoc || Kiem thu bao cao CT theo linh vuc || Doanh nghiep nho va vua || Đã duyệt || Đất đai || Cục Bổ trợ tư pháp - Bộ Tư pháp || 01/01/2026 ||  ||  || Không || 0 || 2026-07-25 02:26:11.646000
+- CT-20260725-0001 || QA CTTLV 25/07 A - Kiem tra linh vuc bat buoc || Kiem thu bao cao CT theo linh vuc || Doanh nghiep nho va vua || Đã duyệt || Thuế || Cục Bổ trợ tư pháp - Bộ Tư pháp || 01/01/2026 ||  ||  || Không || 0 || 2026-07-25 02:25:48.795000
+- CT-20260724-0001 || QA CTTLV 01 - Chương trình Lao động 2026 || Dữ liệu kiểm thử báo cáo chương trình theo lĩnh vực || Doanh nghiệp nhỏ và vừa || Đã duyệt || Lao động || Cục Bổ trợ tư pháp - Bộ Tư pháp || 01/01/2026 || 31/12/2026 || 50000000 || Không || 0 || 2026-07-23 18:29:59.348000
+- CT-20260721-0004 || BCTK-B4 CT khong linh vuc test Khong xac dinh || Seed test nhom Khong xac dinh - CT khong gan linh vuc || Doanh nghiep || Đã duyệt ||  || Cục Bổ trợ tư pháp - Bộ Tư pháp || 01/01/2026 || 31/12/2026 || 50000000 || Không || 0 || 2026-07-21 08:45:05.680000
+- CT-20260721-0003 || CT Seed QA-B (verify SLCTHT) || Seed phục vụ QA verify - dự kiến HOAN_THANH || Doanh nghiệp siêu nhỏ || Hoàn thành ||  || Cục Bổ trợ tư pháp - Bộ Tư pháp || 01/03/2026 || 31/10/2026 || 50000000 || Có || 0 || 2026-07-21 08:44:35.713000
+- CT-20260721-0002 || CT Seed QA-A (verify SLCTHT) || Seed phục vụ QA verify báo cáo Số lượng CT hỗ trợ || Doanh nghiệp nhỏ và vừa || Đang thực hiện ||  || Cục Bổ trợ tư pháp - Bộ Tư pháp || 01/02/2026 || 30/11/2026 || 100000000 || Có || 0 || 2026-07-21 08:42:36.538000
+- CT-20260721-0001 || BCTK-B4 CT verify bao cao Thuong mai || Seed verify bao cao CT theo don vi/linh vuc - batch 4 || Doanh nghiep nho va vua || Đã duyệt || Thương mại || Cục Bổ trợ tư pháp - Bộ Tư pháp || 01/01/2026 || 31/12/2026 || 100000000 || Không || 0 || 2026-07-21 08:36:47.949000
+- CTHTPL-SEED-0001 || Chương trình HTPL doanh nghiệp seed 2026 || Nâng cao nhận thức pháp luật cho doanh nghiệp nhỏ và vừa. || Doanh nghiệp nhỏ và vừa toàn quốc. || Đã công bố || Thương mại ||  || 01/01/2026 || 31/12/2026 ||  || Có || 0 || 2026-06-30 12:28:23.186000

@@ -1,0 +1,17 @@
+[
+ {
+  "row": 37,
+  "Mã TC": "QLDNDHTPL_26",
+  "Tên chức năng": "",
+  "Mô tả": "Kiểm tra hiển thị Nhóm 4 — Thông tin khác",
+  "Điều kiện": "1. Đăng nhập tài khoản \n2. Tồn tại doanh nghiệp",
+  "Dữ liệu đầu vào": "",
+  "Các bước thực hiện": "1. Chọn menu \"Doanh nghiệp\"\n2. Bấm nút Xem\n3. Chọn nhóm 4",
+  "Kết quả mong đợi": "- Hệ thống hiển thị các trường thông tin giống với thiết kế\n- Dữ liệu hiển thị đúng định dạng và trường thông tin\n- Dữ liệu hiển thị không bị tràn/đè lên nhau, đồng nhất ngôn ngữ hiển thị",
+  "Kết quả thực tế": "Hệ thống hiển thị các trường thông tin Nhóm 4 không giống với thiết kế",
+  "Trạng thái dev fix 1": "dev done",
+  "Verify": "Open",
+  "DEV phản hồi lần 1": "✅ Bug đúng (BA 24/07/2026, đã đối chiếu ảnh UAT). Dev FE/BE: khôi phục trường \"File đính kèm\" (file_dinh_kem) trong khối \"Thông tin khác\" của tab Thông tin cơ bản màn Chi tiết DN, đặt ngay sau \"Ghi chú\" — chế độ xem cho liệt kê/tải các file đã đính, chế độ sửa cho đính nhiều file. Căn cứ: srs-fr-07-doanh-nghiep.md:493 quy định thành phần #28 \"File đính kèm\" (file-upload, file_dinh_kem, \"upload nhiều file\") với điều kiện hiển thị \"Luôn hiển thị\", ngay sau #27 \"Ghi chú\" (:492); trường này cũng có trong bảng trường FR-V.III-01 (:118) và inputs màn Thêm mới (:285, :586). Riêng phần GOM KHỐI \"Thông tin khác\" thì web đã đúng đặc tả, không phải sửa. Mức Minor.\n\n── CÁCH VERIFY sau Dev fix ──\nPrecondition: cbnv_tw, mở Doanh nghiệp → nút Xem một DN → /doanh-nghiep/:id, tab \"Thông tin cơ bản\", khối \"Thông tin khác\". Chuẩn bị 1 DN ĐÃ có ít nhất 1 file đính kèm (nếu chưa có: vào /doanh-nghiep/:id/sua đính 1 file PDF rồi Lưu).\n1) Chế độ xem: bung khối \"Thông tin khác\" → đọc danh sách trường ngay dưới \"Ghi chú\".\n2) Chế độ xem: bấm vào file đã đính → tải/mở được đúng file.\n3) Chế độ sửa (/doanh-nghiep/:id/sua): tại khối \"Thông tin khác\" đính THÊM 2 file cùng lúc → Lưu → mở lại chi tiết.\n✅ PASS khi: (a) khối \"Thông tin khác\" ở chế độ xem có trường file đính kèm nằm ngay sau \"Ghi chú\", nhãn phản ánh đúng nội dung (đặc tả ghi \"File đính kèm\"); (b) chế độ xem liệt kê được các file đã đính và tải về đúng file; (c) chế độ sửa nhận nhiều file trong một lần và sau khi Lưu mở lại vẫn còn đủ các file vừa đính.\n❌ FAIL nếu: khối \"Thông tin khác\" vẫn chỉ có duy nhất \"Ghi chú\"; hoặc chỉ chế độ sửa có ô đính kèm còn chế độ xem không liệt kê file nào; hoặc chỉ nhận được 1 file / mất file sau khi Lưu.\n⚠️ Caveat 1 — KHÔNG nhầm với tab \"Hồ sơ pháp lý DN\": tab đó (:467, thành phần #2) là CRUD của một thực thể khác (HO_SO_PHAP_LY_DN — Giấy phép / Hợp đồng / Giấy CN / Quyết định / Khác, kèm trạng thái Hiệu lực / Hết hạn / Thu hồi). Có hồ sơ ở tab đó KHÔNG tính là đã có trường File đính kèm ở tab Thông tin cơ bản. Nếu Dev báo trường này đã hợp nhất hẳn sang tab Hồ sơ pháp lý DN thì phải để CĐT/BA xác nhận và đồng bộ lại đặc tả (:118, :285, :493, :586) trước khi đóng testcase — không tự đóng.\n⚠️ Caveat 2 — chống FAIL oan: nếu DN đem test chưa từng đính file nào thì chế độ xem hiển thị danh sách rỗng, đây KHÔNG phải FAIL. Phải đính file trước (bước Precondition) rồi mới chấm.\nẢnh lỗi cũ: QLDNDHTPL_26.jpg (ảnh UAT đối tác — cột \"Ảnh/video 1\"; khối \"Thông tin khác\" bung ra chỉ có \"Ghi chú\").",
+  "Tác nhân": ""
+ }
+]

@@ -1,0 +1,6 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Màn "Thư viện biểu mẫu → Thư mục" (tìm kiếm thư mục) khi tải kết quả để mặc định 100 mục/trang.
+- Theo SRS FR-VII-02 (UC93), BR-DATA-07 (dòng 917) và màn hình SCR-VII-01 (dòng 623): danh sách phân trang mặc định phải là 20 mục/trang (tối đa 100). Cần đổi mặc định về 20/trang.
+- Phần sắp xếp theo Ngày tạo giảm dần: hệ thống làm ĐÚNG, không phải lỗi.
+- Verify: đăng nhập CB Nghiệp vụ Trung ương (CB_NV_TW), 4 thư mục, dropdown phân trang hiển thị "100 / trang".
+- Bug ID: BUG-TKTMBMHD_02.

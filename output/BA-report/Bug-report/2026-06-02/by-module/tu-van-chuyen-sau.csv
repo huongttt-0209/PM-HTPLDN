@@ -1,0 +1,4 @@
+STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+63,Chuyên gia 403 Tài liệu pháp luật,❌ Lỗi,FAIL,TB,"R-verify-2 06-05 12:10: VẪN LỖI — menu TVCS hiện cho CG, click → /403 dead-end nguyên trạng. (Phần tài liệu PL theo BA đã hết 403 — theo dõi ở report 06-04 BUG-TVCS-063.) Bug: bugs/tu-van-chuyen-sau/bug-63-cg-403-tvcs-list.md"
+64,TVCG thiếu icon Phê duyệt/Từ chối,✅ Đạt,PASS,TB,"R2 06-02: chi tiết CHO_PHE_DUYET (cb_pd_tw_01) hiện đủ nút [Phê duyệt]/[Từ chối]; list có icon check+close — SRS:1142"
+65,Tư liệu pháp luật upload không lưu,✅ Đạt,PASS,Cao,"R2 06-02: endpoint thật /tu-lieu-phap-ly-vvs 200 (ko phải /tu-lieu-phap-luats 404); upload UI (cb_nv_tw) tạo record + soFile=1 (đã xóa) — SRS:800"

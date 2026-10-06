@@ -1,0 +1,10 @@
+✅ Đã đạt — cả 5 nội dung của phiếu đều hết lỗi.
+
+- Đã kiểm lại trên bản dựng mới nhất, màn Đào tạo, tập huấn → Kế hoạch đào tạo → Danh sách, đo bằng 2 vai trò: Cán bộ nghiệp vụ Trung ương và Cán bộ phê duyệt Trung ương. Hai vai trò cho kết quả giống nhau.
+- Ô tích chọn dòng: đã có; tích ở dòng tiêu đề thì toàn bộ 14/14 dòng đang hiển thị được chọn theo.
+- Cột "Người tạo": đã có, hiện đúng tên người lập kế hoạch.
+- Cột "Ngày tạo": đã có, đúng dạng ngày/tháng/năm.
+- Cột ngân sách: đã hiển thị đúng định dạng dấu chấm kèm đơn vị (100.000.000 đ, 1.000.000 đ, 2.000.000 đ); kế hoạch không nhập ngân sách hiện dấu "—". Không còn dòng nào ra số thô.
+- Cột "Số chương trình" — nội dung còn lỗi ở lần trước — nay đã đếm đúng: đối chiếu từng dòng với dữ liệu chương trình đào tạo thực tế đều khớp (4, 2, 1, 1 cho bốn kế hoạch có chương trình; 0 cho các kế hoạch chưa có chương trình nào), cộng dồn cả bảng bằng đúng tổng số chương trình đang có.
+- Đã thử tạo mới một chương trình đào tạo qua giao diện và gắn vào một kế hoạch đang hiện 0: lưu xong quay lại bảng danh sách thì kế hoạch đó chuyển thành 1 và tổng cả bảng tăng theo. Như vậy cột này cập nhật đúng cả với dữ liệu phát sinh mới, không chỉ dữ liệu cũ.
+- Kết luận: nội dung phiếu phản ánh đã được khắc phục trọn vẹn; bảng danh sách Kế hoạch đào tạo hiện đủ cột và đúng định dạng.

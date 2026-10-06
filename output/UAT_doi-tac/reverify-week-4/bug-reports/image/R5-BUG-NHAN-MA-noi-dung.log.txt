@@ -1,0 +1,125 @@
+R5 RE-VERIFY — BUG-NHAN-MA-KY-THUAT-THO (HIENTHI_OOS_10)
+Ngay chay: 30/07/2026 ~11:35-11:50  |  Env: https://18.143.165.120.nip.io  |  Ban dung: V1.0.3
+Tai khoan: admin (phan Nhat ky he thong) + cbnv_tw_02 (phan Dot bao cao, TVV/CG)
+Thao tac hoan toan tren giao dien; tep lay bang chinh nut [Xuat Excel] cua tung man.
+================================================================================
+
+BOI CANH: luot 4 da dong 5/5 cho ghi nhan ban dau, chi con DUY NHAT mot diem —
+tep Excel cua man Quan tri he thong > Nhat ky he thong dat ten trang tinh la
+"Nhat ky he thong" (bo dau), trong khi 8/9 tep xuat khac cung san pham deu co dau.
+
+--------------------------------------------------------------------------------
+PHAN 1 — DIEM DUY NHAT CON LAI: TEN TRANG TINH TEP NHAT KY HE THONG
+--------------------------------------------------------------------------------
+ Cach do: dang nhap admin > Quan tri he thong > Nhat ky he thong > [Xuat Excel],
+ doc truc tiep xl/workbook.xml trong tep .xlsx vua tai (day la cho luu ten trang tinh).
+
+ Luot 4:  ten trang tinh = "Nhat ky he thong"   <-- BO DAU
+ Luot 5:  ten trang tinh = "Nhật ký hệ thống"   <-- DA CO DAU DAY DU  => DAT
+
+ Tep do duoc: audit-log-2026-07-30.xlsx (271.836 byte), bo loc 23/07-30/07.
+
+--------------------------------------------------------------------------------
+PHAN 2 — KIEM LAI 5 CHO DA DONG O LUOT TRUOC (xem co hong nguoc khong)
+--------------------------------------------------------------------------------
+ 2.1 — Tieu de cot tep Nhat ky he thong (16 cot, doc tu sharedStrings.xml)
+   Thoi gian | Module | Entity type | Entity ID | Hanh dong | Chi tiet thay doi |
+   Username | Ho va ten | "Đơn vị" | "Vai trò" | Nguon he thong | Consumer | IP |
+   Endpoint | Ma phan hoi | Session
+   Cot 9 "Đơn vị" va cot 10 "Vai trò" van co dau  => DAT (khong hong nguoc).
+
+ 2.2 — Man Dot bao cao (danh sach + chi tiet), tai khoan cbnv_tw_02
+   Danh sach: hai dot DOT-SO_BO_NAM-2026-1 va DOT-SO_BO_6_THANG-2026-1
+     cot "Ky BC"      -> "Sơ bộ năm" / "Sơ bộ 6 tháng"   (khong con SO_BO_NAM)
+     cot "Trang thai" -> "Tạo đợt"                        (khong con TAO_DOT)
+   Chi tiet DOT-SO_BO_NAM-2026-1:
+     o "Ky BC"        -> "Sơ bộ năm"
+     o "Trang thai"   -> "Tạo đợt"
+     duong dan dau trang -> "Trang chủ / Chương trình HTPLDN / Đợt báo cáo / Chi tiết"
+     muc suon trai       -> "Vụ việc HTPL"
+   Kiem them phan buoc tien do tren man chi tiet: ca 6 trang thai deu la tieng Viet
+   co dau — "Tạo đợt", "Đang lập BC", "Chờ duyệt KQ", "Đã duyệt KQ", "Đã gửi TW",
+   "Đã tổng hợp". Tuc bang chuyen ma trang thai sang chu da phu het gia tri, khong
+   phai chi dung cho mot trang thai dang test.  => DAT
+
+ 2.3 — Tep xuat Tu van vien / Chuyen gia, cot "Trinh do chuyen mon"
+   Ten trang tinh: "DS Tư vấn viên" (co dau).
+   O F5 "Thạc sĩ"  |  F6 "Cử nhân"  |  F7 F8 F9 "Thạc sĩ"
+   Khong con THAC_SI / CU_NHAN nao trong tep.  => DAT
+
+ 2.4 — Toan bo tep xuat cua man Bao cao thong ke (22 tep .xlsx co du lieu)
+   Quet tu dong 3 loai loi: chuoi dinh danh noi bo (UUID), ma enum kieu A_B_C,
+   va tu tieng Viet bi bo dau (Chi tieu / Tong so / Vu viec / Don vi / Linh vuc...).
+     UUID          : 0
+     ma enum       : 0
+     chu bo dau    : 0
+   22/22 ten trang tinh co dau day du, vi du "BC Đánh giá hiệu quả",
+   "BC Chất lượng đào tạo", "Chương trình theo lĩnh vực", "Vụ việc theo đơn vị".
+   Rieng BC Danh gia hieu qua — cho tung bi ghi nhan o luot 2 (cot "Vu viec" ra
+   chuoi dinh danh noi bo, nhan chi tieu "CHI TIEU HOAT DONG (Nhom VI)" bo dau) —
+   nay sach ca hai.  => DAT
+
+ KET LUAN PHAN 1+2: 6/6 diem cua loi nay da dat, ke ca diem duy nhat con lai o luot 4.
+
+--------------------------------------------------------------------------------
+PHAN 3 — MOT QUAN SAT DA XEM XET VA KET LUAN KHONG PHAI LOI
+--------------------------------------------------------------------------------
+ Trong khi kiem lai muc 2.3, mo form Sua cua ho so TVV-BTP-TW-0002 (QA TVV Seed28
+ Active, loai Chuyen gia) thi o "Trinh do hoc van" hien ra chu "CU_NHAN", con danh
+ sach tuy chon cua chinh o do lai la "Cử nhân / Thạc sĩ / Tiến sĩ / Khác".
+ Thoat nhin day dung la loi nay. Nhung dao sau thi KHONG PHAI, vi 3 le sau:
+
+ a) Dac ta dat truong nay la o chu, mien gia tri la chinh 4 chu tieng Viet:
+    srs-fr-04-chuyen-gia-tvv.md:144  — "trinh_do | text | Y | Cử nhân/Thạc sĩ/Tiến sĩ/Khác"
+    srs-fr-04-chuyen-gia-tvv.md:380  — nhac lai cung mien gia tri
+    srs-fr-04-chuyen-gia-tvv.md:1498 — "Trình độ * | dropdown | "Cử nhân" / "Thạc sĩ" / "Tiến sĩ" / "Khác""
+    Nghia la gia tri dung de luu chinh la "Cử nhân", con "CU_NHAN" khong thuoc mien
+    gia tri ma dac ta cho phep.
+
+ b) Rieng ho so nay dang luu "CU_NHAN" la do CHINH QA nap du lieu mau tu ngoai giao
+    dien vao ngay 12/07/2026 (ca ho so day chuoi khong dau kieu du lieu mau:
+    "Ha Noi", "Dai hoc Luat Ha Noi", "Kinh nghiem tu van phap luat doanh nghiep 10 nam
+    (QA re-verify)"). 4 ho so con lai trong cung danh sach deu luu dung chu tieng Viet
+    va form Sua hien dung — kiem TVV-STP-AG-0001, o "Trinh do hoc van" hien "Thạc sĩ"
+    ngay tu 0,5 giay dau, do 6 lan lien tiep khong doi.
+
+ c) Duong di cua chinh san pham ghi xuong dung chu tieng Viet. Phep thu: mo form Sua
+    ho so do, chon "Tiến sĩ" tu dropdown roi [Luu] -> toast "Cap nhat ho so TVV thanh
+    cong"; mo lai form thi hien "Tiến sĩ" (khong phai TIEN_SI); man xem chi tiet cung
+    hien "Tiến sĩ". Chon lai "Cử nhân" roi [Luu] -> mo lai form hien "Cử nhân".
+    Tuc form khong he hong: no hien dung moi gia tri do chinh giao dien ghi ra.
+
+ Doi chieu them cho ro: cung gia tri "CU_NHAN" do, man XEM CHI TIET va TEP XUAT lai
+ hien "Cử nhân" — hai cho nay co them buoc doi ma cu sang chu. Vay chenh lech giua
+ form Sua va hai cho kia chi la muc do do luong voi du lieu ngoai mien gia tri, khong
+ phai loi hien ma ky thuat cua san pham.
+
+ GHI NHAN DE BA XEM XET (khong log thanh loi): khong kiem duoc bang giao dien rang
+ he thong co chan gia tri ngoai 4 gia tri cho phep hay khong, vi o nay la dropdown
+ dong kin, khong go tay duoc. Neu BA muon chan tu goc thi day la diem can chot rieng.
+
+ LUU Y VE DU LIEU: phep thu (c) co ghi xuong that. Ho so TVV-BTP-TW-0002 nay truoc do
+ luu "CU_NHAN", sau phep thu luu "Cử nhân" — tuc da ve dung mien gia tri dac ta, gia
+ tri hien ra cho nguoi dung khong doi ("Cử nhân"), tep xuat khong doi. Cac truong khac
+ giu nguyen. Ghi lai o day de vong sau khong bat ngo.
+
+--------------------------------------------------------------------------------
+CAN CU DAC TA
+--------------------------------------------------------------------------------
+ Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/
+  srs-v3.5.md:575   — UI-06 Localization: "Tiếng Việt là ngôn ngữ duy nhất. Unicode UTF-8..."
+  srs-v3.5.md:4615  — I18N-01: "Tiếng Việt là ngôn ngữ duy nhất cho giao diện CMS" (CDT xac nhan)
+  srs-v3.5.md:4621  — I18N-07: tieng Anh chi dung "trong code, API"; "Giao dien hien thi tieng Viet"
+  srs-fr-04-chuyen-gia-tvv.md:144 / :380 / :1498 — mien gia tri Trinh do
+  srs-fr-15-ct-htpldn.md:92-:93 — ten ky bao cao "Sơ bộ 6 tháng" / "Sơ bộ năm"
+  srs-fr-15-ct-htpldn.md:640 / :654 — SO_BO_NAM / TAO_DOT la ma noi bo dung khi xu ly
+  srs-fr-10-quan-tri.md:1974 — SCR-VIII-10 muc 7: o loc "Entity" = ten bang hoac ma ban ghi
+
+KET LUAN: DAT — dong loi nay. Ten trang tinh tep Nhat ky he thong da co dau tieng Viet;
+ca 5 cho dong o luot truoc khong hong nguoc. Quan sat "CU_NHAN" o form Sua da truy
+den goc va la du lieu mau QA tu nap ngoai mien gia tri, khong phai loi san pham.
+
+ANH CHUP
+ R5-BUG-NHAN-MA-dot-bao-cao-chi-tiet-da-co-dau.png   — man chi tiet dot bao cao
+ R5-BUG-NHAN-MA-form-sua-tvv-trinh-do-CU_NHAN.png    — o "Trinh do hoc van" hien CU_NHAN
+                                                        (quan sat o Phan 3, khong phai loi)

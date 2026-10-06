@@ -1,0 +1,8 @@
+☑️ Đã kiểm tra lại — lỗi đã được khắc phục.
+- Chức năng công bố kết quả đào tạo (UC38) nay đã có tab riêng "Công bố kết quả" trên màn hình chi tiết khóa học, nằm giữa tab "Kết quả" và tab "Bài giảng đã gán".
+- Điều kiện để nhìn thấy và dùng được tab: đăng nhập bằng tài khoản Cán bộ nghiệp vụ đúng đơn vị của khóa học, mở chi tiết khóa học đó. Tab hiển thị ở mọi trạng thái khóa học; riêng việc công bố chỉ có ý nghĩa khi khóa học đã "Hoàn thành" và đã có học viên được duyệt kết quả.
+- Đã thử trực tiếp trên khóa học "Tập huấn pháp lý cấp Trung ương 2026" ở trạng thái "Hoàn thành", có 4 học viên đã được duyệt kết quả, bằng tài khoản Cán bộ nghiệp vụ Trung ương:
+  + Bấm "Công bố tất cả": hệ thống hỏi xác nhận, sau khi đồng ý thì cả 4 học viên chuyển sang "Đã công bố" và có ghi thời điểm công bố.
+  + Bấm "Hủy công bố tất cả": hệ thống bắt nhập lý do tối thiểu 10 ký tự, sau khi nhập thì cả 4 học viên chuyển về "Chưa công bố".
+- Trong tab còn có công tắc "Công bố lên Cổng PLQG" và nút công bố/hủy công bố cho từng học viên.
+- Đề nghị đối tác mở lại màn hình chi tiết khóa học để kiểm tra và xác nhận giúp.

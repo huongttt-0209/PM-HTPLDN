@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Đối tác phản ánh: bấm gửi đánh giá khi để trống biểu mẫu thì hệ thống không hiển thị thông báo lỗi cho trường "Vụ việc liên kết".
+- Thực tế web (đúng như đối tác quan sát): hệ thống CÓ chặn gửi và hiện đủ 3 thông báo lỗi cho 3 trường bắt buộc — "Vui lòng chấm điểm chuyên môn", "Vui lòng chấm điểm thái độ", "Vui lòng chấm điểm đúng hạn"; riêng "Vụ việc liên kết" không báo lỗi.
+- Theo SRS: FR-IV-09 (UC47) §Inputs #2 (srs-fr-04 dòng 702) ghi "Vụ việc liên kết" là trường KHÔNG bắt buộc; SCR-IV-03 cell 24 (dòng 1573) cũng chỉ đánh dấu bắt buộc cho "Tư vấn viên", không đánh dấu cho "Vụ việc liên kết". Vì vậy web đang làm đúng SRS, còn kỳ vọng của đối tác (coi đây là trường bắt buộc) khác SRS.
+- Verify bằng tài khoản Cán bộ nghiệp vụ Trung ương, tư vấn viên TVV-SEED-0001 (Đang hoạt động, chưa có đánh giá) — đúng điều kiện đối tác.
+- Câu hỏi cho BA: "Vụ việc liên kết" là bắt buộc hay tùy chọn? Nếu chốt bắt buộc thì cần cập nhật SRS và lưu ý hiện danh sách vụ việc trong ô chọn đang rỗng nên sẽ chặn toàn bộ việc gửi đánh giá.

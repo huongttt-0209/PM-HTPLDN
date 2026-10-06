@@ -1,0 +1,23 @@
+✅ Là bug — chuyển dev
+
+Tái hiện đúng, đã chuyển dev.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), trên phiên cùng trạng thái với video đối tác, đọc trực tiếp thuộc tính các ô nhập bằng mã lệnh.
+
+✅ 1) Hiện tượng tái hiện đúng.
+- Với phiên ở trạng thái "CB trả lời", bấm nút con mắt (Xem chi tiết) thì hệ thống mở thẳng màn trả lời ở chế độ nhập liệu: ô "Nội dung trả lời" sửa được, ô tra cứu Kho câu hỏi dùng được, nút "Gửi trả lời" đang bật.
+- Không có bất kỳ đường nào để chỉ xem mà không sửa ở trạng thái này.
+- Bug ID: BUG-QLKCHTV_23.
+
+2) Vì sao đây là lỗi.
+- Đặc tả (srs-fr-13-tv-nhanh.md dòng 569) quy định cột Hành động của bảng gồm HAI hành động tách biệt: "Xem" và "Trả lời". Hệ thống chỉ có một nút, và nút đó dẫn thẳng vào chế độ sửa.
+- Đặc tả cũng đặt điều kiện hiển thị của màn trả lời 2 cột là "chế độ trả lời", tức có phân biệt rõ hai chế độ.
+
+3) Đã chứng minh chế độ chỉ-xem CÓ tồn tại trong hệ thống — nên đây là gán sai chế độ, không phải chưa làm.
+- Bấm đúng nút con mắt đó trên một phiên ở trạng thái "Hoàn thành" thì màn mở ra hoàn toàn chỉ đọc: không có ô nhập nào, chỉ còn nút "Quay lại danh sách", không có nút "Gửi trả lời".
+- Nghĩa là hệ thống đang chọn chế độ theo TRẠNG THÁI của phiên, thay vì theo HÀNH ĐỘNG mà cán bộ bấm.
+
+4) Đề nghị xử lý chung với QLKCHTV_24 (thiếu nút "Trả lời") vì cùng một gốc.
+
+5) Bằng chứng.
+- Ảnh chụp màn trả lời mở ra từ nút Xem, kèm trong hồ sơ lỗi.
+- Video của đối tác cũng cho kết quả trùng khớp: bấm nút con mắt ở dòng trạng thái "CB trả lời" ra màn trả lời sửa được.

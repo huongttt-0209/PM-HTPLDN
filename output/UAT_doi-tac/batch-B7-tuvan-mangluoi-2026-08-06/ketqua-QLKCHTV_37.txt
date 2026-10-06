@@ -1,0 +1,221 @@
+================================================================================
+SỐ ĐO ĐẦY ĐỦ — QLKCHTV_37 "Xuất Excel đánh giá" (tab `bug` dòng 305)
+Đo 2026-08-06 14:57 → 15:11 (giờ VN)
+Môi trường: https://18.143.165.120.nip.io  (env NỘI BỘ, KHÔNG phải env nghiệm thu của đối tác)
+================================================================================
+
+[0] DẤU VÂN TAY BẢN DỰNG (đo lúc 14:56 bằng curl, đọc lại trong trang lúc 15:02 và 15:09 — không đổi)
+  Chuỗi phiên bản trong trang (chân sidebar) : "HTPLDN · V1.0.8"
+  Bó mã FE                                   : /assets/index-DIABnbIr.js  (+ /assets/index-DVlgOkLg.css)
+  GET / -> HTTP/2 200 · last-modified        : Thu, 06 Aug 2026 07:13:15 GMT  (= 14:13:15 giờ VN)
+  etag                                       : "6a74340b-428"   · server: nginx/1.27.5 via Caddy
+  => Trùng khít bản dựng của case QLTLPLCVV_17 cùng lô B7. Số phiên bản V1.0.8 KHÔNG đổi so với lô B6
+     sáng nay nhưng bó mã đã khác (B6: index-CNwX9JjX.js, last-modified 02:51:16 GMT) ⇒ env deploy lại
+     lúc 14:13 mà giữ nguyên số phiên bản. Chỉ ghi "V1.0.8" là không truy được đã đo bản nào.
+
+[1] TÀI KHOẢN ĐO
+  cbnv_tw_02 / Test@1234 — đăng nhập OK ngay lần đầu (không phải dùng fallback Rule 7).
+  GET /api/v1/auth/me:
+    userId    = 75ef9f6b-5f5b-474d-9861-dde1c1563f50
+    hoTen     = "CB Nghiệp vụ - Trung ương #02"
+    vaiTro    = ["CB_NV_TW"]        capDonVi = "TW"
+    donViId   = 00000000-0000-4000-8000-000000000001  (Cục Bổ trợ tư pháp - Bộ Tư pháp)
+    quyền liên quan: read_tu_van_nhanh · manage_tu_van_nhanh · create_phien_tu_van · update_phien_tu_van
+  => TRÙNG KHÍT vai trò + cấp đọc được trên ảnh đối tác ("Cán bộ NV Trung ương · CB_NV_TW", badge BTP · TW).
+     Không nới chiều nào. KHÔNG dùng tài khoản quản trị để ra verdict.
+
+[2] TRA ĐƯỜNG DỰNG TIỀN ĐỀ "doanh nghiệp gửi đánh giá"
+  Đặc tả `srs-fr-13-tv-nhanh.md:371`: tác nhân là Cổng PLQG gửi thay DN qua API inbound; DN đánh giá trên
+  chuyên trang của Cổng, KHÔNG nhập trong CMS này.
+  Đã kiểm chứng bằng tài khoản DN thật (0109998887 / Test@1234, đăng nhập OK, phiên trình duyệt riêng
+  isolatedContext="dn-ctx" nên không đụng phiên cán bộ):
+    vaiTro = ["DN"]
+    menu hiện có = Đào tạo tập huấn · Chương trình đào tạo · Khóa học · Kho tài liệu · Vụ việc HTPL ·
+                   Doanh nghiệp   -> KHÔNG có mục "Tư vấn" / "Tư vấn nhanh"
+    GET /api/v1/tu-van-nhanhs -> 403 ERR-PERM-SYS-00-01 "Forbidden"
+    quyền chứa "tu_van_nhanh" / "danh_gia_tv" = 0
+  => Vai trò DN KHÔNG có bất kỳ lối vào nào để gửi đánh giá trong phần mềm này.
+  Đường inbound thật `/api/v1/public/tu-van-nhanhs/{id}/danh-gia` yêu cầu mTLS + OAuth2 client-credentials
+  (docs-json: "public-API mTLS + PublicApiAuthGuard, scope inbound:tu-van-nhanh:danh-gia:write") — env UAT
+  không cấp chứng thư nên không gọi được.
+  => Đường DUY NHẤT phần mềm cung cấp để dựng tiền đề là POST /api/v1/tu-van-nhanhs/{id}/danh-gia/cms-proxy
+     ("Tạo đánh giá phiên tư vấn nhanh (CMS proxy)", yêu cầu quyền Manage trên TuVanNhanh + cùng đơn vị).
+     ĐÃ DÙNG đường này để SEED, và CHỈ để seed. Toàn bộ phép đo quyết định verdict (nút + bấm + tệp) đều
+     bằng thao tác giao diện thật.
+
+[3] DỮ LIỆU QA TỰ DỰNG MỚI (cấm dùng lại TVN-20260727-0002 của lượt QA cũ 28/07)
+  P1  TVN-20260806-0001  id 21beee47-55c4-46a5-ba56-7e6ffd9d6d27
+      tạo 14:59 qua giao diện [Thêm mới] (POST cms-create · 1 request / 1 thông báo "Tạo phiên tư vấn nhanh thành công")
+      trả lời 15:00 qua giao diện [Gửi trả lời] (1 request / 1 thông báo "Gửi trả lời thành công")
+      đánh giá 15:02 (cms-proxy 201): diem=4, nhanXet="Cán bộ trả lời rõ ràng, đúng trọng tâm câu hỏi của
+        doanh nghiệp. Rất hài lòng."   -> DẠNG D1 (CÓ nhận xét, tiếng Việt CÓ DẤU)
+      kênh = TV_NHANH · trạng thái sau seed = HOAN_THANH
+  P2  TVN-20260806-0002  id f9f1b33a-0f73-4631-9013-ff900ea4e5db
+      tạo 15:00 · trả lời 15:01 · đánh giá 15:02 (cms-proxy 201): diem=5, KHÔNG gửi nhanXet
+        -> DẠNG D2 (KHÔNG nhận xét; máy chủ lưu nhanXet = null)
+      kênh = TV_NHANH · trạng thái = HOAN_THANH
+  P3  TVN-20260806-0003  id 5f3741ec-e3b4-4df6-9653-8324d9888806
+      tạo 15:08 · đổi kênh sang Thủ công 15:08 (POST /chuyen-kenh 200 — giao diện không có lối vào cho
+        thao tác này nên buộc phải gọi dịch vụ; đây là bước SEED) · trả lời 15:09 · đánh giá 15:09
+        (cms-proxy 201): diem=3, nhanXet="Nội dung tư vấn tạm ổn nhưng doanh nghiệp mong được trả lời sớm hơn."
+      kênh = TV_THU_CONG ("Thủ công") · trạng thái = HOAN_THANH
+      -> BIẾN THỂ KÊNH trùng khít ảnh đối tác (ảnh của họ: Kênh = "Thủ công")
+  Doanh nghiệp gắn cả 3 phiên: 829abcac-b0af-4cde-9af9-ec51bc79014c
+      mã DN "DN-HNI-0001" · tên "Cong ty TNHH QA UAT Kiem Thu" · MST "0109998887"
+  KHÔNG đụng bản ghi có sẵn của người khác.
+
+[4] BỘ BẮT THÔNG BÁO (output/UAT_doi-tac/tools/toast-capture.js)
+  Tự kiểm trước mỗi chặng đo: soObserverDangSong = 1 (3 lần kiểm: 14:58 · 15:03 · 15:09) -> số liệu hợp lệ.
+  Bổ sung móc XHR (ứng dụng gọi xuất tệp bằng XMLHttpRequest, KHÔNG dùng fetch — móc fetch đơn thuần đếm ra 0).
+  Thao tác seed: 1 request / 1 thông báo mỗi lần, không lặp, không double-toast.
+  Thao tác bấm [Xuất Excel]: 0 thông báo (3/3 lượt). Đặc tả `:582` không đòi thông báo cho thao tác này
+  ⇒ không chấm lỗi. Bằng chứng thay thế cho thứ không hiện lên màn: tệp thật + phản hồi máy chủ (mục 6-8).
+
+[5] VỊ TRÍ 1 — TAB "HOÀN THÀNH" CỦA MÀN DANH SÁCH  (15:02)
+  URL: /tv-nhanh/danh-sach?tab=HOAN_TAT&page=1 · tab đang chọn = "Hoàn thành" · 4 dòng
+  Toàn bộ nút trong vùng nội dung = ["Thêm mới","Làm mới","Xóa bộ lọc","Tìm kiếm", <4 mã phiên>, "1"]
+  Tìm chữ "xuất"/"excel"/"export"/"tải" trên toàn màn -> KHÔNG có.
+  => Không có nút xuất tệp ở vị trí này. ĐẶC TẢ CHO PHÉP: `:582` ghi "hien thi trong tab Hoan thanh
+     HOAC chi tiet phien" ⇒ một trong hai là đủ ⇒ KHÔNG chấm lỗi (đã ghi sẵn ở mục 4 file tiêu chí).
+  Ảnh: image/QLKCHTV_37-01-tab-HoanThanh-khong-co-nut-xuat.png
+
+[6] VỊ TRÍ 2 — MÀN CHI TIẾT PHIÊN: NÚT [Xuất Excel] CÓ MẶT VÀ BẬT  (3/3 phiên)
+  Toàn bộ nút trong vùng nội dung = ["Quay lại danh sách", "Xuất Excel"]  (cả 3 phiên)
+  Chỉ số đo trên nút [Xuất Excel]:
+    phiên              disabled  aria-disabled  pointer-events  opacity  color              cursor   kích thước
+    TVN-20260806-0001  false     null           auto            1        rgb(31, 31, 31)    pointer  127x32
+    TVN-20260806-0002  false     null           auto            1        rgb(31, 31, 31)    pointer  127x32
+    TVN-20260806-0003  false     null           auto            1        rgb(31, 31, 31)    pointer  127x32
+  3 thẻ tổng hợp mà `:582` cũng đòi — CÓ ĐỦ ở cả 3 phiên, số khớp dữ liệu thật:
+    P1: Tổng đánh giá "1 lượt" · Điểm trung bình "4.0 / 5" · Phân bố điểm "4★ × 1"   (đánh giá thật: 4 sao)
+    P2: Tổng đánh giá "1 lượt" · Điểm trung bình "5.0 / 5" · Phân bố điểm "5★ × 1"   (đánh giá thật: 5 sao)
+    P3: Tổng đánh giá "1 lượt" · Điểm trung bình "3.0 / 5" · Phân bố điểm "3★ × 1"   (đánh giá thật: 3 sao)
+  Ảnh: image/QLKCHTV_37-02-chitiet-P1-khoi-DanhGia-co-nut-XuatExcel-va-3-the.png
+       image/QLKCHTV_37-03-chitiet-P2-danhgia-khong-nhan-xet.png
+       image/QLKCHTV_37-04-chitiet-P3-kenh-ThuCong-trung-khit-anh-doi-tac.png
+       image/QLKCHTV_37-05-P3-dau-man-kenh-ThuCong-trangthai-HoanThanh.png
+
+[7] BẤM THẬT NÚT [Xuất Excel] — 3/3 LƯỢT ĐỀU RA TỆP THẬT
+  Mỗi lượt: đúng 1 lời gọi  xhr:GET /api/v1/tu-van-nhanhs/{id}/danh-gia/export
+  (ghi nhận: ứng dụng gọi bằng XHR, không phải fetch).
+  Tệp nhận được (bắt tại chính lượt bấm, qua URL.createObjectURL + thẻ tải xuống của trang):
+
+    lượt  tên tệp do ứng dụng đặt                            byte   mime                          md5
+    P1    DanhGiaTvNhanh_TVN202608060001_20260806_1504.xlsx  7008   ...spreadsheetml.sheet        86fafd5a6f41367dea1a8ceaf686da28
+    P2    DanhGiaTvNhanh_TVN202608060002_20260806_1506.xlsx  6940   ...spreadsheetml.sheet        5db8194db8de6600ac1ec44bd5178f70
+    P3    DanhGiaTvNhanh_TVN202608060003_20260806_1510.xlsx  7000   ...spreadsheetml.sheet        871e16220f29e2a6a053457faa481943
+
+  Chữ ký đầu tệp cả 3: PK\x03\x04 (gói OOXML hợp lệ). 3 mã băm KHÁC NHAU ⇒ 3 tệp thật khác nhau,
+  không phải một tệp lấy lại từ bộ nhớ đệm.
+  Tệp lưu tại: evidence/DanhGiaTvNhanh_TVN2026080600{01,02,03}_*.xlsx
+  (Chrome chạy chế độ --isolated nên tệp không rơi vào ~/Downloads; đã lấy nguyên vẹn khối dữ liệu
+   của chính lượt bấm rồi ghi ra đĩa, số byte khớp khối dữ liệu gốc.)
+
+[8] MỞ TỆP RA ĐỌC — openpyxl (KHÔNG dừng ở "tải được tệp")
+  Cả 3 tệp: 1 sheet tên "Đánh giá TV nhanh", vùng A1:F4 = 4 dòng x 6 cột.
+    dòng 1: "ĐÁNH GIÁ PHIÊN TƯ VẤN NHANH"   (dòng tiêu đề)
+    dòng 2: trống
+    dòng 3: Mã phiên | Điểm đánh giá | Nhận xét của doanh nghiệp | Ngày đánh giá | Tên doanh nghiệp | Mã doanh nghiệp
+    dòng 4: dữ liệu
+
+  ĐỐI CHIẾU 6 TRƯỜNG ĐẶC TẢ `:582` ĐÒI  ->  ĐỦ 6/6 Ở CẢ 3 TỆP:
+    mã phiên ✓ · điểm đánh giá ✓ · nhận xét của DN ✓ · ngày đánh giá ✓ · tên doanh nghiệp ✓ · mã doanh nghiệp ✓
+
+  DỮ LIỆU TỪNG TỆP so với NHỮNG GÌ ĐANG HIỆN TRÊN MÀN:
+    P1  ["TVN-20260806-0001", "4", "Cán bộ trả lời rõ ràng, đúng trọng tâm câu hỏi của doanh nghiệp. Rất hài lòng.",
+         "06/08/2026", "Cong ty TNHH QA UAT Kiem Thu", "0109998887"]
+        màn: mã TVN-20260806-0001 · 4 sao · đúng câu nhận xét đó · Ngày đánh giá 06/08/2026 ·
+             DN "Cong ty TNHH QA UAT Kiem Thu" · MST 0109998887      -> KHỚP TỪNG Ô
+    P2  ["TVN-20260806-0002", "5", "", "06/08/2026", "Cong ty TNHH QA UAT Kiem Thu", "0109998887"]
+        màn: 5 sao · Nhận xét hiện "—" (không có)                    -> KHỚP.
+        QUAN TRỌNG: ô nhận xét trong tệp là CHUỖI RỖNG, KHÔNG phải chữ "null"/"undefined"/"None",
+        dù máy chủ lưu nhanXet = null. Đây chính là bẫy của dạng D2 và bản dựng xử lý đúng.
+    P3  ["TVN-20260806-0003", "3", "Nội dung tư vấn tạm ổn nhưng doanh nghiệp mong được trả lời sớm hơn.",
+         "06/08/2026", "Cong ty TNHH QA UAT Kiem Thu", "0109998887"]
+        màn: 3 sao · đúng câu nhận xét đó                            -> KHỚP TỪNG Ô
+  Tiếng Việt có dấu trong tệp đọc ra nguyên vẹn, không lỗi mã hoá.
+
+  Ghi chú (không chấm lỗi): cột "Mã doanh nghiệp" điền mã số thuế 0109998887, không phải mã nội bộ
+  "DN-HNI-0001". Đặc tả `:582` chỉ ghi "ma doanh nghiep" không nói lấy trường nào; theo Luật Doanh nghiệp
+  mã số doanh nghiệp đồng thời là mã số thuế nên cách điền này có căn cứ. Đã ghi vào mục 4 file tiêu chí
+  là điều KHÔNG được chấm Fail (đặc tả im lặng về việc chọn trường).
+
+[9] KIỂM KHUÔN TÊN TỆP  — `srs-fr-13-tv-nhanh.md:582` + `srs-v3.5.md:6716` Phụ lục E §H8
+  Khuôn đặc tả : DanhGiaTvNhanh_{ma_phien}_{YYYYMMDD_HHmm}.xlsx
+  §H8 quy định {DinhDanh} "áp cùng quy tắc ký tự" = bỏ mọi ký tự không phải chữ/số, kể cả dấu gạch nối
+  ⇒ ma_phien "TVN-20260806-0001" phải thành "TVN202608060001".
+
+    tệp                                                khuôn   {DinhDanh} thực    kỳ vọng            ngày      giờ    dài
+    DanhGiaTvNhanh_TVN202608060001_20260806_1504.xlsx  KHỚP    TVN202608060001    TVN202608060001 ✓  20260806  1504   49/255
+    DanhGiaTvNhanh_TVN202608060002_20260806_1506.xlsx  KHỚP    TVN202608060002    TVN202608060002 ✓  20260806  1506   49/255
+    DanhGiaTvNhanh_TVN202608060003_20260806_1510.xlsx  KHỚP    TVN202608060003    TVN202608060003 ✓  20260806  1510   49/255
+
+  Phần giờ-phút bám đúng thời điểm bấm (14:59→15:10 giờ VN: 1504 / 1506 / 1510) ⇒ hai lần xuất trong
+  cùng ngày không đè tệp, đúng yêu cầu §H8.
+  LƯU Ý VỀ Ô "Kết quả mong đợi" CỦA ĐỐI TÁC: phiếu ghi khuôn `danh-gia-tv-nhanh-{mã phiên}{YYYYMMDD-HHmm}.xlsx`
+  (chữ thường, gạch nối). Đây là khuôn CŨ. BA đã chốt lại ngày 2026-08-06 tại `srs-v3.5.md:6716` §H8 và
+  áp vào `srs-fr-13-tv-nhanh.md:582`. Theo flow 04 §Rẽ nhánh (ngoại lệ "BA đã chốt trước, dẫn được nguồn
+  kèm ngày") ⇒ chấm theo đặc tả hiện hành, KHÔNG chấm theo chữ trong phiếu, và KHÔNG đẩy sang hỏi BA.
+
+[10] KIỂM NHÁNH NGƯỢC — nút KHÔNG được hiện khi chưa đủ điều kiện (`:582`)
+  TVN-20260729-0002 (trạng thái "Cán bộ trả lời", chưa có đánh giá):
+      nút trong vùng nội dung = ["Quay lại danh sách"] · khối "Đánh giá" không có · nút xuất: KHÔNG có
+  TVN-20260727-0004 (trạng thái "Hoàn thành" nhưng KHÔNG có đánh giá — phiên đóng bằng đẩy sang Nhóm II):
+      nút trong vùng nội dung = ["Quay lại danh sách"] · khối "Đánh giá" không có · nút xuất: KHÔNG có
+  => Đúng `:582` "Nut CHI hien thi khi phien o HOAN_THANH va da co it nhat 1 danh gia".
+     Cũng chứng minh nút không phải luôn hiện bừa.
+
+[11] ĐỐI CHỨNG BẰNG ĐƯỜNG THỨ HAI  (15:10-15:11, cùng phiên đăng nhập)
+  a) Gọi thẳng dịch vụ xuất tệp GET /api/v1/tu-van-nhanhs/{id}/danh-gia/export:
+       phiên                  HTTP  content-type                    content-disposition (tên tệp máy chủ đặt)                  byte
+       TVN-20260806-0001      200   ...spreadsheetml.sheet          DanhGiaTvNhanh_TVN202608060001_20260806_1510.xlsx          7008
+       TVN-20260806-0002      200   ...spreadsheetml.sheet          DanhGiaTvNhanh_TVN202608060002_20260806_1510.xlsx          6939
+       TVN-20260806-0003      200   ...spreadsheetml.sheet          DanhGiaTvNhanh_TVN202608060003_20260806_1510.xlsx          7000
+     Chữ ký cả 3: PK\x03\x04.
+     => Tên tệp do MÁY CHỦ đặt trong content-disposition, trùng khít tên mà giao diện dùng khi tải về
+        (chỉ khác phần giờ-phút vì gọi ở phút 15:10 thay vì 15:04/15:06). Khuôn tên KHÔNG phải do phía
+        giao diện tự bịa.
+     (P2 lệch 1 byte 6939 vs 6940 — do chuỗi giờ-phút nằm trong siêu dữ liệu gói nén, không phải lệch nội dung.)
+  b) Đọc lại bản ghi đánh giá GET /api/v1/tu-van-nhanhs/{id}:
+       P1: trangThai=HOAN_THANH · kenh=TV_NHANH    · diem="4" · nhanXet="Cán bộ trả lời rõ ràng, đúng trọng tâm
+           câu hỏi của doanh nghiệp. Rất hài lòng." · ngayDanhGia=2026-08-06T08:02:53.309Z (=15:02 giờ VN)
+       P2: trangThai=HOAN_THANH · kenh=TV_NHANH    · diem="5" · nhanXet=null · ngayDanhGia=2026-08-06T08:02:53.411Z
+       P3: trangThai=HOAN_THANH · kenh=TV_THU_CONG · diem="3" · nhanXet="Nội dung tư vấn tạm ổn nhưng doanh
+           nghiệp mong được trả lời sớm hơn." · ngayDanhGia=2026-08-06T08:09:07.690Z
+     => Khớp từng trường với nội dung đọc trong tệp và với những gì hiện trên màn.
+  HAI ĐƯỜNG ĐO KHÔNG MÂU THUẪN.
+
+[12] KẾT LUẬN THEO 6 TIÊU CHÍ Ở MỤC 4 FILE TIÊU CHÍ
+  1. Nút có mặt + thao tác được ở ≥1 vị trí đặc tả cho phép        -> ĐẠT (3/3 phiên, màn chi tiết)
+  2. Bấm thật ra tệp bảng tính về máy                              -> ĐẠT (3/3 lượt, 7008/6940/7000 byte)
+  3. Tệp có đủ 6 trường `:582`                                     -> ĐẠT (6/6 ở cả 3 tệp)
+  4. Dữ liệu trong tệp khớp màn; ô nhận xét rỗng không sinh "null" -> ĐẠT (khớp từng ô; D2 ra chuỗi rỗng)
+  5. Tên tệp đúng khuôn `:582` + §H8                               -> ĐẠT (3/3, kể cả quy tắc bỏ dấu gạch nối)
+  6. Đối chứng đường thứ hai                                       -> ĐẠT (không mâu thuẫn)
+  Quan sát tách riêng (đối tác không nêu): 3 thẻ tổng hợp `:582` đòi -> CÓ ĐỦ, số khớp dữ liệu thật.
+  GAP còn lại: 0/5.
+  => VERDICT: Pass — nhưng CHỈ CÓ HIỆU LỰC cho env nội bộ + bản dựng ghi ở mục [0].
+
+[13] GIẢI THÍCH MÂU THUẪN 3 NGUỒN (không dùng để chấm, ghi lại cho phiên chính)
+  - QA nội bộ 28/07 chấm Pass trên env nội bộ.
+  - Đối tác 20/07 (ảnh, env nghiệm thu, chuỗi phiên bản "HTPLDN · V1.0") và TKM retest 03/08 đều báo
+    "màn hình không có nút chức năng" — env nghiệm thu ngày 03/08 ở bản V1.0.3 theo hồ sơ cùng lô.
+  - DEV trả lời bằng thì tương lai ("sẽ chỉnh sửa"), tức tự nhận chưa sửa tại thời điểm trả lời.
+  Cả ba lời khai đều nhất quán với MỘT giả thuyết duy nhất: chức năng đã có trên env nội bộ nhưng bản dựng
+  mang chức năng đó CHƯA được đưa sang env nghiệm thu tại thời điểm đối tác đo. Đây là LỆCH BẢN DỰNG GIỮA
+  HAI MÔI TRƯỜNG, KHÔNG phải bằng chứng đối tác thao tác sai — vì vậy KHÔNG dùng verdict "không phải lỗi".
+
+[14] DỮ LIỆU ĐÃ SEED / THAY ĐỔI TRÊN ENV (env nội bộ 18.143.165.120.nip.io)
+  - Tạo mới 3 phiên tư vấn nhanh TVN-20260806-0001 / -0002 / -0003, đều gắn DN DN-HNI-0001.
+  - Trả lời 3 phiên (chuyển MOI -> CB_TRA_LOI).
+  - Tạo 3 bản ghi đánh giá qua cms-proxy (4 sao có nhận xét / 5 sao không nhận xét / 3 sao có nhận xét)
+    -> 3 phiên chuyển sang HOAN_THANH.
+  - Đổi kênh TVN-20260806-0003 từ TV_NHANH sang TV_THU_CONG.
+  - KHÔNG sửa/xoá bản ghi nào có sẵn. KHÔNG thao tác trên env nghiệm thu của đối tác.
+  - Đăng nhập 1 lần bằng tài khoản DN 0109998887 (chỉ đọc, để kiểm có lối vào đánh giá hay không) —
+    không tạo/sửa dữ liệu nào bằng tài khoản này.
+
+[15] GHI NHẬN NGOÀI PHẠM VI
+  Không phát hiện lỗi mới nào trong màn Tư vấn nhanh trong suốt lượt đo (đã mở đọc lại toàn bộ 5 ảnh chụp).
+  Câu này dựa trên ảnh đã đọc, không phải suy đoán.
+================================================================================

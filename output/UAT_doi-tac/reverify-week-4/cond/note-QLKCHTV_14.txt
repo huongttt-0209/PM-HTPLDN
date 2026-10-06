@@ -1,0 +1,23 @@
+✅ Là bug — chuyển dev · ⚠️ Có ý cần BA xác nhận
+
+Đã kiểm tra lại bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW). Đã mở chi tiết 2 bản ghi ở 2 trạng thái/nguồn khác nhau để phủ hết trường hợp.
+
+✅ 1) Thiếu "Người tạo" → Open, chuyển dev.
+- Màn chi tiết hiển thị: Mã, Lĩnh vực, Nguồn, Trạng thái, Công khai, Hiệu lực, Lượt xem, Đánh giá TB, Ngày tạo, Ngày duyệt — rồi tới Câu hỏi / Câu trả lời. Không có dòng nào cho người tạo.
+- Theo FR-X.2-01 (UC 154) §3 SCR-X2-01, quy tắc tương tác (srs-fr-13-tv-nhanh.md dòng 545), màn chi tiết phải hiển thị đầy đủ: câu hỏi, câu trả lời, lĩnh vực, từ khóa, nguồn, NGƯỜI TẠO.
+- Dữ liệu cũng chưa đủ: máy chủ chỉ trả mã người tạo, không kèm họ tên, nên cần bổ sung ở cả hai phía.
+- Bug ID: BUG-QLKCHTV_14.
+
+❌ 2) Thiếu "Từ khóa" → KHÔNG phải lỗi.
+- Trường này CÓ trên màn chi tiết. Chỉ khi bản ghi không có từ khóa thì dòng đó được ẩn đi.
+- Đã kiểm chứng hai vế: bản ghi có từ khóa (QA-20260727-0002) hiện đủ dòng "Từ khóa: thue / mien giam / dnnvv"; bản ghi không có từ khóa thì không hiện dòng.
+- Bản ghi trong ảnh của bên mình (QA-20260702-0003) rơi vào trường hợp không có từ khóa.
+- → Đề nghị đối tác kiểm lại với một câu hỏi có nhập từ khóa.
+
+⚠️ 3) Thiếu "Lịch sử thẩm định" → cần BA chốt.
+- Đã tìm toàn bộ đặc tả v3.5: không có mục "Lịch sử thẩm định" nào cho màn Kho câu hỏi. Dòng 545 liệt kê các trường phải hiển thị cũng không có mục này.
+- Tuy nhiên máy chủ ĐÃ có sẵn dữ liệu để dựng (người gửi duyệt, ngày gửi duyệt, người duyệt, ngày duyệt, ghi chú phê duyệt).
+- Đề nghị BA chốt: màn chi tiết có phải hiển thị lịch sử thẩm định không, và gồm những mốc nào.
+
+✅ 4) Phát hiện thêm khi test (ngoài phạm vi phiếu) — đã tách bug riêng.
+- Phần "Câu trả lời" hiển thị nguyên văn thẻ HTML, ví dụ: "<p>Phản hồi verify QLCKPHCHVM_01 round2: ...</p>". Đặc tả dòng 545 quy định câu trả lời là nội dung có định dạng (rich text). Lỗi lặp lại ở cả file Excel xuất ra. Bug ID: BUG-KCH-HTML-THO.

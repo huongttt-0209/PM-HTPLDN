@@ -1,0 +1,10 @@
+⚠️ Cần BA xác nhận.
+- Lỗi do QA phát hiện thêm khi verify QLDXDTTH_01 ngày 03/08/2026, không nằm trong phạm vi phiếu gốc nên mở dòng riêng.
+- Quan sát trên web là chắc chắn: cán bộ nghiệp vụ đúng đơn vị tiếp nhận KHÔNG có thao tác Tiếp nhận / Đánh dấu thực hiện ở cả danh sách lẫn màn chi tiết; trong khi lại thấy nút Gửi đề xuất mới.
+- Lý do cần BA quyết trước khi dev sửa: đặc tả đang tự mâu thuẫn.
+  + FR-III-13 (UC32) §Mô tả (dòng 1045) và §Đặc tả màn hình SCR-III-01 - Thành phần 8 (dòng 1875) đều giao việc tiếp nhận cho Cán bộ nghiệp vụ.
+  + Nhưng Ma trận phân quyền (dòng 1309) chỉ cấp quyền ĐỌC trong phạm vi đơn vị cho các vai trò cán bộ, không cấp quyền sửa cho bất kỳ vai trò cán bộ nào; chỉ Doanh nghiệp / Người hỗ trợ mới có quyền tạo và sửa.
+- Câu hỏi cho BA:
+  1. Vai trò nào được phép Tiếp nhận / Đánh dấu thực hiện đề xuất? Nếu là Cán bộ nghiệp vụ thì Ma trận phân quyền (dòng 1309) cần bổ sung quyền sửa cho vai trò đó.
+  2. Vai trò cán bộ có được phép gửi đề xuất đào tạo không? Nếu không thì cần ẩn nút Gửi đề xuất mới với vai trò cán bộ.
+- Nếu không chốt, đề xuất sẽ đứng vĩnh viễn ở trạng thái "Mới gửi" và các phiếu kiểm thử phía sau của nhóm đề xuất đào tạo đều không chạy tiếp được.

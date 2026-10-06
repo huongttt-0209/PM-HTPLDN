@@ -1,0 +1,5 @@
+Cần BA xác nhận wording thông báo.
+- Tái hiện: upload file >20MB (file test 21.0MB) → web báo "File vượt quá 20MB (21.0 MB)", chặn client-side, file không đính kèm. Đúng như đối tác quan sát (bản đối tác 24.7MB).
+- Đối chiếu SRS ERR-BM-02 (srs-fr-09 dòng 343): "File vượt quá giới hạn 20MB. Kích thước: {size}MB". App báo CÙNG nội dung nghiệp vụ (vượt 20MB + kích thước thực) nhưng khác cách diễn đạt.
+- Đề nghị BA quyết: chuỗi ERR-BM-02 là bắt buộc đúng nguyên văn hay chỉ mô tả yêu cầu. Nếu mô tả yêu cầu → wording web đạt, không tính lỗi.
+- Verify: cbnv_tw (CB Nghiệp vụ - TW), form Thêm biểu mẫu, 20/07/2026.

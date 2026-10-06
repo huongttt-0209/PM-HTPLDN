@@ -1,0 +1,19 @@
+✅ Vẫn còn lỗi — chưa đạt.
+
+- Đã kiểm lại trên môi trường UAT mới (bản dựng ngày 04/08/2026), màn Đào tạo, tập huấn → Kế hoạch đào tạo → Danh sách, đo bằng 2 vai trò: Cán bộ nghiệp vụ Trung ương và Cán bộ phê duyệt Trung ương. Cả 2 vai trò cho kết quả giống nhau.
+
+- Phần ĐÃ SỬA XONG (4/5 ý của phiếu):
+  • Đã có ô tích chọn dòng; tích ở dòng tiêu đề thì các dòng đang hiển thị được chọn theo.
+  • Đã có cột "Người tạo" (hiện tên người lập kế hoạch).
+  • Đã có cột "Ngày tạo" (dạng ngày/tháng/năm).
+  • Cột ngân sách đã hiển thị đúng định dạng: 100.000.000 đ, 2.943.499.581 đ; kế hoạch không nhập ngân sách hiện dấu "—".
+
+- Phần CÒN LỖI (1/5 ý): cột "Số chương trình" đã được thêm vào bảng nhưng luôn hiển thị 0 cho toàn bộ 15/15 kế hoạch, kể cả những kế hoạch thực tế đang có chương trình đào tạo bên trong.
+
+- Bằng chứng đo được ngay trên phần mềm:
+  • Mở chi tiết chương trình đào tạo "CTDT-BTP-TW-2026-0012" (trạng thái Đã duyệt), ô "Kế hoạch năm" ghi rõ thuộc "Kế hoạch đào tạo luật doanh nghiệp năm quý 3 năm 2026". Nhưng chính dòng kế hoạch đó ở bảng danh sách vẫn hiện Số chương trình = 0. Riêng kế hoạch này đang có 4 chương trình đã duyệt.
+  • Ngoài ra còn 7 kế hoạch khác đang có chương trình bên trong, tất cả cũng đều hiện 0.
+  • Đã thử tạo mới 1 chương trình đào tạo qua giao diện và chọn kế hoạch năm là "Kế hoạch kiểm thử HTPLDN 2026": lưu thành công, mở lại chi tiết thấy liên kết kế hoạch đã được lưu đúng, nhưng quay lại bảng danh sách thì kế hoạch đó vẫn hiện 0. Như vậy không phải do dữ liệu cũ.
+  • Đã đăng nhập lại phiên mới và tải lại trang để loại trừ khả năng trình duyệt giữ bản cũ, kết quả không đổi.
+
+- Theo mô tả màn hình Kế hoạch đào tạo năm, cột này phải đếm số chương trình đào tạo thuộc kế hoạch năm đó. Nhờ đơn vị kiểm tra lại phần tính số liệu cho cột "Số chương trình" để cột phản ánh đúng số chương trình thực tế của từng kế hoạch. Bốn nội dung còn lại của phiếu đã đạt.

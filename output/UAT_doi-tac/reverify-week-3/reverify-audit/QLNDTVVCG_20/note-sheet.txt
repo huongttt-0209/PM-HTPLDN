@@ -1,0 +1,5 @@
+❌ Không phải bug.
+- Đối tác phản ánh: nhóm Nhật ký không hiển thị dữ liệu dù bản ghi đã qua nhiều trạng thái.
+- Kiểm tra lại bằng vai trò Cán bộ Nghiệp vụ (Trung ương): bản ghi được tạo/thao tác thật trên hệ thống HIỂN THỊ ĐẦY ĐỦ nhật ký — có dòng "Tạo mới" kèm thời gian, người thực hiện và vai trò. Chức năng Nhật ký hoạt động đúng.
+- Trường hợp nhật ký trống chỉ xảy ra với bản ghi được nạp sẵn thẳng vào cơ sở dữ liệu (không phát sinh thao tác thật trên giao diện) — không phải lỗi chức năng.
+- → Đối tác kiểm tra lại trên bản ghi được tạo/xử lý qua giao diện.

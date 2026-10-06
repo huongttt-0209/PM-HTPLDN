@@ -1,0 +1,6 @@
+✅ Bug ĐÚNG – chuyển dev. (Bug ID: BUG-QLLSHTCTVV_01)
+- Web sai: thẻ "Lịch sử hỗ trợ" trong chi tiết tư vấn viên luôn hiển thị Tổng vụ việc = 0, Đã hoàn thành = 0, Điểm trung bình "—" và dòng "Tư vấn viên chưa tham gia hỗ trợ vụ việc nào", dù tư vấn viên ĐÃ được phân công vụ việc.
+- Dữ liệu tồn tại thật: vụ việc VV-BTP-TW-20260712-001 (Công ty TNHH Seed Publishable) đang ở trạng thái "Đã phân công", người xử lý chính là tư vấn viên TVV-BTP-TW-0002 ("QA TVV Seed28 Active"), ngày phân công 12/07/2026 — nhìn thấy được ở màn Vụ việc HTPL.
+- Expected theo SRS: FR-IV-10 (UC48) §Processing bước 1-2 (srs-fr-04 dòng 772-773) và §Acceptance Criteria (dòng 801) — thẻ Lịch sử phải lấy danh sách vụ việc liên kết qua bản ghi phân công và hiển thị kèm thống kê; SCR-IV-03 cell 22 (dòng 1567) quy định bảng gồm Mã vụ việc, Tên vụ việc, Doanh nghiệp, Lĩnh vực, Vai trò, Ngày phân công, Ngày hoàn thành, Kết quả, Đánh giá. Trạng thái rỗng (dòng 1569) chỉ được hiện KHI chưa có vụ việc.
+- Verify: tài khoản Cán bộ nghiệp vụ Trung ương, tư vấn viên đang hoạt động, không đặt bộ lọc. Kiểm chứng thêm ở tầng dữ liệu cho kết quả trùng khớp (trả về 0 bản ghi).
+- Ảnh hưởng thêm: cùng nguyên nhân này làm ô chọn "Vụ việc liên kết" khi gửi đánh giá bị rỗng với mọi tư vấn viên.

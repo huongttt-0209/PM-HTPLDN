@@ -1,0 +1,6 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Đã tái hiện đúng điều kiện đối tác: tài khoản cbnv_tw (Cán bộ nghiệp vụ), hồ sơ TVV-BTP-TW-0002 ở trạng thái "Đang hoạt động" và chưa công khai, đã nhập Mô tả công khai + đính kèm 1 tệp PDF → bấm "Công khai" → hệ thống báo lỗi và KHÔNG công khai được. Hồ sơ giữ nguyên trạng thái chưa công khai.
+- Nguyên nhân: khi công khai, hệ thống gọi ra Cổng pháp luật quốc gia; kết nối thất bại nên toàn bộ thao tác bị hủy (rollback). Đã kiểm chứng thêm: bỏ tệp đính kèm vẫn lỗi y hệt → không phải do tệp.
+- Theo FR-IV-08 (UC46) §Mô tả (srs-fr-04 dòng 638) và §Processing bước 2 (dòng 657), công khai theo mô hình KÉO: phần mềm CHỈ đặt cờ công khai + chuyển trạng thái Công khai, còn Cổng pháp luật quốc gia tự kéo dữ liệu ở lần đồng bộ định kỳ kế tiếp — phần mềm KHÔNG gọi API ra Cổng. Vì vậy thao tác công khai phải thành công ngay, không được phụ thuộc kết nối tới Cổng. §Error Handling (dòng 674-675) cũng chỉ có 2 lỗi: sai trạng thái và thiếu mô tả công khai, không có lỗi kết nối Cổng.
+- Lưu ý: phần "Kết quả mong đợi" của test case (hệ thống đẩy dữ liệu lên Cổng và Cổng tiếp nhận ngay trong lần gọi đầu tiên) mô tả theo mô hình ĐẨY, khác với SRS v3.5 (mô hình KÉO) → đã chuyển sang mục BA xác nhận. Verdict Open ở đây là do luồng công khai bị chặn, không phụ thuộc điểm này.
+- Bug ID: BUG-CNDSMLTVV_05.

@@ -1,0 +1,81 @@
+R3 RE-VERIFY — BUG-XUAT-TEP-KHOA-HOC-SAI-DU-LIEU (DAOTAO_OOS_11)
+Ngay chay: 29/07/2026  |  Env: https://18.143.165.120.nip.io  |  Tai khoan: cbnv_tw_01
+Khoa hoc: KH-20260716-002 'QA RV5 - Khoa hoc test diem danh theo buoi'
+Cach lay tep: bam nut [Xuat Excel] / [Xuat DOCX] tren giao dien, doc Blob do chinh UI sinh ra.
+====================================================================================
+
+[1/2] TAB DIEM DANH — dang chon buoi SANG (20/09/2026 08:00-11:30)   -> DA SUA
+--------------------------------------------------------------------------------
+  MAN HINH (2 dong):
+     1 · QA HV RV5 Hai · qa.hv.rv5.hai@htpldn.test · 0912345672 · Cong ty QA RV5 · Co mat
+     2 · QA HV RV5 Mot · qa.hv.rv5.mot@htpldn.test · 0912345671 · Cong ty QA RV5 · Vang khong phep
+
+  TEP EXCEL: sheet 'Điểm danh'  vung A1:K3   (2 dong du lieu)
+     r1: STT | Mã học viên | Họ tên | Đơn vị | Email | Số điện thoại | Buổi học | Ngày điểm danh | Trạng thái | Có mặt (1/0) | Ghi chú
+     r2: 1 | 4d549093-1bab-4466-9fbe-eba114038214 | QA HV RV5 Hai | Cong ty QA RV5 | qa.hv.rv5.hai@htpldn.test | 0912345672 | 20/09/2026 08:00-11:30 | 20/09/2026 | Có mặt | 1 | 
+     r3: 2 | c6777c29-863c-444c-9ea0-07704d43ab8f | QA HV RV5 Mot | Cong ty QA RV5 | qa.hv.rv5.mot@htpldn.test | 0912345671 | 20/09/2026 08:00-11:30 | 20/09/2026 | Vắng không phép | 0 | 
+
+  So voi lan truoc:
+     - Lan truoc: 4 dong (gop ca buoi SANG lan buoi CHIEU), KHONG co cot 'Buoi hoc'.
+       Cung hoc vien 'QA HV RV5 Hai' vua 'Co mat' vua 'Vang co phep' trong cung ngay.
+     - Lan nay : 2 dong, dung bang buoi dang chon tren man hinh.
+     - Da THEM cot 'Buoi hoc' = '20/09/2026 08:00-11:30' -> phan biet duoc buoi.
+     - Da THEM 3 cot truoc day bi mat so voi man hinh: STT, Email, So dien thoai.
+     - O 'Ngay diem danh' nay ghi '20/09/2026' (dinh dang chung), khong con o kieu ngay
+       voi dinh dang mm-dd-yy nhu lan truoc.
+  => DAT.
+
+------------------------------------------------------------------------------------
+[2/2] TAB KET QUA — [Xuat DOCX]   -> 2 diem cu DA SUA, nhung phat sinh diem moi
+------------------------------------------------------------------------------------
+  MAN HINH (2 dong):
+     1 · QA HV RV5 Hai · Chuyen can 1/2 (100.00%) · Diem kiem tra 1.5 · Ket qua 'Khong dat' · Xep loai 'Khong dat'
+     2 · QA HV RV5 Mot · Chuyen can 0/2 (0.00%)   · Diem kiem tra (trong) · Ket qua '—' · Xep loai '—'
+
+  TEP WORD — doan van:
+     BÁO CÁO KẾT QUẢ ĐÀO TẠO
+     Khóa học: QA RV5 - Khoa hoc test diem danh theo buoi (KTDGKQHT_03/08) (KH-20260716-002)
+     Đơn vị tổ chức: Cục Bổ trợ tư pháp - Bộ Tư pháp
+     Thời gian: từ 01/09/2026 đến 30/09/2026
+     Tổng số học viên: 2 — Đạt: 0 — Không đạt: 1
+     Ngày xuất báo cáo: 29/07/2026
+     NGƯỜI LẬP BÁO CÁO
+     (Ký, ghi rõ họ tên)
+  TEP WORD — bang: 3 dong x 12 cot
+     r0: STT | Họ và tên | Email | Số điện thoại | Đơn vị | Số buổi có mặt | Tổng số buổi | Tỉ lệ chuyên cần (%) | Điểm kiểm tra | Kết quả | Xếp loại | Ghi chú
+     r1: 1 | QA HV RV5 Hai | qa.hv.rv5.hai@htpldn.test | 0912345672 | Cục Bổ trợ tư pháp - Bộ Tư pháp | 1 | 2 | 100.00 | 1.5 | Không đạt | KHONG_DAT | 
+     r2: 2 | QA HV RV5 Mot | qa.hv.rv5.mot@htpldn.test | 0912345671 | Cục Bổ trợ tư pháp - Bộ Tư pháp | 0 | 2 | 0.00 |  | — | — | 
+
+  DA SUA (2 diem chinh cua bug):
+     - Dong 2 truoc day trong o 'Ho va ten' va o 'Ket qua'; nay ghi day du
+       'QA HV RV5 Mot' va '—' — dung bang man hinh.
+     - Bang truoc day chi co 7 cot (mat Email, So dien thoai, Don vi, Xep loai, Ghi chu);
+       nay co du 12 cot.
+
+  PHAT SINH MOI trong chinh tep vua sua:
+     - Cot 'Xep loai' dong 1 ghi 'KHONG_DAT' (ma noi bo) trong khi man hinh ghi 'Khong dat'.
+       Cot 'Ket qua' ngay ben canh lai ghi dung 'Khong dat'. Cot 'Xep loai' la cot MOI
+       duoc bo sung o lan sua nay, nen day la diem moi phat sinh.
+       (Anh chup man hinh: R3-BUG-KHOAHOC-tab-ket-qua-xep-loai-tren-man.png)
+
+  CAC GHI NHAN THEM (muc 3 cua bug) — chua thay doi:
+     - Tab Ket qua van chi co nut [Xuat DOCX], khong co [Xuat Excel].
+     - Ten tep van dung chuoi dinh danh noi bo:
+          diem-danh-033910fc-895d-432a-8407-8f7f0a9516c2.xlsx
+          ket-qua-033910fc-895d-432a-8407-8f7f0a9516c2.docx
+       thay vi ma khoa hoc KH-20260716-002.
+     - Don vi cua hoc vien van khac nhau giua 2 tab cua cung mot khoa hoc:
+          tab Diem danh -> 'Cong ty QA RV5'
+          tab Ket qua   -> 'Cuc Bo tro tu phap - Bo Tu phap'
+     - Cot 'Ma hoc vien' trong tep diem danh van la chuoi dinh danh noi bo
+       (4d549093-1bab-4466-9fbe-eba114038214) — diem nay da co tu lan truoc,
+       khong nam trong pham vi bug nay.
+
+====================================================================================
+TONG KET
+ Diem                                                        Ket qua
+ ----------------------------------------------------------- ------------------
+ 1. Diem danh — tep gop ca 2 buoi, thieu cot 'Buoi hoc'       DA SUA
+ 2. Ket qua — tep Word mat o 'Ho va ten' va 'Ket qua'         DA SUA
+ 3. (moi) Ket qua — cot 'Xep loai' ghi ma noi bo KHONG_DAT    PHAT SINH MOI
+

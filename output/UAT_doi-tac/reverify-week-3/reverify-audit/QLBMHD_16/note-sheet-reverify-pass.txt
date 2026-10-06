@@ -1,0 +1,4 @@
+Re-verify 2026-07-23 (cbnv_tw): ✅ PASS trên DỮ LIỆU MỚI. Tạo biểu mẫu mới BM-20260723-001, upload file gốc "GOCFILE-abc123-QLBMHD16.xlsx" (khác tên biểu mẫu) → bấm Tải về: /download 302, content-disposition = "GOCFILE-abc123-QLBMHD16.xlsx" = ĐÚNG TÊN FILE GỐC, giữ nguyên theo SRS srs-fr-09-bieu-mau.md:335.
+Cơ chế fix: luồng upload nay lưu đúng tên file thật vào trường tenFile; /download đặt content-disposition = tenFile.
+Verdict "Reopen" (22/07) test nhầm trên record CŨ (BM-20260715-001) vốn có tenFile lỗi từ trước fix → nay đã thu hồi.
+Caveat: record cũ tạo TRƯỚC fix vẫn tải ra tên biểu mẫu (legacy data trong tenFile) — cần dev backfill/migrate nếu áp dụng cho record cũ.

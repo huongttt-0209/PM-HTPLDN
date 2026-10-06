@@ -1,0 +1,408 @@
+{
+  "GET initial": {
+    "status": 200,
+    "data": {
+      "success": true,
+      "data": {
+        "id": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+        "maHopDong": "HDTV-20260625-0002",
+        "tenHopDong": "QA Dot3 HDTV happy 1782401264",
+        "soHopDong": null,
+        "benA": "Bộ Tư pháp - Cục Bổ trợ tư pháp",
+        "benB": "QA Dot3 bên B",
+        "tuVanVienId": "978354d7-feac-4330-a750-6b8c07b46c24",
+        "toChucTuVanId": null,
+        "tenToChuc": null,
+        "giaTriHopDong": "50000000.00",
+        "ngayKy": null,
+        "ngayBatDau": "2026-06-25",
+        "ngayKetThuc": "2026-12-31",
+        "noiDung": "QA bổ sung report-dot-3 2026-06-25",
+        "trangThai": "DANG_THUC_HIEN",
+        "ghiChu": null,
+        "tienDoTt": 0,
+        "soVuViecLienKet": 0,
+        "donViId": "00000000-0000-4000-8000-000000000001",
+        "nguoiTaoId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+        "ngayTao": "2026-06-25T15:27:45.116Z",
+        "ngayCapNhat": "2026-06-25T15:27:45.116Z",
+        "version": 1,
+        "mocTienDos": [],
+        "thanhToans": [],
+        "vuViecLienKets": [],
+        "fileDinhKem": []
+      },
+      "meta": null
+    }
+  },
+  "PATCH name_content": {
+    "status": 400,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-CHU-THE-01",
+        "message": "Hợp đồng phải gán Tư vấn viên hoặc Tổ chức tư vấn",
+        "timestamp": "2026-06-25T15:29:30.370Z",
+        "requestId": "5293a92f-db59-4708-a472-7a3245947870"
+      }
+    }
+  },
+  "PATCH status TAM_DUNG": {
+    "status": 400,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-CHU-THE-01",
+        "message": "Hợp đồng phải gán Tư vấn viên hoặc Tổ chức tư vấn",
+        "timestamp": "2026-06-25T15:29:30.414Z",
+        "requestId": "8e0a70b6-5aca-4819-afa5-89a65afb5f3e"
+      }
+    }
+  },
+  "PATCH status DANG_THUC_HIEN": {
+    "status": 400,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-CHU-THE-01",
+        "message": "Hợp đồng phải gán Tư vấn viên hoặc Tổ chức tư vấn",
+        "timestamp": "2026-06-25T15:29:30.449Z",
+        "requestId": "d6a98b88-bf12-4a09-8c66-8bf38444ef70"
+      }
+    }
+  },
+  "PATCH status HOAN_THANH": {
+    "status": 400,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-CHU-THE-01",
+        "message": "Hợp đồng phải gán Tư vấn viên hoặc Tổ chức tư vấn",
+        "timestamp": "2026-06-25T15:29:30.486Z",
+        "requestId": "e007bdd4-2fb5-4d21-8cf0-46ccd0587012"
+      }
+    }
+  },
+  "PATCH status HUY": {
+    "status": 400,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-CHU-THE-01",
+        "message": "Hợp đồng phải gán Tư vấn viên hoặc Tổ chức tư vấn",
+        "timestamp": "2026-06-25T15:29:30.558Z",
+        "requestId": "c1cc8ae9-bc98-4fd2-b10e-b7089292b07a"
+      }
+    }
+  },
+  "PATCH milestone add": {
+    "status": 400,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-CHU-THE-01",
+        "message": "Hợp đồng phải gán Tư vấn viên hoặc Tổ chức tư vấn",
+        "timestamp": "2026-06-25T15:29:30.601Z",
+        "requestId": "259bc669-52a7-4dd1-a0e2-e04ba3677fc7"
+      }
+    }
+  },
+  "PATCH milestone complete": {
+    "status": 400,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-CHU-THE-01",
+        "message": "Hợp đồng phải gán Tư vấn viên hoặc Tổ chức tư vấn",
+        "timestamp": "2026-06-25T15:29:30.670Z",
+        "requestId": "2f4ca308-c95d-478b-a70e-3617d581edc4"
+      }
+    }
+  },
+  "PATCH payment add 30m unpaid": {
+    "status": 400,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-CHU-THE-01",
+        "message": "Hợp đồng phải gán Tư vấn viên hoặc Tổ chức tư vấn",
+        "timestamp": "2026-06-25T15:29:30.725Z",
+        "requestId": "53890bd7-1772-4310-a2cb-9581094cbd89"
+      }
+    }
+  },
+  "PATCH payment paid 30m": {
+    "status": 400,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-CHU-THE-01",
+        "message": "Hợp đồng phải gán Tư vấn viên hoặc Tổ chức tư vấn",
+        "timestamp": "2026-06-25T15:29:30.776Z",
+        "requestId": "457baa94-71bf-4878-b029-65a0043cfb40"
+      }
+    }
+  },
+  "PATCH payment over value": {
+    "status": 400,
+    "data": {
+      "success": false,
+      "error": {
+        "code": "ERR-HDTV-CHU-THE-01",
+        "message": "Hợp đồng phải gán Tư vấn viên hoặc Tổ chức tư vấn",
+        "timestamp": "2026-06-25T15:29:30.812Z",
+        "requestId": "5571b79a-a738-4a42-bc79-97721983a29b"
+      }
+    }
+  },
+  "GET final": {
+    "status": 200,
+    "data": {
+      "success": true,
+      "data": {
+        "id": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+        "maHopDong": "HDTV-20260625-0002",
+        "tenHopDong": "QA Dot3 HDTV happy 1782401264",
+        "soHopDong": null,
+        "benA": "Bộ Tư pháp - Cục Bổ trợ tư pháp",
+        "benB": "QA Dot3 bên B",
+        "tuVanVienId": "978354d7-feac-4330-a750-6b8c07b46c24",
+        "toChucTuVanId": null,
+        "tenToChuc": null,
+        "giaTriHopDong": "50000000.00",
+        "ngayKy": null,
+        "ngayBatDau": "2026-06-25",
+        "ngayKetThuc": "2026-12-31",
+        "noiDung": "QA bổ sung report-dot-3 2026-06-25",
+        "trangThai": "DANG_THUC_HIEN",
+        "ghiChu": null,
+        "tienDoTt": 0,
+        "soVuViecLienKet": 0,
+        "donViId": "00000000-0000-4000-8000-000000000001",
+        "nguoiTaoId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+        "ngayTao": "2026-06-25T15:27:45.116Z",
+        "ngayCapNhat": "2026-06-25T15:27:45.116Z",
+        "version": 1,
+        "mocTienDos": [],
+        "thanhToans": [],
+        "vuViecLienKets": [],
+        "fileDinhKem": []
+      },
+      "meta": null
+    }
+  },
+  "GET audit": {
+    "status": 200,
+    "data": {
+      "success": true,
+      "data": [
+        {
+          "id": "bacc2df2-f439-48d1-a4b4-5bd04aa0561e",
+          "entityType": "HOP_DONG_TU_VAN",
+          "entityId": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "hanhDong": "UPDATE",
+          "nguoiThucHienId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "systemActor": null,
+          "consumerId": null,
+          "thoiGian": "2026-06-25T15:29:30.812Z",
+          "ipAddress": "::ffff:127.0.0.1",
+          "endpoint": "PATCH /api/v1/hop-dong-tu-vans/cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "responseCode": 400,
+          "sessionId": "87ee4458-addd-4cde-8603-13b494650511",
+          "module": "TU_VAN",
+          "nguoiThucHienUsername": "cb_nv_tw_07",
+          "nguoiThucHienHoTen": "CB Nghiệp vụ TW 07",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+          "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+        },
+        {
+          "id": "24254c52-dbb5-46f9-a3b9-ca0b9ce95b25",
+          "entityType": "HOP_DONG_TU_VAN",
+          "entityId": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "hanhDong": "UPDATE",
+          "nguoiThucHienId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "systemActor": null,
+          "consumerId": null,
+          "thoiGian": "2026-06-25T15:29:30.775Z",
+          "ipAddress": "::ffff:127.0.0.1",
+          "endpoint": "PATCH /api/v1/hop-dong-tu-vans/cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "responseCode": 400,
+          "sessionId": "87ee4458-addd-4cde-8603-13b494650511",
+          "module": "TU_VAN",
+          "nguoiThucHienUsername": "cb_nv_tw_07",
+          "nguoiThucHienHoTen": "CB Nghiệp vụ TW 07",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+          "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+        },
+        {
+          "id": "0914a601-311f-4e84-a255-fe85064b7b8c",
+          "entityType": "HOP_DONG_TU_VAN",
+          "entityId": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "hanhDong": "UPDATE",
+          "nguoiThucHienId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "systemActor": null,
+          "consumerId": null,
+          "thoiGian": "2026-06-25T15:29:30.725Z",
+          "ipAddress": "::ffff:127.0.0.1",
+          "endpoint": "PATCH /api/v1/hop-dong-tu-vans/cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "responseCode": 400,
+          "sessionId": "87ee4458-addd-4cde-8603-13b494650511",
+          "module": "TU_VAN",
+          "nguoiThucHienUsername": "cb_nv_tw_07",
+          "nguoiThucHienHoTen": "CB Nghiệp vụ TW 07",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+          "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+        },
+        {
+          "id": "63710c5d-0b61-4467-902b-11871dbd7a55",
+          "entityType": "HOP_DONG_TU_VAN",
+          "entityId": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "hanhDong": "UPDATE",
+          "nguoiThucHienId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "systemActor": null,
+          "consumerId": null,
+          "thoiGian": "2026-06-25T15:29:30.670Z",
+          "ipAddress": "::ffff:127.0.0.1",
+          "endpoint": "PATCH /api/v1/hop-dong-tu-vans/cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "responseCode": 400,
+          "sessionId": "87ee4458-addd-4cde-8603-13b494650511",
+          "module": "TU_VAN",
+          "nguoiThucHienUsername": "cb_nv_tw_07",
+          "nguoiThucHienHoTen": "CB Nghiệp vụ TW 07",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+          "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+        },
+        {
+          "id": "e6b56d59-55e3-42ff-9de7-3d0e02852caa",
+          "entityType": "HOP_DONG_TU_VAN",
+          "entityId": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "hanhDong": "UPDATE",
+          "nguoiThucHienId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "systemActor": null,
+          "consumerId": null,
+          "thoiGian": "2026-06-25T15:29:30.601Z",
+          "ipAddress": "::ffff:127.0.0.1",
+          "endpoint": "PATCH /api/v1/hop-dong-tu-vans/cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "responseCode": 400,
+          "sessionId": "87ee4458-addd-4cde-8603-13b494650511",
+          "module": "TU_VAN",
+          "nguoiThucHienUsername": "cb_nv_tw_07",
+          "nguoiThucHienHoTen": "CB Nghiệp vụ TW 07",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+          "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+        },
+        {
+          "id": "c7cad9a9-7deb-4057-a8c1-68ad26ca95f2",
+          "entityType": "HOP_DONG_TU_VAN",
+          "entityId": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "hanhDong": "UPDATE",
+          "nguoiThucHienId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "systemActor": null,
+          "consumerId": null,
+          "thoiGian": "2026-06-25T15:29:30.557Z",
+          "ipAddress": "::ffff:127.0.0.1",
+          "endpoint": "PATCH /api/v1/hop-dong-tu-vans/cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "responseCode": 400,
+          "sessionId": "87ee4458-addd-4cde-8603-13b494650511",
+          "module": "TU_VAN",
+          "nguoiThucHienUsername": "cb_nv_tw_07",
+          "nguoiThucHienHoTen": "CB Nghiệp vụ TW 07",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+          "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+        },
+        {
+          "id": "9259278a-8795-4e3b-ac9b-d139e19cb488",
+          "entityType": "HOP_DONG_TU_VAN",
+          "entityId": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "hanhDong": "UPDATE",
+          "nguoiThucHienId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "systemActor": null,
+          "consumerId": null,
+          "thoiGian": "2026-06-25T15:29:30.486Z",
+          "ipAddress": "::ffff:127.0.0.1",
+          "endpoint": "PATCH /api/v1/hop-dong-tu-vans/cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "responseCode": 400,
+          "sessionId": "87ee4458-addd-4cde-8603-13b494650511",
+          "module": "TU_VAN",
+          "nguoiThucHienUsername": "cb_nv_tw_07",
+          "nguoiThucHienHoTen": "CB Nghiệp vụ TW 07",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+          "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+        },
+        {
+          "id": "3244fcb5-f587-43a0-a6ea-b2ef1c81eca4",
+          "entityType": "HOP_DONG_TU_VAN",
+          "entityId": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "hanhDong": "UPDATE",
+          "nguoiThucHienId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "systemActor": null,
+          "consumerId": null,
+          "thoiGian": "2026-06-25T15:29:30.449Z",
+          "ipAddress": "::ffff:127.0.0.1",
+          "endpoint": "PATCH /api/v1/hop-dong-tu-vans/cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "responseCode": 400,
+          "sessionId": "87ee4458-addd-4cde-8603-13b494650511",
+          "module": "TU_VAN",
+          "nguoiThucHienUsername": "cb_nv_tw_07",
+          "nguoiThucHienHoTen": "CB Nghiệp vụ TW 07",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+          "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+        },
+        {
+          "id": "cddc946f-befb-41f9-8685-372daa98426f",
+          "entityType": "HOP_DONG_TU_VAN",
+          "entityId": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "hanhDong": "UPDATE",
+          "nguoiThucHienId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "systemActor": null,
+          "consumerId": null,
+          "thoiGian": "2026-06-25T15:29:30.414Z",
+          "ipAddress": "::ffff:127.0.0.1",
+          "endpoint": "PATCH /api/v1/hop-dong-tu-vans/cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "responseCode": 400,
+          "sessionId": "87ee4458-addd-4cde-8603-13b494650511",
+          "module": "TU_VAN",
+          "nguoiThucHienUsername": "cb_nv_tw_07",
+          "nguoiThucHienHoTen": "CB Nghiệp vụ TW 07",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+          "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+        },
+        {
+          "id": "0f471cd9-b3a5-4b25-b404-8294ca00785e",
+          "entityType": "HOP_DONG_TU_VAN",
+          "entityId": "cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "hanhDong": "UPDATE",
+          "nguoiThucHienId": "169244eb-bbd8-4a35-bec3-2096f57a62f6",
+          "systemActor": null,
+          "consumerId": null,
+          "thoiGian": "2026-06-25T15:29:30.370Z",
+          "ipAddress": "::ffff:127.0.0.1",
+          "endpoint": "PATCH /api/v1/hop-dong-tu-vans/cf73e788-5bbf-45d1-a175-6717fcb51f5e",
+          "responseCode": 400,
+          "sessionId": "87ee4458-addd-4cde-8603-13b494650511",
+          "module": "TU_VAN",
+          "nguoiThucHienUsername": "cb_nv_tw_07",
+          "nguoiThucHienHoTen": "CB Nghiệp vụ TW 07",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+          "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+        }
+      ],
+      "meta": {
+        "page": 1,
+        "pageSize": 10,
+        "total": 12,
+        "totalPages": 2
+      }
+    }
+  }
+}

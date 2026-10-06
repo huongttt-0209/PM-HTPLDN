@@ -1,0 +1,6 @@
+✅ Bug ĐÚNG.
+- Đối tác báo: Nhóm 1 — Thông tin doanh nghiệp (màn Chi tiết hồ sơ chi trả) hiển thị thiếu trường thông tin so với tài liệu mô tả.
+- Kiểm tra lại trên màn Chi tiết hồ sơ (tài khoản CB Nghiệp vụ TW, hồ sơ CT-SEED-103, data thật): mục "Thông tin Doanh nghiệp" chỉ hiển thị Tên DN, Mã số thuế, Quy mô + các trường tiền (Số tiền đề nghị, Phí tư vấn, Số tiền được duyệt). THIẾU 6 trường: Địa chỉ, Số điện thoại/Fax/Email, Giấy chứng nhận đăng ký kinh doanh, Ngành nghề, Người đại diện, Loại hình doanh nghiệp.
+- Đối chiếu SRS SCR-V.II-02 (FR-06, UC69) component #5 "Accordion I — Thông tin doanh nghiệp" (srs-fr-06-chi-tra.md:981, điều kiện hiển thị "Luôn"): yêu cầu hiển thị đủ 9 trường gồm Tên DN, Địa chỉ, SĐT/Fax/Email, Mã số DN, Giấy CN ĐKKD, Ngành nghề, Người đại diện, Loại hình DN, Quy mô — tự động lấy từ Cổng DVC.
+- KHÔNG phải thiếu dữ liệu nguồn: bản ghi Doanh nghiệp gốc (GET /api/v1/doanh-nghieps/{id}) đã có đủ diaChi, dienThoai, email, nganhNghe, nguoiDaiDien, loaiDnId. Nhưng API chi tiết hồ sơ chi trả chỉ trả khối doanhNghiep = {id, ten, maSoThue} nên màn hình không có dữ liệu 6 trường còn lại để hiển thị.
+- Bug tái hiện đúng như đối tác báo, có SRS reference cụ thể → lỗi thật, dev fix. Chi tiết: Pass-bug-report-UAT-tuan-3-chi-tra.md §BUG-QLHSDNHTCP_11.

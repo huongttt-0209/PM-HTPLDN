@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web: mở màn Chi tiết DN qua nút "Xem" (URL /doanh-nghiep/{id}) → màn hiển thị ngay ở chế độ chỉnh sửa (các trường là ô nhập, có sẵn 2 nút "Hủy" + "Lưu"), KHÔNG có nút "Sửa" và KHÔNG có chế độ chỉ xem để từ đó bấm sang sửa — đúng như đối tác báo.
+- Theo SRS v3.5 SCR-V.III-02 (FR-V.III-01, UC81): màn Chi tiết có 2 chế độ tách biệt — URL /doanh-nghiep/:id là "xem chi tiết" (chỉ hiển thị, dòng 459), URL /:id/sua mới là "chỉnh sửa"; danh sách có 2 hành động riêng Xem / Sửa (dòng 443). Vậy màn Xem phải ở chế độ chỉ đọc, việc chuyển sang sửa là một hành động riêng.
+- Kiểm chứng: /:id và /:id/sua render form editable giống hệt nhau → hệ thống không có chế độ xem chỉ đọc, nên không tồn tại bước "bấm Sửa để vào chỉnh sửa". Cùng gốc lỗi với BUG-QLDNDHTPL_21.
+- Verify: cbnv_tw (CB_NV_TW), DN-SEED-0001. Bug ID BUG-QLDNDHTPL_31.

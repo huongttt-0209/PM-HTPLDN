@@ -1,0 +1,114 @@
+{
+  "ts": "2026-06-25T17:23:07.498Z",
+  "congMeta": {
+    "page": 1,
+    "pageSize": 20,
+    "total": 1,
+    "totalPages": 1,
+    "tabCounts": {
+      "TAT_CA": 8,
+      "MOI": 0,
+      "TIEP_NHAN": 1,
+      "DANG_XU_LY": 5,
+      "CHO_PHE_DUYET": 0,
+      "DA_DUYET": 1,
+      "CONG_KHAI": 1,
+      "HOAN_THANH": 0,
+      "HUY": 0
+    }
+  },
+  "candidates": [
+    {
+      "id": "aab90006-0000-4000-8000-000000000001",
+      "ma": "HD-QA-R9-CK-001",
+      "trangThai": "CONG_KHAI"
+    }
+  ],
+  "test": {
+    "ma": "HD-QA-R9-CK-001",
+    "id": "aab90006-0000-4000-8000-000000000001",
+    "before": {
+      "status": 200,
+      "version": 1,
+      "trangThai": "CONG_KHAI",
+      "moTaCongKhai": "Mô tả công khai cho test CK."
+    },
+    "unpublish": {
+      "status": 200,
+      "body": {
+        "success": true,
+        "data": {
+          "id": "aab90006-0000-4000-8000-000000000001",
+          "nguoiTaoId": "00000000-0000-4000-8000-000000000099",
+          "nguoiCapNhatId": "4ce17408-e1d8-4935-8686-e42060faca84",
+          "ngayTao": "2026-05-12T03:18:09.884Z",
+          "ngayCapNhat": "2026-06-25T17:23:07.764Z",
+          "donViId": "00000000-0000-4000-8002-000000000006",
+          "seqId": "38",
+          "version": 2,
+          "trangThai": "DA_DUYET",
+          "nguoiGuiDuyetId": "a7641452-e4c3-4251-8fa7-7e4caf586e69",
+          "ngayGuiDuyet": "2026-05-02T03:18:09.884Z",
+          "nguoiDuyetId": "319cae73-4f94-49c2-be9b-fca8a4642475",
+          "ngayDuyet": "2026-05-04T03:18:09.884Z",
+          "ghiChuPheDuyet": null,
+          "maHoiDap": "HD-QA-R9-CK-001",
+          "noiDung": "Nội dung hỏi đáp đã được công khai (state CONG_KHAI).",
+          "linhVucId": "bbbbbbbb-0000-4000-8000-000000000010",
+          "nguoiGuiId": null,
+          "tenNguoiGui": "Lê Văn Test C",
+          "emailNguoiGui": "test.c@example.com",
+          "sdtNguoiGui": "0911000003",
+          "kenhTiepNhan": "TRUC_TIEP",
+          "tuVanNhanhGocId": null,
+          "nguoiTiepNhanId": "ce60da61-688a-461a-9c58-2eb8651af275",
+          "ngayTiepNhan": "2026-04-27T03:18:09.884Z",
+          "loaiDoiTuongXuLy": null,
+          "toChucTuVanId": null,
+          "nguoiPhanCongId": "a7641452-e4c3-4251-8fa7-7e4caf586e69",
+          "deadline": "2026-05-07T03:18:09.884Z",
+          "mucDoCanhBao": "BINH_THUONG",
+          "mucDoPhucTap": "THUONG",
+          "congKhai": false,
+          "thoiGianDangTai": null,
+          "anhDaiDien": null,
+          "moTaCongKhai": "Mô tả công khai cho test CK.",
+          "fileDinhKemCongKhai": [],
+          "ngayHoanThanh": null,
+          "ghiChu": null,
+          "lyDoHuy": null,
+          "maCongPlqg": null,
+          "trangThaiDongBo": null,
+          "ngayDongBo": null,
+          "loiDongBo": null,
+          "soLanThuLai": 0
+        },
+        "meta": null
+      }
+    },
+    "afterUnpublish": {
+      "status": 200,
+      "version": 2,
+      "trangThai": "DA_DUYET"
+    },
+    "payload": "<script>alert(1)</script><b>Mo ta cong khai QA</b><img src=x onerror=alert(2)>",
+    "publish": {
+      "status": 422,
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-II-08-03",
+          "message": "Không tìm thấy phản hồi đã duyệt để công khai",
+          "timestamp": "2026-06-25T17:23:07.875Z",
+          "requestId": "bb58d47c-dad4-4af5-a352-010eb19f3bd1"
+        }
+      }
+    },
+    "afterPublish": {
+      "status": 200,
+      "version": 2,
+      "trangThai": "DA_DUYET",
+      "moTaCongKhai": "Mô tả công khai cho test CK."
+    }
+  }
+}

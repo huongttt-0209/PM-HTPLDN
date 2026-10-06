@@ -1,0 +1,11 @@
+✅ Bug đúng (BA 04/08/2026). Dev FE/BE: cột "Cảnh báo thời hạn" ở màn danh sách vụ việc đang hiện nhãn "Đã hoàn thành" — một giá trị không tồn tại trong hệ thống. Cột này chỉ được phép hiện đúng bốn mức đã định nghĩa: Bình thường, Sắp hết hạn, Quá hạn, Quá hạn nghiêm trọng (FR-V.I §cột danh sách, srs-fr-05-vu-viec.md dòng 1656, điều kiện hiển thị "Luôn"; thực thể dòng 2031 cũng chỉ nhận đúng bốn mã này). Với hồ sơ đã đóng thì cột hiển thị đúng mức đang lưu — với hai hồ sơ QA quan sát là "Sắp hết hạn".
+BA chốt rõ hai phần CÒN LẠI của phiếu là ĐÚNG, Dev không đụng: (a) giữ nguyên mức cảnh báo của hồ sơ đã đóng là đúng, vì công việc tự động chỉ quét vụ việc đang hoạt động (dòng 1436); (b) bộ lọc trả về hồ sơ đã đóng cũng đúng, vì nó lọc theo giá trị đã lưu. Việc loại hồ sơ đã đóng khỏi bộ lọc là yêu cầu cải tiến, mở phiếu riêng nếu BA muốn. Minor. Không sửa đặc tả.
+
+── CÁCH VERIFY sau Dev fix ──
+Precondition: cbnv_tw + màn danh sách vụ việc, có sẵn hai hồ sơ đã đóng VV-BTP-TW-20260712-006 và VV-BTP-TW-20260712-005 (một Từ chối, một Hoàn thành) đang lưu mức cảnh báo "Sắp hết hạn".
+1) Đặt bộ lọc "Mức SLA" = "Sắp hết hạn".
+2) Đọc cột "Cảnh báo thời hạn" của từng dòng kết quả.
+3) Bỏ lọc, duyệt danh sách và đọc cột này ở các hồ sơ đang xử lý lẫn hồ sơ đã đóng.
+✅ PASS khi: mọi giá trị xuất hiện ở cột "Cảnh báo thời hạn" đều nằm trong đúng bốn mức đã định nghĩa; hai hồ sơ đã đóng ở bước 1 hiện "Sắp hết hạn" — khớp với chính bộ lọc đã chọn.
+❌ FAIL nếu: cột còn hiện "Đã hoàn thành" hay bất kỳ nhãn nào ngoài bốn mức; hoặc cột để trống ở hồ sơ đã đóng.
+⚠️ Sau khi sửa, hồ sơ trạng thái Hoàn thành SẼ hiện "Sắp hết hạn" ở cột này. Đó là kết quả ĐÚNG theo đặc tả hiện hành — mức cảnh báo được giữ nguyên tại thời điểm hồ sơ đóng. Đừng chấm FAIL và đừng mở bug mới vì điều đó.

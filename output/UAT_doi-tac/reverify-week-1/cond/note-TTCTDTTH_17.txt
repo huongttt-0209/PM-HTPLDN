@@ -1,0 +1,8 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Tái hiện đúng phản ánh (1/1) trên bản hiện tại: đưa TOÀN BỘ khóa học của chương trình "CTDT-2026-001" về "Hoàn thành" bằng đúng luồng (cán bộ nghiệp vụ [Gửi duyệt KQ] → cán bộ phê duyệt [Duyệt KQ]), nhưng chương trình vẫn đứng ở bước "3 Đã duyệt", không chuyển sang "Hoàn thành".
+- Đã loại trừ khả năng chỉ hiển thị sai: khóa học con có mốc cập nhật mới đúng lúc duyệt, còn mốc cập nhật của chương trình KHÔNG đổi ⇒ hệ thống không xử lý trạng thái chương trình.
+- Nguyên nhân chung với phiếu TTCTDTTH_16: vòng đời chương trình đào tạo bị cắt ở "Đã duyệt". Hệ thống hiện không có thao tác nào (tự động hay thủ công) đưa chương trình sang "Đang thực hiện" hoặc "Hoàn thành"; trang chi tiết chương trình chỉ có [Xuất DOCX] và [Tạo khóa học]. Cập nhật trạng thái trực tiếp bị chặn: "Chỉ được cập nhật chương trình ở trạng thái DU_THAO hoặc TU_CHOI".
+- Yêu cầu theo đặc tả: FR-III-01 (UC20), máy trạng thái SM-CTDT — srs-fr-03-dao-tao.md dòng 2129 và 2145: "DANG_THUC_HIEN → HOAN_THANH: Auto khi tất cả KHOA_HOC con HOAN_THANH / DA_HUY". Dòng 2119 liệt kê 7 trạng thái ⇒ hiện có 2/7 trạng thái không thể đạt.
+- Đề nghị: sửa cùng lượt với TTCTDTTH_16 rồi kiểm lại cả 2 nhánh chuyển trạng thái.
+- Tài khoản + dữ liệu verify: quan sát kết luận bằng cbnv_tw (CB Nghiệp vụ - Trung ương, BTP·TW) đúng vai trò và cấp như đối tác; khâu duyệt kết quả dùng cbpd_tw_01 (CB Phê duyệt - Trung ương) vì cbpd_tw đăng nhập lỗi 401. Dữ liệu: CTDT-2026-001 ↔ KH-2026-001 + KH-2026-002 (cả 2 Hoàn thành).
+- Bug ID: BUG-TTCTDTTH_17.

@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Web: màn Chi tiết DN (nút Xem → tab "Thông tin"), các trường thông tin cơ bản (Nhóm 1) hiển thị ĐỦ, đúng định dạng, không tràn/đè, tiếng Việt đồng nhất — gom trong khối "Thông tin chung" + "Thông tin liên hệ".
+- SRS v3.5 SCR-V.III-02 (FR-V.III-01, UC81, dòng 464–495) đặc tả các trường dưới dạng danh sách phẳng, KHÔNG quy định bố cục "6 Nhóm". Bố cục nhóm trong SRS chỉ có ở màn Thêm mới DN (SCR-V.III-03, dòng 552/562/572).
+- Đối tác chấm theo thiết kế "Nhóm 1" (tài liệu HTPLDN-PTYC-CT-v2.0), khác cách gom nhóm của SRS; không chỉ ra trường cụ thể nào thiếu.
+- Hỏi BA: màn Chi tiết DN có bắt buộc theo bố cục "6 Nhóm" của thiết kế đối tác không, hay danh sách trường phẳng đủ trường theo SRS v3.5 là đạt?
+- Verify: cbnv_tw (CB_NV_TW), DN-SEED-0001.

@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: màn chỉnh sửa đợt KHÔNG có nút "Lưu & Chuyển tiêu chí". Nguyên nhân gốc: bấm "Sửa" không mở form chỉnh sửa mà mở màn chi tiết read-only nên không có thanh hành động của form.
+- Đã verify env test (tài khoản CB Nghiệp vụ TW): bấm Sửa đợt DG-20260720-0002 (Lập kế hoạch) → màn chi tiết read-only, không có nút "Lưu & Chuyển tiêu chí" cho việc chỉnh sửa thông tin đợt (chỉ có các nút của tab Tiêu chí + "Hủy đợt" + "Quay lại danh sách").
+- Chuẩn: SRS SCR-VI-01 thanh hành động form (#27): "[Hủy] [Lưu nháp] [Lưu & Chuyển tiêu chí] (→ lưu + mở tab tiêu chí)" — form sửa/tạo phải có nút [Lưu & Chuyển tiêu chí].
+- Mã lỗi nội bộ: BUG-LKHDG-EDIT (gộp LKHDG_16/20/21/22).

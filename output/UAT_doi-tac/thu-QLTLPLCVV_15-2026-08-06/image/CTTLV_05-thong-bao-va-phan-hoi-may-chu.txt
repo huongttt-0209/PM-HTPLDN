@@ -1,0 +1,158 @@
+CTTLV_05 — BC Chương trình theo lĩnh vực (FR-IX-22 / UC145)
+Nguyên văn thông báo trên màn + phản hồi máy chủ + nội dung tệp xuất
+Môi trường: https://18.143.165.120.nip.io — bản dựng HTPLDN · V1.0.8 (bó mã giao diện assets/index-CNwX9JjX.js)
+Thời điểm đo: 2026-08-06 13:30 → 13:46 (giờ máy trạm, GMT+7)
+Bộ bắt thông báo: tools/toast-capture.js (không lọc trùng · đọc innerText · đếm request).
+  Tự kiểm TRƯỚC mỗi lượt đo: soObserverDangSong = 1 (hợp lệ) — 4 lượt đều = 1.
+  Bổ sung: bộ ghi chữ theo thời gian (đọc innerText của .ant-message-notice-wrapper mỗi 100ms)
+  để bắt được chữ ĐỔI TẠI CHỖ trong cùng một khung thông báo — AntD dùng lại khung nên
+  MutationObserver chỉ thấy 1 lần thêm node, còn chữ thì đổi sau đó.
+
+=====================================================================
+NHÁNH A — cbnv_tw_04 (CB Nghiệp vụ Trung ương, cấp TW) — vai trò của đặc tả, dùng để chấm
+=====================================================================
+Danh tính xác nhận TRƯỚC phép đo (GET /api/v1/auth/me):
+  hoTen = "CB Nghiệp vụ - Trung ương #04" · vaiTro = ["CB_NV_TW"] · capDonVi = "TW"
+  donViId = "00000000-0000-4000-8000-000000000001"
+Danh tính xác nhận SAU toàn bộ phép đo nhánh A (ngay trước khi đăng xuất): GIỐNG HỆT ⇒ phép đo hợp lệ.
+
+--- Dạng ① (Toàn quốc, Lĩnh vực để trống — trùng khít ảnh vòng 1 của đối tác) ---
+URL: /bao-cao?loai=ct-theo-linh-vuc&kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+Màn (Thời điểm tạo 06/08/2026 13:32): Tổng chương trình = 7
+Bảng trên màn (hàng = lĩnh vực, cột = số chương trình):
+  Chưa phân loại 3 · Lao động 1 · Đất đai 1 · Thuế 1 · Thương mại 1   (cộng dọc = 7 = tổng)
+KHÔNG có thẻ "Tổng DN tham gia" trên màn.
+Thao tác [Xuất Excel] lúc 13:33:
+  SO_REQUEST = 1 → POST /api/v1/bao-cao/export → HTTP 200
+  SO_KHUNG_THONG_BAO = 1 (1 mốc giờ, không double-toast); chữ bắt được: "Đang tạo file..."
+  KHÔNG có "Không thể tạo file xuất. Vui lòng thử lại." · KHÔNG có "Forbidden"
+  Tệp giao về máy: BaoCaoCtTheoLinhVuc_20260806_1333.xlsx (6.674 byte)
+
+Nội dung tệp (đọc bằng openpyxl — magic PK\x03\x04, zip thật, mở được):
+  sheet: "Chương trình theo lĩnh vực"
+  A1: BC Chương trình theo lĩnh vực
+  A2: Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+  A3: Đơn vị: Toàn quốc
+  A4: Ngày tạo: 06/08/2026
+  A6: Tổng số chương trình
+  A7|B7: Chỉ tiêu | Số lượng
+  A8|B8: Tổng số chương trình | 7
+  A10:  Theo lĩnh vực pháp luật
+  A11|B11: Lĩnh vực PL | Số chương trình
+  A12|B12: Chưa phân loại | 3
+  A13|B13: Lao động | 1
+  A14|B14: Đất đai | 1
+  A15|B15: Thuế | 1
+  A16|B16: Thương mại | 1
+  ⇒ khớp TỪNG HÀNG với bảng trên màn; cộng dọc 3+1+1+1+1 = 7 = thẻ tổng.
+  Lưu bản sao: testfiles/cttlv05-dang1.xlsx
+
+--- Dạng ② (Đơn vị = Cục Bổ trợ tư pháp - Bộ Tư pháp (BTP-TW) — trùng khít ảnh vòng 2 của đối tác) ---
+URL: ...&donViId=00000000-0000-4000-8000-000000000001   (đúng chuỗi trên ảnh vòng 2)
+Màn (Thời điểm tạo 13:35): Tổng 7; bảng y hệt dạng ① (mọi chương trình trên env đều thuộc đơn vị này)
+Thao tác [Xuất Excel] lúc 13:35: 1 request POST /api/v1/bao-cao/export → 200; 1 khung thông báo
+  "Đang tạo file..."; tệp BaoCaoCtTheoLinhVuc_20260806_1335.xlsx (6.691 byte)
+Nội dung tệp: giống dạng ① NHƯNG A3 đổi thành "Đơn vị: Cục Bổ trợ tư pháp - Bộ Tư pháp"
+  Lưu bản sao: testfiles/cttlv05-dang2.xlsx
+
+--- Dạng ②b (Đơn vị = Bộ Công an — nhánh phụ để chứng minh bộ lọc đơn vị có tác dụng) ---
+URL: ...&donViId=00000000-0000-4000-8001-000000000016
+Màn: "Không có dữ liệu báo cáo cho kỳ và đơn vị đã chọn" + [Xuất Excel]/[Xuất PDF] bị khoá
+  ⇒ bộ lọc đơn vị THẬT SỰ lọc dữ liệu (dạng ② trùng dạng ① chỉ vì env chỉ có 1 đơn vị có dữ liệu).
+
+--- Dạng ③ (Lĩnh vực = Lao động) ---
+URL: ...&fd_linhVucId=bbbbbbbb-0000-4000-8000-000000000013
+Màn (Thời điểm tạo 13:37): Tổng chương trình = 1; bảng chỉ còn 1 hàng "Lao động | 1"
+Thao tác [Xuất Excel] lúc 13:37: 1 request POST /api/v1/bao-cao/export → 200; 1 khung thông báo
+  "Đang tạo file..."; tệp BaoCaoCtTheoLinhVuc_20260806_1337.xlsx (6.568 byte)
+Nội dung tệp: A1–A4 như trên (A3 "Đơn vị: Toàn quốc"), A8 "Tổng số chương trình | 1",
+  bảng lĩnh vực CHỈ CÒN "Lao động | 1" — mất hẳn 4 hàng của dạng ①.
+  Lưu bản sao: testfiles/cttlv05-dang3.xlsx
+
+--- Dạng ③b (Lĩnh vực = Đất đai) — lượt dùng để bắt CHỮ của thông báo thành công ---
+URL: ...&fd_linhVucId=bbbbbbbb-0000-4000-8000-000000000014
+Màn (Thời điểm tạo 13:41): Tổng chương trình = 1; bảng 1 hàng "Đất đai | 1"
+Thao tác [Xuất Excel] lúc 13:41 (hẹn giờ bấm sau 2500ms rồi mới chụp ảnh):
+  1 request POST /api/v1/bao-cao/export; 1 khung thông báo.
+  CHỮ NGƯỜI DÙNG THẤY, ghi theo mốc giờ trong trang:
+     t=701682 ms — "Đang tạo file..."     (khung position: fixed, rộng 1432 × cao 40)
+     t=701784 ms — "Tạo file thành công." (khung position: fixed, rộng 1432 × cao 45)
+  ⇒ chữ ĐỔI TẠI CHỖ trong cùng 1 khung ⇒ 1 thông báo, KHÔNG phải 2.
+  Tệp: BaoCaoCtTheoLinhVuc_20260806_1341.xlsx — A8 "Tổng số chương trình | 1", bảng 1 hàng "Đất đai | 1"
+  Lưu bản sao: testfiles/cttlv05-dang3b-datdai.xlsx
+
+=====================================================================
+NHÁNH B — admin (QTHT) — trùng khít vai trò trên 2 ảnh của đối tác, đối chứng
+=====================================================================
+Danh tính xác nhận TRƯỚC phép đo: hoTen = "Quản trị hệ thống" · vaiTro = ["QTHT"] ·
+  capDonVi = "TW" · donViId = "00000000-0000-4000-8000-000000000001"
+Danh tính xác nhận SAU phép đo: GIỐNG HỆT ⇒ phép đo hợp lệ.
+(Giải mã access_token trong cookie của chính request bị 403: sub=...0099, vaiTro=["QTHT"],
+ donViId=00000000-0000-4000-8000-000000000001, capDonVi="TW", hoTen="Quản trị hệ thống".)
+
+--- Dạng ① (Toàn quốc, Lĩnh vực để trống) ---
+[Xem báo cáo] lúc 13:44:
+  GET /api/v1/bao-cao/ct-theo-linh-vuc?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31 → HTTP 200
+  Màn hiện ĐẦY ĐỦ: Tổng chương trình 7 + bảng 5 hàng lĩnh vực + biểu đồ. 0 thông báo, không bị chặn.
+  ⇒ QTHT XEM ĐƯỢC báo cáo.
+
+[Xuất Excel] lúc 13:45:02:
+  SO_REQUEST = 1 → POST /api/v1/bao-cao/export → HTTP 403
+  SO_KHUNG_THONG_BAO = 1 (1 mốc giờ). CHỮ NGƯỜI DÙNG THẤY:
+     t=122807 ms — "Đang tạo file..."  (khung fixed, 1432 × 40)
+     t=122907 ms — "Forbidden"         (khung fixed, 1432 × 43)
+  Lượt chụp thứ 2 (hẹn giờ bấm sau 2500ms rồi mới chụp) cũng bắt được chữ "Forbidden"
+  (khung fixed, 1432 × 41) nhưng ẢNH vẫn không có lớp thông báo.
+  KHÔNG có tệp nào được giao (thư mục tải về không có tệp mới sau 13:41).
+
+Thân yêu cầu đã gửi (giống hệt nhánh A, chỉ khác phiên đăng nhập):
+{"loaiBaoCao":"BC_CT_THEO_LINH_VUC","kyBaoCao":"NAM","tuNgay":"2026-01-01","denNgay":"2026-12-31","filterDacThu":{},"formatXuat":"XLSX"}
+
+Nguyên văn thân phản hồi máy chủ (HTTP 403):
+{
+  "success": false,
+  "error": {
+    "code": "ERR-PERM-SYS-00-01",
+    "message": "Forbidden",
+    "timestamp": "2026-08-06T06:45:02.556Z",
+    "requestId": "d2432a2b-8188-4174-90e7-260149c6dfba"
+  }
+}
+
+=====================================================================
+HẠN CHẾ ĐÃ GHI NHẬN
+=====================================================================
+- KHÔNG chụp được ảnh lớp thông báo (cả nhánh A và nhánh B). Đã thử 3 lượt: chụp ngay sau khi bấm ·
+  hẹn giờ bấm sau 2500ms rồi mới chụp (nhánh A) · hẹn giờ 2500ms (nhánh B). Ảnh chụp ngay sau khi bấm
+  và ảnh hẹn giờ ra byte GIỐNG HỆT NHAU (đã đối chiếu md5) ⇒ công cụ chụp không bắt được lớp nổi do
+  thư viện giao diện dựng qua portal — cùng hạn chế đã ghi ở BUG-QLTLPLCVV-015 và BUG-SLCTHT-006.
+  Bằng chứng thay thế = chữ đọc bằng innerText + số đo chứng minh khung hiển thị thật (position: fixed,
+  rộng 1432 px) + nguyên văn phản hồi máy chủ ở trên.
+- Thao tác quyết định của dạng ① (cả 2 nhánh) dùng công cụ bấm chuột thật của trình duyệt. Các lượt
+  biến thể (②/②b/③/③b và 2 lượt hẹn giờ) bấm bằng lệnh click() trên đúng phần tử nút thật trong trang.
+
+=====================================================================
+GHI NHẬN RIÊNG — nằm trong màn đang tranh chấp nhưng ĐỐI TÁC KHÔNG NÊU (không kéo verdict)
+=====================================================================
+(1) Thẻ "Tổng DN tham gia" — srs-fr-11-bao-cao.md:961 chốt ngày 2026-07-24 BỎ cột "Số DN tham gia".
+    Bản dựng V1.0.8: màn CHỈ CÒN 1 thẻ "Tổng chương trình"; tệp xuất cũng không có dòng/cột nào về
+    doanh nghiệp. ⇒ ĐÃ ĐÚNG :961, không phải lỗi.
+(2) Nhóm lĩnh vực rỗng — srs-fr-11-bao-cao.md:987 + AC :991: không được phát sinh nhóm "Không xác định";
+    chương trình chưa gán lĩnh vực thì gom vào "Chưa phân loại".
+    Bản dựng V1.0.8: nhãn hiện ra đúng là "Chưa phân loại" (3 chương trình), KHÔNG có nhãn
+    "Không xác định" — cả trên màn lẫn trong tệp xuất. ⇒ ĐÃ ĐÚNG :987/:991, không phải lỗi.
+    Đối chiếu dữ liệu gốc: GET /api/v1/chuong-trinh-htpls cho đúng 3 chương trình có linhVucId = null
+    ở trạng thái được đếm (CT-20260721-0004 DA_DUYET · CT-20260721-0003 HOAN_THANH ·
+    CT-20260721-0002 DANG_THUC_HIEN) ⇒ con số 3 của nhóm "Chưa phân loại" là đúng.
+(3) 🔴 PHÁT HIỆN MỚI — nút [Xuất Excel]/[Xuất PDF] bị khoá sau khi XOÁ bộ lọc "Lĩnh vực".
+    Tái hiện 2 lần bằng THAO TÁC CHUỘT THẬT (nhánh A, cbnv_tw_04, bản dựng V1.0.8):
+      - Chọn Lĩnh vực = Lao động → [Xem báo cáo] → nút xuất BẬT → xuất được tệp.
+      - Bấm dấu × xoá bộ lọc Lĩnh vực → [Xem báo cáo] → báo cáo hiện ĐẦY ĐỦ dữ liệu
+        (Tổng 7, Thời điểm tạo 13:38 / 13:40) nhưng [Xuất Excel] và [Xuất PDF] vẫn ở trạng thái KHOÁ.
+      - Lặp lại với Lĩnh vực = Thuế → cùng kết quả.
+    (Trước đó, khi chưa từng chạm vào ô Lĩnh vực thì nút xuất vẫn BẬT bình thường — dạng ① lúc 13:32.)
+    Đối chiếu đặc tả: :1052 đặt điều kiện của nút Xuất Excel là "Sau khi đã Xem báo cáo"; ở đây người
+    dùng ĐÃ Xem báo cáo và đang có dữ liệu trên màn mà vẫn không xuất được.
+    Ảnh: CTTLV_05-A5-nut-xuat-bi-khoa-sau-khi-xoa-bo-loc-linhvuc-V108.png
+    ⇒ CHƯA mở phiếu: theo quy tắc của đợt, bug ngoài phạm vi cần mở dòng mới trên bảng theo dõi phải
+      được phiên chính duyệt mã trước. Đã báo về phiên chính.

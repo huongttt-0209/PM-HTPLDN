@@ -1,0 +1,5 @@
+✅ PASS UAT sau Dev fix (14/08/2026) — Chrome DevTools UI, `cbnv_tw`, OTP qua MailHog.
+- Bộ lọc `2026 / Cả năm / Toàn quốc / Tất cả`. Trước seed: 13 vụ hoàn thành, 0 vụ từng qua trạng thái `Yêu cầu bổ sung` → thẻ `0%` là đúng.
+- Seed dữ liệu dương qua API: `VV-BTP-TW-20260814-013`. Trên UI, dòng thời gian có `Yêu cầu bổ sung` lúc 20:03 và `Hoàn thành` lúc 20:08 ngày 14/08/2026.
+- Sau bấm `Làm mới` trên UI: `Vụ việc hoàn thành = 14`; danh sách 14 kết quả có hồ sơ `-013`; `Tỷ lệ hồ sơ bổ sung = 7,1%`, khớp `1/14 = 7,142…%` làm tròn 1 chữ số; không có dòng `Chưa có dữ liệu`.
+→ Công thức và cách hiển thị sau fix đạt; UAT done.

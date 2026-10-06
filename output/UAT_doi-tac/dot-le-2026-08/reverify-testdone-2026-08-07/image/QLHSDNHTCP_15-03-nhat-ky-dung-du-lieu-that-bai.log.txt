@@ -1,0 +1,72 @@
+QLHSDNHTCP_15 — Nhật ký nỗ lực tự dựng tiền đề (tệp đính kèm hồ sơ chi trả)
+Môi trường nghiệm thu: https://htpldn-uat.ospgroup.vn — nhãn V1.0.10 — bó mã giao diện index-DebYrtQg.js
+Thời điểm: 2026-08-07 (giờ VN ~21:12–21:30)
+Vai trò chấm: cbnv_tw (Cán bộ Nghiệp vụ Trung ương, cấp TW)
+Vai trò chỉ dùng để dựng dữ liệu/điều tra: admin (Quản trị hệ thống)
+
+--------------------------------------------------------------------
+1) HIỆN TRẠNG DỮ LIỆU
+--------------------------------------------------------------------
+- Vai trò cbnv_tw thấy 5 hồ sơ chi trả (HSCT000066, 000067, 000068, 000069, 000070).
+- Vai trò quản trị thấy 113 hồ sơ chi trả.
+- Quét chi tiết TOÀN BỘ 113 hồ sơ: 0/113 hồ sơ có tệp đính kèm (danh sách tệp rỗng ở mọi hồ sơ).
+- Màn chi tiết hồ sơ chỉ có 4 thẻ: Thông tin Doanh nghiệp / Thông tin Tư vấn viên /
+  Thông tin phê duyệt / Lịch sử xử lý. Không có thẻ tài liệu đính kèm, không có ô tải tệp lên.
+
+--------------------------------------------------------------------
+2) CÁC ĐƯỜNG ĐÃ THỬ ĐỂ ĐÍNH TỆP VÀO HỒ SƠ CHI TRẢ — ĐỀU KHÔNG ĐI ĐƯỢC
+--------------------------------------------------------------------
+(a) Đính tệp qua chức năng đính kèm dùng chung của hệ thống
+    - Loại đối tượng "Hồ sơ chi trả" CÓ trong danh sách hợp lệ mà hệ thống công bố
+      (VuViec, HoSoVuViec, KetQuaVuViec, HoSoChiTra, HoSoTuVanVien, DanhGiaVuViec).
+    - Nhưng khi gửi thật, máy chủ từ chối:
+        ERR-VAL-FILE-03 — "Loại đối tượng đính kèm 'HoSoChiTra' không được hỗ trợ"
+    - Thử với cả tài khoản nghiệp vụ lẫn quản trị: kết quả giống nhau
+      => lỗi ở phần cài đặt, không phải thiếu quyền.
+    - Gửi biến thể tên khác (HO_SO_CHI_TRA / HoSoChiTras / ChiTra): bị chặn ở bước kiểm tra dữ liệu.
+
+(b) 4 đường tiếp nhận hồ sơ/chứng từ từ Cổng dịch vụ công
+    - tiếp nhận hồ sơ từ Cổng DVC, bổ sung hồ sơ từ Cổng DVC,
+      gửi đề nghị thanh toán từ Cổng DVC, bổ sung chứng từ.
+    - Cả 4 đều đòi khóa tích hợp riêng của Cổng dịch vụ công.
+      Gửi có phiên đăng nhập quản trị vẫn bị chặn:
+        ERR-CT-AUTH-01 (mã hệ thống ERR-AUTH-SYS-00-01)
+    - Đã tra toàn bộ kho tài liệu dự án: không có khóa tích hợp nào được cấp cho môi trường nghiệm thu.
+
+(c) Màn "Đồng bộ LGSP" (Quản trị hệ thống)
+    - Danh sách trống hoàn toàn, không có chức năng mô phỏng/chạy lại một lượt tiếp nhận.
+
+(d) Phía doanh nghiệp
+    - Hệ thống không có chức năng nào cho doanh nghiệp nộp/bổ sung hồ sơ chi trả trên phần mềm.
+      Theo đặc tả, doanh nghiệp nộp tại Cổng dịch vụ công, cán bộ KHÔNG nhập tay hồ sơ chi trả.
+
+--------------------------------------------------------------------
+3) GIAO DIỆN CÓ SẴN CHỨC NĂNG XEM TỆP (chỉ thiếu dữ liệu)
+--------------------------------------------------------------------
+- Bó mã giao diện đang chạy có sẵn thẻ "Tài liệu đính kèm" trên màn chi tiết hồ sơ chi trả,
+  mỗi tệp là một liên kết bấm được, kèm nhánh báo lỗi "Không thể mở tệp đính kèm. Vui lòng thử lại."
+- Thẻ này chỉ hiển thị khi hồ sơ CÓ tệp; hồ sơ không có tệp thì không hiện gì.
+- Vì 0/113 hồ sơ có tệp nên không thể thực hiện bước 2 và bước 3 của phiếu.
+
+--------------------------------------------------------------------
+4) DỮ LIỆU ĐÃ THÊM VÀO MÔI TRƯỜNG (cần đối tác biết)
+--------------------------------------------------------------------
+- 2 tệp mẫu đã tải lên kho tệp nhưng KHÔNG gắn được vào bất kỳ hồ sơ nào (nằm rời):
+    * QA-CT15-chung-tu-thanh-toan.pdf   (726 byte)
+    * QA-CT15-bien-ban-doi-chieu.docx   (1.037 byte)
+- Đã thử xóa 2 tệp rời này để trả môi trường về nguyên trạng nhưng hệ thống từ chối (không đủ quyền xóa).
+- KHÔNG có hồ sơ chi trả nào bị đổi trạng thái, KHÔNG có bản ghi nghiệp vụ nào được tạo/sửa/xóa.
+
+--------------------------------------------------------------------
+5) BỘ BẮT THÔNG BÁO
+--------------------------------------------------------------------
+- Dùng đúng tools/toast-capture.js. Tự kiểm: số bộ đo đang sống = 1 (hợp lệ).
+- Thao tác mở hồ sơ HSCT000068: 0 yêu cầu ghi dữ liệu — 0 khung thông báo.
+
+--------------------------------------------------------------------
+6) KẾT LUẬN
+--------------------------------------------------------------------
+Không dựng được tiền đề => chưa đo được bước "Xem file đính kèm". Không đủ căn cứ để chấm
+Pass hay Reopen. Cần đối tác/dev cấp một trong hai:
+  (i) một hồ sơ chi trả có sẵn tệp đính kèm (ít nhất 1 PDF/ảnh + 1 tệp định dạng khác), hoặc
+  (ii) khóa tích hợp Cổng dịch vụ công cho môi trường nghiệm thu để tự nạp hồ sơ kèm tệp.

@@ -1,0 +1,18 @@
+🔴 Reopen — QA đo lại 04/08/2026 trên môi trường bàn giao, bản dựng V1.0.5. BA đã chốt cả ba điểm trong ô Kết quả mong đợi của nhóm phiếu này (04/08/2026):
+
+(1) Khung văn bản hành chính theo Thông tư 17/2025 — BA chốt ÁP đúng theo yêu cầu của Quý đơn vị. Đo lại hôm nay: tệp PDF đã đúng khổ A4, đúng phông chữ, đã có tên báo cáo, kỳ báo cáo, đơn vị và ngày tạo; nhưng VẪN CHƯA có quốc hiệu và tên cơ quan ban hành ở đầu trang, chưa có khối ký ở cuối trang. Dev bổ sung. Khối ký in ngày ký và HỌ TÊN người xuất báo cáo, chừa chỗ đóng dấu khi in chính thức; KHÔNG in dòng chức danh, vì hồ sơ tài khoản người dùng không lưu chức vụ nên không có nguồn dữ liệu để điền — người ký ghi tay chức danh khi ký. Riêng điểm chức danh, đề nghị Quý đơn vị cập nhật lại Kết quả mong đợi.
+
+(2) Tên tệp — BA chốt khuôn {TenBaoCao}_{YYYYMMDD_HHmm}.{ext}, phần giờ-phút là bắt buộc để xuất hai lần trong cùng một ngày không đè lên nhau. Đo lại hôm nay: tên tệp trả về chỉ có ngày, chưa có giờ-phút. Dev sửa, áp cho mọi định dạng xuất của nhóm báo cáo thống kê.
+
+(3) Ký số điện tử — BA chốt KHÔNG áp cho nhóm báo cáo thống kê: trong toàn bộ tài liệu, ký số chỉ đặt ra cho một chức năng duy nhất là xuất hồ sơ chương trình đào tạo. Tệp chừa sẵn khối ký để ký tay sau khi in. Phần này phần mềm đang ĐÚNG, không phải lỗi — đề nghị Quý đơn vị cập nhật lại Kết quả mong đợi.
+
+── CÁCH VERIFY sau Dev fix ──
+Precondition: cbnv_tw + màn Báo cáo thống kê, chọn đúng loại báo cáo của phiếu này, kỳ Năm 2026, đơn vị Toàn quốc.
+1) Bấm Xem báo cáo, rồi bấm Xuất PDF và lưu tệp về máy.
+2) Đọc tên tệp vừa tải về.
+3) Lặp bước 1 lần nữa trong cùng ngày, so tên hai tệp.
+4) Mở tệp, đọc phần đầu trang đầu và phần cuối trang cuối.
+✅ PASS khi: tên tệp có đủ cả ngày lẫn giờ-phút và hai lần xuất trong cùng ngày ra hai tên khác nhau; đầu trang có quốc hiệu, tiêu ngữ và tên cơ quan ban hành; cuối trang có ngày ký, họ tên người xuất báo cáo và chỗ trống cho con dấu; vẫn giữ khổ A4, phông Times New Roman cỡ 13 và đủ bốn mục tên báo cáo, kỳ báo cáo, đơn vị, ngày tạo.
+❌ FAIL nếu: thiếu bất kỳ mục nào ở trên; hoặc hai lần xuất trong cùng ngày ra trùng tên tệp.
+⚠️ Tệp KHÔNG có dòng chức danh người ký và KHÔNG có chữ ký số là ĐÚNG theo BA chốt — đừng chấm FAIL vì hai điều đó.
+Bằng chứng đo 04/08: evidence/bao-cao-hoi-dap-2026-08-04.pdf + evidence/xuat-pdf-header-phan-hoi-2026-08-04.json

@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG.
+- Đối tác báo: Nhóm 2 — Thông tin tư vấn (màn Chi tiết hồ sơ chi trả) hiển thị thiếu trường thông tin so với tài liệu mô tả và không hiển thị các thông tin hiện có trên màn hình.
+- Kiểm tra lại trên màn Chi tiết hồ sơ (tài khoản CB Nghiệp vụ TW, hồ sơ CT-SEED-103, data thật): mục "Thông tin Tư vấn viên" chỉ có 4 dòng Họ tên TVV / Mã TVV / Mã vụ việc / Tiêu đề vụ việc. THIẾU 5 trường: Thời điểm phát sinh, Tổ chức hành nghề, Địa chỉ tư vấn viên, Số điện thoại tư vấn viên, Số ngày hợp đồng tư vấn pháp luật.
+- Đối chiếu SRS SCR-V.II-02 (FR-06, UC69) component #6 "Accordion II — Thông tin tư vấn" (srs-fr-06-chi-tra.md:982, điều kiện hiển thị "Luôn"): yêu cầu hiển thị Vụ việc vướng mắc, Thời điểm phát sinh, Tên TVV, Tổ chức hành nghề, Địa chỉ TVV, SĐT TVV, Số ngày HĐ TVPL, Phí tư vấn, Số tiền đề nghị hỗ trợ. Hai trường Phí tư vấn + Số tiền đề nghị app đặt ở mục Thông tin DN (sai vị trí).
+- Về "không hiển thị thông tin hiện có": hồ sơ đã có soHopDongTvpl (HDTV-2026-103), ngayHopDong (2026-06-10), noiDungDeNghiTt ("Đề nghị thanh toán phí tư vấn...") nhưng màn chi tiết không hiển thị các thông tin này.
+- Ghi chú: 10 hồ sơ seed đều chưa gắn TVV (tuVanVienId=null) nên giá trị TVV hiển thị "—"; nhưng phần thiếu NHÃN TRƯỜNG (structural) tái hiện độc lập dữ liệu — mục render 4 nhãn cố định, không có 5 nhãn còn lại.
+- Bug tái hiện đúng, có SRS reference cụ thể → lỗi thật, dev fix. Chi tiết: Pass-bug-report-UAT-tuan-3-chi-tra.md §BUG-QLHSDNHTCP_12.

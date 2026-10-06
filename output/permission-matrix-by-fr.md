@@ -3,7 +3,7 @@
 > **Nguồn:** SRS v3.1 §3.4.2 + **SRS update 2026-05-05** (`srs-update-2026-5-5/`)
 > **Ngày trích:** 2026-04-16 | **Cập nhật 2026-04-21:** bổ sung Dashboard (FR-01) cho CB_NV/CB_PD + KHO_CAU_HOI chuyển FR-12 → FR-13 | **Cập nhật 2026-05-06:** apply SRS update FR-04 — thêm 3 entity mới (DANH_GIA_SAU_VU_VIEC, NGUOI_HO_TRO, TO_CHUC_TU_VAN) + 7 FR mới (FR-IV-CROSS-01, FR-IV-NEW-01/02/04, FR-IV-NHT-01/02/03) | **Cập nhật 2026-05-06 (FR-05 v3.5):** thêm **2 FR mới** FR-V.I-NEW-02 (DN bổ sung HS) + FR-V.I-NEW-05 (Công khai VV) + **3 entity owned mới** (PHAN_CONG_VU_VIEC, DANH_GIA_VU_VIEC, LICH_SU_VU_VIEC). | **Cập nhật 2026-05-06 (FR-12 v3.5):** rename entity NOI_DUNG_TU_VAN_CS → TU_VAN_CHUYEN_SAU (Thay đổi 2) + đổi tên menu "Tư vấn chuyên sâu" → "Tư vấn pháp luật chuyên sâu" (Thay đổi 1) + thêm **3 entity owned mới** (HO_SO_PHAP_LY_DN 3.4.3.46 / TU_LIEU_PHAP_LY_VV 3.4.3.47 / DANH_GIA_CHAT_LUONG_TV 3.4.3.48 — Thay đổi 5) + 7 state SM-TVCS mới (Thay đổi 3) + 4 BR mới BR-ROUTE-TVCS-01 + BR-PUBLIC-01/02/03 (Thay đổi 6+7) + NHT 📝 RU* trên HSPL_DN (Thay đổi 10).
 > **View đối ứng:** [permission-matrix.md](permission-matrix.md) (Role × Entity) | [permission-matrix-by-role.md](permission-matrix-by-role.md) (Role × Function pivot)
-> **Tổng entity:** **52 entity** (46 cũ + NGUOI_HO_TRO + TO_CHUC_TU_VAN + NGAY_LE + **PHAN_CONG_VU_VIEC + DANH_GIA_VU_VIEC + LICH_SU_VU_VIEC**) | **Role:** 11
+> **Tổng entity:** **55 entity** (46 cũ + 3 entity FR-04/07/10 update 2026-05-05: NGUOI_HO_TRO + TO_CHUC_TU_VAN + NGAY_LE + 3 entity FR-05 v3.5 update 2026-05-06: PHAN_CONG_VU_VIEC + DANH_GIA_VU_VIEC + LICH_SU_VU_VIEC + 3 entity FR-12 v3.5 update 2026-05-06: HO_SO_PHAP_LY_DN + TU_LIEU_PHAP_LY_VV + DANH_GIA_CHAT_LUONG_TV) | **Role:** 11
 > **Ghi chú:** FR-01 Dashboard là *view* (tổng hợp data từ các entity khác), không phải entity trong §3.4.2 — thêm dòng "Dashboard (Nhóm I — view)" để đối chiếu test quyền truy cập.
 
 > **📋 FR-05 v3.5 permission delta (NEW 2026-05-06 — cite `srs-update-2026-5-5/srs-fr-05-vu-viec.md`):**
@@ -112,15 +112,23 @@
 
 ## 5. FR-05 — Vụ việc HTPL
 
-> **SRS §3.2.5 (Nhóm V)** | 3 entity
+> **SRS §3.2.5 (Nhóm V) v3.5** | **6 entity** (3 cũ + **3 entity owned mới** từ FR-05 v3.5 update 2026-05-06: PHAN_CONG_VU_VIEC, DANH_GIA_VU_VIEC, LICH_SU_VU_VIEC — Cite: `srs-update-2026-5-5/srs-fr-05-vu-viec.md` §4)
 
 | Entity | QTHT | CB_NV_TW | CB_NV_BN | CB_NV_DP | CB_PD_TW | CB_PD_BN | CB_PD_DP | DN | NHT | TVV | CG |
 |--------|------|----------|----------|----------|----------|----------|----------|----|-----|-----|----|
 | VU_VIEC | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 📝 RU* | 📝 RU* | 📝 RU* | 👁️ R* | 📝 RU* | ❌ | ❌ |
 | HO_SO_VU_VIEC | 👁️ R | ✅ CRUD* | ✅ CRUD* | ✅ CRUD* | 👁️ R* | 👁️ R* | 👁️ R* | 🔌 C†R* | ✅ CRU* | ❌ | ❌ |
 | KET_QUA_VU_VIEC | 👁️ R | ✅ CRU* | ✅ CRU* | ✅ CRU* | 📝 RU* | 📝 RU* | 📝 RU* | 👁️ R* | ✅ CRU* | ❌ | ❌ |
+| **PHAN_CONG_VU_VIEC** `[NEW v3.5]` | 👁️ R | ✅ CRU* | ✅ CRU* | ✅ CRU* | 👁️ R* | 👁️ R* | 👁️ R* | — | 👁️ R* (own) | — | — |
+| **DANH_GIA_VU_VIEC** `[NEW v3.5]` | 👁️ R | ✅ CRU* | ✅ CRU* | ✅ CRU* | 👁️ R* | 👁️ R* | 👁️ R* | 🔌 C†R* | — | — | — |
+| **LICH_SU_VU_VIEC** `[NEW v3.5]` | 👁️ R | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | — | 👁️ R* (own) | — | — |
 
-> ⚠️ TVV KHÔNG có quyền trên cả 3 entity Vụ việc. NHT mới là người có quyền RU*/CRU* trên vụ việc được phân công.
+> ⚠️ TVV KHÔNG có quyền trên cả 3 entity Vụ việc gốc (VU_VIEC/HO_SO_VU_VIEC/KET_QUA_VU_VIEC). NHT mới là người có quyền RU*/CRU* trên vụ việc được phân công.
+>
+> **3 entity NEW v3.5 quote nguyên văn `srs-update-2026-5-5/srs-v3.5.md:1289-1291`:**
+> - **PHAN_CONG_VU_VIEC** (FR-V.I-09 + §4 PHAN_CONG_VU_VIEC): QTHT 👁️ R; CB NV TW/BN/DP ✅ CRU* (modal 2 thẻ Cá nhân/Tổ chức); CB PD TW/BN/DP 👁️ R*; DN —; **NHT 👁️ R* scoped own** (chỉ xem PC của chính mình); TVV/CG — (matrix v3.5:1289 KHÔNG cấp quyền dù SRS:21+792 nói "người được phân công bao gồm NHT/TVV/CG" — đã log SRS-C-005 chờ BA).
+> - **DANH_GIA_VU_VIEC** (FR-V.I-17 UC67 + §4): QTHT 👁️ R; CB NV TW/BN/DP ✅ CRU*; CB PD TW/BN/DP 👁️ R* (CSV UC67 loại CB_PD khỏi role chấm điểm — chỉ R*); DN 🔌 C†R* (API inbound từ Cổng PLQG, không truy cập CMS); NHT/TVV/CG —; UNIQUE per `loai_nguoi_danh_gia` — duplicate → ERR-DG-VV-04.
+> - **LICH_SU_VU_VIEC** (audit log auto từ FR-V.I-01..17 + NEW-02 + NEW-05): QTHT 👁️ R; CB NV/CB PD TW/BN/DP 👁️ R* (scope đơn vị); DN —; **NHT 👁️ R* scoped own** (chỉ xem lịch sử VV của chính mình); TVV/CG —; KHÔNG ai write trực tiếp.
 
 ---
 
@@ -207,7 +215,7 @@
 | QUYEN_HAN | ✅ CRUD | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | ❌ | ❌ | ❌ | ❌ |
 | DON_VI | ✅ CRUD | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R |
 | CAU_HINH_SLA | ✅ CRUD | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | ❌ | ❌ | ❌ | ❌ |
-| **NGAY_LE** `[NEW v3.5]` | ✅ CRUD | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **NGAY_LE** `[NEW v3.5]` | ✅ CRUD | ✅ CRUD | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R | 👁️ R |
 | AUDIT_LOG | 👁️ R | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | ❌ | ❌ | ❌ | ❌ |
 | THONG_BAO | 👁️ R | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* | 👁️ R* |
 | ~~CAU_HINH_PHAN_CONG~~ `[DEPRECATED 2026-05-06]` | — | — | — | — | — | — | — | — | — | — | — |

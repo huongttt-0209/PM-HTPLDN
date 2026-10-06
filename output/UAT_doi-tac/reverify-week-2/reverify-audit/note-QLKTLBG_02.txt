@@ -1,0 +1,4 @@
+❌ Không phải bug.
+• Màn "Kho tài liệu / Bài giảng" (CB_NV_TW): trang tải bình thường, hiển thị bảng đủ cột (Tên bài giảng / Loại tài liệu / Dung lượng / Ngày tạo / Công khai / Thao tác), mặc định 20 bản ghi/trang. Khi có dữ liệu, bảng hiển thị đúng và đủ bản ghi.
+• KHÔNG xuất hiện "Lỗi hệ thống, vui lòng thử lại sau" — danh sách tải thành công. Khớp đặc tả Quản lý kho tài liệu, bài giảng (UC26).
+→ Đối tác kiểm tra lại; nếu vẫn gặp "Lỗi hệ thống", gửi lại thời điểm gặp để rà soát log (khả năng lỗi tạm thời).

@@ -1,0 +1,356 @@
+================================================================================
+QLDMTCTV_12 — BẢNG ĐO CHI TIẾT TỪNG VẾ (Giai đoạn B)
+================================================================================
+Env      : https://18.143.165.120.nip.io   (env NỘI BỘ, không phải htpldn-uat.ospgroup.vn)
+Bó mã FE : assets/index-D4Buvu4S.js · assets/index-DVlgOkLg.css
+           etag W/"6a74df15-428" · last-modified Thu, 06 Aug 2026 19:23:01 GMT
+           (= 02:23:01 giờ VN 07/08) — đo bằng curl lúc 03:44:09 giờ VN
+Phiên bản: sidebar hiện "HTPLDN · V1.0.9"
+Tài khoản: cbnv_tw_03 / Test@1234
+           /auth/me 200: userId 9b557200-be4b-46ac-b84b-fe6c154dc65f
+                         hoTen  "CB Nghiệp vụ - Trung ương #03"
+                         vaiTro ["CB_NV_TW"]  capDonVi "TW"
+                         donViId 00000000-0000-4000-8000-000000000001
+           quyền liên quan có trong danh sách: read_to_chuc_tu_van,
+           update_to_chuc_tu_van, publish_to_chuc_tu_van, delete_to_chuc_tu_van
+           Mã 6 số lấy ở MailHog mailbox cbnv_tw_03@htpldn.test (316140, 03:44:54)
+           KHÔNG dùng admin / QTHT ở bất kỳ bước nào của case này.
+
+BẢN GHI DÙNG ĐỂ ĐO (dùng lại dữ liệu QA có sẵn, KHÔNG tạo mới)
+  Mã            : TC-TW-DEMO-001
+  Tên           : Công ty Luật TNHH Demo Kiểm Thử
+  id            : fbeea7e9-118e-49ce-abaf-6245a9ebe604
+  donViId       : 00000000-0000-4000-8000-000000000001  = ĐÚNG đơn vị của cbnv_tw_03
+                  (Bộ Tư Pháp · Cục Bổ trợ tư pháp — chân sidebar)
+  Trạng thái đầu: HOAT_DONG  (badge "Đang hoạt động") · version 5
+  Số TVV liên kết: 0  (ô "Số TVV liên kết" = 0 · API soTvvLienKet = 0)
+  Loại hình     : Công ty Luật · Người đại diện Nguyễn Văn Demo
+
+  Vì sao chọn bản ghi này: GET /api/v1/to-chuc-tu-vans?page=1&limit=100 trả
+  meta.countByTrangThai = {MOI_DANG_KY:2, CHO_PHE_DUYET:2, TU_CHOI:0, HOAT_DONG:3,
+  TAM_DUNG:0, VO_HIEU_HOA:0}. Trong 3 bản ghi HOAT_DONG có 2 bản ghi thuộc đơn vị
+  00000000-...-0001: TCTV-SEED-0001 (id 5eed0004-...-0001) và TC-TW-DEMO-001.
+  Bản ghi thứ 3 (TC-STP-AG-0001, donViId 00000000-0000-4000-8002-000000000006) khác
+  đơn vị nên KHÔNG dùng. Chọn TC-TW-DEMO-001 để chừa TCTV-SEED-0001 làm dữ liệu nền.
+  KHÔNG đụng bản ghi trong ảnh đối tác (TC-STP-HN-0001, đơn vị Sở Tư pháp Hà Nội).
+
+  Nhánh đo: "Tạm dừng" (theo chuẩn chấm §9 mục 5). KHÔNG đo nhánh "Vô hiệu hóa".
+
+--------------------------------------------------------------------------------
+C1 — Từ danh sách → chi tiết có đường vào chức năng cập nhật trạng thái
+     Quan hệ MATCH → TEST                                       KẾT QUẢ: PASS
+--------------------------------------------------------------------------------
+Đường đi UI thật: click sidebar "Tổ chức tư vấn" → /chuyen-gia-tvv/to-chuc
+                  → click icon "Xem chi tiết" (eye) trên đúng dòng TC-TW-DEMO-001
+                  → /chuyen-gia-tvv/to-chuc/fbeea7e9-118e-49ce-abaf-6245a9ebe604
+Đo lúc 03:46:44 giờ VN. Đếm bằng innerText, lọc phần tử hiển thị thật
+(getClientRects().length > 0 && offsetParent !== null). CẤM textContent — không dùng.
+
+Tổng số nút/liên kết hiển thị trong <main>: 6
+
+  # | Vùng           | Nguyên văn nhãn            | Loại
+  --+----------------+----------------------------+---------------------------
+  1 | header         | ← Quay lại danh sách       | button.ant-btn
+  2 | dải tab        | (không nhãn)               | button.ant-tabs-nav-more (nút "»" của dải tab, rỗng)
+  3 | thẻ "Thao tác" | Chỉnh sửa                  | button.ant-btn
+  4 | thẻ "Thao tác" | Cập nhật trạng thái        | button.ant-btn        <<< CHÍNH LÀ NÚT CẦN
+  5 | thẻ "Thao tác" | (Công khai: — công tắc)    | button.ant-switch
+  6 | thẻ "Thao tác" | Xóa                        | button.ant-btn-dangerous
+
+innerText nguyên văn thẻ "Thao tác":  "Chỉnh sửa\nCập nhật trạng thái\nCông khai:\nXóa"
+Dải tab hiển thị: ["Thông tin", "Tư vấn viên liên kết", "Lịch sử"]
+Badge trạng thái trên header: "Đang hoạt động"
+
+Đã tìm cả 2 chỗ theo caveat FAIL-oan: (a) vùng header — chỉ có "← Quay lại danh sách";
+(b) thẻ "Thao tác" — chứa nút. KHÔNG có menu "..." nào trên màn chi tiết
+(0 phần tử .ant-dropdown-trigger hiển thị). => Nút nằm trong thẻ "Thao tác", không ở header.
+
+Ảnh: image/QLDMTCTV_12-C1-chi-tiet-co-nut.png
+
+--------------------------------------------------------------------------------
+C2 — Cửa sổ có trường "Trạng thái mới"
+     Quan hệ MATCH → TEST                                       KẾT QUẢ: PASS
+--------------------------------------------------------------------------------
+Bấm nút "Cập nhật trạng thái" (UI thật) lúc 03:47:22 giờ VN.
+
+Dạng cửa sổ : HỘP THOẠI (MODAL). class gốc = "ant-modal css-ch9ese",
+              role="dialog" aria-modal. Số bề mặt hiển thị = 1 (không phải khay bên/drawer).
+Tiêu đề     : "Cập nhật trạng thái hoạt động"
+innerText nguyên văn toàn hộp thoại:
+  Cập nhật trạng thái hoạt động
+  Trạng thái mới
+  Chọn trạng thái mới
+  Lý do thay đổi
+  0 / 1000
+  Hủy
+  Đồng ý
+
+Trường "Trạng thái mới": CÓ.
+  Nhãn nguyên văn: "Trạng thái mới"
+  Widget: danh sách chọn (.ant-select ant-select-single ant-select-show-arrow)
+  Chỗ giữ chỗ nguyên văn: "Chọn trạng thái mới"
+  input readonly, role="combobox", aria-label="Trạng thái mới", type="search"
+  => ĐÚNG dạng "danh sách chọn" mà phiếu yêu cầu (không phải radio).
+
+Trường "Lý do thay đổi": CÓ.
+  Nhãn nguyên văn: "Lý do thay đổi"
+  Thẻ thật: <textarea aria-label="Lý do thay đổi">
+  Chỗ giữ chỗ nguyên văn: "Nhập lý do thay đổi trạng thái (tối thiểu 10 ký tự)"
+  THUỘC TÍNH THẬT CỦA Ô: maxlength = "1000"   <<< số đo cho C6
+                          required = false · aria-required = (không có)
+  Bộ đếm hiển thị: "0 / 1000" (data-count="0 / 1000" trên .ant-input-affix-wrapper)
+
+Nút trong hộp thoại: ["Hủy", "Đồng ý"]  (+ nút Close ✕)
+  => Nhãn xác nhận thực tế là [Đồng ý] (không phải [Lưu]) — theo chuẩn chấm §7.2 mục 3
+     KHÔNG Fail vì nhãn.
+Trạng thái nút "Đồng ý" ngay khi hộp thoại mở: disabled = true.
+
+Ảnh: image/QLDMTCTV_12-C2-C3-cua-so-trang-thai-moi.png
+
+--------------------------------------------------------------------------------
+C3a — Tập lựa chọn ⊆ {Đang hoạt động, Tạm dừng, Vô hiệu hóa}
+      Quan hệ MATCH → TEST                                      KẾT QUẢ: PASS
+--------------------------------------------------------------------------------
+Mở đúng danh sách chọn vừa bấm, đo lúc 03:47:45 giờ VN.
+Số .ant-select-dropdown trong DOM = 1 · dropdown-hidden = false · display = "block"
+
+Đếm bằng innerText + LỌC phần tử hiển thị thật. Đối chứng chống bug ma:
+  Tổng số node .ant-select-item-option trong DOM      = 2
+  Số node HIỂN THỊ THẬT (getClientRects + offsetParent) = 2
+  => hai số TRÙNG NHAU, không có node ẩn nào bị đếm oan.
+
+Lựa chọn hiển thị (nguyên văn, theo đúng thứ tự trên màn), khi bản ghi đang "Đang hoạt động":
+  1. "Tạm dừng"      (title="Tạm dừng"   · không disabled)
+  2. "Vô hiệu hóa"   (title="Vô hiệu hóa" · không disabled)
+Đối chứng cây trợ năng (a11y) của cùng lúc đó: listbox chỉ có 2 mục
+  StaticText "Tạm dừng" · StaticText "Vô hiệu hóa"
+
+KHÔNG lẫn trạng thái ngoài luồng: không có "Mới đăng ký", không "Chờ phê duyệt",
+không "Đã từ chối". => tập lựa chọn nằm trong {Đang hoạt động, Tạm dừng, Vô hiệu hóa}.
+
+--------------------------------------------------------------------------------
+C3b — "Chỉ hiển thị trạng thái chuyển được theo máy trạng thái"
+      Quan hệ GAP → BA · CHỈ GHI HIỆN TRẠNG, KHÔNG CHẤM PASS/FAIL
+--------------------------------------------------------------------------------
+Hiện trạng đo được (2 điểm dữ liệu, cùng bản ghi, cùng phiên):
+
+  Trạng thái bản ghi lúc mở | Lựa chọn hiển thị (nguyên văn)        | Đo lúc
+  --------------------------+---------------------------------------+---------
+  Đang hoạt động (HOAT_DONG)| "Tạm dừng" · "Vô hiệu hóa"            | 03:47:45
+  Tạm dừng (TAM_DUNG)       | "Đang hoạt động" · "Vô hiệu hóa"      | 03:52:52
+
+Trong cả 2 lần: tổng node option = số node hiển thị (2 = 2), không có node ẩn.
+Không lần nào hiện lại chính trạng thái hiện tại của bản ghi.
+
+Đối chiếu bảng chuyển trạng thái SM-TCTV (chỉ để BA có dữ liệu, KHÔNG dùng chấm):
+  HOAT_DONG → {TAM_DUNG (:2392), VO_HIEU_HOA (:2394)}          — khớp đo được
+  TAM_DUNG  → {HOAT_DONG (:2393), VO_HIEU_HOA (:2395)}         — khớp đo được
+=> Bản dựng ĐANG lọc theo trạng thái hiện tại. Không đo biến thể VO_HIEU_HOA
+   (không dựng bản ghi ở trạng thái đó, và vế này chờ BA nên không mở rộng).
+
+--------------------------------------------------------------------------------
+C4 — Lý do thay đổi bắt buộc
+     Quan hệ MATCH → TEST                                       KẾT QUẢ: PASS
+--------------------------------------------------------------------------------
+Bước làm: chọn "Trạng thái mới" = "Tạm dừng" (03:48:23) → ĐỂ TRỐNG ô Lý do
+          → tìm cách bấm nút xác nhận [Đồng ý].
+
+Quan sát nút [Đồng ý] khi ô Lý do trống (bộ đếm "0 / 1000"):
+  thuộc tính disabled : CÓ (disabledAttr = "", disabledProp = true)
+  aria-disabled       : (không có)
+  con trỏ chuột (cursor CSS): "not-allowed"
+  phần tử trên cùng tại tâm nút (elementFromPoint): chính nút đó, không bị che
+=> Nút KHÔNG bấm được. Bấm bằng công cụ trả về: "The element did not become
+   interactive within the configured timeout".
+
+Thử tiếp 2 đường vòng để chắc chắn không lọt (chống PASS-oan):
+  (a) bắn đủ chuỗi pointerdown/mousedown/pointerup/mouseup/click lên chính nút đó
+      → số yêu cầu ghi phát sinh: 0
+  (b) gõ Enter trong ô Lý do + bắn sự kiện submit (ô không nằm trong <form>)
+      → số yêu cầu ghi phát sinh: 0
+
+THÔNG BÁO CHẶN THẬT: KHÔNG có chữ nào. Bộ bắt thông báo (MutationObserver trên
+document.body, cài TRƯỚC khi bấm, KHÔNG lọc trùng) ghi được 0 khối thông báo.
+Số phần tử .ant-form-item-explain-error / .ant-form-item-explain / [role=alert]
+hiển thị trong hộp thoại = 0. Cách chặn của bản dựng là LÀM MỜ + VÔ HIỆU HÓA nút
+[Đồng ý], không phải hiện câu báo lỗi.
+
+HỆ QUẢ (kiểm cả phía sau, chống PASS-oan):
+  Danh sách yêu cầu mạng cả phiên: KHÔNG có yêu cầu POST .../cap-nhat-trang-thai
+  nào trong khoảng đo C4 (yêu cầu ghi đầu tiên chỉ xuất hiện ở 03:51:07, sau khi
+  đã nhập đủ 10 ký tự).
+  Badge trạng thái trên màn vẫn "Đang hoạt động" trong suốt bước này.
+
+Ảnh: image/QLDMTCTV_12-C4-lydo-bat-buoc.png
+
+--------------------------------------------------------------------------------
+C5 — Lý do tối thiểu 10 ký tự (đo CẢ HAI phía biên)
+     Quan hệ MATCH → TEST                                       KẾT QUẢ: PASS
+--------------------------------------------------------------------------------
+Chuỗi thử không có khoảng trắng đầu/cuối (tránh bị cắt làm đổi độ dài thật).
+
+BIÊN DƯỚI — 9 ký tự (phải bị chặn):
+  Chuỗi nhập  : "TamDung09"   (độ dài đọc lại từ ô = 9)
+  Bộ đếm      : "9 / 1000"
+  Nút [Đồng ý]: disabled = true · cursor "not-allowed"
+  Bắn đủ chuỗi sự kiện chuột lên nút → số yêu cầu ghi phát sinh: 0
+  Thông báo chặn thật: KHÔNG có chữ nào (0 khối thông báo, 0 phần tử báo lỗi)
+  Badge bản ghi: vẫn "Đang hoạt động"
+  => BỊ CHẶN. Đo lúc 03:49:55 (lần 1) và 03:50:38 (lần chụp ảnh).
+  Ảnh: image/QLDMTCTV_12-C5-bien-9-va-10.png
+
+BIÊN TRÊN — đúng 10 ký tự (phải được nhận):
+  Chuỗi nhập  : "TD07080351"  (độ dài đọc lại từ ô = 10) — mã hóa mốc giờ 07/08 03:51
+  Bộ đếm      : "10 / 1000"
+  Nút [Đồng ý]: disabled = false (nút chuyển sang xanh, bấm được)
+  Ảnh: image/QLDMTCTV_12-C5-bien-10-duoc-nhan.png
+  Bấm [Đồng ý] bằng công cụ (thao tác UI thật) lúc 03:51:07:
+    Yêu cầu ghi: ĐÚNG 1 lần (không double-submit)
+      POST /api/v1/to-chuc-tu-vans/fbeea7e9-118e-49ce-abaf-6245a9ebe604/cap-nhat-trang-thai
+      Thân yêu cầu: {"trangThaiMoi":"TAM_DUNG","lyDo":"TD07080351","version":5}
+      Mã trả về  : 200
+      Thân trả về: trangThai "TAM_DUNG" · version 6 · lyDoTamDung "TD07080351"
+                   nguoiCapNhatId 9b557200-... (= chính cbnv_tw_03)
+  => ĐƯỢC NHẬN. Chuỗi đúng 10 ký tự lưu nguyên vẹn vào trường lyDoTamDung.
+
+  Kết luận C5: 9 ký tự bị chặn VÀ đúng 10 ký tự được nhận => đủ 2 phía biên.
+
+--------------------------------------------------------------------------------
+C6 — Lý do tối đa 5.000 ký tự
+     Quan hệ GAP → BA · CHỈ GHI HIỆN TRẠNG, KHÔNG CHẤM PASS/FAIL
+--------------------------------------------------------------------------------
+Đo lúc 03:50:08 giờ VN, trong đúng hộp thoại đang mở.
+
+  Số ký tự CỐ nhập vào ô Lý do          : 5001  (chuỗi "X" x 5001)
+  Số ký tự Ô THỰC SỰ NHẬN (đọc lại value): 1000
+  Đầu/cuối chuỗi còn lại                 : "XXXXXXXXXXXXXXXXXXXX" / "XXXXXXXXXXXXXXXXXXXX"
+  Bộ đếm hiển thị sau khi nhập            : "1000 / 1000"
+  THUỘC TÍNH THẬT CỦA Ô                   : maxlength = "1000"
+  Thông báo chặn / cảnh báo               : KHÔNG có chữ nào
+      (0 khối thông báo bắt được; 0 phần tử .ant-form-item-explain-error /
+       .ant-form-item-explain / [role=alert] trong hộp thoại)
+  Nút [Đồng ý] sau khi nhập               : disabled = false (vì đã ≥ 10 ký tự)
+
+HIỆN TRẠNG: ô Lý do bị chặn cứng ở 1.000 ký tự bằng thuộc tính maxlength của ô,
+CẮT ÂM THẦM phần vượt quá, không báo cho người dùng biết đã bị cắt.
+Ngưỡng thực tế 1.000 ≠ 5.000 mà phiếu đối tác yêu cầu.
+KHÔNG chấm Pass/Fail — chuyển BA (đặc tả im lặng về ngưỡng tối đa).
+
+Ảnh: image/QLDMTCTV_12-C6-5001-ky-tu.png
+
+--------------------------------------------------------------------------------
+THAO TÁC THÀNH CÔNG (chứng minh chức năng chạy thật, không chỉ mở được cửa sổ)
+--------------------------------------------------------------------------------
+Lúc 03:51:07 giờ VN — Đang hoạt động → Tạm dừng, lý do "TD07080351" (10 ký tự).
+
+Bộ bắt thông báo cài TRƯỚC khi bấm, KHÔNG lọc trùng, dùng innerText:
+  Bắt được 4 bản ghi, đều CÙNG MỘT chuỗi và CÙNG mốc 20:51:07.719Z (GMT):
+    .ant-message-notice-wrapper   → "Cập nhật trạng thái thành công"
+    .ant-message-notice-success   → "Cập nhật trạng thái thành công"
+    .ant-message-notice-wrapper   → "Cập nhật trạng thái thành công"  (bản ghi added-self của cùng node)
+    .ant-message-notice-success   → "Cập nhật trạng thái thành công"
+  => 4 bản ghi là do 1 node bị 2 bộ chọn lồng nhau bắt trùng, KHÔNG phải 4 thông báo.
+     Chốt bằng số yêu cầu ghi: ĐÚNG 1 POST cap-nhat-trang-thai (reqid 118) → không double-submit.
+
+THÔNG BÁO THẬT, NGUYÊN VĂN: "Cập nhật trạng thái thành công"
+
+Sau thao tác:
+  Hộp thoại tự đóng (0 .ant-modal hiển thị)
+  Badge trên header đổi thành "Tạm dừng"
+  Thẻ "Thao tác" đổi thành ["Chỉnh sửa", "Cập nhật trạng thái", "Xóa"]
+    (công tắc "Công khai" biến mất vì bản ghi không còn Đang hoạt động — chỉ ghi nhận)
+  Nút "Cập nhật trạng thái" VẪN hiện ở trạng thái Tạm dừng
+
+--------------------------------------------------------------------------------
+ĐỐI CHỨNG ĐỘC LẬP — ĐÚNG MỘT ĐƯỜNG: tab "Lịch sử" của chính bản ghi
+--------------------------------------------------------------------------------
+Bấm tab "Lịch sử" lúc 03:51:47. Yêu cầu nền:
+  GET .../fbeea7e9-118e-49ce-abaf-6245a9ebe604/lich-su?page=1&pageSize=20 → 200
+
+Tiêu đề cột nguyên văn: ["Thời gian", "Người thực hiện", "Hành động", "Ghi chú / lý do"]
+
+DÒNG MỚI NHẤT (chính thao tác vừa làm):
+  Thời gian       : "07/08/2026 03:51"
+  Người thực hiện : "CB Nghiệp vụ - Trung ương #03"
+  Hành động       : "Cập nhật"
+  Ghi chú / lý do : "TD07080351"        <<< KHỚP TỪNG CHỮ chuỗi vừa nhập
+
+=> Lý do THỰC SỰ ĐƯỢC LƯU, không chỉ hiện thông báo. Đối chứng đạt.
+   Chỉ dùng MỘT đường này để chốt, không mở đường thứ ba.
+
+Ảnh: image/QLDMTCTV_12-doi-chung-lich-su.png
+
+--------------------------------------------------------------------------------
+KHÔI PHỤC DỮ LIỆU (khai rõ: đã đổi rồi khôi phục)
+--------------------------------------------------------------------------------
+Lúc 03:53:13 giờ VN — Tạm dừng → Đang hoạt động, qua chính chức năng
+"Cập nhật trạng thái" trên UI (không dùng API tay).
+  Lựa chọn hiển thị lúc đó: "Đang hoạt động" · "Vô hiệu hóa"  (xem C3b)
+  Lý do nhập: "KhoiPhuc07080353 - hoan nguyen sau do QLDMTCTV_12" (49 ký tự)
+  POST .../cap-nhat-trang-thai
+    Thân yêu cầu: {"trangThaiMoi":"HOAT_DONG","lyDo":"KhoiPhuc07080353 - hoan
+                   nguyen sau do QLDMTCTV_12","version":6}
+    Mã trả về: 200
+  Thông báo thật: "Cập nhật trạng thái thành công"
+
+Kiểm hoàn nguyên (bước dọn dẹp, KHÔNG dùng làm đường chốt verdict):
+  Badge trên header : "Đang hoạt động"
+  Đọc lại bản ghi   : trangThai "HOAT_DONG" · version 7 · lyDoTamDung null
+                      soTvvLienKet 0 · laCongKhai false (giữ nguyên như trước khi đo)
+  Thẻ "Thao tác"    : đã có lại công tắc "Công khai"
+=> Bản ghi TC-TW-DEMO-001 ĐÃ VỀ ĐÚNG trạng thái ban đầu (Đang hoạt động).
+   Riêng version tăng 5 → 7 và tab "Lịch sử" còn 2 dòng nhật ký của lượt đo —
+   đúng bản chất nhật ký, không thể và không nên xóa.
+
+Ảnh: image/QLDMTCTV_12-hoan-nguyen-dang-hoat-dong.png
+
+--------------------------------------------------------------------------------
+TOÀN BỘ 4xx / 5xx GẶP TRONG PHIÊN ĐO
+--------------------------------------------------------------------------------
+Duyệt toàn bộ 45 yêu cầu xhr/fetch của phiên:
+  GET /api/v1/auth/me → 401   — 1 lần, TRƯỚC khi đăng nhập (hành vi bình thường)
+  KHÔNG có 5xx. KHÔNG có 4xx nào khác.
+  Đúng 2 lần POST cap-nhat-trang-thai, cả 2 đều 200, cả 2 đều do QA chủ động
+  (1 lần đo + 1 lần khôi phục). Không có lần ghi ngoài ý muốn.
+=> Không có bug candidate loại "workaround 4xx/5xx".
+
+--------------------------------------------------------------------------------
+GHI NHẬN THÊM (KHÔNG kéo verdict C1–C6 — đối tác không nêu, ngoài phạm vi 6 vế)
+--------------------------------------------------------------------------------
+(1) Cột "Hành động" của tab Lịch sử ghi "Cập nhật" cho cả lượt Tạm dừng và lượt
+    Khôi phục. Đặc tả :1731 liệt kê bộ nhãn hành động có riêng "Tạm dừng" /
+    "Khôi phục" / "Vô hiệu hóa". Chỉ ghi nhận, không mở rộng điều tra.
+(2) Ở lượt Khôi phục (Tạm dừng → Đang hoạt động), chuỗi lý do gửi lên là
+    "KhoiPhuc07080353 - hoan nguyen sau do QLDMTCTV_12" nhưng dòng nhật ký
+    07/08/2026 03:53 hiện "Mo ta cong khai kiem thu re-verify QLDMTCTV_OOS_02
+    ngay 04/08/2026." — là giá trị của trường mô tả công khai cũ, KHÔNG phải lý do
+    vừa nhập. Ở lượt Tạm dừng thì hiện đúng. => bug candidate (1 dòng ở báo cáo),
+    KHÔNG kéo verdict của QLDMTCTV_12 vì cả 6 vế C1–C6 đều đo trên nhánh Tạm dừng.
+(3) Nút hành động đặt trong thẻ "Thao tác" bên phải, không ở header như :1701 mô tả.
+    Đặc tả không quy định vị trí ⇒ chỉ ghi nhận.
+
+--------------------------------------------------------------------------------
+MỐC GIỜ ĐO (giờ VN, 07/08/2026)
+--------------------------------------------------------------------------------
+03:44:09  curl lấy dấu vân tay bản dựng FE
+03:44:39  đọc DOM /login (bó mã index-D4Buvu4S.js; ô tên đăng nhập CÓ CẢ
+          id="login-username" VÀ placeholder="Nhập tên đăng nhập" — hòa giải
+          điểm tranh chấp ghi ở BAN-DUNG.md, xem báo cáo)
+03:44:54  mã 6 số về MailHog (316140)
+03:45:xx  đăng nhập xong → /dashboard · /auth/me 200
+03:46:44  đo C1 trên màn chi tiết
+03:47:06  cài bộ bắt thông báo (TRƯỚC mọi lần bấm)
+03:47:22  mở hộp thoại → đo C2
+03:47:45  mở danh sách chọn → đo C3a + C3b (bản ghi Đang hoạt động)
+03:48:23  chọn "Tạm dừng"; nút Đồng ý vẫn vô hiệu hóa
+03:49:xx  đo C4 (ô Lý do trống)
+03:49:55  đo C5 biên 9 ký tự
+03:50:08  đo C6 (5001 ký tự)
+03:50:38  chụp lại ảnh biên 9 ký tự
+03:50:51  đo C5 biên đúng 10 ký tự
+03:51:07  thao tác thành công → Tạm dừng
+03:51:47  đối chứng tab "Lịch sử"
+03:52:52  đọc lựa chọn tại trạng thái Tạm dừng (dữ liệu cho C3b)
+03:53:13  khôi phục → Đang hoạt động
+03:53:24  kiểm hoàn nguyên (trangThai HOAT_DONG, version 7)
+================================================================================

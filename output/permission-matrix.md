@@ -7,9 +7,9 @@
 > **Tham chiếu update:** [`../input/srs-update-2026-5-5/_DELTA-MAP-FR04.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR04.md), [`_DELTA-MAP-FR05.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR05.md), [`_DELTA-MAP-FR07.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR07.md), [`_DELTA-MAP-FR10.md`](../input/srs-update-2026-5-5/_DELTA-MAP-FR10.md), [`CHANGELOG-v3-to-v3.5.md`](../input/srs-update-2026-5-5/CHANGELOG-v3-to-v3.5.md) §srs-fr-12-tv-chuyen-sau.md.
 >
 > **🆕 3 entity owned mới VV — quyền matrix (NEW 2026-05-06, applies all roles):**
-> - **PHAN_CONG_VU_VIEC**: CB NV ✅ CRU* scope (tạo PC, sửa khi cần phân công lại); CB PD 👁️ R* (xem); QTHT 👁️ R; cá nhân được phân công 📝 RU* (chấp nhận/từ chối qua trang_thai); DN/khác ❌. Cite: `srs-update-2026-5-5/srs-fr-05-vu-viec.md` §4 PHAN_CONG_VU_VIEC.
-> - **DANH_GIA_VU_VIEC**: **CHỈ {CB_NV, DN}** ✅ CRU* (loại CB_PD theo CSV UC67); CB PD/QTHT 👁️ R*; UNIQUE per loại — duplicate → ERR-DG-VV-04. Cite: §4 DANH_GIA_VU_VIEC + FR-V.I-17.
-> - **LICH_SU_VU_VIEC**: CB NV/CB PD/QTHT 👁️ R* (audit log read scope đơn vị); cá nhân được phân công 👁️ R* (action của mình); DN 👁️ R* (action của VV mình); KHÔNG ai write trực tiếp (auto ghi từ FR-V.I-01..17 + NEW-02 + NEW-05). Cite: §4 LICH_SU_VU_VIEC.
+> - **PHAN_CONG_VU_VIEC** (cite `srs-update-2026-5-5/srs-v3.5.md:1289`): QTHT 👁️ R; CB NV TW/BN/DP ✅ CRU* (modal 2 thẻ Cá nhân/Tổ chức); CB PD TW/BN/DP 👁️ R*; DN —; NHT 👁️ R* (own); TVV —; CG —. (SRS narrative `srs-fr-05-vu-viec.md:21+792` ghi "actor FR-V.I-10 gồm NHT/TVV/CG" nhưng matrix:1289 không cấp quyền TVV/CG — log SRS-C-005 chờ BA.)
+> - **DANH_GIA_VU_VIEC** (cite `srs-v3.5.md:1290`): QTHT 👁️ R; CB NV TW/BN/DP ✅ CRU*; CB PD TW/BN/DP 👁️ R* (CSV UC67 loại CB_PD khỏi role chấm điểm); DN 🔌 C†R* (API inbound Cổng PLQG); NHT/TVV/CG —. UNIQUE per `loai_nguoi_danh_gia` — duplicate → ERR-DG-VV-04.
+> - **LICH_SU_VU_VIEC** (cite `srs-v3.5.md:1291`): QTHT 👁️ R; CB NV/CB PD TW/BN/DP 👁️ R* (scope đơn vị); DN —; NHT 👁️ R* (own); TVV/CG —; KHÔNG ai write trực tiếp (auto ghi từ FR-V.I-01..17 + NEW-02 + NEW-05).
 >
 > **🆕 3 entity owned mới TVCS — quyền matrix (NEW 2026-05-06 FR-12 v3.5, applies all roles):**
 > - **HO_SO_PHAP_LY_DN** (FR-X.1-04/05, UC150-151): CB NV ✅ CRUD* (CMS qua FR-X.1-04 + nhận từ Cổng PLQG via API qua FR-X.1-05); CB PD 👁️ R* (entity này không có quy trình phê duyệt); QTHT 👁️ R; **NHT 📝 RU* scoped theo VV được phân công cho NHT trong cơ quan của mình** (Thay đổi 10 — chỉ R+U, KHÔNG C/D, ngoài scope → 403); DN 👁️ R* (own DN's HSPL via portal); TVV/CG ❌. Cite: `srs-update-2026-5-5/srs-fr-12-tv-chuyen-sau.md` §3.4.3.46 + Thay đổi 5+10.
@@ -63,6 +63,9 @@
 | FR-05 | VU_VIEC | 👁️ R |
 | FR-05 | HO_SO_VU_VIEC | 👁️ R |
 | FR-05 | KET_QUA_VU_VIEC | 👁️ R |
+| FR-05 | PHAN_CONG_VU_VIEC `[NEW v3.5]` | 👁️ R |
+| FR-05 | DANH_GIA_VU_VIEC `[NEW v3.5]` | 👁️ R |
+| FR-05 | LICH_SU_VU_VIEC `[NEW v3.5]` | 👁️ R |
 | FR-06 | HO_SO_CHI_TRA | 👁️ R |
 | FR-06 | DANH_GIA_HO_SO_CHI_TRA | 👁️ R |
 | FR-06 | THAM_DINH_HO_SO `[NEW v3.5]` | 👁️ R |
@@ -97,7 +100,7 @@
 | FR-15 | KE_HOACH_CT_HTPL | 👁️ R |
 | FR-15 | BAO_CAO_CT_HTPL | 👁️ R |
 
-> QTHT có quyền trên **49 entity** — Read nghiệp vụ + CRUD các entity hệ thống (TIEU_CHI_DANH_GIA + 8 entity QTHT trừ AUDIT_LOG/THONG_BAO là Read). **Update 2026-05-05:** thêm Read trên NGUOI_HO_TRO + NGAY_LE (FR-VIII-29 QTHT only) + Read TO_CHUC_TU_VAN (CB NV CRUD theo FR-IV-NEW-01). **Update 2026-05-09:** QTHT trên NGUOI_HO_TRO **chỉ 👁️ R** (BA chốt — KHÔNG C/U/D); CRUD NHT thuộc CB NV theo FR-IV-NHT-01 (BR-AUTH-08 don_vi_id scope).
+> QTHT có quyền trên **49 entity** — Read nghiệp vụ + CRUD các entity hệ thống (TIEU_CHI_DANH_GIA + 8 entity QTHT trừ AUDIT_LOG/THONG_BAO là Read). **Update 2026-05-05:** thêm Read trên NGUOI_HO_TRO + NGAY_LE (FR-VIII-29) + Read TO_CHUC_TU_VAN (CB NV CRUD theo FR-IV-NEW-01). **Update 2026-05-09:** QTHT trên NGUOI_HO_TRO **chỉ 👁️ R** (BA chốt — KHÔNG C/U/D); CRUD NHT thuộc CB NV theo FR-IV-NHT-01 (BR-AUTH-08 don_vi_id scope). **Update 2026-05-10:** NGAY_LE — QTHT + CB_NV_TW = ✅ CRUD; 9 vai trò còn lại = 👁️ R (BA chốt 2026-05-10, SRS srs-fr-10:1310 + 1391).
 
 ---
 
@@ -127,6 +130,9 @@
 | FR-05 | VU_VIEC | ✅ CRUD* |
 | FR-05 | HO_SO_VU_VIEC | ✅ CRUD* |
 | FR-05 | KET_QUA_VU_VIEC | ✅ CRU* |
+| FR-05 | PHAN_CONG_VU_VIEC `[NEW v3.5]` | ✅ CRU* |
+| FR-05 | DANH_GIA_VU_VIEC `[NEW v3.5]` | ✅ CRU* |
+| FR-05 | LICH_SU_VU_VIEC `[NEW v3.5]` | 👁️ R* |
 | FR-06 | HO_SO_CHI_TRA | ✅ CRUD* |
 | FR-06 | DANH_GIA_HO_SO_CHI_TRA | ✅ CRU* |
 | FR-06 | THAM_DINH_HO_SO `[NEW v3.5]` | ✅ CRU* |
@@ -146,6 +152,7 @@
 | FR-10 | AUDIT_LOG | 👁️ R* |
 | FR-10 | THONG_BAO | 👁️ R* |
 | FR-10 | ~~CAU_HINH_PHAN_CONG~~ `[DEPRECATED 2026-05-06]` | — |
+| FR-10 | NGAY_LE `[NEW]` | ✅ CRUD |
 | FR-11 | BAO_CAO | ✅ CRU* |
 | FR-12 | TU_VAN_CHUYEN_SAU | ✅ CRUD* |
 | FR-12 | PHIEN_TU_VAN | ✅ CRUD* |
@@ -190,6 +197,9 @@
 | FR-05 | VU_VIEC | ✅ CRUD* |
 | FR-05 | HO_SO_VU_VIEC | ✅ CRUD* |
 | FR-05 | KET_QUA_VU_VIEC | ✅ CRU* |
+| FR-05 | PHAN_CONG_VU_VIEC `[NEW v3.5]` | ✅ CRU* |
+| FR-05 | DANH_GIA_VU_VIEC `[NEW v3.5]` | ✅ CRU* |
+| FR-05 | LICH_SU_VU_VIEC `[NEW v3.5]` | 👁️ R* |
 | FR-06 | HO_SO_CHI_TRA | ✅ CRUD* |
 | FR-06 | DANH_GIA_HO_SO_CHI_TRA | ✅ CRU* |
 | FR-06 | THAM_DINH_HO_SO `[NEW v3.5]` | ✅ CRU* |
@@ -209,6 +219,7 @@
 | FR-10 | AUDIT_LOG | 👁️ R* |
 | FR-10 | THONG_BAO | 👁️ R* |
 | FR-10 | ~~CAU_HINH_PHAN_CONG~~ `[DEPRECATED 2026-05-06]` | — |
+| FR-10 | NGAY_LE `[NEW]` | 👁️ R |
 | FR-11 | BAO_CAO | ✅ CRU* |
 | FR-12 | TU_VAN_CHUYEN_SAU | ✅ CRUD* |
 | FR-12 | PHIEN_TU_VAN | ✅ CRUD* |
@@ -253,6 +264,9 @@
 | FR-05 | VU_VIEC | ✅ CRUD* |
 | FR-05 | HO_SO_VU_VIEC | ✅ CRUD* |
 | FR-05 | KET_QUA_VU_VIEC | ✅ CRU* |
+| FR-05 | PHAN_CONG_VU_VIEC `[NEW v3.5]` | ✅ CRU* |
+| FR-05 | DANH_GIA_VU_VIEC `[NEW v3.5]` | ✅ CRU* |
+| FR-05 | LICH_SU_VU_VIEC `[NEW v3.5]` | 👁️ R* |
 | FR-06 | HO_SO_CHI_TRA | ✅ CRUD* |
 | FR-06 | DANH_GIA_HO_SO_CHI_TRA | ✅ CRU* |
 | FR-06 | THAM_DINH_HO_SO `[NEW v3.5]` | ✅ CRU* |
@@ -272,6 +286,7 @@
 | FR-10 | AUDIT_LOG | 👁️ R* |
 | FR-10 | THONG_BAO | 👁️ R* |
 | FR-10 | ~~CAU_HINH_PHAN_CONG~~ `[DEPRECATED 2026-05-06]` | — |
+| FR-10 | NGAY_LE `[NEW]` | 👁️ R |
 | FR-11 | BAO_CAO | ✅ CRU* |
 | FR-12 | TU_VAN_CHUYEN_SAU | ✅ CRUD* |
 | FR-12 | PHIEN_TU_VAN | ✅ CRUD* |
@@ -316,6 +331,9 @@
 | FR-05 | VU_VIEC | 📝 RU* |
 | FR-05 | HO_SO_VU_VIEC | 👁️ R* |
 | FR-05 | KET_QUA_VU_VIEC | 📝 RU* |
+| FR-05 | PHAN_CONG_VU_VIEC `[NEW v3.5]` | 👁️ R* |
+| FR-05 | DANH_GIA_VU_VIEC `[NEW v3.5]` | 👁️ R* (loại chấm điểm theo CSV UC67) |
+| FR-05 | LICH_SU_VU_VIEC `[NEW v3.5]` | 👁️ R* |
 | FR-06 | HO_SO_CHI_TRA | 📝 RU* |
 | FR-06 | DANH_GIA_HO_SO_CHI_TRA | 📝 RU* |
 | FR-06 | THAM_DINH_HO_SO `[NEW v3.5]` | 👁️ R* |
@@ -335,6 +353,7 @@
 | FR-10 | AUDIT_LOG | 👁️ R* |
 | FR-10 | THONG_BAO | 👁️ R* |
 | FR-10 | ~~CAU_HINH_PHAN_CONG~~ `[DEPRECATED 2026-05-06]` | — |
+| FR-10 | NGAY_LE `[NEW]` | 👁️ R |
 | FR-11 | BAO_CAO | 📝 RU* |
 | FR-12 | TU_VAN_CHUYEN_SAU | 📝 RU* |
 | FR-12 | PHIEN_TU_VAN | 👁️ R* |
@@ -379,6 +398,9 @@
 | FR-05 | VU_VIEC | 📝 RU* |
 | FR-05 | HO_SO_VU_VIEC | 👁️ R* |
 | FR-05 | KET_QUA_VU_VIEC | 📝 RU* |
+| FR-05 | PHAN_CONG_VU_VIEC `[NEW v3.5]` | 👁️ R* |
+| FR-05 | DANH_GIA_VU_VIEC `[NEW v3.5]` | 👁️ R* (loại chấm điểm theo CSV UC67) |
+| FR-05 | LICH_SU_VU_VIEC `[NEW v3.5]` | 👁️ R* |
 | FR-06 | HO_SO_CHI_TRA | 📝 RU* |
 | FR-06 | DANH_GIA_HO_SO_CHI_TRA | 📝 RU* |
 | FR-06 | THAM_DINH_HO_SO `[NEW v3.5]` | 👁️ R* |
@@ -398,6 +420,7 @@
 | FR-10 | AUDIT_LOG | 👁️ R* |
 | FR-10 | THONG_BAO | 👁️ R* |
 | FR-10 | ~~CAU_HINH_PHAN_CONG~~ `[DEPRECATED 2026-05-06]` | — |
+| FR-10 | NGAY_LE `[NEW]` | 👁️ R |
 | FR-11 | BAO_CAO | 📝 RU* |
 | FR-12 | TU_VAN_CHUYEN_SAU | 📝 RU* |
 | FR-12 | PHIEN_TU_VAN | 👁️ R* |
@@ -442,6 +465,9 @@
 | FR-05 | VU_VIEC | 📝 RU* |
 | FR-05 | HO_SO_VU_VIEC | 👁️ R* |
 | FR-05 | KET_QUA_VU_VIEC | 📝 RU* |
+| FR-05 | PHAN_CONG_VU_VIEC `[NEW v3.5]` | 👁️ R* |
+| FR-05 | DANH_GIA_VU_VIEC `[NEW v3.5]` | 👁️ R* (loại chấm điểm theo CSV UC67) |
+| FR-05 | LICH_SU_VU_VIEC `[NEW v3.5]` | 👁️ R* |
 | FR-06 | HO_SO_CHI_TRA | 📝 RU* |
 | FR-06 | DANH_GIA_HO_SO_CHI_TRA | 📝 RU* |
 | FR-06 | THAM_DINH_HO_SO `[NEW v3.5]` | 👁️ R* |
@@ -461,6 +487,7 @@
 | FR-10 | AUDIT_LOG | 👁️ R* |
 | FR-10 | THONG_BAO | 👁️ R* |
 | FR-10 | ~~CAU_HINH_PHAN_CONG~~ `[DEPRECATED 2026-05-06]` | — |
+| FR-10 | NGAY_LE `[NEW]` | 👁️ R |
 | FR-11 | BAO_CAO | 📝 RU* |
 | FR-12 | TU_VAN_CHUYEN_SAU | 📝 RU* |
 | FR-12 | PHIEN_TU_VAN | 👁️ R* |
@@ -496,6 +523,7 @@
 | FR-05 | VU_VIEC | 👁️ R* |
 | FR-05 | HO_SO_VU_VIEC | 🔌 C†R* |
 | FR-05 | KET_QUA_VU_VIEC | 👁️ R* |
+| FR-05 | DANH_GIA_VU_VIEC `[NEW v3.5]` | 🔌 C†R* (API inbound Cổng PLQG — UC67) |
 | FR-06 | HO_SO_CHI_TRA | 🔌 C†RU* `[CHANGED v3.5]` (Create qua DVC FR-V.II-01; Update file_bo_sung[] qua FR-V.II-14 khi YEU_CAU_BO_SUNG ≤5 ngày LV; Update rút HS qua FR-V.II-02 [GAP-V.II-03]) |
 | FR-07 | DOANH_NGHIEP | 🔌 C†RU* `[CHANGED 2026-05-05]` |
 | FR-09 | BIEU_MAU | 👁️ R |
@@ -503,6 +531,7 @@
 | FR-10 | DANH_MUC | 👁️ R |
 | FR-10 | DON_VI | 👁️ R |
 | FR-10 | THONG_BAO | 👁️ R* |
+| FR-10 | NGAY_LE `[NEW]` | 👁️ R |
 | FR-12 | TU_VAN_CHUYEN_SAU | 👁️ R* |
 | FR-12 | PHIEN_TU_VAN | 👁️ R* |
 | FR-12 | LICH_SU_TRAO_DOI_TV | 🔌 C†R* |
@@ -531,11 +560,14 @@
 | FR-05 | VU_VIEC | 📝 RU* |
 | FR-05 | HO_SO_VU_VIEC | ✅ CRU* |
 | FR-05 | KET_QUA_VU_VIEC | ✅ CRU* |
+| FR-05 | PHAN_CONG_VU_VIEC `[NEW v3.5]` | 👁️ R* (own — cá nhân được phân công) |
+| FR-05 | LICH_SU_VU_VIEC `[NEW v3.5]` | 👁️ R* (own — action của mình) |
 | FR-09 | BIEU_MAU | 👁️ R |
 | FR-09 | THU_MUC_BIEU_MAU | 👁️ R |
 | FR-10 | DANH_MUC | 👁️ R |
 | FR-10 | DON_VI | 👁️ R |
 | FR-10 | THONG_BAO | 👁️ R* |
+| FR-10 | NGAY_LE `[NEW]` | 👁️ R |
 | FR-12 | HO_SO_PHAP_LY_DN `[NEW v3.5]` | 📝 RU* (scoped theo VV được phân công cho NHT trong cơ quan của mình — Thay đổi 10) |
 
 > NHT là role duy nhất (ngoài CB_NV) có quyền 📝 RU* trên VU_VIEC và ✅ CRU* trên HO_SO_VU_VIEC / KET_QUA_VU_VIEC.
@@ -554,6 +586,7 @@
 | FR-10 | DANH_MUC | 👁️ R |
 | FR-10 | DON_VI | 👁️ R |
 | FR-10 | THONG_BAO | 👁️ R* |
+| FR-10 | NGAY_LE `[NEW]` | 👁️ R |
 | FR-12 | TU_VAN_CHUYEN_SAU | 👁️ R* |
 | FR-12 | PHIEN_TU_VAN | 👁️ R* |
 | FR-14 | HOP_DONG_TU_VAN | 👁️ R* |
@@ -573,6 +606,7 @@
 | FR-10 | DANH_MUC | 👁️ R |
 | FR-10 | DON_VI | 👁️ R |
 | FR-10 | THONG_BAO | 👁️ R* |
+| FR-10 | NGAY_LE `[NEW]` | 👁️ R |
 | FR-12 | TU_VAN_CHUYEN_SAU | ✅ CRU* |
 | FR-12 | PHIEN_TU_VAN | 📝 RU* |
 | FR-12 | LICH_SU_TRAO_DOI_TV | ✅ CRU* |

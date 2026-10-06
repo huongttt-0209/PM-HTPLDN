@@ -1,0 +1,16 @@
+✅ Đã hết lỗi.
+
+Đo 07/08/2026 17:00–17:12 trên https://htpldn-uat.ospgroup.vn, bản dựng V1.0.10, tài khoản vai trò Cán bộ Nghiệp vụ cấp Trung ương (đúng tác nhân đặc tả, srs-fr-03-dao-tao.md:751). Màn "Đào tạo, tập huấn" → "Kho tài liệu / Bài giảng"; tổng 7 bài giảng khi chưa lọc.
+
+Triệu chứng "Màn hình không có nút chức năng" không còn tái hiện: thanh công cụ có nút "Xuất Excel" ở trạng thái dùng được; bấm 3 lần ở 3 bộ lọc khác nhau, cả 3 lần đều xử lý thành công, tải về tệp .xlsx và báo "Xuất dữ liệu thành công.".
+
+Tệp xuất bám đúng bộ lọc hiện tại — đã mở tệp đọc nội dung, không dừng ở mức tải được tệp:
+- Lọc "Loại tài liệu" = PDF: danh sách 2 bản ghi; tệp 3 dòng (1 tiêu đề + 2 dữ liệu), tên bài giảng trùng khít 2/2, cột "Loại tài liệu" của cả 2 dòng đều là PDF.
+- Lọc "Loại tài liệu" = Video: danh sách 3 bản ghi; tệp 4 dòng, trùng khít 3/3, cả 3 dòng đều là Video.
+Hai lần đo cho hai con số khác nhau và đều khác tổng chưa lọc (7), nên tệp thật sự bám bộ lọc chứ không xuất toàn bộ danh sách, cũng không cắt theo trang đang xem (cỡ trang 20). Đáp ứng srs-fr-03-dao-tao.md:1952 và srs-v3.5.md:5570 (BR-DATA-06) — "xuất danh sách theo bộ lọc hiện tại".
+
+Ghi nhận ngoài phạm vi phiếu này: tiêu chí lọc "Công khai" trả kết quả sai ngay trên màn danh sách — chọn "Không công khai" vẫn nhận về đúng 6 bản ghi "Đã công khai", còn bài giảng "Chưa công khai" duy nhất ("Test video 2") thì vắng mặt, dù vẫn hiển thị bình thường khi không lọc và khi lọc Video (srs-fr-03-dao-tao.md:874 và :844). Chức năng xuất chỉ chép lại đúng tập kết quả mà màn danh sách đang hiển thị, nên đây là lỗi của bộ lọc chứ không phải của chức năng xuất; đề nghị mở phiếu riêng cho FR-III-08.
+
+Phạm vi hiệu lực: môi trường và bản dựng nêu trên, tại thời điểm đo, trên 7 bài giảng thuộc đơn vị của tài khoản (6 đã công khai + 1 chưa công khai). Lượt đo chỉ xem, lọc và xuất; không tạo, sửa hay xóa bản ghi nào.
+
+Ảnh bằng chứng: https://drive.google.com/file/d/1RByMYU34lbQBZtCt9R5ZdgM3_UJSJp7u/view?usp=drivesdk (màn đã lọc Loại tài liệu = PDF, thanh công cụ có nút "Xuất Excel", chân bảng "Hiển thị 1-2 / 2 kết quả") · https://drive.google.com/file/d/1aE94R-5qqRUI5pCJdQdpDtE_GSHxbw0M/view?usp=drivesdk (đối chứng: lọc Video, chân bảng "Hiển thị 1-3 / 3 kết quả") · https://drive.google.com/file/d/1hFYYXcccWeT-W_3CbRwOmym1H7hSaGTj/view?usp=drivesdk (ghi nhận ngoài phạm vi: đang chọn "Không công khai" nhưng cả 6 dòng đều "Đã công khai") · https://drive.google.com/file/d/1B2gqnjsyCthKxEZ4CLYk7GTdEHtigBFS/view?usp=drivesdk (ngay sau khi bấm "Xuất Excel" với bộ lọc đó).

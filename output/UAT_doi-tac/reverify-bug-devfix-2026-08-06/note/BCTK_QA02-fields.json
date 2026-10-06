@@ -1,0 +1,14 @@
+{
+  "Tuần": "Tuần 3",
+  "Mã TC": "BCTK_QA02",
+  "Tên chức năng": "Báo cáo thống kê",
+  "Mô tả": "Báo cáo thống kê — QA phát hiện ngoài phạm vi (không thuộc case nào của đối tác), phát sinh khi verify nhóm phiếu VVDTN_04/06 · VVDHT_01/06 · VVTTG_01/05.\n\nSau khi đã xem được báo cáo, nếu người dùng bấm lại nút [Xem báo cáo] một lần nữa mà không thay đổi bộ lọc thì cả hai nút [Xuất Excel] và [Xuất PDF] bị làm mờ và không bấm được nữa, dù màn hình vẫn đang hiện đầy đủ số liệu. Bấm [Xem báo cáo] thêm bao nhiêu lần nữa cũng không hồi phục. Người dùng chỉ dùng lại được nút Xuất khi đổi một tiêu chí lọc bất kỳ rồi xem lại, hoặc tải lại trang.",
+  "Điều kiện": "1. Đăng nhập bằng tài khoản thuộc nhóm tác nhân của báo cáo (Cán bộ Nghiệp vụ hoặc Cán bộ Phê duyệt)\n2. Kỳ báo cáo đã chọn phải có dữ liệu để báo cáo hiển thị được",
+  "Dữ liệu đầu vào": "Tái hiện được trên nhiều loại báo cáo khác nhau. Ví dụ dùng để chụp ảnh: Loại báo cáo \"BC Vụ việc theo thời gian\", Kỳ báo cáo \"Tháng\" (01/08/2026 – 31/08/2026), Đơn vị \"Toàn quốc\" — màn hiện Tổng vụ việc toàn kỳ = 20.\nTài khoản đo: Cán bộ Phê duyệt Trung ương, cấp TW. Bản dựng V1.0.8, môi trường 18.143.165.120.nip.io.",
+  "Các bước thực hiện": "1. Đăng nhập, vào menu \"Báo cáo thống kê\"\n2. Chọn Loại báo cáo và Kỳ báo cáo có dữ liệu, nhấn [Xem báo cáo] — báo cáo hiện ra, hai nút [Xuất Excel] / [Xuất PDF] dùng được bình thường\n3. KHÔNG đổi bất kỳ tiêu chí lọc nào. Nhấn [Xem báo cáo] lần thứ hai\n4. Quan sát hai nút [Xuất Excel] / [Xuất PDF]\n5. Nhấn [Xem báo cáo] lần thứ ba, quan sát lại\n6. Đổi một tiêu chí lọc bất kỳ (ví dụ Kỳ báo cáo Tháng → Quý) rồi nhấn [Xem báo cáo], quan sát lại",
+  "Kết quả mong đợi": "Theo đặc tả srs-fr-11-bao-cao.md:1052 và :1053 (SCR-IX-01, thành phần #8 và #9), điều kiện hiển thị của hai nút Xuất là \"Sau khi đã Xem báo cáo\". Vậy chừng nào màn hình còn đang hiện kết quả báo cáo thì người dùng vẫn phải xuất được tệp, không phụ thuộc việc họ đã bấm [Xem báo cáo] bao nhiêu lần.",
+  "Kết quả thực tế": "Sau lần bấm [Xem báo cáo] thứ hai (không đổi bộ lọc), cả [Xuất Excel] và [Xuất PDF] đều bị làm mờ và không bấm được, trong khi khối kết quả bên dưới vẫn hiện đầy đủ số liệu (Tổng vụ việc toàn kỳ = 20). Bấm [Xem báo cáo] lần thứ ba: hai nút vẫn mờ. Chỉ khi đổi tiêu chí lọc (Tháng → Quý) rồi xem lại thì hai nút mới dùng được trở lại.\n\nĐo lại trên hai loại báo cáo khác nhau (BC Vụ việc đã tiếp nhận và BC Vụ việc theo thời gian) đều ra cùng hiện tượng, nên nhiều khả năng ảnh hưởng chung cho cả màn Báo cáo thống kê chứ không riêng một loại báo cáo.\n\nẢnh hưởng người dùng: người dùng đang xem đúng báo cáo mình cần, nhìn thấy nút Xuất bị mờ mà không có thông báo gì giải thích, dễ hiểu nhầm là hệ thống lỗi hoặc mình không có quyền.",
+  "Ảnh/vieo 1": "https://drive.google.com/file/d/1UXXsJZi_Zt1HozVk19Ez0emwnil2uoBg/view?usp=drivesdk",
+  "Trạng thái": "Fail",
+  "Dopai": "bug"
+}

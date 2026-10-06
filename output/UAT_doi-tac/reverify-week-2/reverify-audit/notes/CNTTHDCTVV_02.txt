@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev. (Bug ID: BUG-CNTTHDCTVV_02)
+- Web sai: khi vô hiệu hóa tư vấn viên đang còn vụ việc chưa hoàn thành, hệ thống có từ chối đúng (trạng thái giữ nguyên) nhưng giao diện chỉ hiện thông báo chung chung "Có lỗi xảy ra", không cho cán bộ biết lý do bị chặn.
+- Điểm mấu chốt: hệ thống ở phía máy chủ ĐÃ trả về đúng thông báo nghiệp vụ "Tư vấn viên đang có 1 vụ việc và 0 hỏi đáp chưa hoàn thành, không thể vô hiệu hóa" — nhưng giao diện không hiển thị thông báo này. Đây là lỗi ở phần hiển thị của giao diện, phần nghiệp vụ chặn vô hiệu hóa vẫn chạy đúng.
+- Expected theo SRS: FR-IV-12 (UC50) §Error Handling E2 - ERR-TT-02 (srs-fr-04 dòng 914) và §Acceptance Criteria (dòng 925): khi tư vấn viên còn vụ việc đang xử lý thì phải từ chối và hiển thị thông báo "Tư vấn viên đang có {N} vụ việc và {M} hỏi đáp chưa hoàn thành, không thể vô hiệu hóa"; §Processing bước 2 (dòng 892) quy định điều kiện kiểm tra.
+- Verify: tài khoản Cán bộ nghiệp vụ Trung ương, tư vấn viên TVV-BTP-TW-0002 (Đang hoạt động) đang có 1 vụ việc chưa hoàn thành (VV-BTP-TW-20260712-001), chọn Vô hiệu hóa + nhập lý do hợp lệ — đúng điều kiện đối tác.

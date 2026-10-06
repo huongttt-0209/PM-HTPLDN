@@ -1,0 +1,33 @@
+✅ ĐÃ HẾT LỖI — còn một điểm nhỏ về câu chữ, không chặn bàn giao.
+
+Kiểm tra lại ngày 07/08/2026, khung giờ 19:33–20:14, trên bản dựng V1.0.10, bằng tài khoản Cán bộ Nghiệp vụ Trung ương. Đã chạy đủ các bước của phiếu: vào "Đào tạo, tập huấn" > "Khóa học" > xem chi tiết khóa học > tab "Điểm danh" > tải lên tệp Excel. Đã chạy hai lượt trên hai buổi học khác nhau để chắc chắn kết quả không phụ thuộc một buổi cụ thể; hai lượt cho kết quả trùng khít.
+
+VIỆC QUÝ ĐƠN VỊ PHẢN ÁNH ĐÃ ĐƯỢC XỬ LÝ
+- Trước đây cán bộ phải tự biết mã học viên mới nhập được tệp điểm danh, trong khi màn hình danh sách không hiển thị mã. Nay không còn phải làm vậy.
+- Trên tab "Điểm danh", sau khi chọn buổi học sẽ có nút "Tải mẫu điểm danh". Tệp mẫu do hệ thống sinh ra đã điền sẵn danh sách học viên của đúng khóa đó, phần định danh được khóa lại và ẩn đi. Cán bộ chỉ điền cột trạng thái điểm danh rồi tải tệp lên.
+- Vì vậy màn hình danh sách không cần hiển thị mã học viên nữa, và việc nhập tệp cũng không còn đòi cán bộ nhập mã.
+- Cách làm này đã áp cho cả tab "Kết quả": ở đó cũng có nút "Tải mẫu điểm kiểm tra" tương ứng.
+
+CÁC PHẦN CÒN LẠI CỦA PHIẾU ĐỀU ĐẠT
+- Khi chưa chọn buổi học, các nút thao tác để mờ và màn hình hướng dẫn "Vui lòng chọn buổi học để bắt đầu điểm danh". Chọn buổi xong thì các nút bật lên.
+- Tải tệp lên, hệ thống hiển thị bản xem trước và ghi rõ "chưa nhập dữ liệu": tổng số dòng, số dòng hợp lệ, số dòng bỏ qua, số dòng lỗi. Lượt kiểm tra với tệp 5 dòng cho ra: tổng 5, hợp lệ 3, bỏ qua 0, lỗi 2.
+- Bản xem trước tách hai thẻ "Hợp lệ" và "Lỗi/Bỏ qua". Mỗi dòng lỗi đều ghi rõ số dòng và lý do riêng của chính dòng đó, không gộp chung một câu.
+- Dòng ghi sai giá trị điểm danh và dòng ghi học viên không thuộc khóa học đang thao tác đều bị báo lỗi bằng hai lý do khác nhau.
+- Sau khi xác nhận nạp, hệ thống chỉ ghi các dòng hợp lệ. Đã tải lại trang và kiểm chứng: 3 học viên hợp lệ có đúng trạng thái vừa nhập, còn học viên ở dòng lỗi vẫn để trống hoàn toàn.
+- Nạp nhầm tệp mẫu của buổi học khác vào buổi đang chọn thì hệ thống chặn lại và báo tệp mẫu không khớp buổi học đang chọn, đồng thời không ghi bất kỳ dữ liệu nào.
+
+⚠️ MỘT ĐIỂM NHỎ ĐỀ NGHỊ GHI NHẬN
+- Phiếu mong đợi câu thông báo sau khi nạp là "Đã nạp {số thành công} bản ghi thành công, {số lỗi} bản ghi không hợp lệ". Hệ thống hiện hiển thị "Import hoàn tất" kèm ba số: Đã nhập 3, Bỏ qua 0, Lỗi 2.
+- Đặc tả không quy định câu chữ cụ thể cho thông báo này, và hệ thống đã nêu đủ cả hai con số mà phiếu cần, nên chúng tôi không chấm đây là lỗi. Ghi nhận lại để Quý đơn vị nắm và thống nhất cách diễn đạt nếu cần.
+
+ẢNH BẰNG CHỨNG
+- Chọn buổi học xong thì nút "Tải mẫu điểm danh" và "Import Excel" bật lên: https://drive.google.com/file/d/1EjFO0p8g6clOZncoQIC_EKoB2m9zXFxb/view?usp=drivesdk
+- Bản xem trước "chưa nhập dữ liệu": tổng 5, hợp lệ 3, bỏ qua 0, lỗi 2: https://drive.google.com/file/d/1GezY7sX8Bm-AFy68KpuwqO2jRqFQ-Ao5/view?usp=drivesdk
+- Thẻ "Lỗi/Bỏ qua": hai dòng lỗi có số dòng và lý do riêng khác nhau: https://drive.google.com/file/d/13ToHMdgI4l5yDcP5HhFkTex_rk3Oqw6H/view?usp=drivesdk
+- Ngay sau khi xác nhận nạp: "Import hoàn tất", đã nhập 3, bỏ qua 0, lỗi 2: https://drive.google.com/file/d/1v-q7LIHvm7bpZGgVYvILtt2CYwTV2RnY/view?usp=drivesdk
+- Sau khi tải lại trang: 3 học viên hợp lệ có trạng thái, học viên ở dòng lỗi để trống: https://drive.google.com/file/d/1uagFt99YZoFaH9fgzEfvEW6d611egsp1/view?usp=drivesdk
+- Tab "Kết quả" cũng có nút "Tải mẫu điểm kiểm tra": https://drive.google.com/file/d/1FtPuDJ0QNNPNjLal14qQICPUtBrtUgwG/view?usp=drivesdk
+
+Lưu ý về dữ liệu: thao tác đo lần này đã ghi thêm hai buổi học mới kèm bản ghi điểm danh trên khóa "Hội nghị đối thoại DN 2026" — đây là hệ quả của chính thao tác đang kiểm, không phải dựng thêm dữ liệu.
+
+KẾT LUẬN: Nội dung phiếu phản ánh đã được xử lý xong, các bước của phiếu chạy thông. Đề nghị đóng phiếu.

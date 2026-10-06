@@ -1,0 +1,7 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Tái hiện được đúng như phản ánh: Import Excel danh sách đăng ký báo "Dòng 2/3/4: Email không hợp lệ", Tổng dòng 3 – Thành công 0 – Lỗi 3, dù 3 địa chỉ email đều đúng định dạng.
+- Nguyên nhân: khi ô cột Email là ô có liên kết (Excel TỰ ĐỘNG tạo liên kết mailto: ngay khi gõ email vào ô rồi rời ô – chữ chuyển xanh gạch chân), hệ thống không lấy được chữ trong ô mà đọc ra "[object Object]", rồi đem chuỗi đó đi kiểm định dạng email nên luôn trượt. Cùng 3 email đó, nếu để ô Email là chữ thường thì import chạy đúng (Thành công 2 – Bỏ qua trùng 1 – Lỗi 0). Cùng email đó nhập tay cũng tạo được đăng ký bình thường.
+- Kèm theo: hệ thống vẫn hiện thông báo "Import hoàn tất" trong khi 100% số dòng bị loại – thông báo không phản ánh đúng kết quả.
+- Yêu cầu theo đặc tả: FR-III-04 (UC23) §Inputs dòng 4 (srs-fr-03-dao-tao.md:461) quy định email là trường bắt buộc kiểu text, không đặt ràng buộc nào hẹp hơn định dạng email thông thường; §Processing bước 6 (dòng 475) yêu cầu kiểm rồi nạp từng dòng và báo cáo kết quả đúng thực chất; dòng 443 xác định import Excel là một trong ba cách đăng ký, ngang hàng với nhập tay. Định dạng hiển thị của ô không phải căn cứ nghiệp vụ để loại dòng.
+- Kiểm bằng: tài khoản CB Nghiệp vụ Trung ương, khóa học KH-QAW7-HOINGHI ở bước "Đã duyệt", dùng chính file mẫu tải từ nút "Tải file mẫu" của hệ thống.
+- Bug ID: BUG-DKTGKH_12

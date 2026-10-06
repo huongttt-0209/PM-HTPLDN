@@ -1,0 +1,11 @@
+✅ Vẫn còn lỗi — chưa đạt. Kiểm lại trên môi trường UAT, bản dựng V1.0.5, vai trò Cán bộ Nghiệp vụ Trung ương (cbnv_tw). Đo 2 lần độc lập, kết quả trùng nhau (VV-BTP-TW-20260804-001 và -002).
+
+Phần đã hết lỗi: lưu hồ sơ có tệp đính kèm không còn báo lỗi máy chủ, hồ sơ tạo được và vào đúng trạng thái "Đã tiếp nhận".
+
+Phần còn lỗi 1 — tệp đính kèm không gắn được vào hồ sơ nên coi như mất. Bước tải tệp lên chạy đúng: máy chủ nhận đủ tên gốc, định dạng và dung lượng. Nhưng sau khi bấm Lưu & Tiếp nhận, tệp không được gắn vào hồ sơ vừa tạo. Hậu quả người dùng thấy: bảng Tài liệu đính kèm hiện tên máy sinh "File đính kèm 3131f695" thay vì tên tệp đã chọn, cột Định dạng bỏ trống, cột Kích thước hiện dấu gạch; bấm Xem báo "Không thể tải file", bấm Tải báo "Không kết nối được máy chủ.". Đối chiếu đặc tả: tên tài liệu và đường dẫn tệp đều là trường bắt buộc (srs-fr-05-vu-viec.md dòng 2057 và 2059), tên tệp gốc phải được giữ (dòng 2223), bảng tài liệu phải nêu tên và kích thước (dòng 1695).
+Không phải lỗi môi trường: ngay trong cùng phiên, hồ sơ VV-BTP-TW-20260803-002 có 4 tài liệu vẫn hiện đúng tên, đúng định dạng, đúng dung lượng và tải về được.
+
+Phần còn lỗi 2 — nhãn mức ưu tiên hiển thị ngược chiều. Doanh nghiệp gắn vào hồ sơ không có bất kỳ dữ liệu ưu tiên nào (quy mô, số lao động, số lao động nữ, số lao động khuyết tật đều trống, không phải nữ làm chủ), nên theo dòng 196 hệ thống phải cho mức thấp nhất. Hệ thống tính đúng: giá trị lưu là 1. Nhưng giao diện lại hiển thị "Rất cao", trong khi bảng nhãn ở dòng 1526 quy định 1 là "Thấp".
+⚠️ Riêng việc chốt bộ chữ hiển thị cần BA xác nhận, vì dòng 1522 ghi bảng nhãn mới là đề xuất. Tuy nhiên chiều của thang thì không mơ hồ: thang chạy 1 đến 5 (dòng 326), 1 là đầu thấp nhất, nên gắn cho nó nhãn nghe cao nhất là đảo chiều chứ không phải khác cách gọi tên.
+
+Bằng chứng: evidence/NHSYC_01-uat-tep-dinh-kem-mat-ten-that-0408.png, NHSYC_01-uat-tai-tep-that-bai-0408.png, NHSYC_01-uat-tai-hien-lan2-0408.png. Bảng đối chiếu điều kiện: cond/NHSYC_01-uat.md (0 ô lệch).

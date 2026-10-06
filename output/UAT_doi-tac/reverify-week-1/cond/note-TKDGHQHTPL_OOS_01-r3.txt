@@ -1,0 +1,17 @@
+☑️ Đã kiểm tra lại — lỗi ĐÃ ĐƯỢC SỬA, đóng dòng này.
+
+Kiểm tra lại ngày 27/07/2026 lúc 17:22 trên môi trường được giao 18.143.165.120.nip.io (đúng môi trường đã phát hiện lỗi), bằng tài khoản Cán bộ NV Trung ương, đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp, đúng màn "Tổng quan hệ thống" và đúng bộ lọc mặc định (Năm 2026, Tháng "Cả năm").
+
+Điều quan trọng nhất: dữ liệu gây ra lỗi VẪN CÒN NGUYÊN trên môi trường, không hề bị dọn đi. Cụ thể vẫn còn 3 kết quả đánh giá ở trạng thái "Chưa đánh giá" nhưng đã có sẵn điểm (80,00 / 60,00 / 90,00) và vẫn còn kế hoạch DG-20260727-0001 ở trạng thái "Hủy" có kết quả 100,00 điểm. Nghĩa là thẻ không còn đếm chúng là do phần tính đã được sửa, chứ không phải do dữ liệu thay đổi.
+
+Kết quả đo được:
+- Thẻ "Điểm đánh giá hiệu quả hỗ trợ pháp lý" nay hiển thị 8.2/100 kèm chú thích "Dựa trên 10 đánh giá" (trước đây là 29.5/100 và "Dựa trên 14 đánh giá").
+- Con số 10 đúng bằng số kết quả thực sự đã chấm và còn hiệu lực: 11 kết quả ở trạng thái "Đã đánh giá" trừ đi 1 kết quả thuộc kế hoạch đã hủy.
+- Ba bản ghi chưa chấm đã bị loại khỏi biểu đồ: ba cột cao nhất trước đây (tháng 02/2026 là 90.0, tháng 04/2026 là 80.0, tháng 05/2026 là 60.0) nay không còn.
+- Kết quả của kế hoạch đã hủy cũng đã bị loại: cột tháng 07/2026 nay là 8.2 thay vì 16.6.
+
+Đối chiếu số học để loại trừ nhầm lẫn: cộng điểm của đúng 10 kết quả được đếm ra 82,40; chia 10 được 8,24 — khớp con số 8.2 đang hiển thị. Đây đúng bằng giá trị mà báo cáo lỗi trước đó đã dự đoán cho trường hợp loại bỏ bản ghi của kế hoạch đã hủy.
+
+Đã đo lặp lại bằng một tài khoản khác vai trò (Cán bộ PD Trung ương) và thẻ trả về cùng con số, xác nhận kết quả không phụ thuộc quyền.
+
+Bug ID: BUG-TKDGHQ-KPI-LOC — trạng thái: đã đóng.

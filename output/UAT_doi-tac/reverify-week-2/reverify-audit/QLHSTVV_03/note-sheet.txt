@@ -1,0 +1,14 @@
+✅ Bug ĐÚNG – chuyển dev (mục "Địa bàn") + ⚠️ Cần BA xác nhận (mục "Số quyết định (công nhận)").
+
+[1] ✅ Bug ĐÚNG – chuyển dev — mục "Địa bàn" ở nhóm Tổ chức:
+- Ảnh anh/chị gửi cho thấy rất rõ nhóm "Tổ chức & Mạng lưới" có mục "Địa bàn". Anh/chị phản ánh đúng: theo đặc tả, tư vấn viên KHÔNG còn khái niệm địa bàn nữa, trường này đã được bỏ hẳn vì thẻ tư vấn viên có hiệu lực toàn quốc theo Nghị định 77/2008 Điều 19 (srs-fr-04-chuyen-gia-tvv.md dòng 46 và dòng 153 — đánh dấu "Bỏ field này"). Đặc tả còn ghi rõ bộ lọc "địa bàn" ở màn danh sách phải hiểu là lọc theo đơn vị công nhận, không phải theo địa bàn của tư vấn viên (dòng 233).
+- Lưu ý khi kiểm lại: QA chạy đúng các bước anh/chị mô tả với cùng vai trò Cán bộ Nghiệp vụ Trung ương, thử trên 2 hồ sơ khác nhau (một hồ sơ đã phê duyệt, một hồ sơ đang hoạt động) và cả hai lần đều KHÔNG thấy mục "Địa bàn" hiện ra. Vì bằng chứng của anh/chị rất rõ và đặc tả thì cấm hẳn trường này, QA vẫn chuyển dev để dev rà và gỡ dứt điểm. Nếu anh/chị còn gặp lại, nhờ gửi giúp mã tư vấn viên cụ thể.
+- Bug ID: BUG-QLHSTVV_03
+
+[2] ⚠️ Cần BA xác nhận — mục "Số quyết định (công nhận)" ở nhóm Nghề nghiệp:
+- Quan sát của anh/chị đúng là màn có mục này. Nhưng đây KHÔNG phải trường lạ: đặc tả quy định "Số quyết định công nhận" là thông tin bắt buộc nhập khi Cán bộ Phê duyệt duyệt hồ sơ tư vấn viên (srs-fr-04-chuyen-gia-tvv.md dòng 583, mã lỗi ERR-PD-05 ở dòng 616), và nó nằm trong mẫu xuất Phụ lục 1 (dòng 2027).
+- Vướng ở chỗ: bảng liệt kê thành phần của thẻ "Hồ sơ" (dòng 1556) không nhắc tới mục này — nhưng bảng đó cũng không nhắc tới Chuyên ngành, Số QĐ công bố, Ngày QĐ công bố, Mô tả kinh nghiệm, trong khi các mục đó vẫn đang hiển thị và không ai coi là thừa. Nghĩa là bảng ấy viết tóm tắt chứ không phải danh sách đóng. Đây là bất đồng về cách hiểu tài liệu nên QA không tự kết luận đúng/sai.
+- Câu hỏi BA: (a) Bảng thành phần thẻ "Hồ sơ" (dòng 1556) là danh sách đóng hay chỉ mô tả tóm tắt? (b) Nếu là danh sách đóng thì "Số quyết định (công nhận)" có được hiển thị trên thẻ Hồ sơ không — và nếu không thì người dùng tra số quyết định công nhận của một tư vấn viên ở đâu? BA chốt xong QA sẽ cập nhật lại kết quả mong đợi của test case cho khớp.
+- Xin lưu ý: câu hỏi này trùng với câu hỏi đã nêu ở phiếu DKTGMLTVV_03 (bộ trường nhóm Nghề nghiệp), chỉ khác là ở màn xem thay vì màn nhập. Mong BA chốt một lần cho cả hai để dev không phải sửa qua sửa lại.
+
+- Kiểm bằng: tài khoản Cán bộ Nghiệp vụ Trung ương, badge đơn vị "BTP · TW" đúng như trong ảnh anh/chị gửi; cùng màn chi tiết tư vấn viên, thẻ "Hồ sơ". Đã đọc toàn bộ nhãn của hai nhóm bằng công cụ nên không bỏ sót mục nào ngoài vùng nhìn. Không tạo hay sửa dữ liệu nào trên hệ thống.

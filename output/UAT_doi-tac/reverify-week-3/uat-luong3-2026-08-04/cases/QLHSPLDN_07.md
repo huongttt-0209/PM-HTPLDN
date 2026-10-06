@@ -1,0 +1,62 @@
+# QLHSPLDN_07 — dòng 325 (tab `UAT_TGPL Doanh Nghiệp-tuần 3`)
+
+## Tuần
+
+Tuần 3
+
+## Mã TC
+
+QLHSPLDN_07
+
+## Mô tả
+
+Sửa
+
+## Điều kiện
+
+1. Đăng nhập hệ thống thành công
+
+## Các bước thực hiện
+
+1. Chọn menu "Doanh nghiệp"
+2. Nhấn "Xem chi tiết"
+3. Chọn thẻ "Hồ sơ pháp lý doanh nghiệp"
+4. Nhấn "Sửa"
+
+## Kết quả mong đợi
+
+- Hệ thống mở cửa sổ chỉnh sửa với dữ liệu hiện có.
+- NSD cập nhật và bấm "Lưu", hệ thống cập nhật bản ghi và lưu vết thao tác.
+
+## Kết quả thực tế
+
+Hệ thống hiển thị thông báo cập nhật thành công nhưng dữ liệu chưa được cập nhật vào bản ghi
+
+## Ảnh/vieo 1
+
+QLHSPLDN_07.jpg 
+ QLHSPLDN_07.webm
+
+## Trạng thái 1
+
+Fail
+
+## Trạng thái dev fix 1
+
+dev done
+
+## Verify
+
+Pass
+
+## DEV phản hồi lần 1
+
+Đã kiểm tra lại — lỗi đã được khắc phục. Sửa hồ sơ pháp lý doanh nghiệp nay lưu đúng: hệ thống báo cập nhật thành công và dữ liệu thật sự được ghi vào bản ghi. Kiểm ở đúng vai trò Cán bộ Nghiệp vụ Trung ương và đúng phạm vi Bộ Tư pháp - Trung ương như trong ảnh và video đối tác gửi, theo đúng 4 bước của phiếu kiểm thử.
+• Mỗi thay đổi đều được kiểm ở ba nơi, không chỉ nhìn khung thông báo: (1) khung thông báo hiện lên khi bấm Đồng ý, (2) tải lại trang rồi mở lại chính hồ sơ đó, (3) đọc lại bản ghi từ máy chủ để so từng ô. Cả ba nơi đều cho cùng một kết quả.
+• Đã sửa đủ mọi kiểu ô nhập chứ không gộp chung, vì lỗi loại này thường chỉ dính một nhóm: ô chữ (Tên hồ sơ, Cơ quan cấp), ô chữ dài (Mô tả), ô ngày (Ngày cấp, Ngày hết hạn), ô chọn (Loại hồ sơ, Lĩnh vực pháp lý), Trạng thái, và Tệp đính kèm. Kết quả: cả 9 ô đều lưu đúng, không ô nào bị mất.
+• Riêng thao tác trong video đối tác gửi — thêm một tệp đính kèm vào hồ sơ rồi mở lại xem — đã chạy lại 3 lần, cả 3 lần tệp vừa thêm đều còn nguyên, đúng tên và đúng dung lượng, kể cả sau khi tải lại trang. Trong video đối tác thì tệp này biến mất ngay khi mở lại.
+• Đội kiểm thử đã lưu ý một khả năng dễ gây kết luận sai và đã kiểm riêng: bản ghi tạo từ trước có thể mang dữ liệu cũ nên sửa vẫn hỏng dù phần mềm đã được vá. Vì vậy đã kiểm cả ba trường hợp — hồ sơ đã có sẵn từ trước, hồ sơ cũ tạo từ ngày 21/07, và hồ sơ mới tạo qua luồng chuẩn rồi sửa ngay. Cả ba đều lưu đủ như nhau, không có chênh lệch giữa dữ liệu cũ và dữ liệu mới.
+• Cũng đã đếm số lần hệ thống gọi máy chủ đi kèm mỗi thông báo thành công: đúng một lần gọi ứng với một khung thông báo, không có thông báo hiện lặp và không tạo ra bản ghi trùng.
+• Phần "lưu vết thao tác" theo yêu cầu của phiếu cũng đạt: sau mỗi lần lưu, hệ thống ghi lại đúng thời điểm cập nhật, đúng người thực hiện và tăng số phiên bản của hồ sơ.
+• Xác nhận thêm: phản ánh của đối tác là chính xác đối với bản phần mềm tại thời điểm quay — bản đó thật sự báo thành công nhưng làm mất tệp vừa đính kèm. Đây không phải do thao tác nhầm.
+• Verify: tài khoản Cán bộ Nghiệp vụ Trung ương (cbnv_tw_04), trùng vai trò với đối tác. Doanh nghiệp dùng để kiểm tra là "Cong ty TNHH QA UAT Kiem Thu" (mã DN-HNI-0001). Đã kiểm trên hồ sơ ở cả ba trạng thái Hiệu lực, Hết hạn, Thu hồi và bốn loại hồ sơ khác nhau.

@@ -1,0 +1,4 @@
+✅ Bug đúng – chuyển dev.
+• Màn Ngân hàng câu hỏi (tab Câu hỏi): tìm theo từ khóa không lọc — nhập từ khóa không khớp bản ghi nào nhưng danh sách vẫn hiển thị toàn bộ câu hỏi.
+• SRS FR-III-10 (UC29 – Tìm kiếm NHCH, dòng 945–948): tìm theo từ khóa phải trả về đúng câu hỏi phù hợp; không khớp thì danh sách rỗng.
+• Verify: CB_NV_TW, tìm từ khóa "zzzznomatch..." nhưng danh sách vẫn còn bản ghi. Bug ID: BUG-TKNHCH_05.

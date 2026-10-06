@@ -1,0 +1,23 @@
+CKBMHDLCTT_01 (dòng 115) — Verdict: Reject (không tái hiện) — 2026-07-20
+Verify: Chrome DevTools MCP, tài khoản cbnv_bn (CB Nghiệp vụ - Bộ ngành), URL /bieu-mau/{id}/sua.
+
+Claim đối tác: trường "Ảnh đại diện" (khi công khai biểu mẫu) từ chối ảnh hợp lệ với lỗi
+"chỉ chấp nhận .doc/.docx/.xls/.xlsx".
+
+Quan sát: KHÔNG TÁI HIỆN. Sửa biểu mẫu → bật "Công khai trên Cổng PLQG" → trường "Ảnh đại diện":
+ - Upload .png (400×300) + .jpg (400×300) hợp lệ → ĐƯỢC NHẬN (đính kèm + nút Xem/Xóa).
+ - Lưu thành công (sau khi công khai thư mục cha) → chi tiết biểu mẫu hiển thị "Ảnh đại diện: BM-B6-avatar..."
+   (lưu server-side OK).
+ - KHÔNG còn thông báo "Biểu mẫu chỉ chấp nhận file .doc, .docx, .xls, .xlsx".
+Kết quả ngược claim (claim: bị từ chối; thực tế: được nhận) → không tái hiện trên bản hiện tại.
+
+Ghi chú nội bộ (KHÔNG đưa vào note đối tác): bằng chứng đối tác (video t021s) cho thấy lỗi CÓ THẬT trên bản đối
+tác test. Cụm lỗi liên quan QLBMHD_03/11 + QLBMHD_14. Nay đã fix trên bản hiện tại.
+
+Vai trò: case chỉ định "CB Nghiệp vụ TW/BN/ĐP" → cbnv_bn NẰM TRONG tập vai trò → đúng vai trò (không phải thay
+thế). Trường Ảnh đại diện validate client-side, không phụ thuộc đơn vị.
+
+Evidence web: ../../bug-reports/image/BUG-CKBMHDLCTT_01-anh-dai-dien-accepts-png.png ;
+              BUG-CKBMHDLCTT_01-detail-anh-dai-dien-persisted.png
+Condition table: ../../cond/CKBMHDLCTT_01.md
+Sheet: dòng 115, P="Reject", R=note "Không phải bug (bản hiện tại)...".

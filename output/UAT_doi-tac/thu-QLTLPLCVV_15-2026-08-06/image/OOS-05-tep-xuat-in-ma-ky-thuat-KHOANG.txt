@@ -1,0 +1,62 @@
+PHÁT HIỆN NGOÀI PHẠM VI 05 — tệp xuất in mã kỹ thuật "KHOANG" thay cho tên kỳ tiếng Việt
+Env : https://18.143.165.120.nip.io   Bản dựng: V1.0.8   Ngày đo: 2026-08-06 14:25 và 14:28
+Tài khoản đo: cbnv_tw_03. Không tạo/sửa/xoá bản ghi nào.
+
+================================================================================
+1. HIỆN TƯỢNG
+================================================================================
+
+Ở màn Báo cáo thống kê, chọn Kỳ báo cáo = "Khoảng tùy chọn" rồi xuất tệp. Dòng "Kỳ báo cáo" ở
+đầu tệp in ra mã kỹ thuật KHOANG thay vì chữ tiếng Việt:
+
+    Tệp Excel (BaoCaoChiPhiTheoThoiGian_20260806_1425.xlsx):
+        "Kỳ báo cáo: KHOANG (từ 01/06/2026 đến 30/06/2026)"
+    Tệp PDF (BaoCaoChiPhiTheoThoiGian_20260806_1428.pdf):
+        "Kỳ báo cáo: KHOANG (từ 01/06/2026 đến 30/06/2026)"
+
+Các kỳ khác in đúng chữ tiếng Việt:
+    Kỳ Năm   → "Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)"
+    Kỳ Tháng → "Kỳ báo cáo: Tháng (từ 01/01/2026 đến 31/12/2026)"
+
+Trên MÀN HÌNH thì hiện đúng chữ tiếng Việt ("Kỳ: Khoảng"). Chỉ tệp xuất bị lộ mã.
+
+⇒ Chỉ riêng giá trị "Khoảng tùy chọn" thiếu bước đổi mã sang chữ hiển thị, nên tệp gửi ra ngoài
+mang một chuỗi kỹ thuật của hệ thống.
+
+================================================================================
+2. ĐẶC TẢ ĐÒI GÌ
+================================================================================
+
+Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/srs-fr-11-bao-cao.md
+- :1092 — tệp xuất phải chèn vào phần đầu: tên báo cáo, KỲ, đơn vị, ngày tạo.
+- :1048 — bộ lọc kỳ trên màn gồm: Tuần / Tháng / Quý / Năm / Khoảng tùy chọn (đây là tên hiển
+  thị cho người dùng).
+- :86  — tệp PDF theo khung văn bản hành chính Thông tư 17/2025. Văn bản hành chính gửi ra ngoài
+  không nên mang chuỗi mã nội bộ của hệ thống.
+
+================================================================================
+3. HỆ QUẢ NGƯỜI DÙNG NHÌN THẤY
+================================================================================
+
+Tệp báo cáo (nhất là bản PDF theo khung hành chính, có quốc hiệu và chỗ ký đóng dấu) khi in ra
+hoặc gửi đi sẽ có dòng "Kỳ báo cáo: KHOANG" — người nhận không hiểu, và trông như lỗi kỹ thuật
+lọt ra văn bản chính thức.
+
+================================================================================
+4. CÁCH TÁI HIỆN NGẮN
+================================================================================
+
+1. Đăng nhập cbnv_tw_03. Vào Báo cáo thống kê.
+2. Loại báo cáo "BC Chi phí theo thời gian" (hoặc loại khác có dữ liệu), Kỳ báo cáo = "Khoảng
+   tùy chọn", nhập 01/06/2026 → 30/06/2026, Đơn vị Toàn quốc. Bấm [Xem báo cáo].
+3. Bấm [Xuất Excel] → mở tệp, đọc dòng thứ hai ở đầu sheet.
+4. Bấm [Xuất PDF] → [Xuất file] → mở tệp, đọc dòng "Kỳ báo cáo" ở đầu trang.
+5. Đối chiếu: đổi Kỳ sang "Năm" rồi xuất lại — dòng đó in "Năm", đúng chữ tiếng Việt.
+
+================================================================================
+5. TỆP LIÊN QUAN
+================================================================================
+
+image/CPCTHTTTG_05-xuat-excel-dang2-khoang-thang6.xlsx — tệp Excel có dòng "Kỳ báo cáo: KHOANG"
+image/CPCTHTTTG_06-xuat-pdf-dang2-khoang-thang6.pdf    — tệp PDF có dòng "Kỳ báo cáo: KHOANG"
+image/CPCTHTTTG_05-xuat-excel-dang1.xlsx               — tệp cùng màn, kỳ Năm, in đúng chữ "Năm"

@@ -1,0 +1,6 @@
+✅ PASS sau Dev fix (14/08/2026) — UI DEV, `cbnv_tw_02`, OTP qua MailHog.
+- Reopen cũ là false-positive: `VV-BTP-TW-20260712-005` chỉ có thao tác thêm tài liệu `Bổ sung hồ sơ`, không từng qua trạng thái `Yêu cầu bổ sung`, nên không thuộc tử số.
+- Dữ liệu fresh `VV-BTP-TW-20260814-002`: lịch sử UI có `Yêu cầu bổ sung` 17:14 → `Hoàn thành` 17:16 ngày 14/08/2026.
+- Bộ lọc `2026 / Cả năm / Toàn quốc / Tất cả`: `24` vụ hoàn thành; tỷ lệ bổ sung `4,2%`, khớp `1/24 = 4,166…%` làm tròn. Danh sách 24 kết quả có hồ sơ fresh trên.
+→ Dev fix đạt, khép bug.
+Ảnh UI: `image/05-dashboard-after-apply-pass.png`; `image/04-fresh-case-full-history.png`; `image/07-completed-list-fresh-row.png`; `image/08-completed-list-total-24.png`.

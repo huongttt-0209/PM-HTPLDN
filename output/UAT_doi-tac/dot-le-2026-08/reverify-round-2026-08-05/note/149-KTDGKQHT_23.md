@@ -1,0 +1,35 @@
+## [UAT_TGPL Doanh Nghiệp-tuần 2] row 149 — KTDGKQHT_23 — S1
+Tên chức năng: 
+Tác nhân: 
+Mô tả: Tỷ lệ chuyên cần ở tab "Kết quả" không cập nhật lại khi lịch học của khóa được thêm buổi sau lúc điểm danh — mẫu số đóng băng ở số buổi tại thời điểm lưu điểm danh gần nhất
+Điều kiện: 1. Đăng nhập tài khoản Cán bộ nghiệp vụ đúng đơn vị của khóa học
+2. Khóa học ở trạng thái "Đang diễn ra", có học viên trong danh sách kết quả
+3. Đã điểm danh ít nhất 1 buổi, sau đó lịch học được thêm buổi mới
+Dữ liệu đầu vào: Khóa học KH-20260509-006 "Luật đất đai cập nhật 2024 - R9" (Đang diễn ra, 6 học viên).
+Lịch học ban đầu 3 buổi (15/02, 16/02, 17/02/2026). Điểm danh 1 buổi (15/02): 2 học viên "Có mặt", 2 "Vắng có phép", 2 "Vắng không phép".
+Sau đó thêm buổi thứ 4 (17/02/2026 14:00-16:00) vào tab "Lịch học".
+Các bước: 1. Chọn menu "Đào tạo, tập huấn" -> "Khóa học", mở chi tiết khóa học đang diễn ra
+2. Vào tab "Lịch học", thêm cho đủ 3 buổi
+3. Vào tab "Điểm danh", chọn buổi 1, chấm điểm danh cho các học viên rồi nhấn [Lưu điểm danh]
+4. Vào tab "Kết quả", đọc ô "Chuyên cần" — ghi nhận mẫu số đang là 3
+5. Quay lại tab "Lịch học", thêm buổi thứ 4
+6. Tải lại trang (bỏ bộ nhớ đệm), mở lại tab "Kết quả" và đọc lại ô "Chuyên cần"
+KQ mong đợi: Mẫu số của tỷ lệ chuyên cần phải là TỔNG SỐ BUỔI HIỆN CÓ CỦA KHÓA (4 buổi), theo FR-III-05 (UC24) §Quy tắc nghiệp vụ BR-KQ-02 (srs-fr-03-dao-tao.md dòng 2251): tỷ lệ chuyên cần = (số buổi Có mặt + số buổi Vắng có phép) / tổng số buổi x 100.
+Với dữ liệu trên, sau khi thêm buổi 4 thì học viên "Có mặt" 1 buổi phải là 1/4 = 25.00%, học viên "Vắng có phép" 1 buổi cũng 25.00%.
+KQ thực tế (l1): Sau khi thêm buổi thứ 4, tab "Kết quả" của 5/6 học viên vẫn hiển thị mẫu số 3 (ví dụ "1/3 (33.33%)", "0/3 (33.33%)") trong khi tab "Lịch học" của chính khóa đó đã có 4 buổi. Đã tải lại trang bỏ bộ nhớ đệm trước khi đọc.
+Chỉ học viên nào được lưu điểm danh thêm một lần nữa sau đó mới nhảy sang mẫu số 4: học viên 1 hiện "1/4 (50.00%)" nằm ngay cạnh học viên 2 "1/3 (33.33%)" trong cùng một bảng, cùng một khóa học.
+Đã đo bằng 2 cách độc lập, cùng kết quả: (1) giao diện tab "Kết quả"; (2) mở đọc nội dung tệp DOCX xuất từ nút [Xuất DOCX] — cột "Tổng số buổi" ghi 4 cho học viên 1 và 3 cho 5 học viên còn lại.
+Tác động: ngưỡng chuyên cần tối thiểu mặc định 80%. Khi cán bộ bổ sung buổi học sau khi đã điểm danh, tỷ lệ chuyên cần bị tính trên mẫu số cũ nên cao hơn thực tế, dẫn tới kết luận Đạt/Không đạt sai. Trong cùng một bảng còn xuất hiện hai mẫu số khác nhau cho cùng một khóa.
+Môi trường: bản dựng V1.0.5, gói giao diện index-DpIXRGaI.js, tài khoản cbnv_tw.
+Trạng thái 1: Fail | P dev fix1: dev done | Q Verify: Open
+KQ thực tế lần 2: 
+Trạng thái 2:  | W dev fix2:  | X Verify2: 
+--- NOTE (R: DEV phản hồi lần 1) ---
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi do tổ kiểm thử phát hiện thêm ngày 04/08/2026 khi soát lại dòng KTDGKQHT_20, không nằm trong phạm vi phiếu nào của đối tác nên mở dòng riêng.
+- Dòng KTDGKQHT_20 (mẫu số lấy số buổi đã điểm danh) đã hết lỗi. Phần còn lại ở đây là trường hợp khác: mẫu số được chốt cứng tại thời điểm lưu điểm danh và không tính lại khi lịch học của khóa thay đổi.
+- Web đang sai: khóa có 4 buổi trong tab "Lịch học" nhưng tab "Kết quả" vẫn tính chuyên cần trên 3 buổi cho 5/6 học viên. Cùng một bảng đang hiện hai mẫu số khác nhau (1/4 và 1/3).
+- Đúng theo đặc tả phải là: FR-III-05 (UC24) §Quy tắc nghiệp vụ BR-KQ-02 (srs-fr-03-dao-tao.md dòng 2251) — tỷ lệ chuyên cần = (số buổi Có mặt + số buổi Vắng có phép) / tổng số buổi × 100, tức mẫu số phải bám theo tổng số buổi hiện có của khóa.
+- Đã đo bằng 2 cách độc lập, cùng kết quả: giao diện tab "Kết quả"; nội dung tệp DOCX xuất ra (cột "Tổng số buổi").
+- Mức độ ảnh hưởng: ngưỡng chuyên cần tối thiểu mặc định 80% nên tỷ lệ tính trên mẫu số cũ làm học viên vượt ngưỡng oan, sai kết luận Đạt/Không đạt của khóa.
+- Dữ liệu kiểm tra: khóa KH-20260509-006 (Đang diễn ra, 6 học viên, lịch học 4 buổi, đã điểm danh 1 buổi cho cả 6 và thêm buổi 2 cho riêng học viên 1). Tài khoản cbnv_tw. Bản dựng V1.0.5. Bug ID: BUG-KTDGKQHT_23.

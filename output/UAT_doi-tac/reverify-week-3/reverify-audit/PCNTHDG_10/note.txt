@@ -1,0 +1,4 @@
+Không phải bug.
+- Kiểm tra: Tại tab Phân công, thêm "Cán bộ Nghiệp vụ Demo" (Trưởng nhóm) → thành công (Tổng: 1 người). Mở "Thêm người đánh giá" lần 2, chọn LẠI đúng người đó → bấm Thêm mới → hệ thống TỪ CHỐI với thông báo "Người đánh giá đã được phân công trong kế hoạch này", không thêm trùng (Tổng vẫn 1 người).
+- Chuẩn: SRS quy định trình phê duyệt yêu cầu "không trùng lặp" người đánh giá. Hệ thống đã chặn trùng ngay tại bước thêm.
+- Kết luận: Không tái hiện được lỗi "hệ thống hiển thị thông báo thành công / cho phép phân công trùng người". App chặn đúng.

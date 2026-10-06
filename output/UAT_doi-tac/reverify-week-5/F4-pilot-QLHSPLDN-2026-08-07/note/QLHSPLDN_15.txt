@@ -1,0 +1,5 @@
+⚠️ CẦN BA XÁC NHẬN: Đặc tả im lặng về việc xuất Excel khi bộ lọc ra 0 bản ghi nên chưa có chuẩn để chấm.
+WEB HIỆN TẠI: Lọc ra 0 bản ghi rồi bấm Xuất Excel thì hệ thống chặn xuất và báo đúng nguyên văn "Không có dữ liệu để xuất", không tạo tệp rỗng.
+KỲ VỌNG ↔ SRS: Đối tác kỳ vọng đúng câu đó, còn FR-X.1-04 đặc tả khối Xuất Excel (srs-fr-12-tv-chuyen-sau.md:657-665) và bảng lỗi E1-E7 (:693-701) đều không có mã nào cho tình huống xuất khi bộ lọc rỗng, trong khi module Kho câu hỏi đã chốt mã INF-KHO-XL-01 với đúng câu này (srs-fr-13-tv-nhanh.md:155).
+ĐÃ ĐO: Tài khoản cbnv_tw_02, doanh nghiệp DN-HNI-0001 thẻ Hồ sơ pháp lý; lọc từ khóa không khớp thì bảng còn 0 dòng, bấm Xuất Excel bắt được đúng 1 thông báo "Không có dữ liệu để xuất", đối chứng 0 lượt gọi máy chủ và không tệp nào được tạo.
+CÂU HỎI BA: Hồ sơ pháp lý DN có áp cùng hành vi chặn xuất kèm thông báo như Kho câu hỏi không, và câu chữ chính thức là gì?

@@ -1,0 +1,526 @@
+{
+  "run_id": "20260626-002336",
+  "auth": {
+    "tw": {
+      "login_status": 200,
+      "otp_status": 200
+    },
+    "qtht": {
+      "login_status": 200,
+      "otp_status": 200
+    }
+  },
+  "tests": {
+    "create_DN012_OVERRIDE_attempt1": {
+      "status": 201,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": true,
+        "data": {
+          "id": "995174c9-306a-4009-bd07-fabc4f10e7e3",
+          "nguoiTaoId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "nguoiCapNhatId": null,
+          "ngayTao": "2026-06-25T17:23:37.750Z",
+          "ngayCapNhat": "2026-06-25T17:23:37.750Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "version": 1,
+          "maDoanhNghiep": "DN-HNI-0012",
+          "tenDoanhNghiep": "QA Slow DN012_OVERRIDE 20260626-002336",
+          "tenVietTat": null,
+          "maSoThue": "7008217628",
+          "giayCnDkkd": null,
+          "ngayCapDkkd": null,
+          "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+          "diaChi": "QA Slow 20260626-002336",
+          "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+          "dienThoai": "0901234567",
+          "email": "qa-slow-DN012_OVERRIDE-20260626-002336@example.test",
+          "fax": null,
+          "nganhNghe": "CONG_NGHIEP",
+          "nguoiDaiDien": "Nguyen QA",
+          "chucVuDaiDien": null,
+          "doanhThu": "1000000000",
+          "soLaoDong": 5,
+          "soLaoDongNu": 0,
+          "soLaoDongKhuyetTat": 0,
+          "laNuLamChu": false,
+          "tongSoVuViec": 0,
+          "tongChiPhiHoTro": "0.00",
+          "ghiChu": null,
+          "quyMo": "VUA",
+          "tongNguonVon": "100000000",
+          "laCongKhai": false
+        },
+        "meta": null
+      }
+    },
+    "create_EDITBASE_attempt1": {
+      "status": 201,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": true,
+        "data": {
+          "id": "fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+          "nguoiTaoId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "nguoiCapNhatId": null,
+          "ngayTao": "2026-06-25T17:23:39.295Z",
+          "ngayCapNhat": "2026-06-25T17:23:39.295Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "version": 1,
+          "maDoanhNghiep": "DN-HNI-0013",
+          "tenDoanhNghiep": "QA Slow EDITBASE 20260626-002336",
+          "tenVietTat": null,
+          "maSoThue": "7008219175",
+          "giayCnDkkd": null,
+          "ngayCapDkkd": null,
+          "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+          "diaChi": "QA Slow 20260626-002336",
+          "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+          "dienThoai": "0901234567",
+          "email": "qa-slow-EDITBASE-20260626-002336@example.test",
+          "fax": null,
+          "nganhNghe": "CONG_NGHIEP",
+          "nguoiDaiDien": "Nguyen QA",
+          "chucVuDaiDien": null,
+          "doanhThu": "1000000000",
+          "soLaoDong": 5,
+          "soLaoDongNu": 0,
+          "soLaoDongKhuyetTat": 0,
+          "laNuLamChu": false,
+          "tongSoVuViec": 0,
+          "tongChiPhiHoTro": "0.00",
+          "ghiChu": null,
+          "quyMo": "SIEU_NHO",
+          "tongNguonVon": "100000000",
+          "laCongKhai": false
+        },
+        "meta": null
+      }
+    },
+    "TC-DN-301_update_v1": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+      "body": {
+        "success": true,
+        "data": {
+          "id": "fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+          "nguoiTaoId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "nguoiCapNhatId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "ngayTao": "2026-06-25T17:23:39.295Z",
+          "ngayCapNhat": "2026-06-25T17:23:39.340Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "seqId": "70",
+          "version": 2,
+          "maDoanhNghiep": "DN-HNI-0013",
+          "tenDoanhNghiep": "QA Slow First 20260626-002336",
+          "tenVietTat": null,
+          "maSoThue": "7008219175",
+          "giayCnDkkd": null,
+          "ngayCapDkkd": null,
+          "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+          "diaChi": "QA Slow 20260626-002336",
+          "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+          "dienThoai": "0901234567",
+          "email": "qa-slow-EDITBASE-20260626-002336@example.test",
+          "fax": null,
+          "nganhNghe": "CONG_NGHIEP",
+          "nguoiDaiDien": "Nguyen QA",
+          "chucVuDaiDien": null,
+          "doanhThu": "1000000000",
+          "soLaoDong": 5,
+          "soLaoDongNu": 0,
+          "soLaoDongKhuyetTat": 0,
+          "laNuLamChu": false,
+          "tongSoVuViec": 0,
+          "tongChiPhiHoTro": "0.00",
+          "ghiChu": null,
+          "quyMo": "SIEU_NHO",
+          "tongNguonVon": "100000000",
+          "laCongKhai": false
+        },
+        "meta": null
+      }
+    },
+    "TC-DN-301_update_stale": {
+      "status": 409,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-LOCK-409",
+          "message": "Dữ liệu đã bị thay đổi bởi người dùng khác. Vui lòng tải lại.",
+          "timestamp": "2026-06-25T17:23:39.388Z",
+          "requestId": "119ef029-b080-4fa5-afbc-fd827dae8f8a"
+        }
+      }
+    },
+    "TC-DN-304_cur": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+      "body": {
+        "success": true,
+        "data": {
+          "id": "fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+          "nguoiTaoId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "nguoiCapNhatId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "ngayTao": "2026-06-25T17:23:39.295Z",
+          "ngayCapNhat": "2026-06-25T17:23:39.340Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "seqId": "70",
+          "version": 2,
+          "maDoanhNghiep": "DN-HNI-0013",
+          "tenDoanhNghiep": "QA Slow First 20260626-002336",
+          "tenVietTat": null,
+          "maSoThue": "7008219175",
+          "giayCnDkkd": null,
+          "ngayCapDkkd": null,
+          "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+          "diaChi": "QA Slow 20260626-002336",
+          "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+          "dienThoai": "0901234567",
+          "email": "qa-slow-EDITBASE-20260626-002336@example.test",
+          "fax": null,
+          "nganhNghe": "CONG_NGHIEP",
+          "nguoiDaiDien": "Nguyen QA",
+          "chucVuDaiDien": null,
+          "doanhThu": "1000000000.00",
+          "soLaoDong": 5,
+          "soLaoDongNu": 0,
+          "soLaoDongKhuyetTat": 0,
+          "laNuLamChu": false,
+          "tongSoVuViec": 0,
+          "tongChiPhiHoTro": "0.00",
+          "ghiChu": null,
+          "quyMo": "SIEU_NHO",
+          "tongNguonVon": "100000000.00",
+          "laCongKhai": false,
+          "linhVucIds": []
+        },
+        "meta": null
+      }
+    },
+    "TC-DN-304_update_xss": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+      "body": {
+        "success": true,
+        "data": {
+          "id": "fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+          "nguoiTaoId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "nguoiCapNhatId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "ngayTao": "2026-06-25T17:23:39.295Z",
+          "ngayCapNhat": "2026-06-25T17:23:39.448Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "seqId": "70",
+          "version": 3,
+          "maDoanhNghiep": "DN-HNI-0013",
+          "tenDoanhNghiep": "<script>alert(1)</script>",
+          "tenVietTat": null,
+          "maSoThue": "7008219175",
+          "giayCnDkkd": null,
+          "ngayCapDkkd": null,
+          "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+          "diaChi": "QA Slow 20260626-002336",
+          "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+          "dienThoai": "0901234567",
+          "email": "qa-slow-EDITBASE-20260626-002336@example.test",
+          "fax": null,
+          "nganhNghe": "CONG_NGHIEP",
+          "nguoiDaiDien": "Nguyen QA",
+          "chucVuDaiDien": null,
+          "doanhThu": "1000000000.00",
+          "soLaoDong": 5,
+          "soLaoDongNu": 0,
+          "soLaoDongKhuyetTat": 0,
+          "laNuLamChu": false,
+          "tongSoVuViec": 0,
+          "tongChiPhiHoTro": "0.00",
+          "ghiChu": null,
+          "quyMo": "SIEU_NHO",
+          "tongNguonVon": "100000000.00",
+          "laCongKhai": false
+        },
+        "meta": null
+      }
+    },
+    "TC-DN-304_detail_after": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+      "body": {
+        "success": true,
+        "data": {
+          "id": "fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+          "nguoiTaoId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "nguoiCapNhatId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+          "ngayTao": "2026-06-25T17:23:39.295Z",
+          "ngayCapNhat": "2026-06-25T17:23:39.448Z",
+          "donViId": "00000000-0000-4000-8000-000000000001",
+          "seqId": "70",
+          "version": 3,
+          "maDoanhNghiep": "DN-HNI-0013",
+          "tenDoanhNghiep": "<script>alert(1)</script>",
+          "tenVietTat": null,
+          "maSoThue": "7008219175",
+          "giayCnDkkd": null,
+          "ngayCapDkkd": null,
+          "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+          "diaChi": "QA Slow 20260626-002336",
+          "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+          "dienThoai": "0901234567",
+          "email": "qa-slow-EDITBASE-20260626-002336@example.test",
+          "fax": null,
+          "nganhNghe": "CONG_NGHIEP",
+          "nguoiDaiDien": "Nguyen QA",
+          "chucVuDaiDien": null,
+          "doanhThu": "1000000000.00",
+          "soLaoDong": 5,
+          "soLaoDongNu": 0,
+          "soLaoDongKhuyetTat": 0,
+          "laNuLamChu": false,
+          "tongSoVuViec": 0,
+          "tongChiPhiHoTro": "0.00",
+          "ghiChu": null,
+          "quyMo": "SIEU_NHO",
+          "tongNguonVon": "100000000.00",
+          "laCongKhai": false,
+          "linhVucIds": []
+        },
+        "meta": null
+      }
+    },
+    "TC-DN-PERM-401_audit_update": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/audit-logs?entityType=DOANH_NGHIEP&entityId=fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36&limit=20",
+      "body": {
+        "success": true,
+        "data": [
+          {
+            "id": "3ddaf362-9367-4fe5-a074-891e36f8c6b0",
+            "entityType": "DOANH_NGHIEP",
+            "entityId": "fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+            "hanhDong": "UPDATE",
+            "nguoiThucHienId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T17:23:39.460Z",
+            "ipAddress": "::ffff:127.0.0.1",
+            "endpoint": "PATCH /api/v1/doanh-nghieps/fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+            "responseCode": 200,
+            "sessionId": "6648691f-f77e-439a-bac9-8742550f238d",
+            "module": "DOANH_NGHIEP",
+            "nguoiThucHienUsername": "cb_nv_tw_01",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 01",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          },
+          {
+            "id": "536de135-14d9-46dd-9e45-46b9e2dddb18",
+            "entityType": "DOANH_NGHIEP",
+            "entityId": "fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+            "hanhDong": "UPDATE",
+            "nguoiThucHienId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T17:23:39.387Z",
+            "ipAddress": "::ffff:127.0.0.1",
+            "endpoint": "PATCH /api/v1/doanh-nghieps/fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+            "responseCode": 409,
+            "sessionId": "6648691f-f77e-439a-bac9-8742550f238d",
+            "module": "DOANH_NGHIEP",
+            "nguoiThucHienUsername": "cb_nv_tw_01",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 01",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          },
+          {
+            "id": "e6cf9a2f-4579-4948-8bb2-58cca2ad06db",
+            "entityType": "DOANH_NGHIEP",
+            "entityId": "fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+            "hanhDong": "UPDATE",
+            "nguoiThucHienId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T17:23:39.353Z",
+            "ipAddress": "::ffff:127.0.0.1",
+            "endpoint": "PATCH /api/v1/doanh-nghieps/fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+            "responseCode": 200,
+            "sessionId": "6648691f-f77e-439a-bac9-8742550f238d",
+            "module": "DOANH_NGHIEP",
+            "nguoiThucHienUsername": "cb_nv_tw_01",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 01",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          },
+          {
+            "id": "cc191c8c-f437-4df8-af87-c2857c9b097a",
+            "entityType": "DOANH_NGHIEP",
+            "entityId": "fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+            "hanhDong": "CREATE",
+            "nguoiThucHienId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+            "systemActor": null,
+            "consumerId": null,
+            "thoiGian": "2026-06-25T17:23:39.308Z",
+            "ipAddress": "::ffff:127.0.0.1",
+            "endpoint": "POST /api/v1/doanh-nghieps",
+            "responseCode": 201,
+            "sessionId": "6648691f-f77e-439a-bac9-8742550f238d",
+            "module": "DOANH_NGHIEP",
+            "nguoiThucHienUsername": "cb_nv_tw_01",
+            "nguoiThucHienHoTen": "CB Nghiệp vụ TW 01",
+            "donViId": "00000000-0000-4000-8000-000000000001",
+            "donViTen": "Cục Bổ trợ tư pháp - Bộ Tư pháp",
+            "nguoiThucHienVaiTro": "Cán bộ Nghiệp vụ TW"
+          }
+        ],
+        "meta": {
+          "page": 1,
+          "pageSize": 50,
+          "total": 4,
+          "totalPages": 1
+        }
+      }
+    },
+    "TC-DN-PERM-403_patch": {
+      "status": 404,
+      "url": "http://103.172.236.130:3000/api/v1/audit-logs/3ddaf362-9367-4fe5-a074-891e36f8c6b0",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-SYS-00-04-01",
+          "message": "Cannot PATCH /api/v1/audit-logs/3ddaf362-9367-4fe5-a074-891e36f8c6b0",
+          "timestamp": "2026-06-25T17:23:39.580Z",
+          "requestId": "b4b02564-2365-4ff1-80c6-25eb227bedce"
+        }
+      }
+    },
+    "TC-DN-PERM-403_delete": {
+      "status": 404,
+      "url": "http://103.172.236.130:3000/api/v1/audit-logs/3ddaf362-9367-4fe5-a074-891e36f8c6b0",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-SYS-00-04-01",
+          "message": "Cannot DELETE /api/v1/audit-logs/3ddaf362-9367-4fe5-a074-891e36f8c6b0",
+          "timestamp": "2026-06-25T17:23:39.600Z",
+          "requestId": "3f0adc78-d8db-45ba-a5e9-d602a1fabdfa"
+        }
+      }
+    },
+    "create_DUP1_attempt1": {
+      "status": 409,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-SYS-00-01",
+          "message": "Mã doanh nghiệp vừa bị trùng do thao tác đồng thời. Vui lòng thử lại.",
+          "timestamp": "2026-06-25T17:23:41.136Z",
+          "requestId": "eb84eae8-e0b1-4078-a7e5-016079c4be09"
+        }
+      }
+    },
+    "create_DUP1_attempt2": {
+      "status": 409,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-SYS-00-01",
+          "message": "Mã doanh nghiệp vừa bị trùng do thao tác đồng thời. Vui lòng thử lại.",
+          "timestamp": "2026-06-25T17:23:42.408Z",
+          "requestId": "d11160bd-c30f-4b52-afa1-1d2d21d96540"
+        }
+      }
+    },
+    "create_DUP1_attempt3": {
+      "status": 409,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-SYS-00-01",
+          "message": "Mã doanh nghiệp vừa bị trùng do thao tác đồng thời. Vui lòng thử lại.",
+          "timestamp": "2026-06-25T17:23:43.647Z",
+          "requestId": "f40a7936-1685-4a18-94a0-b6045f7dd08a"
+        }
+      }
+    },
+    "create_DUP2_attempt1": {
+      "status": 409,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-SYS-00-01",
+          "message": "Mã doanh nghiệp vừa bị trùng do thao tác đồng thời. Vui lòng thử lại.",
+          "timestamp": "2026-06-25T17:23:46.418Z",
+          "requestId": "d5cc16b7-40af-4b17-a3b4-17cbae2c13e4"
+        }
+      }
+    },
+    "create_DUP2_attempt2": {
+      "status": 409,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-SYS-00-01",
+          "message": "Mã doanh nghiệp vừa bị trùng do thao tác đồng thời. Vui lòng thử lại.",
+          "timestamp": "2026-06-25T17:23:47.666Z",
+          "requestId": "2e3da2a3-20e6-4303-ba04-671fc16679a1"
+        }
+      }
+    },
+    "create_DUP2_attempt3": {
+      "status": 409,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-STATE-SYS-00-01",
+          "message": "Mã doanh nghiệp vừa bị trùng do thao tác đồng thời. Vui lòng thử lại.",
+          "timestamp": "2026-06-25T17:23:48.918Z",
+          "requestId": "607f5321-c4c9-436a-96ca-716776c2e094"
+        }
+      }
+    },
+    "TC-DN-PERM-203_statuses": [
+      409,
+      409
+    ],
+    "cleanup_DN012_OVERRIDE": {
+      "status": 204,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/995174c9-306a-4009-bd07-fabc4f10e7e3",
+      "body": null
+    },
+    "cleanup_EDITBASE": {
+      "status": 204,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+      "body": null
+    }
+  },
+  "created": [
+    {
+      "label": "DN012_OVERRIDE",
+      "id": "995174c9-306a-4009-bd07-fabc4f10e7e3",
+      "mst": "7008217628"
+    },
+    {
+      "label": "EDITBASE",
+      "id": "fa2b59f4-4aa8-4a34-bcb3-2c4ccbe1bf36",
+      "mst": "7008219175"
+    }
+  ],
+  "verdicts": {
+    "TC-DN-012": "PASS",
+    "TC-DN-301": "PASS",
+    "TC-DN-304": "PASS",
+    "TC-DN-PERM-401": "PASS",
+    "TC-DN-PERM-403": "PASS",
+    "TC-DN-PERM-203": "FAIL",
+    "TC-DN-PERM-606": "FAIL"
+  }
+}

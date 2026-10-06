@@ -1,0 +1,45 @@
+⚠️ ĐẠT PHẦN ĐO ĐƯỢC — còn một ý cần nghiệp vụ chốt (KHÔNG chặn bàn giao).
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh; ô phản hồi ghi "Chưa thực hiện được do uc GKQTHCTHTPL_01 lỗi"), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-eWHwDgt2.js (bản lên lúc 09:11 ngày 07/08/2026), đo lúc 13:30-13:45 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_05 - đúng vai trò và đúng cấp Trung ương mà phiếu yêu cầu. Đội dùng tài khoản số 05 thay cho số 03 vì trong lúc đo có một tiến trình khác đăng nhập cùng tài khoản số 03 làm phiên bị ngắt; hai tài khoản cùng vai trò, cùng cấp, cùng đơn vị Cục Bổ trợ tư pháp nên phạm vi dữ liệu không đổi. Riêng phần Nhật ký hệ thống phải dùng tài khoản quản trị để ĐỌC, vì tài khoản nghiệp vụ không có quyền xem nhật ký (hệ thống trả đúng thông báo không đủ quyền - đây là phân quyền đúng, không phải lỗi); mọi thao tác của phiếu đều do tài khoản nghiệp vụ thực hiện.
+
+TIỀN ĐỀ (kiểm sống ngay trước khi đo, lúc 13:14)
+
+Đợt DOT-THBC01-UAT (kỳ Sơ bộ 6 tháng, biểu mẫu 21a) có đúng hai đơn vị đã gửi báo cáo lên Trung ương: Bộ Kế hoạch và Đầu tư (gửi 20/07/2026) và Sở Tư pháp An Giang (gửi 22/07/2026). Trạng thái trước khi bấm: đợt đang ở "Tạo đợt"; hai đơn vị đều "Đã nộp"; hai bản báo cáo đều "Đã gửi TW".
+
+ĐÃ ĐẠT - 3 phần
+
+1) Hệ thống LƯU ĐƯỢC bản ghi báo cáo tổng hợp toàn quốc. Trên màn "Tổng hợp báo cáo toàn quốc", chọn hai báo cáo của hai đơn vị, bấm "Tổng hợp (2)" để hệ thống gợi ý số liệu, nhập câu nhận xét có mốc giờ riêng để không nhìn nhầm bản ghi cũ, rồi bấm "Lưu tổng hợp" lúc 13:30:50. Hệ thống tạo mới một bản báo cáo mã TH-TW-1786084251126, đúng loại "tổng hợp Trung ương", thuộc đúng đợt DOT-THBC01-UAT, đơn vị đứng tên là Cục Bổ trợ tư pháp (cấp Trung ương), mang đủ 13 chỉ tiêu đúng bằng số trên màn lúc bấm (12, 4, 3, 7, 7, 37, 29, 7, 14, 8, 680.000.000, 160.000.000, 30.000.000) và đúng câu nhận xét đã nhập. Kiểm lại bằng đường thứ hai: TẢI LẠI TOÀN BỘ TRANG bằng địa chỉ rồi đọc lại từ máy chủ - đợt đọc lại được ở trạng thái "Đã tổng hợp", hai báo cáo nguồn cũng "Đã tổng hợp"; đọc thêm bằng một phiên đăng nhập khác hẳn cũng cho kết quả y hệt; và tệp Excel do chính máy chủ sinh sau đó chứa đúng 13 con số đã lưu. Tức dữ liệu nằm ở máy chủ, không phải chỉ hiện trên màn. Yêu cầu của đặc tả tại srs-fr-15-ct-htpldn.md:1004.
+
+Xin nói rõ một giới hạn: bản dựng hiện chưa có chức năng mở lại bản báo cáo tổng hợp để xem, nên phép đọc lại được thực hiện gián tiếp qua bốn nguồn độc lập kể trên; không nguồn nào mâu thuẫn.
+
+2) Hệ thống LƯU VẾT thao tác. Nhật ký hệ thống có đúng một mục cho lượt bấm này: hành động "TONG_HOP", đối tượng đúng là bản ghi vừa tạo, thời điểm 13:30:51 ngày 07/08/2026, người thực hiện cbnv_tw_05 - CB Nghiệp vụ - Trung ương #05, vai trò "Cán bộ Nghiệp vụ TW", đơn vị "Cục Bổ trợ tư pháp - Bộ Tư pháp", phân hệ "Đợt báo cáo". Đối chiếu chéo: mã đối tượng và thời điểm trong nhật ký trùng khít với mã bản ghi và thời điểm tạo mà máy chủ trả về ngay lúc bấm. Yêu cầu của đặc tả tại srs-fr-15-ct-htpldn.md:1007.
+
+3) Câu chữ thông báo ĐÚNG NGUYÊN VĂN như phiếu yêu cầu. Người dùng nhìn thấy "Đã tổng hợp báo cáo toàn quốc" - trùng khít từng chữ với chuỗi đặc tả quy định tại srs-fr-15-ct-htpldn.md:1032. Bộ bắt thông báo được cài trước thao tác và không lọc trùng: một lượt bấm sinh đúng một yêu cầu gửi đi và đúng một thông báo (hai nút hiển thị bắt được cách nhau 3 phần nghìn giây là khung ngoài và phần thân của cùng một thông báo), không có hiện tượng thông báo hiện hai lần.
+
+CẦN NGHIỆP VỤ CHỐT - sau khi lưu tổng hợp thì "cái gì" chuyển sang Đã tổng hợp
+
+CẦN BA CONFIRM: phiếu kỳ vọng "chuyển trạng thái các đợt báo cáo đã chọn: Đã gửi Trung ương sang Đã tổng hợp". Đặc tả quy định điều này ở cấp ĐỢT (srs-fr-15-ct-htpldn.md:1005, :1022, :1517) nhưng tự mâu thuẫn: đầu vào của chính chức năng lại là danh sách BÁO CÁO của từng đơn vị (:993); một đợt chỉ có duy nhất một trạng thái (:1368) trong khi phạm vi một đợt là khoảng 70-83 đơn vị (:1367, :1398) - tổng hợp vài đơn vị mà chuyển cả đợt thì các đơn vị chưa nộp bị coi là xong; còn danh sách trạng thái nộp của đơn vị (:1389) lại KHÔNG có giá trị "Đã tổng hợp" để mà chuyển.
+
+Hiện trạng đo được (trước và sau khi bấm Lưu tổng hợp): đợt chuyển từ "Tạo đợt" thẳng sang "Đã tổng hợp" - tức không đi qua bước "Đã gửi TW" như đặc tả mô tả, và cờ "đã gửi TW" của đợt vẫn để không; hai đơn vị giữ nguyên "Đã nộp"; hai bản báo cáo được chọn chuyển từ "Đã gửi TW" sang "Đã tổng hợp", còn báo cáo của đợt khác không bị đụng. Trên màn hình, cán bộ Trung ương thấy đợt dừng ở bước 6 "Đã tổng hợp" và hai dòng báo cáo đổi nhãn sang "Đã tổng hợp"; riêng bảng tiến độ nộp theo đơn vị vẫn ghi "Đã nộp".
+
+Nói cho rõ để không hiểu nhầm thành lỗi: ở phần người dùng quan sát được, hệ thống làm ĐÚNG kỳ vọng của phiếu - báo cáo đã chọn chuyển sang "Đã tổng hợp", đợt khác không bị ảnh hưởng. Điểm chưa khớp là đường đi trạng thái của đợt và việc đặc tả tự mâu thuẫn như trên.
+
+Câu hỏi cho nghiệp vụ: sau khi cán bộ Trung ương lưu tổng hợp, cái gì phải chuyển sang "Đã tổng hợp" - (a) cả đợt, kể cả khi mới tổng hợp một phần số đơn vị; (b) từng bản nộp của các đơn vị được chọn (nếu vậy xin bổ sung giá trị "Đã tổng hợp" vào danh sách trạng thái nộp của đơn vị); hay (c) chỉ bản ghi báo cáo tổng hợp của Trung ương mới mang trạng thái này? Trạng thái mà cán bộ nhìn thấy ở màn chi tiết đợt là của đơn vị mình hay của cả đợt? Và đợt có bắt buộc đi qua "Đã gửi TW" trước khi sang "Đã tổng hợp" không, vì thực tế đợt chưa từng đạt trạng thái đó. Đây là đề nghị làm rõ và bổ sung đặc tả, KHÔNG phải lỗi chặn bàn giao. (Cùng gốc với câu hỏi nghiệp vụ đội đã gửi ở bàn giao lô trước về ba trục trạng thái đợt - đơn vị - báo cáo.)
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Mục nhật ký của thao tác này để trống ba thông tin bối cảnh là địa chỉ máy, đường dẫn chức năng và mã phản hồi. Phiếu và đặc tả không đòi các thông tin này nên đội không chấm, nêu để dev cân nhắc bổ sung cho việc truy vết về sau.
+- Sau khi lưu, không có chức năng nào cho phép mở lại bản báo cáo tổng hợp toàn quốc để xem; màn chi tiết đợt vẫn hiển thị số liệu của một đơn vị (Bộ Kế hoạch và Đầu tư: 8, 3, 2...) chứ không phải số tổng vừa lưu (12, 4, 3...). Cán bộ chỉ thấy được số tổng qua tệp xuất. Phiếu không nhắc việc xem lại nên đội không chấm, đề nghị dev và nghiệp vụ xem lại.
+- Màn "Tổng hợp báo cáo toàn quốc" không có mục nào dẫn tới trên thanh menu bên trái, cũng không có nút dẫn từ màn "Đợt báo cáo" - đã nêu ở phiếu THBCTHCT_02.
+
+Ảnh bằng chứng:
+- Ngay sau khi bấm "Lưu tổng hợp": hai báo cáo được chọn đổi nhãn sang "Đã tổng hợp", báo cáo của đợt khác vẫn giữ "Đã gửi TW": https://drive.google.com/file/d/1S1_DK0Kw4HkBGgXgX3v1ILxc-9EUP57W/view?usp=drivesdk
+- Sau khi tải lại toàn bộ trang bằng địa chỉ: đợt dừng ở bước 6 "Đã tổng hợp", ô Trạng thái ghi "Đã tổng hợp", bảng tiến độ hai đơn vị vẫn "Đã nộp": https://drive.google.com/file/d/1M7omE-bcvFN3JpXqlVzrLHx_-AjELdxy/view?usp=drivesdk
+
+Lưu ý về dữ liệu: lượt đo này CÓ ghi xuống môi trường nội bộ - đợt DOT-THBC01-UAT chuyển từ "Tạo đợt" sang "Đã tổng hợp", hai báo cáo của Bộ Kế hoạch và Đầu tư và Sở Tư pháp An Giang chuyển từ "Đã gửi TW" sang "Đã tổng hợp", và hệ thống tạo mới bản báo cáo tổng hợp TH-TW-1786084251126. Đây là thao tác bắt buộc của chính phiếu này. Không đụng dữ liệu của bên nghiệm thu, không sửa thẳng cơ sở dữ liệu.
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.

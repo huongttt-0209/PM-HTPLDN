@@ -1,0 +1,31 @@
+⚠️ ĐÃ HẾT LỖI CŨ — còn một ý nhỏ cần nghiệp vụ chốt (KHÔNG chặn bàn giao).
+
+Đo lại trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-eWHwDgt2.js (bản lên lúc 09:11 ngày 07/08/2026), đo lúc 12:04–12:06 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_03. Đã đo dấu vân tay bản dựng cả trước (11:49) và sau (12:40) lượt đo, hai đầu trùng khít nên không có bản mới xen vào giữa. Lượt đo trước lúc 02:20 cùng ngày chạy trên bản cũ hơn 2 lần cập nhật.
+
+Tiền đề: khóa "Hội nghị đối thoại DN 2026" (KH-QAW7-HOINGHI) đang ở trạng thái Đang diễn ra, có 4 buổi học và 4 học viên đã duyệt; đo trên Buổi 4 ngày 11/05/2026 (14:00–16:00). Tệp nạp lấy từ chính nút "Tải mẫu điểm danh" của hệ thống, chỉ điền thêm cột trạng thái, gồm 5 dòng: 3 dòng hợp lệ và 2 dòng cố ý sai (1 dòng dùng học viên của khóa khác, 1 dòng ghi trạng thái "XYZ").
+
+ĐÃ ĐẠT — 3 phần
+
+1) Việc bên nghiệm thu nêu ban đầu (màn hình không hiện mã học viên nhưng nhập Excel lại bắt buộc có mã) đã được giải quyết đúng hướng nghiệp vụ đã chốt. Đặc tả sửa ngày 04/08/2026 ghi đích danh phiếu này (srs-fr-03-dao-tao.md:14) và quyết định KHÔNG thêm trường mã học viên, thay vào đó dùng cơ chế "Tải mẫu - điền - tải lên": hệ thống điền sẵn định danh học viên vào tệp mẫu, cán bộ không phải tự gõ (srs-fr-03-dao-tao.md:573). Kiểm tệp mẫu tải về: đã điền sẵn định danh cho cả 4 học viên, cột định danh được khóa và ẩn, đủ 6 cột đúng như đặc tả quy định (srs-fr-03-dao-tao.md:581), còn định danh buổi học nằm ở vùng thông tin ẩn của tệp chứ không phải cột từng dòng (srs-fr-03-dao-tao.md:583). Vì vậy đề nghị "thêm cột mã học viên" không còn cần thiết; nếu bên nghiệm thu vẫn muốn có cột đó thì đây là thay đổi đặc tả, cần nghiệp vụ quyết lại.
+
+2) Bản xem trước trước khi ghi dữ liệu đã có đúng đặc tả (srs-fr-03-dao-tao.md:593). Sau khi bấm kiểm tệp, hệ thống hiện khối "Kết quả kiểm tra - chưa nhập dữ liệu": Tổng dòng 5, Hợp lệ 3, Bỏ qua 0, Lỗi 2; tách hai thẻ "Hợp lệ (3)" và "Lỗi/Bỏ qua (2)"; mỗi dòng lỗi ghi rõ số dòng kèm lý do riêng - dòng 5 báo ERR-KQ-03 (học viên không thuộc khóa), dòng 6 báo ERR-KQ-04 (giá trị điểm danh không hợp lệ). Câu chữ hai thông báo lỗi này khớp đúng bảng xử lý lỗi trong đặc tả (srs-fr-03-dao-tao.md:637 và :638).
+
+3) Bước ghi dữ liệu - đây chính là chỗ hỏng của lượt đo trước - NAY ĐÃ CHẠY ĐƯỢC. Bấm "Xác nhận import (3 dòng hợp lệ)", hệ thống hiển thị báo cáo kết quả nạp "Import hoàn tất" với Đã nhập 3, Bỏ qua 0, Lỗi 2, kèm bảng chi tiết từng dòng. Không còn thông báo "Lỗi hệ thống, vui lòng thử lại sau" như lượt trước. Kiểm lại bằng đường thứ hai (đọc lại dữ liệu điểm danh của đúng Buổi 4 từ máy chủ, lúc 12:35 cùng ngày): đúng 3 học viên được ghi trạng thái, đúng 3 giá trị đã điền trong tệp (Có mặt, Vắng có phép, Vắng không phép); học viên ở dòng ghi sai trạng thái không được ghi giá trị nào; học viên thuộc khóa khác không xuất hiện. Tức đúng 3/3 dòng hợp lệ được ghi và 0/2 dòng lỗi bị lọt - khớp yêu cầu "chỉ ghi nhận dòng hợp lệ, bỏ qua dòng lỗi" của đặc tả (srs-fr-03-dao-tao.md:594, điều kiện nghiệm thu :652 và :654). Kiểm thêm trên giao diện sau khi tải lại trang: bảng điểm danh Buổi 4 hiện 4 học viên, 3 học viên có trạng thái mới, học viên ở dòng lỗi không có trạng thái nào - khớp với dữ liệu máy chủ.
+
+CẦN NGHIỆP VỤ CHỐT — câu chữ của thông báo kết quả nạp
+
+CẦN BA CONFIRM: bên nghiệm thu kỳ vọng thông báo đúng chuỗi "Đã nạp {số thành công} bản ghi thành công, {số lỗi} bản ghi không hợp lệ"; đặc tả chỉ quy định chung là "Trả về báo cáo import" (srs-fr-03-dao-tao.md:595) và bảng xử lý lỗi của chức năng này (srs-fr-03-dao-tao.md:633 đến :643) không khai bất kỳ thông báo thành công nào; web hiện tại hiển thị "Import hoàn tất" kèm ba chỉ số Đã nhập 3, Bỏ qua 0, Lỗi 2.
+
+Nghĩa là hệ thống ĐÃ cho biết đủ hai con số mà phiếu yêu cầu (số nạp thành công và số không hợp lệ), chỉ khác cách diễn đạt và có thêm một chỉ số "Bỏ qua". Vì đặc tả không quy định câu chữ nên không có căn cứ chấm sai, đồng thời cũng không có căn cứ chấm đạt trọn vẹn.
+
+Câu hỏi cho nghiệp vụ: thông báo kết quả nạp có bắt buộc đúng câu chữ ghi trong phiếu không, hay chỉ cần nêu được số bản ghi nạp thành công và số bản ghi không hợp lệ là đạt? Nếu chỉ cần nêu đủ hai con số thì hiện trạng đã đáp ứng và đề nghị bổ sung câu này vào đặc tả để vòng nghiệm thu sau có mốc đối chiếu. Đây là đề nghị hoàn thiện tài liệu, KHÔNG phải lỗi chặn bàn giao. (Ý này đã được nêu một lần ở lượt đo 02:20 cùng ngày và chưa có phản hồi.)
+
+Ảnh bằng chứng:
+- Bản xem trước trước khi ghi (Tổng 5, Hợp lệ 3, Bỏ qua 0, Lỗi 2, hai dòng lỗi có hai lý do khác nhau): https://drive.google.com/file/d/1rox_5mYNkIuPKMa2xoOLqhFDi6QkXdi7/view?usp=drivesdk
+- Ngay sau khi bấm xác nhận nạp (báo cáo "Import hoàn tất", Đã nhập 3, Bỏ qua 0, Lỗi 2, không còn lỗi hệ thống): https://drive.google.com/file/d/1QZxqaKsncvzztI1jeSLpb4m4BbmpKEWk/view?usp=drivesdk
+- Bảng điểm danh Buổi 4 sau khi nạp (3 học viên có trạng thái, học viên ở dòng lỗi không được ghi): https://drive.google.com/file/d/14mhMuxhAdQeB7HuRp_PMB7pqw1HCIfCM/view?usp=drivesdk
+- Nút "Tải mẫu điểm danh" bật lên sau khi chọn buổi học: https://drive.google.com/file/d/1L2D2CVqyXkjn-WtFTKh7b3Zw54QAUsfX/view?usp=drivesdk
+
+Lưu ý về dữ liệu: thao tác đo lần này đã ghi 3 bản ghi điểm danh vào Buổi 4 của khóa KH-QAW7-HOINGHI trên môi trường nội bộ (đây là hệ quả của chính thao tác đang kiểm, không phải dựng thêm dữ liệu). Sau lượt này khóa đó không còn buổi học nào chưa điểm danh, nên lượt kiểm sau cần tạo buổi học mới hoặc dùng khóa khác đang diễn ra.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.

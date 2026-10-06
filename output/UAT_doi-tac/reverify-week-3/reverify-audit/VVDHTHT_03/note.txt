@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Web (BC Vụ việc đã hoàn thành, UC127) chỉ hiển thị 1 thẻ chỉ số "Tổng vụ việc = 5"; KHÔNG có chỉ số Thành công / Không thành công / Tỷ lệ thành công ở bất kỳ đâu (thẻ KPI, bảng hay biểu đồ). Kiểm tra a11y/DOM: không tồn tại text "thành công" trong khu vực kết quả (chỉ "Kết quả" là nhãn bộ lọc đầu vào).
+- API backend đã trả theoKetQua (THANH_CONG: 1, CHUA_XAC_DINH: 4) nhưng giao diện không dựng → lỗi hiển thị FE (bỏ render dữ liệu BE đã có).
+- Theo SRS FR-IX-04 (UC127) §Output dòng 300-303, các trị tong_hoan_thanh, thanh_cong, khong_thanh_cong, ty_le_thanh_cong đều bắt buộc "Luôn". Web chỉ hiển thị tong_hoan_thanh.
+- Verify: tài khoản cbnv_tw (Toàn quốc), Kỳ Năm 2026, 5 vụ việc đã hoàn thành. Bug ID: BUG-VVDHTHT_03.

@@ -1,0 +1,216 @@
+uid=3_0 RootWebArea "Phần mềm Hỗ trợ pháp lý doanh nghiệp" url="https://18.143.165.120.nip.io/quan-tri/danh-muc/CO_QUAN_DON_VI"
+  uid=3_1 link "Bỏ qua đến nội dung chính" url="https://18.143.165.120.nip.io/quan-tri/danh-muc/CO_QUAN_DON_VI#main-content"
+    uid=3_2 StaticText "Bỏ qua đến nội dung chính"
+  uid=3_3 complementary
+    uid=3_4 image "Logo HTPLDN" url="https://18.143.165.120.nip.io/logo.svg"
+    uid=3_5 StaticText "BỘ TƯ PHÁP"
+    uid=3_6 StaticText "Hỗ trợ pháp lý doanh nghiệp"
+    uid=3_7 StaticText "HTPLDN · V1.0"
+    uid=3_8 menu orientation="vertical"
+      uid=3_9 menuitem "dashboard Tổng quan"
+      uid=3_10 menuitem "question-circle Hỏi đáp pháp lý"
+      uid=3_11 menuitem "read Đào tạo, tập huấn" expandable expanded haspopup="menu"
+      uid=3_12 menu orientation="vertical"
+        uid=3_13 menuitem "schedule Kế hoạch đào tạo"
+        uid=3_14 menuitem "folder-open Chương trình đào tạo"
+        uid=3_15 menuitem "read Khóa học"
+        uid=3_16 menuitem "book Kho tài liệu / Bài giảng"
+        uid=3_17 menuitem "database Ngân hàng câu hỏi & Đề kiểm tra"
+        uid=3_18 menuitem "team Giảng viên / Trợ giảng"
+      uid=3_19 menuitem "user-switch Mạng lưới Tư vấn viên" expandable expanded haspopup="menu"
+      uid=3_20 menu orientation="vertical"
+        uid=3_21 menuitem "solution Tư vấn viên / Chuyên gia"
+        uid=3_22 menuitem "apartment Tổ chức tư vấn"
+        uid=3_23 menuitem "customer-service Người hỗ trợ pháp lý"
+      uid=3_24 menuitem "file-search Vụ việc HTPL"
+      uid=3_25 menuitem "wallet Chi trả chi phí"
+      uid=3_26 menuitem "bank Doanh nghiệp"
+      uid=3_27 menuitem "bar-chart Đánh giá hiệu quả"
+      uid=3_28 menuitem "file-text Biểu mẫu" expandable expanded haspopup="menu"
+      uid=3_29 menu orientation="vertical"
+        uid=3_30 menuitem "folder-open Thư viện biểu mẫu"
+        uid=3_31 menuitem "unordered-list Danh sách biểu mẫu"
+      uid=3_32 menuitem "message Tư vấn" expandable expanded haspopup="menu"
+      uid=3_33 menu orientation="vertical"
+        uid=3_34 menuitem "bulb Tư vấn chuyên sâu"
+        uid=3_35 menuitem "container Kho câu hỏi"
+        uid=3_36 menuitem "thunderbolt Tư vấn nhanh"
+      uid=3_37 menuitem "folder-open Chương trình HTPLDN"
+      uid=3_38 menuitem "file-text Đợt báo cáo"
+      uid=3_39 menuitem "line-chart Báo cáo thống kê"
+      uid=3_40 menuitem "setting Quản trị hệ thống" expandable expanded haspopup="menu"
+      uid=3_41 menu orientation="vertical"
+        uid=3_42 menuitem "tags Danh mục dùng chung"
+        uid=3_43 menuitem "tool Cấu hình hệ thống"
+        uid=3_44 menuitem "idcard Tài khoản & phân quyền"
+        uid=3_45 menuitem "safety-certificate Vai trò"
+        uid=3_46 menuitem "history Nhật ký hệ thống"
+    uid=3_47 StaticText "Bộ Tư Pháp · Cục Bổ trợ tư pháp"
+  uid=3_48 banner
+    uid=3_49 button "Thu gọn menu điều hướng"
+    uid=3_50 navigation
+      uid=3_51 link "Trang chủ" url="https://18.143.165.120.nip.io/dashboard"
+        uid=3_52 StaticText "Trang chủ"
+      uid=3_53 link "Quản trị hệ thống" url="https://18.143.165.120.nip.io/quan-tri"
+        uid=3_54 StaticText "Quản trị hệ thống"
+      uid=3_55 link "Danh mục dùng chung" url="https://18.143.165.120.nip.io/quan-tri/danh-muc"
+        uid=3_56 StaticText "Danh mục dùng chung"
+      uid=3_57 StaticText "Cơ quan đơn vị"
+    uid=3_58 StaticText "BTP · TW"
+    uid=3_59 button "Thông báo, 45 chưa đọc"
+    uid=3_60 StaticText "4"
+    uid=3_61 StaticText "5"
+    uid=3_62 StaticText "QT"
+    uid=3_63 StaticText "Quản trị hệ thống"
+    uid=3_64 StaticText "QTHT"
+  uid=3_65 main
+    uid=3_66 heading "Quản lý danh mục" level="1"
+    uid=3_67 button "Lĩnh vực pháp lý"
+    uid=3_68 button "Loại hình hỗ trợ"
+    uid=3_69 button "Chương trình hỗ trợ"
+    uid=3_70 button "Tình trạng vụ việc"
+    uid=3_71 button "Cơ quan đơn vị"
+    uid=3_72 button "Loại doanh nghiệp"
+    uid=3_73 button "Tỉnh/Thành phố"
+    uid=3_74 button "Lĩnh vực kinh doanh"
+    uid=3_75 button "Hồ sơ đề nghị hỗ trợ"
+    uid=3_76 button "Hồ sơ đề nghị thanh toán"
+    uid=3_77 button "Tiêu chí đánh giá hiệu quả"
+    uid=3_78 button "Tiêu chí đánh giá chi phí"
+    uid=3_79 button "Loại tài khoản"
+    uid=3_80 button "Loại hình tiếp nhận"
+    uid=3_81 button "Kênh tiếp nhận"
+    uid=10_0 StaticText "Cây đơn vị"
+    uid=10_1 image "search"
+    uid=10_2 textbox "Tim kiem don vi..."
+    uid=10_3 generic live="polite" relevant="additions text"
+      uid=10_4 tree orientation="vertical"
+        uid=10_5 treeitem "minus-square TW Cục Bổ trợ tư pháp - Bộ Tư pháp" expandable expanded level="1" selectable
+        uid=11_0 treeitem "BN Bộ Kế hoạch và Đầu tư" level="1" selectable
+        uid=11_1 treeitem "DP Sở Tư pháp Hà Nội" level="1" selectable selected
+        uid=11_2 treeitem "BN Bộ Tài chính" level="1" selectable
+        uid=11_3 treeitem "DP Sở Tư pháp TP. Hồ Chí Minh" level="1" selectable
+        uid=11_4 treeitem "BN Bộ Công Thương" level="1" selectable
+        uid=11_5 treeitem "DP Sở Tư pháp Đà Nẵng" level="1" selectable
+        uid=11_6 treeitem "BN Bộ Nông nghiệp và Phát triển nông thôn" level="1" selectable
+        uid=11_7 treeitem "DP Sở Tư pháp Hải Phòng" level="1" selectable
+        uid=11_8 treeitem "BN Bộ Giao thông vận tải" level="1" selectable
+        uid=11_9 treeitem "DP Sở Tư pháp Cần Thơ" level="1" selectable
+        uid=11_10 treeitem "BN Bộ Xây dựng" level="1" selectable
+        uid=11_11 treeitem "DP Sở Tư pháp An Giang" level="1" selectable
+        uid=11_12 treeitem "BN Bộ Tài nguyên và Môi trường" level="1" selectable
+        uid=11_13 treeitem "DP Sở Tư pháp Bà Rịa - Vũng Tàu" level="1" selectable
+        uid=11_14 treeitem "BN Bộ Thông tin và Truyền thông" level="1" selectable
+        uid=11_15 treeitem "DP Sở Tư pháp Bắc Giang" level="1" selectable
+        uid=11_16 treeitem "BN Bộ Giáo dục và Đào tạo" level="1" selectable
+        uid=11_17 treeitem "DP Sở Tư pháp Bắc Kạn" level="1" selectable
+        uid=11_18 treeitem "BN Bộ Y tế" level="1" selectable
+        uid=11_19 treeitem "DP Sở Tư pháp Bạc Liêu" level="1" selectable
+        uid=11_20 treeitem "BN Bộ Lao động, Thương binh và Xã hội" level="1" selectable
+        uid=11_21 treeitem "DP Sở Tư pháp Bắc Ninh" level="1" selectable
+        uid=11_22 treeitem "BN Bộ Văn hóa, Thể thao và Du lịch" level="1" selectable
+        uid=11_23 treeitem "DP Sở Tư pháp Bến Tre" level="1" selectable
+        uid=11_24 treeitem "BN Bộ Khoa học và Công nghệ" level="1" selectable
+        uid=11_25 treeitem "DP Sở Tư pháp Bình Định" level="1" selectable
+        uid=11_26 treeitem "BN Bộ Nội vụ" level="1" selectable
+        uid=11_27 treeitem "DP Sở Tư pháp Bình Dương" level="1" selectable
+        uid=11_28 treeitem "BN Bộ Quốc phòng" level="1" selectable
+        uid=11_29 treeitem "DP Sở Tư pháp Bình Phước" level="1" selectable
+        uid=11_30 treeitem "BN Bộ Công an" level="1" selectable
+        uid=11_31 treeitem "DP Sở Tư pháp Bình Thuận" level="1" selectable
+        uid=11_32 treeitem "BN Bộ Ngoại giao" level="1" selectable
+        uid=11_33 treeitem "DP Sở Tư pháp Cà Mau" level="1" selectable
+        uid=11_34 treeitem "BN Ngân hàng Nhà nước Việt Nam" level="1" selectable
+        uid=11_35 treeitem "DP Sở Tư pháp Cao Bằng" level="1" selectable
+        uid=11_36 treeitem "DP Sở Tư pháp Đắk Lắk" level="1" selectable
+        uid=11_37 treeitem "BN Ủy ban Dân tộc" level="1" selectable
+        uid=11_38 treeitem "DP Sở Tư pháp Đắk Nông" level="1" selectable
+        uid=11_39 treeitem "BN Thanh tra Chính phủ" level="1" selectable
+        uid=11_40 treeitem "DP Sở Tư pháp Điện Biên" level="1" selectable
+        uid=11_41 treeitem "DP Sở Tư pháp Đồng Nai" level="1" selectable
+        uid=11_42 treeitem "DP Sở Tư pháp Đồng Tháp" level="1" selectable
+        uid=11_43 treeitem "DP Sở Tư pháp Gia Lai" level="1" selectable
+        uid=11_44 treeitem "DP Sở Tư pháp Hà Giang" level="1" selectable
+        uid=11_45 treeitem "DP Sở Tư pháp Hà Nam" level="1" selectable
+        uid=11_46 treeitem "DP Sở Tư pháp Hà Tĩnh" level="1" selectable
+        uid=11_47 treeitem "DP Sở Tư pháp Hải Dương" level="1" selectable
+        uid=11_48 treeitem "DP Sở Tư pháp Hậu Giang" level="1" selectable
+        uid=11_49 treeitem "DP Sở Tư pháp Hòa Bình" level="1" selectable
+        uid=11_50 treeitem "DP Sở Tư pháp Hưng Yên" level="1" selectable
+        uid=11_51 treeitem "DP Sở Tư pháp Khánh Hòa" level="1" selectable
+        uid=11_52 treeitem "DP Sở Tư pháp Kiên Giang" level="1" selectable
+        uid=11_53 treeitem "DP Sở Tư pháp Kon Tum" level="1" selectable
+        uid=11_54 treeitem "DP Sở Tư pháp Lai Châu" level="1" selectable
+        uid=11_55 treeitem "DP Sở Tư pháp Lâm Đồng" level="1" selectable
+        uid=11_56 treeitem "DP Sở Tư pháp Lạng Sơn" level="1" selectable
+        uid=11_57 treeitem "DP Sở Tư pháp Lào Cai" level="1" selectable
+        uid=11_58 treeitem "DP Sở Tư pháp Long An" level="1" selectable
+        uid=11_59 treeitem "DP Sở Tư pháp Nam Định" level="1" selectable
+        uid=11_60 treeitem "DP Sở Tư pháp Nghệ An" level="1" selectable
+        uid=11_61 treeitem "DP Sở Tư pháp Ninh Bình" level="1" selectable
+        uid=11_62 treeitem "DP Sở Tư pháp Ninh Thuận" level="1" selectable
+        uid=11_63 treeitem "DP Sở Tư pháp Phú Thọ" level="1" selectable
+        uid=11_64 treeitem "DP Sở Tư pháp Phú Yên" level="1" selectable
+        uid=11_65 treeitem "DP Sở Tư pháp Quảng Bình" level="1" selectable
+        uid=11_66 treeitem "DP Sở Tư pháp Quảng Nam" level="1" selectable
+        uid=11_67 treeitem "DP Sở Tư pháp Quảng Ngãi" level="1" selectable
+        uid=11_68 treeitem "DP Sở Tư pháp Quảng Ninh" level="1" selectable
+        uid=11_69 treeitem "DP Sở Tư pháp Quảng Trị" level="1" selectable
+        uid=11_70 treeitem "DP Sở Tư pháp Sóc Trăng" level="1" selectable
+        uid=11_71 treeitem "DP Sở Tư pháp Sơn La" level="1" selectable
+        uid=11_72 treeitem "DP Sở Tư pháp Tây Ninh" level="1" selectable
+        uid=11_73 treeitem "DP Sở Tư pháp Thái Bình" level="1" selectable
+        uid=11_74 treeitem "DP Sở Tư pháp Thái Nguyên" level="1" selectable
+        uid=11_75 treeitem "DP Sở Tư pháp Thanh Hóa" level="1" selectable
+        uid=11_76 treeitem "DP Sở Tư pháp Thừa Thiên Huế" level="1" selectable
+        uid=11_77 treeitem "DP Sở Tư pháp Tiền Giang" level="1" selectable
+        uid=11_78 treeitem "DP Sở Tư pháp Trà Vinh" level="1" selectable
+        uid=11_79 treeitem "DP Sở Tư pháp Tuyên Quang" level="1" selectable
+        uid=11_80 treeitem "DP Sở Tư pháp Vĩnh Long" level="1" selectable
+        uid=11_81 treeitem "DP Sở Tư pháp Vĩnh Phúc" level="1" selectable
+        uid=11_82 treeitem "DP Sở Tư pháp Yên Bái" level="1" selectable
+    uid=10_6 StaticText "Chỉnh sửa đơn vị"
+    uid=11_83 form
+      uid=11_84 alert atomic live="assertive" relevant="additions text"
+        uid=11_85 image "exclamation-circle"
+        uid=11_86 StaticText "Thay đổi cấp/đơn vị cha sẽ cập nhật chính sách phân quyền"
+      uid=11_87 StaticText "*"
+      uid=11_88 StaticText "Mã đơn vị"
+      uid=11_89 textbox "* Mã đơn vị" disableable disabled value="STP-HN"
+      uid=11_87 StaticText "*"
+      uid=11_90 StaticText "Tên đơn vị"
+      uid=11_91 textbox "* Tên đơn vị" value="Sở Tư pháp Hà Nội"
+      uid=11_92 button "close-circle"
+      uid=11_93 StaticText "Tên viết tắt"
+      uid=11_94 textbox "Tên viết tắt"
+      uid=11_87 StaticText "*"
+      uid=11_95 StaticText "Cấp"
+      uid=11_96 StaticText "Đơn vị"
+      uid=11_97 combobox "* Cấp" autocomplete="list" expandable haspopup="listbox"
+      uid=11_98 image "down"
+      uid=11_99 image "close-circle"
+      uid=11_100 StaticText "Đơn vị cha"
+      uid=11_101 generic live="polite" relevant="additions text"
+        uid=11_102 StaticText "Cục Bổ trợ tư pháp - Bộ Tư pháp"
+        uid=11_103 combobox "Đơn vị cha" autocomplete="list" expandable haspopup="listbox"
+        uid=11_104 image "down"
+        uid=11_105 image "close-circle"
+      uid=11_106 StaticText "Địa chỉ"
+      uid=11_107 textbox "Địa chỉ" multiline
+      uid=11_108 StaticText "Điện thoại"
+      uid=11_109 textbox "Điện thoại"
+      uid=11_110 StaticText "Email"
+      uid=11_111 textbox "Email"
+      uid=11_112 StaticText "Thứ tự"
+      uid=11_113 spinbutton "Thứ tự" value="1" valuemax="0" valuemin="0" valuetext="1"
+      uid=11_114 button "Increase Value"
+      uid=11_115 button "Decrease Value"
+      uid=11_116 StaticText "Trạng thái"
+      uid=11_117 radio "Hoạt động  " checked
+      uid=11_118 StaticText "Hoạt động"
+      uid=11_87 StaticText " "
+      uid=11_119 radio "Tạm dừng  "
+      uid=11_120 StaticText "Tạm dừng"
+      uid=11_87 StaticText " "
+      uid=11_121 button "Hủy"
+      uid=11_122 button "Lưu"

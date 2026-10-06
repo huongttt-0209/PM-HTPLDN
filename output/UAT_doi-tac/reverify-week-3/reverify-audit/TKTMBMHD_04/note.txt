@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+- Web hiện tại: màn tìm kiếm thư mục, 2 bộ lọc "Lĩnh vực" và "Trạng thái" để mặc định rỗng (chỉ hiện chữ gợi ý mờ; danh sách chọn không có mục "Tất cả"). Danh sách vẫn hiển thị toàn bộ thư mục (tab "Tất cả").
+- SRS mâu thuẫn: màn hình SCR-VII-01 (FR-VII-02/UC93, dòng 606) ghi lọc Lĩnh vực "Mặc định: Tất cả", dòng 607 liệt kê "Tất cả" cho lọc Trạng thái; nhưng bảng Inputs FR-VII-02 (dòng 162–166) ghi mặc định "—" (rỗng).
+- Đối tác kỳ vọng mặc định "Tất cả".
+- Hỏi BA: bộ lọc Danh sách chọn có bắt buộc thêm mục "Tất cả" và chọn sẵn làm mặc định không, hay để placeholder rỗng (không chọn = lọc toàn bộ) là chấp nhận được?

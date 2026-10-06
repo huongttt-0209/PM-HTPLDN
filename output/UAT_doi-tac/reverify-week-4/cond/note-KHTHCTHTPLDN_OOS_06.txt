@@ -1,0 +1,6 @@
+✅ Là bug — chuyển dev
+Dòng này do QA mở thêm, không thuộc case nào của phiếu đối tác. Phát sinh khi verify KHTHCTHTPLDN_07.
+
+Tệp Excel xuất ra ghi thời gian lệch 1 ngày so với màn hình: chương trình bắt đầu 01/01/2026 vào tệp thành 31/12/2025. Hai cột thời gian đều lệch.
+
+Mã bug trong báo cáo: BUG-CT-XUAT-EXCEL-SAI-NGAY. Các bước tái hiện, kết quả mong đợi và bằng chứng đã ghi đầy đủ ở các cột bên trái của chính dòng này.

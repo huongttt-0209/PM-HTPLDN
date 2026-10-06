@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Màn tìm kiếm thư mục (Thư viện biểu mẫu → Thư mục): khi tìm không có kết quả, hệ thống hiển thị thông báo "Trống".
+- Theo SRS FR-VII-02 (UC93) §Error Handling E2 (dòng 199), mã INF-TM-TK-01: thông báo phải là "Không tìm thấy thư mục phù hợp".
+- Verify: đăng nhập CB Nghiệp vụ Trung ương (CB_NV_TW), tìm từ khóa "zzzqa123khongtontai" → 0 kết quả → màn hiện "Trống".
+- Bug ID: BUG-TKTMBMHD_06.

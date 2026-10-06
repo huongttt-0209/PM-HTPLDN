@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Yêu cầu theo đặc tả: FR-IV-08 "Công khai mạng lưới TVV (UC46)" §Xử lý lỗi dòng 682 — trường hợp E2 "Thiếu mô tả công khai khi CONG_KHAI" có duy nhất một mã lỗi ERR-CK-02 với nội dung "Mô tả công khai là bắt buộc trước khi công khai lên Cổng pháp luật quốc gia".
+- Bằng chứng đo: 2 dòng báo lỗi cùng hiển thị (mỗi dòng 592x22 điểm ảnh, đã loại trừ khả năng chữ ẩn dành cho trình đọc màn hình); 0 lệnh gửi ra máy chủ.
+- Mã lỗi nội bộ: BUG-CNDSMLTVV_OOS_03. Tài khoản kiểm tra: cbnv_tw_02 (Cán bộ nghiệp vụ Trung ương, đơn vị Cục Bổ trợ tư pháp). Bản dựng V1.0.5, kiểm tra ngày 03/08/2026.
+- Lỗi phát hiện ngoài phạm vi các dòng TC có sẵn nên mở dòng mới.

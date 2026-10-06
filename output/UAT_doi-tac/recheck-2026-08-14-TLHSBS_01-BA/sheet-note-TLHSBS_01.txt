@@ -1,0 +1,10 @@
+✅ Bug đúng (BA 14/08/2026). Dev FE/BE: sửa cách tính thẻ “Tỷ lệ hồ sơ bổ sung” theo tập vụ việc hoàn thành trong kỳ và phạm vi đang xem; mỗi vụ trong tập này từng qua bước yêu cầu bổ sung ít nhất một lần phải được tính một lần vào tử số, theo quyết định BA và KPI-S-01. Major.
+── CÁCH VERIFY sau Dev fix ──
+Precondition: đăng nhập `cbnv_tw_02`; dùng Dashboard `/dashboard`; có vụ `VV-BTP-TW-20260712-005` ở trạng thái Hoàn thành, hoàn thành ngày 25/07/2026 và dòng thời gian có “Bổ sung hồ sơ” ngày 15/07/2026.
+1) Mở vụ `VV-BTP-TW-20260712-005`, xác nhận trạng thái Hoàn thành và có sự kiện “Bổ sung hồ sơ” trong dòng thời gian.
+2) Mở Dashboard, chọn Năm `2026`, Tháng `Cả năm`, Cấp đơn vị `Toàn quốc`, Đơn vị `Tất cả`, rồi bấm `Áp dụng`.
+3) Ghi lại số `Vụ việc hoàn thành` trong kỳ và giá trị thẻ `Tỷ lệ hồ sơ bổ sung`; đối chiếu tập tử số là các vụ trong tập hoàn thành đã từng qua bổ sung, mỗi vụ chỉ đếm một lần.
+✅ PASS khi: thẻ hiển thị tỷ lệ lớn hơn 0% khi còn ít nhất một vụ hoàn thành từng qua bổ sung; giá trị bằng số vụ hoàn thành duy nhất từng qua bổ sung chia tổng vụ hoàn thành trong cùng bộ lọc; không hiển thị “Chưa có dữ liệu” khi mẫu số lớn hơn 0; nếu kiểm thêm bộ lọc có 0 vụ hoàn thành thì thẻ hiển thị “—” và không có chỉ dấu xu hướng.
+❌ FAIL nếu: thẻ vẫn hiển thị 0% hoặc “Chưa có dữ liệu” trong khi tập hoàn thành còn vụ đã từng bổ sung; một vụ bổ sung nhiều lần bị đếm lặp; hoặc mẫu số bằng 0 nhưng thẻ hiển thị 0%.
+⚠️ Không hardcode số 23 khi re-verify: dữ liệu có thể thay đổi. Phải đo lại mẫu số trên danh sách vụ hoàn thành bằng đúng bộ lọc và xác nhận còn ít nhất một vụ thuộc tử số trước khi kết luận.
+Ảnh lỗi cũ: image/01-dashboard-card-and-completed-count.png

@@ -1,0 +1,6 @@
+❌ Không phải bug.
+- Đối tác phản ánh: khi Xuất Excel báo cáo "Lớp đào tạo đã diễn ra" thì hệ thống báo "Không thể tạo file xuất. Vui lòng thử lại.".
+- Kiểm thử lại ngày 21/07/2026 đúng điều kiện đối tác: báo cáo Lớp đào tạo đã diễn ra, kỳ Năm 2026, đơn vị Toàn quốc; đã bấm Xem báo cáo ra dữ liệu (5 khóa học, 11 học viên) rồi mới bấm Xuất Excel.
+- Kết quả: hệ thống tạo và tự động tải về tệp Excel (.xlsx) thành công, KHÔNG xuất hiện thông báo lỗi.
+- Đã mở file Excel tải về kiểm tra nội dung: có đủ phần đầu (tiêu đề báo cáo, kỳ báo cáo, đơn vị, ngày tạo) và số liệu khớp báo cáo trên màn hình (5 khóa học, 11 học viên: Cục Bổ trợ 2/5, Bộ KH&ĐT 1/3, Sở Tư pháp Hà Nội 2/3).
+- → Đối tác kiểm tra lại.

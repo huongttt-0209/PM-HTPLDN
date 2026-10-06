@@ -5,16 +5,16 @@
 | **Dự án** | PM HTPLDN |
 | **Môi trường** | http://103.172.236.130:3000/ |
 | **Người test** | Claude Code (Opus 4.7) — QA Automation |
-| **Ngày** | 2026-05-14 13:30:00 |
-| **Loại test** | Workflow (FR-05 v3.5 refactor) + R20 deep-verify SRS reclassify |
-| **Round** | R23 |
+| **Ngày** | 2026-05-18 14:35:00 |
+| **Loại test** | Workflow (FR-05 v3.5 refactor) + R20 deep-verify SRS reclassify + R26 re-confirm Open |
+| **Round** | R26 |
 | **Tài liệu tham chiếu** | [`srs-update-2026-5-5/srs-fr-05-vu-viec.md`](../../../../input/srs-update-2026-5-5/srs-fr-05-vu-viec.md) · [`_DELTA-MAP-FR05.md`](../../../../input/srs-update-2026-5-5/_DELTA-MAP-FR05.md) · [`output/funtion/7.5-vu-viec-htpl.md`](../../../funtion/7.5-vu-viec-htpl.md) · [`output/smoke/6.5-sm-vuviec.md`](../../../smoke/6.5-sm-vuviec.md) |
 
 ---
 
 ## Tổng hợp
 
-Phát hiện **7** lỗi spec v3.5 trên workflow Vụ việc HTPL. Hiện trạng: **1 Open** (BUG-VV-PC-WRN-01 — Minor, modal empty state thiếu nút override [Tìm thủ công] — R20 2026-05-13 still missing) · **6 Closed** sau retest R10/R11/R13/R18.
+Phát hiện **7** lỗi spec v3.5 trên workflow Vụ việc HTPL. Hiện trạng: **1 Open** (BUG-VV-PC-WRN-01 — Minor P2, modal empty state thiếu mechanism override per SRS line 781 — R26 2026-05-18 14:35:00 re-confirm Open unchanged với account `cb_nv_tw_01` + VV-QA-R7-PRIVACY-DNAG002 LV Doanh nghiệp; force search `XXKHONGMATCH99` → itemCount=0, hasOverrideButton=false, dialogButtons=["", "Hủy", "Xác nhận"], emptyText "Liên hệ QTHT để mở rộng lĩnh vực TVV/NHT, hoặc chọn vụ việc khác" — BE+FE chưa fix) · **6 Closed** sau retest R10/R11/R13/R18.
 
 ### Severity breakdown
 
@@ -48,7 +48,7 @@ Phát hiện **7** lỗi spec v3.5 trên workflow Vụ việc HTPL. Hiện trạ
 
 ## BUG-VV-PC-WRN-01 — Modal Phân công empty state thiếu mechanism cho phép CB NV tìm/override TVV ngoài LV phù hợp
 
-> **Re-test:** 2026-05-14 13:30:00 R23-verify3 (fresh seed VV + UI-first) — ❌ CONFIRMED OPEN Minor P2 (replicate finding R23 trên fresh data LV Đất đai + meaningful search keyword). UI walk `cb_nv_tw_03` BTP-TW: tạo VV2 VV-BTP-TW-20260514-002 LV Đất đai (form Nhập thủ công) → Kiểm tra hồ sơ Kết luận "Đạt — chuyển sang phân công" → state DANG_KIEM_TRA → click button [Phân công] header → modal `Phân công tư vấn viên` mở → DOM probe: dialog 6 control (1 radio Cá nhân/Tổ chức + 1 dropdown gợi ý + 1 textarea ghi chú) + 2 button (Hủy/Xác nhận) — **KHÔNG có button [Tìm thủ công]/[Mở rộng LV]/toggle [Bỏ filter LV]/dropdown thứ 2 unfiltered**. Dropdown render 5 TVV/NHT LV-Đất-đai matched (default). Gõ keyword `hương tvv1` (TVV-BTP-TW-0029, state HOAT_DONG, LV "Dân sự/Hành chính/Lao động/Thuế" — KHÔNG Đất đai, đã verify qua `/api/v1/tu-van-viens` API global) → listbox empty với message **"Trống — Không tìm thấy đối tượng phù hợp lĩnh vực — Liên hệ QTHT để mở rộng lĩnh vực TVV/NHT, hoặc chọn vụ khác"**. BE LV-locked enforced, FE message hint user về 2 path duy nhất (contact QTHT hoặc đổi vụ), KHÔNG có "tìm thủ công" path per `srs-fr-05-vu-viec.md:781` AC. **Kết luận:** bug structural confirmed real với fresh data + active TVV pool (không phải false positive do TVV inactive). Dev FE+BE bổ sung mechanism (button/toggle/clear-LV/dropdown unfiltered — implementation tùy dev). Evidence: [image/r23v3-seed-bug-vv-pc-wrn-01-vv2-search-huong-tvv1-empty-2026-05-14.png](image/r23v3-seed-bug-vv-pc-wrn-01-vv2-search-huong-tvv1-empty-2026-05-14.png) · [image/r23v3-seed-bug-vv-pc-wrn-01-vv2-datdai-modal-no-override-2026-05-14.png](image/r23v3-seed-bug-vv-pc-wrn-01-vv2-datdai-modal-no-override-2026-05-14.png).
+> **Re-test:** 2026-05-18 14:35:00 R26 (Chrome DevTools MCP — fresh isolated context `r26-bug1-pcwrn-cbnvtw01`) — ❌ **CONFIRMED OPEN Minor P2 (unchanged R25→R26).** UI walk: navigate `/vu-viec/aaff0000-0000-4000-8000-000000000001` (VV-QA-R7-PRIVACY-DNAG002, LV Doanh nghiệp, state DANG_KIEM_TRA) → click button [team Phân công] header → modal `Phân công tư vấn viên` mở. DOM probe: dialog có radiogroup Cá nhân/Tổ chức tư vấn + 1 combobox `* Chọn người được phân công` + 1 textarea Ghi chú + 2 button Hủy/Xác nhận — **KHÔNG có button override**. Click combobox → type `XXKHONGMATCH99` (force empty no-match) → listbox empty state text: `"Trống Không tìm thấy đối tượng phù hợp lĩnh vực Liên hệ QTHT để mở rộng lĩnh vực TVV/NHT, hoặc chọn vụ việc khác."`; `evaluate_script` xác nhận `itemCount: 0`, `emptyTexts: 2 (Trống / hint)`, `dialogButtons: ["", "Hủy", "Xác nhận"]`, `overrideHints: []`. BE LV-locked enforced; FE empty state hint chỉ 2 path (Liên hệ QTHT / đổi vụ); KHÔNG có override mechanism theo `srs-fr-05-vu-viec.md:781` AC "cho phép tìm thủ công". Bug giữ Open Minor P2 unchanged R24→R25→R26. Dev FE+BE bổ sung mechanism per SRS line 781 (button toggle / clear-LV / dropdown unfiltered — implementation tùy dev). Evidence: [image/r26-bug-pc-wrn-empty-xxkhongmatch-2026-05-18.png](../../reverify-2026-05-12/image/r26-bug-pc-wrn-empty-xxkhongmatch-2026-05-18.png).
 
 ![BUG-VV-PC-WRN-01 — R20 modal empty state vẫn thiếu button [Tìm thủ công]](image/r20-bug-pc-wrn-01-no-tim-thu-cong-2026-05-13.png)
 
@@ -379,7 +379,7 @@ uid=19_0 dialog "Phân công tư vấn viên" modal
 
 ## ~~BUG-VV-SLA-01~~ [CLOSED] — Deadline tính 10 ngày LV thay vì 15 ngày LV (BR-SLA-01 v3.5)
 
-> **Re-test:** 2026-05-10 10:30:00 R13 — ✅ PASS (Closed-verified). Sync với re-test trong [`bug-report-r7-7-3-functional-vu-viec.md` BUG-VV-FN-SLA-01](bug-report-r7-7-3-functional-vu-viec.md#bug-vv-fn-sla-01--cong-bo-cluster-c61). VV mới VV-BTP-TW-20260510-002 (`cb_nv_tw_03` tạo 10/05 02:49) → deadline 01/06/2026 = 16 ngày LV (gần đúng 15 ngày LV BR-SLA-01, lệch 1 ngày inclusive end-date). VV cũ pool giữ data cũ 10 ngày LV — không migrate retroactive (chấp nhận, data created trước fix).
+> **Re-test:** 2026-05-10 10:30:00 R13 — ✅ PASS (Closed-verified). Sync với re-test trong [`Pass-bug-report-r7-7-3-functional-vu-viec.md` BUG-VV-FN-SLA-01](Pass-bug-report-r7-7-3-functional-vu-viec.md#bug-vv-fn-sla-01--cong-bo-cluster-c61). VV mới VV-BTP-TW-20260510-002 (`cb_nv_tw_03` tạo 10/05 02:49) → deadline 01/06/2026 = 16 ngày LV (gần đúng 15 ngày LV BR-SLA-01, lệch 1 ngày inclusive end-date). VV cũ pool giữ data cũ 10 ngày LV — không migrate retroactive (chấp nhận, data created trước fix).
 >
 
 ### Mô tả

@@ -1,0 +1,18 @@
+⚠️ CẦN BA CHỐT — một vế đã hết lỗi, một vế vướng khác biệt giữa kỳ vọng nghiệm thu và đặc tả. Đo lại 07/08/2026 lúc 16:49–16:51 trên bản dựng mới nhất (nhãn HTPLDN · V1.0.10), màn Báo cáo thống kê, loại báo cáo "BC Vụ việc đã tiếp nhận", kỳ Năm 01/01/2026 → 31/12/2026, đơn vị Toàn quốc, không lọc kênh và không lọc lĩnh vực (cố ý để có nhiều kênh và nhiều lĩnh vực cùng lúc). Vai trò đo: Cán bộ Nghiệp vụ Trung ương — vai trò mà đặc tả nêu đích danh cho chức năng báo cáo thống kê. Trang được tải lại từ đầu trước khi đo.
+
+1) VẾ "BẢNG TỔNG HỢP THIẾU CỘT THEO KÊNH, THEO LĨNH VỰC" — ĐÃ HẾT LỖI, ĐỪNG ĐỤNG LẠI
+Màn hiện Tổng vụ việc 55 và đủ CẢ HAI chiều:
+- Theo kênh tiếp nhận: Trực tiếp 48, Doanh nghiệp 7 — cộng lại đúng 55.
+- Theo lĩnh vực pháp luật: Thương mại 21 (38,2%), Dân sự 13 (23,6%), Lao động 12 (21,8%), Thuế 9 (16,4%) — cộng lại đúng 55.
+Không chỉ nhìn thấy là chấp nhận: đã đếm lại độc lập từ danh sách vụ việc theo đúng công thức của đặc tả ("đếm vụ việc đã tiếp nhận, TRỪ vụ việc từ chối, trong kỳ, theo phạm vi đơn vị"). Kết quả đếm tay ra đúng 55 và phân bố trùng khít từng con số ở cả hai chiều. Nếu không loại vụ việc từ chối thì tổng sẽ là 56 — nghĩa là hệ thống đang áp đúng vế "trừ từ chối". Bốn vụ việc ngoài kỳ cũng đã bị loại đúng.
+Về cách trình bày: hai chiều nằm ở hai bảng rời và tiêu đề ghi là "Kênh tiếp nhận" / "Thống kê theo lĩnh vực pháp luật" thay vì đúng chữ "Theo kênh" / "Theo lĩnh vực". Đặc tả không quy định nhãn phải viết thế nào, cũng không quy định phải gộp một bảng, nên hai điểm này không tính là lỗi.
+
+2) VẾ "KHÔNG HIỂN THỊ BIỂU ĐỒ TRÒN THEO LĨNH VỰC" — CẦN BA CHỐT, CHƯA GIAO LẠI DEV
+Hiện trạng đúng là màn KHÔNG có biểu đồ tròn: chỉ có một biểu đồ cột theo kênh tiếp nhận và một biểu đồ đường theo kỳ. Đã soi toàn bộ phần nội dung màn, không có khối hình quạt/hình tròn nào.
+QA không tự kết luận được vì kỳ vọng của phiếu NGƯỢC với đặc tả đang có hiệu lực: bảng quy định dạng biểu đồ cho từng loại báo cáo của màn này gán cho "BC Vụ việc đã tiếp nhận" dạng biểu đồ CỘT + ĐƯỜNG XU HƯỚNG, đúng như hệ thống đang làm. Đây không phải chỗ đặc tả bỏ sót: cũng chính bảng đó có dùng biểu đồ tròn và gán cho hai loại báo cáo khác ("BC Số lượng hỏi đáp/vướng mắc pháp luật" và "BC Vụ việc đã hoàn thành"), và danh mục dạng biểu đồ hợp lệ của màn cũng có sẵn biểu đồ tròn. Nghĩa là đặc tả có công cụ nhưng cố ý không chọn cho loại báo cáo này.
+
+ĐỀ NGHỊ BA CHỐT 1 TRONG 2 HƯỚNG
+- Hướng A — giữ đặc tả: xác nhận "BC Vụ việc đã tiếp nhận" chỉ có biểu đồ cột + đường, chiều lĩnh vực đã được trình bày đầy đủ bằng bảng có cột Tỷ lệ. Khi đó cập nhật lại kỳ vọng của phiếu và đóng phiếu.
+- Hướng B — sửa đặc tả: bổ sung biểu đồ tròn theo lĩnh vực cho loại báo cáo này, rồi mới giao dev thực hiện.
+
+GIỚI HẠN HIỆU LỰC: kết quả trên ứng với bản dựng đã đo ngày 07/08/2026. Đề nghị xác nhận lại khi chính bản dựng này được đưa lên môi trường nghiệm thu.

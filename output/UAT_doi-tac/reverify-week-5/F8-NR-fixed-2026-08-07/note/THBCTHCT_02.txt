@@ -1,0 +1,39 @@
+⚠️ ĐẠT PHẦN ĐO ĐƯỢC — còn một ý cần nghiệp vụ chốt (KHÔNG chặn bàn giao).
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-eWHwDgt2.js (bản lên lúc 09:11 ngày 07/08/2026), đo lúc 13:18-13:29 ngày 07/08/2026. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_05 - đúng vai trò và đúng cấp Trung ương mà phiếu yêu cầu, không dùng tài khoản quản trị. Đội dùng tài khoản số 05 thay cho số 03 vì trong lúc đo có một tiến trình khác đăng nhập cùng tài khoản số 03 làm phiên bị ngắt hai lần; hai tài khoản cùng vai trò, cùng cấp, cùng đơn vị Cục Bổ trợ tư pháp nên phạm vi dữ liệu không đổi.
+
+TIỀN ĐỀ (kiểm sống ngay trước khi đo, lúc 13:14)
+
+Đợt DOT-THBC01-UAT (kỳ Sơ bộ 6 tháng, biểu mẫu 21a) có đúng hai đơn vị đã nộp và đã gửi lên Trung ương: Bộ Kế hoạch và Đầu tư (gửi 20/07/2026) và Sở Tư pháp An Giang (gửi 22/07/2026). Trước khi bấm, đội đã đọc số liệu gốc của cả hai bản báo cáo này bằng hai phiên đăng nhập khác nhau để làm số hạng tự cộng tay. Mười ba chỉ tiêu của hai đơn vị đều khác nhau và hầu hết khác 0, nên phép cộng phân biệt được thật sự (nếu hai bên trùng nhau hoặc đều bằng 0 thì không kết luận được hệ thống có cộng hay chỉ chép lại).
+
+ĐÃ ĐẠT - 2 phần
+
+1) Hệ thống GỢI Ý SỐ LIỆU BẰNG ĐÚNG TỔNG của các báo cáo được chọn. Trên màn "Tổng hợp báo cáo toàn quốc", tick chọn hai báo cáo của hai đơn vị rồi bấm nút "Tổng hợp (2)": hệ thống hiện bảng gợi ý ghi rõ Số đơn vị: 2, kèm dòng giải thích "Hệ thống đã cộng các chỉ tiêu tương ứng từ báo cáo của những đơn vị được chọn". Đối chiếu từng chỉ tiêu một: Số TVV kiện toàn 8+4=12, Cuộc tập huấn 3+1=4, Hội nghị đối thoại 2+1=3, VB trả lời UBND 5+2=7, VB TV mạng lưới TVV 4+3=7, HS tiếp nhận 25+12=37, HS giải quyết tổng 20+9=29, DN vừa 5+2=7, DN nhỏ 10+4=14, DN siêu nhỏ 5+3=8, KP hỗ trợ TVPL 500.000.000+180.000.000=680.000.000, KP chi HĐ khác 120.000.000+40.000.000=160.000.000, KP xã hội hóa 30.000.000+0=30.000.000. Đủ 13/13 chỉ tiêu khớp khít với phép cộng tay. Kiểm thêm bằng cách đổi bộ chọn: bỏ chọn Bộ Kế hoạch và Đầu tư, chỉ để lại An Giang rồi bấm lại, bảng đổi thành Số đơn vị: 1 và toàn bộ 13 giá trị đổi đúng thành số của riêng An Giang - tức hệ thống cộng thật theo bộ chọn chứ không hiện con số cố định hay số của lượt trước. Yêu cầu của đặc tả tại srs-fr-15-ct-htpldn.md:1002 và điều kiện nghiệm thu :1037.
+
+2) Biểu mẫu tổng hợp CHO CÁN BỘ TRUNG ƯƠNG SỬA VÀ BỔ SUNG ĐƯỢC. Đội gõ thật một giá trị mốc giờ (13250807) vào ô chỉ tiêu 13 "KP xã hội hóa": ô nhận giá trị, mười hai ô còn lại giữ nguyên. Ô "Nhận xét, kiến nghị" cũng nhập được chữ và đọc lại đúng nguyên văn, tức đáp ứng cả vế "bổ sung". Kiểm lại bằng đường thứ hai (đọc thuộc tính của chính ô đó trên trang): ô không bị khóa, không bị vô hiệu hóa. Hai đường đo khớp nhau. Yêu cầu của đặc tả tại srs-fr-15-ct-htpldn.md:1003 và mô tả màn hình :1175. Sau khi đo, đội bấm "Hủy" nên phép đo này KHÔNG ghi gì xuống dữ liệu.
+
+CẦN NGHIỆP VỤ CHỐT - biểu mẫu tổng hợp có bắt buộc hiện đủ cả 21a và 21b không
+
+CẦN BA CONFIRM: phiếu kỳ vọng "hiển thị biểu mẫu tổng hợp Biểu 21a, 21b toàn quốc", tức đủ cả hai biểu. Đặc tả không có dòng nào quy định điều đó: mục Tổng hợp báo cáo toàn quốc (srs-fr-15-ct-htpldn.md:971 đến :1038) chỉ viết gộp "21a/21b" ở dòng :1002, phần mô tả màn hình :1175 cũng chỉ ghi "tự tính tổng hợp mẫu 21a/21b, biểu mẫu sửa được" mà không nêu điều kiện hiển thị; điều kiện hiển thị duy nhất cho hai biểu (:1167 và :1168) lại là của màn LẬP báo cáo ở đơn vị, không phải màn tổng hợp của Trung ương. Trong khi đó mỗi đơn vị được tự chọn dùng mẫu 21a, 21b hay cả hai (:730, :1366).
+
+Hiện trạng đo được: bảng tổng hợp hiển thị "Biểu mẫu 21a/TP/HTPLDN" - chỉ một biểu 21a, đúng bằng biểu mà cả hai báo cáo nguồn và cả đợt báo cáo đang dùng. Hệ thống có sẵn ba lựa chọn biểu mẫu là 21a, 21b và cả hai.
+
+Câu hỏi cho nghiệp vụ: biểu mẫu tổng hợp của cấp Trung ương có bắt buộc hiện cả hai biểu 21a và 21b trong mọi trường hợp không, hay chỉ hiện những biểu mà các báo cáo được chọn thực sự sử dụng? Nếu bắt buộc hiện cả hai thì xin bổ sung điều kiện hiển thị này vào đặc tả để vòng nghiệm thu sau có mốc đối chiếu. Đây là đề nghị làm rõ đặc tả, KHÔNG phải lỗi chặn bàn giao.
+
+GHI NHẬN THÊM CHO DEV (không ảnh hưởng kết quả phiếu này)
+
+- Màn "Tổng hợp báo cáo toàn quốc" chạy đúng và đủ quyền cho tài khoản cấp Trung ương, nhưng KHÔNG có mục nào dẫn tới nó trên thanh menu bên trái, cũng không có nút dẫn từ màn "Đợt báo cáo"; cán bộ chỉ vào được nếu biết sẵn đường dẫn. Phiếu không nhắc lối vào nên đội không chấm, nhưng đề nghị xem lại vì đây là chức năng chính của nghiệp vụ tổng hợp.
+- Có hai nút cùng tên "Tổng hợp" ở hai màn khác nhau nhưng làm việc khác hẳn: nút ở màn chi tiết đợt hỏi xác nhận rồi chuyển trạng thái đợt ngay, không có bước xem trước số liệu; nút ở màn tổng hợp toàn quốc mới là bước gợi ý số liệu cho sửa trước khi lưu. Dễ gây nhầm cho người dùng.
+
+Ảnh bằng chứng:
+- Tiền đề và bảng chọn báo cáo: hai đơn vị của cùng đợt DOT-THBC01-UAT đang ở trạng thái Đã gửi TW, mỗi dòng có ô chọn: https://drive.google.com/file/d/1B7QphhLnSCYozM2972ru418LmBCOa7HP/view?usp=drivesdk
+- Bảng gợi ý số liệu sau khi bấm Tổng hợp (2): ghi rõ Biểu mẫu 21a, Số đơn vị 2 và các con số 12, 4, 3, 7, 7, 37 đúng bằng tổng hai báo cáo nguồn: https://drive.google.com/file/d/1CBqUaRMCna0pmOnbiwV2QadGIZwPIu4z/view?usp=drivesdk
+- Biểu mẫu sửa được: ô chỉ tiêu 13 nhận giá trị vừa gõ, ô nhận xét nhập được chữ, các ô khác giữ nguyên: https://drive.google.com/file/d/1AQVK22gpA0Z7XjIfYLED5rBLQ9fQ9eYP/view?usp=drivesdk
+
+Lưu ý về dữ liệu: phép đo của phiếu này KHÔNG ghi gì xuống môi trường - hai lượt bấm "Tổng hợp" chỉ là bước gợi ý số liệu (chỉ đọc), giá trị gõ thử và câu nhận xét chỉ nằm trên màn rồi đã bấm Hủy. Kiểm lại sau đó: đợt và hai báo cáo giữ nguyên trạng thái cũ.
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.

@@ -1,0 +1,78 @@
+BẰNG CHỨNG DẠNG VĂN BẢN — QLTLPLCVV_15
+Môi trường: https://18.143.165.120.nip.io   ·   Bản dựng: HTPLDN V1.0.8 (asset index-CNwX9JjX.js)
+Tài khoản: cbnv_tw (CB_NV_TW, cấp TW)   ·   Thời điểm: 2026-08-06 11:23–11:29 (giờ máy), 04:23–04:29 UTC
+Màn: /tv-chuyen-sau/f389b7f3-875d-45d2-950a-c0e07b2e269e → "Tư liệu pháp lý liên kết" → Sửa tư liệu
+Tư liệu: "QA QLTLPLCVV_15 - kiem thu tep chua ma doc 06/08/2026" (id 18183dfb-d95d-4b65-9cbf-a370357dea72), trạng thái Nháp
+
+VÌ SAO CÓ FILE NÀY: ảnh chụp qua MCP KHÔNG bắt được lớp thông báo của AntD (đã thử 4 lượt,
+kể cả hẹn giờ thao tác trước rồi mới chụp và lặp thao tác liên tục 25 lượt × 2s). Đo trực tiếp
+trên DOM cho thấy khung thông báo CÓ hiển thị thật: position=fixed, top=8px, rect x=0 y=8
+w=1440 h=56, opacity=1, z-index=2010, sống 3.34 giây (xuất hiện ở mốc 102ms, tắt ở mốc 3439ms).
+⇒ Bằng chứng dùng ở đây là (1) chữ bắt bằng MutationObserver đọc innerText + (2) nguyên văn
+phản hồi máy chủ. Theo tiền lệ nội bộ, response body là bằng chứng mạnh hơn ảnh cho ca này.
+
+────────────────────────────────────────────────────────────────────────
+1) TỆP A — PDF hợp lệ (732 B, %PDF-1.4, mở đọc được bằng PyMuPDF) nhúng chuỗi EICAR chuẩn
+   Thao tác: chọn tệp qua widget "File đính kèm" trong cửa sổ Sửa tư liệu (thao tác UI thật).
+
+   Bộ bắt thông báo (tự kiểm soObserverDangSong = 1 trước khi đo):
+     SO_REQUEST = 1   →  POST /api/v1/tu-lieu-phap-ly-vvs/upload
+     SO_KHUNG_THONG_BAO = 1   (1 mốc giờ duy nhất: 259193.4)
+     chữ = "Tệp «A-eicar-nhung-trong-pdf-hop-le.pdf» chứa mã độc, không thể tải lên"
+
+   Phản hồi máy chủ (reqid 133):
+     HTTP 400
+     {"success":false,"error":{"code":"ERR-TLPL-04",
+      "message":"Tệp «A-eicar-nhung-trong-pdf-hop-le.pdf» chứa mã độc, không thể tải lên",
+      "timestamp":"2026-08-06T04:23:28.987Z",
+      "requestId":"5e569e13-d8b7-496d-82c2-68aaa724b975"}}
+
+   Sau thao tác: widget chỉ còn "B-pdf-sach.pdf" — tệp A KHÔNG được đính kèm.
+
+────────────────────────────────────────────────────────────────────────
+2) TỆP B — PDF sạch 594 B
+     SO_REQUEST = 1  →  POST /api/v1/tu-lieu-phap-ly-vvs/upload
+     SO_KHUNG_THONG_BAO = 0  (không thông báo lỗi)
+     Widget hiển thị: "B-pdf-sach.pdf (594 B) — Xem | Xóa"  → đính kèm thành công.
+
+────────────────────────────────────────────────────────────────────────
+3) TỆP C — PDF sạch 23.069.772 B (≈22 MB, vượt 20MB)
+     SO_REQUEST = 0  (giao diện chặn trước, không gửi lên máy chủ)
+     SO_KHUNG_THONG_BAO = 1
+     chữ = "C-pdf-sach-vuot-20mb.pdf: Kích thước vượt quá giới hạn 20MB."
+   ⇒ KHÁC HẲN thông báo của tệp A ⇒ tệp A bị chặn ở bước quét virus, không phải ở bước
+     kiểm dung lượng/định dạng.
+
+────────────────────────────────────────────────────────────────────────
+4) ĐO LẠI BẰNG ĐƯỜNG THỨ HAI — gọi thẳng máy chủ cùng hành động (đối chứng cho mục 1–3)
+
+   A' PDF hợp lệ nhúng EICAR   → HTTP 400
+      {"code":"ERR-TLPL-04","message":"Tệp «API-A-eicar-trong-pdf.pdf» chứa mã độc, không thể tải lên"}
+   B' PDF sạch                 → HTTP 201
+      {"tenFile":"API-B-pdf-sach.pdf","dungLuong":98,"loaiFile":"application/pdf","trangThaiQuet":"SACH"}
+   D' EICAR thô đổi đuôi .pdf  → HTTP 400
+      {"code":"ERR-TLPL-04","message":"Tệp «API-D-eicar-tho.pdf» chứa mã độc, không thể tải lên"}
+   C' PDF sạch 22.000.099 B    → HTTP 413
+      {"code":"ERR-SYS-00-00-01","message":"File too large"}      ← xem mục 5
+
+   ⇒ Giao diện và máy chủ KHỚP nhau ở cả 3 dạng A/B/C của mục 5 file tiêu chí.
+
+────────────────────────────────────────────────────────────────────────
+5) TRẠNG THÁI BỀN VỮNG (sau khi bấm Lưu + TẢI LẠI TRANG)
+
+   PATCH /api/v1/tu-lieu-phap-ly-vvs/18183dfb-... → 1 request, 1 thông báo "Đã cập nhật tư liệu"
+   Bảng tư liệu, cột File = 1
+   GET /api/v1/tu-lieu-phap-ly-vvs/18183dfb-... → trangThai "NHAP",
+       files = [ { tenFile: "B-pdf-sach.pdf", dungLuong: 594 } ]
+   Mở lại cửa sổ Sửa sau khi tải lại trang: widget chỉ có "B-pdf-sach.pdf"
+   ⇒ Tệp A không lọt vào bản ghi ở bất kỳ lớp nào (giao diện · bản ghi · sau tải lại).
+
+────────────────────────────────────────────────────────────────────────
+6) GHI NHẬN NGOÀI PHẠM VI (không ảnh hưởng verdict của case)
+
+   Khi gọi thẳng máy chủ với tệp > 20MB, phản hồi là HTTP 413 mã ERR-SYS-00-00-01
+   "File too large" (tiếng Anh, không nêu ngưỡng 20MB), trong khi đặc tả
+   srs-fr-12-tv-chuyen-sau.md:968 quy định E3 = ERR-TLPL-03 "File tối đa 20MB".
+   Trên GIAO DIỆN người dùng KHÔNG gặp tình huống này vì bước chặn phía giao diện đã trả
+   thông báo tiếng Việt đúng nghĩa trước đó (mục 3). Giao diện ↔ máy chủ lệch nhau
+   ⇒ ghi cả hai + chuyển thành câu hỏi cho BA, KHÔNG mở phiếu lỗi. Xem `cau-hoi-BA.md`.

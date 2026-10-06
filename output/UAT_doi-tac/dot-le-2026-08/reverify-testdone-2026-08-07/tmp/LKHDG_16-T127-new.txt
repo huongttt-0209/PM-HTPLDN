@@ -1,0 +1,20 @@
+✅ ĐÃ HẾT LỖI — Bấm "Sửa" vào đúng chế độ chỉnh sửa, sửa và lưu lại được ở cả hai trạng thái cho phép.
+
+Đã kiểm lại ngày 07/08/2026 trên môi trường nghiệm thu htpldn-uat.ospgroup.vn, bản dựng V1.0.10, tại Đánh giá hiệu quả → Kế hoạch đánh giá → Danh sách, tài khoản Cán bộ nghiệp vụ Trung ương.
+
+Yêu cầu nghiệp vụ được kiểm: đợt đang ở "Lập kế hoạch" hoặc "Phân công" thì cán bộ nghiệp vụ phải vào được chế độ chỉnh sửa, và thay đổi phải lưu lại được.
+
+Đã đo trên cả hai trạng thái bắt buộc, mỗi trạng thái đều làm đủ chuỗi: bấm Sửa → đổi trường Ghi chú → lưu → đóng biểu mẫu → mở lại đối chiếu:
+• Đợt "Lập kế hoạch" — mã DG-20260803-0001: biểu mẫu chỉnh sửa mở ra với đầy đủ giá trị cũ, các trường nhập/sửa được bình thường. Đổi Ghi chú thành "QA verify LKHDG_16 - LAP KE HOACH - 07/08/2026", lưu lại, hệ thống báo cập nhật thành công. Mở lại (sau khi đã tải lại trang và đăng nhập lại) vẫn đọc đúng giá trị mới, đợt giữ nguyên trạng thái "Lập kế hoạch".
+• Đợt "Phân công" — mã DG-20260807-0001: dòng trong danh sách có thao tác chỉnh sửa. Đổi Ghi chú thành "QA verify LKHDG_16 - PHAN CONG - 07/08/2026", lưu lại thành công, mở lại đối chiếu thấy đúng giá trị mới, đợt vẫn giữ nguyên trạng thái "Phân công". Trước đây hệ thống từ chối cập nhật khi đợt ở trạng thái này; nay không còn bị từ chối.
+(Trên môi trường nghiệm thu chưa sẵn có đợt ở trạng thái "Phân công", nên đợt DG-20260807-0001 do kiểm thử tự dựng theo đúng luồng nghiệp vụ: tạo đợt → thiết lập tiêu chí → phân công người đánh giá.)
+
+Hai triệu chứng đối tác nêu đều không tái phát:
+• Các trường thông tin chỉnh sửa được bình thường, không còn bị khóa.
+• Không còn bị chuyển sang màn Chi tiết khi bấm Sửa: biểu mẫu chỉnh sửa mở ngay trên màn Danh sách, đường dẫn phía trên vẫn là Trang chủ/Đánh giá hiệu quả/Kế hoạch đánh giá/Danh sách (không phải .../Chi tiết). Màn Chi tiết là một màn riêng, chỉ mở khi bấm thao tác xem.
+
+Đã rà quyền theo chiều ngược để chắc chắn bản sửa không mở nhầm quyền: soát cột thao tác của toàn bộ 23 đợt trên cả 2 trang danh sách. Thao tác chỉnh sửa CHỈ xuất hiện ở 3 đợt "Lập kế hoạch" và 1 đợt "Phân công". Toàn bộ đợt ở các trạng thái khác — "Chờ phê duyệt" (2 đợt), "Chờ duyệt phân công" (2 đợt), "Thực hiện" (5 đợt), "Đang đánh giá" (3 đợt), "Hoàn thành" (7 đợt) — chỉ có thao tác xem, không có chỉnh sửa. Thao tác xóa cũng chỉ có ở đợt "Lập kế hoạch", đúng yêu cầu.
+
+Ghi nhận thêm (không thuộc phạm vi phiếu này, không ảnh hưởng kết luận): trên biểu mẫu chỉnh sửa của đợt đã ở trạng thái "Phân công", nút lưu vẫn mang tên "Lưu nháp" trong khi đợt không còn là bản nháp. Sẽ theo dõi riêng.
+
+Phạm vi hiệu lực: đo trên môi trường nghiệm thu htpldn-uat.ospgroup.vn, bản dựng V1.0.10, chiều 07/08/2026.

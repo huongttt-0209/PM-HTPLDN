@@ -1,0 +1,13 @@
+✅ Bug đúng (BA 04/08/2026 + QA đo lại 04/08/2026 trên bản dựng V1.0.5). Dev FE/BE: giấy tờ hành nghề của tổ chức tư vấn đang được gọi bằng HAI tên khác nhau cho hai trường của cùng một loại giấy, và không tên nào là tên chuẩn. Trên biểu mẫu Thêm mới: một trường ghi "Số Giấy ĐKHĐ Sở TP", trường ngay bên cạnh ghi "Ngày cấp Giấy đăng ký hành nghề". Câu báo lỗi của hệ thống cũng lệch tương ứng: một câu nói "Số Giấy đăng ký hành nghề là bắt buộc (NĐ 77/2008 Đ.13)", câu kia nói "Ngày cấp Giấy ĐKHĐ là bắt buộc (NĐ 77/2008 Đ.13)".
+BA chốt tên gọi chuẩn là "Giấy đăng ký hoạt động" — căn cứ chính NĐ 77/2008 Điều 13 mà câu báo lỗi đang viện dẫn: điều luật này quy định Sở Tư pháp cấp Giấy đăng ký HOẠT ĐỘNG cho tổ chức; "giấy đăng ký hành nghề" là khái niệm của cá nhân tư vấn viên, không phải của tổ chức. Dev thống nhất tên gọi ở cả nhãn trường lẫn câu báo lỗi.
+Phần MỨC BẮT BUỘC thì phần mềm ĐANG ĐÚNG, Dev không đụng: QA đo cả hai chiều — biểu mẫu đánh dấu bắt buộc cho cả hai trường, và gửi hồ sơ trống thẳng lên máy chủ bị từ chối kèm đúng hai câu báo lỗi trên, không tạo ra bản ghi nào. Điều kiện "nếu phần mềm đang cho lưu hồ sơ trống giấy này" mà BA nêu KHÔNG xảy ra. Minor.
+
+── CÁCH VERIFY sau Dev fix ──
+Precondition: cbnv_tw + màn Mạng lưới Tư vấn viên → Tổ chức tư vấn → Thêm mới.
+1) Đọc nhãn của hai trường giấy tờ trong nhóm "Thông tin cơ bản".
+2) Để trống cả hai trường đó, điền đủ các trường bắt buộc còn lại → bấm Lưu, đọc câu báo lỗi.
+3) Mở màn Chỉnh sửa một tổ chức đã có, đọc lại nhãn hai trường đó.
+✅ PASS khi: cả hai nhãn và cả hai câu báo lỗi đều dùng cùng một tên gọi "Giấy đăng ký hoạt động", nhất quán giữa màn Thêm mới và màn Chỉnh sửa; bước 2 vẫn bị chặn, hồ sơ không được tạo.
+❌ FAIL nếu: còn chỗ nào dùng chữ "hành nghề" cho giấy tờ của tổ chức; hoặc hai trường vẫn gọi tên khác nhau; hoặc bước 2 lưu được hồ sơ trống giấy này.
+⚠️ Viết tắt "ĐKHĐ" chỉ được chấp nhận nếu tên đầy đủ đã xuất hiện ở nhãn hoặc chú giải cùng màn. Đừng chấm PASS khi màn chỉ có chữ viết tắt.
+Bằng chứng đo: do-lai-nhom-xuat-pdf-va-row339-2026-08-04.md + image/QLDMTCTV_OOS_13-form-themmoi-hai-ten-goi-khac-nhau.png

@@ -1,0 +1,23 @@
+✅ Là bug — chuyển dev
+
+Tái hiện đúng, đã chuyển dev. Nhưng phiếu test gộp 2 ý mà nguyên nhân khác hẳn nhau, nêu tách để dev sửa đúng chỗ.
+Đã kiểm bằng 2 tài khoản đúng vai: cbpd_tw (CB Phê duyệt - Trung ương, BTP · TW) thực hiện từ chối, cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW) là người tạo câu hỏi và là người kiểm thông báo.
+
+✅ 1) Ý "không có thông báo kèm lý do" — ĐÚNG LÀ LỖI.
+- Đặc tả (srs-fr-13-tv-nhanh.md dòng 536) yêu cầu hành động Từ chối phải: bắt buộc nhập lý do, đưa về trạng thái Nháp, VÀ thông báo cho cán bộ nghiệp vụ.
+- Hai vế đầu chạy đúng: hộp thoại có ô Lý do từ chối bắt buộc, và lý do được lưu lại đầy đủ.
+- Vế thông báo không chạy: hộp thông báo của người tạo trước 253 mục, sau vẫn 253 mục, chênh lệch bằng 0. Mục mới nhất vẫn là mục cũ lúc 12:43, trong khi thao tác từ chối lúc 12:49.
+- Đã loại trừ "hệ thống thông báo hỏng chung": chính tài khoản này vẫn nhận thông báo phê duyệt từ 8 nhóm chức năng khác; riêng Kho câu hỏi chưa từng có mục nào.
+- Bug ID: BUG-PD-THONG-BAO.
+
+✅ 2) Ý "trạng thái chuyển sang Bị từ chối" — hiện tượng đúng như phiếu mô tả, nhưng nguyên nhân KHÁC.
+- Bên trong, hệ thống lưu trạng thái là NHÁP — tức là ĐÚNG đặc tả, không sai luồng.
+- Vấn đề nằm ở chữ hiển thị: giao diện đang gọi trạng thái Nháp là "Bị từ chối", ở cả bộ lọc lẫn cột Trạng thái trong bảng.
+- Ba phép đo độc lập cùng cho một kết luận: đọc trực tiếp bản ghi thì trạng thái là Nháp; lọc theo Nháp thì ra đúng bản ghi này; bấm lựa chọn mang tên "Bị từ chối" trên bộ lọc thì thực chất hệ thống lọc theo Nháp và cho kết quả đúng.
+- Vậy hướng sửa là đổi chữ hiển thị cho đúng, KHÔNG phải thêm hay bớt trạng thái.
+- Ý này thuộc chung một lỗi nhãn trạng thái đã ghi nhận ở phiếu QLKCHTV_02 cùng đợt; QA đã cập nhật lại mô tả nguyên nhân của lỗi đó theo kết quả đo lần này.
+- Bug ID: BUG-QLKCHTV_02.
+
+3) Bằng chứng.
+- Ảnh chụp cho thấy đồng thời: địa chỉ trang đang lọc theo Nháp, thẻ lọc ghi "Bị từ chối", và dòng dữ liệu cũng ghi "Bị từ chối".
+- Ảnh chụp hộp thoại Từ chối có ô lý do bắt buộc, và ảnh hộp thông báo của cán bộ tạo. Tất cả kèm trong hồ sơ lỗi.

@@ -1,0 +1,1 @@
+{"success":true,"data":{"results":[{"id":"4c1d3aab-db59-40f8-9a58-b8637c42d8ab","success":true,"laCongKhai":true},{"id":"5eed0003-0000-4000-8000-000000000001","success":false,"error":"new row for relation \"tu_van_vien\" violates check constraint \"CHK_tu_van_vien_tvv_so_the_hanh_nghe\""}]},"meta":null}

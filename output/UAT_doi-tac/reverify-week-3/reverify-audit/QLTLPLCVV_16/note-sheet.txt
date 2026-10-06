@@ -1,0 +1,9 @@
+⚠️ Cần BA xác nhận.
+
+Đối tác quan sát ĐÚNG: xóa tệp đính kèm → không hiển thị hộp xác nhận (video partner-evidence/QLTLPLCVV_16.webm, frame t002→t004: bấm icon thùng rác → file biến mất ngay, không confirm).
+
+Nhưng theo SRS FR-X.1-06/UC152 §Processing "Xóa file đính kèm" (dòng 904–913) hệ thống KHÔNG có step "hiển thị xác nhận" — khác §Xóa mềm tư liệu (dòng 900) vốn CÓ confirm. Tức hành vi "không confirm khi xóa file" đang KHỚP SRS hiện hành; kỳ vọng "phải có confirm" của đối tác là thứ SRS chưa quy định.
+
+Câu hỏi BA: có bổ sung bước "hiển thị hộp xác nhận" cho thao tác Xóa FILE đính kèm không, hay giữ theo SRS (chỉ xóa TƯ LIỆU mới confirm)? Nếu giữ SRS → cập nhật expected đối tác, không phải bug. Nếu bổ sung → Dev FE thêm confirm.
+
+(Ghi chú riêng cho dev: trên env verify form "Sửa" không hiển thị file đính kèm cũ — API detail trả files:[] dù soFile:1; xem BA_confirm-tvcs + cond/QLTLPLCVV_16.md.)

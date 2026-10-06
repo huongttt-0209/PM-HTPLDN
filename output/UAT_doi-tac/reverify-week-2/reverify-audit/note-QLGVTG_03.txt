@@ -1,0 +1,4 @@
+✅ Bug đúng – chuyển dev.
+• Biểu mẫu Thêm mới giảng viên có 9 trường (Họ và tên, Chuyên ngành, Trình độ, Tổ chức, Email, Điện thoại, Mô tả năng lực, Lĩnh vực, Trạng thái) → thiếu trường "Tệp đính kèm".
+• SRS FR-III-11 (UC30 – Inputs, dòng 965): liệt kê file_dinh_kem là trường của biểu mẫu (không bắt buộc) → cần bổ sung.
+• Verify: CB_NV_TW, màn Giảng viên/Trợ giảng → Thêm mới. Bug ID: BUG-QLGVTG_03.

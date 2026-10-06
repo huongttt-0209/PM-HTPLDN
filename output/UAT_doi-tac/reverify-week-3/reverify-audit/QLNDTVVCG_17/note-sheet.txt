@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Verify lại bằng CB Nghiệp vụ TW (cbnv_tw_03), mở màn Chi tiết TVCS bản "Đã duyệt" (TVCS-SEED-0001).
+- Nhóm 2 (Nội dung tư vấn): web hiện đúng nhãn "Tiêu đề", KHÔNG còn "Tóm tắt" → phần "Nhóm 2 thiếu Tiêu đề + thừa Tóm tắt" KHÔNG tái hiện, web đã đúng.
+- Nhóm 1 (Thông tin cơ bản): web KHÔNG hiển thị trường "Cơ quan tiếp nhận". Theo SRS (FR-X.1-01/UC147, SCR-X1-02 §Thành phần dòng 1142) Nhóm 1 chỉ gồm Mã / DN / Chuyên gia / Lĩnh vực / Ngày tư vấn / Ghi chú — KHÔNG có trường "Cơ quan tiếp nhận" (đơn vị tiếp nhận là don_vi_id tự gán = đơn vị của CB đăng nhập, dòng 118), nên web đang đúng SRS.
+- Đối tác kỳ vọng Nhóm 1 có thêm trường "Cơ quan tiếp nhận" — khác SRS.
+- Đề nghị BA chốt: có bổ sung hiển thị "Cơ quan tiếp nhận" (đơn vị tiếp nhận) ở Nhóm 1 màn Chi tiết không? Nếu có, cập nhật SRS dòng 1142; nếu không, cập nhật lại kỳ vọng testcase.

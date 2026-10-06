@@ -1,0 +1,6 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Khi chưa chọn "Kết luận thẩm định", nút "Gửi KQ" vẫn bật (bấm được). Kiểm bằng cách đọc trực tiếp thuộc tính của nút: "Gửi KQ" không bị khóa, trong khi nút "Trình duyệt" bên cạnh thì bị khóa đúng.
+- Theo FR-IV-06 (UC44) · SCR-IV-03 tab "Thẩm định" (srs-fr-04-chuyen-gia-tvv.md, dòng 1564), điều kiện hiển thị của nút "Gửi kết quả thẩm định" là "Tab Thẩm định, kết luận đã chọn" — tức chưa chọn kết luận thì nút phải khóa. Nút "Trình phê duyệt" (dòng 1565) đã được cài đúng theo mẫu điều kiện này, riêng nút "Gửi KQ" bị bỏ sót.
+- Ghi nhận thêm để dev nắm: bấm "Gửi KQ" khi chưa chọn kết luận thì biểu mẫu vẫn báo lỗi tại chỗ ("Vui lòng chọn kết luận") và không đổi trạng thái hồ sơ — dữ liệu không bị hỏng, nhưng trạng thái bật/tắt của nút vẫn sai so với đặc tả.
+- Verify: tài khoản cbnv_tw (Cán bộ Nghiệp vụ - Trung ương), hồ sơ TVV-BTP-TW-0003 ở trạng thái "Đang thẩm định".
+- Bug ID: BUG-TDHSTVV_12.

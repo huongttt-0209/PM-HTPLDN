@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+- Web hiện tại (màn Danh sách biểu mẫu): (1) các bộ lọc Danh sách chọn (Thư mục, Lĩnh vực, Loại hình, Định dạng) để mặc định rỗng (chỉ hiện chữ gợi ý, không có mục "Tất cả"); (2) bộ lọc "Định dạng" có 5 giá trị DOC/DOCX/XLS/XLSX/PDF — thừa "PDF".
+- SRS: FR-VII-05 (UC96) §Inputs (dòng 397–402) không đặt giá trị mặc định; màn SCR-VII-02 (dòng 640) chỉ ghi "các bộ lọc", không nêu default "Tất cả". Biểu mẫu chỉ nhận file doc/docx/xls/xlsx (dòng 50; form dòng 652) → biểu mẫu không thể có định dạng PDF; nhưng file đính kèm CÔNG KHAI cho phép PDF (dòng 779).
+- Đối tác kỳ vọng: dropdown mặc định "Tất cả"; bỏ "PDF" khỏi bộ lọc Định dạng.
+- Hỏi BA: (1) bộ lọc Danh sách chọn có phải thêm mục "Tất cả" + chọn sẵn không? (2) có bỏ "PDF" khỏi bộ lọc Định dạng không (vì biểu mẫu chính chỉ doc/docx/xls/xlsx), hay giữ vì file công khai có thể là PDF?

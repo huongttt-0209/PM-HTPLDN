@@ -1,0 +1,27 @@
+✅ Là bug — chuyển dev · ⚠️ Có ý cần BA xác nhận
+
+Phần đối tác phản ánh đã hết lỗi. Còn lại một điểm về câu chữ, đã chuyển dev kèm 1 câu hỏi gửi BA.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), trên cả hai màn trong cùng một phiên đăng nhập.
+
+❌ 1) Phần phiếu ghi ở cột Kết quả thực tế: KHÔNG còn tái hiện.
+- Phiếu ghi Kho câu hỏi nhập từ khóa không có kết quả nhưng vẫn hiển thị toàn bộ bản ghi.
+- Hiện tại gõ chuỗi vô nghĩa trên kho 14 câu hỏi thì bảng còn 0 dòng. Không còn hiện tượng trả về tất cả. Đã kiểm chéo bằng đường khác giao diện, kết quả trùng khít, nên đây là hết lỗi thật chứ không phải trùng hợp lúc chụp màn.
+
+✅ 2) Phần còn lại: câu thông báo đang nói sai tình huống.
+- Kho câu hỏi đang có 14 câu hỏi, tìm không khớp lại báo "Chưa có câu hỏi nào.".
+- Tư vấn nhanh đang có 4 phiên, tìm không khớp lại báo "Không có phiên tư vấn nhanh nào.".
+- Hai câu này là câu dành cho trường hợp kho chưa có dữ liệu. Cán bộ đọc xong dễ hiểu nhầm là mất dữ liệu hoặc mình không có quyền xem, thay vì hiểu đơn giản là từ khóa không khớp.
+- Xóa từ khóa thì danh sách trở lại đủ 14 và 4 dòng, chứng minh dữ liệu vẫn nguyên.
+- Bug ID: BUG-TK-THONG-DIEP-RONG.
+
+⚠️ 3) Vì sao có kèm câu hỏi cho BA.
+- Đặc tả nhóm Tư vấn nhanh CÓ định nghĩa câu cho tình huống tìm không ra là "Không tìm thấy câu hỏi phù hợp", nhưng câu đó gắn cho màn tra cứu kho trong lúc trả lời phiên và màn chuyên trang doanh nghiệp, không phải màn danh sách mà phiếu này test. Phần mô tả màn danh sách thì không quy định câu thông báo khi rỗng.
+- Trong khi đó nhóm Hỏi đáp đã có quy ước rõ, tách riêng câu cho trường hợp chưa có dữ liệu và câu cho trường hợp lọc không khớp kèm nút xóa bộ lọc.
+- Cụm chữ mà phiếu mong đợi cho Tư vấn nhanh là "Không tìm thấy phiên tư vấn phù hợp" thì không có trong đặc tả, nên không lấy làm chuẩn để chấm.
+- Vì vậy QA đề nghị BA chốt câu chữ chính thức cho hai màn danh sách này.
+
+4) Mức độ.
+- Xếp nhẹ vì không chặn nghiệp vụ, xóa từ khóa là danh sách trở lại bình thường. Nhưng nên sửa cùng đợt với việc bổ sung nút xóa bộ lọc cho màn Kho câu hỏi, vì hai thứ đi với nhau.
+
+5) Bằng chứng.
+- Ảnh Kho câu hỏi báo "Chưa có câu hỏi nào." khi kho đang có 14 câu hỏi, và ảnh Tư vấn nhanh báo "Không có phiên tư vấn nhanh nào." khi đang có 4 phiên. Kèm trong hồ sơ lỗi.

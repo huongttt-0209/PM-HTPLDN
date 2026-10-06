@@ -1,0 +1,17 @@
+# Bảng đối chiếu điều kiện — CNKQHT_07 (row 315, tab `UAT_TGPL Doanh Nghiệp-tuần 3`)
+
+**Chức năng:** Cập nhật kết quả hỗ trợ của vụ việc HTPL — thông báo cho CB NV phụ trách
+**Loại bug:** phụ thuộc **vai trò + state + dữ liệu tiền đề** (workflow + thông báo) → BẮT BUỘC điền bảng này.
+**Ngày:** 2026-08-03 · **Env QA:** https://18.143.165.120.nip.io · MailHog http://18.143.165.120:8025
+
+| Điều kiện có thể đổi kết quả | Đối tác (từ evidence full-res `CNKQHT_07.webm`) | Mình test | GAP? |
+|---|---|---|:-:|
+| Vai trò / tài khoản NGƯỜI THAO TÁC (bấm Cập nhật kết quả) | `huongcg` — vai trò **TVV · CG**, đơn vị **BTP · TW**, là người được phân công vụ việc (frame `t000.00s.jpg`, `t015.04s.jpg`) | `qa_tvvseed28` ("QA TVV Seed28 Active") — vai trò **TVV · CG**, đơn vị **Cục Bổ trợ tư pháp - Bộ Tư pháp** cấp **TW**, là người được phân công (`nguoiXuLyId` = `nguoiHoTroId` = `5432719c-c542-4a5d-8c3a-db1b8a918bbf`) | Không |
+| Vai trò / tài khoản NGƯỜI NHẬN thông báo (CB NV phụ trách) | `cb_nv_tw_03@htpldn.test` — CB Nghiệp vụ cấp TW, suy ra từ mail "Người hỗ trợ đã xác nhận tham gia vụ việc - VV-BTP-TW-20260511-001" gửi tới chính địa chỉ này (frame `t025.10s.jpg`) | `cbnv_tw_03` ("CB Nghiệp vụ - Trung ương #03", vai trò `CB_NV_TW`, email `cbnv_tw_03@htpldn.test`, userId `9b557200-be4b-46ac-b84b-fe6c154dc65f`) — API vụ việc xác nhận `nguoiTiepNhanId` = đúng userId này | Không |
+| Người thao tác ≠ người phụ trách (điều kiện làm lộ bug) | Có tách: người bấm là TVV·CG được phân công, người phải nhận thông báo là CB NV phụ trách — 2 tài khoản khác nhau | Có tách: `nguoiXuLyId` = `5432719c-…` (TVV·CG) ≠ `nguoiTiepNhanId` = `9b557200-…` (CB NV TW) | Không |
+| Entity + **trạng thái** (state machine) | Vụ việc `VV-BTP-TW-20260511-001`, stepper bước **6 Đang xử lý** (`DANG_XU_LY`) (frame `t000.00s.jpg`) | Vụ việc `VV-BTP-TW-20260803-001`, API trả `trangThai = DANG_XU_LY`, stepper bước **6 Đang xử lý** (ảnh `CNKQHT_07-02`, `-07`) | Không |
+| Dữ liệu tiền đề (chuỗi state dựng vụ việc) | VV đã qua tiếp nhận → kiểm tra hồ sơ → phân công cho TVV·CG → TVV chấp nhận tham gia (mail "Người hỗ trợ đã xác nhận tham gia vụ việc" 14 phút trước thao tác) | QA tự seed đúng chuỗi đó bằng `cbnv_tw_03`: tiếp nhận → kiểm tra hồ sơ → phân công `qa_tvvseed28` → TVV chấp nhận (ảnh `-seed-01`…`-seed-06`; dòng thời gian 15:47 / 17:02 / 17:04 / 17:06) | Không |
+| Input / giá trị nhập ở form Cập nhật kết quả | Nhập nội dung kết quả dạng chữ, KHÔNG đính kèm tệp, bấm nút xác nhận → toast "Đã cập nhật kết quả" (frame `t015.04s.jpg`) | Nhập nội dung kết quả dạng chữ (104 ký tự), KHÔNG đính kèm tệp, bấm [Xác nhận] → 1 request `POST /api/v1/vu-viecs/{id}/cap-nhat-ket-qua` + 1 khung thông báo "Đã cập nhật kết quả" (ảnh `-06`, `-07`) | Không |
+| Kênh kiểm tra thông báo sau khi lưu | ① MailHog `htpldn-uat.ospgroup.vn/mailhog/` ~10 giây sau khi lưu ② chuông Thông báo — nhưng đối tác đăng nhập bằng `cbnv_tw` (KHÁC `cb_nv_tw_03` nhận mail) (frame `t026.44s.jpg`, `t035.10s.jpg`) | ① MailHog `18.143.165.120:8025` (list UI + API `search?kind=to`) ② chuông Thông báo mở bằng **đúng** `cbnv_tw_03` + đọc full nội dung qua `GET /api/v1/thong-baos` — chặt hơn đối tác vì không lệch tài khoản | Không |
+
+**Kết luận bảng:** 0 GAP. Mọi điều kiện của đối tác đã được dựng lại đúng trên env QA, riêng chiều in-app còn kiểm bằng ĐÚNG tài khoản phụ trách (đối tác kiểm nhầm tài khoản `cbnv_tw`) nên phép đo của QA chặt hơn.

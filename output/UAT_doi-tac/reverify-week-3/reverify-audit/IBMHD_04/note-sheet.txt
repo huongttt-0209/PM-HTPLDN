@@ -1,0 +1,24 @@
+IBMHD_04 (dòng 118) — Verdict: BA confirm — 2026-07-20
+Verify: Chrome DevTools MCP, tài khoản cbnv_bn (CB Nghiệp vụ - Bộ ngành), URL /bieu-mau/nhap-hang-loat.
+
+Claim đối tác: tệp lỗi không hiển thị trong bảng kiểm tra (Hợp lệ/Lỗi kèm lý do).
+
+Quan sát: upload .txt (sai định dạng) + .docx 22MB (>20MB) + 2 tệp hợp lệ.
+ - Tệp lỗi bị CHẶN NGAY tại bước Chọn file kèm lý do ("Định dạng không hỗ trợ..." / "vượt quá 20MB (22.0 MB)").
+ - Bảng kiểm tra (STT/Tên/Định dạng/Kích thước/Trạng thái) + Thống kê chỉ liệt kê tệp hợp lệ; tệp lỗi không
+   thành dòng.
+ - App KHÔNG im lặng (báo lý do), nhưng KHÁC cách trình bày SCR-VII-03 #4/#5.
+
+SRS backing cho kỳ vọng đối tác:
+ - SCR-VII-03 #4 (:675): Bảng kiểm tra có cột "Trạng thái (Hợp lệ/Lỗi)" → hàm ý tệp Lỗi thành dòng.
+ - SCR-VII-03 #5 (:676): Thống kê "Lỗi: {Y}" → kỳ vọng đếm tệp lỗi.
+ - Nhưng SCR-VII-03 #4 KHÔNG có cột "Lý do" → kỳ vọng "kèm lý do" của đối tác vượt SRS.
+→ App đạt yêu cầu nghiệp vụ (báo tệp lỗi + lý do) nhưng lệch literal screen spec → BA chốt: literal #4/#5 có
+  bắt buộc không, hay early-validation là đủ.
+
+Vai trò: case "CB Nghiệp vụ"; dùng cbnv_bn do cbnv_tw bị chiếm session. Validate client-side, không phụ thuộc đơn vị.
+
+Evidence web: ../../bug-reports/image/BUG-IBMHD_04-step1-valid-2-reject-txt.png ; BUG-IBMHD_04-step2-bang-kiem-tra.png
+Condition table: ../../cond/IBMHD_04.md
+BA doc: ../../ba-confirmation-needed-week-3-bieu-mau-batch6.md
+Sheet: dòng 118, P="BA confirm".

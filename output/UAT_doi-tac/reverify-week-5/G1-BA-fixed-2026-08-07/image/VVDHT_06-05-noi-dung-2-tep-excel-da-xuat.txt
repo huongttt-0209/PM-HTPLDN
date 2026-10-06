@@ -1,0 +1,68 @@
+NOI DUNG THUC DOC DUOC TU 2 TEP EXCEL DA XUAT — case VVDHT_06 (dong 185)
+Doc bang openpyxl, khong phai chi kiem 'tai duoc'. Thoi diem doc: 2026-08-07 15:22:50
+====================================================================================================
+
+### TEP: BaoCaoVuViecDangHoTro_20260807_1513.xlsx
+Kich thuoc: 7007 byte
+Sheet: ['BC Vụ việc đang hỗ trợ']
+----------------------------------------------------------------------------------------------------
+[Sheet] BC Vụ việc đang hỗ trợ  dim: A1:C27  max_row: 27  max_col: 3
+BC Vụ việc đang hỗ trợ
+Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+Đơn vị: Toàn quốc
+Ngày tạo: 07/08/2026
+
+Tổng số vụ việc đang hỗ trợ
+Chỉ tiêu | Số lượng
+Tổng số vụ việc đang hỗ trợ | 22
+
+Theo mức SLA
+Mức SLA | Số lượng
+Bình thường | 16
+Sắp hết hạn | 0
+Quá hạn | 3
+Quá hạn nghiêm trọng | 3
+
+Theo người hỗ trợ (NHT)
+Người hỗ trợ | Số lượng | Số quá hạn
+QA TVV Seed28 Active | 3 | 1
+QA NHT An Giang UAT2 | 1 | 0
+
+Theo đơn vị
+Đơn vị | Số lượng | Số quá hạn
+Cục Bổ trợ tư pháp - Bộ Tư pháp | 16 | 2
+Sở Tư pháp An Giang | 3 | 1
+Bộ Kế hoạch và Đầu tư | 2 | 2
+Sở Tư pháp Hà Nội | 1 | 1
+====================================================================================================
+
+### TEP: BaoCaoVuViecDangHoTro_20260807_1515.xlsx
+Kich thuoc: 6889 byte
+Sheet: ['BC Vụ việc đang hỗ trợ']
+----------------------------------------------------------------------------------------------------
+[Sheet] BC Vụ việc đang hỗ trợ  dim: A1:C24  max_row: 24  max_col: 3
+BC Vụ việc đang hỗ trợ
+Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+Đơn vị: Toàn quốc
+Ngày tạo: 07/08/2026
+
+Tổng số vụ việc đang hỗ trợ
+Chỉ tiêu | Số lượng
+Tổng số vụ việc đang hỗ trợ | 3
+
+Theo mức SLA
+Mức SLA | Số lượng
+Bình thường | 0
+Sắp hết hạn | 0
+Quá hạn | 3
+Quá hạn nghiêm trọng | 0
+
+Theo người hỗ trợ (NHT)
+Người hỗ trợ | Số lượng | Số quá hạn
+QA TVV Seed28 Active | 1 | 1
+
+Theo đơn vị
+Đơn vị | Số lượng | Số quá hạn
+Cục Bổ trợ tư pháp - Bộ Tư pháp | 2 | 2
+Sở Tư pháp An Giang | 1 | 1
+====================================================================================================

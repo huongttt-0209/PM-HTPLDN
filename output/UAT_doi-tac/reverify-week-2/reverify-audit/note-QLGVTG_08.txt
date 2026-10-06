@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận.
+• Khi bấm "Sửa" một giảng viên, hệ thống mở biểu mẫu chỉnh sửa (sửa được và bấm Lưu) nhưng breadcrumb hiển thị "Chi tiết" thay vì "Chỉnh sửa".
+• SRS FR-III-11 (UC30, dòng 959) mô tả CRUD + chi tiết 2 tab, không quy định nhãn breadcrumb theo từng chế độ. Web dùng chung 1 màn "Chi tiết" (cho chỉnh sửa) cho cả xem lẫn sửa; thiết kế nội bộ có phân biệt "Chỉnh sửa" vs "Chi tiết".
+• Verify: CB_NV_TW, danh sách Giảng viên/Trợ giảng → bấm Sửa.
+→ Đề nghị BA chốt: chế độ chỉnh sửa có cần nhãn/breadcrumb riêng "Chỉnh sửa" không.

@@ -1,0 +1,62 @@
+🔁 CÒN LỖI — chuyển lại dev.
+
+■ CÒN LỖI Ở ĐÂU
+Vai trò Quản trị hệ thống (tài khoản admin) — đúng vai trò trong ảnh nghiệm thu:
+   [Xem báo cáo] → OK. Hiện đủ số liệu, hai nút Xuất bật sáng.
+   [Xuất Excel]  → KHÔNG ra tệp. Màn hiện đúng một chữ "Forbidden"
+                   (máy chủ trả 403 · mã ERR-PERM-SYS-00-01)
+Đúng hiện tượng ô "TKM phản hồi lần 1" đã ghi.
+
+■ VÌ SAO LÀ LỖI (đặc tả srs-fr-11-bao-cao.md)
+1. Dòng :79 — kiểm quyền phải nằm ở ĐẦU luồng, nên bước Xem và bước Xuất phải cùng một quy
+   tắc quyền. Hiện đang cho xem đủ số liệu rồi mới chặn ở bước xuất.
+2. Dòng :117 — khi từ chối phải hiện câu tiếng Việt báo người dùng không có quyền xem báo
+   cáo. Hiện đang ném thẳng chuỗi kỹ thuật tiếng Anh của máy chủ ra cho người dùng cuối.
+KHÔNG phải chờ BA mới sửa được: câu hỏi "QTHT có được xuất báo cáo không" đã gửi BA, nhưng
+trả lời hướng nào thì vẫn là lỗi — nếu không được xuất thì phải chặn từ bước Xem và báo bằng
+tiếng Việt; nếu được xuất thì đang chặn nhầm.
+
+■ ĐÃ HẾT LỖI — ĐỪNG ĐỤNG LẠI
+Cán bộ Nghiệp vụ Trung ương xuất Excel tốt: tệp mở đọc được, đầu tệp đủ tên báo cáo + kỳ +
+đơn vị + ngày tạo, số trong tệp khớp đúng số trên màn; hai lượt xuất ra hai tên tệp khác nhau
+nên không đè nhau. Hết câu "Không thể tạo file xuất. Vui lòng thử lại." (đối tác báo 16/07).
+
+■ AI SỬA
+Dev BE — cho bước Xem và bước Xuất dùng chung quy tắc quyền; từ chối thì trả thông báo theo :117.
+Dev FE — không đẩy chuỗi máy chủ trả về ra thẳng màn hình người dùng.
+BA     — chốt "QTHT có được xuất báo cáo không" để dev chọn hướng sửa.
+
+■ ĐÃ ĐO
+06/08/2026 · bản dựng V1.0.8 · admin (QTHT/TW) + cbnv_tw_03 (CB Nghiệp vụ/TW) · BC Chi phí chi
+trả hỗ trợ · Kỳ Năm 2026 · Toàn quốc · 3 lượt bấm xuất · không tạo/sửa/xoá bản ghi nào.
+Bằng chứng: ô "Ảnh/video verify" cùng dòng.
+Lỗi khác gặp lúc đo, đã tách phiếu riêng, KHÔNG tính vào phiếu này: BCTK_QA06 (dòng 369) —
+báo cáo này thiếu hẳn phần chia theo kỳ.
+
+────────── CÁCH VERIFY SAU KHI DEV FIX ──────────
+Cần trước: tài khoản admin (QTHT, cấp TW) · màn Báo cáo thống kê (/bao-cao) · kỳ báo cáo phải
+CÓ dữ liệu (báo cáo trống thì nút Xuất tự tắt, đo vô nghĩa).
+
+B1. admin → BC Chi phí chi trả hỗ trợ · Kỳ Năm 01/01–31/12/2026 · Toàn quốc → [Xem báo cáo]
+    (bấm đúng 1 lần). Ghi 3 số: Tổng chi phí · Tổng hồ sơ · TB mỗi hồ sơ.
+B2. [Xuất Excel] → chép nguyên văn chữ hiện ra; kiểm có tệp về máy không.
+B3. Đối chiếu bằng đường thứ 2: tab Network xem lời gọi xuất trả mã gì. Có tệp thì MỞ RA ĐỌC,
+    so với 3 số ở B1.
+B4. Lặp B1–B3 bằng cbnv_tw_03 để chắc vai trò này không bị chặn theo.
+
+✅ PASS — đạt 1 trong 2:
+   a) admin xuất được tệp .xlsx mở đọc được, số khớp màn, không thông báo từ chối; HOẶC
+   b) nếu BA chốt QTHT không được xuất → chặn NGAY ở bước [Xem báo cáo], kèm câu tiếng Việt.
+❌ FAIL nếu: còn "Forbidden" hay bất kỳ chuỗi tiếng Anh / mã kỹ thuật nào cho người dùng cuối ·
+   vẫn cho xem đủ rồi mới chặn ở bước Xuất · chỉ ẩn/làm mờ nút Xuất mà bước Xem vẫn vào được ·
+   Cán bộ Nghiệp vụ bị chặn theo.
+
+⚠️ BẪY
+1. Cán bộ Nghiệp vụ xuất được KHÔNG chứng minh đã fix — vai trò đó vốn đã tốt từ 06/08. Phép đo
+   quyết định là chạy bằng chính tài khoản admin.
+2. Tải được tệp chưa đủ — phải MỞ TỆP RA ĐỌC mới chốt.
+3. Đừng chấm Fail vì tên tệp BaoCaoChiPhiChiTra_… (khuôn tên đã chốt 04/08/2026), hay vì số liệu
+   khác ảnh nghiệm thu (25 hồ sơ / 226.308.268 đ) — khác dữ liệu, không phải lỗi.
+4. Khung thông báo sống ~3 giây và đổi chữ NGAY TRONG khung cũ, không mọc khung mới → công cụ
+   đếm "khung mới" chỉ thấy "Đang tạo file..." rồi báo nhầm là im lặng. Phải theo dõi nội dung
+   khung theo thời gian. Tải lại trang trước khi đo — tab mở lâu vẫn chạy mã cũ.

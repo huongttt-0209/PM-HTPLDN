@@ -1,0 +1,16 @@
+⚠️ Cần BA xác nhận.
+
+Quan sát của phiếu là đúng: bảng danh sách chương trình không có cột "Đợt báo cáo" mà hiển thị cột "Số đợt BC". QA đã kiểm lại ngày 27/07/2026 bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), có kiểm lại bằng cbpd_tw để chắc tập cột không đổi theo quyền.
+
+⚠️ 1) Vì sao để BA chốt thay vì kết luận đúng/sai ngay.
+- FR-XI-01 (UC160) — SCR-XI-01, dòng 1113: bảng danh sách được liệt kê 10 cột, cột thứ 9 ghi "Số đợt BC". Không có mục nào tên "Đợt báo cáo" và không mô tả liên kết nhanh từ dòng chương trình.
+- Nhưng cùng bản đặc tả còn hai chỗ chưa thống nhất về màn Đợt báo cáo: dòng 618 ghi "v3.5.2: tab Đợt báo cáo độc lập, không drill-down từ CT", còn dòng 1101 và bảng dòng 1143-1166 vẫn mô tả "Đợt báo cáo" là một thẻ nằm trong trang chi tiết chương trình. Thực tế trang chi tiết chỉ có thẻ "Thông tin", tức đang theo dòng 618.
+- Câu hỏi cho BA: bản đang hiệu lực chốt theo hướng nào, và có bổ sung liên kết nhanh từ dòng chương trình sang màn Đợt báo cáo định kỳ hay không? Nếu chốt theo dòng 618, đề nghị BA gỡ phần tab Đợt báo cáo ở dòng 1101 và 1143-1166 để đối tác không mở lại case ở vòng sau.
+
+✅ 2) Một lỗi khác trên cùng bảng, đã chuyển dev.
+- Đối chiếu từng mục với dòng 1113: web hiện có 9 cột (Mã CT, Tên chương trình, Mục tiêu, Thời gian, Ngân sách, Đơn vị, Trạng thái, Số đợt BC, Hành động), thiếu đúng cột "Lĩnh vực pháp lý".
+- Đã loại khả năng do chưa có dữ liệu: tệp Excel xuất từ chính màn này in ra đủ ba giá trị Đất đai, Thuế, Lao động. Lĩnh vực pháp lý còn là trường bắt buộc khi tạo chương trình (dòng 1128) và là chiều gom số liệu khi làm báo cáo.
+- QA đã mở dòng riêng mã KHTHCTHTPLDN_OOS_05 để dev xử lý, tránh log trùng. Bug ID: BUG-CT-BANG-THIEU-COT-LINHVUC.
+
+3) Bằng chứng.
+- Ảnh tiêu đề bảng trên môi trường kiểm thử, đọc rõ thứ tự và tập cột. Ảnh của chính đối tác ở case này cũng cho thấy bảng hiển thị "Số đợt BC", tức hai bên quan sát trùng nhau. Kèm trong hồ sơ lỗi.

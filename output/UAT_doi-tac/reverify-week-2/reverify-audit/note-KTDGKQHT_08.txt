@@ -1,0 +1,5 @@
+❌ Không phải bug.
+• Điểm kiểm tra là điểm cuối khóa: chỉ nhập được khi khóa học ở trạng thái "Đã kết thúc".
+• Khóa "Đang diễn ra" thì tab "Kết quả" trống ("Chưa có dữ liệu kết quả") và nút "Lưu kết quả" bị khóa — đúng thiết kế. Phải bấm "Kết thúc" khóa (chuyển "Đã kết thúc") thì danh sách học viên mới hiện để nhập điểm.
+• Đã kiểm chứng trên khóa "Đã kết thúc" (CB_NV_TW): tab "Kết quả" hiện đủ học viên; ô "Điểm kiểm tra" giới hạn 0–10, nhập >10 hệ thống tự đưa về 10, không cho lưu điểm sai. Theo đặc tả Quản lý kiểm tra, đánh giá kết quả (UC24), điểm phải trong khoảng 0–10.
+→ Đối tác kết thúc khóa rồi nhập điểm.

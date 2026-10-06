@@ -1,0 +1,4 @@
+STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+53,Popup duyệt câu hỏi text sai,✅ Đạt,PASS,Thấp,"R2 06-02: cb_pd_tw_01 bấm Phê duyệt HD-QA-R9-CPD-001 → popup ""Xác nhận phê duyệt? Hành động không thể hoàn tác"" text đúng — SRS:1126"
+54,Kho câu hỏi thiếu cột Hành động,✅ Đạt,PASS,Cao,"R2 06-02: list có cột Hành động + Mã link + Xem/Sửa/Xóa; DA_DUYET/CONG_KHAI/HOAN_THANH chỉ Xem — SRS:1055"
+59,Chọn câu hỏi gợi ý gửi lỗi,✅ Đạt,PASS,Cao,"R2 06-02: SCR-II-03 chọn ứng viên (radio) → ""Phân công thành công"", state TIEP_NHAN→DANG_XU_LY, no lỗi — SRS:1214"

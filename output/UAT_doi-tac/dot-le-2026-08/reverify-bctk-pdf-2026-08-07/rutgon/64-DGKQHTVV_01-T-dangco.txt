@@ -1,0 +1,28 @@
+📌 CÒN LỖI (REOPEN) — doanh nghiệp vẫn không tới được chức năng đánh giá, vì không thấy vụ việc của chính mình.
+
+❌ CÒN LỖI
+Doanh nghiệp đang sở hữu 2 vụ việc "Đã đánh giá" VV-BTP-TW-20260806-003 và -004, do đơn vị Trung ương xử lý. Cả 2 đều không tới được: danh sách chỉ hiện 5, lọc "Hoàn thành"/"Đã đánh giá" đều rỗng, mở thẳng địa chỉ thì báo "Không tìm thấy vụ việc." — trong khi vụ việc do đơn vị địa phương xử lý vẫn mở bình thường. Không mở được bản ghi thì không có đường nào tới nút đánh giá, đúng triệu chứng phiếu báo.
+
+VÌ SAO LÀ LỖI
+srs-fr-05-vu-viec.md:1793 — "DN chỉ thấy vụ việc của DN mình", chỉ chặn khi mở vụ việc KHÔNG phải của mình; :1792 đặt màn này là "hồ sơ của tôi". Hiện phạm vi nhìn cắt theo ĐƠN VỊ XỬ LÝ thay vì theo CHỦ SỞ HỮU, nên vụ việc do Trung ương xử lý bị giấu khỏi chính doanh nghiệp đã gửi.
+
+DEV CẦN SỬA
+Doanh nghiệp phải thấy và mở được mọi vụ việc do chính mình sở hữu, không phụ thuộc đơn vị nào đang xử lý.
+
+✅ ĐÃ HẾT LỖI (đừng làm hỏng lại): bấm mã vụ việc vào thẳng chi tiết, không còn bị đẩy sang trang báo không có quyền · ẩn đúng "Kết quả kiểm tra" và "Phân công xử lý" (:1805, :1806).
+
+⏸ CHƯA ĐO ĐƯỢC: thao tác nhập điểm, vì vế trên đã chặn toàn bộ luồng. Sửa xong phạm vi nhìn phải đo tiếp mới chốt trọn phiếu.
+
+🔎 ĐÃ ĐO: 07/08/2026 · env nội bộ 18.143.165.120.nip.io, bó mã index-BbPPdate.js (đọc lại tên bó mã trong tab trước khi đo) · 1 doanh nghiệp · 7 vụ việc của doanh nghiệp đó (5 hiện, 2 bị giấu) · 2 đường vào (bấm danh sách, dán thẳng địa chỉ) · đối chứng bằng 2 vai trò cán bộ để xác nhận 2 vụ việc kia có thật, đúng chủ sở hữu.
+
+── CÁCH VERIFY sau Dev fix ──
+Precondition: tài khoản doanh nghiệp có ≥1 vụ việc do đơn vị Trung ương xử lý ở "Hoàn thành"/"Đã đánh giá", doanh nghiệp chưa chấm.
+1) Đăng nhập doanh nghiệp → danh sách, không lọc → tổng phải bằng đúng số vụ việc doanh nghiệp đó sở hữu (đối chiếu bằng vai trò cán bộ Trung ương).
+2) Bấm mã vụ việc do Trung ương xử lý → phải mở được hồ sơ.
+3) Mở lại đúng vụ việc đó bằng cách dán thẳng địa chỉ → vẫn phải mở được.
+4) Nhập đánh giá 9 · 8 · 10 + nhận xét có mốc giờ riêng → gửi → tải lại trang → đọc đúng nội dung vừa nhập.
+5) Chứng âm: thử mở/đánh giá vụ việc của doanh nghiệp khác → phải bị từ chối.
+✅ PASS: đủ 5 bước đạt, điểm tổng bằng trung bình 3 điểm (:1220).
+❌ FAIL: vẫn không thấy/không mở được vụ việc của chính mình · hoặc mở được nhưng không có đường vào đánh giá · hoặc gửi xong tải lại trang thì đánh giá rỗng. Sửa được một vế vẫn là FAIL.
+⚠️ Đừng chấm FAIL vì nhãn/vị trí nút đánh giá, câu chữ thông báo, cách làm tròn điểm, hay vì không sửa/xoá được đánh giá đã gửi. Doanh nghiệp KHÔNG được thấy "Phân công xử lý" và "Kết quả kiểm tra" — thiếu 2 phần này là đúng đặc tả.
+⚠️ Đừng chấm PASS chỉ vì trạng thái đổi sang "Đã đánh giá" hay có thông báo thành công (cả hai đã từng đúng trong khi lỗi còn nguyên), hay chỉ vì mở được vụ việc do đơn vị địa phương xử lý — chỗ hỏng là vụ việc do Trung ương xử lý.

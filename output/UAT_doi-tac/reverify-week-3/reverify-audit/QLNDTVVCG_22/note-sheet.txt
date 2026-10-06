@@ -1,0 +1,6 @@
+⚠️ Cần BA xác nhận.
+- Verify lại bằng CB Nghiệp vụ TW (cbnv_tw_03), mở modal Phân công Chuyên gia trên bản TVCS trạng thái Tiếp nhận.
+- Hiện tượng "Chuyên môn: —" TÁI HIỆN: modal hiện đúng SĐT + Email của CG, nhưng ô "Chuyên môn" để trống (—). Dropdown chọn CG hiển thị lĩnh vực ("Thương mại") — đây là trường Lĩnh vực, không phải Chuyên môn.
+- Nguyên nhân: dữ liệu CG có trường Lĩnh vực nhưng trường "chuyên môn/chuyên ngành" đang để trống, nên ô "Chuyên môn" hiển thị "—" đúng theo dữ liệu. Đây là câu hỏi về nghiệp vụ: ô "Chuyên môn" nên lấy theo Lĩnh vực của CG hay theo trường chuyên ngành riêng (đang trống)? SRS mô tả "hiển thị chuyên môn phù hợp lĩnh vực" nhưng không định rõ trường dữ liệu.
+- Chú thích SLA: modal CÓ dòng thông báo Chuyên gia có 2 ngày làm việc để xác nhận tham gia — đã đủ thông tin SLA theo SRS. Câu "Chuyên gia sẽ được gửi thông báo..." mà đối tác kỳ vọng là chi tiết UX, SRS không quy định.
+- Đề nghị BA chốt: (1) ô "Chuyên môn" trong modal Phân công lấy dữ liệu từ đâu (Lĩnh vực CG hay trường chuyên ngành riêng); (2) có cần thêm câu chú thích "Chuyên gia sẽ được gửi thông báo" không.

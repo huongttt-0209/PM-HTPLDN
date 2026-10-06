@@ -1,0 +1,8 @@
+❌ Reopen (QA verify 14/08/2026) — Dev fix chưa đạt KPI-S-01.
+- Account/môi trường: `cbnv_tw_02`, DEV `/dashboard`, build `V1.0.14`.
+- Precondition đã xác nhận: `VV-BTP-TW-20260712-005` ở trạng thái Hoàn thành; hoàn thành `25/07/2026 02:23`; timeline có `Bổ sung hồ sơ` lúc `15/07/2026 12:15`.
+- Bộ lọc `2026 / Cả năm / Toàn quốc / Tất cả`: thẻ và danh sách cùng có `23` vụ hoàn thành; thẻ `Tỷ lệ hồ sơ bổ sung` vẫn trả `0%` (API dashboard cũng trả 0).
+- Theo KPI-S-01, tử số đã chứng minh ≥ 1 nên tỷ lệ phải > 0%; cận dưới từ riêng vụ mẫu là `1/23 ≈ 4,35%`. Actual `0%` ⇒ FAIL. Không suy diễn tổng tử số chính xác chỉ bằng 1.
+- Nhánh mẫu số 0 PASS: `Tháng 9/2026` có 0 vụ hoàn thành, thẻ hiển thị `—` và không có chỉ dấu xu hướng.
+- Cần Dev sửa tiếp phần ghi nhận/tổng hợp vụ đã từng qua yêu cầu bổ sung trong tập hoàn thành; giữ logic mẫu số 0 hiện tại.
+Evidence: `reverify-after-fix-2026-08-14-TLHSBS_01/image/01-precondition-record-completed.png`, `02-precondition-history-supplement.png`, `03-dashboard-after-apply.png`, `04-completed-list-current.png`, `05-zero-denominator.png`, `06-restored-dashboard.png`.

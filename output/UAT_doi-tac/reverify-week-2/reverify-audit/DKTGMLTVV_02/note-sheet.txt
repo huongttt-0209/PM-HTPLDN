@@ -1,0 +1,4 @@
+❌ Không phải bug.
+- Form Thêm mới Tư vấn viên vẫn có trường "Đơn vị quản lý", nằm ở CUỐI nhóm "Thông tin cá nhân" — ngay sau trường "Địa chỉ". Ô nền xám, tự điền sẵn đơn vị của tài khoản đang đăng nhập, không sửa được.
+- Ảnh anh/chị gửi dừng ở trường "Giới tính", còn 5 trường nữa mới tới. Nhờ anh/chị cuộn hết nhóm xuống dưới "Địa chỉ" sẽ thấy.
+→ Đối tác kiểm tra lại.

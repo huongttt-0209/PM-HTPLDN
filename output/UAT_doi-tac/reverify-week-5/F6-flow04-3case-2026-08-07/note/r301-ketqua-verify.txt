@@ -1,0 +1,21 @@
+⚠️ Cần BA xác nhận — QA verify lại 07/08/2026, bản dựng V1.0.9, vai trò Cán bộ Nghiệp vụ Trung ương (cbnv_tw_05), trên bản ghi tư vấn chuyên sâu TVCS-20260806-0003. Phiếu gồm 2 vế: 1 vế chạy đúng như đối tác mong đợi, 1 vế phải để BA chốt vì đặc tả màn hình chưa nói tới.
+
+WEB HIỆN TẠI — ĐÚNG KỲ VỌNG ĐỐI TÁC
+- Nhóm "Tư liệu pháp lý liên kết" trong màn chi tiết Tư vấn chuyên sâu ĐÃ CÓ ô nhập từ khóa (chữ gợi ý trong ô: "Tìm theo tên hoặc mô tả tư liệu") kèm 3 bộ lọc Loại tư liệu / Lĩnh vực / Trạng thái và hai nút [Tìm kiếm] [Xóa bộ lọc]. Bảng tư liệu đủ 9 cột như đặc tả màn.
+- Tìm bằng từ khóa tiếng Việt CÓ DẤU chạy đúng: nhóm đang có 2 tư liệu; gõ "Nghị định" rồi bấm [Tìm kiếm] thì bảng còn đúng 1 dòng "Nghị định 55/2019 hỗ trợ pháp lý cho doanh nghiệp nhỏ và vừa", tư liệu còn lại bị loại. Đối chứng bằng chính phản hồi máy chủ của lượt tìm đó: tổng = 1, đúng 1 mã bản ghi 0d258d7c-9498-48b3-982d-db85a13cdb96 — khớp số dòng hiện trên màn.
+
+VÌ SAO VẪN PHẢI HỎI BA, KHÔNG CHẤM "ĐÃ HẾT LỖI"
+Đặc tả CÓ yêu cầu chức năng tìm kiếm tư liệu (srs-fr-12-tv-chuyen-sau.md:942-951 — nhận từ khóa theo tên tư liệu và mô tả, lĩnh vực, loại tư liệu, trạng thái; AND logic; phân trang), và màn duy nhất chứa yêu cầu này chính là nhóm tư liệu trong màn chi tiết TVCS (:828, :1153, :1227-1229 — màn riêng SCR-X1-07 đã bị gộp vào). NHƯNG phần Thành phần màn hình của SCR-X1-02 chỉ khai cho nhóm này một bảng dữ liệu và nút [+ Thêm tư liệu] (:1171, :1198), và FR-X.1-06 không có tiêu chí chấp nhận nào cho tìm kiếm (:986-996). Tức phần dev đang làm đúng ý đối tác lại không có chỗ nào trong đặc tả màn hình quy định — QA không có căn cứ để chấm đạt hay không đạt.
+
+CẦN BA CONFIRM: đối tác kỳ vọng nhóm "Tư liệu pháp lý liên kết" trong màn chi tiết Tư vấn chuyên sâu có ô nhập từ khóa và/hoặc bộ lọc để tìm tư liệu ngay tại đó; SRS quy định chức năng tìm kiếm tư liệu là yêu cầu bắt buộc của FR-X.1-06 (srs-fr-12-tv-chuyen-sau.md:942-951) và màn duy nhất chứa FR-X.1-06 chính là nhóm này (:828, :1153, :1227-1229), nhưng Thành phần màn hình của SCR-X1-02 chỉ khai bảng dữ liệu + nút [+ Thêm tư liệu], không khai ô tìm kiếm hay bộ lọc nào (:1171, :1198), và FR-X.1-06 không có tiêu chí chấp nhận cho tìm kiếm (:986-996); web/dev hiện tại đã có đủ ô tìm kiếm + 3 bộ lọc + nút [Tìm kiếm] [Xóa bộ lọc] và chạy đúng.
+Đề nghị BA chốt: bổ sung thành phần tìm kiếm/lọc này vào SCR-X1-02 phần Thành phần màn hình (nêu rõ tìm theo trường nào, có mấy bộ lọc) và bổ sung tiêu chí chấp nhận tương ứng cho FR-X.1-06, để đặc tả khớp sản phẩm đang chạy. Mục đích là bổ sung vào đặc tả, KHÔNG phải chặn bàn giao.
+
+ĐÃ ĐO
+Đếm số ô nhập/chọn nằm trong đúng khung của nhóm tư liệu (4 ô: 1 ô từ khóa + 3 bộ lọc) và đếm số dòng bảng trước/sau khi tìm (2 → 1), rồi đối chiếu với phản hồi máy chủ của chính lượt tìm đó. Tiền đề: nhóm này ban đầu chỉ có 1 tư liệu không mang dấu tiếng Việt nên chưa phân biệt được có dấu / không dấu; QA đã thêm 1 tư liệu "Nghị định 55/2019 hỗ trợ pháp lý cho doanh nghiệp nhỏ và vừa" (loại Văn bản pháp luật, trạng thái Nháp) bằng chính nút [Thêm tư liệu] trên bản ghi TVCS-20260806-0003 của môi trường kiểm thử nội bộ; không đụng dữ liệu của đối tác.
+
+BẰNG CHỨNG
+- Nhóm tư liệu có ô tìm kiếm + 3 bộ lọc + bảng 9 cột: https://drive.google.com/file/d/1KGFgkn36R1FI1bBLr1cp84WUShXqe1tr/view?usp=drivesdk
+- Gõ từ khóa có dấu "Nghị định" ra đúng 1 kết quả: https://drive.google.com/file/d/1Q2Y31zRZ55NZ_85fCf5s3f07jK0jEG70/view?usp=drivesdk
+
+GIỚI HẠN HIỆU LỰC
+Kết quả trên đo tại môi trường kiểm thử nội bộ bản dựng V1.0.9. Ảnh của đối tác chụp ở bản V1.0, tại đó nhóm tư liệu chưa có thanh lọc và bảng chỉ 7 cột — hai bản dựng khác nhau thật, nên kết luận này chỉ có hiệu lực cho bản V1.0.9 và cần đo lại sau khi bản này lên môi trường nghiệm thu.

@@ -1,0 +1,11 @@
+{
+  "Mã TC": "QLNDTVVCG_QA01",
+  "Tên chức năng": "Quản lý nội dung tư vấn chuyên sâu — danh sách Tư vấn chuyên sâu",
+  "Mô tả": "Nhãn trạng thái trên màn danh sách Tư vấn chuyên sâu không khớp bảng nhãn của đặc tả. Phát hiện trong lúc verify dòng 288 (QLNDTVVCG_38), khi phải đọc lại nhãn trạng thái của từng hồ sơ sau khi phân công.",
+  "Các bước thực hiện": "1. Đăng nhập bằng tài khoản Cán bộ Nghiệp vụ (đã dùng cbnv_tw_04). · 2. Chọn menu \"Tư vấn\" => \"Tư vấn chuyên sâu\". · 3. Ở thẻ \"Chờ xử lý\", cuộn bảng sang phải để nhìn thấy cột \"Trạng thái\"; đọc nhãn của hồ sơ đã được phân công chuyên gia (ví dụ TVCS-QLND38-UAT-01, TVCS-QLND38-UAT-02). · 4. Chuyển sang thẻ \"Hoàn thành\"; đọc nhãn của các hồ sơ đã hủy (ví dụ TVCS-20260725-0006, TVCS-20260721-0004).",
+  "Kết quả mong đợi": "Nhãn trạng thái hiển thị đúng như bảng nhãn trạng thái SM-TVCS của đặc tả (srs-fr-12-tv-chuyen-sau.md, mục \"Bảng nhãn trạng thái SM-TVCS\", các dòng 1130-1140): trạng thái đã phân công hiển thị \"Đã phân công\" (dòng 1135); trạng thái hủy hiển thị \"Đã hủy\" (dòng 1140).",
+  "Kết quả thực tế": "Hai nhãn hiển thị thiếu chữ so với đặc tả: trạng thái đã phân công hiện \"Phân công\" (đặc tả: \"Đã phân công\"); trạng thái hủy hiện \"Hủy\" (đặc tả: \"Đã hủy\"). Hai nhãn còn lại nhìn thấy trong lượt đo thì khớp: \"Tiếp nhận\" và \"Đã duyệt\". Đọc lại từ máy chủ xác nhận trạng thái bên dưới là đúng (đã phân công / đã hủy), nên đây là lỗi câu chữ hiển thị chứ không phải lỗi dữ liệu. Đo lúc 07/08/2026 02:42 trên env nội bộ 18.143.165.120.nip.io, bó mã index-D4Buvu4S.js. Chỉ khẳng định 2 trạng thái đã trực tiếp nhìn thấy; các trạng thái còn lại chưa đo.",
+  "Trạng thái": "Fail",
+  "Dopai": "bug",
+  "Ảnh/vieo 1": "https://drive.google.com/file/d/1otYA7Kt6569i_xBMcOrig92Po5SDT97T/view?usp=drivesdk\nhttps://drive.google.com/file/d/1IHJIesPwbhZCFP0HNUVFqEzpco7yB3LV/view?usp=drivesdk"
+}

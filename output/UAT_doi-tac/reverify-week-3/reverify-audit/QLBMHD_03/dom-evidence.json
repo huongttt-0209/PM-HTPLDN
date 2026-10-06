@@ -1,0 +1,23 @@
+// Row 98 QLBMHD_03 — DOM evidence form Thêm biểu mẫu (them-moi), switch Công khai ON
+// Trích qua Chrome DevTools MCP evaluate_script, tài khoản cbnv_tw (CB NV - TW), 2026-07-20
+// URL: https://18.143.165.120.nip.io/bieu-mau/them-moi
+{
+  "switchChecked": "true",
+  "hasCoQuanBanHanh": false,        // <-- Không có trường/label "Cơ quan ban hành" (cả switch OFF lẫn ON) → SRS #21 (dòng 658) yêu cầu read-only field → THIẾU
+  "labels_khi_switch_ON": [
+    "Thư mục", "Tên biểu mẫu", "Lĩnh vực", "Loại hình", "Mô tả", "Thứ tự hiển thị",
+    "File biểu mẫu",
+    "Nội dung công khai trên Cổng PLQG", "Công khai trên Cổng PLQG",
+    "Ảnh đại diện", "Mô tả công khai", "File đính kèm công khai"
+    // KHÔNG có "Cơ quan ban hành"
+  ],
+  "fileInputs_accept": [
+    { "field": "File biểu mẫu (chính)", "accept": "" , "hint": "Chỉ chấp nhận: .doc, .docx, .xls, .xlsx — Tối đa 20MB" },
+    { "field": "Ảnh đại diện", "accept": ".jpg,.png,.gif", "hint": "Định dạng: .jpg, .png, .gif. Dung lượng tối đa: 5MB/tệp" },
+    { "field": "File đính kèm công khai", "accept": ".pdf,.doc,.docx,.xls,.xlsx", "hint": "Định dạng: .pdf, .doc, .docx, .xls, .xlsx. Dung lượng tối đa: 20MB/tệp" }
+  ],
+  "ket_luan": {
+    "sub_a_co_quan_ban_hanh": "THIẾU trường (hasCoQuanBanHanh=false) → Open (SRS SCR-VII-02 #21 dòng 658 / Inputs #14 dòng 304)",
+    "sub_b_tep_dinh_kem_sai_dinh_dang": "KHÔNG tái hiện: File đính kèm công khai accept=.pdf,.doc,.docx,.xls,.xlsx (không còn .jpg/.png/.gif). Đối tác thấy có .jpg/.png/.gif ở build cũ → build hiện tại đã sửa → Reject sub-item. (.jpg/.png/.gif chỉ nhận ở trường Ảnh đại diện — đúng thiết kế)"
+  }
+}

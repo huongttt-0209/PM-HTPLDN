@@ -1,0 +1,29 @@
+## [UAT_TGPL Doanh Nghiệp-tuần 2] row 126 — QLLSHTCTVV_04 — S1
+Tên chức năng: 
+Tác nhân: 
+Mô tả: Kiểm tra các trường thông tin tìm kiếm
+Điều kiện: 1. Đăng nhập tài khoản
+Dữ liệu đầu vào: 
+Các bước: 1. Chọn menu "Mạng lướt tư vấn viên" -> "Tư vấn viên/Chuyên gia"
+2. Tìm kiếm và Nhấn xem chi tiết ứng viên
+3. Chọn tab "Lịch sử hỗ trợ"
+KQ mong đợi: - Hệ thống hiển thị các trường thông tin giống với thiết kế
+- Dữ liệu hiển thị đúng định dạng và trường thông tin
+- Dữ liệu hiển thị không bị tràn/đè lên nhau, đồng nhất ngôn ngữ hiển thị
+KQ thực tế (l1): - Danh sách chọn Trạng thái chưa đủ giá trị theo định nghĩa của nhóm chức năng Quản lý vụ việc
+Trạng thái 1: Fail | P dev fix1: dev done | Q Verify: Open
+KQ thực tế lần 2: 
+Trạng thái 2:  | W dev fix2:  | X Verify2: 
+--- NOTE (R: DEV phản hồi lần 1) ---
+✅ Bug đúng (BA 04/08/2026). Dev FE/BE: ô lọc "Trạng thái vụ việc" ở bảng Lịch sử hỗ trợ đang bỏ sót phần lớn dữ liệu của chính bảng đó — đo trên một hồ sơ có 6 vụ việc thì 4 vụ việc không lựa chọn nào lọc ra được. BA chốt: GIỮ tập rút gọn ba lựa chọn (không mở ra đủ 12 trạng thái), nhưng mỗi lựa chọn phải gom đủ các trạng thái tương ứng để không bản ghi nào lọt lưới: "Đang xử lý" gom MOI_TAO, CHO_TIEP_NHAN, DA_TIEP_NHAN, DANG_KIEM_TRA, YEU_CAU_BO_SUNG, DA_PHAN_CONG, DANG_XU_LY, CHO_PHE_DUYET, DA_DUYET; "Hoàn thành" gom HOAN_THANH, DA_DANH_GIA; "Từ chối" gom TU_CHOI. Áp cho cả tab "Vụ việc đã hỗ trợ" của màn Người hỗ trợ pháp lý (cùng cụm đặc tả, dòng 1856). Nhãn hiển thị "Từ chối" mà phần mềm đang dùng là ĐÚNG — nhãn "Đã hủy" trong đặc tả là nhãn mồ côi, BA gỡ. Căn cứ: bảng ánh xạ trạng thái vụ việc (srs-fr-05-vu-viec.md dòng 1498-1509), tập lọc SCR-IV-03 (dòng 1578). Major.
+
+Ghi nhận: Dev báo đã sửa cả giao diện lẫn máy chủ ngày 03/08/2026 (commit a03203023). QA CHƯA đo lại trên môi trường bàn giao nên phiếu giữ Open — bản fix sẽ được chấm ở vòng sau theo đúng khối dưới đây.
+── CÁCH VERIFY sau Dev fix ──
+Precondition: cbnv_tw + hồ sơ TVV-BTP-TW-0002 có 6 vụ việc trải trên các trạng thái DA_DUYET, DA_DANH_GIA (2), DA_PHAN_CONG, DANG_XU_LY, HOAN_THANH → tab "Lịch sử hỗ trợ".
+1) Không lọc: đếm tổng số vụ việc bảng trả về (kỳ vọng 6).
+2) Lần lượt chọn từng giá trị của ô lọc "Trạng thái vụ việc", ghi số vụ việc mỗi lần.
+3) Cộng kết quả của tất cả các giá trị lại.
+4) Lặp bước 1-3 ở tab "Vụ việc đã hỗ trợ" của màn Người hỗ trợ pháp lý.
+✅ PASS khi: tổng số vụ việc lọc được qua tất cả các lựa chọn bằng đúng tổng số khi không lọc — không vụ việc nào nằm ngoài mọi lựa chọn; và điều này đúng ở cả hai màn.
+❌ FAIL nếu: còn vụ việc nào không lựa chọn nào lọc ra được; hoặc ô lọc vẫn còn lựa chọn tên "Đã hủy"; hoặc hai màn cho kết quả khác nhau.
+⚠️ Ô lọc KHÔNG cần mở ra đủ 12 trạng thái — BA đã chốt giữ tập rút gọn. Đừng chấm FAIL vì chỉ thấy ba lựa chọn.

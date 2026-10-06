@@ -1,0 +1,5 @@
+✅ Bug ĐÚNG – chuyển dev.
+- Lỗi: bấm "Sửa" một đợt đang ở trạng thái "Lập kế hoạch" KHÔNG mở màn chỉnh sửa. Hệ thống mở màn chi tiết ở chế độ chỉ xem: các trường thông tin (Tên đợt, Mục tiêu, Tần suất, Đối tượng, Thời gian...) hiển thị read-only, không sửa được; breadcrumb hiển thị "Trang chủ / Đánh giá hiệu quả / Kế hoạch đánh giá / Chi tiết" (đúng ra là màn Sửa/Chỉnh sửa).
+- Đã verify env test (tài khoản CB Nghiệp vụ TW): tạo đợt DG-20260720-0002 (Lập kế hoạch) → danh sách hiện icon Sửa (đúng, chỉ hiện ở Lập kế hoạch/Phân công) → bấm Sửa → điều hướng tới URL chi tiết đợt, các trường read-only, không có ô nhập nào cho thông tin đợt.
+- Chuẩn: SRS SCR-VI-01 — "Form tạo/sửa đợt đánh giá" (các trường phải nhập/sửa được); Hành động danh sách #18: "Sửa (chỉ LAP_KE_HOACH/PHAN_CONG)" → mở form sửa; FR-VI-01 (UC83) Acceptance Criteria: "CB NV chỉnh sửa KH chưa duyệt → thay đổi → validate + lưu".
+- Mã lỗi nội bộ: BUG-LKHDG-EDIT (gộp LKHDG_16/20/21/22).

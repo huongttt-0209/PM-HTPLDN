@@ -1,0 +1,114 @@
+R4 RE-VERIFY — BUG-XUAT-TEP-KHOA-HOC-SAI-DU-LIEU (DAOTAO_OOS_11)
+Ngay chay: 29/07/2026 ~17:40  |  Env: https://18.143.165.120.nip.io  |  Tai khoan: cbnv_tw_01
+Thao tac hoan toan tren giao dien; tep lay bang chinh nut [Xuat Excel] / [Xuat DOCX] cua man hinh.
+================================================================================
+
+BOI CANH: luot 3 da sua 2 diem chinh (diem danh theo buoi + tep ket qua khong con o
+trong), NHUNG cot "Xep loai" moi bo sung lai ghi ma noi bo KHONG_DAT trong khi man
+hinh ghi "Khong dat". Luot 4 kiem lai ca 3 diem.
+
+--------------------------------------------------------------------------------
+PHAN 1 — DIEM DANH: TEP CO BAM THEO BUOI DANG CHON KHONG?
+--------------------------------------------------------------------------------
+ Khoa hoc: KH-20260716-002 (QA RV5 - Khoa hoc test diem danh theo buoi)
+ Khoa nay co 2 buoi cung ngay 20/09/2026: SANG 08:00-11:30 va CHIEU 13:30-17:00.
+
+ PHEP THU QUYET DINH: xuat 2 lan voi 2 buoi KHAC NHAU, doi chieu tung o.
+ (Luot 3 chi thu 1 buoi -> chua loai duoc kha nang tep luon tra buoi dau tien.)
+
+ Lan A — chon buoi SANG (08:00-11:30)
+   Man hinh (2 dong):  QA HV RV5 Hai -> Co mat
+                       QA HV RV5 Mot -> Vang khong phep
+   Tep xuat (vung A1:K3 = 2 dong du lieu):
+     Cot: STT | Ma hoc vien | Ho ten | Don vi | Email | So dien thoai |
+          Buoi hoc | Ngay diem danh | Trang thai | Co mat (1/0) | Ghi chu
+     1 | ... | QA HV RV5 Hai | ... | 20/09/2026 08:00-11:30 | 20/09/2026 | Co mat            | 1
+     2 | ... | QA HV RV5 Mot | ... | 20/09/2026 08:00-11:30 | 20/09/2026 | Vang khong phep   | 0
+
+ Lan B — doi sang buoi CHIEU (13:30-17:00), khong doi gi khac
+   Man hinh (2 dong):  QA HV RV5 Hai -> Vang co phep
+                       QA HV RV5 Mot -> Vang khong phep
+   Tep xuat:
+     1 | ... | QA HV RV5 Hai | ... | 20/09/2026 13:30-17:00 | 20/09/2026 | Vang co phep      | 0
+     2 | ... | QA HV RV5 Mot | ... | 20/09/2026 13:30-17:00 | 20/09/2026 | Vang khong phep   | 0
+
+ => Tep doi theo dung buoi dang chon: cot "Buoi hoc" doi gio, cot "Trang thai" doi
+    tu "Co mat" sang "Vang co phep". Khong con canh 1 hoc vien co 2 dong mau thuan
+    trong cung mot tep (luot 1: 4 dong gop ca 2 buoi, khong co cot buoi).
+    So dong: 2 = dung bang man hinh (luot 1 la 4).
+
+--------------------------------------------------------------------------------
+PHAN 2 — KET QUA HOC TAP: CON O TRONG? CON MA KHONG_DAT?
+--------------------------------------------------------------------------------
+ Man hinh tab Ket qua (KH-20260716-002), doc ca gia tri trong o nhap:
+   Dong 1  QA HV RV5 Hai | Chuyen can 1/2 (100.00%) | Diem KT 1.5 | Ket qua Khong dat | Xep loai Khong dat
+   Dong 2  QA HV RV5 Mot | Chuyen can 0/2 (0.00%)   | Diem KT     | Ket qua —         | Xep loai —
+
+ Tep .docx xuat bang nut [Xuat DOCX] (2078 B):
+   Tieu de : BAO CAO KET QUA DAO TAO
+   Khoa hoc: QA RV5 - Khoa hoc test diem danh theo buoi (KTDGKQHT_03/08) (KH-20260716-002)
+   Tong so hoc vien: 2 — Dat: 0 — Khong dat: 1
+   Bang 12 cot: STT | Ho va ten | Email | So dien thoai | Don vi | So buoi co mat |
+                Tong so buoi | Ti le chuyen can (%) | Diem kiem tra | Ket qua | Xep loai | Ghi chu
+   1 | QA HV RV5 Hai | qa.hv.rv5.hai@htpldn.test | 0912345672 | Cong ty QA RV5 | 1 | 2 | 100.00 | 1.5 | Khong dat | Khong dat |
+   2 | QA HV RV5 Mot | qa.hv.rv5.mot@htpldn.test | 0912345671 | Cong ty QA RV5 | 0 | 2 |   0.00 |     | —         | —         |
+
+ So do tung o voi man hinh:
+   Muc                       | Luot 1        | Luot 3     | Luot 4
+   --------------------------+---------------+------------+------------------
+   Dong 2 — o "Ho va ten"    | TRONG         | da co      | "QA HV RV5 Mot"  OK
+   Dong 2 — o "Ket qua"      | TRONG         | da co      | "—"              OK
+   Dong 1 — o "Xep loai"     | (chua co cot) | KHONG_DAT  | "Khong dat"      OK
+   So cot cua bang           | 7             | 12         | 12               OK
+
+--------------------------------------------------------------------------------
+PHAN 3 — KIEM CHEO TREN KHOA HOC KHAC (xem ban sua co bi vá rieng cho 1 gia tri khong)
+--------------------------------------------------------------------------------
+ Neu chi sua rieng truong hop "Khong dat" thi cac xep loai khac van co the ra ma.
+ Mo them khoa KH-2026-001 (Khoa phap luat co ban cho DN 2026 - dot 1), tab Ket qua:
+
+   Man hinh: Nguyen Van A | 8.5 | Ket qua Dat | Xep loai Gioi
+             Tran Thi B   | 7.2 | Ket qua Dat | Xep loai Kha
+   Tep docx: Nguyen Van A | 9 | 10 | 90.00 | 8.5 | Dat | Gioi |
+             Tran Thi B   | 9 | 10 | 80.00 | 7.2 | Dat | Kha  |
+
+ => Ca 3 gia tri xep loai gap duoc (Gioi / Kha / Khong dat) deu ghi bang chu tieng
+    Viet, dung y man hinh. Khong con ma noi bo o bat ky dong nao.
+
+--------------------------------------------------------------------------------
+PHAN 4 — VE VIEC "DU LIEU MOI"
+--------------------------------------------------------------------------------
+ Loi "KHONG_DAT" nam o khau ket xuat chu khong phai o du lieu da luu. Phep thu manh
+ nhat la lay lai chinh ban ghi TUNG HONG (KH-20260716-002, tao tu luot 1) — neu ban
+ ghi cu nay da ra chu dung thi khong con kha nang "chi du lieu tao moi moi dung".
+ Da lam dung nhu vay, va bo sung mot khoa hoc thu hai khac ky (Phan 3) de doi chung.
+ Ngoai ra phan diem danh (Phan 1) duoc chay bang mot lan chon buoi MOI ngay tai luot
+ 4, khong dung lai ket qua cu.
+
+--------------------------------------------------------------------------------
+PHAN 5 — GHI NHAN THEM (khong thuoc pham vi loi nay, khong chan viec dong)
+--------------------------------------------------------------------------------
+ a) Ten tep tai ve van dung chuoi dinh danh noi bo:
+    "diem-danh-033910fc-895d-432a-8407-8f7f0a9516c2.xlsx" (khong dung ma KH-20260716-002).
+    Da ghi nhan tu luot 3, chua doi.
+ b) Cot "Ma hoc vien" trong tep diem danh ghi chuoi dinh danh noi bo
+    (4d549093-1bab-4466-9fbe-eba114038214). Man hinh tab Hoc vien khong co cot ma
+    hoc vien nao de doi chieu. Ton tai tu luot 1, khong phai do ban sua nay sinh ra.
+ c) Tab Ket qua chi co [Xuat DOCX], khong co [Xuat Excel]. Da ghi nhan tu luot 3.
+ d) DA SUA (khong con lech): don vi cua hoc vien nay khop nhau giua hai tab —
+    ca tab Diem danh lan tab Ket qua deu ghi "Cong ty QA RV5"
+    (luot 3 tab Ket qua con ghi "Cuc Bo tro tu phap - Bo Tu phap").
+
+--------------------------------------------------------------------------------
+PHAN 6 — CAN CU DAC TA
+--------------------------------------------------------------------------------
+ Docs-PM-HTPLDN/_bmad-output/planning-artifacts/srs-v3.5/
+  srs-fr-03-dao-tao.md:606  — truong xep_loai: "Gioi / Kha / Trung binh / Khong dat
+                              — auto tu diem theo BR-KQ-01"  (tap gia tri la chu
+                              tieng Viet, khong phai ma)
+  srs-fr-03-dao-tao.md:546  — diem danh bat buoc gan voi 1 buoi cu the (lich_hoc_id)
+  srs-fr-03-dao-tao.md:39   — diem danh per-buoi
+  srs-fr-11-bao-cao.md:1280 — BR-DATA-06: file xuat theo bo loc hien tai
+
+KET LUAN: DAT — ca 3 diem cua loi deu da sua, kiem tren 2 khoa hoc va 2 buoi khac
+nhau. Dong loi nay. Cac muc a/b/c o Phan 5 giu lai de theo doi rieng.

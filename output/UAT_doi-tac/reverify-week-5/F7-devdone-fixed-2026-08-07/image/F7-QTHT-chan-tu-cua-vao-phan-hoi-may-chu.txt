@@ -1,0 +1,64 @@
+BẰNG CHỨNG — vai trò Quản trị hệ thống bị chặn NGAY TỪ CỬA VÀO chức năng báo cáo thống kê
+=========================================================================================
+Áp cho 14 phiếu: SLHDVM_06 · CLDTBDDDR_06 · LDTBDDDR_06 · CGTVPL_06 · DGHQHTPL_06 ·
+CLDTBDPL_06 · CPHTCT_06 · CPCTHTTDVQL_06 · CPCTHTTLHDN_06 · CPCTHTTTG_06 · SLCTHT_06 ·
+CTTDVQL_04 · CTTLV_05 · CTTTG_04
+
+Đo lúc  : 2026-08-07 09:48:48 giờ VN (02:48:48 GMT)
+Env     : https://18.143.165.120.nip.io  (nội bộ)
+Bó mã FE: assets/index-eWHwDgt2.js   (GET / last-modified Fri, 07 Aug 2026 02:11:03 GMT)
+Nhãn màn: HTPLDN · V1.0.10
+Tài khoản: admin / Secret@123
+
+--- (0) Xác nhận đúng vai trò đang đo ------------------------------------------------
+GET /api/v1/auth/me  ->  200
+{"success":true,"data":{"userId":"00000000-0000-4000-8000-000000000099","hoTen":"Quản trị hệ thống",
+"vaiTro":["QTHT"],"donViId":"00000000-0000-4000-8000-000000000001","capDonVi":"TW",
+"authMethod":"LOCAL","tinhThanhId":null},"meta":null}
+
+=> Đúng vai trò Quản trị hệ thống, cấp TW — cùng vai trò trong 10/10 ảnh nghiệm thu của đối tác.
+
+--- (1) Menu: đã ẨN, không phải làm mờ -----------------------------------------------
+Liệt kê TOÀN BỘ mục của thanh điều hướng trái (đọc thẳng từ cây giao diện, không dùng
+phép so chuỗi có dấu — chữ tiếng Việt trên trang ở dạng tổ hợp dấu nên so chuỗi dễ sai):
+
+  admin (QTHT)      : 33 mục — ... "Chương trình HTPLDN" | "Đợt báo cáo" |
+                      "Quản trị hệ thống" | "Danh mục dùng chung" | ...
+                      => KHÔNG có mục "Báo cáo thống kê".
+
+  cbnv_tw_03 (CB NV): 29 mục — ... "Chương trình HTPLDN" | "Đợt báo cáo" |
+                      "Báo cáo thống kê" | "Quản trị hệ thống" | ...
+                      => CÓ mục "Báo cáo thống kê", đúng vị trí cũ.
+
+=> Mục menu bị ẩn theo VAI TRÒ, không phải bị gỡ khỏi phần mềm. Đúng quy ước "ẩn, không
+   làm mờ" khi vai trò không có quyền.
+Ảnh: F7-00-admin-sidebar-khong-con-muc-Bao-cao-thong-ke.png
+
+--- (2) Gõ thẳng địa chỉ màn báo cáo: bị đẩy ra --------------------------------------
+Điều hướng tới  https://18.143.165.120.nip.io/bao-cao
+Kết thúc ở      https://18.143.165.120.nip.io/dashboard   (màn Tổng quan hệ thống)
+=> Không vào được màn báo cáo kể cả khi gõ thẳng địa chỉ.
+
+--- (3) Phía máy chủ: chặn ở bước XEM, thông báo bằng TIẾNG VIỆT ----------------------
+GET /api/v1/bao-cao/loai                                            -> 403
+  {"success":false,"error":{"code":"ERR-RPT-05",
+   "message":"Bạn không có quyền xem báo cáo này",
+   "timestamp":"2026-08-07T02:48:48.105Z","requestId":"37684067-abda-4b84-be32-f3183b92037b"}}
+
+GET /api/v1/bao-cao/chi-phi-chi-tra?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31 -> 403
+  {"success":false,"error":{"code":"ERR-RPT-05",
+   "message":"Bạn không có quyền xem báo cáo này",
+   "timestamp":"2026-08-07T02:48:48.167Z","requestId":"2c5beae1-3483-4175-8d6a-b3083ec3dde5"}}
+
+GET /api/v1/bao-cao/so-luong-ct-ho-tro?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31 -> 403
+  {"success":false,"error":{"code":"ERR-RPT-05",
+   "message":"Bạn không có quyền xem báo cáo này",
+   "timestamp":"2026-08-07T02:48:48.234Z","requestId":"5debd8c0-de07-4aad-b112-1af4df32efc6"}}
+
+--- SO VỚI LƯỢT ĐO 06/08/2026 (bản dựng cũ index-DIABnbIr.js) ------------------------
+Trước : vào được màn, [Xem báo cáo] ra đủ số liệu, nút Xuất sáng; bấm Xuất -> 403
+        mã ERR-PERM-SYS-00-01, màn hiện đúng một chữ tiếng Anh "Forbidden".
+Nay   : chặn ngay ở bước XEM (kể cả /bao-cao/loai — ô chọn loại báo cáo),
+        mã ERR-RPT-05, câu tiếng Việt "Bạn không có quyền xem báo cáo này".
+        Menu đã ẩn hẳn nên người dùng không còn đường bấm vào.
+        Chuỗi "Forbidden" và mã ERR-PERM-SYS-00-01 KHÔNG còn xuất hiện.

@@ -1,0 +1,40 @@
+{
+  "run_id": "20260625-235950",
+  "name200_len": 200,
+  "create": {
+    "status": 401,
+    "body": {
+      "success": false,
+      "error": {
+        "code": "ERR-AUTH-SYS-00-03",
+        "message": "Token đã bị thu hồi",
+        "timestamp": "2026-06-25T16:59:50.518Z",
+        "requestId": "b167cee4-5f66-4061-936c-6be2254a0923"
+      }
+    }
+  },
+  "search200": {
+    "status": 401,
+    "body": {
+      "success": false,
+      "error": {
+        "code": "ERR-AUTH-SYS-00-03",
+        "message": "Token đã bị thu hồi",
+        "timestamp": "2026-06-25T16:59:50.539Z",
+        "requestId": "a6e8e266-9d44-41b8-a80c-3ab21af317c2"
+      }
+    }
+  },
+  "search201": {
+    "status": 401,
+    "body": {
+      "success": false,
+      "error": {
+        "code": "ERR-AUTH-SYS-00-03",
+        "message": "Token đã bị thu hồi",
+        "timestamp": "2026-06-25T16:59:50.584Z",
+        "requestId": "a5e40c00-477e-4f6b-a36b-0105552e2fc8"
+      }
+    }
+  }
+}

@@ -1,0 +1,172 @@
+CTTDVQL_04 — NGUYÊN VĂN THÔNG BÁO TRÊN MÀN + PHẢN HỒI MÁY CHỦ + NỘI DUNG TỆP XUẤT
+Màn: Báo cáo thống kê → Loại BC "BC Chương trình theo đơn vị" (?loai=ct-theo-don-vi)
+Môi trường: https://18.143.165.120.nip.io — bản dựng HTPLDN V1.0.8, bó mã giao diện assets/index-CNwX9JjX.js
+Thời điểm đo: 2026-08-06 12:54 – 13:08 (giờ máy chủ ghi trong phản hồi là UTC, lệch -7h)
+Công cụ: Chrome DevTools MCP, tab riêng mở bằng new_page với isolatedContext="cttdvql04"
+         (cách ly cookie/bộ nhớ khỏi phiên QA khác đang chạy song song trên cùng trình duyệt)
+Bộ bắt thông báo: script dùng chung output/UAT_doi-tac/tools/toast-capture.js
+         — KHÔNG lọc trùng · đọc bằng innerText · đếm request.
+         Tự kiểm trước mỗi phép đo quyết định: soObserverDangSong = 1 (hợp lệ) ở CẢ 2 nhánh.
+         Bổ sung 1 observer phụ (mutation-driven, không poll) ghi lại MỌI thay đổi chữ trong vùng
+         .ant-message để đọc được chuỗi "Đang tạo file..." → "<kết quả>" (AntD cập nhật chữ tại chỗ,
+         không sinh khung mới, nên bộ đếm khung của script dùng chung chỉ thấy 1 khung).
+         Bổ sung 1 bẫy "tệp được giao": ghi lại mọi URL.createObjectURL + mọi <a download> trang tự bấm.
+
+================================================================================
+NHÁNH A — cbnv_tw_04 (CB_NV_TW, cấp TW) — vai trò đặc tả, dùng để chấm
+================================================================================
+
+Danh tính TRƯỚC và SAU mỗi phép đo quyết định (GET /api/v1/auth/me) — GIỐNG NHAU:
+  hoTen "CB Nghiệp vụ - Trung ương #04" · vaiTro ["CB_NV_TW"] · capDonVi "TW"
+  donViId 00000000-0000-4000-8000-000000000001 (Cục Bổ trợ tư pháp - Bộ Tư pháp)
+  Có quyền read_bao_cao = true, export_bao_cao = true (đọc từ permissions của /auth/me).
+
+--- DẠNG ① Kỳ Năm 01/01/2026–31/12/2026 · Đơn vị Toàn quốc (khớp khít cấu hình đối tác) ---
+
+URL sinh ra khi bấm [Xem báo cáo]:
+  /bao-cao?loai=ct-theo-don-vi&kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+  (trùng khít URL trên 2 ảnh đối tác)
+
+Số trên màn (Thời điểm tạo 06/08/2026 12:56):
+  Tổng chương trình = 7 · Tổng ngân sách = 350,000,000
+  Bảng cross-tab: | Đơn vị | Cấp đơn vị | Số chương trình | Tổng ngân sách |
+                  | Cục Bổ trợ tư pháp - Bộ Tư pháp | TW | 7 | 350.000.000 ₫ |
+
+Bấm [Xuất Excel] (thao tác chuột thật của trình duyệt):
+  SO_REQUEST (khác GET) = 1  →  POST /api/v1/bao-cao/export
+  SO_KHUNG_THONG_BAO = 1 (1 mốc giờ duy nhất: 205263.5) → KHÔNG double-toast
+  Chuỗi chữ hiện cho người dùng: "Đang tạo file..." → (không bắt được khung mới)
+  KHÔNG có "Không thể tạo file xuất. Vui lòng thử lại." · KHÔNG có "Forbidden"
+  TỆP ĐƯỢC GIAO: <a download="BaoCaoCtTheoDonVi_20260806_1257.xlsx">, blob 6.693 byte,
+                 type application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+
+Nội dung tệp BaoCaoCtTheoDonVi_20260806_1257.xlsx (đọc bằng openpyxl, sheet "Chương trình theo đơn vị"):
+  A1  BC Chương trình theo đơn vị
+  A2  Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+  A3  Đơn vị: Toàn quốc
+  A4  Ngày tạo: 06/08/2026
+  A6  Tổng số chương trình
+  A7  Chỉ tiêu           B7  Số lượng
+  A8  Tổng số chương trình   B8  7
+  A10 Tổng ngân sách
+  A11 Chỉ tiêu           B11 Số tiền (₫)
+  A12 Tổng ngân sách     B12 350000000
+  A14 Theo đơn vị
+  A15 Đơn vị   B15 Cấp đơn vị   C15 Số chương trình   D15 Tổng ngân sách (₫)
+  A16 Cục Bổ trợ tư pháp - Bộ Tư pháp   B16 TW   C16 7   D16 350000000
+  → Tệp là zip thật (magic PK\x03\x04), openpyxl mở được.
+  → Cộng dọc hàng đơn vị: 7 = thẻ Tổng chương trình · 350.000.000 = thẻ Tổng ngân sách (khớp).
+
+Đường đo thứ hai — phản hồi máy chủ của chính lời gọi báo cáo
+GET /api/v1/bao-cao/ct-theo-don-vi?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31 → 200:
+{"success":true,"data":{"tenBaoCao":"BC Chương trình HTPLDN theo đơn vị","ngayTaoBc":"2026-08-06T05:56:27.028Z",
+ "kyBaoCao":"NAM","tuNgay":"2026-01-01","denNgay":"2026-12-31","tongCt":7,"tongNganSach":350000000,
+ "data":[{"donViId":"00000000-0000-4000-8000-000000000001","tenDonVi":"Cục Bổ trợ tư pháp - Bộ Tư pháp",
+ "capDonVi":"TW","soCt":7,"tongNganSach":350000000}],"chartType":"BAR_CROSS_TAB"},"meta":null}
+  → Có ĐỦ 5 trường Output đặc thù FR-IX-21 (:941–:945): donViId · tenDonVi · capDonVi · soCt · tongNganSach.
+  → chartType BAR_CROSS_TAB đúng mapping :1084.
+  → Giao diện ↔ máy chủ ↔ tệp xuất: 3 nguồn KHÔNG mâu thuẫn.
+
+--- DẠNG ② Kỳ Năm · Đơn vị = Cục Bổ trợ tư pháp - Bộ Tư pháp (BTP-TW) ---
+
+URL: ...&donViId=00000000-0000-4000-8000-000000000001 · Thời điểm tạo 06/08/2026 12:59
+Màn: Tổng chương trình 7 · Tổng ngân sách 350,000,000 · 1 hàng đơn vị (7 / 350.000.000 ₫)
+Bấm [Xuất Excel]:
+  SO_REQUEST = 1 → POST /api/v1/bao-cao/export · SO_KHUNG = 1 (1 mốc giờ 366311.3)
+  Chuỗi chữ ĐẦY ĐỦ bắt được lần này: "Đang tạo file..."  →  "Tạo file thành công."
+  TỆP: BaoCaoCtTheoDonVi_20260806_1300.xlsx — 6.686 byte
+Nội dung tệp — khác dạng ① ĐÚNG ở dòng đơn vị:
+  A3  Đơn vị: Cục Bổ trợ tư pháp - Bộ Tư pháp        ← dạng ① là "Đơn vị: Toàn quốc"
+  (các dòng còn lại giữ nguyên: B8 = 7, B12 = 350000000, A16 = Cục Bổ trợ tư pháp - Bộ Tư pháp | TW | 7 | 350000000)
+  Tên tệp _1300 KHÁC tên tệp _1257 của dạng ① ⇒ xuất 2 lần trong cùng ngày KHÔNG đè tệp.
+
+--- DẠNG ②b (nhánh phụ, để phá ca suy biến) Kỳ Năm · Đơn vị = Bộ Công an (BCA) ---
+
+URL: ...&donViId=00000000-0000-4000-8001-000000000016
+Màn: hiện ảnh "Trống" + chữ "Không có dữ liệu báo cáo cho kỳ và đơn vị đã chọn"
+Nút [Xuất Excel] và [Xuất PDF] ở trạng thái KHOÁ (disabled = true)
+  ⇒ chứng minh bộ lọc đơn vị THẬT SỰ lọc dữ liệu (dạng ② trùng số dạng ① chỉ vì mọi chương trình
+    trên môi trường này đều thuộc một đơn vị), và điều kiện hiển thị nút xuất bám đúng luồng.
+
+--- DẠNG ③ Kỳ "Khoảng tùy chọn" 01/02/2026 → 31/12/2026 · Đơn vị Toàn quốc ---
+
+URL: /bao-cao?loai=ct-theo-don-vi&kyBaoCao=KHOANG&tuNgay=2026-02-01&denNgay=2026-12-31
+Màn (Thời điểm tạo 06/08/2026 13:02): Tổng chương trình = 2 · Tổng ngân sách = 150,000,000
+  Bảng cross-tab: Cục Bổ trợ tư pháp - Bộ Tư pháp | TW | 2 | 150.000.000 ₫
+Bấm [Xuất Excel]:
+  SO_REQUEST = 1 → POST /api/v1/bao-cao/export · SO_KHUNG = 1 (mốc giờ 547971.3)
+  Chuỗi chữ: "Đang tạo file..."  →  "Tạo file thành công."
+  TỆP: BaoCaoCtTheoDonVi_20260806_1303.xlsx — 6.694 byte
+Nội dung tệp — ĐỔI THEO BỘ LỌC:
+  A2  Kỳ báo cáo: KHOANG (từ 01/02/2026 đến 31/12/2026)
+  A3  Đơn vị: Toàn quốc
+  B8  2            (dạng ① là 7)
+  B12 150000000    (dạng ① là 350000000)
+  A16 Cục Bổ trợ tư pháp - Bộ Tư pháp | TW | 2 | 150000000
+  → khớp đúng màn của chính bộ lọc đó.
+
+Đối chiếu chéo bằng lời gọi máy chủ (đọc, không đổi dữ liệu), cùng phiên:
+  NAM   2026-01-01→2026-12-31 : tongCt 7 · 350.000.000 · 1 hàng đơn vị
+  KHOANG 2026-02-01→2026-12-31: tongCt 2 · 150.000.000 · 1 hàng đơn vị
+  QUY   2026-01-01→2026-03-31 : tongCt 7 · 350.000.000
+  QUY   2026-04-01→2026-06-30 : tongCt 0 · 0 · 0 hàng
+  THANG 2026-03-01→2026-03-31 : tongCt 1 · 50.000.000
+
+================================================================================
+NHÁNH B — admin (QTHT, cấp TW) — TRÙNG KHÍT vai trò trên cả 2 ảnh đối tác, đối chứng
+================================================================================
+
+Danh tính TRƯỚC và SAU phép đo (GET /api/v1/auth/me) — GIỐNG NHAU:
+  hoTen "Quản trị hệ thống" · vaiTro ["QTHT"] · capDonVi "TW"
+  donViId 00000000-0000-4000-8000-000000000001 (Cục Bổ trợ tư pháp - Bộ Tư pháp) — trùng "BTP · TW" của đối tác
+  permissions: MẢNG RỖNG (0 quyền) — không có read_bao_cao, không có export_bao_cao.
+Tự kiểm bộ bắt thông báo sau khi đăng nhập lại: soObserverDangSong = 1 (hợp lệ).
+
+Bước [Xem báo cáo] — CHO QUA:
+  GET /api/v1/bao-cao/ct-theo-don-vi?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31 → 200
+  Màn hiện ĐẦY ĐỦ (Thời điểm tạo 06/08/2026 13:05):
+    Tổng chương trình 7 · Tổng ngân sách 350,000,000 · biểu đồ cột
+    Bảng cross-tab: Cục Bổ trợ tư pháp - Bộ Tư pháp | TW | 7 | 350.000.000 ₫
+  SO_KHUNG_THONG_BAO = 0 — không bị chặn, không cảnh báo gì.
+
+Bước [Xuất Excel] — TỪ CHỐI:
+  SO_REQUEST (khác GET) = 1 → POST /api/v1/bao-cao/export → HTTP 403
+  SO_KHUNG_THONG_BAO = 1 (1 mốc giờ 128778.4) → KHÔNG double-toast
+  Chuỗi chữ người dùng đọc được: "Đang tạo file..."  →  "Forbidden"
+  KHÔNG có tệp nào được giao: 0 blob, 0 thẻ <a download>.
+
+  Thân yêu cầu đã gửi (giống hệt nhánh A, chỉ khác phiên đăng nhập):
+  {"loaiBaoCao":"BC_CT_THEO_DON_VI","kyBaoCao":"NAM","tuNgay":"2026-01-01","denNgay":"2026-12-31","formatXuat":"XLSX"}
+
+  Nguyên văn phản hồi máy chủ:
+  {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+   "timestamp":"2026-08-06T06:06:15.027Z","requestId":"05ed4987-9bce-4a93-930d-1de2eb3326ad"}}
+
+  Số đo chứng minh khung thông báo HIỂN THỊ THẬT với người dùng (đo ở trạng thái ổn định,
+  0,9 s sau khi bấm): chữ "Forbidden" · khung x=0 y=8 w=1432 h=56 · opacity 1 ·
+  vùng chứa .ant-message position: fixed, z-index 2010 · thời gian sống đo được 3.370 ms.
+
+CHỤP ẢNH LỚP THÔNG BÁO — đã thử 3 lượt, lượt 3 THÀNH CÔNG:
+  Lượt 1: bấm nút thật rồi chụp ngay          → TRƯỢT (ảnh CTTDVQL_04-B2…)
+  Lượt 2: hẹn giờ bấm sau 2.500 ms rồi chụp   → TRƯỢT (ảnh CTTDVQL_04-B3…)
+  Lượt 3: bấm lặp 8 lượt cách nhau 1.500 ms để lớp thông báo luôn hiện trên màn rồi chụp
+          → BẮT ĐƯỢC (ảnh CTTDVQL_04-B4-qtht-thong-bao-Forbidden-khi-bam-xuat-excel-V108.png)
+  8 lượt lặp này chỉ sinh thêm 8 lời gọi POST /bao-cao/export đều trả 403, KHÔNG đổi dữ liệu
+  nghiệp vụ (báo cáo là read-only theo Postconditions :105).
+
+================================================================================
+GHI NHẬN THÊM (đối tác KHÔNG nêu — không kéo verdict của case)
+================================================================================
+Ở dạng ③, dòng A2 của tệp xuất ghi nhãn kỳ bằng mã nội bộ: "Kỳ báo cáo: KHOANG (từ 01/02/2026
+đến 31/12/2026)", trong khi trên màn cùng lúc đó ghi "Kỳ: Khoảng" và ở dạng ① tệp ghi "Kỳ báo
+cáo: Năm". Đặc tả (:1092 chỉ đòi "chèn thông tin kỳ"; :95 ghi format "Kỳ đã chọn") KHÔNG nói rõ
+nhãn kỳ trong tệp phải là nhãn tiếng Việt ⇒ đẩy sang câu hỏi cho BA, không mở phiếu lỗi.
+
+================================================================================
+DỮ LIỆU ĐÃ SEED / THAY ĐỔI TRÊN MÔI TRƯỜNG
+================================================================================
+KHÔNG seed, KHÔNG tạo/sửa/xoá bất kỳ bản ghi nào. Môi trường đã sẵn 14 chương trình HTPLDN
+(GET /api/v1/chuong-trinh-htpls: DU_THAO 3 · CHO_PHE_DUYET 1 · HUY 1 · TAM_DUNG 1 · DA_DUYET 5 ·
+DA_CONG_BO 1 · DANG_THUC_HIEN 1 · HOAN_THANH 1), đủ để cả 3 dạng ở mục 5 chạy được.
+Toàn bộ thao tác là đọc (GET báo cáo) + xuất tệp (POST /bao-cao/export — chỉ sinh tệp).
+Có đăng xuất cbnv_tw_04 rồi đăng nhập admin để đo nhánh B.

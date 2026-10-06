@@ -1,0 +1,58 @@
+🔁 CÒN LỖI — chuyển lại dev.
+
+■ LỖI Ở ĐÂU
+Ai     : Vai trò Quản trị hệ thống (tài khoản admin)
+Màn    : Báo cáo thống kê → "BC Số lượng CG/TVV"
+Làm gì : [Xem báo cáo] hiện đủ số liệu (Tổng TVV 6 · TVV 4 · CG 2), hai nút Xuất bật sáng
+         → bấm [Xuất Excel]
+Hỏng   : KHÔNG có tệp nào về máy. Màn hiện đúng một từ tiếng Anh "Forbidden"
+         (máy chủ trả 403 · mã ERR-PERM-SYS-00-01). Tái hiện 4/4 lượt, cả Excel lẫn PDF.
+
+■ SAI CHỖ NÀO (srs-fr-11-bao-cao.md)
+:117 — khi từ chối vì thiếu quyền phải hiện câu TIẾNG VIỆT báo người dùng không có quyền xem báo
+       cáo, không ném chuỗi kỹ thuật của máy chủ ra màn.
+:79  — kiểm quyền nằm ở ĐẦU luồng: không được phép thì chặn ngay ở [Xem báo cáo], đừng cho xem
+       hết số liệu rồi mới chặn lúc xuất.
+Không phải chờ BA mới sửa được: BA trả lời hướng nào thì vẫn là lỗi — không được xuất thì phải
+chặn từ bước Xem và báo bằng tiếng Việt; được xuất thì đang chặn nhầm.
+
+■ ĐÃ CHẠY ĐÚNG — ĐỪNG TEST LẠI
+Vai trò CB Nghiệp vụ TW xuất bình thường: 7 lượt (4 dạng bộ lọc + 1 lượt PDF) đều ra tệp, mở đọc
+được, đủ 4 mục đầu tệp (tên báo cáo · kỳ · đơn vị · ngày tạo), số khớp từng con số với màn, bảng
+theo đơn vị cộng dọc đúng, TVV + CG = Tổng. Hết câu "Không thể tạo file xuất. Vui lòng thử lại.".
+
+■ ĐỪNG CHẤM HỎNG VÌ
+Tên tệp BaoCaoSoLuongCgTvv_20260806_1429.xlsx — đúng khuôn {TênBáoCáo}_{YYYYMMDD_HHmm} (:85).
+Đặc tả không ấn định chuỗi "BaoCaoDanhGia" (đó là tên của loại báo cáo khác).
+
+■ LỖI KHÁC CÙNG MÀN — đề nghị sửa luôn thể, không tính vào phiếu này
+Bộ lọc "Lĩnh vực chuyên môn" không có tác dụng: chọn lĩnh vực thì số trên màn và trong tệp vẫn y
+hệt bản không lọc, trong khi lọc đúng chiều đó ở máy chủ thì số có đổi. → :449, :1280
+
+■ AI SỬA
+Dev BE — bước Xem và bước Xuất dùng chung một quy tắc quyền; từ chối thì trả thông báo theo :117.
+Dev FE — không đẩy chuỗi lỗi kỹ thuật của máy chủ ra màn hình người dùng.
+BA     — chốt "QTHT có được xuất báo cáo không" để dev chọn hướng sửa.
+
+■ VERIFY LẠI SAU KHI FIX
+Cần trước: tài khoản admin (QTHT/TW) · màn /bao-cao · trong kỳ có ≥1 tư vấn viên và ≥1 chuyên gia
+  đang hoạt động (báo cáo trống thì đo vô nghĩa).
+B1. admin → "BC Số lượng CG/TVV" · Kỳ Năm 2026 · Toàn quốc → [Xem báo cáo] (bấm đúng 1 lần).
+    Ghi lại Tổng TVV / Số TVV / Số CG và bảng theo đơn vị.
+B2. [Xuất Excel] → chép nguyên văn chữ hiện ra, kiểm có tệp về máy không.
+B3. Kiểm đường thứ hai: tab Network xem lời gọi xuất trả mã gì. Có tệp thì MỞ RA ĐỌC, so từng số
+    với B1 và kiểm cộng dọc bảng theo đơn vị.
+✅ ĐẠT — một trong hai:
+   a) admin nhận được tệp .xlsx mở đọc được, số khớp màn, không thông báo từ chối nào; HOẶC
+   b) nếu BA chốt QTHT không được xuất → chặn NGAY ở [Xem báo cáo] kèm câu tiếng Việt báo không
+      có quyền.
+❌ CHƯA ĐẠT: còn "Forbidden" hay bất kỳ chuỗi tiếng Anh / mã kỹ thuật nào · vẫn cho xem đủ rồi mới
+   chặn lúc xuất · chỉ làm mờ nút Xuất mà bước Xem vẫn vào được · CB Nghiệp vụ bị chặn theo.
+⚠️ Bẫy: (1) CB Nghiệp vụ xuất được KHÔNG chứng minh đã fix — vai trò đó vốn đã tốt từ 06/08, phép
+   đo quyết định phải chạy bằng chính admin. (2) Tải được tệp chưa đủ, phải MỞ TỆP RA ĐỌC.
+   (3) Ghi kèm tên bó mã assets/index-XXXX.js, đừng chỉ ghi V1.0.8 — ngày 06/08 bó mã đã đổi mà
+   chuỗi phiên bản vẫn in V1.0.8; hai vai trò phải đo trên cùng bó mã mới so được.
+
+Đo 06/08/2026 · V1.0.8 · admin (QTHT/TW) + cbnv_tw_05 (CB Nghiệp vụ/TW, cùng đơn vị) · Kỳ Năm
+01/01–31/12/2026 · Toàn quốc · không tạo/sửa/xoá bản ghi nào.
+Ảnh: thu-QLTLPLCVV_15-2026-08-06/image/CGTVPL_06-07-vaitro-QTHT-thong-bao-Forbidden-khi-xuat-excel-V108.png

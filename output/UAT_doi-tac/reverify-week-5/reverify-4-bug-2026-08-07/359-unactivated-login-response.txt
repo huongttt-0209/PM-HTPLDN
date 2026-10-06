@@ -1,0 +1,44 @@
+#81 [POST] https://18.143.165.120.nip.io/api/v1/auth/login
+
+  General
+    status:    [401] 
+    duration:  53ms
+    type:      xhr
+    mimeType:  application/json
+
+  Request headers
+    sec-ch-ua-platform: "macOS"
+    referer: https://18.143.165.120.nip.io/login
+    user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36
+    accept: application/json, text/plain, */*
+    sec-ch-ua: "Not=A?Brand";v="99", "Google Chrome";v="151", "Chromium";v="151"
+    content-type: application/json
+    sec-ch-ua-mobile: ?0
+
+  Response headers
+    etag: W/"ec-ASYd26wToDUfEWTOHPRXSU76rBM"
+    x-permitted-cross-domain-policies: none
+    x-content-type-options: nosniff, nosniff
+    alt-svc: h3=":443"; ma=2592000
+    date: Fri, 07 Aug 2026 15:00:51 GMT
+    content-type: application/json; charset=utf-8
+    x-frame-options: SAMEORIGIN, DENY
+    strict-transport-security: max-age=31536000; includeSubDomains, max-age=31536000; includeSubDomains
+    content-security-policy: frame-ancestors 'none'; object-src 'none'; base-uri 'self'
+    x-dns-prefetch-control: off
+    cross-origin-opener-policy: same-origin
+    cross-origin-resource-policy: same-origin
+    x-ratelimit-reset: 60
+    referrer-policy: no-referrer, strict-origin-when-cross-origin
+    via: 1.1 Caddy
+    x-download-options: noopen
+    permissions-policy: geolocation=(), microphone=(), camera=()
+    x-ratelimit-remaining: 2
+    content-length: 236
+    x-xss-protection: 0
+    x-ratelimit-limit: 5
+    origin-agent-cluster: ?1
+    server: nginx/1.27.5
+
+Call browser_network_request with part="request-body" to read the request body.
+Call browser_network_request with part="response-body" to read the response body.

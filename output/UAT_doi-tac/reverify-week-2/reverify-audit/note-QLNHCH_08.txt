@@ -1,0 +1,5 @@
+✅ Bug đúng – chuyển dev.
+• Màn Ngân hàng câu hỏi (tab Câu hỏi): mỗi dòng chỉ có nút Sửa + Xóa, không có chức năng Xem chi tiết; bấm vào nội dung câu hỏi cũng không mở chi tiết.
+• Danh sách chỉ hiển thị nội dung tóm tắt → thiếu màn xem đầy đủ nội dung, các lựa chọn và đáp án đúng.
+• SRS FR-III-09 (UC28 – CRUD câu hỏi, dòng 823–828) + thiết kế màn MH-03.4: yêu cầu xem được chi tiết câu hỏi.
+• Verify: CB_NV_TW, đã tạo 1 câu hỏi để kiểm tra. Bug ID: BUG-QLNHCH_08.

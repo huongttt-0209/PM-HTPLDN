@@ -1,0 +1,23 @@
+⚠️ Cần BA xác nhận.
+
+Phiếu nêu 4 điểm, QA đo tách riêng từng điểm ngày 27/07/2026 bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), có kiểm lại bằng cbpd_tw để chắc đầu trang không đổi theo quyền. Cả 4 điểm quan sát của phiếu đều đúng; vướng là chưa có căn cứ đủ rõ để chấm đúng hay sai, nên QA gửi BA chốt.
+
+⚠️ 1) Hai điểm về đầu trang.
+- Thanh điều hướng hiện là "Trang chủ / Chương trình HTPLDN / Chi tiết", đúng là không kèm mã chương trình.
+- Tiêu đề trang hiện chỉ là mã chương trình kèm nhãn trạng thái; tên chương trình nằm ở dòng dưới trong phần Thông tin.
+- FR-XI-01 (UC160) — SCR-XI-01 chỉ quy định thanh điều hướng cho trang danh sách (dòng 1107); bảng thành phần trang chi tiết bắt đầu từ dòng 1120 và không có dòng nào cho thanh điều hướng hay định dạng tiêu đề. Mức chi tiết này thuộc bản đặc tả màn hình mà đặc tả trỏ tới ở dòng 1096 (MH-15.1) — bản này không có trong bộ tài liệu QA đang dùng để đối chiếu.
+- Câu hỏi cho BA: bản đặc tả màn hình có quy định thanh điều hướng kèm mã chương trình và tiêu đề dạng {Mã}: {Tên} không? Nếu có, đề nghị BA gửi bản đó để QA chấm lại; nếu không, đề nghị bổ sung mô tả đầu trang chi tiết vào đặc tả.
+
+⚠️ 2) Điểm hiển thị viết tắt "Chờ PD".
+- Thanh tiến trình đang ghi "Chờ PD" đúng như phiếu quan sát. Cùng lúc, thẻ lọc ở màn danh sách lại ghi đầy đủ "Chờ phê duyệt".
+- Bản đặc tả có hai chỗ chưa thống nhất: dòng 1120 viết thanh tiến trình dạng viết tắt "[Chờ PD]", còn bảng nhãn trạng thái ở dòng 1169-1174 quy định nhãn của trạng thái này là "Chờ phê duyệt".
+- Câu hỏi cho BA: nhãn trên thanh tiến trình lấy theo bảng nhãn trạng thái (dòng 1174) hay giữ dạng viết tắt ở dòng 1120? Cần chốt để hai chỗ trong phần mềm hiển thị thống nhất.
+
+⚠️ 3) Điểm thiếu khối thông tin nhanh.
+- Không có khối tóm tắt riêng ở đầu trang, nhưng cả 4 thông tin phiếu nói thiếu đều đang hiển thị đầy đủ trong phần Thông tin ngay bên dưới: đơn vị chủ trì, thời gian bắt đầu và kết thúc, ngân sách, đối tượng thụ hưởng. QA đã đọc từng cặp nhãn và giá trị bằng mã lệnh, không chỉ nhìn ảnh.
+- Bản đặc tả liệt kê 4 thông tin này là các trường của phần Thông tin (dòng 1124, 1125, 1126, 1127, 1129), không có thành phần nào tên "khối thông tin nhanh".
+- Câu hỏi cho BA: bản đặc tả màn hình (MH-15.1) có quy định khối tóm tắt riêng ở đầu trang không? Nếu không, đề nghị BA bổ sung mô tả đầu trang chi tiết vào đặc tả để chốt dứt điểm.
+
+4) QA đã kiểm chéo trạng thái và bằng chứng.
+- Ảnh của phiếu chụp chương trình ở Dự thảo, QA đo trên chương trình Đang thực hiện. Để chắc kết luận không phụ thuộc điều đó, QA mở thêm 3 chương trình ở Đã duyệt, Đã công bố và Hoàn thành: thanh điều hướng, dạng tiêu đề và thanh tiến trình đều giữ nguyên cách hiển thị.
+- Ảnh đầu trang chi tiết gồm thanh điều hướng, tiêu đề kèm nhãn trạng thái, thanh tiến trình 6 bước và trọn phần Thông tin. Kèm trong hồ sơ lỗi.

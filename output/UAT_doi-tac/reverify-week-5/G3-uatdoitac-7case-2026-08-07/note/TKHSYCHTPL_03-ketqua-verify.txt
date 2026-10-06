@@ -1,0 +1,20 @@
+✅ Đã hết lỗi.
+
+Đo 07/08/2026 17:41–17:50 trên https://htpldn-uat.ospgroup.vn, bản dựng V1.0.10, tài khoản vai trò Cán bộ Nghiệp vụ cấp Trung ương (đúng tác nhân đặc tả, srs-fr-05-vu-viec.md:94; phạm vi dữ liệu cấp TW là toàn quốc theo :2450). Màn "Vụ việc HTPL" → Danh sách hồ sơ vụ việc: đặt "Mức SLA" = "Sắp hết hạn" trên ô lọc rồi bấm "Tìm kiếm", đúng thao tác ghi trong phiếu.
+
+Lưu ý về dữ liệu: mức "Sắp hết hạn" hiện chỉ có 1 vụ việc (VV-BTP-TW-20260713-001, trạng thái "Đã đánh giá") nên nó nằm ở tab "Hoàn thành"; phép đo vì vậy thực hiện ở tab "Tất cả". Đứng ở tab hẹp hơn sẽ ra 0 dòng do phân nhóm trạng thái, không phải do bộ lọc hỏng. Mốc chưa lọc: 74 vụ việc.
+
+Chọn "Sắp hết hạn" không còn bị hệ thống từ chối: 0 thông báo lỗi — đã cài sẵn bộ theo dõi thông báo trước khi bấm (không lọc trùng), rà thêm mọi khung cảnh báo trên màn thì không có phần tử nào. Giá trị mà màn hình gửi lên cho ô Mức SLA lần này nằm TRONG tập giá trị hợp lệ đặc tả quy định; trong bằng chứng cũ (đã mở video xem lại), giá trị gửi lên nằm NGOÀI tập hợp lệ nên bị từ chối và bảng về rỗng. Lặp lại nguyên phép đo 2 lần ở 2 lần tải trang khác nhau (một lần tải lại bỏ bộ nhớ đệm), kết quả trùng khít.
+
+Danh sách trả về đúng tiêu chí: 1 dòng VV-BTP-TW-20260713-001, cột "Cảnh báo thời hạn" ghi đúng "Sắp hết hạn"; chân bảng "Hiển thị 1-1 / 1 kết quả", ba nguồn đếm khớp nhau.
+Đã chạy đủ 4 mức trong cùng phiên để chứng minh bộ lọc chia nhóm không sót: Bình thường 29 · Sắp hết hạn 1 · Quá hạn 5 · Quá hạn nghiêm trọng 39 — cộng đúng 74, bằng mốc chưa lọc. Cả 4 mức đều 0 thông báo lỗi và không mức nào lẫn dòng của mức khác (đã đọc nhãn cột "Cảnh báo thời hạn" của từng dòng, không kết luận bằng mắt).
+
+Phân trang 20 bản ghi mỗi trang: đo trên tập 74 bản ghi — trang 1 đếm tay 20 dòng, chân bảng "Hiển thị 1-20 / 74 kết quả", ô chọn "20 / trang"; trang 2 đếm tay 20 dòng, chân bảng "Hiển thị 21-40 / 74 kết quả", và 20 mã vụ việc của trang 2 không trùng mã nào của trang 1.
+
+Đối chiếu đặc tả (đã mở file xác minh số dòng): srs-fr-05-vu-viec.md:1644 (ô lọc "Mức SLA" có đúng 4 lựa chọn, khớp giao diện) · :1516 (nhãn hiển thị "Sắp hết hạn") · :690–693 (bảng xử lý lỗi của FR-V.I-08 chỉ có 2 điều kiện, không điều kiện nào ứng với việc người dùng chọn một lựa chọn hợp lệ ⇒ hệ thống phải trả danh sách chứ không báo lỗi) · :668 và :1659 · srs-v3.5.md:5571 (BR-DATA-07: mặc định 20 dòng/trang). Cả ba vế kỳ vọng của phiếu đều đạt.
+
+Đề nghị BA xác nhận (không chặn bàn giao, không đổi kết quả case này): trong cùng bộ đặc tả, mã nội bộ của mức "Sắp hết hạn" được viết khác nhau giữa :1516/:1644/:1656/:2031 và :1449 với srs-v3.5.md:5626; cũng tại BR-SLA-02, nhãn mức thấp nhất chốt là "Trong hạn" trong khi :1516 và giao diện dùng "Bình thường". Đây thuần túy là việc thống nhất câu chữ trong tài liệu, không phải lỗi phần mềm.
+
+Phạm vi hiệu lực: môi trường và bản dựng nêu trên, tại thời điểm đo, trên 74 vụ việc thuộc phạm vi dữ liệu của tài khoản (phân bố 4 mức 29/1/5/39), tab đang đứng là "Tất cả". Lượt đo chỉ lọc và chuyển trang; không tạo, sửa hay xóa bản ghi nào.
+
+Ảnh bằng chứng: https://drive.google.com/file/d/1wX-JpYwNKywRE_Z6Cac9L0aIcXEcDsG-/view?usp=drivesdk (sau khi chọn Mức SLA = "Sắp hết hạn" và bấm Tìm kiếm — bảng hiện đúng 1 vụ việc, chân bảng "Hiển thị 1-1 / 1 kết quả", không có khung thông báo lỗi nào) · https://drive.google.com/file/d/1XcPiz0dHf4PbLp-mHGqdLqW6HBwW9XFd/view?usp=drivesdk (vế phân trang — trang 2 của danh sách 74 vụ việc, "Hiển thị 21-40 / 74 kết quả", ô "20 / trang").

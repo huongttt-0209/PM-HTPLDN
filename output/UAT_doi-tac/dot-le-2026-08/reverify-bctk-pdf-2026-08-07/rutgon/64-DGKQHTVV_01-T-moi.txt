@@ -1,0 +1,31 @@
+❌ CÒN LỖI — doanh nghiệp không thấy vụ việc của chính mình, nên không tới được chức năng đánh giá.
+
+TÁI HIỆN
+1) Đăng nhập tài khoản doanh nghiệp → mở danh sách vụ việc, không lọc.
+2) Danh sách chỉ hiện 5 vụ việc, trong khi doanh nghiệp này sở hữu 7. Hai vụ việc bị thiếu là VV-BTP-TW-20260806-003 và -004 — đều ở "Đã đánh giá", đều do đơn vị TRUNG ƯƠNG xử lý.
+3) Lọc "Hoàn thành" và lọc "Đã đánh giá" → đều rỗng. Dán thẳng địa chỉ 2 vụ việc đó → báo "Không tìm thấy vụ việc."
+4) Cùng phiên đó, vụ việc do đơn vị ĐỊA PHƯƠNG xử lý vẫn mở bình thường.
+⇒ QUY LUẬT: doanh nghiệp bị giấu vụ việc của chính mình khi vụ việc do đơn vị khác (Trung ương) xử lý.
+
+VÌ SAO SAI
+srs-fr-05-vu-viec.md:1793 — "DN chỉ thấy vụ việc của DN mình", chỉ chặn khi doanh nghiệp mở vụ việc KHÔNG phải của mình; :1792 gọi màn này là "hồ sơ của tôi". Phạm vi nhìn đang lọc theo ĐƠN VỊ XỬ LÝ, đúng ra phải lọc theo CHỦ SỞ HỮU (doanh nghiệp đã gửi vụ việc).
+
+DEV SỬA
+Danh sách + chi tiết vụ việc phía doanh nghiệp: lọc theo chủ sở hữu, bỏ điều kiện đơn vị xử lý. Không mở được bản ghi thì không có đường nào tới nút đánh giá — đây chính là triệu chứng phiếu báo ("không hiển thị nút chức năng").
+
+✅ ĐANG ĐÚNG, ĐỪNG PHÁ: mở chi tiết không còn bị đẩy sang trang báo không có quyền · doanh nghiệp không thấy "Kết quả kiểm tra" và "Phân công xử lý" (:1805, :1806) — đúng đặc tả.
+
+⏸ Chưa đo được thao tác nhập điểm vì lỗi trên chặn hết luồng. Sửa xong phạm vi nhìn phải đo tiếp mới chốt trọn phiếu.
+
+KIỂM LẠI SAU FIX
+1) Doanh nghiệp mở danh sách, không lọc → tổng phải bằng đúng số vụ việc nó sở hữu (đối chiếu bằng vai trò cán bộ Trung ương).
+2) Bấm vụ việc do Trung ương xử lý → phải mở được; dán thẳng địa chỉ → cũng phải mở được.
+3) Nhập đánh giá 9 · 8 · 10 + nhận xét có mốc giờ riêng → gửi → tải lại trang → đọc đúng nội dung vừa nhập.
+4) Chứng âm: mở/đánh giá vụ việc của doanh nghiệp khác → phải bị từ chối.
+✅ PASS: cả 4 bước đạt, điểm tổng bằng trung bình 3 điểm (:1220).
+❌ FAIL: còn thiếu vụ việc · hoặc mở được mà không có đường vào đánh giá · hoặc gửi xong tải lại trang thì rỗng.
+⚠️ Đừng chấm PASS chỉ vì trạng thái đổi sang "Đã đánh giá" hoặc có thông báo thành công — hai dấu hiệu này đã từng đúng trong khi lỗi còn nguyên.
+
+ĐO: 07/08/2026 · env nội bộ 18.143.165.120.nip.io · bó mã index-BbPPdate.js · 1 doanh nghiệp / 7 vụ việc / 2 đường vào · đối chứng bằng 2 vai trò cán bộ để xác nhận 2 vụ việc kia có thật và đúng chủ sở hữu.
+
+Lưu ý: ô "DEV phản hồi lần 1" của phiếu này đang TRỐNG — chưa có BA chốt nào cho case này, nên không có căn cứ BA để đổi verdict. Hai câu hỏi BA đã gửi 06/08 (cán bộ có được chấm khi vụ việc đã ở "Đã đánh giá"; đánh giá xong điểm TVV có cập nhật) đều KHÔNG phải căn cứ của verdict này và cũng đang bị chính lỗi trên chặn không đo được.

@@ -1,0 +1,29 @@
+✅ Là bug — chuyển dev · ⚠️ Có ý cần BA xác nhận
+
+Tái hiện đúng phần đối tác phản ánh, đã chuyển dev kèm 1 câu hỏi gửi BA. Phần Tư vấn nhanh thì hệ thống làm đúng.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), trên cả hai màn trong cùng một phiên đăng nhập.
+
+✅ 1) Bước 2-3 (Kho câu hỏi): ĐÚNG như phiếu, không có nút Xóa bộ lọc.
+- Thanh lọc màn này có 6 tiêu chí: từ khóa, Lĩnh vực, Nguồn, Trạng thái, Từ ngày, Đến ngày. Không có nút nào xóa hết trong một thao tác.
+- Đã đọc toàn bộ nút trên màn bằng mã lệnh chứ không chỉ nhìn ảnh, để chắc chắn nút không nằm ngoài khung nhìn. Chỉ có 4 nút: Thêm câu hỏi, Nhập Excel, Xuất Excel, Làm mới.
+- Bug ID: BUG-TK-KHONG-CO-XOA-BO-LOC.
+
+2) Đã thử nút gần nghĩa nhất trước khi kết luận là thiếu.
+- Nhiều màn dùng nút Làm mới để vừa tải lại vừa xóa lọc, nên phải loại khả năng này.
+- Đặt từ khóa "lao động" cho bảng còn 1 trong 14 dòng rồi bấm Làm mới: sau khi bấm ô tìm kiếm vẫn là "lao động", bảng vẫn 1 dòng, số đếm trên thẻ vẫn giữ nguyên. Nút này không đặt lại bộ lọc.
+- Kết luận: hiện không có thao tác nào đưa danh sách về mặc định trong một lần bấm. Cán bộ phải gỡ tay từng ô, gồm dấu x trong ô tìm kiếm cộng 3 danh sách chọn và 2 ô ngày.
+
+❌ 3) Bước 5-6 (Tư vấn nhanh): hệ thống làm ĐÚNG, đề nghị dev không sửa nhầm.
+- Màn này có nút Xóa bộ lọc và chạy đúng: bấm xong thì ô tìm kiếm rỗng, trạng thái rỗng, hai ô ngày rỗng, thẻ về Tất cả, danh sách về đủ 4 dòng.
+- Đây cũng là đối chứng cho thấy thành phần này đã có sẵn trong hệ thống, không phải thứ phải làm mới từ đầu.
+
+⚠️ 4) Vì sao có kèm câu hỏi cho BA.
+- Đặc tả nhóm Tư vấn nhanh mô tả thanh lọc của cả hai màn nhưng không dòng nào nhắc nút Xóa bộ lọc, nên không có căn cứ trực tiếp trong nhóm này.
+- Ngược lại, nút này là quy ước lặp lại ở 7 nhóm khác của cùng bộ đặc tả, và chính màn anh em cùng nhóm cũng đã có.
+- Vì vậy QA đề nghị BA chốt: thanh lọc màn danh sách nhóm này có bắt buộc kèm nút Xóa bộ lọc không. Nếu BA chốt là không thì QA sẽ hạ case này xuống không phải lỗi.
+
+5) Mức độ.
+- Xếp nhẹ vì không chặn nghiệp vụ. Nhưng nên sửa cùng đợt với câu thông báo khi tìm không khớp, vì quy ước chung của hệ thống đặt nút Xóa bộ lọc ngay trong câu thông báo đó, sửa một lượt là xong cả hai.
+
+6) Bằng chứng.
+- Ảnh thanh lọc Kho câu hỏi đầy đủ 6 tiêu chí và hàng nút góc phải trên, không có nút xóa bộ lọc. Ảnh đối chứng thanh lọc Tư vấn nhanh có đủ Xóa bộ lọc và Tìm kiếm. Kèm trong hồ sơ lỗi.

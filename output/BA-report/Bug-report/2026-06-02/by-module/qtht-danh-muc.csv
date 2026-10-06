@@ -1,0 +1,3 @@
+﻿STT,Tên bug,Trạng thái,Trạng thái (mã),Độ ưu tiên,Ghi chú verify (01/06/2026)
+67,Xuất Excel danh mục không mở,✅ Đạt,PASS,TB,"R2 06-02: nút ""Xuất Excel"" có; nhấp → POST /danh-muc/export 200 + content-disposition attachment .xlsx (7389 bytes) tải về OK — SRS:1385/1697"
+69,Danh mục sort cột chưa chạy,✅ Đạt,PASS,Thấp,"R-verify 06-02 22:44 (lật FALSE-POSITIVE): SRS SCR-VIII-01 KHÔNG yêu cầu sortable — 3 cột Hành vi=""—"" (srs-fr-10:1572/1573/1575), :1609 chỉ sắp xếp mặc định thu_tu/ten. ""Ko sắp lại khi nhấp"" là đúng spec. FE để artifact sortBy/aria-sort = observation gỡ. Đóng: bugs/qtht-danh-muc/Pass-bug-69-sort-cot-khong-chay.md"

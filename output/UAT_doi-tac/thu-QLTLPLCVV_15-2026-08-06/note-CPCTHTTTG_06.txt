@@ -1,0 +1,82 @@
+🔁 CÒN LỖI — chuyển lại dev.
+
+■ CÒN LỖI Ở ĐÂU
+Vai trò Quản trị hệ thống (tài khoản admin) — đúng vai trò trong ảnh nghiệm thu:
+   [Xem báo cáo]         → OK. Hiện đủ số liệu, hai nút Xuất bật sáng.
+   [Xuất PDF]            → hộp thoại "Tùy chọn in báo cáo PDF" mở bình thường.
+   [Xuất file] trong hộp → KHÔNG ra tệp. Màn hiện đúng một chữ "Forbidden"
+                           (máy chủ trả 403 · mã ERR-PERM-SYS-00-01)
+Đúng hiện tượng ô "TKM phản hồi lần 1" đã ghi. Lần này đã CHỤP ĐƯỢC ẢNH khung thông báo đó.
+
+■ VÌ SAO LÀ LỖI (đặc tả srs-fr-11-bao-cao.md)
+1. Dòng :79 — kiểm quyền phải nằm ở ĐẦU luồng, nên bước Xem và bước Xuất phải cùng một quy
+   tắc quyền. Hiện đang cho xem đủ số liệu rồi mới chặn ở bước xuất.
+2. Dòng :117 — khi từ chối phải hiện câu tiếng Việt báo người dùng không có quyền xem báo
+   cáo. Hiện đang ném thẳng chuỗi kỹ thuật tiếng Anh của máy chủ ra cho người dùng cuối.
+KHÔNG phải chờ BA mới sửa được: câu hỏi "QTHT có được xuất báo cáo không" đã gửi BA, nhưng
+trả lời hướng nào thì vẫn là lỗi — nếu không được xuất thì phải chặn từ bước Xem và báo bằng
+tiếng Việt; nếu được xuất thì đang chặn nhầm.
+
+■ ĐÃ HẾT LỖI — ĐỪNG ĐỤNG LẠI
+Cán bộ Nghiệp vụ Trung ương xuất PDF tốt, tệp ra ĐÚNG khung văn bản hành chính Thông tư
+17/2025: 1 trang khổ A4; đầu trang có tên cơ quan + quốc hiệu + tiêu ngữ; giữa trang đủ tên
+báo cáo + kỳ + đơn vị + ngày tạo, bảng số khớp đúng số trên màn; cuối trang có ngày ký, dòng
+"NGƯỜI XUẤT BÁO CÁO", "(Ký, ghi rõ họ tên và đóng dấu)" và họ tên cán bộ xuất báo cáo. Xuất
+lần 2 với kỳ khác ra tên tệp khác và nội dung đổi theo bộ lọc. Hết câu "Không thể tạo file
+xuất. Vui lòng thử lại." (đối tác báo 16/07).
+
+■ MỘT CHỖ TRONG Ô "KẾT QUẢ MONG ĐỢI" KHÔNG CÒN ĐÚNG
+Ô đó chờ phần ký cuối trang có DÒNG CHỨC DANH người ký. Nghiệp vụ đã chốt 04/08/2026 là KHÔNG
+in dòng chức danh (hồ sơ tài khoản không lưu chức vụ). Tệp hiện tại làm ĐÚNG quyết định đó —
+không phải khuyết tật, đừng ghi thành lỗi.
+
+■ AI SỬA
+Dev BE — cho bước Xem và bước Xuất dùng chung quy tắc quyền; từ chối thì trả thông báo theo :117.
+Dev FE — không đẩy chuỗi máy chủ trả về ra thẳng màn hình người dùng.
+BA     — chốt "QTHT có được xuất báo cáo không" để dev chọn hướng sửa.
+
+■ ĐÃ ĐO
+06/08/2026 · bản dựng V1.0.8 · admin (QTHT/TW) + cbnv_tw_03 (CB Nghiệp vụ/TW) · BC Chi phí
+theo thời gian · Kỳ Năm 2026 · Toàn quốc · thêm 1 cấu hình kỳ (Khoảng tùy chọn tháng 6) · hộp
+thoại in để mặc định A4 Dọc · 3 lượt bấm xuất · không tạo/sửa/xoá bản ghi nào. Bằng chứng: ô
+"Ảnh/video verify" cùng dòng.
+Hai lỗi khác gặp lúc đo, đã tách phiếu riêng, KHÔNG tính vào phiếu này: BCTK_QA07 (dòng 370)
+— nút Xuất bị khoá sau lần xem thứ 2; BCTK_QA09 (dòng 372) — tệp PDF in mã kỹ thuật "KHOANG"
+thay cho chữ tiếng Việt ở dòng Kỳ báo cáo.
+
+────────── CÁCH VERIFY SAU KHI DEV FIX ──────────
+Cần trước: tài khoản admin (QTHT, cấp TW) · màn Báo cáo thống kê (/bao-cao) · kỳ báo cáo phải
+CÓ dữ liệu (báo cáo trống thì nút Xuất tự tắt, đo vô nghĩa).
+
+B1. admin → BC Chi phí theo thời gian · Kỳ Năm 01/01–31/12/2026 · Toàn quốc → [Xem báo cáo]
+    (bấm đúng 1 lần).
+B2. [Xuất PDF] → hộp thoại mở → để mặc định A4 + Dọc → [Xuất file]. Chép nguyên văn chữ hiện
+    ra; kiểm có tệp về máy không.
+B3. Đối chiếu bằng đường thứ 2: tab Network xem lời gọi xuất trả mã gì. Có tệp thì MỞ RA ĐỌC
+    bằng phần mềm đọc PDF, kiểm khổ giấy và các mục đầu/cuối trang.
+B4. Lặp B1–B3 bằng cbnv_tw_03 để chắc vai trò này không bị chặn theo.
+
+✅ PASS — đạt 1 trong 2:
+   a) admin xuất được tệp .pdf mở đọc được — khổ A4, đầu trang có quốc hiệu + tiêu ngữ + tên
+      cơ quan, cuối trang có ngày ký + họ tên + chỗ trống cho con dấu, số khớp màn — và không
+      thông báo từ chối; HOẶC
+   b) nếu BA chốt QTHT không được xuất → chặn NGAY ở bước [Xem báo cáo], kèm câu tiếng Việt.
+❌ FAIL nếu: còn "Forbidden" hay bất kỳ chuỗi tiếng Anh / mã kỹ thuật nào cho người dùng cuối ·
+   vẫn cho xem đủ rồi mới chặn ở bước Xuất · chỉ ẩn/làm mờ nút Xuất mà bước Xem vẫn vào được ·
+   tệp PDF thiếu mục nào của khung hành chính hoặc khổ giấy khác A4 khi để mặc định · Cán bộ
+   Nghiệp vụ bị chặn theo.
+
+⚠️ BẪY
+1. Nút [Xuất PDF] CHỈ MỞ HỘP THOẠI — lượt xuất thật là nút [Xuất file] bên trong. Dừng ở nút
+   [Xuất PDF] sẽ không thấy lời gọi nào và dễ kết luận nhầm là hệ thống im lặng.
+2. Cán bộ Nghiệp vụ xuất được KHÔNG chứng minh đã fix — vai trò đó vốn đã tốt từ 06/08. Phép đo
+   quyết định là chạy bằng chính tài khoản admin.
+3. Tải được tệp chưa đủ — phải MỞ TỆP RA ĐỌC mới chốt.
+4. Đừng chấm Fail vì tệp không có dòng chức danh người ký (đã chốt 04/08/2026 là KHÔNG in); vì
+   phông đọc ra là "Tinos" (bản tương thích số đo của Times New Roman); vì tệp không có chữ ký
+   số (đặc tả chỉ đòi CHỖ TRỐNG cho con dấu); hay vì tên tệp BaoCaoChiPhiTheoThoiGian_…
+5. Khung thông báo sống ~3 giây và đổi chữ NGAY TRONG khung cũ, không mọc khung mới → công cụ
+   đếm "khung mới" chỉ thấy "Đang tạo file..." rồi báo nhầm là im lặng. Phải theo dõi nội dung
+   khung theo thời gian; muốn chụp ảnh thì hẹn giờ bấm nút sau ~2500 mili-giây rồi mới gọi lệnh
+   chụp. Ứng dụng gửi lời gọi xuất qua XHR chứ không qua fetch. Nút Xuất mờ dù báo cáo đang
+   hiện số liệu = do đã bấm [Xem báo cáo] từ 2 lần trở lên (lỗi riêng BCTK_QA07).

@@ -1,0 +1,29 @@
+✅ Là bug — chuyển dev
+
+Tái hiện được phần Tư vấn nhanh, đã chuyển dev. Phần Kho câu hỏi không còn lỗi — nêu rõ để dev khỏi sửa nhầm màn.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), trên cả hai màn trong cùng một phiên đăng nhập.
+
+❌ 1) Bước 2 (Kho câu hỏi): KHÔNG còn lỗi.
+- Phiếu ghi nhập từ khóa có kết quả nhưng hệ thống hiển thị toàn bộ bản ghi.
+- Hiện tại gõ "lao động" trên kho 14 câu hỏi thì còn đúng 1 bản ghi, phân trang đổi thành "Hiển thị 1-1 / 1 kết quả", số đếm trên các thẻ cũng đổi theo. Đúng như kết quả mong đợi của phiếu, kể cả yêu cầu 20 bản ghi mỗi trang.
+
+✅ 2) Bước 4 (Tư vấn nhanh): CÓ lỗi thật, đây là phần cần dev xử lý.
+- Ô tìm kiếm ghi "Tìm theo mã phiên, câu hỏi..." nhưng gõ đúng mã phiên đang hiển thị trên màn (TVN-20260727-0001) lại ra "Không có phiên tư vấn nhanh nào.".
+- Gõ từ khóa tiếng Việt có dấu cũng ra rỗng: "Thủ tục" ra 0 dù phiên TVN-20260727-0003 mở đầu bằng đúng cụm này; "động" ra 0 nhưng bỏ dấu thành "dong" lại ra 2.
+- Gõ cụm có dấu cách cũng ra rỗng: "lao động" ra 0, trong khi "lao" một mình ra 2.
+- Bug ID: BUG-TK-TVN-TIM-KIEM.
+
+3) Tóm lại ô tìm kiếm Tư vấn nhanh chỉ khớp khi từ khóa là một chữ đơn, không dấu, và nằm ở đầu một từ trong câu hỏi. Ba điều kiện đó cộng lại thì hầu hết cách gõ tự nhiên của cán bộ đều ra rỗng.
+
+4) Đối chứng để khoanh vùng cho dev.
+- Cùng tài khoản, cùng phiên, cùng thời điểm: màn Kho câu hỏi xử lý đúng cả từ khóa có dấu lẫn cụm nhiều chữ ("lao động", "thử việc", "hợp đồng" đều ra kết quả).
+- Vậy không phải hệ thống thiếu khả năng, mà là màn Tư vấn nhanh chưa làm giống màn Kho câu hỏi.
+
+5) Đã kiểm chéo bằng đường khác giao diện.
+- Gọi thẳng dịch vụ dữ liệu của từng màn với cùng bộ từ khóa, kết quả trùng khít với những gì thấy trên màn hình. Nghĩa là lỗi nằm ở phần lọc dữ liệu, không phải ở phần vẽ bảng.
+
+6) Vì sao xếp mức cao.
+- Ô tìm kiếm là đường chính để cán bộ tra một phiên cụ thể. Không tra được theo mã phiên và không gõ được tiếng Việt có dấu thì gần như phải cuộn tay tìm.
+
+7) Bằng chứng.
+- Ảnh gõ đúng mã phiên vẫn ra rỗng, ảnh gõ từ khóa có dấu vẫn ra rỗng, và ảnh đối chứng màn Kho câu hỏi lọc đúng. Tất cả kèm trong hồ sơ lỗi.

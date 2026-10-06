@@ -1,0 +1,31 @@
+✅ Là bug — chuyển dev
+
+Tái hiện đúng phần cốt lõi, đã chuyển dev. Có 1 điểm trong phiếu cần đính chính để dev không tìm nhầm lỗi.
+Đã kiểm bằng tài khoản cbnv_tw (CB Nghiệp vụ - Trung ương, BTP · TW), trên câu hỏi đang ở trạng thái Đã duyệt và chưa công khai.
+
+❌ 1) Đính chính một ý trong phiếu: ô "Mô tả công khai" THỰC TẾ CÓ.
+- Phiếu ghi hệ thống không hiển thị trường cho phép bổ sung mô tả. Nhưng chính ảnh gửi kèm phiếu đã cho thấy ô "Mô tả công khai" đang hiện, có nội dung, đếm 56/2000.
+- Hệ thống hiện tại cũng vậy: hộp thoại có ô Mô tả công khai, nhập được, tối đa 2000 ký tự.
+- Nêu rõ để dev không mất công đi tìm một lỗi không tồn tại.
+
+✅ 2) Phần LỖI THẬT: hộp thoại thiếu ảnh đại diện và tệp đính kèm.
+- Đặc tả (srs-fr-13-tv-nhanh.md dòng 538) yêu cầu khi bấm Công khai thì hộp thoại xác nhận phải hiển thị ĐỦ 3 thứ sắp được công khai: ảnh đại diện, mô tả công khai, tệp đính kèm công khai.
+- Hệ thống chỉ hiện 1 trong 3 (mô tả công khai). Không có vùng ảnh, không có danh sách tệp.
+- Bug ID: BUG-CK-MODAL-THIEU-ANH-TEP.
+
+3) Đã loại trừ khả năng "ẩn vì bản ghi chưa có ảnh và tệp" — đây là phép thử quyết định.
+- QA tự tạo một câu hỏi mới qua đúng luồng nghiệp vụ, có tải lên ảnh đại diện và tệp PDF đính kèm, có nhập mô tả công khai, rồi nhờ tài khoản phê duyệt duyệt.
+- Mở lại hộp thoại Công khai của bản ghi ĐÃ CÓ ĐỦ dữ liệu: vẫn chỉ hiện mô tả công khai, không hiện ảnh, không hiện tệp.
+
+4) Khoanh vùng cho dev: đây là thiếu hiển thị, không phải tính năng chưa làm.
+- Form "Thêm câu hỏi" đã có đủ cả 3 trường, ràng buộc đúng đặc tả: ảnh 1 tệp .jpg/.png/.gif tối đa 5MB kèm nút dùng ảnh hệ thống mặc định; tệp đính kèm tối đa 10 tệp .pdf/.doc/.docx/.xls/.xlsx tối đa 20MB mỗi tệp.
+- Máy chủ cũng lưu đủ 3 trường. Vậy chỉ còn thiếu phần dựng chúng trong hộp thoại xác nhận.
+
+❌ 5) Phần chạy ĐÚNG, đề nghị dev không sửa nhầm.
+- Bấm Công khai xong: câu hỏi chuyển sang trạng thái Công khai, cờ công khai bật, có ghi thời gian đăng tải. Đúng đặc tả. Chỉ 1 lần gọi xử lý, 1 thông báo, không lặp.
+
+6) Vì sao xếp mức trung bình chứ không phải nhẹ.
+- Đây là bước xác nhận cuối trước khi nội dung ra Cổng Pháp luật quốc gia. Không nhìn thấy ảnh và tệp sắp công khai thì cán bộ mất chốt kiểm soát cuối cùng, không phát hiện được ảnh hoặc tệp gắn nhầm trước khi đưa ra ngoài.
+
+7) Bằng chứng.
+- Ảnh hộp thoại Công khai trên bản ghi thường, ảnh hộp thoại trên bản ghi đã có đủ ảnh và tệp, và ảnh form Thêm câu hỏi có đủ 3 trường. Tất cả kèm trong hồ sơ lỗi.

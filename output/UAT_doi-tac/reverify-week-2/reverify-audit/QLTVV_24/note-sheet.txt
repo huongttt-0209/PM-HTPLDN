@@ -1,0 +1,11 @@
+✅ Bug ĐÚNG – chuyển dev.
+
+[1] Tái hiện 100%: mở màn Chỉnh sửa hồ sơ tư vấn viên, bấm "Xóa" trên ảnh chân dung ĐÃ LƯU → hiện "Lỗi hệ thống, vui lòng thử lại sau", ảnh vẫn còn nguyên, thao tác thất bại (lỗi 500 chưa được xử lý). Lặp lại nhiều lần đều lỗi, không phải trục trặc nhất thời.
+
+[2] Đã cô lập điều kiện gây lỗi bằng phép thử đối chứng trên bản ghi thứ hai: ảnh CHƯA gắn vào hồ sơ thì xóa được bình thường; ảnh ĐÃ gắn vào hồ sơ thì lỗi; gỡ liên kết rồi xóa lại thì được. Người dùng thật luôn rơi vào trường hợp bị lỗi vì nút "Xóa" chỉ xuất hiện sau khi ảnh đã lưu.
+
+[3] Cùng tình huống "tệp đang được tham chiếu", nhánh tệp đính kèm PDF trả về thông báo nghiệp vụ đọc hiểu được, riêng nhánh ảnh chân dung rơi vào lỗi hệ thống chung.
+
+[4] Theo SRS FR-IV-03 (srs-fr-04-chuyen-gia-tvv.md:136), ảnh chân dung là trường KHÔNG bắt buộc, nên người dùng phải có quyền đưa hồ sơ về trạng thái không có ảnh. Hiện không có cách nào gỡ ảnh khỏi hồ sơ qua giao diện.
+
+[5] Ghi nhận kèm (dev xử lý một lượt): sau khi lưu ảnh thành công, màn CHI TIẾT tư vấn viên vẫn không hiển thị ảnh chân dung mà chỉ hiện chữ cái đầu họ tên, trái SCR-IV-03 (:1543) yêu cầu thẻ thông tin chính có ảnh chân dung 80x100. Đây đúng phần đối tác đã nêu ở vòng 1 của cùng ca.

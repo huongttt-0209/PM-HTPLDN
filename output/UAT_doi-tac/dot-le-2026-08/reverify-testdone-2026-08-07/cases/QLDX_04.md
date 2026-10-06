@@ -1,0 +1,55 @@
+# QLDX_04 — row 164 (tab `bug`)
+
+## [2] Tuần
+
+Tuần 3
+
+## [3] Mã TC
+
+QLDX_04
+
+## [6] Mô tả
+
+Kiểm tra Hộp thoại cảnh báo sắp hết phiên
+
+## [7] Điều kiện
+
+1. Đăng nhập hệ thống thành công
+
+## [9] Các bước thực hiện
+
+1. Không thao tác suốt 25 phút.
+
+## [10] Kết quả mong đợi
+
+- Thông báo cảnh báo Nội dung: "Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc." 
+- Nút "Gia hạn phiên"
+- Nút "Đăng xuất"
+
+## [13] Trạng thái
+
+Fail
+
+## [14] Dopai
+
+Open
+
+## [17] Trạng thái dev fix
+
+Test done
+
+## [19] Kết quả verify
+
+✅ Đã hết lỗi — verify lại 07/08/2026 02:08 trên env nội bộ 18.143.165.120.nip.io, bó mã FE index-DsMHK7Dp.js (chân sidebar HTPLDN · V1.0.9), vai trò Cán bộ Nghiệp vụ Trung ương (cbnv_tw_03). Không dùng tài khoản quản trị để chấm.
+
+- Hộp thoại cảnh báo BẬT ĐÚNG mốc 25 phút không thao tác. Đo bằng đồng hồ thật và kẹp hai đầu: ở mức không thao tác 24,988 phút chưa có hộp thoại, ở 25,017 phút đã có — sai số dưới 2 giây. Khớp srs-fr-10-quan-tri.md:1959 "Dang xuat tu dong: 25 phut idle → Modal canh bao → 30 phut → Auto invalidate".
+
+- Nội dung hiển thị trùng từng ký tự với kết quả mong đợi trong phiếu: "Phiên làm việc sắp hết hạn trong 5 phút do không có thao tác. Vui lòng gia hạn để tiếp tục làm việc." Tiêu đề "Phiên làm việc sắp hết hạn", kèm dòng đếm ngược chạy thật "Phiên sẽ tự đăng xuất sau 5:00" (quan sát tiếp thấy 4:37 rồi 3:50).
+
+- Có đủ hai nút và đúng nhãn phiếu yêu cầu: [Đăng xuất] và [Gia hạn phiên]. Đếm trong phạm vi hộp thoại: đúng 2 nút hiển thị, cả hai đều bấm được.
+
+- Đối chứng độc lập để loại khả năng đây là hộp thoại "hết phiên" do máy chủ đá ra: quanh thời điểm hộp thoại bật không có request nào trả 401; lần gọi /auth/me sau đó 26 giây trả 304, tức phiên vẫn còn hợp lệ. Chữ hiển thị đọc bằng innerText của đúng phần tử đang hiện, không dùng textContent để tránh gom node ẩn.
+
+Hai điểm đề nghị BA cập nhật đặc tả cho khớp bản đang chạy (không chặn bàn giao, không phải lỗi dev): srs-fr-10-quan-tri.md:1891 dòng "Session Warning" ghi điều kiện hiển thị "30 phut idle", trái với :1959 là 25 phút — bản đang chạy làm theo :1959 và đúng như phiếu yêu cầu. Cùng dòng :1891 chỉ ghi chuỗi rút gọn không dấu "Phien sap het han trong 5 phut. [Gia han] [Dang xuat]"; CHANGELOG-v3-to-v3.5.md:1212 và :1240 cho thấy bảng này chỉ được soát lại ở dòng 2 và dòng 11, chưa soát dòng 12, nên chuỗi đó không phải chuẩn câu chữ hiển thị.
+
+Bằng chứng (output/UAT_doi-tac/reverify-week-5/F5-devfix-2026-08-07/): image/QLDX_04-C1-modal-canh-bao-phut-25.png · image/QLDX_04-C2-C3-C4-modal-innerText.txt · image/QLDX_04-timeline-idle.txt · image/QLDX_04-doi-chung-network.txt · do/QLDX_04.md

@@ -1,0 +1,5 @@
+❌ Không phải bug.
+- Đối tác phản ánh: khu vực tổng hợp điểm đánh giá ở đầu thẻ hồ sơ tư vấn viên đang hiển thị theo thang 1-10 (ví dụ 8.3/10), trong khi tài liệu yêu cầu thang 1-5.
+- QA kiểm tra lại chức năng Đánh giá tư vấn viên (UC 47) bằng tài khoản Cán bộ nghiệp vụ Trung ương, mở hồ sơ tư vấn viên TVV-BTP-TW-0002 (trạng thái Đang hoạt động, đã có đánh giá): hệ thống hiển thị đúng thang 1-5, không tái hiện lỗi.
+- Cụ thể trên web hiện tại: đầu thẻ hiển thị "4.0/5" kèm đúng 5 ngôi sao; ba tiêu chí Chuyên môn / Thái độ / Đúng hạn đều hiển thị "4.0/5"; bảng danh sách đánh giá cũng chấm trên 5 sao.
+- → Đối tác kiểm tra lại.

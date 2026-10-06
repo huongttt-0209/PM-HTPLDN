@@ -6,7 +6,7 @@
 > **Round:** R7 — 72 TC v3.5 · Latest R18 (2026-05-12): **33/72 TC da chay (~46%)**
 > **Thoi diem tong hop:** 2026-05-12 01:15:00
 > **Functional report:** [`functional-test-report-r7-7-3-vu-viec.md`](../../functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md)
-> **Bug report:** [`bug-report-r7-7-3-functional-vu-viec.md`](bug-report-r7-7-3-functional-vu-viec.md)
+> **Bug report:** [`Pass-bug-report-r7-7-3-functional-vu-viec.md`](Pass-bug-report-r7-7-3-functional-vu-viec.md)
 
 ---
 
@@ -176,7 +176,7 @@ Cac muc duoi day khong phai viec Dev BE/FE trong request hien tai:
 
 ## Tai lieu tham chieu
 
-- [`bug-report-r7-7-3-functional-vu-viec.md`](bug-report-r7-7-3-functional-vu-viec.md)
+- [`Pass-bug-report-r7-7-3-functional-vu-viec.md`](Pass-bug-report-r7-7-3-functional-vu-viec.md)
 - [`bug-report-flow-vu-viec.md`](bug-report-flow-vu-viec.md)
 - [`functional-test-report-r7-7-3-vu-viec.md`](../../functional/vu-viec/functional-test-report-r7-7-3-vu-viec.md)
 - [`todo-vu-viec.md`](../../../../../tasks/todo-vu-viec.md)

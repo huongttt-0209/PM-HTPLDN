@@ -1,0 +1,4 @@
+❌ Không phải bug.
+• Form "Thêm bài giảng" (CB_NV_TW) CÓ trường "Ảnh đại diện" — kèm ô upload "Kéo thả hoặc nhấp để chọn ảnh", định dạng .jpg/.jpeg/.png/.gif, tối đa 5MB.
+• Form đủ các trường: Tên bài giảng, Mô tả, Loại tài liệu, Tệp tài liệu, Lĩnh vực, Ảnh đại diện, Công khai — khớp đặc tả Quản lý kho tài liệu, bài giảng (UC26).
+→ Đối tác kiểm tra lại.

@@ -1,0 +1,19 @@
+{
+  "case": "CKTMBMHDLCTT_11 (row 96) — Wording 'Ẩn X/Y thư mục, Z thất bại' khác thiết kế",
+  "env": "https://18.143.165.120.nip.io",
+  "account": "cbnv_tw (CB_NV_TW)",
+  "timestamp": "2026-07-20 ~23:05",
+  "action": "Chọn 2 thư mục [QA Hidden Folder 715 = CONG_KHAI (đủ đk ẩn) + BM-B3-0720-Rong-1 = Nháp (không công khai → không thể ẩn)] → Ẩn hàng loạt",
+  "confirm_modal": "Ẩn 2 thư mục? Các thư mục sẽ được ẩn khỏi Cổng PLQG. [Hủy] [Ẩn]",
+  "clicked_confirm": "Ẩn",
+  "toast_observer": { "so_toast": 1, "chu": ["Ẩn 1/2 thư mục, 1 thất bại."], "note": "1 toast, không nhân đôi. Dạng wording giống toast công khai partial (case 94)." },
+  "network": { "so_request_non_get": 1, "requests": ["POST /api/v1/thu-muc-bieu-maus/batch-an"] },
+  "after_state": {
+    "QA Hidden Folder 715 (CONG_KHAI)": "Đã ẩn (AN) — THÀNH CÔNG",
+    "BM-B3-0720-Rong-1 (Nháp)": "vẫn Nháp — THẤT BẠI (đúng: không thể ẩn thư mục chưa công khai)"
+  },
+  "selection_after": "Thanh 'Đã chọn 2 thư mục' vẫn tồn tại — cùng lỗi selection cụm 93/95.",
+  "partner_evidence": "Đối tác: toast 'Ẩn 1/3 thư mục, 2 thất bại.' — cùng dạng wording, khác con số (chọn 3 thư mục).",
+  "verdict": "BA confirm",
+  "ly_do_verdict": "Wording 'Ẩn X/Y thư mục, Z thất bại' — SRS §Error Handling (dòng 250-251) chỉ có ERR-CK-01/WRN-CK-01 cho công khai đơn lẻ, KHÔNG có message chuẩn cho ẩn hàng loạt một phần. Expected đối tác cũng không có nguồn SRS → SRS im lặng → BA confirm (cùng bản chất sub-issue wording case 94)."
+}

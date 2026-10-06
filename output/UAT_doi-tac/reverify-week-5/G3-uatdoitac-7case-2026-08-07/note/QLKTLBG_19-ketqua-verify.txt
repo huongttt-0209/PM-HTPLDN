@@ -1,0 +1,14 @@
+✅ Đã hết lỗi.
+
+Đo 07/08/2026 16:46–16:52 trên https://htpldn-uat.ospgroup.vn, bản dựng V1.0.10, tài khoản vai trò Cán bộ Nghiệp vụ cấp Trung ương (đúng tác nhân đặc tả, srs-fr-03-dao-tao.md:751). Màn "Đào tạo, tập huấn" → "Kho tài liệu / Bài giảng", bấm "Xóa bộ lọc" để không còn điều kiện lọc nào; danh sách có 7 bản ghi.
+
+Triệu chứng "Màn hình không có nút chức năng" không còn tái hiện: thanh công cụ có nút "Xuất Excel" ở trạng thái dùng được; bấm 1 lần, hệ thống xử lý thành công, tải về tệp DanhSachBaiGiang_20260807_1649.xlsx và báo "Xuất dữ liệu thành công.".
+
+Tệp chứa toàn bộ danh sách — đã mở tệp đọc nội dung, không dừng ở mức tải được tệp:
+- Tệp gồm 1 trang tính "Bài giảng", 8 dòng = 1 tiêu đề + 7 dòng dữ liệu. Số dòng dữ liệu đúng bằng tổng bản ghi của danh sách; đối chiếu từng dòng thì đủ 7/7 bài giảng đang có trên bảng, gồm cả bản ghi "Chưa công khai".
+- Phép thử loại trừ khả năng tệp chỉ chứa trang đang xem: hạ xuống 10 dòng/trang (dải 10/20/50/100 theo srs-fr-03-dao-tao.md:1976) rồi xuất lại, và ép xuất theo tham số phân trang nhỏ hơn tổng — cả hai trường hợp tệp vẫn giữ đủ 7 bản ghi.
+Đáp ứng srs-fr-03-dao-tao.md:1952 và srs-v3.5.md:5570 (BR-DATA-06): khi không đặt điều kiện lọc thì "xuất theo bộ lọc hiện tại" chính là toàn bộ danh sách; giới hạn duy nhất đặc tả đặt ra cho tệp là 10.000 dòng.
+
+Phạm vi hiệu lực: môi trường và bản dựng nêu trên, tại thời điểm đo, trên 7 bài giảng thuộc đơn vị của tài khoản. Lượt đo chỉ xem và xuất; không tạo, sửa hay xóa bản ghi nào.
+
+Ảnh bằng chứng: https://drive.google.com/file/d/1D2mi1ekM97pN_K7oJYSnQJwAjM_HFLIu/view?usp=drivesdk (màn "Kho tài liệu / Bài giảng", thanh lọc để trống, thanh công cụ có nút "Xuất Excel") · https://drive.google.com/file/d/19aP8YUWX7gTdFvtTsx_ffJFbJG_8Zm3U/view?usp=drivesdk (chân bảng "Hiển thị 1-7 / 7 kết quả" tại thời điểm bấm "Xuất Excel").

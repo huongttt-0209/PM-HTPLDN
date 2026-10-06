@@ -1,0 +1,11 @@
+⚠️ Cần BA xác nhận.
+
+Không tái hiện được tình huống đối tác báo (upload file mã độc → "Tải file thất bại") vì trên hệ thống hiện tại bước Quét virus (SRS FR-X.1-06/UC152 §Tải lên file, dòng 858) chưa chặn tệp chứa chữ ký mã độc mẫu chuẩn (EICAR): tệp PDF hợp lệ nhúng chuỗi EICAR upload thành công (HTTP 201, trangThaiQuet="SACH"=sạch), không có thông báo lỗi. Vì tệp không bị chặn → chưa hề hiển thị message nào để đối chiếu với chuẩn ERR-TLPL-04 "File '{ten_file}' chứa mã độc" (dòng 955).
+
+Nghi vấn: tính năng quét virus chưa được bật/triển khai trên env này (phần virus/mã độc trước đây được hoãn).
+
+Câu hỏi BA: bước Quét virus có nằm trong phạm vi bản phát hành hiện tại / được bật không, hay đang hoãn?
+- Nếu HOÃN → wording khi chặn mã độc tạm hoãn đánh giá, phản hồi đối tác; test lại khi tính năng bật.
+- Nếu PHẢI hoạt động → lỗ hổng bảo mật (tệp chứa mã độc mẫu được nhận là "sạch"), ưu tiên Dev BE fix quét virus trước; wording đánh giá sau.
+
+Chi tiết + bằng chứng network: BA_confirm-tvcs/ba-confirmation-needed-tvcs-batchF.md + cond/QLTLPLCVV_15.md.

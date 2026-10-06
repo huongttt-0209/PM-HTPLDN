@@ -1,0 +1,5 @@
+⚠️ Cần BA xác nhận (SRS im lặng về KPI).
+- Web (BC Vụ việc theo thời gian, UC128) hiển thị 1 thẻ chỉ số "Tổng vụ việc toàn kỳ = 6". Đối tác kỳ vọng (thiết kế PTYC) KHÔNG có chỉ số riêng cho báo cáo này.
+- SRS FR-IX-05 §Output (dòng 335-339) CHỈ liệt kê trend_data[], theo_don_vi[], chart_type=LINE — KHÔNG có chỉ số/KPI scalar nào, nhưng cũng KHÔNG cấm hiển thị tổng. Thẻ "Tổng vụ việc toàn kỳ" là số liệu phụ trợ (suy ra được từ trend), không vi phạm §Output.
+- Vì SRS im lặng (không yêu cầu, không cấm) → QA không kết luận Open. Câu hỏi BA: giữ thẻ tổng (hữu ích) hay bỏ để khớp thiết kế PTYC "không có chỉ số riêng"?
+- Verify: cbnv_tw (Toàn quốc), Kỳ Năm 2026. Verdict: BA confirm.

@@ -1,0 +1,69 @@
+🔁 CÒN LỖI — chuyển lại dev.
+
+[1] CÒN LỖI Ở ĐÂU
+Vai trò : Quản trị hệ thống (tài khoản admin).
+Màn     : Báo cáo thống kê → loại "BC Số lượng chương trình hỗ trợ".
+Bấm [Xem báo cáo] → hiện đủ số liệu: Tổng chương trình 7 · Đang thực hiện 1 · Hoàn thành 1.
+Bấm [Xuất Excel]  → KHÔNG có tệp nào về máy.
+                    Chữ hiện ra cho người dùng chỉ là một từ tiếng Anh: "Forbidden".
+                    Máy chủ trả 403, mã ERR-PERM-SYS-00-01.
+Đúng triệu chứng đã ghi ở ô TKM phản hồi lần 1.
+
+[2] PHẦN NÀO ĐÃ HẾT LỖI
+Chạy lại đúng màn đó bằng vai trò Cán bộ Nghiệp vụ Trung ương thì xuất tệp bình thường:
+ · Tệp BaoCaoSoLuongCtHoTro_20260806_1224.xlsx tải về được và mở đọc được.
+ · Phần đầu tệp có đủ: tên báo cáo, kỳ, khoảng thời gian, đơn vị, ngày tạo.
+ · Số trong tệp khớp đúng số trên màn.
+ · Đổi bộ lọc thì nội dung tệp đổi theo.
+ · Câu lỗi cũ "Không thể tạo file xuất. Vui lòng thử lại." KHÔNG còn xuất hiện.
+
+[3] VÌ SAO VẪN CHƯA ĐÓNG ĐƯỢC — 2 điểm, còn 1 điểm là chưa đóng
+(a) Câu báo lỗi sai. Khi từ chối vì thiếu quyền, hệ thống phải cho người dùng biết bằng tiếng
+    Việt rằng họ không có quyền xem báo cáo. Hiện đang đẩy thẳng chuỗi kỹ thuật của máy chủ ra
+    màn hình.  →  srs-fr-11-bao-cao.md dòng 117 (E7 ERR-RPT-05).
+(b) Chặn không nhất quán. Việc kiểm quyền nằm ở ĐẦU luồng báo cáo. Nếu vai trò này thật sự
+    không được phép thì phải chặn ngay từ [Xem báo cáo], chứ không cho xem hết số liệu rồi mới
+    chặn lúc xuất.  →  srs-fr-11-bao-cao.md dòng 79 (Processing bước 1).
+Ghi chú: đặc tả dòng 1268 (BR-AUTH-08) ghi ngoại lệ "QTHT bypass" cho toàn nhóm FR-IX, tức
+đang nghiêng về hướng vai trò này ĐƯỢC xuất. Cần nghiệp vụ chốt — xem mục [5].
+
+[4] ĐÃ TEST BẰNG GÌ
+Tài khoản : admin (Quản trị hệ thống, cấp TW) · cbnv_tw_04 (CB Nghiệp vụ, cấp TW)
+Dữ liệu   : 7 chương trình trong kỳ Năm 2026
+Bộ lọc    : 4 cấu hình — không lọc · lọc đơn vị · lọc trạng thái Hoàn thành · một đơn vị không
+            có dữ liệu (để chắc bộ lọc có ăn thật)
+Bản dựng  : V1.0.8
+Không tạo, sửa hay xoá bản ghi nào.
+
+[5] AI LÀM GÌ TIẾP
+BA     : chốt giúp câu "Vai trò Quản trị hệ thống có được xuất báo cáo không?". Dev cần câu
+         trả lời này TRƯỚC, vì hai hướng sửa khác hẳn nhau.
+Dev BE : cho bước Xem và bước Xuất dùng chung một quy tắc quyền; khi từ chối thì trả thông báo
+         theo đặc tả dòng 117.
+Dev FE : không hiển thị nguyên chuỗi lỗi kỹ thuật của máy chủ ra màn hình.
+
+── CÁCH VERIFY sau Dev fix ──
+CẦN CÓ TRƯỚC: tài khoản admin (Quản trị hệ thống, cấp TW); màn Báo cáo thống kê (/bao-cao);
+  ≥1 chương trình HTPLDN đã duyệt / đang thực hiện / hoàn thành nằm trong năm 2026. Báo cáo
+  trống thì phép thử không có giá trị — tạo chương trình mới ở màn Chương trình HTPLDN và đưa
+  lên trạng thái đã duyệt trở đi.
+Bước 1. Chọn loại báo cáo "BC Số lượng chương trình hỗ trợ", Kỳ "Năm", Đơn vị "Toàn quốc", để
+  trống Trạng thái chương trình. Bấm [Xem báo cáo]. Ghi lại 3 số trên màn: Tổng chương trình /
+  Đang thực hiện / Hoàn thành.
+Bước 2. Bấm [Xuất Excel]. Chép lại NGUYÊN VĂN chữ hiện ra và kiểm có tệp về máy không.
+Bước 3. Kiểm bằng đường thứ hai: mở tab Network xem lời gọi xuất báo cáo trả mã gì, thân phản
+  hồi ghi gì. Có tệp thì MỞ TỆP RA ĐỌC, đối chiếu 3 số ở bước 1 với số trong tệp.
+✅ ĐẠT khi một trong hai:
+  · Vai trò Quản trị hệ thống bấm [Xuất Excel] thì nhận được tệp .xlsx mở đọc được, 3 số trong
+    tệp khớp đúng 3 số trên màn, và không hiện thông báo từ chối nào.
+  · Hoặc — nếu nghiệp vụ chốt vai trò này KHÔNG được xuất — hệ thống chặn ngay từ bước
+    [Xem báo cáo], và chữ hiện ra là câu tiếng Việt cho người dùng biết họ không có quyền xem
+    báo cáo này.
+❌ CHƯA ĐẠT nếu: còn thấy "Forbidden" hay bất kỳ chuỗi tiếng Anh / mã kỹ thuật nào; hoặc vẫn
+  cho Xem đủ số liệu rồi mới chặn ở bước Xuất. Đúng một nửa cũng tính là chưa đạt.
+⚠️ 3 bẫy hay mắc khi đo:
+  1. Chỉ thử bằng vai trò Cán bộ Nghiệp vụ rồi kết luận "đã fix". Vai trò đó vốn đã chạy tốt từ
+     lượt đo 06/08/2026 — phép đo quyết định phải chạy bằng chính vai trò Quản trị hệ thống.
+  2. Dừng ở "tải được tệp". Phải mở tệp ra đọc mới chốt được.
+  3. Chấm hỏng vì tên sheet, thứ tự cột, màu sắc, dòng tổng cuối bảng hay tệp không nhúng biểu
+     đồ — đặc tả không quy định những thứ đó (dòng 85, dòng 1092).

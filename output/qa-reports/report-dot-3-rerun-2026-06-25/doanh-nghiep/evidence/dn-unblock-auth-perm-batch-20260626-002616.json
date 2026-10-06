@@ -1,0 +1,361 @@
+{
+  "run_id": "20260626-002616",
+  "tests": {
+    "TC-DN-PERM-103_wrong_otp": {
+      "login": {
+        "status": 200,
+        "url": "http://103.172.236.130:3000/api/v1/auth/login",
+        "body": {
+          "success": true,
+          "data": {
+            "otpToken": "0aff62ad-9d40-4fc1-bf2c-236b9db51731",
+            "otpExpiresIn": 300,
+            "maskedEmail": "cb_***@htpldn.test",
+            "message": "Mã xác thực đã gửi qua email"
+          },
+          "meta": null
+        }
+      },
+      "otp": {
+        "status": 401,
+        "url": "http://103.172.236.130:3000/api/v1/auth/verify-otp",
+        "body": {
+          "success": false,
+          "error": {
+            "code": "ERR-AUTH-VIII-20-06",
+            "message": "Đã có lỗi xảy ra",
+            "timestamp": "2026-06-25T17:26:17.137Z",
+            "requestId": "bbf398da-57d4-4746-82ba-2f6473779e9d"
+          }
+        }
+      }
+    },
+    "login_tw": {
+      "login_status": 200,
+      "otp_status": 200
+    },
+    "login_dn": {
+      "login_status": 200,
+      "otp_status": 200
+    },
+    "login_dp": {
+      "login_status": 200,
+      "otp_status": 200,
+      "login_body": {
+        "success": true,
+        "data": {
+          "otpToken": "dc6b9b9c-7765-4776-b480-1503dbd480d7",
+          "otpExpiresIn": 300,
+          "maskedEmail": "cb_***@htpldn.test",
+          "message": "Mã xác thực đã gửi qua email"
+        },
+        "meta": null
+      }
+    },
+    "tw_list_sample": {
+      "status": 200,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps?page=1&pageSize=5",
+      "body": {
+        "success": true,
+        "data": [
+          {
+            "id": "1e29453e-cba4-4618-b3f9-6740f411e906",
+            "nguoiTaoId": "de7d2f4a-9eac-4972-a8c5-f86232009217",
+            "nguoiCapNhatId": "de7d2f4a-9eac-4972-a8c5-f86232009217",
+            "ngayTao": "2026-05-09T15:13:47.536Z",
+            "ngayCapNhat": "2026-06-25T16:56:04.108Z",
+            "donViId": "00000000-0000-4000-8002-000000000001",
+            "seqId": "30",
+            "version": 3,
+            "maDoanhNghiep": "DN-HNI-0004",
+            "tenDoanhNghiep": "Công ty TNHH DN Test 01",
+            "tenVietTat": null,
+            "maSoThue": "9999999990",
+            "giayCnDkkd": null,
+            "ngayCapDkkd": null,
+            "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+            "diaChi": "Số 1, Đường Test, Quận Test, Hà Nội",
+            "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+            "dienThoai": "0901234567",
+            "email": "dntest01@htpldn.test",
+            "fax": null,
+            "nganhNghe": "THUONG_MAI",
+            "nguoiDaiDien": "Nguyễn Văn A",
+            "chucVuDaiDien": null,
+            "doanhThu": "0.00",
+            "soLaoDong": 1,
+            "soLaoDongNu": null,
+            "soLaoDongKhuyetTat": null,
+            "laNuLamChu": false,
+            "tongSoVuViec": 5,
+            "tongChiPhiHoTro": "0.00",
+            "ghiChu": null,
+            "quyMo": "SIEU_NHO",
+            "tongNguonVon": null,
+            "laCongKhai": false,
+            "linhVucIds": []
+          },
+          {
+            "id": "e0000000-0000-4000-8001-000000000001",
+            "nguoiTaoId": "00000000-0000-4000-8000-000000000099",
+            "nguoiCapNhatId": "12838ee6-9ca3-4676-9a2c-1823df2f7bd0",
+            "ngayTao": "2026-05-07T03:05:02.182Z",
+            "ngayCapNhat": "2026-06-02T11:46:24.218Z",
+            "donViId": "00000000-0000-4000-8001-000000000001",
+            "seqId": "12",
+            "version": 2,
+            "maDoanhNghiep": "DN-BKH-001",
+            "tenDoanhNghiep": "Công ty TNHH Sông Hồng BKH",
+            "tenVietTat": null,
+            "maSoThue": "0100000003",
+            "giayCnDkkd": null,
+            "ngayCapDkkd": null,
+            "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+            "diaChi": "6B Hoàng Diệu, Hà Nội (sửa R2 0602)",
+            "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+            "dienThoai": "0901234567",
+            "email": "songhong-bkh@example.test",
+            "fax": null,
+            "nganhNghe": "CONG_NGHIEP",
+            "nguoiDaiDien": "Nguyễn Thị Lan",
+            "chucVuDaiDien": "Giám đốc",
+            "doanhThu": "9500000000.00",
+            "soLaoDong": 42,
+            "soLaoDongNu": 18,
+            "soLaoDongKhuyetTat": null,
+            "laNuLamChu": true,
+            "tongSoVuViec": 1,
+            "tongChiPhiHoTro": "17950593.00",
+            "ghiChu": null,
+            "quyMo": "NHO",
+            "tongNguonVon": null,
+            "laCongKhai": false,
+            "linhVucIds": []
+          },
+          {
+            "id": "8eca0f10-6ab6-483b-9b8a-7583e6ab52bf",
+            "nguoiTaoId": "12838ee6-9ca3-4676-9a2c-1823df2f7bd0",
+            "nguoiCapNhatId": null,
+            "ngayTao": "2026-06-02T11:44:28.915Z",
+            "ngayCapNhat": "2026-06-02T11:44:28.915Z",
+            "donViId": "00000000-0000-4000-8001-000000000001",
+            "seqId": "53",
+            "version": 1,
+            "maDoanhNghiep": "DN-HNI-0011",
+            "tenDoanhNghiep": "Công ty TNHH Sông Hồng BKH",
+            "tenVietTat": null,
+            "maSoThue": "9988776655",
+            "giayCnDkkd": null,
+            "ngayCapDkkd": null,
+            "loaiDnId": "0227c481-81a3-43fa-8037-c6b72f464d1e",
+            "diaChi": "1 Test, Hà Nội",
+            "tinhThanhId": "7ab46d68-7aad-49b0-bee6-51465e301e4a",
+            "dienThoai": "0901234567",
+            "email": "testdn0602@example.test",
+            "fax": null,
+            "nganhNghe": "NONG_LAM",
+            "nguoiDaiDien": "Nguyễn Văn Test",
+            "chucVuDaiDien": null,
+            "doanhThu": null,
+            "soLaoDong": null,
+            "soLaoDongNu": null,
+            "soLaoDongKhuyetTat": null,
+            "laNuLamChu": false,
+            "tongSoVuViec": 0,
+            "tongChiPhiHoTro": "0.00",
+            "ghiChu": null,
+            "quyMo": "SIEU_NHO",
+            "tongNguonVon": null,
+            "laCongKhai": false,
+            "linhVucIds": []
+          },
+          {
+            "id": "6c46d245-0ace-4c9a-a32e-a85802884c41",
+            "nguoiTaoId": "12838ee6-9ca3-4676-9a2c-1823df2f7bd0",
+            "nguoiCapNhatId": "0c039382-7162-49ce-b785-43dbd9f65c6d",
+            "ngayTao": "2026-06-01T14:52:49.241Z",
+            "ngayCapNhat": "2026-06-01T15:31:36.743Z",
+            "donViId": "00000000-0000-4000-8001-000000000001",
+            "seqId": "52",
+            "version": 2,
+            "maDoanhNghiep": "DN-XX-0001",
+            "tenDoanhNghiep": "Test DN Auto Tỉnh 0601",
+            "tenVietTat": null,
+            "maSoThue": "9999000111",
+            "giayCnDkkd": null,
+            "ngayCapDkkd": null,
+            "loaiDnId": null,
+            "diaChi": null,
+            "tinhThanhId": null,
+            "dienThoai": null,
+            "email": null,
+            "fax": null,
+            "nganhNghe": null,
+            "nguoiDaiDien": null,
+            "chucVuDaiDien": null,
+            "doanhThu": null,
+            "soLaoDong": null,
+            "soLaoDongNu": null,
+            "soLaoDongKhuyetTat": null,
+            "laNuLamChu": false,
+            "tongSoVuViec": 0,
+            "tongChiPhiHoTro": "0.00",
+            "ghiChu": null,
+            "quyMo": null,
+            "tongNguonVon": null,
+            "laCongKhai": false,
+            "linhVucIds": []
+          },
+          {
+            "id": "8bd9c2e2-ef01-48ca-96b3-b414763debe3",
+            "nguoiTaoId": "250c14d9-cfab-4a16-97b0-78487d1c064c",
+            "nguoiCapNhatId": null,
+            "ngayTao": "2026-05-28T10:32:45.622Z",
+            "ngayCapNhat": "2026-05-28T10:32:45.622Z",
+            "donViId": "00000000-0000-4000-8002-000000000006",
+            "seqId": "51",
+            "version": 1,
+            "maDoanhNghiep": "DN-AGG-0004",
+            "tenDoanhNghiep": "Công ty TNHH QA Test 2026-05-28",
+            "tenVietTat": null,
+            "maSoThue": "9999000028",
+            "giayCnDkkd": null,
+            "ngayCapDkkd": null,
+            "loaiDnId": "2e4c4a8e-f884-428c-ad82-57b48f86126c",
+            "diaChi": "100 Nguyễn Trãi",
+            "tinhThanhId": "a3f8a913-832b-456e-86a7-327bd81288fe",
+            "dienThoai": null,
+            "email": "dn_qa_test_2026_05_28@htpldn.test",
+            "fax": null,
+            "nganhNghe": "NONG_LAM",
+            "nguoiDaiDien": "Nguyễn QA Test DN",
+            "chucVuDaiDien": null,
+            "doanhThu": null,
+            "soLaoDong": null,
+            "soLaoDongNu": null,
+            "soLaoDongKhuyetTat": null,
+            "laNuLamChu": false,
+            "tongSoVuViec": 0,
+            "tongChiPhiHoTro": "0.00",
+            "ghiChu": null,
+            "quyMo": "SIEU_NHO",
+            "tongNguonVon": null,
+            "laCongKhai": false,
+            "linhVucIds": []
+          }
+        ],
+        "meta": {
+          "total": 41,
+          "page": 1,
+          "pageSize": 5,
+          "totalPages": 9
+        }
+      }
+    },
+    "TC-PERM-033_dn_list": {
+      "status": 403,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps?page=1&pageSize=20",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-AUTH-DN-00-01",
+          "message": "Role không được phép truy cập endpoint CMS này",
+          "timestamp": "2026-06-25T17:26:18.376Z",
+          "requestId": "4d0593a9-c222-471f-ac55-bd8beb94f08e"
+        }
+      }
+    },
+    "TC-DN-PERM-605_dn_get_other_detail": {
+      "status": 403,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/1e29453e-cba4-4618-b3f9-6740f411e906",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-AUTH-DN-00-01",
+          "message": "Role không được phép truy cập endpoint CMS này",
+          "timestamp": "2026-06-25T17:26:18.398Z",
+          "requestId": "15e0ef28-8550-44b4-a26c-edb593736566"
+        }
+      }
+    },
+    "TC-LS-203_or_cross_tenant_dp_get_tw_sample": {
+      "status": 404,
+      "url": "http://103.172.236.130:3000/api/v1/doanh-nghieps/1e29453e-cba4-4618-b3f9-6740f411e906",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-VAL-VII-02-01",
+          "message": "Bản ghi không tồn tại",
+          "timestamp": "2026-06-25T17:26:18.432Z",
+          "requestId": "1d106f9a-8e55-4060-928e-57410c7a797d"
+        }
+      }
+    },
+    "register_existing_mst_9988776601": {
+      "status": 422,
+      "url": "http://103.172.236.130:3000/api/v1/auth/register-doanh-nghiep",
+      "body": {
+        "success": false,
+        "error": {
+          "code": "ERR-VAL-SYS-00-01",
+          "field": "hoTen",
+          "message": "hoTen must be shorter than or equal to 200 characters",
+          "details": [
+            {
+              "field": "hoTen",
+              "message": "hoTen must be shorter than or equal to 200 characters"
+            },
+            {
+              "field": "hoTen",
+              "message": "Họ tên người liên hệ không được để trống"
+            },
+            {
+              "field": "hoTen",
+              "message": "hoTen must be a string"
+            },
+            {
+              "field": "soDienThoaiTaiKhoan",
+              "message": "Số điện thoại không hợp lệ"
+            },
+            {
+              "field": "password",
+              "message": "ERR-REG-04"
+            },
+            {
+              "field": "password",
+              "message": "ERR-REG-04"
+            },
+            {
+              "field": "password",
+              "message": "password must be a string"
+            },
+            {
+              "field": "passwordConfirm",
+              "message": "Xác nhận mật khẩu không được để trống"
+            },
+            {
+              "field": "passwordConfirm",
+              "message": "passwordConfirm must be a string"
+            },
+            {
+              "field": "captchaToken",
+              "message": "CAPTCHA không được để trống"
+            },
+            {
+              "field": "captchaToken",
+              "message": "captchaToken must be a string"
+            }
+          ],
+          "timestamp": "2026-06-25T17:26:18.454Z",
+          "requestId": "d97ec7a4-7972-4124-88ce-a8d1734730db"
+        }
+      }
+    }
+  },
+  "verdicts": {
+    "TC-DN-PERM-103": "PASS",
+    "TC-PERM-033": "PASS",
+    "TC-DN-PERM-605": "PASS",
+    "TC-LS-203": "PASS"
+  }
+}

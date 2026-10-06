@@ -1,0 +1,63 @@
+🔁 CÒN LỖI — chuyển lại dev.
+
+■ LỖI Ở ĐÂU
+Ai     : Vai trò Quản trị hệ thống (tài khoản admin)
+Màn    : Báo cáo thống kê → "BC Đánh giá hiệu quả HTPL"
+Làm gì : [Xem báo cáo] hiện đủ số liệu (4 đợt · 8 lượt · 7 vụ việc đã đánh giá), hai nút Xuất
+         bật sáng → bấm [Xuất Excel]
+Hỏng   : KHÔNG có tệp nào về máy. Màn hiện đúng một từ tiếng Anh "Forbidden"
+         (máy chủ trả 403 · mã ERR-PERM-SYS-00-01). Tái hiện 13/13 lượt, cả Excel lẫn PDF
+         (nhánh PDF mở được hộp thoại in rồi mới báo lỗi ở bước cuối).
+
+■ SAI CHỖ NÀO (srs-fr-11-bao-cao.md)
+:117 — khi từ chối vì thiếu quyền phải hiện câu TIẾNG VIỆT báo người dùng không có quyền xem báo
+       cáo, không ném chuỗi kỹ thuật của máy chủ ra màn.
+:79  — kiểm quyền nằm ở ĐẦU luồng: không được phép thì chặn ngay ở [Xem báo cáo], đừng cho xem
+       hết số liệu rồi mới chặn lúc xuất.
+Không phải chờ BA mới sửa được: BA trả lời hướng nào thì vẫn là lỗi — không được xuất thì phải
+chặn từ bước Xem và báo bằng tiếng Việt; được xuất thì đang chặn nhầm.
+
+■ ĐÃ CHẠY ĐÚNG — ĐỪNG TEST LẠI
+Vai trò CB Nghiệp vụ TW xuất bình thường: 8 lượt đều ra tệp, mở đọc được, đủ 4 mục đầu tệp, số
+khớp từng con số với màn, bảng theo đơn vị cộng dọc đúng (lượt 1+4+3 = 8 · vụ việc 1+4+2 = 7).
+Bộ lọc "Đợt đánh giá" chạy đúng: hai đợt khác nhau cho hai kết quả khác hẳn, tệp bám đúng bộ lọc.
+Hết câu "Không thể tạo file xuất. Vui lòng thử lại.".
+
+■ ĐỪNG CHẤM HỎNG VÌ
+Tên tệp BaoCaoDanhGiaHieuQua_20260806_1514.xlsx — đúng khuôn {TênBáoCáo}_{YYYYMMDD_HHmm} (:85,
+:86). Đặc tả không ấn định đúng chuỗi "BaoCaoDanhGia"; tên đang dùng chỉ dài hơn chứ vẫn đúng loại.
+
+■ LỖI KHÁC CÙNG MÀN — đề nghị sửa luôn thể, không tính vào phiếu này
+1. Thiếu hẳn phần kết quả chia theo đợt đánh giá: :507 ghi phần đó hiển thị "Luôn", nhưng cả dữ
+   liệu máy chủ lẫn tệp xuất đều không có bảng nào theo đợt.
+2. Cùng một con số hiện 3 kiểu: thẻ "Điểm trung bình chung" trên màn cắt thập phân (33) trong khi
+   tệp và máy chủ là 33,9, còn bảng theo đơn vị làm tròn 1 chữ số → người dùng tưởng tệp lệch màn.
+
+■ AI SỬA
+Dev BE — bước Xem và bước Xuất dùng chung một quy tắc quyền; từ chối thì trả thông báo theo :117.
+Dev FE — không đẩy chuỗi lỗi kỹ thuật của máy chủ ra màn hình người dùng.
+BA     — chốt "QTHT có được xuất báo cáo không" để dev chọn hướng sửa.
+
+■ VERIFY LẠI SAU KHI FIX
+Cần trước: tài khoản admin (QTHT/TW) · màn /bao-cao · trong kỳ có ≥1 đợt đánh giá đã có lượt chấm
+  (báo cáo trống thì đo vô nghĩa).
+B1. admin → "BC Đánh giá hiệu quả HTPL" · Kỳ Năm 2026 · Toàn quốc → [Xem báo cáo] (bấm đúng 1
+    lần). Ghi lại Tổng đợt / Tổng lượt / Tổng vụ việc và bảng theo đơn vị.
+B2. [Xuất Excel] → chép nguyên văn chữ hiện ra, kiểm có tệp về máy không.
+B3. Kiểm đường thứ hai: tab Network xem lời gọi xuất trả mã gì. Có tệp thì MỞ RA ĐỌC, so từng số
+    với B1 và kiểm cộng dọc bảng theo đơn vị.
+✅ ĐẠT — một trong hai:
+   a) admin nhận được tệp .xlsx mở đọc được, số khớp màn, không thông báo từ chối nào; HOẶC
+   b) nếu BA chốt QTHT không được xuất → chặn NGAY ở [Xem báo cáo] kèm câu tiếng Việt báo không
+      có quyền.
+❌ CHƯA ĐẠT: còn "Forbidden" hay bất kỳ chuỗi tiếng Anh / mã kỹ thuật nào · vẫn cho xem đủ rồi mới
+   chặn lúc xuất · chỉ làm mờ nút Xuất mà bước Xem vẫn vào được · CB Nghiệp vụ bị chặn theo.
+⚠️ Bẫy: (1) CB Nghiệp vụ xuất được KHÔNG chứng minh đã fix — vai trò đó vốn đã tốt từ 06/08, phép
+   đo quyết định phải chạy bằng chính admin. (2) Tải được tệp chưa đủ, phải MỞ TỆP RA ĐỌC.
+   (3) Ghi kèm tên bó mã assets/index-XXXX.js, đừng chỉ ghi V1.0.8 — ngày 06/08 bó mã đã đổi mà
+   chuỗi phiên bản vẫn in V1.0.8.
+
+Đo 06/08/2026 · V1.0.8 · admin (QTHT/TW) + cbnv_tw_05 (CB Nghiệp vụ/TW, cùng đơn vị) · Kỳ Năm
+01/01–31/12/2026 · Toàn quốc · môi trường không có đợt "TKM kiểm thử 2" nên đo bằng hai đợt khác
+đang có dữ liệu · không tạo/sửa/xoá bản ghi nào.
+Ảnh: thu-QLTLPLCVV_15-2026-08-06/image/DGHQHTPL_06-07-vaitro-QTHT-thong-bao-Forbidden-khi-xuat-excel-V108.png

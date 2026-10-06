@@ -1,0 +1,20 @@
+⚠️ Cần BA xác nhận — verify lại 07/08/2026 03:0x–03:4x trên env nội bộ 18.143.165.120.nip.io, bó mã FE index-D4Buvu4S.js. Chạy trọn luồng bằng dữ liệu QA tự dựng, không đụng dữ liệu đối tác. Kết quả cuối mà phiếu yêu cầu thì ĐÃ ĐẠT, nhưng bước 2 của phiếu không tồn tại trên bản dựng và đặc tả đang tự mâu thuẫn ở đúng chỗ đó, nên không tự chấm đạt cũng không tự chấm lỗi.
+
+ĐÃ ĐẠT — cả ba điểm trong kết quả mong đợi
+- Tài khoản chuyển sang trạng thái hoạt động: đọc lại chính bản ghi cho trangThai = "HOAT_DONG", vai trò "DN", và lanDangNhapCuoi = null — tức trạng thái đã đổi TRƯỚC mọi lần đăng nhập, do chính bước kích hoạt làm, không phải do đăng nhập. Đúng cả 2/2 doanh nghiệp QA dựng.
+- Doanh nghiệp đăng nhập được bằng mã số thuế + mật khẩu: tên đăng nhập là mã số thuế 9908070102, đăng nhập qua giao diện thật, qua bước mã xác thực 6 số, vào được hệ thống.
+- Dùng được chức năng của mình: mở được hồ sơ doanh nghiệp của chính mình, yêu cầu /doanh-nghieps/me trả 200, không gặp trang chặn quyền và không trắng màn. Không thấy menu quản trị — điều này đúng srs-fr-01-dashboard.md:685 (doanh nghiệp không có phần quản trị), không phải thiếu chức năng.
+- Liên kết kích hoạt dùng một lần: đã kiểm, bấm lại lần hai không dùng được nữa.
+
+VÌ SAO PHẢI ĐỂ BA CHỐT — bước 2 của phiếu không tồn tại, và đặc tả tự mâu thuẫn ở đúng chỗ này
+- Trên bản dựng, màn kích hoạt KHÔNG có bước đặt mật khẩu: 0 ô nhập mật khẩu ở mọi lần đo (2/2 lượt), yêu cầu gửi lên chỉ mang mã kích hoạt, không có trường mật khẩu. Màn chỉ báo "Đang kích hoạt tài khoản..." rồi "Kích hoạt thành công! Tài khoản của bạn đã được kích hoạt. Đang chuyển đến trang đăng nhập..." rồi tự về trang đăng nhập.
+- Phép thử quyết định (cố ý dùng hai mật khẩu khác nhau): mật khẩu nhập ở FORM ĐĂNG KÝ thì đăng nhập ĐƯỢC; mật khẩu định đặt ở bước kích hoạt thì đăng nhập trả lỗi "Tên đăng nhập hoặc mật khẩu không đúng." ⇒ bản dựng lấy mật khẩu từ form đăng ký.
+- Đặc tả có hai nhánh loại trừ nhau trong CÙNG một chức năng FR-VIII-22: srs-fr-10-quan-tri.md:1070-1071 đặt mật khẩu + xác nhận mật khẩu là trường bắt buộc NGAY Ở FORM ĐĂNG KÝ (đúng như bản dựng đang làm); nhưng srs-fr-10-quan-tri.md:1109, :1116, :2299 lại ghi doanh nghiệp "đặt mật khẩu lần đầu" QUA LIÊN KẾT KÍCH HOẠT (đúng như bước 2 của phiếu). Không thể vừa đúng cả hai.
+
+CÂU HỎI CHO BA: doanh nghiệp đặt mật khẩu ở đâu — ở form đăng ký (:1070-1071, bản dựng đang làm vậy) hay ở màn kích hoạt qua liên kết trong thư (:1109 · :1116 · :2299, phiếu UAT đang theo hướng này)? Chốt một hướng rồi sửa nhánh còn lại trong đặc tả. Nếu BA chốt hướng đặt mật khẩu ở màn kích hoạt thì đây là lỗi cần dev sửa; nếu chốt hướng form đăng ký thì bước 2 của phiếu cần viết lại và phiếu này coi như đã xong.
+
+Ghi thêm hai điều để BA có đủ dữ kiện, không phải lỗi: (1) hồ sơ doanh nghiệp mở ở đường /doanh-nghiep/me/sua trong khi srs-fr-07-doanh-nghiep.md:513 đặc tả đường /doanh-nghiep/ho-so-cua-toi và :514 còn đặt điều kiện xác thực VNeID mức 2 — QA không mở rộng đo phần này vì ngoài phạm vi phiếu. (2) Phiếu gốc chưa từng được đối tác chạy (ô phản hồi ghi "sau khi tc QLDKTK_01 được fix sẽ test") và không có ảnh bằng chứng, nên không có triệu chứng cũ để so; kết luận ở đây là hiện trạng so với đặc tả.
+
+Dữ liệu QA đã tạo trên env nội bộ (khai để dọn nếu cần): doanh nghiệp mã số thuế 9908070101 (email qa.w5.qldktk10.01@htpldn.test) và 9908070102 (email qa.w5.qldktk10.02@htpldn.test), cùng ở trạng thái HOAT_DONG, mật khẩu đăng nhập QaW5FormA@2026. Phải dựng 2 bản ghi vì liên kết kích hoạt chỉ dùng được một lần. Tài khoản admin CHỈ dùng để đọc lại trạng thái bản ghi làm đối chứng, không dùng để chấm.
+
+Bằng chứng (output/UAT_doi-tac/reverify-week-5/F5-devfix-2026-08-07/): image/QLDKTK_10-C0-form-dang-ky.png · image/QLDKTK_10-C1-man-kich-hoat.png · image/QLDKTK_10-C2-sau-dat-mat-khau.png · image/QLDKTK_10-C3-dang-nhap-bang-MST.png · image/QLDKTK_10-C4-surface-DN.png · image/QLDKTK_10-C2-verify-email-response.network-response · image/QLDKTK_10-doi-chung-trangthai.txt · image/QLDKTK_10-timeline.txt · do/QLDKTK_10.md

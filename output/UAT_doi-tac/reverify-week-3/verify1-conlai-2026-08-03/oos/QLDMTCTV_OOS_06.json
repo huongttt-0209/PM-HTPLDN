@@ -1,0 +1,16 @@
+{
+  "STT": "03/08/2026",
+  "Tuần": "Tuần 3",
+  "Mã TC": "QLDMTCTV_OOS_06",
+  "Mô tả": "Danh sách Tổ chức tư vấn — thứ tự các thẻ trạng thái khác thứ tự đặc tả",
+  "Điều kiện": "1. Đăng nhập tài khoản Cán bộ Phê duyệt cấp Trung ương (cbpd_tw_04), đơn vị Cục Bổ trợ tư pháp - Bộ Tư pháp.\n2. Chọn menu \"Mạng lưới Tư vấn viên\" -> \"Tổ chức tư vấn\".",
+  "Dữ liệu đầu vào": "Tài khoản Cán bộ Phê duyệt thấy đủ 6 thẻ.",
+  "Các bước thực hiện": "1. Đọc thứ tự các thẻ trạng thái từ trái sang phải.\n2. Đối chiếu với thứ tự trong đặc tả màn hình.",
+  "Kết quả mong đợi": "Màn hình SCR-IV-NEW-01 xếp thứ tự các thẻ từ dòng 1625 đến 1630 là: \"Đang hoạt động\" -> \"Tạm dừng\" -> \"Mới đăng ký\" -> \"Chờ phê duyệt\" -> \"Đã từ chối\" -> \"Vô hiệu hóa\".",
+  "Kết quả thực tế": "Thứ tự trên web là: \"Đang hoạt động\" -> \"Chờ phê duyệt\" -> \"Mới đăng ký\" -> \"Đã từ chối\" -> \"Tạm dừng\" -> \"Vô hiệu hóa\".\nĐủ 6 thẻ, không thiếu thẻ nào, chỉ khác vị trí sắp xếp.",
+  "Ảnh/vieo 1": "QLDMTCTV_05-cbpd-tw-04-thanh-the-co-cho-phe-duyet.png",
+  "Trạng thái 1": "Fail",
+  "Verify": "BA confirm",
+  "DEV phản hồi lần 1": "⚠️ Cần BA xác nhận.\n- Thứ tự các thẻ trạng thái trên web là: Đang hoạt động, Chờ phê duyệt, Mới đăng ký, Đã từ chối, Tạm dừng, Vô hiệu hóa.\n- Theo màn hình SCR-IV-NEW-01 (dòng 1625 đến 1630), thứ tự phải là: Đang hoạt động, Tạm dừng, Mới đăng ký, Chờ phê duyệt, Đã từ chối, Vô hiệu hóa.\n- Đủ 6 thẻ, không thiếu thẻ nào, chỉ khác vị trí. Mức ảnh hưởng nhẹ.\n⚠️ Câu hỏi gửi BA số 1: thứ tự các thẻ trong đặc tả có phải là ràng buộc bắt buộc không, hay chỉ là liệt kê? Nếu bắt buộc thì dev sắp lại; nếu thứ tự hiện tại là cố ý thì xin cập nhật đặc tả.\n⚠️ Câu hỏi gửi BA số 2 — đặc tả đang TỰ MÂU THUẪN về SỐ LƯỢNG thẻ: phần màn hình ghi 6 thẻ (dòng 1610, 1617 và 1625 đến 1630), nhưng phần Tiêu chí chấp nhận của chức năng lại ghi \"3 tab trạng thái\" (dòng 1129). Đề nghị BA chốt con số đúng và sửa lại đặc tả cho khớp, vì hai chỗ này đang dẫn tới hai kết luận kiểm thử khác nhau.\n- Ghi chú tham chiếu: chức năng \"Quản lý Tổ chức tư vấn\" (FR-IV-NEW-01) trong đặc tả KHÔNG được cấp mã UC (dòng 1029 ghi \"chưa có trong CSV\"), nên chỉ nêu tên chức năng và số dòng, không có mã UC để dẫn.\n- Lỗi do QA phát hiện thêm khi kiểm 4 phiếu QLDMTCTV_02 / _05 / _06 / _09 ngày 03/08/2026, không nằm trong phạm vi 4 phiếu đó nên mở dòng riêng để chuyển dev.\n- Môi trường kiểm: bản dựng HTPLDN V1.0.5.",
+  "Trạng thái dev fix 1": "BA confirm"
+}

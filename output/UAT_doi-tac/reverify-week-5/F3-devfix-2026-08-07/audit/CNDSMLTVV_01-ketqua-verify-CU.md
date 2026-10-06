@@ -1,0 +1,20 @@
+# Nội dung CŨ của ô 'Kết quả verify' — dòng 37 · CNDSMLTVV_01
+
+Chụp lại lúc bắt đầu lô F3-devfix-2026-08-07, TRƯỚC khi đè (prompt mục 6 cho phép đè `--cho-phep-de-ketqua`).
+
+- Trạng thái dev fix (lúc chụp): `Fixed`
+- Dopai (lúc chụp): `dev done`
+- DEV phản hồi lần 1 (lúc chụp): (trống)
+
+---
+
+## Nguyên văn ô 'Kết quả verify'
+
+```text
+🔁 CÒN LỖI Ở ĐÂU: Công khai hàng loạt báo "Đã công khai tư vấn viên thành công" nhưng tải lại trang thì hồ sơ vẫn "Chưa công khai". Chỉ 1 hồ sơ trong lô bị từ chối là cả lô bị hoàn tác, kể cả hồ sơ đã báo thành công.
+VÌ SAO LÀ LỖI: FR-IV-08 §Processing bước 2 (srs-fr-04-chuyen-gia-tvv.md:664) và SCR-IV-01 §Quy tắc tương tác (:1464) buộc lưu mô tả, đặt cờ công khai, chuyển trạng thái và ghi thời điểm cho các dòng đã chọn.
+ĐÃ HẾT LỖI: Cửa sổ nhập mô tả công khai đã mở đúng, câu xác nhận báo đúng số hồ sơ đã chọn; bỏ trống mô tả thì bị chặn đúng chỗ.
+AI SỬA: Dev.
+ĐÃ ĐO: cbnv_tw_02, 4 hồ sơ x 5 dạng = 9 lượt bấm thật, chỉ 1/4 lượt hợp lệ ra đủ 4 kết cục. Hồ sơ loại Tư vấn viên thiếu Số thẻ hành nghề luôn bị từ chối mà giao diện vẫn báo thành công.
+CÁCH VERIFY SAU DEV FIX: Tích 2 hồ sơ "Đang hoạt động" chưa công khai (1 có số thẻ, 1 không) rồi công khai; tải lại trang và đếm số hồ sơ thật sự chuyển sang "Công khai", không tin thông báo.
+```

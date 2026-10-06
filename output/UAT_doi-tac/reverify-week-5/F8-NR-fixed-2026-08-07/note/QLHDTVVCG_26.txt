@@ -1,0 +1,81 @@
+[!] BẢN NHÁP ĐÃ HẾT HIỆU LỰC — KHÔNG GHI VÀO BẢNG.
+Nội dung dưới đây soạn cho ô "Kết quả verify" khi verdict còn là Reopen (07/08/2026 18:4x).
+User chốt lại tiêu chí lúc 18:3x: "verify theo bug gốc + nội dung BA chốt; phần mềm đúng ý BA chốt là được rồi".
+Chiếu theo đó, QLHDTVVCG_26 = Test done, và ô "Kết quả verify" đã hoàn nguyên về RỖNG.
+Giữ tệp này chỉ để lưu vết phần đo; phần "còn lỗi" bên dưới nay là GHI NHẬN, không phải lý do lật ô R.
+Bản đo chuẩn: ../do/QLHDTVVCG_26.md
+================================================================================
+
+📌 KẾT QUẢ CHUNG: CÒN LỖI (REOPEN) — hai hạng mục bộ phận phát triển khai đã bổ sung (thanh tiến độ thanh toán và cảnh báo khi tổng thanh toán vượt giá trị hợp đồng) đều CHẠY ĐÚNG; nhưng ô "Ngày thanh toán" trên dòng giai đoạn đang bị BẮT BUỘC, chặn không cho lưu, trong khi cả phiếu lẫn đặc tả đều ghi ô này là tùy chọn.
+
+Phiếu này bên nghiệm thu chưa chạy lượt nào (ô Kết quả thực tế để trống, không có ảnh), nên đây là lượt chạy đầu tiên; chuẩn chấm lấy từ ô Kết quả mong đợi của phiếu đối chiếu với đặc tả.
+
+Đo trên môi trường nội bộ https://18.143.165.120.nip.io, bó mã giao diện index-BbPPdate.js (bản lên lúc 13:47 ngày 07/08/2026), đo lúc 17:44-17:57 ngày 07/08/2026, cửa sổ trình duyệt 1440x900. Tài khoản Cán bộ Nghiệp vụ Trung ương cbnv_tw_04.
+
+ĐƯỜNG VÀO THỰC TẾ VÀ MÀN ĐÃ CHẤM
+
+Thanh bên KHÔNG có mục "Hợp đồng Tư vấn" - đúng theo quyết định nghiệp vụ ngày 11/05/2026 (bỏ menu riêng). Đây là đường đi, không phải điểm chấm, nên không tính là lỗi.
+
+Đã chấm trên: Vụ việc HTPL > VV-BTP-TW-20260804-002 > Xem vụ việc > mục "HĐ tư vấn liên kết" > hợp đồng HDTV-20260807-0006 > Xem chi tiết > nút Chỉnh sửa > hộp thoại "Cập nhật hợp đồng tư vấn" > nhóm "Thanh toán giai đoạn".
+
+Nền trước khi thao tác (mốc so bắt buộc): giá trị hợp đồng 250.000.000 VNĐ; đúng 1 giai đoạn ("Dot 1 - tam ung khi ky hop dong", 100.000.000 VNĐ, ngày 15/08/2026, Chưa TT); khối tổng trên bảng đọc nguyên văn "0% · Đã thanh toán: 0 VNĐ · Tổng 1 giai đoạn: 100.000.000 VNĐ · Giá trị hợp đồng: 250.000.000 VNĐ".
+
+❌ CÒN LỖI - Ô "Ngày thanh toán" của dòng giai đoạn bị bắt buộc, không lưu được nếu bỏ trống
+
+Vì sao thuộc phạm vi phiếu: Kết quả mong đợi của chính phiếu QLHDTVVCG_26 ghi nguyên văn người dùng nhập trực tiếp trên dòng bốn mục "Giai đoạn, Số tiền, Ngày thanh toán (tùy chọn), Trạng thái thanh toán". Đặc tả srs-fr-14-hop-dong-tv.md:111 khai trường ngay_thanh_toan có cột Bắt buộc = N. Tức tùy chọn là yêu cầu của chính phiếu, không phải kiểm tra mở rộng.
+
+Thực tế đo được, hai đường độc lập:
+
+1) Đọc thuộc tính của ô ngày trên dòng giai đoạn vừa thêm: ô này mang dấu bắt buộc (aria-required="true").
+
+2) Đường quyết định - chạy tới bước sinh lỗi: thêm một dòng giai đoạn mới, điền ĐỦ Giai đoạn và Số tiền, CỐ Ý để trống ô ngày, rồi bấm Lưu. Kết quả: hộp thoại KHÔNG đóng, hiện dòng chữ đỏ "Chọn ngày" gắn đúng vào ô ngày (và đó là ô báo lỗi DUY NHẤT của cả biểu mẫu), và bản ghi trên máy chủ KHÔNG đổi (đọc lại ngay sau đó: vẫn 1 giai đoạn, số hiệu phiên bản vẫn là 4). Tức đây là chặn thật, không phải nhắc nhở suông.
+
+Ràng buộc này áp cho CẢ dòng cũ, không riêng dòng mới: ô ngày của giai đoạn đã có sẵn cũng mang dấu bắt buộc. Hệ quả nghiệp vụ: hợp đồng nào đang có giai đoạn chưa xác định được ngày thì người dùng sẽ không sửa và không lưu được bất cứ thứ gì trong hộp thoại đó cho tới khi bịa ra một ngày.
+
+Dev cần sửa: khi người dùng nhập một giai đoạn thanh toán mà bỏ trống ô ngày, hệ thống phải cho lưu bình thường và ghi nhận giai đoạn đó với ngày để trống - đúng như đặc tả :111 (Bắt buộc = N) và đúng chữ "(tùy chọn)" của phiếu. Cách làm cụ thể do bộ phận phát triển tự chọn.
+
+✅ NHỮNG PHẦN ĐÃ CHẠY ĐÚNG (ghi rõ để lần sửa sau không phá vỡ)
+
+- Thêm dòng: bấm "Thêm giai đoạn thanh toán" thì bảng tăng từ 1 lên 2 dòng, KHÔNG mở hộp thoại con hay ngăn kéo riêng, đúng kiểu nhập ngay trên dòng mà đặc tả :293 mô tả. Bốn ô của dòng mới đều trống và gõ được ngay tại chỗ (đã gõ thật, giá trị vào ô).
+- Trạng thái thanh toán là công tắc hai giá trị "Đã TT / Chưa TT", mặc định "Chưa TT" - đúng :112.
+- Cảnh báo vượt giá trị hợp đồng (một trong hai hạng mục dev khai đã bổ sung) CHẠY ĐÚNG: gõ số tiền 500.000.000 (tổng 600.000.000 so với giá trị hợp đồng 250.000.000) thì hiện ngay khối cảnh báo đỏ "Tổng thanh toán vượt quá giá trị hợp đồng - Tổng 600.000.000 VNĐ đang vượt 350.000.000 VNĐ so với giá trị hợp đồng 250.000.000 VNĐ. Vui lòng điều chỉnh trước khi lưu.", thanh tiến độ chuyển sang trạng thái báo lỗi ở mức 200%. Hạ số tiền về 50.000.000 thì cảnh báo biến mất và thanh về 20% - chứng minh cảnh báo bám phép tính thật chứ không phải khối chữ dán cứng. Bấm Lưu khi đang vượt (đã điền đủ ngày để loại yếu tố lỗi ở trên) thì bị chặn, bản ghi máy chủ không đổi.
+- Thanh tiến độ thanh toán (hạng mục dev khai còn lại) CÓ chạy và tính đúng công thức đặc tả: bật một giai đoạn 50.000.000 sang "Đã TT" thì thanh nhảy 0% lên 20%, dòng "Đã thanh toán" từ 0 lên 50.000.000 VNĐ, máy chủ trả tiến độ 20 - đúng 50.000.000 / 250.000.000.
+
+❓ CẦN NGHIỆP VỤ CHỐT (KHÔNG tính là lỗi, KHÔNG dùng để đánh trượt)
+
+Phiếu mong đợi "khi nhập Số tiền, hệ thống tự cộng dồn và cập nhật thanh tiến trình tổng". Đo được: nhập số tiền 50.000.000 vào dòng đang ở trạng thái "Chưa TT" thì dòng chữ "Tổng 2 giai đoạn" CÓ tăng 100.000.000 lên 150.000.000 VNĐ, nhưng thanh tiến trình đứng yên ở 0%. Đây là vì đặc tả srs-fr-14-hop-dong-tv.md:301 quy định thanh tiến độ thanh toán = tổng phần ĐÃ THANH TOÁN chia cho giá trị hợp đồng, mà giai đoạn mới mặc định là chưa thanh toán (:112). Nói cách khác phần mềm đang làm ĐÚNG đặc tả, còn kỳ vọng của phiếu thì ngược với đặc tả. Đề nghị bộ phận nghiệp vụ chốt: giữ công thức :301, hay đổi thanh tiến trình sang tổng tất cả giai đoạn như phiếu mong đợi. Trước khi có chốt thì KHÔNG tính điểm này là lỗi của bộ phận phát triển.
+
+GHI NHẬN THÊM (đã kiểm, KHÔNG tính là lỗi)
+
+- Nhãn ô ngày trên dòng nhập ghi là "Ngày dự kiến", trong khi cột tương ứng ở màn Chi tiết ghi "Ngày thanh toán" và đặc tả gọi trường là ngay_thanh_toan. Đã chứng minh đúng là một ô: gõ 22/08/2026 vào ô đó, sau khi lưu máy chủ trả ngày thanh toán 2026-08-22. Chỉ là chênh lệch câu chữ, chấm theo hành vi nên không tính lỗi.
+- Một lần bấm Lưu làm số hiệu phiên bản của hợp đồng tăng 3 đơn vị (4 lên 7), giống hệt lượt đo phiếu _24 (1 lên 4). Hai lần liên tiếp cùng bước nhảy nên đây là quy ước của máy chủ khi lưu kèm mốc tiến độ và giai đoạn, KHÔNG phải dấu hiệu gửi trùng: thông báo "Đã lưu hợp đồng" chỉ xuất hiện một lần.
+
+🔎 PHẠM VI ĐÃ ĐO: môi trường nội bộ · 07/08/2026 17:44-17:57 · Cán bộ Nghiệp vụ Trung ương · hộp thoại Cập nhật hợp đồng tư vấn của HDTV-20260807-0006, nhóm Thanh toán giai đoạn · 2 lượt bấm Lưu tới bước sinh lỗi, mỗi lượt đối chiếu lại bản ghi trên máy chủ · thông báo nổi bắt bằng bộ theo dõi cài TRƯỚC thao tác, không lọc trùng. Không đo các nhóm khác của hộp thoại (thông tin chung, vụ việc liên kết, tài liệu, mốc tiến độ) vì ngoài phạm vi phiếu.
+
+Đính chính phương pháp để người kiểm toán không hiểu nhầm: trong lượt đo có gắn bộ đếm lời gọi mạng kiểu window.fetch, bộ đếm này trả 0 kể cả ở lần lưu THÀNH CÔNG, tức ứng dụng không dùng cơ chế đó. Vì vậy bằng chứng "bị chặn" KHÔNG lấy từ bộ đếm, mà lấy từ việc bản ghi trên máy chủ không đổi sau khi bấm Lưu, cộng với hộp thoại không đóng.
+
+DỮ LIỆU ĐÃ THAY ĐỔI: trên hợp đồng HDTV-20260807-0006 đã thêm 1 giai đoạn thanh toán "Dot 2 - QA H1 kiem thu them giai doan", 50.000.000 VNĐ, ngày 22/08/2026, trạng thái Đã thanh toán; tiến độ thanh toán từ 0 lên 20; số hiệu phiên bản từ 4 lên 7. CỐ Ý giữ lại, không hoàn tác, vì đây là điều kiện bắt buộc của phiếu QLHDTVVCG_27 chạy ngay sau. Số tiền vượt ngưỡng 500.000.000 chỉ tồn tại trên biểu mẫu, CHƯA BAO GIỜ được lưu (cả hai lần bấm Lưu khi đang vượt đều bị chặn). Không đụng dữ liệu của bên nghiệm thu, không đổi hợp đồng khác.
+
+Ảnh bằng chứng:
+- Dòng giai đoạn thứ 2 đã có Giai đoạn và Số tiền 50.000.000, ô ngày viền đỏ kèm lỗi "Chọn ngày" sau khi bấm Lưu; trong cùng ảnh thấy khối tổng "0% · Đã thanh toán: 0 VNĐ · Tổng 2 giai đoạn: 150.000.000 VNĐ": https://drive.google.com/file/d/1xR7-8hPFF_Z4oB_w4rBR0op02Kvx-GHs/view?usp=drivesdk
+
+Do bên nghiệm thu chưa từng chạy phiếu này nên đội không có ảnh "lỗi cũ" để so sánh; vì vậy chỉ kết luận được hiện trạng hiện nay, không kết luận về tác dụng của bản sửa.
+
+---
+── CÁCH VERIFY sau Dev fix ──
+Phạm vi: CHỈ kiểm yêu cầu "Ngày thanh toán là tùy chọn" trên dòng giai đoạn thanh toán (đặc tả srs-fr-14-hop-dong-tv.md:111, cột Bắt buộc = N). KHÔNG đo lại cảnh báo vượt ngưỡng và KHÔNG đo lại công thức thanh tiến độ - hai phần đó đã đạt, chỉ kiểm nhanh xem có bị phá vỡ không.
+Precondition: đăng nhập cbnv_tw_04, vào Vụ việc HTPL > VV-BTP-TW-20260804-002 > Xem vụ việc > mục "HĐ tư vấn liên kết" > một hợp đồng bất kỳ > Xem chi tiết > Chỉnh sửa > nhóm "Thanh toán giai đoạn". Ghi lại trước khi bấm: số giai đoạn hiện có và số hiệu phiên bản của hợp đồng.
+1) Bấm "Thêm giai đoạn thanh toán". Điền ĐỦ Giai đoạn và Số tiền, CỐ Ý để TRỐNG ô ngày. Bấm Lưu.
+2) Nếu bước 1 lưu được: mở lại hợp đồng, xem giai đoạn vừa thêm có được ghi nhận với ngày để trống hay không (không được tự điền ngày hôm nay thay người dùng).
+3) Mở lại chế độ Chỉnh sửa trên một hợp đồng đang có giai đoạn KHÔNG có ngày, sửa một trường khác rồi bấm Lưu - kiểm ràng buộc cũ có còn chặn dòng cũ không.
+4) Kiểm không phá vỡ: gõ số tiền lớn hơn giá trị hợp đồng, xem cảnh báo vượt ngưỡng có còn hiện và có còn chặn Lưu không; bật một giai đoạn sang "Đã TT", xem thanh tiến độ có còn nhảy đúng tỉ lệ đã thanh toán trên giá trị hợp đồng không.
+Đối chứng độc lập: sau mỗi lần bấm Lưu, đọc lại bản ghi hợp đồng trên máy chủ và so số giai đoạn, giá trị ngày thanh toán, số hiệu phiên bản với những gì đang hiện trên màn. Chỉ dựa vào hộp thoại đóng hay không thì chưa đủ.
+✅ PASS khi: bước 1 lưu thành công, hộp thoại đóng, không có dòng chữ đỏ nào ở ô ngày; bước 2 cho thấy giai đoạn được ghi nhận với ngày trống; bước 3 không bị chặn; bước 4 cả hai phần cũ vẫn chạy như trước.
+❌ FAIL nếu: bước 1 vẫn bị chặn với báo lỗi ở ô ngày, hoặc bản ghi máy chủ không đổi sau khi bấm Lưu; hoặc bước 2 cho thấy hệ thống tự gán một ngày nào đó cho giai đoạn mà người dùng bỏ trống; hoặc bước 4 cho thấy cảnh báo vượt ngưỡng hay thanh tiến độ đã hỏng theo.
+⏸ CHƯA CHỐT khi: hộp thoại đóng nhưng đọc lại máy chủ vẫn thấy chưa có giai đoạn mới (hai đường mâu thuẫn), hoặc không mở được hộp thoại Chỉnh sửa để đo.
+⚠️ Không chấm FAIL vì thanh tiến độ đứng yên khi mới nhập số tiền vào dòng "Chưa TT" - đó đang là điểm chờ nghiệp vụ chốt, và phần mềm hiện làm đúng đặc tả :301.
+⚠️ Không chấm FAIL vì nhãn ô ghi "Ngày dự kiến" thay vì "Ngày thanh toán" - đã chứng minh là cùng một trường.
+⚠️ Không suy ra "gửi trùng" khi thấy số hiệu phiên bản tăng 3 đơn vị sau một lần lưu - đó là quy ước của máy chủ, đã kiểm hai lượt.
+Artifact lỗi lần này: do/QLHDTVVCG_26.md - vế C1.
+
+Kết quả trên chỉ có hiệu lực cho môi trường nội bộ https://18.143.165.120.nip.io ở bản dựng đã ghi tại thời điểm đo; đợt kiểm của bên nghiệm thu thực hiện trên môi trường htpldn-uat.ospgroup.vn.

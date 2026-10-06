@@ -1,0 +1,163 @@
+CPCTHTTDVQL_06 — BC Chi phí theo đơn vị · thao tác [Xuất Excel]
+Bằng chứng chữ: thông báo nguyên văn + phản hồi máy chủ của CHÍNH lượt bấm đó
+Env verify : https://18.143.165.120.nip.io      Bản dựng: V1.0.8 (gói assets/index-CNwX9JjX.js)
+Ngày đo    : 2026-08-06
+Cách đo    : cài bộ theo dõi lên document.body TRƯỚC khi bấm (không lọc trùng, đọc innerText,
+             lấy mẫu chữ + hình học khung thông báo mỗi 150 ms, đếm request kèm theo, móc cả
+             fetch lẫn XHR vì ứng dụng gửi request xuất tệp qua XHR).
+
+================================================================================
+A. VAI TRÒ `cbnv_tw_03` (CB Nghiệp vụ - Trung ương) — đúng tác nhân đặc tả :62
+================================================================================
+
+Màn hình sau khi bấm [Xem báo cáo] (biến thể ①, Thời điểm tạo 06/08/2026 13:34):
+    Tổng hồ sơ    2
+    Tổng chi phí  23.000.000
+    Bảng chéo, hàng = đơn vị:
+        Đơn vị                            Số hồ sơ   Tổng chi phí     TB chi phí
+        Cục Bổ trợ tư pháp - Bộ Tư pháp   2          23.000.000 ₫     11.500.000 ₫
+Địa chỉ trang khớp đúng chuỗi tham số trên ảnh nghiệm thu:
+    /bao-cao?loai=chi-phi-theo-don-vi&kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+
+A1. Biến thể ① — Đơn vị "Toàn quốc" — bấm [Xuất Excel] lúc 13:35
+    Số khung thông báo mọc lên : 1  (không có hiện tượng 2 thông báo chồng)
+    Chữ lúc khung mọc ra       : "Đang tạo file..."
+    Chuỗi chữ đo theo thời gian trong CÙNG khung đó:
+        +7318 ms : ""
+        +7470 ms : "Tạo file thành công."
+        +9886 ms : ""            (khung tự tắt)
+    Số request kèm lượt bấm    : 1  → XHR POST /api/v1/bao-cao/export
+    Mã trả về                  : 200
+    Kiểu nội dung              : application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+    Tệp hệ thống giao ra       : 1 tệp — BaoCaoChiPhiTheoDonVi_20260806_1335.xlsx
+                                 6.676 byte · md5 710b2bfb243aed111364e0a6ab8bbc6e
+
+A2. Biến thể ② — Đơn vị "Cục Bổ trợ tư pháp - Bộ Tư pháp (BTP-TW)" — bấm [Xuất Excel] lúc 13:36
+    Địa chỉ trang có thêm     : &donViId=00000000-0000-4000-8000-000000000001
+    Màn hình (Thời điểm tạo 13:36): Tổng hồ sơ 2 · Tổng chi phí 23.000.000 · 1 dòng đơn vị
+    Số khung thông báo         : 1
+    Chuỗi chữ                  : "Tạo file thành công." rồi tự tắt
+    Mã trả về                  : 200
+    Tệp hệ thống giao ra       : BaoCaoChiPhiTheoDonVi_20260806_1336.xlsx
+                                 6.670 byte · md5 6cb0acf8e6caadcf64839694b48e096f
+
+A3. Nội dung hai tệp .xlsx đọc bằng thư viện đọc bảng tính (openpyxl)
+
+    Tệp ① — sheet "Chi phí theo đơn vị", 16 dòng x 4 cột:
+        BC Chi phí theo đơn vị
+        Kỳ báo cáo: Năm (từ 01/01/2026 đến 31/12/2026)
+        Đơn vị: Toàn quốc                                     <-- theo bộ lọc lượt ①
+        Ngày tạo: 06/08/2026
+        Tổng số hồ sơ | Chỉ tiêu | Số lượng | Tổng số hồ sơ 2
+        Tổng chi phí  | Chỉ tiêu | Số tiền (₫) | Tổng chi phí 23000000
+        Theo đơn vị
+        Đơn vị | Số hồ sơ | Tổng chi phí (₫) | Trung bình chi phí (₫)
+        Cục Bổ trợ tư pháp - Bộ Tư pháp | 2 | 23000000 | 11500000
+
+    Tệp ② — y hệt cấu trúc, KHÁC đúng một dòng:
+        Đơn vị: Cục Bổ trợ tư pháp - Bộ Tư pháp               <-- theo bộ lọc lượt ②
+
+    => Đủ 4 mục header đặc tả :1092 đòi (tên báo cáo · kỳ · đơn vị · ngày tạo).
+    => Bảng chéo hàng = đơn vị, đủ 4 cột đặc tả FR-IX-16 (:731-761) đòi:
+       tên đơn vị · số hồ sơ · tổng chi phí · trung bình.
+    => Số liệu trong tệp khớp đúng từng con số trên màn.
+    => Hai tệp khác md5 và dòng "Đơn vị" đổi theo bộ lọc ⇒ tệp bám bộ lọc đang chọn,
+       không phải bản xuất cứng.
+    => Triệu chứng gốc ngày 16/07 ("Không thể tạo file xuất. Vui lòng thử lại." = ERR-RPT-04,
+       đặc tả :116) KHÔNG còn tái hiện với vai trò này.
+
+================================================================================
+B. VAI TRÒ `admin` (Quản trị viên — QTHT, BTP · TW) — ĐÚNG VAI TRÒ TRONG ẢNH ĐỐI TÁC
+================================================================================
+
+B1. Bước Xem báo cáo — KHÔNG bị chặn
+    GET /api/v1/bao-cao/chi-phi-theo-don-vi?kyBaoCao=NAM&tuNgay=2026-01-01&denNgay=2026-12-31
+        -> 200
+    Màn hiện đầy đủ số liệu, y hệt số của vai trò cbnv_tw_03 (Thời điểm tạo 06/08/2026 13:38).
+    Hai nút [Xuất Excel] / [Xuất PDF] đều bấm được (không bị làm mờ, không bị ẩn).
+    Ảnh: image/CPCTHTTDVQL_06-02-qtht-xem-duoc-bao-cao-nut-xuat-bam-duoc.png
+
+B2. Bước Xuất Excel — BỊ CHẶN. Đo 3 lượt, kết quả giống hệt nhau:
+
+    Lượt 1 — 13:38, bấm trên giao diện
+        Số khung thông báo : 1
+        Chuỗi chữ đo theo thời gian:
+            +20454 ms : "Đang tạo file..."
+            +20605 ms : "Forbidden"          <-- CHỮ NGƯỜI DÙNG THỰC SỰ ĐỌC ĐƯỢC
+            +23776 ms : ""                   (khung tự tắt sau ~3,2 s)
+        Số request : 1 → XHR POST /api/v1/bao-cao/export → 403
+        Số tệp giao ra : 0 · Số blob : 0
+        Nguyên văn phản hồi:
+            {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+             "timestamp":"2026-08-06T06:38:19.857Z",
+             "requestId":"8dffc0ea-fe1c-4643-877c-391e7e5f2fa8"}}
+
+    Lượt 2 — 13:40, gọi thẳng máy chủ (không qua giao diện)
+        POST /api/v1/bao-cao/export
+        Nội dung gửi lên:
+            {"loaiBaoCao":"BC_CHI_PHI_THEO_DON_VI","kyBaoCao":"NAM","tuNgay":"2026-01-01",
+             "denNgay":"2026-12-31","formatXuat":"XLSX"}
+        Mã trả về: 403
+            {"success":false,"error":{"code":"ERR-PERM-SYS-00-01","message":"Forbidden",
+             "timestamp":"2026-08-06T06:40:29.644Z",
+             "requestId":"03f33085-8166-4905-8f30-4b43819f1e4d"}}
+        => Hai đường đo (giao diện và gọi thẳng máy chủ) khớp nhau hoàn toàn.
+
+    Lượt 3 — 13:41, bấm trên giao diện, đo thêm hình học khung thông báo
+        +605 ms  : "Forbidden", khung x=657 y=3 w=118 h=40   (giữa đầu màn, hiện thật)
+        +800 ms  : vẫn "Forbidden", khung x=657 y=16 w=118 h=40
+        +3932 ms : ""            (khung tự tắt)
+        Mã trả về: 403, mã lỗi ERR-PERM-SYS-00-01
+            requestId c5060a92-0b6e-4edf-baa3-58135a8d9384
+        Số tệp giao ra : 0
+
+    !! Vì sao không có ẢNH chụp khung thông báo:
+       Khung chỉ sống ~3,3 giây. Đã thử 4 cách hẹn giờ khác nhau (bấm ngay rồi chụp; hẹn bấm
+       sau 400 ms / 800 ms / 2500 ms rồi chụp) — cả 4 lần ảnh về đều KHÔNG có khung, trong khi
+       phép đo bằng máy ở cùng thời điểm xác nhận khung đang hiện và có kích thước thật. Nhiều
+       khả năng công cụ chụp chờ trang hết hoạt ảnh mới bấm máy, tức luôn chụp sau khi khung đã
+       tắt. Bằng chứng thay thế: chuỗi chữ + hình học đo bằng máy ở trên, cộng nguyên văn phản
+       hồi 403 của máy chủ — mạnh hơn ảnh vì có mã lỗi và số hiệu request để dev tra lại.
+
+================================================================================
+C. ĐỐI CHIẾU VỚI ĐẶC TẢ
+================================================================================
+
+- srs-v3.5/srs-fr-11-bao-cao.md:117 — E7 ERR-RPT-05 quy định câu hiện cho người dùng khi thiếu
+  quyền là "Bạn không có quyền xem báo cáo này". Chuỗi "Forbidden" KHÔNG có trong bảng lỗi.
+- :79 — Processing bước 1 đặt việc kiểm quyền truy cập báo cáo ở đầu luồng, nên bước Xem và
+  bước Xuất phải nhất quán.
+- :1052 — điều kiện hiện nút Xuất Excel chỉ là "sau khi đã Xem báo cáo", không kèm điều kiện
+  vai trò.
+- :62 — đặc tả khai tác nhân là CB Nghiệp vụ / CB Phê duyệt; IM LẶNG về việc Quản trị viên có
+  được xuất hay không → phần đó là câu hỏi gửi BA (cau-hoi-BA.md Mục 2), KHÔNG tự chấm.
+- :731-761 — FR-IX-16 đòi cross-tab hàng = đơn vị với tên đơn vị · số hồ sơ · tổng chi phí ·
+  trung bình. Tệp xuất có đủ.
+
+================================================================================
+D. HIỆN TƯỢNG LẠ — ĐÃ THỬ TÁI HIỆN NHƯNG KHÔNG LẶP LẠI
+================================================================================
+
+Ở lượt đo đầu của vai trò QTHT, sau cú xuất thứ nhất (403, reqid 211), cú xuất thứ hai khoảng
+1 phút sau trả 401 (reqid 213), FE tự gọi POST /api/v1/auth/logout (reqid 214) rồi đá về màn
+đăng nhập kèm chữ "Phiên làm việc hết hạn" — trong khi phiên mới đăng nhập được ~2 phút.
+
+Đã thử tái hiện 2 đường, đều KHÔNG lặp lại:
+  1. Gọi thẳng máy chủ: lành tính -> 200; xem báo cáo -> 200; xuất -> 403; lành tính lại -> 200;
+     xem báo cáo lại -> 200. Tức cú 403 KHÔNG giết phiên.
+  2. Bấm trên giao diện: sau khi nhận "Forbidden", kho lưu phiên auth-store không đổi (231 ký
+     tự trước và sau), gọi lành tính ngay sau đó -> 200.
+
+=> Không đủ căn cứ quy cho thao tác xuất. Ghi lại kèm số hiệu request để vòng sau có mốc đối
+   chiếu nếu gặp lại. KHÔNG log thành lỗi, KHÔNG tính vào kết luận của case này.
+
+================================================================================
+E. TỆP SỐ LIỆU THÔ (để dev/BA mở lại kiểm chứng)
+================================================================================
+
+testfiles/CPCTHTTDVQL_06-b64.json           — lượt xuất ① (vai trò cbnv_tw_03)
+testfiles/CPCTHTTDVQL_06-b64-bienthe2.json  — lượt xuất ② (vai trò cbnv_tw_03)
+image/CPCTHTTDVQL_06-xuat-excel.xlsx            — tệp thật lượt ①, 6.676 byte
+image/CPCTHTTDVQL_06-xuat-excel-bienthe2.xlsx   — tệp thật lượt ②, 6.670 byte
+image/CPCTHTTDVQL_06-01-cbnv-man-hinh-truoc-khi-xuat.png            — màn vai trò CB Nghiệp vụ
+image/CPCTHTTDVQL_06-02-qtht-xem-duoc-bao-cao-nut-xuat-bam-duoc.png — màn vai trò QTHT

@@ -1,0 +1,33 @@
+{
+  "ghi_chu": "Bằng chứng mở rộng phạm vi BCTK_QA04 — đếm số dòng phần 'Theo đơn vị' của 5 loại báo cáo vụ việc, đo cùng một lượt lúc 06/08/2026 15:47 (giờ máy chủ +07), bản dựng V1.0.8, env 18.143.165.120.nip.io.",
+  "tham_so_chung": "kyBaoCao=NAM & tuNgay=2026-01-01 & denNgay=2026-12-31",
+  "don_vi_loc": "00000000-0000-4000-8000-000000000001 (Cục Bổ trợ tư pháp - Bộ Tư pháp)",
+  "ket_qua": {
+    "vu-viec-tiep-nhan": [
+      {"pham_vi": "lọc 1 đơn vị", "so_dong_theo_don_vi": 0, "tong_vu_viec": 38, "dat": false},
+      {"pham_vi": "toàn quốc", "so_dong_theo_don_vi": 4, "tong_vu_viec": 55, "dat": true}
+    ],
+    "vu-viec-dang-ho-tro": [
+      {"pham_vi": "lọc 1 đơn vị", "so_dong_theo_don_vi": 0, "tong_vu_viec": 18, "dat": false},
+      {"pham_vi": "toàn quốc", "so_dong_theo_don_vi": 4, "tong_vu_viec": 25, "dat": true}
+    ],
+    "vu-viec-hoan-thanh": [
+      {"pham_vi": "lọc 1 đơn vị", "so_dong_theo_don_vi": 0, "tong_vu_viec": 15, "dat": false},
+      {"pham_vi": "toàn quốc", "so_dong_theo_don_vi": 3, "tong_vu_viec": 18, "dat": true}
+    ],
+    "vu-viec-theo-thoi-gian": [
+      {"pham_vi": "lọc 1 đơn vị", "so_dong_theo_don_vi": 1, "dat": true},
+      {"pham_vi": "toàn quốc", "so_dong_theo_don_vi": 4, "dat": true}
+    ],
+    "vu-viec-theo-don-vi": [
+      {"pham_vi": "lọc 1 đơn vị", "so_dong_theo_don_vi": 1, "dat": true},
+      {"pham_vi": "toàn quốc", "so_dong_theo_don_vi": 4, "dat": true}
+    ]
+  },
+  "doi_chieu_dac_ta": {
+    "vu-viec-tiep-nhan": "srs-fr-11-bao-cao.md:216 (FR-IX-02) — theo_don_vi[] | structured | Luôn | {don_vi, ten, so_luong}",
+    "vu-viec-dang-ho-tro": "srs-fr-11-bao-cao.md:262 (FR-IX-03) — theo_don_vi[] | structured | Luôn | {don_vi, ten, so_luong, qua_han}",
+    "vu-viec-hoan-thanh": "srs-fr-11-bao-cao.md:305 (FR-IX-04) — theo_don_vi[] | structured | Luôn | {don_vi, ten, so_luong}"
+  },
+  "ket_luan": "3/5 loại báo cáo trả phần 'Theo đơn vị' rỗng khi lọc đúng một đơn vị, dù đặc tả ghi điều kiện xuất hiện là 'Luôn'. 2/5 loại còn lại gặp đúng tình huống đó vẫn nêu đúng đơn vị đang lọc, nên không phải chủ ý thiết kế. Tổng vụ việc đúng ở cả hai phạm vi nên số liệu không sai."
+}

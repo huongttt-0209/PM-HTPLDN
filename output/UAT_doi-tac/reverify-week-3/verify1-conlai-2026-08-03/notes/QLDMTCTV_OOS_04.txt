@@ -1,0 +1,8 @@
+❌ Không phải bug.
+- Rà lại ngày 03/08/2026: thẻ trạng thái chưa có hồ sơ thì không hiển thị huy hiệu số đếm, kể cả số 0. Quan sát ban đầu là đúng, nhưng kết luận "lỗi" thì không đủ căn cứ.
+- Ẩn huy hiệu khi giá trị bằng 0 là hành vi mặc định của thư viện giao diện đang dùng: huy hiệu đếm tự ẩn khi bằng 0, phải bật tùy chọn riêng mới hiện số 0. Đây không phải dấu hiệu chức năng chưa được làm.
+- Đặc tả màn hình danh sách Tổ chức tư vấn không có chỗ nào quy định thẻ có 0 hồ sơ phải hiển thị số 0. Dòng 1650 chỉ yêu cầu hiển thị tổng của mỗi thẻ, và các thẻ đang có hồ sơ đều hiển thị đúng tổng.
+- Người dùng vẫn phân biệt được mục trống: thẻ vẫn bấm được và mở ra trạng thái rỗng.
+- Vì đặc tả không quy định trường hợp bằng 0 nên không trích được điều khoản nào bị vi phạm ⇒ đóng dòng này, không chuyển dev và cũng không cần BA quyết.
+- Đã gỡ khỏi file gửi BA (ba-confirmation-needed-luong4-to-chuc-tu-van-2026-08-03.md). Bản ghi P/Q/R trước khi sửa lưu tại reverify-audit/BACKUP-sheet-tuan3-rows-330-331-332-339-truoc-khi-sua-2026-08-03.json.
+- Kiểm bằng vai trò Cán bộ Nghiệp vụ Trung ương (cbnv_tw_04) và Cán bộ Phê duyệt Trung ương (cbpd_tw_04), bản dựng HTPLDN V1.0.5.

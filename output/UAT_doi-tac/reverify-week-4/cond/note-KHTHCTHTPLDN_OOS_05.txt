@@ -1,0 +1,6 @@
+✅ Là bug — chuyển dev
+Dòng này do QA mở thêm, không thuộc case nào của phiếu đối tác. Phát sinh khi verify KHTHCTHTPLDN_03.
+
+Bảng danh sách chương trình thiếu cột "Lĩnh vực pháp lý" dù máy chủ đã trả sẵn dữ liệu này. Cán bộ muốn biết lĩnh vực phải mở từng chương trình.
+
+Mã bug trong báo cáo: BUG-CT-BANG-THIEU-COT-LINHVUC. Các bước tái hiện, kết quả mong đợi và bằng chứng đã ghi đầy đủ ở các cột bên trái của chính dòng này.

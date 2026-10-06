@@ -1,0 +1,212 @@
+================================================================================
+QLDX_06 — TIMELINE 2 NHANH (do Giai doan B)
+Ngay do: 2026-08-07 · Gio VN (UTC+7) · Env https://18.143.165.120.nip.io
+Tai khoan: cbnv_tw_03 / Test@1234 (KHONG fallback, KHONG dung admin)
+"Ghi nho dang nhap": KHONG tick (verify checked=false ngay truoc moi lan submit)
+================================================================================
+
+BO MA FE DANG DO  ==> KHAC BAN-DUNG.md, PHAI GHI RO
+--------------------------------------------------------------------------------
+  script     : /assets/index-D4Buvu4S.js
+  css        : /assets/index-DVlgOkLg.css + /assets/index-DNsk8fKL.css
+  GET / etag : W/"6a74df15-428"
+  last-mod   : Thu, 06 Aug 2026 19:23:01 GMT  = 2026-08-07 02:23:01 gio VN
+  sidebar    : "HTPLDN · V1.0.9"
+  BAN-DUNG.md ghi index-DsMHK7Dp.js / etag "6a74d7ad-428" / last-mod 01:51:25 VN
+  ==> DEV DEPLOY LAI FE luc 02:23:01 VN, tuc GIUA lo F5 (sau QLDX_04 va giua
+      khoang do cua QLDX_05). Moi so do duoi day chi co hieu luc cho bo ma
+      index-D4Buvu4S.js.
+  Ghi nhan phu: bo ma moi BO placeholder o input login (chi con label
+  "Ten dang nhap *" / "Mat khau *"); selector cu input[placeholder="Nhap ten
+  dang nhap"] khong con match => dung wait_for(["Ten dang nhap"]).
+
+TIEN DE DUNG LAI TU 2 CASE LIEN TRUOC (khong do lai)
+--------------------------------------------------------------------------------
+  QLDX_04.md §3 C1 : moc bat modal canh bao = idle 25.0'
+  QLDX_05.md §2    : cach dung moc idle (localStorage["auth-last-activity"])
+  Lan nay modal TAI LAP dung 25.008' o CA 3 lan dung moc (xem duoi) => tien de
+  van dung tren bo ma moi.
+
+CACH DUNG MOC (giong QLDX_04 / QLDX_05)
+--------------------------------------------------------------------------------
+  - Man dang mo: /chuyen-gia-tvv/danh-sach ("Tu van vien / Chuyen gia", bang 7 dong)
+    Da chu dong roi /dashboard bang click sidebar (Dashboard tu lam moi 60s,
+    srs-fr-01-dashboard.md:49) — tranh Bay do #3.
+  - Dat localStorage["auth-last-activity"] = Date.now() - 24.5*60*1000
+  - Bo ghi setInterval 250 ms THUAN DOC DOM + DOC localStorage.
+    KHONG dispatch mousemove/click/keydown/scroll/touchstart. KHONG reload.
+    KHONG navigate sau khi dat moc. Poll ngoai bang evaluate_script (doc khong reset moc).
+  - Chi 1 tab dung phien (tab about:blank cua profile --isolated khong dung phien).
+
+================================================================================
+LAN DO A — NHANH 1 lan 1 (BI HUY lam bang chung thong bao, van giu lam doi chieu)
+================================================================================
+  02:41:21.0  fill form login (checkbox Ghi nho = false)
+  02:41:24.7  MailHog gui OTP 235196 (mailbox cbnv_tw_03@htpldn.test)
+  02:41:54    dang nhap xong, o /dashboard
+  02:42:50.009 t_set — dat moc
+  02:42:50.009 t_baseline = 02:18:20.009  (= t_set - 24.5')
+  02:43:20.009 moc modal ky vong (baseline + 25')
+  02:43:20.510 MODAL BAT THUC TE — idle 25.008'
+               ket: 02:43:20.262 idle 25.004' modal=0 | 02:43:20.510 idle 25.008' modal=1
+  02:48:20.009 t_logout_goc (baseline + 30') — KHONG toi vi bam nut truoc
+  02:43:45.0  BAM [Dang xuat] (MCP click, uid fresh tu take_snapshot)
+              server date POST /api/v1/auth/logout = Thu, 06 Aug 2026 19:43:45 GMT
+  02:43:46.25 GET /api/v1/auth/me [401] — cu probe FE tren trang /login vua reload
+  02:44:32    doi chung API: /api/v1/auth/me => 401
+  VI SAO HUY LAM BANG CHUNG THONG BAO: cu bam gay HARD RELOAD (loadId mat,
+  window.name bi xoa, localStorage bi clear) + bo bat thong bao khi do KHONG
+  attach duoc (MutationObserver.observe nem loi "parameter 1 is not of type
+  'Node'" vi document.documentElement con null o document-start).
+  => Log thong bao mat trang. Da lam lai o LAN DO B voi kenh console preserved.
+
+================================================================================
+LAN DO B — NHANH 1 (C1a + C1b) — LAN DO CHINH THUC
+================================================================================
+  02:46:02    navigate /login kem initScript ban DA SUA (attach co retry)
+  02:46:18.4  MailHog OTP 509887
+  02:47:50.638 QLDX06NOTI-INSTALLED (root=HTML) — bo bat thong bao attach THAT
+  02:47:58.378 SELF-TEST bo bat: chen 1 node .ant-message-notice-wrapper gia
+               => bo bat GHI DUOC (selftestFired=true). Chung minh khong phai
+               "im lang gia" khi sau nay khong co emission.
+  02:48:27    click sidebar sang /chuyen-gia-tvv/danh-sach (h1 "Tu van vien / Chuyen gia")
+  02:48:37.375 t_set — dat moc
+  02:48:37.375 t_baseline = 02:24:07.375
+  02:49:07.375 moc modal ky vong
+  02:49:07.877 MODAL BAT THUC TE — idle 25.008'
+               ket: 02:49:07.628 idle 25.004' modal=0 | 02:49:07.877 idle 25.008' modal=1
+               laIntact = true (moc khong bi reset o moi mau truoc do)
+  02:49:07.769 bo bat ghi 2 ban ghi CUNG MOC GIO cho CUNG 1 hop thoai
+               (elemId E6 wrapper vis=true + E7 .ant-modal role=dialog vis=false)
+               => 2 ban ghi = 1 hop thoai, KHONG phai 2 thong bao.
+  02:49:24    ANH: QLDX_06-C1a-truoc-khi-bam-dang-xuat.png (dem nguoc 4:44)
+  02:54:07.375 t_logout_goc (baseline + 30') — KHONG toi vi bam nut truoc
+  02:49:37.177 BAM [Dang xuat] (MCP click uid=14_300 tu take_snapshot fresh)
+               idle luc bam ~= 25.49'  => PHIEN CHUA HET HAN (con ~4.5' nua)
+               reqid=646 POST /api/v1/auth/logout [200]
+  02:49:38-42 trang chuyen sang /login bang HARD RELOAD (initScript KHONG re-run,
+               window.__qldx2 = false o document moi => initScript la one-shot)
+  02:49:43    ANH: QLDX_06-C1a-sau-khi-bam-ve-login.png
+               => co 1 THONG BAO xanh la "Dang xuat thanh cong"
+  02:49:50    doc DOM tren /login: 0 node thong bao (da tu tat)
+               => tuoi tho thong bao thuoc khoang [6 s, 13 s]
+  02:50:14    doi chung API: /api/v1/auth/me => 401
+  BO BAT THONG BAO TREN TRANG GOC: 0 emission tu luc bam den luc document chet
+  (console preserved chi con 2 ban ghi cua modal 02:49:07.769) => KHONG co toast
+  nao tren trang goc; thong bao nam o trang dich /login.
+
+================================================================================
+LAN DO C — NHANH 2 (C2a) — DONG HO THAT CHAY DU, LAN DO CHINH THUC CHO MOC 30'
+================================================================================
+  02:52:2x    navigate /login kem initScript da sua
+  02:52:30.552 SELF-TEST bo bat: PASS (chen .ant-alert gia => ghi duoc)
+  02:52:49.5  MailHog OTP 742741
+  02:53:11    click sidebar sang /chuyen-gia-tvv/danh-sach
+  02:53:24.888 t_set — dat moc
+  02:53:24.888 t_baseline = 02:28:54.888
+  02:53:54.888 moc modal ky vong
+  02:53:55.390 MODAL BAT THUC TE — idle 25.008'
+               ket: 02:53:55.140 idle 25.004' modal=0 | 02:53:55.390 idle 25.008' modal=1
+  02:54:09    ANH: QLDX_06-C2a-modal-truoc-moc-30.png (dem nguoc 4:46)
+  --- KHONG BAM GI, KHONG THAO TAC, de dong ho that chay 5 phut ---
+  02:58:54.888 *** t_logout_goc = t_baseline + 30' ***
+
+  BANG POLL quanh moc 30' (console preserved, dinh dang
+  QX|<epoch ms>|<idle phut>|<modal>|<co form dang nhap>|<path>|<so thong bao>|<moc con nguyen>)
+    QX|1786046332642|29.963|1|0|/chuyen-gia-tvv/danh-sach|0|1
+    QX|1786046333142|29.971|1|0|/chuyen-gia-tvv/danh-sach|0|1
+    QX|1786046333392|29.975|1|0|/chuyen-gia-tvv/danh-sach|0|1
+    QX|1786046333892|29.983|1|0|/chuyen-gia-tvv/danh-sach|0|1
+    QX|1786046334142|29.988|1|0|/chuyen-gia-tvv/danh-sach|0|1
+    QX|1786046334642|29.996|1|0|/chuyen-gia-tvv/danh-sach|0|1
+    QX|1786046334892|30.000|1|0|/chuyen-gia-tvv/danh-sach|0|1   <-- dung moc 30.000'
+    QX|1786046335142|30.004|1|0|/chuyen-gia-tvv/danh-sach|0|1   <-- MAU SONG CUOI CUNG
+    (het — document bi huy do hard reload)
+    Failed to load resource: 401 (x2)  <-- probe cua trang /login moi
+
+  02:58:55.142 mau song cuoi (idle 30.004', van o man danh sach, modal van hien,
+               moc con nguyen = 1 o TAT CA mau)
+  02:58:55    POST /api/v1/auth/logout [200] — server date Thu, 06 Aug 2026 19:58:55 GMT
+               referer = /chuyen-gia-tvv/danh-sach  (gui tu trang app truoc khi reload)
+  ==> THOI DIEM TU DANG XUAT so voi moc 30': tre 0.25 s -> duoi 1 s.
+      (mau song cuoi 02:58:55.142 = moc + 0.254 s; server nhan logout trong giay 02:58:55)
+  02:59:09.95 doc DOM tren /login: 0 node thong bao (da tu tat — vong tool ~11 s
+              > tuoi tho thong bao) => KHONG dung de ket luan "im lang"
+  03:00:09    ANH: QLDX_06-C2-sau-tu-dang-xuat.png (moc + 74 s: /login, co form
+              dang nhap, khong con thong bao)
+  03:00:15    doi chung API: /api/v1/auth/me => 401
+              auth-last-activity VAN = 02:28:54.888 (dung baseline, CHUA TUNG bi reset)
+
+================================================================================
+LAN DO D — NHANH 2 (C2b + C2c) — LAY NGUYEN VAN THONG BAO, MOC EP CHU DONG
+================================================================================
+  LY DO CAN LAN DO D: o LAN DO C, vong tool giua 2 lenh (~11-16 s) DAI HON tuoi
+  tho thong bao (<13 s) nen khong bat duoc chuoi. Chuan cham §3 cho phep
+  "khong thao tac cho toi phut 30 (HOAC ep moc idle)" => lan D ep moc de thoi
+  diem tu dang xuat roi dung vao cua so chup anh. Duong logout van la duong
+  idle-watcher y nhu lan C (khong bam nut nao).
+  MOC 30' THUC (dong ho that) DA DO O LAN C — lan D KHONG dung de cham C2a.
+
+  03:02:59.7  MailHog OTP 851223
+  03:03:19    click sidebar sang /chuyen-gia-tvv/danh-sach
+  03:03:29.006 t_set — dat moc
+  03:03:29.006 t_baseline = 02:38:59.006
+  03:03:59.006 moc modal ky vong
+  03:04:00.007 MODAL BAT THUC TE — idle 25.017'
+               ket: 03:03:59.757 idle 25.013' modal=0 | 03:04:00.007 idle 25.017' modal=1
+  03:04:16.141 hen gio ep moc sau 12 000 ms (khong bam nut nao tren hop thoai)
+  03:04:28    ANH: QLDX_06-C2b-thongbao-idle-cap1.png (modal, dem nguoc 4:32,
+              ngay truoc thoi diem ep moc)
+  03:04:28.144 QY-PRESS — ep auth-last-activity = 02:34:27.844 (= now - 30'00.3")
+  03:04:29.009 mau song cuoi (idle 30.019', van o man danh sach, modal van hien)
+               => document chet ~0.9 s sau khi moc vuot 30'
+  03:04:33    ANH: QLDX_06-C2b-thongbao-idle-cap2.png (moc + ~4 s)
+              => co DUNG 1 THONG BAO mau xanh duong (info):
+                 "Phien lam viec da het han do khong co thao tac"
+  03:04:44.3  doc DOM tren /login: 0 node thong bao (da tu tat, +16 s)
+
+  BANG POLL quanh thoi diem ep moc (dinh dang
+  QY|<epoch ms>|<idle phut>|<modal>|<logout-notice>|<path>)
+    QY|1786046667509|25.475|1|-|/chuyen-gia-tvv/danh-sach
+    QY|1786046668006|25.483|1|-|/chuyen-gia-tvv/danh-sach
+    QY-PRESS|1786046668144|forcedMark=1786044867844
+    QY|1786046668257|30.007|1|-|/chuyen-gia-tvv/danh-sach
+    QY|1786046668509|30.011|1|-|/chuyen-gia-tvv/danh-sach
+    QY|1786046669009|30.019|1|-|/chuyen-gia-tvv/danh-sach   <-- MAU SONG CUOI
+    (het — document bi huy)
+    Failed to load resource: 401  <-- probe cua trang /login moi
+  Ghi chu: cot logout-notice luon "-" vi app ghi sessionStorage["logout-notice"]
+  roi reload ngay trong cung mot nhip => poll 250 ms khong kip thay.
+
+================================================================================
+MD5 + MOC GIO ANH (chong nghi van "chup lai cung mot file")
+================================================================================
+  4aa4e74c0a956004b26e8dffdac6795f  QLDX_06-C1a-truoc-khi-bam-dang-xuat.png   485875 B  02:49:24
+  30d900c265eadf676e4eda089d6ad557  QLDX_06-C1a-sau-khi-bam-ve-login.png     2291795 B  02:49:43
+  431a7979e80b68179c91f6a69d64f9c9  QLDX_06-C2a-modal-truoc-moc-30.png        486196 B  02:54:09
+  95231a4d33224e7c4e5e77f66c16ebb0  QLDX_06-C2-sau-tu-dang-xuat.png          2340945 B  03:00:09
+  1e2145c15cadcc7c6af5687c81bf9223  QLDX_06-C2b-thongbao-idle-cap1.png        486348 B  03:04:28
+  40987d74712fa5d8eedd50ebe33dab14  QLDX_06-C2b-thongbao-idle-cap2.png       2277447 B  03:04:33
+  ==> 6 anh, 6 md5 KHAC NHAU. Hai anh trang /login cua 2 nhanh (…C1a-sau… va
+      …C2-sau-tu-dang-xuat…) KHONG trung byte: mot anh co thong bao xanh la
+      "Dang xuat thanh cong", anh kia khong con thong bao (chup +74 s).
+      Thoi gian duoc neo bang: (a) bang poll 250 ms trong file nay,
+      (b) header `date` cua may chu o QLDX_06-doi-chung-api.txt.
+
+================================================================================
+TOAN VEN PHEP DO
+================================================================================
+  1. Moc idle KHONG bi reset trong suot moi lan do: laEq/laIntact = true o
+     100% mau (LAN B, LAN C). O LAN C, sau khi bi da ve /login,
+     auth-last-activity VAN dung baseline 02:28:54.888.
+  2. Modal tai lap dung idle 25.008' (lan B), 25.008' (lan C), 25.017' (lan D)
+     => khop QLDX_04 §3 C1, tien de con hieu luc tren bo ma moi.
+  3. Bo bat thong bao da SELF-TEST truoc khi tin (02:47:58 va 02:52:30 deu PASS).
+     Lan dau (LAN DO A) bo bat KHONG attach duoc => da phat hien bang self-test,
+     khong bao cao "im lang" oan.
+  4. Bo bat KHONG lam gon trung (no dedupe) va KHONG dung textContent — chi
+     innerText cua phan tu, co co ghi kem vis=true/false de phan biet node an.
+  5. Trang duoc tai moi truoc moi lan do; bo ma FE doc truc tiep tu DOM.
+  6. Chi 1 tab dung phien. 4 lan dang nhap cach nhau >= 4 phut => khong cham
+     rate-limit 5 lan/60 s.
+  7. Nhanh 1 va nhanh 2 chay tren PHIEN RIENG (4 phien doc lap), khong tron.

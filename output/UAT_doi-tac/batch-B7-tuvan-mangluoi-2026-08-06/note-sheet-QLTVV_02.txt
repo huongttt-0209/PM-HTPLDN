@@ -1,0 +1,21 @@
+- Dữ liệu cột Điểm ĐG bị tràn/đè lên cột Trạng thái
+- Dữ liệu cột Điểm ĐG hiển thị không đồng nhất: chưa có điểm hiển thị "-/5" nhưng có điểm hiển thị số sao
+- Các nút thao tác Xem, Sửa bị xuống dòng.
+──────────────────────────────
+⚠️ Cần BA xác nhận — QA verify lại 06/08/2026, vai trò Cán bộ Nghiệp vụ Trung ương. Phiếu này gộp 5 vế: 4 vế đã hết lỗi, còn 1 vế phải để nghiệp vụ chốt.
+
+- Cột Điểm ĐG KHÔNG còn tràn/đè lên cột Trạng thái. Đo bằng toạ độ thật từng hàng chứ không nhìn bằng mắt: khoảng cách giữa mép phải ô Điểm ĐG và mép trái ô Trạng thái đúng bằng 0, không hàng nào chồng lấn; chữ bên trong ô còn cách mép phải 27-36 px. Đã đo hết 6/6 hàng của tab "Đang hoạt động" ở 4 bề rộng cửa sổ (1920 · 1440 · 1280 · 1024) và thêm 14 hàng ở 3 tab còn lại — tổng 26 lượt đo hàng, không lượt nào tràn. Bảng vẫn cuộn ngang được như cảnh trong video, nhưng cuộn ngang không phải tràn cột.
+
+- Cột Điểm ĐG đã hiển thị ĐỒNG NHẤT giữa hai ca. Hàng chưa có điểm: 5 ngôi sao xám kèm chữ "—/5". Hàng đã có điểm: cũng 5 ngôi sao, trong đó 4 và 3 sao được tô vàng, kèm chữ "4.1/5" và "3.3/5". Cùng một kiểu trình bày, chỉ khác dữ liệu; đều theo thang 1-5, một chữ số thập phân.
+
+- Các nút thao tác KHÔNG còn xuống dòng. Ô Hành động là ba biểu tượng 24x24 nằm ngang trên cùng một dòng, chênh lệch chiều dọc bằng 0, chiều cao khung ô đúng bằng chiều cao một biểu tượng đơn (hai dòng thì phải gấp đôi). Trường hợp hồ sơ ở trạng thái "Vô hiệu hóa" thì còn hai biểu tượng, vẫn một dòng.
+
+- Mặc định 20 bản ghi mỗi trang: đúng, ở cả 4 tab và cả 4 bề rộng.
+
+- Vế còn lại — thứ tự sắp xếp mặc định — VẪN KHÁC kỳ vọng ghi trong phiếu, nhưng QA không tự chốt được: đọc hết cột "Ngày công nhận" của toàn bộ 6/6 hàng trang 1 thấy thứ tự "—", 17/07/2026, 12/07/2026, "—", "—", "—" (không giảm dần). Đối chiếu bằng đường thứ hai thì thứ tự hệ thống trả về trùng khít thứ tự trên màn, và ngày TẠO bản ghi của dãy đó giảm dần tuyệt đối (05/08 → 12/07 09:55 → 12/07 00:11 → 30/06 → 01/03/2026 → 01/02/2024). Tức danh sách đang sắp theo ngày tạo bản ghi, mới nhất trước — một tiêu chí khác với ngày công nhận.
+
+Vì sao chuyển BA thay vì chuyển lại đơn vị phát triển: đã tra toàn bộ đặc tả màn Danh sách Tư vấn viên / Chuyên gia, KHÔNG có dòng nào quy định thứ tự sắp xếp mặc định của màn này. Trong khi đó các màn danh sách khác đều có quy định rõ (Vụ việc, Doanh nghiệp, Chi trả, Đánh giá). Đây là chỗ đặc tả bỏ sót, không phải chỗ phần mềm làm sai điều đã quy định — nên cần nghiệp vụ chốt sắp theo tiêu chí nào rồi đơn vị phát triển mới có căn cứ sửa.
+
+Câu hỏi cho BA: màn Danh sách Tư vấn viên / Chuyên gia mặc định sắp xếp theo ngày công nhận mới nhất trước (như phiếu ghi) hay giữ theo ngày tạo bản ghi như hiện tại? Nếu chọn ngày công nhận thì các hồ sơ CHƯA có ngày công nhận xếp lên đầu hay xuống cuối?
+
+Kết quả này ứng với bản dựng đã kiểm; đề nghị xác nhận lại khi bản dựng lên môi trường nghiệm thu.

@@ -14,6 +14,7 @@
 | [permission-matrix-test-report-template.md](permission-matrix-test-report-template.md) | Báo cáo test ma trận phân quyền (N role × entity) | GĐ 3 Auth |
 | [test-plan-overview-template.md](test-plan-overview-template.md) | Kế hoạch test module (BR + permission + UI layout) | Pre-GĐ 3 |
 | [bug-report-template.md](bug-report-template.md) | Báo cáo bug chi tiết (repro, evidence, fix) | Mọi GĐ |
+| [ba-confirmation-needed-template.md](ba-confirmation-needed-template.md) | Gom TC cần BA chốt (QA không tự verdict / SRS tự mâu thuẫn) — 2 dạng A/B | UAT đối tác |
 | [test-case-template.md](test-case-template.md) | Template test case field-level (BVA/EP/XSS) | GĐ 3 |
 | [smoke-procedure.md](smoke-procedure.md) | Procedure smoke test chuẩn | GĐ 0 |
 | [README.md](README.md) | Tài liệu này | — |
@@ -30,6 +31,7 @@
 | GĐ 3 — Ma trận N role × M entity | `permission-matrix-test-report-template.md` |
 | Viết kế hoạch test module mới | `test-plan-overview-template.md` |
 | Phát hiện bug → viết bug riêng | `bug-report-template.md` |
+| TC không tự chốt verdict / SRS mâu thuẫn → cần BA xác nhận | `ba-confirmation-needed-template.md` |
 
 ---
 
