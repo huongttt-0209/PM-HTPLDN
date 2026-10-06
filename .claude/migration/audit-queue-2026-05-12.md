@@ -48,7 +48,7 @@
 - [tu-van-vien-cg] Pass-bug-report-functional-r7-7-2-tvv.md  — counts: total=2 closed=2 open=0 (C0/M2/m0/n0/t0)
 - [tu-van-vien-cg] Pass-bug-report-seed-r7-2-6-tvv-tochuc.md  — counts: total=1 closed=1 open=0 (C0/M1/m0/n0/t0)
 - [vu-viec] bug-report-flow-vu-viec.md  — counts: total=7 closed=6 open=1 (C3/M3/m0/n1/t0)
-- [vu-viec] bug-report-r7-7-3-functional-vu-viec.md  — counts: total=10 closed=8 open=2 (C3/M6/m0/n1/t0)
+- [vu-viec] Pass-bug-report-r7-7-3-functional-vu-viec.md  — counts: total=10 closed=8 open=2 (C3/M6/m0/n1/t0)
 
 ## Nhóm B — MANUAL: add Severity table (BST present, no table) (21 files)
 

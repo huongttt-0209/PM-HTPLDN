@@ -41,13 +41,13 @@
 graph LR
     A[Tạo Thư mục] --> B[Thêm Biểu mẫu]
     B --> C{Công khai?}
-    C -->|Có| D[Đẩy lên Cổng PLQG]
+    C -->|Có| D[Đặt cờ Công khai — Cổng PLQG tự kéo]
     C -->|Không| E[Giữ Nháp]
     D --> F[DN tải về / xem]
     G[Import hàng loạt] --> B
 ```
 
-Nhóm VII quản lý thư viện biểu mẫu theo cấu trúc 2 cấp (Thư mục → Biểu mẫu). File chấp nhận doc/docx/xls/xlsx (max 20MB). Công khai trực tiếp lên Cổng PLQG mà KHÔNG cần phê duyệt (BR-FLOW-07). Ưu tiên xem trực tuyến (preview) trước khi tải về.
+Nhóm VII quản lý thư viện biểu mẫu theo cấu trúc 2 cấp (Thư mục → Biểu mẫu). File chấp nhận doc/docx/xls/xlsx (max 20MB). Công khai KHÔNG cần phê duyệt (BR-FLOW-07): phần mềm chỉ đặt cờ `cong_khai` + trạng thái CONG_KHAI, Cổng PLQG tự kéo (PULL) dữ liệu công khai định kỳ qua FR-XII-11 — phần mềm KHÔNG đẩy trực tiếp. Ưu tiên xem trực tuyến (preview) trước khi tải về.
 
 **Entity chính:** THU_MUC_BIEU_MAU, BIEU_MAU, FILE_DINH_KEM _(HOP_DONG_TU_VAN → xem `srs-fr-14-hop-dong-tv.md`)_
 
@@ -211,7 +211,7 @@ NHAP / AN → XOA
 **Priority:** Essential | **Stability:** High
 **Màn hình:** SCR-VII-01
 
-**Mô tả:** Đẩy hoặc gỡ thư mục + biểu mẫu lên/khỏi Cổng PLQG. KHÔNG cần phê duyệt — CB NV tự chịu trách nhiệm.
+**Mô tả:** Công khai hoặc gỡ công khai thư mục + biểu mẫu bên trong. Phần mềm chỉ đặt cờ công khai + chuyển trạng thái; Cổng PLQG tự kéo (PULL) định kỳ — KHÔNG đẩy/gỡ trực tiếp. KHÔNG cần phê duyệt — CB NV tự chịu trách nhiệm.
 
 **Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP)
 
@@ -232,26 +232,23 @@ NHAP / AN → XOA
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền + phạm vi phân quyền | BR-AUTH-01 |
 | 2 | Kiểm tra thư mục không rỗng (có >= 1 biểu mẫu) | — |
-| 3 | Cập nhật trạng thái thư mục = CONG_KHAI | — |
-| 4 | Gọi API trực tiếp → Cổng PLQG: đẩy thư mục + biểu mẫu | BR-FLOW-07 |
-| 5 | Ghi nhật ký thao tác (hành động = 'PUBLISH') | BR-DATA-05 |
+| 3 | Đặt cờ `cong_khai = 1` + trạng thái thư mục = CONG_KHAI (áp cho thư mục + biểu mẫu bên trong). Cổng PLQG tự kéo qua FR-XII-11 ở lượt sau — phần mềm KHÔNG gọi API đẩy. | BR-FLOW-05, BR-FLOW-07 |
+| 4 | Ghi nhật ký thao tác (hành động = 'PUBLISH') | BR-DATA-05 |
 
 **Processing — Ẩn (hủy công khai):**
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền | — |
-| 2 | Cập nhật trạng thái thư mục = AN | — |
-| 3 | Gọi API trực tiếp → Cổng PLQG: gỡ thư mục | BR-FLOW-07 |
-| 4 | Ghi nhật ký thao tác (hành động = 'UNPUBLISH') | BR-DATA-05 |
+| 2 | Đặt cờ `cong_khai = 0` + trạng thái thư mục = AN. Cổng PLQG tự loại thư mục khỏi response ở lượt kéo tiếp theo — phần mềm KHÔNG gọi API gỡ. | — |
+| 3 | Ghi nhật ký thao tác (hành động = 'UNPUBLISH') | BR-DATA-05 |
 
 **Error Handling:**
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
 | E1 | Thư mục rỗng | ERR-CK-01 | "Thư mục chưa có biểu mẫu, không thể công khai" | ERROR |
-| E2 | API Cổng PLQG lỗi | ERR-CK-02 | "Lỗi kết nối Cổng PLQG. Vui lòng thử lại sau" | ERROR |
-| E3 | Thư mục đã công khai | WRN-CK-01 | "Thư mục đã ở trạng thái công khai" | WARNING |
+| E2 | Thư mục đã công khai | WRN-CK-01 | "Thư mục đã ở trạng thái công khai" | WARNING |
 
 **Outputs:**
 
@@ -259,15 +256,15 @@ NHAP / AN → XOA
 |---|-----|-----------|-----------|--------|
 | 1 | thu_muc_id | identifier | — | — |
 | 2 | trang_thai | text | — | CONG_KHAI / AN |
-| 3 | api_response | structured | — | Response từ API Cổng PLQG |
+| 3 | cong_khai | boolean | — | 1 / 0 |
 
 **Postconditions:**
-- Thư mục + biểu mẫu hiển thị/gỡ khỏi Cổng PLQG
+- Thư mục + biểu mẫu xuất hiện/biến mất khỏi response Cổng PLQG ở lượt kéo tiếp theo (qua FR-XII-11)
 - KHÔNG cần phê duyệt — CB NV tự chịu trách nhiệm (BR-FLOW-07)
 
 **Acceptance Criteria:**
-- **Given** CB NV chọn thư mục **When** nhấn "Công khai" **Then** thư mục + biểu mẫu gửi qua API lên Cổng PLQG
-- **Given** CB NV hủy công khai **When** xác nhận **Then** thư mục bị gỡ khỏi Cổng
+- **Given** CB NV chọn thư mục **When** nhấn "Công khai" **Then** `cong_khai`=1 + trạng thái CONG_KHAI; lượt Cổng PLQG kéo tiếp theo (FR-XII-11) sẽ trả thư mục + biểu mẫu này
+- **Given** CB NV hủy công khai **When** xác nhận **Then** `cong_khai`=0 + trạng thái AN; lượt Cổng kéo tiếp theo sẽ KHÔNG trả thư mục này
 - **Given** thư mục rỗng **When** CB NV công khai **Then** cảnh báo
 - **Given** CB NV mở "Danh sách đã công khai" **When** có thư mục đã công khai **Then** hiển thị danh sách thư mục trạng thái CONG_KHAI
 
@@ -304,6 +301,7 @@ NHAP / AN → XOA
 | 11 | anh_dai_dien | structured | N | Ảnh đại diện (jpg/png/gif, max 5MB). Mặc định ảnh hệ thống | — | user upload `[CR-01]` |
 | 12 | mo_ta_cong_khai | text (long) | N | Mô tả hiển thị trên chuyên trang. Tách biệt với `mo_ta` nội bộ | — | user input `[CR-01]` |
 | 13 | file_dinh_kem_cong_khai | file[] | N | File đính kèm công khai (PDF/DOC/DOCX/XLS/XLSX, max 20MB/file) | — | user upload `[CR-01]` |
+| 14 | co_quan_ban_hanh | identifier | Y | Auto = đơn vị của tài khoản đăng nhập (`BIEU_MAU.don_vi_id`); hiển thị **read-only**, không cho sửa; là Cơ quan ban hành hiển thị trên chuyên trang | đơn vị tài khoản | hệ thống `[STT12]` |
 
 **Processing — Thêm mới:**
 
@@ -364,7 +362,7 @@ NHAP / AN → XOA
 **Postconditions:**
 - Biểu mẫu được lưu kèm file đính kèm
 - File mã hóa AES-256 at-rest trên storage
-- Nếu thư mục đã công khai → biểu mẫu mới tự động hiển thị trên Cổng (qua API sync)
+- Nếu thư mục đã công khai → biểu mẫu mới tự hiển thị trên Cổng ở lượt Cổng PLQG kéo tiếp theo (FR-XII-11)
 
 **Acceptance Criteria:**
 - **Given** CB NV truy cập thư mục **When** hiển thị **Then** danh sách biểu mẫu thuộc thư mục, phân trang
@@ -382,8 +380,7 @@ NHAP / AN → XOA
 |----|-----------|-------|
 | EC-01 | Upload bị ngắt giữa chừng (mất mạng) | Dọn blob mồ côi trong storage. ERR-BM-06 'Upload bị gián đoạn, vui lòng thử lại' |
 | EC-02 | File chứa macro virus (doc/docx) | Quét antivirus trước lưu trữ → ERR-BM-07 nếu phát hiện mã độc |
-| EC-03 | Thêm biểu mẫu vào thư mục đã công khai nhưng sync Cổng PLQG fail | Set sync_status = 'PENDING', queue retry. Hiển thị sync status trên danh sách |
-| EC-04 | Xóa biểu mẫu đã công khai trên Cổng PLQG | Gọi API Cổng PLQG gỡ trước khi soft-delete. Nếu API fail → giữ nguyên, thông báo CB NV |
+| EC-03 | Xóa biểu mẫu đang công khai | Đặt cờ `cong_khai = 0` trước khi soft-delete. Cổng PLQG tự loại biểu mẫu khỏi response ở lượt kéo tiếp theo — phần mềm KHÔNG gọi API gỡ. |
 
 ---
 
@@ -469,7 +466,7 @@ NHAP / AN → XOA
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền + phạm vi phân quyền | BR-AUTH-01 |
 | 2 | Kiểm tra từng file: định dạng + kích thước | — |
-| 3 | Với mỗi file hợp lệ: tạo bản ghi BIEU_MAU + FILE_DINH_KEM | BR-DATA-03 |
+| 3 | Với mỗi file hợp lệ: tạo bản ghi BIEU_MAU + FILE_DINH_KEM (`don_vi_id` = đơn vị người import = Cơ quan ban hành, auto, không đọc từ file) `[STT12]` | BR-DATA-03 |
 | 4 | Với mỗi file lỗi: ghi vào báo cáo lỗi | — |
 | 5 | Trả về tổng hợp: N thành công, M lỗi | — |
 | 6 | Ghi nhật ký thao tác (hành động = 'BULK_IMPORT', count = N) | BR-DATA-05 |
@@ -515,7 +512,7 @@ NHAP / AN → XOA
 **Priority:** Essential | **Stability:** High
 **Màn hình:** SCR-VII-02 (giao diện chi tiết biểu mẫu — nút Công khai/Hủy công khai)
 
-**Mô tả:** CB NV đẩy hoặc gỡ biểu mẫu/hợp đồng cá thể lên/khỏi Cổng PLQG. Khác FR-VII-03 (công khai theo cả thư mục): FR-VII-07 thao tác công khai trên từng biểu mẫu cụ thể. KHÔNG cần phê duyệt — CB NV tự chịu trách nhiệm.
+**Mô tả:** CB NV công khai hoặc gỡ công khai biểu mẫu/hợp đồng cá thể. Phần mềm chỉ đặt cờ công khai + chuyển trạng thái; Cổng PLQG tự kéo (PULL) định kỳ. Khác FR-VII-03 (công khai theo cả thư mục): FR-VII-07 thao tác công khai trên từng biểu mẫu cụ thể. KHÔNG cần phê duyệt — CB NV tự chịu trách nhiệm.
 
 **Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP)
 
@@ -554,6 +551,8 @@ NHAP / AN → XOA
 |---|--------------|--------|-------------------|----------|
 | E1 | Biểu mẫu không có file đính kèm | ERR-CK-BM-01 | "Biểu mẫu chưa có file, không thể công khai" | ERROR |
 | E2 | Thư mục cha đang ẩn (chưa công khai) | ERR-CK-BM-02 | "Thư mục cha đang ẩn. Vui lòng công khai thư mục trước (UC94)" | ERROR |
+
+> **Ghi chú STT 10 UAT 2026-05-26 (cập nhật mô hình KÉO):** `ERR-CK-BM-01`/`ERR-CK-BM-02` là lỗi VALIDATION nội bộ trước khi cho phép `cong_khai=1` — Tổ PTNV **giữ nguyên 2 mã này ở FR-VII-07**. Theo mô hình KÉO (BA chốt C-INT-01 2026-05-10), cả FR-VII-03 lẫn FR-VII-07 đều KHÔNG gọi API Cổng PLQG trực tiếp (chỉ đặt cờ công khai, Cổng tự kéo qua FR-XII-11). Vì vậy 2 mã `ERR-CK-API-01/02` (lỗi gọi API đẩy/gỡ thư mục) **ĐÃ BỎ** — không còn áp ở FR-VII-03.
 | E3 | Biểu mẫu đã ở trạng thái yêu cầu | WRN-CK-BM-01 | "Biểu mẫu đã ở trạng thái {trang_thai}" | WARNING |
 
 **Outputs:**
@@ -647,15 +646,16 @@ NHAP / AN → XOA
 | 9 | content | Cột Trạng thái lifecycle | badge | NHAP / CONG_KHAI / AN (vòng đời nội bộ — SM-BIEUMAU) | — | luôn hiển thị |
 | 10 | content | Cột Đã công khai | badge | Hiển thị badge xanh khi `cong_khai`=1, xám khi =0; tooltip kèm `thoi_gian_dang_tai` | — | luôn hiển thị `[CR-01]` |
 | 11 | content | Cột Ảnh đại diện | thumbnail | Hiển thị ảnh đại diện công khai (ảnh hệ thống nếu chưa upload) | — | luôn hiển thị `[CR-01]` |
-| 12 | content | Cột Sync Cổng | badge | Đã đồng bộ / Chờ / Lỗi | — | luôn hiển thị |
-| 13 | content | Cột Hành động | button | Xem trước (mặc định) / Tải về / Sửa / Xóa | click → hành động | luôn hiển thị |
-| 14 | form | Thư mục | select | Bắt buộc | — | khi tạo/sửa |
-| 15 | form | Tên biểu mẫu | text-input | Bắt buộc, max 500 ký tự | — | khi tạo/sửa |
-| 16 | form | File đính kèm | file-upload | Bắt buộc. doc/docx/xls/xlsx. Max 20MB. Quét virus | — | khi tạo/sửa |
-| 17 | form | Switch "Công khai trên Cổng PLQG" | switch | Mặc định OFF. Bật → hiện 3 trường bên dưới | toggle | khi tạo/sửa `[CR-01]` |
-| 18 | form | Ảnh đại diện công khai | image-upload | jpg/png/gif, max 5MB. Mặc định ảnh hệ thống | — | khi Switch ON `[CR-01]` |
-| 19 | form | Mô tả công khai | rich-text | Văn bản dài hiển thị trên chuyên trang. Tách biệt với mô tả nội bộ | — | khi Switch ON `[CR-01]` |
-| 20 | form | File đính kèm công khai | file-upload (multi) | Nhiều file PDF/DOC/DOCX/XLS/XLSX, max 20MB/file | — | khi Switch ON `[CR-01]` |
+| 12 | content | Cột Hành động | button | Xem trước (mặc định) / Tải về / Sửa / Xóa | click → hành động | luôn hiển thị |
+| 13 | form | Thư mục | select | Bắt buộc | — | khi tạo/sửa |
+| 14 | form | Tên biểu mẫu | text-input | Bắt buộc, max 500 ký tự | — | khi tạo/sửa |
+| 15 | form | File đính kèm | file-upload | Bắt buộc. doc/docx/xls/xlsx. Max 20MB. Quét virus | — | khi tạo/sửa |
+| 16 | form | Switch "Công khai trên Cổng PLQG" | switch | Mặc định OFF. Bật → hiện 3 trường bên dưới | toggle | khi tạo/sửa `[CR-01]` |
+| 17 | form | Ảnh đại diện công khai | image-upload | jpg/png/gif, max 5MB. Mặc định ảnh hệ thống | — | khi Switch ON `[CR-01]` |
+| 18 | form | Mô tả công khai | rich-text | Văn bản dài hiển thị trên chuyên trang. Tách biệt với mô tả nội bộ | — | khi Switch ON `[CR-01]` |
+| 19 | form | File đính kèm công khai | file-upload (multi) | Nhiều file PDF/DOC/DOCX/XLS/XLSX, max 20MB/file | — | khi Switch ON `[CR-01]` |
+| 20 | content | Cột Cơ quan ban hành | table-column | Tên đơn vị ban hành (`don_vi_id` → DON_VI) | — | luôn hiển thị `[STT12]` |
+| 21 | form | Cơ quan ban hành | text (read-only) | Auto = đơn vị của tài khoản đăng nhập, không cho sửa | — | khi tạo/sửa `[STT12]` |
 
 ---
 
@@ -779,7 +779,7 @@ erDiagram
 | 13 | file_dinh_kem_cong_khai | file[] | N | PDF/DOC/DOCX/XLS/XLSX, max 20MB/file | — | File đính kèm công khai cho chuyên trang `[CR-01]` |
 | 14 | so_luot_tai | number | N | | 0 | Counter lượt tải |
 | 15 | trang_thai | text | Y | CHECK IN ('NHAP','CONG_KHAI','AN') | 'NHAP' | Trạng thái lifecycle (SM-BIEUMAU: NHAP→CONG_KHAI↔AN) |
-| 16 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu theo đơn vị |
+| 16 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu theo đơn vị; **đồng thời là Cơ quan ban hành** hiển thị trên chuyên trang (auto = đơn vị tài khoản tạo, read-only) `[STT12]` |
 | 17 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
 | 18 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |
 | 19 | created_by | identifier | N | FK → TAI_KHOAN(id) | — | Người tạo |
@@ -874,7 +874,7 @@ stateDiagram-v2
 | BR-DATA-03 | Common fields | FR-VII-01, FR-VII-04, FR-VII-06 |
 | BR-DATA-05 | Audit trail | FR-VII-01 đến FR-VII-07 |
 | BR-DATA-07 | Pagination | FR-VII-02, FR-VII-05 |
-| BR-FLOW-05 | Công khai qua API trực tiếp | FR-VII-03 |
+| BR-FLOW-05 | Công khai theo mô hình KÉO | FR-VII-03, FR-VII-07 |
 | BR-FLOW-07 | Biểu mẫu công khai không cần phê duyệt | FR-VII-03 |
 | BR-PUBLIC-01 | Điều kiện công khai (BIEU_MAU bất kỳ — không có quy trình PD) | FR-VII-04 |
 | BR-PUBLIC-02 | Hủy công khai (clear thoi_gian_dang_tai) | FR-VII-04 |
@@ -916,11 +916,11 @@ stateDiagram-v2
 |----|-------------------|-------|----------------------|---------|------------|
 | BR-DATA-07 | Mọi danh sách sử dụng phân trang. Default: 20 rows/page, max: 100 rows/page | UX-Spec | FR-VII-02, FR-VII-05 | Dashboard: không phân trang | Verify API response |
 
-### BR-FLOW-05: Công khai qua API trực tiếp
+### BR-FLOW-05: Công khai theo mô hình KÉO
 
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm này) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|----------------------|---------|------------|
-| BR-FLOW-05 | Chỉ bản ghi đã duyệt mới được công khai lên Cổng PLQG (REST trực tiếp, không qua LGSP). Hủy công khai gỡ khỏi Cổng | Pattern IP-03 | FR-VII-03 | Biểu mẫu nhóm VII: công khai KHÔNG cần phê duyệt | Test publish undrafted = error |
+| BR-FLOW-05 | Công khai = đặt cờ `cong_khai`=1 + trạng thái CONG_KHAI; gỡ công khai = `cong_khai`=0 + trạng thái phù hợp. Cổng PLQG tự kéo (PULL) dữ liệu công khai định kỳ qua FR-XII-11 — phần mềm KHÔNG gọi API đẩy/gỡ trực tiếp, không qua LGSP. | BA chốt C-INT-01 2026-05-10 | FR-VII-03, FR-VII-07 | Biểu mẫu nhóm VII: công khai KHÔNG cần phê duyệt | Test công khai → cờ `cong_khai`=1, không có call out tới Cổng |
 
 ### BR-FLOW-07: Biểu mẫu công khai không cần phê duyệt
 
@@ -938,7 +938,7 @@ stateDiagram-v2
 
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm này) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|----------------------|---------|------------|
-| BR-PUBLIC-02 | Khi user tắt Switch công khai: set `cong_khai`=0; clear `thoi_gian_dang_tai`=NULL; gọi API gỡ khỏi chuyên trang Cổng PLQG. | CR-01 (báo cáo phân tích mục D.2) | FR-VII-04 | — | Test tắt Switch → API gỡ + thoi_gian_dang_tai NULL |
+| BR-PUBLIC-02 | Khi user tắt Switch công khai: set `cong_khai`=0; clear `thoi_gian_dang_tai`=NULL. Cổng PLQG tự loại bản ghi khỏi response ở lượt kéo tiếp theo — phần mềm KHÔNG gọi API gỡ. | CR-01 (báo cáo phân tích mục D.2) | FR-VII-04 | — | Test tắt Switch → `cong_khai`=0 + thoi_gian_dang_tai NULL |
 
 ### BR-PUBLIC-03: Thời gian đăng tải (CR-01)
 

@@ -3,8 +3,8 @@
 **Dự án:** Phần mềm hỗ trợ pháp lý doanh nghiệp
 **Phiên bản SRS:** 3.0
 **Nhóm:** XII — API Kết nối Chia sẻ Dữ liệu
-**UC range:** UC 171 – UC 188 + UC189 (mới — inbound hỏi đáp; CSV v1.1 chưa có, BA chốt giữ trạng thái này tại review 2026-05-10)
-**Số FR:** 19 (18 outbound + 1 inbound)
+**UC range:** UC 171 – UC 188 + UC189 (mới — inbound hỏi đáp; CSV v1.1 chưa có, BA chốt giữ trạng thái này tại review 2026-05-10) + 2 API transaction bổ sung ngoài baseline UC cho tab "Tổ chức tư vấn" `[STT14]` (không làm tăng tổng số UC)
+**Số FR:** 24 (20 outbound danh sách/tìm kiếm + 3 outbound xem chi tiết get-by-id `[STT9/11/15/17/19]` + 1 inbound)
 **File chính:** `srs-v3.md` Section 3.2
 
 ---
@@ -22,28 +22,31 @@
 
 ## 1. Tổng quan nhóm
 
-**Mục đích:** 19 endpoint API kết nối với hệ thống khác (chủ yếu Cổng PLQG module HTPLDN) qua REST + JSON, kết nối trực tiếp không qua LGSP. **18 outbound** (CMS cung cấp dữ liệu ra) + **1 inbound** (Cổng PLQG đẩy hỏi đáp về CMS).
+**Mục đích:** 24 endpoint API kết nối với hệ thống khác (chủ yếu Cổng PLQG module HTPLDN) qua REST + JSON, kết nối trực tiếp không qua LGSP. **23 outbound** (CMS cung cấp dữ liệu ra: 20 danh sách/tìm kiếm + 3 xem chi tiết) + **1 inbound** (Cổng PLQG đẩy hỏi đáp về CMS).
 
 **Tác nhân chính:** Cổng PLQG (cả consumer outbound và sender inbound), Hệ thống khác (consumer outbound).
 
 **Đặc thù:**
-- **Outbound:** 9 cặp API (chia sẻ + tìm kiếm), mỗi cặp phục vụ 1 loại nội dung. Auth: mTLS + JWT scope `read`/`search`. Filter chỉ trả dữ liệu đã công khai (`trang_thai = CONG_KHAI AND cong_khai = true AND is_deleted = false`).
+- **Outbound:** 10 cặp API (chia sẻ + tìm kiếm), mỗi cặp phục vụ 1 loại nội dung, cộng 3 API xem chi tiết get-by-id. Auth: mTLS + JWT scope `read`/`search`. Filter chỉ trả dữ liệu đã công khai (`cong_khai = true AND is_deleted = false` + trạng thái publishable theo từng entity).
 - **Inbound:** Cổng PLQG đẩy câu hỏi DN về CMS để CB nghiệp vụ tiếp nhận. Auth: mTLS + JWT scope `write`. Idempotency qua `external_id` UNIQUE (UPSERT khi Cổng retry).
-- **Hành vi "công khai" trong nghiệp vụ (FR-02/04/12/13/15):** chỉ là thao tác nội bộ — CB NV/PD set `cong_khai = 1` + chuyển `trang_thai = CONG_KHAI` trên CSDL CMS. Cổng PLQG sẽ tự pull dữ liệu mới qua 18 outbound API định kỳ. KHÔNG có API outbound push riêng từ CMS ra Cổng (BA chốt 2026-05-10 — mô hình a). Wording "đẩy lên Cổng PLQG" / "push API Cổng PLQG" trong các FR khác là viết tắt nghiệp vụ cho hành vi này.
+- **Hành vi "công khai" trong nghiệp vụ (FR-02/04/12/13/15):** chỉ là thao tác nội bộ — CB NV/PD set `cong_khai = 1` + cập nhật trạng thái công khai/publishable trên CSDL CMS. Cổng PLQG sẽ tự pull dữ liệu mới qua API outbound định kỳ. KHÔNG có API outbound push riêng từ CMS ra Cổng (BA chốt 2026-05-10 — mô hình a). Wording "đẩy lên Cổng PLQG" / "push API Cổng PLQG" trong các FR khác là viết tắt nghiệp vụ cho hành vi này.
 
-**9 cặp API outbound:**
+**10 cặp API outbound:**
 
 | # | Nội dung | UC Chia sẻ | UC Tìm kiếm | FR-ID Chia sẻ | FR-ID Tìm kiếm |
 |---|---------|-----------|-------------|--------------|----------------|
 | 1 | Hỏi đáp/vướng mắc PL | UC171 | UC172 | FR-XII-01 | FR-XII-02 |
 | 2 | Đào tạo/bồi dưỡng | UC173 | UC174 | FR-XII-03 | FR-XII-04 |
 | 3 | CG/TVV | UC175 | UC176 | FR-XII-05 | FR-XII-06 |
-| 4 | Vụ việc TGPL | UC177 | UC178 | FR-XII-07 | FR-XII-08 |
-| 5 | Đánh giá hiệu quả | UC179 | UC180 | FR-XII-09 | FR-XII-10 |
-| 6 | Thư viện biểu mẫu | UC181 | UC182 | FR-XII-11 | FR-XII-12 |
-| 7 | Tư vấn chuyên sâu | UC183 | UC184 | FR-XII-13 | FR-XII-14 |
-| 8 | CT HTPLDN | UC185 | UC186 | FR-XII-15 | FR-XII-16 |
-| 9 | Hồ sơ pháp lý DN (entity HO_SO_PHAP_LY_DN — tài liệu pháp lý: giấy phép, hợp đồng, giấy chứng nhận, quyết định) | UC187 | UC188 | FR-XII-17 | FR-XII-18 |
+| 4 | Tổ chức tư vấn `[STT14]` | API transaction STT14-LIST (mở rộng UC175) | API transaction STT14-SEARCH (mở rộng UC176) | FR-XII-22 | FR-XII-23 |
+| 5 | Vụ việc TGPL | UC177 | UC178 | FR-XII-07 | FR-XII-08 |
+| 6 | Đánh giá hiệu quả | UC179 | UC180 | FR-XII-09 | FR-XII-10 |
+| 7 | Thư viện biểu mẫu | UC181 | UC182 | FR-XII-11 | FR-XII-12 |
+| 8 | Tư vấn chuyên sâu | UC183 | UC184 | FR-XII-13 | FR-XII-14 |
+| 9 | CT HTPLDN | UC185 | UC186 | FR-XII-15 | FR-XII-16 |
+| 10 | Hồ sơ pháp lý DN (entity HO_SO_PHAP_LY_DN — tài liệu pháp lý: giấy phép, hợp đồng, giấy chứng nhận, quyết định) | UC187 | UC188 | FR-XII-17 | FR-XII-18 |
+
+> **Ghi chú trình bày:** `FR-XII-22/23` được đặt ngay sau `FR-XII-05/06` trong phần chi tiết để giữ ngữ cảnh nghiệp vụ Mạng lưới tư vấn viên. Registry chính thức vẫn theo `FR-ID`; các bảng traceability ở `srs-v3.5.md` ghi rõ `STT14-LIST/SEARCH`.
 
 **1 endpoint inbound (mới):**
 
@@ -55,10 +58,10 @@
 
 ```mermaid
 graph LR
-    subgraph Outbound[18 Outbound API — CMS cung cấp dữ liệu]
+    subgraph Outbound[23 Outbound API — CMS cung cấp dữ liệu]
         A[Cổng PLQG / Hệ thống khác] -->|GET REST+JSON, mTLS+JWT scope read/search| B[PM HTPLDN API Gateway]
         B --> C{Verify JWT + Rate Limit}
-        C -->|OK| D[Truy vấn dữ liệu CONG_KHAI]
+        C -->|OK| D[Truy vấn dữ liệu publishable]
         D --> E[Trả response JSON]
         C -->|Fail| F[HTTP 401/403/429]
     end
@@ -78,7 +81,7 @@ graph LR
 
 ## 2a. Đặc tả chung TPL-API
 
-> Tất cả 18 FR-XII kế thừa đặc tả chung này. Mỗi FR bổ sung phần đặc thù (endpoint, scope, request/response, processing riêng).
+> Tất cả API outbound nhóm XII kế thừa đặc tả chung này. Mỗi FR bổ sung phần đặc thù (endpoint, scope, request/response, processing riêng).
 
 **Đặc tả kỹ thuật chung:**
 
@@ -121,6 +124,8 @@ graph LR
   "timestamp": "2026-03-25T10:30:00+07:00"
 }
 ```
+
+**Trường thời gian chung mọi response outbound:** Mọi response outbound nhóm XII đều kèm `ngay_tao` (= `created_at`) và `ngay_cap_nhat` (= `updated_at`) của bản ghi — kiểu `datetime`, định dạng ISO 8601 (Common Fields BR-DATA-03).
 
 **Preconditions chung (TPL-API-FULL):**
 
@@ -211,6 +216,8 @@ API cung cấp danh sách hỏi đáp/vướng mắc pháp lý **đã công khai
 | 5 | linh_vuc | structured | luôn | {id, ten} |
 | 6 | ngay_tra_loi | date | luôn | ISO 8601 |
 | 7 | nguoi_tra_loi | text | luôn | — |
+| 8 | ngay_tao | datetime | luôn | ISO 8601 |
+| 9 | ngay_cap_nhat | datetime | luôn | ISO 8601 |
 
 **Postconditions:** Theo TPL-API-FULL.
 **Error Handling:** Theo TPL-API-FULL.
@@ -259,7 +266,7 @@ API tìm kiếm toàn văn hỏi đáp theo từ khóa.
 | 6 | Phân trang | BR-DATA-08 |
 | 7 | Ghi nhật ký thao tác | BR-DATA-05 |
 
-**Outputs:** Giống FR-XII-01 + trường relevance_score (number).
+**Outputs:** Giống FR-XII-01 + trường relevance_score (number). Bổ sung khối `facets` để dựng dropdown lọc lĩnh vực: `facets.linh_vuc[]` = {id, ten, count} ← `HOI_DAP.linh_vuc_id` → DANH_MUC (chỉ lĩnh vực đang có hỏi đáp công khai) `[STT16]`.
 
 **Postconditions:** Theo TPL-API-FULL.
 
@@ -271,6 +278,7 @@ API tìm kiếm toàn văn hỏi đáp theo từ khóa.
 
 **Acceptance Criteria:** Theo TPL-API-FULL. Bổ sung:
 - **Given** consumer gửi keyword "hợp đồng" **When** search **Then** trả danh sách hỏi đáp chứa từ khóa, sắp xếp theo relevance
+- **Given** consumer gọi search **When** có kết quả **Then** response kèm khối `facets.linh_vuc[]` (id, ten, count) để dựng dropdown lọc `[STT16]`
 
 **Cross-ref:** Entity HOI_DAP
 
@@ -324,6 +332,8 @@ API cung cấp danh sách khóa đào tạo/bồi dưỡng cho consumer.
 | 6 | ngay_ket_thuc | date | luôn | ISO 8601 |
 | 7 | so_hoc_vien | number | luôn | — |
 | 8 | trang_thai | text | luôn | — |
+| 9 | ngay_tao | datetime | luôn | ISO 8601 |
+| 10 | ngay_cap_nhat | datetime | luôn | ISO 8601 |
 
 **Postconditions:** Theo TPL-API-FULL.
 **Error Handling:** Theo TPL-API-FULL.
@@ -390,7 +400,7 @@ API cung cấp danh sách chuyên gia/tư vấn viên đang hoạt động. Lo�
 | 2 | size | number | N | 1-100 | 20 | query param |
 | 3 | linh_vuc_id | number | N | FK -> lĩnh vực chuyên môn | — | query param |
 | 4 | dia_ban | text | N | Tỉnh/TP | — | query param |
-| 5 | loai | text | N | TVV / CG / NHT | — | query param |
+| 5 | loai | text | N | TVV / CG | — | query param `[STT14]` |
 
 **Processing (Xử lý):**
 
@@ -409,11 +419,13 @@ API cung cấp danh sách chuyên gia/tư vấn viên đang hoạt động. Lo�
 |---|-----|-----------|-----------|--------|
 | 1 | id | number | luôn | — |
 | 2 | ho_ten | text | luôn | — |
-| 3 | loai | text | luôn | TVV / CG / NHT |
+| 3 | loai | text | luôn | TVV / CG `[STT14]` |
 | 4 | linh_vuc | structured | luôn | [{id, ten}] |
 | 5 | dia_ban | text | luôn | — |
 | 6 | to_chuc_hanh_nghe | text | luôn | — |
 | 7 | trang_thai | text | luôn | HOAT_DONG |
+| 8 | ngay_tao | datetime | luôn | ISO 8601 |
+| 9 | ngay_cap_nhat | datetime | luôn | ISO 8601 |
 
 **Postconditions:** Theo TPL-API-FULL.
 **Error Handling:** Theo TPL-API-FULL.
@@ -453,6 +465,136 @@ API tìm kiếm CG/TVV theo từ khóa (tên, tổ chức). Loại trừ thông 
 - **Given** consumer gửi keyword "Luật ABC" **When** search **Then** trả DS TVV thuộc tổ chức Luật ABC
 
 **Cross-ref:** Entity TU_VAN_VIEN, TVV_LINH_VUC
+
+---
+
+### FR-XII-22: API Chia sẻ Tổ chức tư vấn `[STT14]`
+
+**UC Reference:** API transaction STT14-LIST (mở rộng UC175 — tab "Tổ chức tư vấn" trong Mạng lưới tư vấn viên; không tạo UC mới)
+**Source:** STT14 báo cáo đối soát API — bổ sung API outbound riêng cho entity `TO_CHUC_TU_VAN`
+**Priority:** Essential
+**Stability:** Medium
+**Endpoint:** `GET /api/v1/to-chuc-tu-van`
+**Scope JWT:** `htpldn:to-chuc-tu-van:read`
+
+**Mô tả:**
+API cung cấp danh sách Tổ chức tư vấn pháp luật đang hoạt động và đã công khai để Cổng PLQG hiển thị tab "Tổ chức tư vấn". API này **không dùng chung** FR-XII-05 vì `TO_CHUC_TU_VAN` là entity riêng, không phải giá trị `loai` của `TU_VAN_VIEN`.
+
+**Tác nhân:** Cổng PLQG (consumer)
+
+**Preconditions:** Theo TPL-API-FULL + entity `TO_CHUC_TU_VAN` có dữ liệu `trang_thai = HOAT_DONG`, `cong_khai = 1`.
+
+**Inputs (Request Parameters):**
+
+| # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
+|---|----------|-----------|----------|-----------|----------|-------|
+| 1 | page | number | N | >= 1 | 1 | query param |
+| 2 | size | number | N | 1-100 | 20 | query param |
+| 3 | linh_vuc_id[] | identifier[] | N | FK → DANH_MUC | — | query param |
+| 4 | loai_hinh[] | text[] | N | CONG_TY_LUAT / VP_LUAT_SU / TT_TVPL / KHAC | — | query param |
+| 5 | don_vi_id[] | identifier[] | N | FK → DON_VI; mapping `TO_CHUC_TU_VAN.don_vi_id` | — | query param |
+| 6 | sort | text | N | field,asc/desc | thoi_gian_dang_tai,desc | query param |
+
+**Processing (Xử lý):**
+
+| Bước | Mô tả xử lý | BR áp dụng |
+|------|-------------|-----------|
+| 1 | Xác thực mTLS + JWT + scope `htpldn:to-chuc-tu-van:read` | BR-AUTH-01, BR-INTG-02 |
+| 2 | Kiểm tra rate limit | BR-API-01, BR-INTG-03 |
+| 3 | Truy vấn `TO_CHUC_TU_VAN` với điều kiện `trang_thai = 'HOAT_DONG' AND cong_khai = 1 AND is_deleted = false` | BR-INTG-07 |
+| 4 | Áp dụng bộ lọc `linh_vuc_id[]`, `loai_hinh[]`, `don_vi_id[]` | BR-INTG-07 |
+| 5 | Chỉ trả trường công khai; không trả `file_dinh_kem` nội bộ, `ghi_chu` nội bộ, lịch sử thao tác, thông tin tài khoản | BR-SEC-01 |
+| 6 | Phân trang, sắp xếp | BR-API-01 |
+| 7 | Ghi nhật ký thao tác | BR-DATA-05 |
+
+**Outputs (Response Data):**
+
+| # | Tên | Nguồn |
+|---|-----|-------|
+| 1 | id, ma_to_chuc | `TO_CHUC_TU_VAN.id`, `.ma_to_chuc` |
+| 2 | ten_to_chuc | `TO_CHUC_TU_VAN.ten_to_chuc` |
+| 3 | loai_hinh | `TO_CHUC_TU_VAN.loai_hinh` |
+| 4 | linh_vuc[] | Junction lĩnh vực của tổ chức → DANH_MUC `{id, ten}` |
+| 5 | dia_chi | `TO_CHUC_TU_VAN.dia_chi` |
+| 6 | don_vi_quan_ly {id, ten} | `TO_CHUC_TU_VAN.don_vi_id` → DON_VI |
+| 7 | nguoi_dai_dien | `TO_CHUC_TU_VAN.nguoi_dai_dien` |
+| 8 | dien_thoai, email, website | `TO_CHUC_TU_VAN.dien_thoai`, `.email`, `.website` |
+| 9 | so_giay_dkhd, ngay_cap_dkhd | `TO_CHUC_TU_VAN.so_giay_dkhd`, `.ngay_cap_dkhd` |
+| 10 | so_qd_cong_bo, ngay_qd_cong_bo | `TO_CHUC_TU_VAN.so_qd_cong_bo`, `.ngay_qd_cong_bo`; quyết định công bố công khai tổ chức trên danh sách |
+| 11 | so_quyet_dinh_cong_nhan, ngay_cong_nhan | `TO_CHUC_TU_VAN.so_quyet_dinh_cong_nhan`, `.ngay_cong_nhan`; quyết định công nhận/ghi nhận năng lực tổ chức, trả kèm nếu có dữ liệu |
+| 12 | anh_dai_dien | `TO_CHUC_TU_VAN.anh_dai_dien` (mặc định ảnh hệ thống nếu trống) |
+| 13 | mo_ta_cong_khai | `TO_CHUC_TU_VAN.mo_ta_cong_khai` |
+| 14 | file_dinh_kem_cong_khai[] | `TO_CHUC_TU_VAN.file_dinh_kem_cong_khai` — chỉ file đã chọn để công khai |
+| 15 | so_luong_tvv_lien_ket | Count `TVV_TO_CHUC` với `TVV_TO_CHUC.to_chuc_id = TO_CHUC_TU_VAN.id`, liên kết đang kích hoạt, `TVV_TO_CHUC.is_deleted = false`, `TU_VAN_VIEN.trang_thai = 'HOAT_DONG'`, `TU_VAN_VIEN.is_deleted = false` |
+| 16 | trang_thai, thoi_gian_dang_tai, ngay_cap_nhat | `TO_CHUC_TU_VAN.trang_thai`, `.thoi_gian_dang_tai`, `.updated_at` |
+| 17 | ngay_tao | `TO_CHUC_TU_VAN.created_at` |
+
+**Response object chuẩn cho `file_dinh_kem_cong_khai[]`:**
+
+| Field | Kiểu logic | Bắt buộc | Mô tả |
+|-------|-----------|----------|-------|
+| file_id | identifier | Y | ID file công khai, không dùng ID file nội bộ nếu file chưa được chọn công khai |
+| ten_file | text | Y | Tên file hiển thị |
+| url | text | Y | URL download/preview đã ký hoặc URL public theo cấu hình media |
+| mime_type | text | N | MIME type |
+| size_bytes | number | N | Kích thước file |
+| thoi_gian_cong_khai | datetime | N | Thời điểm file được chọn công khai |
+
+**Postconditions:** Theo TPL-API-FULL (read-only).
+**Error Handling:** Theo TPL-API-FULL.
+
+**Acceptance Criteria:** Theo TPL-API-FULL. Bổ sung:
+- **Given** consumer gọi GET /to-chuc-tu-van **When** JWT hợp lệ **Then** chỉ trả tổ chức `HOAT_DONG` + `cong_khai = 1` + `is_deleted = false`
+- **Given** consumer truyền `don_vi_id[]` **When** gọi API **Then** chỉ trả tổ chức thuộc đơn vị quản lý tương ứng
+- **Given** consumer truyền `linh_vuc_id[]` hoặc `loai_hinh[]` **When** gọi API **Then** chỉ trả tổ chức khớp lĩnh vực/loại hình và vẫn bảo toàn điều kiện công khai
+- **Given** tổ chức có Common Public Fields (`anh_dai_dien`, `mo_ta_cong_khai`, `file_dinh_kem_cong_khai[]`, `thoi_gian_dang_tai`) **When** trả response **Then** response chứa đúng các trường công khai này theo schema đã định nghĩa
+- **Given** tổ chức có `file_dinh_kem` nội bộ nhưng không có `file_dinh_kem_cong_khai` **When** trả response **Then** KHÔNG trả file nội bộ
+- **Given** tổ chức có dữ liệu `ghi_chu`, lịch sử thao tác hoặc thông tin tài khoản nội bộ **When** trả response **Then** các trường này không xuất hiện trong payload
+
+**Cross-ref:** Entity TO_CHUC_TU_VAN, TVV_TO_CHUC, TU_VAN_VIEN, DANH_MUC, DON_VI
+
+---
+
+### FR-XII-23: API Tìm kiếm Tổ chức tư vấn `[STT14]`
+
+**UC Reference:** API transaction STT14-SEARCH (mở rộng UC176 — tab "Tổ chức tư vấn" trong Mạng lưới tư vấn viên; không tạo UC mới)
+**Source:** STT14 báo cáo đối soát API — bổ sung API outbound riêng cho entity `TO_CHUC_TU_VAN`
+**Priority:** Conditional
+**Stability:** Medium
+**Endpoint:** `GET /api/v1/to-chuc-tu-van/search`
+**Scope JWT:** `htpldn:to-chuc-tu-van:search`
+
+**Mô tả:**
+API tìm kiếm Tổ chức tư vấn pháp luật theo từ khóa và bộ lọc lĩnh vực / loại hình / đơn vị quản lý. Output dùng chung cấu trúc với FR-XII-22.
+
+**Tác nhân:** Cổng PLQG (consumer)
+
+**Preconditions:** Theo TPL-API-FULL.
+
+**Inputs (Request Parameters):**
+
+| # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
+|---|----------|-----------|----------|-----------|----------|-------|
+| 1 | keyword | text | Y | >= 2 ký tự; bắt buộc với endpoint `/search` | — | query param |
+| 2 | linh_vuc_id[] | identifier[] | N | FK → DANH_MUC | — | query param |
+| 3 | loai_hinh[] | text[] | N | CONG_TY_LUAT / VP_LUAT_SU / TT_TVPL / KHAC | — | query param |
+| 4 | don_vi_id[] | identifier[] | N | FK → DON_VI; mapping `TO_CHUC_TU_VAN.don_vi_id` | — | query param |
+| 5 | page | number | N | >= 1 | 1 | query param |
+| 6 | size | number | N | 1-100 | 20 | query param |
+
+**Processing:** Xác thực JWT → rate limit → validate `keyword` bắt buộc và tối thiểu 2 ký tự → tìm kiếm toàn văn trên `ten_to_chuc`, `ma_to_chuc`, `nguoi_dai_dien`, lĩnh vực/loại hình đã đánh chỉ mục → áp filter `trang_thai = 'HOAT_DONG' AND cong_khai = 1 AND is_deleted = false` + các tham số lọc thêm → sắp theo relevance → phân trang → ghi log. Khi consumer không có từ khóa, consumer dùng API danh sách `GET /api/v1/to-chuc-tu-van` kèm bộ lọc thay vì gọi endpoint `/search`.
+
+**Outputs:** Giống FR-XII-22.
+
+**Error Handling:** Theo TPL-API-FULL. Bổ sung: nếu thiếu `keyword` hoặc `keyword` < 2 ký tự → `ERR-API-SEARCH-01`.
+
+**Acceptance Criteria:** Theo TPL-API-FULL. Bổ sung:
+- **Given** consumer gửi keyword "Luật ABC" **When** search **Then** trả DS tổ chức matching keyword và chỉ gồm tổ chức đang hoạt động, đã công khai
+- **Given** consumer không có keyword và chỉ cần lọc theo `linh_vuc_id[]`, `loai_hinh[]` hoặc `don_vi_id[]` **When** cần lấy dữ liệu **Then** consumer dùng FR-XII-22 `GET /api/v1/to-chuc-tu-van`, không gọi endpoint `/search`
+- **Given** consumer gửi keyword 1 ký tự **When** search **Then** trả lỗi `ERR-API-SEARCH-01`
+- **Given** consumer không gửi keyword **When** gọi `/api/v1/to-chuc-tu-van/search` **Then** trả lỗi `ERR-API-SEARCH-01`
+
+**Cross-ref:** Entity TO_CHUC_TU_VAN, TVV_TO_CHUC, TU_VAN_VIEN, DANH_MUC, DON_VI, BR-DATA-08
 
 ---
 
@@ -505,6 +647,10 @@ API cung cấp danh sách vụ việc TGPL đã hoàn thành/duyệt. Loại tr�
 | 5 | don_vi_xu_ly | text | luôn | — |
 | 6 | ngay_tiep_nhan | date | luôn | ISO 8601 |
 | 7 | ngay_hoan_thanh | date | luôn | ISO 8601 |
+| 8 | tieu_de | text | luôn | nguồn `VU_VIEC.tieu_de` `[STT15]` |
+| 9 | tom_tat | text | nếu có | nguồn `VU_VIEC.mo_ta_cong_khai` (mô tả công khai đã anonymize DN theo BR-PUBLIC-04) `[STT15]` |
+| 10 | ngay_tao | datetime | luôn | ISO 8601 |
+| 11 | ngay_cap_nhat | datetime | luôn | ISO 8601 |
 
 **Postconditions:** Theo TPL-API-FULL.
 **Error Handling:** Theo TPL-API-FULL.
@@ -580,6 +726,8 @@ API cung cấp kết quả đánh giá hiệu quả đã duyệt báo cáo.
 | 7 | trang_thai | text | luôn | HOAN_THANH (của KE_HOACH_DANH_GIA) |
 | 8 | mau_bao_cao | text | luôn | MAU_21A / MAU_21B (lấy từ BAO_CAO_DANH_GIA — để consumer biết format BC theo TT17/2025) |
 | 9 | thoi_gian_duyet_bc | date | luôn | Ngày BAO_CAO_DANH_GIA chuyển sang trạng thái DA_DUYET, ISO 8601 |
+| 10 | ngay_tao | datetime | luôn | ISO 8601 |
+| 11 | ngay_cap_nhat | datetime | luôn | ISO 8601 |
 
 **Postconditions:** Theo TPL-API-FULL.
 **Error Handling:** Theo TPL-API-FULL.
@@ -639,7 +787,7 @@ API cung cấp danh sách biểu mẫu đã duyệt + công khai, kèm URL tải
 
 **Preconditions:** Theo TPL-API-FULL + entity BIEU_MAU có dữ liệu đã duyệt + công khai.
 
-**Inputs:** page + size + danh_muc_id + dinh_dang (text: docx/pdf/xlsx).
+**Inputs:** page + size + linh_vuc_id + dinh_dang (DOC/DOCX/XLS/XLSX). _(API danh sách cơ bản; bộ lọc đa tiêu chí lĩnh vực/cơ quan ban hành/định dạng đặt ở FR-XII-12 `[STT12]`.)_
 
 **Processing:** Xác thực JWT -> rate limit -> truy vấn biểu mẫu đã duyệt + công khai -> áp dụng bộ lọc, phân trang -> ghi log.
 
@@ -649,19 +797,22 @@ API cung cấp danh sách biểu mẫu đã duyệt + công khai, kèm URL tải
 |---|-----|-----------|-----------|--------|
 | 1 | id | number | luôn | — |
 | 2 | ten_bieu_mau | text | luôn | — |
-| 3 | danh_muc | text | luôn | — |
-| 4 | dinh_dang | text | luôn | docx / pdf / xlsx |
-| 5 | kich_thuoc | number | luôn | bytes |
-| 6 | url_tai_ve | text | luôn | /api/v1/bieu-mau/{id}/download |
-| 7 | thoi_gian_dang_tai | date | luôn | ISO 8601 `[CR-01]` |
+| 3 | linh_vuc | structured | luôn | {id, ten} — nguồn `BIEU_MAU.linh_vuc_id` → DANH_MUC `[STT12]` |
+| 4 | co_quan_ban_hanh | structured | luôn | {id, ten} — nguồn `BIEU_MAU.don_vi_id` → DON_VI (đơn vị tạo/sở hữu, hiển thị làm cơ quan ban hành) `[STT12]` |
+| 5 | dinh_dang | text | luôn | DOC / DOCX / XLS / XLSX |
+| 6 | kich_thuoc | number | luôn | bytes |
+| 7 | url_tai_ve | text | luôn | /api/v1/bieu-mau/{id}/download |
+| 8 | thoi_gian_dang_tai | date | luôn | ISO 8601 `[CR-01]` |
+| 9 | ngay_tao | datetime | luôn | ISO 8601 |
+| 10 | ngay_cap_nhat | datetime | luôn | ISO 8601 |
 
 **Postconditions:** Theo TPL-API-FULL.
 **Error Handling:** Theo TPL-API-FULL.
 
 **Acceptance Criteria:** Theo TPL-API-FULL. Bổ sung:
-- **Given** consumer gọi GET /bieu-mau **When** JWT hợp lệ **Then** trả DS biểu mẫu công khai + URL download
+- **Given** consumer gọi GET /bieu-mau **When** JWT hợp lệ **Then** trả DS biểu mẫu công khai + URL download, mỗi bản ghi kèm `linh_vuc` và `co_quan_ban_hanh` (từ don_vi_id) `[STT12]`
 
-**Cross-ref:** Entity BIEU_MAU, THU_MUC_BIEU_MAU
+**Cross-ref:** Entity BIEU_MAU, THU_MUC_BIEU_MAU, DON_VI (cơ quan ban hành = BIEU_MAU.don_vi_id)
 
 ---
 
@@ -675,24 +826,40 @@ API cung cấp danh sách biểu mẫu đã duyệt + công khai, kèm URL tải
 **Scope JWT:** `htpldn:bieu-mau:search`
 
 **Mô tả:**
-API tìm kiếm biểu mẫu theo từ khóa (tên biểu mẫu, mô tả).
+API tìm kiếm + lọc đa tiêu chí biểu mẫu phục vụ màn "Biểu mẫu, hợp đồng" trên chuyên trang. Hỗ trợ tìm theo từ khóa (tên biểu mẫu, mô tả) **và/hoặc** lọc theo lĩnh vực, cơ quan ban hành, định dạng. Từ khóa **không bắt buộc** — cho phép lọc thuần theo tiêu chí khi không nhập từ khóa `[STT12]`.
 
 **Tác nhân:** Cổng PLQG (consumer)
 
 **Preconditions:** Theo TPL-API-FULL.
 
-**Inputs:** keyword (text, Y) + danh_muc_id + page + size.
+**Inputs (Request Parameters):**
 
-**Processing:** Xác thực JWT -> rate limit -> tìm kiếm toàn văn trên tên biểu mẫu + mô tả -> sắp relevance, phân trang -> ghi log.
+| # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
+|---|----------|-----------|----------|-----------|----------|-------|
+| 1 | keyword | text | N | Nếu có nhập: tối thiểu 2 ký tự | — | query param `[STT12]` |
+| 2 | linh_vuc_id | number[] | N | Chọn nhiều, FK → DANH_MUC (LINH_VUC_PL) | — | query param `[STT12]` |
+| 3 | co_quan_ban_hanh_id | number[] | N | Chọn nhiều, FK → DON_VI (lọc theo BIEU_MAU.don_vi_id) | — | query param `[STT12]` |
+| 4 | dinh_dang | text[] | N | Chọn nhiều: DOC/DOCX/XLS/XLSX (Word = DOC+DOCX, Excel = XLS+XLSX) | — | query param `[STT12]` |
+| 5 | page | number | N | >= 1 | 1 | query param |
+| 6 | size | number | N | 1-100 | 20 | query param |
 
-**Outputs:** Giống FR-XII-11.
+**Processing:** Xác thực JWT -> rate limit -> nếu có keyword: tìm kiếm toàn văn trên tên biểu mẫu + mô tả; nếu không có keyword: bỏ qua bước tìm toàn văn -> áp bộ lọc đa tiêu chí (linh_vuc_id, co_quan_ban_hanh_id = don_vi_id, dinh_dang — đều chọn nhiều) trên tập biểu mẫu đã duyệt + công khai -> tính `facets` -> sắp xếp (relevance nếu có keyword, ngược lại theo thoi_gian_dang_tai giảm dần), phân trang -> ghi log `[STT12]`.
 
-**Error Handling:** Theo TPL-API-FULL + ERR-API-SEARCH-01.
+**Outputs:** Giống FR-XII-11 (gồm `linh_vuc` + `co_quan_ban_hanh`). Bổ sung khối `facets` để dựng dropdown bộ lọc:
+- `facets.linh_vuc[]` = {id, ten, count} ← `BIEU_MAU.linh_vuc_id` → DANH_MUC
+- `facets.co_quan_ban_hanh[]` = {id, ten, count} ← `BIEU_MAU.don_vi_id` → DON_VI
+
+(Chỉ liệt kê giá trị đang có biểu mẫu công khai. `dinh_dang` là enum cố định Word/Excel — consumer tự dựng, không cần facet.) `[STT12]`
+
+**Error Handling:** Theo TPL-API-FULL. ERR-API-SEARCH-01 chỉ áp khi **có nhập** keyword nhưng < 2 ký tự (keyword bỏ trống là hợp lệ — lọc thuần tiêu chí) `[STT12]`.
 
 **Acceptance Criteria:** Theo TPL-API-FULL. Bổ sung:
 - **Given** consumer gửi keyword "hợp đồng lao động" **When** search **Then** trả DS biểu mẫu matching
+- **Given** consumer KHÔNG nhập keyword, chỉ chọn linh_vuc_id=[1,2] + dinh_dang=["DOCX"] **When** gọi API **Then** trả DS biểu mẫu thuộc 2 lĩnh vực + định dạng DOCX, sắp theo thoi_gian_dang_tai giảm dần `[STT12]`
+- **Given** consumer chọn co_quan_ban_hanh_id=[X] **When** gọi API **Then** chỉ trả biểu mẫu có don_vi_id = X `[STT12]`
+- **Given** consumer gọi API **When** có kết quả **Then** response chứa khối `facets` với danh sách lĩnh vực + cơ quan ban hành kèm count `[STT12]`
 
-**Cross-ref:** Entity BIEU_MAU
+**Cross-ref:** Entity BIEU_MAU, DON_VI (cơ quan ban hành = don_vi_id), DANH_MUC (lĩnh vực)
 
 ---
 
@@ -706,7 +873,7 @@ API tìm kiếm biểu mẫu theo từ khóa (tên biểu mẫu, mô tả).
 **Scope JWT:** `htpldn:tvcs:read`
 
 **Mô tả:**
-API cung cấp danh sách tư vấn chuyên sâu đã hoàn thành (metadata only, loại trừ nội dung chi tiết văn bản tư vấn).
+API cung cấp danh sách tư vấn chuyên sâu đã hoàn thành (metadata + tiêu đề + tóm tắt). Nội dung chi tiết đầy đủ (Nội dung, Kết quả, File tư liệu): xem **FR-XII-21 — API chi tiết TVCS** `[STT11]`.
 
 **Tác nhân:** Cổng PLQG (consumer)
 
@@ -722,10 +889,14 @@ API cung cấp danh sách tư vấn chuyên sâu đã hoàn thành (metadata onl
 |---|-----|-----------|-----------|--------|
 | 1 | id | number | luôn | — |
 | 2 | ma_yeu_cau | text | luôn | TVCS-{date}-{seq} |
-| 3 | linh_vuc | structured | luôn | {id, ten} |
-| 4 | trang_thai | text | luôn | HOAN_THANH |
-| 5 | chuyen_gia | text | luôn | — |
-| 6 | ngay_hoan_thanh | date | luôn | ISO 8601 |
+| 3 | tieu_de | text | luôn | nguồn `TU_VAN_CHUYEN_SAU.tieu_de` `[STT11]` |
+| 4 | tom_tat | text | nếu có | nguồn `TU_VAN_CHUYEN_SAU.mo_ta_cong_khai` `[STT11]` |
+| 5 | linh_vuc | structured | luôn | {id, ten} |
+| 6 | trang_thai | text | luôn | HOAN_THANH |
+| 7 | chuyen_gia | text | luôn | — |
+| 8 | ngay_hoan_thanh | date | luôn | ISO 8601 |
+| 9 | ngay_tao | datetime | luôn | ISO 8601 |
+| 10 | ngay_cap_nhat | datetime | luôn | ISO 8601 |
 
 **Postconditions:** Theo TPL-API-FULL.
 **Error Handling:** Theo TPL-API-FULL.
@@ -800,6 +971,8 @@ API cung cấp danh sách chương trình HTPLDN đã công bố (chỉ kế ho�
 | 6 | thoi_gian_ket_thuc | date | luôn | ISO 8601 |
 | 7 | don_vi | text | luôn | — |
 | 8 | trang_thai | text | luôn | DA_CONG_BO |
+| 9 | ngay_tao | datetime | luôn | ISO 8601 |
+| 10 | ngay_cap_nhat | datetime | luôn | ISO 8601 |
 
 **Postconditions:** Theo TPL-API-FULL.
 **Error Handling:** Theo TPL-API-FULL.
@@ -887,6 +1060,8 @@ API cung cấp danh sách **hồ sơ pháp lý của DN** (entity HO_SO_PHAP_LY_
 | 8 | ngay_het_han | date | nếu có | ISO 8601 |
 | 9 | co_quan_cap | text | nếu có | — |
 | 10 | trang_thai | text | luôn | HIEU_LUC (mặc định filter) |
+| 11 | ngay_tao | datetime | luôn | ISO 8601 |
+| 12 | ngay_cap_nhat | datetime | luôn | ISO 8601 |
 
 **Lưu ý phạm vi và bảo mật:**
 - API là kênh **B2G (hệ thống ↔ hệ thống)** với xác thực JWT + mTLS — không phải public-facing cho công chúng/dân
@@ -991,7 +1166,7 @@ API tiếp nhận câu hỏi/vướng mắc pháp lý của doanh nghiệp đư�
 | 2 | Kiểm tra rate limit | BR-API-01 |
 | 3 | Validate payload: `external_id` không trống, `noi_dung` ≤ 5000 ký tự, `linh_vuc_id` tồn tại, `don_vi_id` tồn tại | — |
 | 4 | **Idempotency check:** SELECT HOI_DAP WHERE `external_id = {input.external_id}`. Nếu đã tồn tại → trả HTTP 200 OK với existing `internal_id` + `received_at`, KHÔNG tạo mới (UPSERT pattern). | — |
-| 5 | Nếu chưa tồn tại: INSERT HOI_DAP với `kenh_tiep_nhan = CONG_PLQG`, `external_id = input.external_id`, `trang_thai = MOI`, `muc_do_phuc_tap = input.muc_do_phuc_tap || THUONG`, các field khác từ input | BR-DATA-03 |
+| 5 | Nếu chưa tồn tại: INSERT HOI_DAP với `kenh_tiep_nhan = CONG_PLQG`, `external_id = input.external_id`, `trang_thai = MOI`, `muc_do_phuc_tap` = input (mặc định THUONG nếu null), các field khác từ input | BR-DATA-03 |
 | 6 | Trả về `internal_id` (HOI_DAP.id) + presigned URL cho từng file metadata để Cổng PLQG upload trực tiếp lên storage CMS (S3-compatible). TTL 1 giờ. | — |
 | 7 | Sau khi Cổng PLQG upload file qua presigned URL → ClamAV scan async → cập nhật FILE_DINH_KEM | F-36 |
 | 8 | Tính deadline SLA theo `muc_do_phuc_tap` (BR-CALC-03) | BR-CALC-03 |
@@ -1040,6 +1215,152 @@ API tiếp nhận câu hỏi/vướng mắc pháp lý của doanh nghiệp đư�
 
 ---
 
+### FR-XII-20: API Xem chi tiết vụ việc (UC177 — get-by-id) `[STT15][STT19]`
+
+**UC Reference:** UC 177 (bổ sung thao tác xem chi tiết — ngoài 2 transaction baseline chia sẻ + tìm kiếm)
+**Source:** Issue STT15/STT19 (sheet Bug+API) — chuyên trang cần trang chi tiết vụ việc của DN
+**Priority:** Essential
+**Stability:** Medium
+**Endpoint:** `GET /api/v1/vu-viec/{id}`
+**Scope JWT:** `htpldn:vu-viec:read`
+
+**Mô tả:**
+API trả chi tiết đầy đủ một vụ việc cho **doanh nghiệp sở hữu** xem trên chuyên trang. Vì người xem là DN sở hữu nên **KHÔNG ẩn trường** (không áp whitelist BR-PUBLIC-04 vốn dùng cho danh sách công khai); thay vào đó **lọc theo quyền sở hữu** — chỉ trả vụ việc thuộc DN đang đăng nhập.
+
+**Tác nhân:** Cổng PLQG (consumer; truyền định danh DN sau khi DN xác thực VNeID).
+
+**Preconditions:** Theo TPL-API-FULL + vụ việc tồn tại và thuộc DN đang xem.
+
+**Inputs (Request Parameters):**
+
+| # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Nguồn |
+|---|----------|-----------|----------|-----------|-------|
+| 1 | id | number | Y | PK vụ việc | path param |
+| 2 | doanh_nghiep_id | number | Y | Định danh DN đang xem (Cổng truyền sau VNeID) — API kiểm tra `VU_VIEC.doanh_nghiep_id` khớp | header/claim |
+
+**Processing:** Xác thực mTLS+JWT + scope -> kiểm tra rate limit -> truy vấn vụ việc theo `id` -> **kiểm tra quyền sở hữu**: `VU_VIEC.doanh_nghiep_id = input.doanh_nghiep_id`, nếu không khớp → 404 (không lộ tồn tại) -> trả đầy đủ trường (không ẩn) -> ghi log.
+
+**Outputs (Response Data):**
+
+| # | Tên | Nguồn |
+|---|-----|-------|
+| 1 | id, ma_vu_viec | `VU_VIEC.id`, `.ma_vu_viec` |
+| 2 | tieu_de | `VU_VIEC.tieu_de` |
+| 3 | linh_vuc {id,ten} | `VU_VIEC.linh_vuc_id` → DANH_MUC |
+| 4 | loai_hinh_ho_tro | `VU_VIEC.loai_hinh_ht_id` → DANH_MUC |
+| 5 | noi_dung | `VU_VIEC.mo_ta` |
+| 6 | ket_qua | `KET_QUA_VU_VIEC.noi_dung` (VB tư vấn PL) + `KET_QUA_VU_VIEC.ket_luan` (tóm tắt) |
+| 7 | tai_lieu[] | `VU_VIEC.file_dinh_kem` |
+| 8 | don_vi_xu_ly | `VU_VIEC.don_vi_id` → DON_VI.ten_don_vi |
+| 9 | trang_thai, ngay_tiep_nhan, ngay_hoan_thanh | `VU_VIEC.*` |
+| 10 | ngay_tao, ngay_cap_nhat | `VU_VIEC.created_at`, `.updated_at` |
+
+**Postconditions:** Theo TPL-API-FULL (read-only).
+**Error Handling:** Theo TPL-API-FULL. Bổ sung: vụ việc không tồn tại HOẶC không thuộc DN đang xem → HTTP 404.
+
+**Acceptance Criteria:** Theo TPL-API-FULL. Bổ sung:
+- **Given** DN X gọi GET /vu-viec/{id} với vụ việc thuộc DN X **When** hợp lệ **Then** trả đầy đủ nội dung/kết quả/tài liệu, không ẩn trường
+- **Given** DN X gọi GET /vu-viec/{id} với vụ việc của DN Y **When** kiểm tra sở hữu **Then** trả HTTP 404
+
+**Cross-ref:** Entity VU_VIEC, KET_QUA_VU_VIEC, DON_VI, DANH_MUC
+
+---
+
+### FR-XII-21: API Xem chi tiết tư vấn chuyên sâu (UC183 — get-by-id) `[STT9][STT11]`
+
+**UC Reference:** UC 183 (bổ sung thao tác xem chi tiết — ngoài 2 transaction baseline)
+**Source:** Issue STT9/STT11 (sheet Bug+API) — chuyên trang cần trang chi tiết TVCS của DN
+**Priority:** Essential
+**Stability:** Medium
+**Endpoint:** `GET /api/v1/tu-van-chuyen-sau/{id}`
+**Scope JWT:** `htpldn:tvcs:read`
+
+**Mô tả:**
+API trả chi tiết đầy đủ một yêu cầu tư vấn chuyên sâu cho **doanh nghiệp sở hữu**. Không ẩn trường; lọc theo quyền sở hữu (chỉ trả bản ghi của DN đang xem). File tư liệu pháp luật chỉ trả **sau khi đã công khai** (`cong_khai = 1`).
+
+**Tác nhân:** Cổng PLQG (consumer; truyền định danh DN sau VNeID).
+
+**Preconditions:** Theo TPL-API-FULL + bản ghi TVCS tồn tại và thuộc DN đang xem.
+
+**Inputs:**
+
+| # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Nguồn |
+|---|----------|-----------|----------|-----------|-------|
+| 1 | id | number | Y | PK TVCS | path param |
+| 2 | doanh_nghiep_id | number | Y | Định danh DN đang xem — API kiểm tra `TU_VAN_CHUYEN_SAU.doanh_nghiep_id` khớp | header/claim |
+
+**Processing:** Xác thực mTLS+JWT + scope -> rate limit -> truy vấn TVCS theo `id` -> kiểm tra `TU_VAN_CHUYEN_SAU.doanh_nghiep_id` khớp, không khớp → 404 -> trả đầy đủ trường -> ghi log.
+
+**Outputs (Response Data):**
+
+| # | Tên | Nguồn |
+|---|-----|-------|
+| 1 | id, ma_yeu_cau | `TU_VAN_CHUYEN_SAU.id`, `.ma_tu_van` |
+| 2 | tieu_de | `.tieu_de` |
+| 3 | linh_vuc {id,ten} | `.linh_vuc_id` → DANH_MUC |
+| 4 | chuyen_gia | `.chuyen_gia_id` → TU_VAN_VIEN.ho_ten |
+| 5 | trang_thai, ngay_hoan_thanh | `.trang_thai`, `.ngay_hoan_thanh` |
+| 6 | noi_dung | `.noi_dung` |
+| 7 | ket_qua | `.ket_qua` (VB TVPL) |
+| 8 | file_tu_lieu[] | `.file_dinh_kem_cong_khai` (chỉ trả khi `cong_khai = 1`) `[STT11]` |
+| 9 | ngay_tao, ngay_cap_nhat | `TU_VAN_CHUYEN_SAU.created_at`, `.updated_at` |
+
+**Postconditions:** Theo TPL-API-FULL (read-only).
+**Error Handling:** Theo TPL-API-FULL. Bổ sung: bản ghi không tồn tại HOẶC không thuộc DN đang xem → HTTP 404.
+
+**Acceptance Criteria:** Theo TPL-API-FULL. Bổ sung:
+- **Given** DN sở hữu gọi GET /tu-van-chuyen-sau/{id} **When** hợp lệ **Then** trả đầy đủ Nội dung + Kết quả; File tư liệu chỉ có khi bản ghi đã công khai
+- **Given** gọi với bản ghi của DN khác **Then** trả HTTP 404
+
+**Cross-ref:** Entity TU_VAN_CHUYEN_SAU, TU_VAN_VIEN, DANH_MUC
+
+---
+
+### FR-XII-24: API Xem chi tiết biểu mẫu (UC181 — get-by-id) `[STT17]`
+
+**UC Reference:** UC 181 (bổ sung thao tác xem chi tiết — ngoài 2 transaction baseline)
+**Source:** Issue STT17 (sheet Bug+API) — chuyên trang cần trang xem thông tin/xem trước biểu mẫu (UC CPLQG-VI-166)
+**Priority:** Essential
+**Stability:** Medium
+**Endpoint:** `GET /api/v1/bieu-mau/{id}`
+**Scope JWT:** `htpldn:bieu-mau:read`
+
+**Mô tả:**
+API trả chi tiết một biểu mẫu công khai, kèm **URL xem trước (preview)**. Biểu mẫu là nội dung công khai (không chứa dữ liệu cá nhân DN) → không lọc sở hữu; chỉ trả bản ghi `cong_khai = 1` AND `trang_thai = CONG_KHAI`.
+
+**Tác nhân:** Cổng PLQG (consumer).
+
+**Preconditions:** Theo TPL-API-FULL + biểu mẫu ở trạng thái công khai.
+
+**Inputs:** `id` (number, Y, PK biểu mẫu — path param).
+
+**Processing:** Xác thực JWT + scope -> rate limit -> truy vấn biểu mẫu theo `id` với điều kiện `cong_khai = 1` AND `trang_thai = CONG_KHAI` -> sinh `preview_url` từ file -> trả response -> ghi log.
+
+**Outputs (Response Data):**
+
+| # | Tên | Nguồn |
+|---|-----|-------|
+| 1 | id, ten_bieu_mau | `BIEU_MAU.id`, `.ten_bieu_mau` |
+| 2 | linh_vuc {id,ten} | `BIEU_MAU.linh_vuc_id` → DANH_MUC |
+| 3 | co_quan_ban_hanh {id,ten} | `BIEU_MAU.don_vi_id` → DON_VI.ten_don_vi |
+| 4 | dinh_dang, kich_thuoc | `BIEU_MAU.dinh_dang`, `.kich_thuoc` |
+| 5 | mo_ta | `BIEU_MAU.mo_ta_cong_khai` |
+| 6 | url_tai_ve | `/api/v1/bieu-mau/{id}/download` (từ `.duong_dan_file`) |
+| 7 | preview_url | **sinh từ `BIEU_MAU.duong_dan_file`** qua bộ chuyển đổi xem trước (doc→PDF, xls→bảng) — cùng cơ chế preview nội bộ FR-VII `[STT17]` |
+| 8 | thoi_gian_dang_tai, so_luot_tai | `BIEU_MAU.*` |
+| 9 | ngay_tao, ngay_cap_nhat | `BIEU_MAU.created_at`, `.updated_at` |
+
+**Postconditions:** Theo TPL-API-FULL (read-only).
+**Error Handling:** Theo TPL-API-FULL. Bổ sung: biểu mẫu không tồn tại hoặc không công khai → HTTP 404; không hỗ trợ preview định dạng → trả `preview_url = null` + cờ `preview_supported = false`.
+
+**Acceptance Criteria:** Theo TPL-API-FULL. Bổ sung:
+- **Given** consumer gọi GET /bieu-mau/{id} với biểu mẫu công khai **When** hợp lệ **Then** trả chi tiết + `preview_url`
+- **Given** biểu mẫu chưa công khai **Then** trả HTTP 404
+
+**Cross-ref:** Entity BIEU_MAU, DON_VI, DANH_MUC; cơ chế preview FR-VII (srs-fr-09)
+
+---
+
 ---
 
 ## 3. Màn hình chức năng
@@ -1064,19 +1385,23 @@ API tiếp nhận câu hỏi/vướng mắc pháp lý của doanh nghiệp đư�
 | 1 | HOI_DAP | referenced | Hỏi đáp/vướng mắc PL (FR-XII-01/02) |
 | 2 | KHOA_HOC | referenced | Khóa đào tạo/tập huấn (FR-XII-03/04) |
 | 3 | TU_VAN_VIEN | referenced | TVV/CG — cá nhân hành nghề tư vấn (FR-XII-05/06). NHT là cán bộ HTPL DN, lưu ở entity riêng NGUOI_HO_TRO, không xuất qua API nhóm này. |
-| 4 | VU_VIEC | referenced | Vụ việc HTPL (FR-XII-07/08) |
+| 3b | TO_CHUC_TU_VAN | referenced | Tổ chức tư vấn pháp luật tham gia mạng lưới (FR-XII-22/23) `[STT14]` |
+| 3c | TVV_TO_CHUC | referenced | Liên kết TVV ↔ Tổ chức tư vấn; nguồn tính `so_luong_tvv_lien_ket` cho FR-XII-22/23 `[STT14]` |
+| 4 | VU_VIEC | referenced | Vụ việc HTPL (FR-XII-07/08; **chi tiết FR-XII-20** `[STT15/19]`) |
+| 4b | KET_QUA_VU_VIEC | referenced | Kết quả xử lý vụ việc (noi_dung, ket_luan) — nguồn `ket_qua` cho **FR-XII-20** `[STT15/19]` |
 | 5 | KE_HOACH_DANH_GIA | referenced | Kế hoạch đánh giá hiệu quả (FR-XII-09/10) |
 | 6 | KET_QUA_DANH_GIA | referenced | Kết quả đánh giá chi tiết từng vụ việc (FR-XII-09/10) |
 | 6b | BAO_CAO_DANH_GIA | referenced | Báo cáo tổng hợp đợt đánh giá (mẫu 21a/21b TT17/2025), 1:1 với KE_HOACH_DANH_GIA — nguồn dữ liệu chính cho FR-XII-09 |
-| 7 | BIEU_MAU | referenced | Biểu mẫu/hợp đồng mẫu (FR-XII-11/12) |
-| 8 | TU_VAN_CHUYEN_SAU | referenced | Nội dung tư vấn chuyên sâu (FR-XII-13/14) |
+| 7 | BIEU_MAU | referenced | Biểu mẫu/hợp đồng mẫu (FR-XII-11/12; **chi tiết FR-XII-24** `[STT17]`) |
+| 8 | TU_VAN_CHUYEN_SAU | referenced | Nội dung tư vấn chuyên sâu (FR-XII-13/14; **chi tiết FR-XII-21** `[STT9/11]`) |
 | 9 | CHUONG_TRINH_HTPL | referenced | Chương trình HTPLDN (FR-XII-15/16) |
 | 10 | HO_SO_PHAP_LY_DN | referenced | Hồ sơ pháp lý DN — tài liệu (giấy phép, hợp đồng, giấy chứng nhận, quyết định) (FR-XII-17/18) |
 | 11 | DANH_MUC | referenced | Danh mục dùng chung (lĩnh vực PL, bộ lọc) |
+| 12 | DON_VI | referenced | Đơn vị — nguồn `don_vi_quan_ly` (Tổ chức tư vấn, FR-XII-22/23), `co_quan_ban_hanh` (biểu mẫu, FR-XII-11/12/24) + `don_vi_xu_ly` (vụ việc) `[STT12][STT14]` |
 
 ### ERD nhóm (subset)
 
-> Nhóm XII chỉ READ dữ liệu. ERD thể hiện các entity được expose qua 18 API outbound.
+> Nhóm XII chỉ READ dữ liệu. ERD thể hiện các entity được expose qua 23 API outbound (20 danh sách/tìm kiếm + 3 xem chi tiết FR-XII-20/21/24; thêm KET_QUA_VU_VIEC + DON_VI cho các API chi tiết).
 
 ```mermaid
 erDiagram
@@ -1099,6 +1424,20 @@ erDiagram
         text ma_tvv UK
         text ho_ten
         text loai_tvv
+        text trang_thai
+    }
+    TO_CHUC_TU_VAN {
+        identifier id PK
+        text ma_to_chuc UK
+        text ten_to_chuc
+        text loai_hinh
+        boolean cong_khai
+        text trang_thai
+    }
+    TVV_TO_CHUC {
+        identifier id PK
+        identifier tu_van_vien_id FK
+        identifier to_chuc_id FK
         text trang_thai
     }
     VU_VIEC {
@@ -1139,10 +1478,19 @@ erDiagram
         text ma UK
         text ten
     }
+    DON_VI {
+        identifier id PK
+        text ma_don_vi UK
+        text ten_don_vi
+    }
 
     HOI_DAP }o--|| DANH_MUC : "linh_vuc_id"
     KHOA_HOC }o--o| DANH_MUC : "linh_vuc_id"
-    TU_VAN_VIEN }o--o| DANH_MUC : "to_chuc_chinh_id"
+    TU_VAN_VIEN }o--o| TO_CHUC_TU_VAN : "to_chuc_chinh_id"
+    TO_CHUC_TU_VAN }o--o{ DANH_MUC : "linh_vuc_ids"
+    TO_CHUC_TU_VAN }o--|| DON_VI : "don_vi_id"
+    TO_CHUC_TU_VAN ||--o{ TVV_TO_CHUC : "co_tvv"
+    TU_VAN_VIEN ||--o{ TVV_TO_CHUC : "tham_gia_to_chuc"
     VU_VIEC }o--|| DANH_MUC : "linh_vuc_id"
     BIEU_MAU }o--o| DANH_MUC : "linh_vuc_id"
     TU_VAN_CHUYEN_SAU }o--|| DANH_MUC : "linh_vuc_id"
@@ -1173,7 +1521,32 @@ erDiagram
 | loai_tvv | text | Y | CHECK IN ('TVV','CG') | | Loại: TVV (có thẻ NĐ 77/2008 Đ.19) / CG (chuyên gia) |
 | trang_thai | text | Y | ... | 'MOI_DANG_KY' | API filter: HOAT_DONG only |
 
-### VU_VIEC (referenced — FR-XII-07/08)
+### TO_CHUC_TU_VAN (referenced — FR-XII-22/23)
+
+**Mô tả:** Tổ chức tư vấn pháp luật tham gia mạng lưới hỗ trợ pháp lý cho DNNVV. API chỉ trả tổ chức `trang_thai = HOAT_DONG`, `cong_khai = 1`, `is_deleted = false`; không trả tệp/ghi chú nội bộ.
+
+| Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|-----------|-----------|----------|------------|---------|-------|
+| ma_to_chuc | text | Y | UNIQUE | Auto: TC-{DV}-{SEQ} | Mã tổ chức |
+| ten_to_chuc | text | Y | | | Tên tổ chức tư vấn |
+| loai_hinh | text | Y | CHECK IN ('CONG_TY_LUAT','VP_LUAT_SU','TT_TVPL','KHAC') | | Loại hình tổ chức |
+| nguoi_dai_dien | text | Y | | | Họ tên người đại diện |
+| so_giay_dkhd | text | Y | Giấy đăng ký hoạt động | | Số giấy ĐKHĐ |
+| ngay_cap_dkhd | date | Y | ≤ ngày hiện tại | | Ngày cấp giấy ĐKHĐ |
+| dia_chi | text | Y | | | Địa chỉ trụ sở |
+| dien_thoai, email, website | text | N | | | Thông tin liên hệ công khai |
+| so_qd_cong_bo, ngay_qd_cong_bo | text/date | N | | | Thông tin công bố tham gia mạng lưới |
+| so_quyet_dinh_cong_nhan, ngay_cong_nhan | text/datetime | N | | | Quyết định/ngày công nhận theo luồng phê duyệt TC TV |
+| don_vi_id | identifier | Y | FK → DON_VI(id) | | Đơn vị/Tỉnh TP quản lý; nguồn filter `don_vi_id[]` |
+| linh_vuc_ids | identifier[] | Y | FK → DANH_MUC, N:N | | Lĩnh vực tư vấn |
+| trang_thai | text | Y | CHECK IN ('MOI_DANG_KY','CHO_PHE_DUYET','TU_CHOI','HOAT_DONG','TAM_DUNG','VO_HIEU_HOA') | 'MOI_DANG_KY' | API filter: HOAT_DONG only |
+| cong_khai | boolean | N | | 0 | API filter: cong_khai = 1 |
+| anh_dai_dien | structured | N | jpg/png/gif, max 5MB | Ảnh hệ thống | Ảnh đại diện công khai |
+| thoi_gian_dang_tai | datetime | N | Auto fill khi cong_khai=1 | | Thời điểm đăng tải công khai |
+| mo_ta_cong_khai | text_long | N | | | Mô tả hiển thị trên chuyên trang |
+| file_dinh_kem_cong_khai | file[] | N | PDF/DOC/DOCX/XLS/XLSX, max 20MB/file | | File đã chọn để công khai |
+
+### VU_VIEC (referenced — FR-XII-07/08, 20)
 
 **Mô tả:** Vụ việc HTPL. API loại trừ thông tin DN nhạy cảm (MST, địa chỉ chi tiết).
 
@@ -1183,7 +1556,7 @@ erDiagram
 | tieu_de | text | Y | | | Tiêu đề vụ việc |
 | trang_thai | text | Y | ... | 'CHO_TIEP_NHAN' | API filter: HOAN_THANH/DA_DUYET only |
 
-### BIEU_MAU (referenced — FR-XII-11/12)
+### BIEU_MAU (referenced — FR-XII-11/12, 22)
 
 **Mô tả:** Biểu mẫu/hợp đồng mẫu (file, max 20MB). API chỉ trả biểu mẫu đã duyệt + công khai.
 
@@ -1195,7 +1568,7 @@ erDiagram
 | cong_khai | boolean | N | | 0 | API filter: cong_khai = 1 `[CR-01]` |
 | trang_thai | text | Y | CHECK IN ('NHAP','CONG_KHAI','AN') | 'NHAP' | API filter: CONG_KHAI only |
 
-### TU_VAN_CHUYEN_SAU (referenced — FR-XII-13/14)
+### TU_VAN_CHUYEN_SAU (referenced — FR-XII-13/14, 21)
 
 **Mô tả:** Nội dung tư vấn chuyên sâu. API chỉ trả metadata (không nội dung chi tiết VB tư vấn).
 
@@ -1247,7 +1620,7 @@ erDiagram
 
 > **Source of truth:** `srs-v3.md` Phụ lục C.
 
-Nhóm XII (API Kết nối Chia sẻ Dữ liệu) không có state machine riêng. Tất cả 18 API đều là read-only outbound, không thay đổi trạng thái dữ liệu.
+Nhóm XII (API Kết nối Chia sẻ Dữ liệu) không có state machine riêng. FR-XII-01~18 và FR-XII-20~24 là read-only outbound (không thay đổi trạng thái dữ liệu); FR-XII-19 là inbound (POST nhận hỏi đáp từ Cổng).
 
 Các API chỉ trả dữ liệu ở trạng thái publishable (đã duyệt / đã công khai / hoàn thành) theo quy tắc BR-INTG-07.
 
@@ -1261,16 +1634,18 @@ Các API chỉ trả dữ liệu ở trạng thái publishable (đã duyệt / �
 
 | BR ID | Tên | FR áp dụng (nhóm này) |
 |-------|-----|----------------------|
-| BR-AUTH-01 | Xác thực (JWT) | FR-XII-01 ~ FR-XII-18 |
-| BR-INTG-02 | Bảo mật API: mTLS + JWT RS256 | FR-XII-01 ~ FR-XII-18 |
-| BR-INTG-03 | Rate limit: 100 req/min/consumer | FR-XII-01 ~ FR-XII-18 |
-| BR-INTG-04 | Response time < 3 giây | FR-XII-01 ~ FR-XII-18 |
-| BR-INTG-07 | Chỉ chia sẻ dữ liệu đã duyệt/công khai | FR-XII-01 ~ FR-XII-18 |
-| BR-RETRY-01 | Retry policy API outbound LGSP/Cổng PLQG (3 lần backoff 1s/2s/4s, sau 3 fail → manual_review_queue) | FR-XII-01 ~ FR-XII-18 (toàn bộ outbound) |
-| BR-API-01 | Quy ước API Outbound (mTLS+JWT+rate limit, đồng bộ BR-INTG-02/03) | FR-XII-01 ~ FR-XII-18 |
-| BR-SEC-01 | Sanitize PII/dữ liệu nhạy cảm trước khi publish | FR-XII-01 ~ FR-XII-18 |
-| BR-DATA-05 | Ghi nhật ký thao tác (audit trail) | FR-XII-01 ~ FR-XII-18 |
-| BR-DATA-08 | Tìm kiếm toàn văn | FR-XII-02, FR-XII-04, FR-XII-06, FR-XII-08, FR-XII-10, FR-XII-12, FR-XII-14, FR-XII-16, FR-XII-18 |
+| BR-AUTH-01 | Xác thực (JWT) | Tất cả API nhóm XII |
+| BR-INTG-02 | Bảo mật API: mTLS + JWT RS256 | Tất cả API nhóm XII |
+| BR-INTG-03 | Rate limit: 100 req/min/consumer | Tất cả API nhóm XII |
+| BR-INTG-04 | Response time < 3 giây | Tất cả API nhóm XII |
+| BR-INTG-07 | Chỉ chia sẻ dữ liệu đã duyệt/công khai | Toàn bộ outbound: FR-XII-01~18, FR-XII-20~24 |
+| BR-RETRY-01 | Retry policy API outbound LGSP/Cổng PLQG (3 lần backoff 1s/2s/4s, sau 3 fail → manual_review_queue) | Toàn bộ outbound: FR-XII-01~18, FR-XII-20~24 |
+| BR-API-01 | Quy ước API Outbound (mTLS+JWT+rate limit, đồng bộ BR-INTG-02/03) | Toàn bộ outbound: FR-XII-01~18, FR-XII-20~24 |
+| BR-SEC-01 | Sanitize PII/dữ liệu nhạy cảm trước khi publish | Toàn bộ outbound: FR-XII-01~18, FR-XII-20~24 |
+| BR-DATA-05 | Ghi nhật ký thao tác (audit trail) | Tất cả API nhóm XII |
+| BR-DATA-08 | Tìm kiếm toàn văn | FR-XII-02, FR-XII-04, FR-XII-06, FR-XII-08, FR-XII-10, FR-XII-12, FR-XII-14, FR-XII-16, FR-XII-18, FR-XII-23 |
+
+> **3 API xem chi tiết get-by-id (FR-XII-20 vụ việc, FR-XII-21 TVCS, FR-XII-24 biểu mẫu)** kế thừa cùng nhóm BR như API outbound danh sách: BR-AUTH-01, BR-INTG-02, BR-INTG-03, BR-INTG-04, BR-INTG-07, BR-API-01, BR-SEC-01, BR-DATA-05, BR-RETRY-01. **KHÔNG** áp BR-DATA-08 (không phải tìm kiếm toàn văn). Riêng FR-XII-20/21 (nội dung của DN) thay BR-SEC-01 "loại trừ PII" bằng **lọc theo quyền sở hữu** (chỉ trả bản ghi của DN đang xem) `[STT9/11/15/17/19]`.
 
 ### BR-AUTH-01: Xác thực (JWT cho API)
 
@@ -1278,7 +1653,7 @@ Các API chỉ trả dữ liệu ở trạng thái publishable (đã duyệt / �
 |-----------|---------|
 | **Phát biểu** | Consumer phải xác thực qua JWT Bearer token. API verify JWT (RS256, issuer = htpldn.moj.gov.vn), kiểm tra claims: consumer_id, scope, exp |
 | **Nguồn** | PRD A6, FR-VIII-20, Architecture AD-05 |
-| **Applied in (nhóm XII)** | FR-XII-01 đến FR-XII-18 (toàn bộ — bước 1 mọi API) |
+| **Applied in (nhóm XII)** | Tất cả API nhóm XII |
 
 ### BR-INTG-02: Bảo mật API — mTLS + JWT
 
@@ -1286,7 +1661,7 @@ Các API chỉ trả dữ liệu ở trạng thái publishable (đã duyệt / �
 |-----------|---------|
 | **Phát biểu** | Mọi API outbound phải xác thực qua 2 lớp: mTLS + JWT Bearer token RS256. Áp dụng cho kết nối trực tiếp với Cổng PLQG |
 | **Nguồn** | Architecture AD-05/06 |
-| **Applied in (nhóm XII)** | FR-XII-01 đến FR-XII-18 |
+| **Applied in (nhóm XII)** | Tất cả API nhóm XII |
 | **Kiểm chứng** | Test invalid JWT = 401 |
 
 ### BR-INTG-03: Rate limit
@@ -1295,7 +1670,7 @@ Các API chỉ trả dữ liệu ở trạng thái publishable (đã duyệt / �
 |-----------|---------|
 | **Phát biểu** | 100 requests/phút/consumer |
 | **Nguồn** | PRD Section 6.16 |
-| **Applied in (nhóm XII)** | FR-XII-01 đến FR-XII-18 (bước 2 mọi API) |
+| **Applied in (nhóm XII)** | Tất cả API nhóm XII (bước 2 mọi API) |
 | **Kiểm chứng** | Load test rate limit |
 
 ### BR-INTG-04: Response time
@@ -1304,7 +1679,7 @@ Các API chỉ trả dữ liệu ở trạng thái publishable (đã duyệt / �
 |-----------|---------|
 | **Phát biểu** | Response time API < 3 giây |
 | **Nguồn** | NFR-01, PRD |
-| **Applied in (nhóm XII)** | FR-XII-01 đến FR-XII-18 |
+| **Applied in (nhóm XII)** | Tất cả API nhóm XII |
 | **Ngoại lệ** | Báo cáo nặng có thể > 3s (async) |
 
 ### BR-INTG-07: Chỉ chia sẻ dữ liệu đã duyệt/công khai
@@ -1313,7 +1688,7 @@ Các API chỉ trả dữ liệu ở trạng thái publishable (đã duyệt / �
 |-----------|---------|
 | **Phát biểu** | Chỉ chia sẻ dữ liệu đã duyệt/công khai qua API. Bản ghi draft/chờ duyệt KHÔNG xuất hiện trong API response |
 | **Nguồn** | Pattern IP-03/05 |
-| **Applied in (nhóm XII)** | FR-XII-01 đến FR-XII-18 |
+| **Applied in (nhóm XII)** | Toàn bộ outbound: FR-XII-01~18, FR-XII-20~24 |
 | **Kiểm chứng** | Test API filter trạng thái |
 
 ### BR-DATA-05: Ghi nhật ký thao tác
@@ -1322,7 +1697,7 @@ Các API chỉ trả dữ liệu ở trạng thái publishable (đã duyệt / �
 |-----------|---------|
 | **Phát biểu** | Mọi API call ghi vào AUDIT_LOG: consumer_id, endpoint, timestamp, response_code |
 | **Nguồn** | NFR-06 |
-| **Applied in (nhóm XII)** | FR-XII-01 đến FR-XII-18 (bước cuối mọi API) |
+| **Applied in (nhóm XII)** | Tất cả API nhóm XII (bước cuối mọi API) |
 
 ### BR-DATA-08: Tìm kiếm toàn văn
 
@@ -1330,7 +1705,7 @@ Các API chỉ trả dữ liệu ở trạng thái publishable (đã duyệt / �
 |-----------|---------|
 | **Phát biểu** | Hỗ trợ tìm kiếm toàn văn toàn văn |
 | **Nguồn** | FR-II-02, FR-X.1-02, FR-X.2-04 |
-| **Applied in (nhóm XII)** | FR-XII-02 (hỏi đáp), FR-XII-04 (đào tạo), FR-XII-06 (TVV), FR-XII-08 (vụ việc), FR-XII-10 (đánh giá), FR-XII-12 (biểu mẫu), FR-XII-14 (TVCS), FR-XII-16 (CT HTPL), FR-XII-18 (DN) |
+| **Applied in (nhóm XII)** | FR-XII-02 (hỏi đáp), FR-XII-04 (đào tạo), FR-XII-06 (TVV), FR-XII-08 (vụ việc), FR-XII-10 (đánh giá), FR-XII-12 (biểu mẫu), FR-XII-14 (TVCS), FR-XII-16 (CT HTPL), FR-XII-18 (DN), FR-XII-23 (Tổ chức tư vấn) |
 
 ---
 

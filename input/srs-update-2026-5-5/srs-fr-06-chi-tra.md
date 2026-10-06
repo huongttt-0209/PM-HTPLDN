@@ -92,14 +92,14 @@ graph LR
 
 **Tác nhân:** Hệ thống TTHC Bộ Tư pháp (DVC)
 
-**Preconditions:** API LGSP hoạt động, JWT hợp lệ, payload đúng schema Mẫu 01 NĐ55.
+**Preconditions:** API LGSP hoạt động, JWT hợp lệ, payload đúng schema Mẫu 01 (Phụ lục NĐ18/2026).
 
 **Inputs:**
 
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc |
 |---|----------|-----------|----------|-----------|
 | 1 | ma_ho_so_dvc | text | Y | Mã hồ sơ phía DVC |
-| 2 | ho_so_json | text (long) | Y | 18 trường Mẫu 01 NĐ55 |
+| 2 | ho_so_json | text (long) | Y | 18 trường Mẫu 01 (Phụ lục NĐ18/2026) |
 | 3 | file_dinh_kem | structured | Y | Giấy CNĐKKD, HĐ TVPL, VB TVPL |
 | 4 | ngay_nop | datetime | Y | Ngày nộp trên DVC |
 
@@ -108,14 +108,15 @@ graph LR
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 1 | Xác thực JWT + chứng chỉ mTLS | BR-AUTH-09 |
-| 2 | Phân tích và xác nhận 18 trường Mẫu 01 NĐ55 | — |
-| 3 | Kiểm tra mã số DN: nếu chưa có → tự động tạo | — |
-| 4 | Kiểm tra quy mô DN hợp lệ | BR-CALC-01 |
+| 2 | Phân tích và xác nhận 18 trường Mẫu 01 (Phụ lục NĐ18/2026) | — |
+| 3 | Kiểm tra mã số DN: nếu chưa có → tự động tạo DOANH_NGHIEP từ Phần I Mẫu 01. **Sửa theo BA chốt 2026-05-30: bắt buộc TỐI THIỂU 2 trường** (`ma_so_thue` + `ten_doanh_nghiep`). Các trường khác trong Phần I Mẫu 01 (`email`, `dia_chi`, `nguoi_dai_dien`, `quy_mo`, `nganh_nghe`, `loai_doanh_nghiep_id`, ...) — nếu Mẫu 01 có thì lưu, không có thì để trống. `tinh_thanh_id` tự suy diễn từ 2 chữ số đầu MST (mã cơ quan thuế cấp tỉnh) hoặc default theo địa chỉ Phần I nếu có. | — |
+| ~~3a~~ | ~~Tạo TAI_KHOAN cho DN~~ — **BỎ theo BA chốt 2026-05-30 (override 2026-05-10).** API LGSP chỉ tạo `DOANH_NGHIEP` từ Phần I Mẫu 01. KHÔNG tạo TAI_KHOAN, KHÔNG gửi mail. Lý do override: theo CSV UC 68 actor là Hệ thống TTHC BTP (DVC), KHÔNG phải Doanh nghiệp — DN không tương tác phần mềm tại bước này, tạo TK + gửi mail bất ngờ có thể gây bối rối. Khi DN muốn theo dõi hồ sơ chi trả → DN tự đăng ký TK qua FR-VIII-22 với MST. Nếu MST đã có sẵn → FR-VIII-26 (Quên mật khẩu) làm Claim Flow xác minh qua email lưu trong DOANH_NGHIEP. Bỏ luôn cờ `warning_thieu_email_dn` ở HO_SO_CHI_TRA (không cần thiết). | — |
+| 4 | Kiểm tra quy mô DN hợp lệ **CHỈ KHI** `quy_mo` có giá trị (đã đẩy từ Mẫu 01 hoặc DN khai trước đó). Nếu `quy_mo` trống → skip bước này, lưu HO_SO_CHI_TRA với `quy_mo = NULL`; CB NV bổ sung khi xử lý hồ sơ. **Sửa theo BA chốt 2026-05-30** — không chặn hồ sơ chi trả khi thiếu quy_mo. | BR-CALC-01 |
 | 5 | Tự động sinh mã hồ sơ: CT-{YYYYMMDD}-{SEQ} | BR-DATA-04 |
 | 6 | Tạo bản ghi HO_SO_CHI_TRA, trạng thái = CHO_TIEP_NHAN | SM-CHITRA |
 | 7 | Tính deadline SLA | BR-CALC-03 |
 | 8 | Phản hồi HTTP 200 + mã HS về DVC | — |
-| 9 | Ghi nhật ký thao tác | BR-DATA-05 |
+| 9 | Ghi nhật ký thao tác (gồm thông tin DOANH_NGHIEP mới tạo nếu có). **Sửa theo BA chốt 2026-05-30:** không còn ghi "TAI_KHOAN mới tạo" vì FR này không tạo TK. | BR-DATA-05 |
 
 **Outputs (Response về DVC):**
 
@@ -154,7 +155,7 @@ graph LR
 **Priority:** Essential | **Stability:** High
 **Màn hình:** SCR-V.II-01
 
-**Mô tả:** Xem danh sách, chi tiết hồ sơ đề nghị hỗ trợ chi phí tư vấn. Hiển thị Mẫu 01 NĐ55 (3 phần: DN, VV+TVV, cam kết).
+**Mô tả:** Xem danh sách, chi tiết hồ sơ đề nghị hỗ trợ chi phí tư vấn. Hiển thị Mẫu 01 (Phụ lục NĐ18/2026) — 5 phần I–V (18 ô). (cần CĐT xác nhận chi tiết 18 ô)
 
 **Tác nhân:** CB NV (TW/BN/ĐP)
 
@@ -231,7 +232,7 @@ graph LR
 
 **Acceptance Criteria:**
 - **Given** CB NV truy cập danh sách **When** hiển thị **Then** HS thuộc đơn vị, phân trang
-- **Given** CB NV xem chi tiết **When** chọn HS **Then** hiển thị Mẫu 01 NĐ55 (Phần I: DN, Phần II: VV+TVV, Phần III: cam kết)
+- **Given** CB NV xem chi tiết **When** chọn HS **Then** hiển thị Mẫu 01 (Phụ lục NĐ18/2026) — 5 phần I–V (18 ô; Phần I: thông tin DN). (cần CĐT xác nhận chi tiết 18 ô)
 - **Given** CB NV tìm kiếm **When** nhập từ khóa/lọc **Then** kết quả AND logic
 - **Given** CB NV xem HS CHO_TIEP_NHAN **When** nhấn Tiếp nhận **Then** trạng thái → DANG_KIEM_TRA `[GAP-V.II-02]`
 - **Given** DN xem HS CHO_TIEP_NHAN **When** nhấn Rút hồ sơ + xác nhận **Then** trạng thái → HUY `[GAP-V.II-03]`
@@ -244,7 +245,7 @@ graph LR
 **Priority:** Essential | **Stability:** High
 **Màn hình:** SCR-V.II-02 (Section 3 — Kiểm tra Hồ sơ)
 
-**Mô tả:** CB NV kiểm tra tính đầy đủ và hợp lệ của HS theo 18 trường Mẫu 01 NĐ55.
+**Mô tả:** CB NV kiểm tra tính đầy đủ và hợp lệ của HS theo 18 trường Mẫu 01 (Phụ lục NĐ18/2026).
 
 **Tác nhân:** CB NV
 
@@ -853,7 +854,7 @@ graph LR
 | # | Điều kiện |
 |---|----------|
 | PRE-01 | HO_SO_CHI_TRA.trang_thai = YEU_CAU_BO_SUNG |
-| PRE-02 | Chưa quá hạn bổ sung (≤ 5 ngày LV kể từ ngày yêu cầu) |
+| PRE-02 | Chưa quá hạn bổ sung — `elapsed(ngay_yeu_cau_bo_sung)` ≤ `cau_hinh_sla.so_ngay_bo_sung_toi_da` (loai_yeu_cau='HO_SO_CHI_TRA', QTHT cấu hình qua FR-VIII-10; default 5 ngày LV) |
 
 **Inputs:**
 
@@ -889,11 +890,11 @@ graph LR
 |---|--------------|--------|-------------------|----------|
 | E1 | Trạng thái ≠ YEU_CAU_BO_SUNG | ERR-CT-BS-01 | "Hồ sơ không ở trạng thái yêu cầu bổ sung" | ERROR |
 | E2 | File quá lớn hoặc sai định dạng | ERR-CT-BS-02 | "File không hợp lệ" | WARNING |
-| E3 | Quá hạn bổ sung (>5 ngày LV) | ERR-CT-BS-03 | "Đã quá thời hạn bổ sung" | ERROR |
+| E3 | Quá hạn bổ sung — `elapsed > cau_hinh_sla.so_ngay_bo_sung_toi_da` (HO_SO_CHI_TRA) | ERR-CT-BS-03 | "Đã quá thời hạn bổ sung ({cau_hinh_sla.so_ngay_bo_sung_toi_da} ngày làm việc theo cấu hình QTHT)" | ERROR |
 
 **Acceptance Criteria:**
 - **Given** DN nhận yêu cầu bổ sung **When** upload tài liệu hợp lệ **Then** trạng thái → DANG_KIEM_TRA + CB NV nhận thông báo
-- **Given** quá hạn 5 ngày LV **When** upload **Then** hệ thống từ chối với ERR-CT-BS-03
+- **Given** elapsed vượt `cau_hinh_sla.so_ngay_bo_sung_toi_da` (HO_SO_CHI_TRA) **When** upload **Then** hệ thống từ chối với ERR-CT-BS-03
 
 **Pháp luật:** NĐ 55/2019, Điều 9
 
@@ -963,7 +964,7 @@ graph LR
 
 **Loại màn hình:** Chi tiết (6-step Stepper + 8 Sections + auto-calc formulas)
 **FR sử dụng:** FR-V.II-02, FR-V.II-03, FR-V.II-05, FR-V.II-09, FR-V.II-11, FR-V.II-12, FR-V.II-13
-**Mô tả:** Trang chi tiết một hồ sơ chi trả. Tập trung **toàn bộ workflow** trên cùng một trang: tiếp nhận → kiểm tra Mẫu 01 NĐ55 → đánh giá theo tiêu chí (auto-calc Số tiền được duyệt) → thẩm định → phê duyệt → cập nhật kết quả thanh toán. Các section workflow hiển thị **conditional theo trạng thái SM-CHITRA**, nút hành động context-sensitive theo trạng thái và vai trò người dùng. Stepper 6 bước hiển thị tiến độ. Toàn bộ thông tin doanh nghiệp + thông tin tư vấn tự động lấy từ DVC qua LGSP (chỉ đọc).
+**Mô tả:** Trang chi tiết một hồ sơ chi trả. Tập trung **toàn bộ workflow** trên cùng một trang: tiếp nhận → kiểm tra Mẫu 01 (Phụ lục NĐ18/2026) → đánh giá theo tiêu chí (auto-calc Số tiền được duyệt) → thẩm định → phê duyệt → cập nhật kết quả thanh toán. Các section workflow hiển thị **conditional theo trạng thái SM-CHITRA**, nút hành động context-sensitive theo trạng thái và vai trò người dùng. Stepper 6 bước hiển thị tiến độ. Toàn bộ thông tin doanh nghiệp + thông tin tư vấn tự động lấy từ DVC qua LGSP (chỉ đọc).
 **UX-Spec ref:** dac-ta-man-hinh-chuc-nang-v2.md — MH-06.1a
 **Gộp từ:** MH-06.2 (Kiểm tra) + MH-06.3 (Đánh giá tiêu chí) + MH-06.4 (Thẩm định) + MH-06.5 (Phê duyệt) + MH-06.6 (Cập nhật KQ TT)
 **URL pattern:** /chi-tra/:id
@@ -980,7 +981,7 @@ graph LR
 | 5 | section-1 | Accordion I — Thông tin doanh nghiệp (chỉ đọc) | C23 | Các trường hiển thị với nhãn tiếng Việt: "Tên doanh nghiệp", "Địa chỉ", "Số điện thoại / Fax / Email", "Mã số doanh nghiệp", "Giấy chứng nhận đăng ký kinh doanh", "Ngành nghề", "Người đại diện", "Loại hình doanh nghiệp", "Quy mô doanh nghiệp" (badge: "Siêu nhỏ" / "Nhỏ" / "Vừa" — quyết định mức hỗ trợ). Tất cả tự động lấy từ DVC | — | Luôn |
 | 6 | section-2 | Accordion II — Thông tin tư vấn (chỉ đọc) | C23 | Các trường hiển thị với nhãn tiếng Việt: "Vụ việc vướng mắc", "Thời điểm phát sinh", "Tên tư vấn viên", "Tổ chức hành nghề", "Địa chỉ tư vấn viên", "Số điện thoại tư vấn viên", "Số ngày hợp đồng tư vấn pháp luật", **"Phí tư vấn"** (VNĐ, > 0), **"Số tiền đề nghị hỗ trợ"** (VNĐ, > 0). Tự động lấy từ DVC | — | Luôn |
 | 7 | section-3 | Section Kiểm tra hồ sơ | form | — | — | Khi trạng thái = "Đang kiểm tra" |
-| 8 | section-3 | Danh mục thành phần hồ sơ | Checkbox list | Checklist từ Danh mục UC106, hiển thị nhãn đầy đủ tiếng Việt: ☐ "Mẫu 01 Nghị định 55/2019", ☐ "Giấy chứng nhận đăng ký kinh doanh", ☐ "Tờ khai", ☐ "Hợp đồng tư vấn pháp luật", ☐ "Văn bản tư vấn pháp luật" | tick từng mục | Khi trạng thái = "Đang kiểm tra" |
+| 8 | section-3 | Danh mục thành phần hồ sơ | Checkbox list | Checklist từ Danh mục UC106, hiển thị nhãn đầy đủ tiếng Việt: ☐ "Mẫu 01 (Phụ lục Nghị định 18/2026/NĐ-CP)", ☐ "Giấy chứng nhận đăng ký kinh doanh", ☐ "Tờ khai", ☐ "Hợp đồng tư vấn pháp luật", ☐ "Văn bản tư vấn pháp luật" | tick từng mục | Khi trạng thái = "Đang kiểm tra" |
 | 9 | section-3 | Kết quả kiểm tra | Radio group | Nhãn 3 lựa chọn tiếng Việt: **"Đạt"** (chuyển sang "Đang đánh giá") / **"Yêu cầu bổ sung"** (chuyển sang "Yêu cầu bổ sung", tăng counter bổ sung) / **"Không đạt"** (chuyển sang "Từ chối") | — | Khi trạng thái = "Đang kiểm tra" |
 | 10 | section-3 | Lý do | C09 Textarea | Nhãn: "Lý do" (nội dung cần bổ sung hoặc nguyên nhân không đạt). Bắt buộc khi kết quả = "Yêu cầu bổ sung" hoặc "Không đạt" | — | Khi kết quả ≠ "Đạt" |
 | 11 | section-3 | Đếm lần bổ sung | Info text | Nhãn: "Lần bổ sung: {n}/3" (theo PRE-02 FR-V.II-14 + Processing FR-V.II-03 Bước 5). Highlight đỏ khi n ≥ 2 | — | Khi trạng thái = "Đang kiểm tra" |
@@ -1035,7 +1036,7 @@ graph LR
 - Công thức: `so_tien_duoc_duyet = MIN(so_tien_de_nghi, phi_tu_van × muc_ho_tro%, tran_ho_tro_nam − da_chi_trong_nam)`
 - Reset trần chi phí/năm vào 1/1 hàng năm
 - `so_tien_thuc_tra ≤ so_tien_duoc_duyet`
-- DN bổ sung hồ sơ qua DVC trong vòng 5 ngày làm việc kể từ `ngay_yeu_cau_bo_sung` (FR-V.II-14 PRE-02 + ERR-CT-BS-03). UI counter "Lần bổ sung: {n}/3" tham chiếu giới hạn nghiệp vụ tối đa 3 lần (đối chiếu Entity HO_SO_CHI_TRA.bo_sung_count CHECK BETWEEN 0 AND 3)
+- DN bổ sung hồ sơ qua DVC trong vòng `cau_hinh_sla.so_ngay_bo_sung_toi_da` ngày làm việc (loai_yeu_cau='HO_SO_CHI_TRA', default seed = 5 ngày, QTHT sửa qua FR-VIII-10) kể từ `ngay_yeu_cau_bo_sung` (FR-V.II-14 PRE-02 + ERR-CT-BS-03). UI counter "Lần bổ sung: {n}/3" tham chiếu giới hạn nghiệp vụ tối đa 3 lần (đối chiếu Entity HO_SO_CHI_TRA.bo_sung_count CHECK BETWEEN 0 AND 3)
 - **CB PD "Từ chối"** là trả về DANG_THAM_DINH (KHÔNG phải từ chối cuối). CB NV điều chỉnh xong có thể Trình PD lại → PHE_DUYET_CHI_TRA ghi nhiều bản ghi lịch sử
 - **Nhãn UI:** Tất cả label, button, badge, radio, message hiển thị bằng tiếng Việt chuẩn (không viết tắt, không dùng enum/field code như `DANG_KIEM_TRA`, `so_tien_de_nghi`). Enum chỉ dùng làm giá trị nội bộ — khi hiển thị phải map sang nhãn Việt tương ứng (xem Bảng nhãn trạng thái SCR-V.II-01)
 
@@ -1049,7 +1050,7 @@ graph LR
 
 | # | Entity | Vai trò | Mô tả |
 |---|--------|---------|-------|
-| 1 | HO_SO_CHI_TRA | owned | Hồ sơ đề nghị hỗ trợ chi phí TVPL theo Mẫu 01 NĐ55 |
+| 1 | HO_SO_CHI_TRA | owned | Hồ sơ đề nghị hỗ trợ chi phí TVPL theo Mẫu 01 (Phụ lục NĐ18/2026) |
 | 2 | DANH_GIA_HO_SO_CHI_TRA | owned | Kết quả đánh giá hồ sơ chi trả theo bộ tiêu chí. 1:1 với HO_SO_CHI_TRA |
 | 3 | THAM_DINH_HO_SO | owned | Kết quả thẩm định hồ sơ (FR-V.II-09). 1:1 với HO_SO_CHI_TRA |
 | 4 | PHE_DUYET_CHI_TRA | owned | Lịch sử quyết định phê duyệt (FR-V.II-12). N:1 với HO_SO_CHI_TRA — một HS có thể có nhiều lần phê duyệt (bị trả về rồi trình lại) |
@@ -1159,7 +1160,7 @@ erDiagram
 
 ### HO_SO_CHI_TRA (owned)
 
-**Mô tả:** Hồ sơ đề nghị hỗ trợ chi phí tư vấn pháp luật theo Mẫu 01 NĐ55. Entity trung tâm Nhóm V.II.
+**Mô tả:** Hồ sơ đề nghị hỗ trợ chi phí tư vấn pháp luật theo Mẫu 01 (Phụ lục NĐ18/2026). Entity trung tâm Nhóm V.II.
 **Tham chiếu FR:** FR-V.II-01 đến FR-V.II-14
 
 | Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
@@ -1190,7 +1191,7 @@ erDiagram
 | ly_do_tu_choi | text | N | | | Lý do từ chối (áp dụng cho state TU_CHOI) |
 | ly_do_huy | text | N | | | Lý do hủy (áp dụng cho state HUY — phân biệt với TU_CHOI) |
 | bo_sung_count | number | N | CHECK BETWEEN 0 AND 3 | 0 | Số lần đã yêu cầu bổ sung (giới hạn nghiệp vụ tối đa 3 lần — đối chiếu UI SCR-V.II-02 #11) |
-| ngay_yeu_cau_bo_sung | datetime | N | | | Thời điểm lần yêu cầu bổ sung gần nhất (track deadline 5 ngày LV — FR-V.II-14 PRE-02) |
+| ngay_yeu_cau_bo_sung | datetime | N | | | Thời điểm lần yêu cầu bổ sung gần nhất (track deadline = `cau_hinh_sla.so_ngay_bo_sung_toi_da` cho HO_SO_CHI_TRA — FR-V.II-14 PRE-02, mặc định seed 5 ngày LV) |
 
 **Volume & Growth:** ~3,000 records/năm.
 
@@ -1324,7 +1325,7 @@ stateDiagram-v2
 | DANG_KIEM_TRA | DANG_DANH_GIA | Đạt | Checklist đủ | TB DVC kết quả | FR-V.II-03/04 | — |
 | DANG_KIEM_TRA | YEU_CAU_BO_SUNG | Cần bổ sung | — | Ghi `ngay_yeu_cau_bo_sung`, tăng `bo_sung_count`, TB DN qua DVC | FR-V.II-03 | — |
 | DANG_KIEM_TRA | TU_CHOI | CB NV kiểm tra không đạt | Có lý do | Ghi `ly_do_tu_choi`, `thoi_gian_tu_choi`, `nguoi_tu_choi_id` | FR-V.II-03 | — |
-| YEU_CAU_BO_SUNG | DANG_KIEM_TRA | DN bổ sung hồ sơ qua DVC | File hợp lệ, chưa quá 5 ngày LV | Lưu file, TB CB NV, audit | FR-V.II-14 [GAP-V.II-01] | — |
+| YEU_CAU_BO_SUNG | DANG_KIEM_TRA | DN bổ sung hồ sơ qua DVC | File hợp lệ, chưa quá `cau_hinh_sla.so_ngay_bo_sung_toi_da` (HO_SO_CHI_TRA, default 5) | Lưu file, TB CB NV, audit | FR-V.II-14 [GAP-V.II-01] | — |
 | DANG_DANH_GIA | DANG_THAM_DINH | Đánh giá xong | Tính mức HT theo quy mô DN | Áp dụng BR-CALC-01/02 | FR-V.II-05 | BR-CALC-01, BR-CALC-02 |
 | DANG_THAM_DINH | CHO_PHE_DUYET | CB NV trình | KQ thẩm định Đạt | TB CB PD cùng đơn vị | FR-V.II-11 | BR-AUTH-05 |
 | DANG_THAM_DINH | TU_CHOI | CB NV thẩm định không đạt | Có nhận xét | Ghi `ly_do_tu_choi = "THAM_DINH: " + nhan_xet`, `thoi_gian_tu_choi`, `nguoi_tu_choi_id` | FR-V.II-09 | — |

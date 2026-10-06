@@ -635,7 +635,7 @@ graph LR
 **Priority:** Essential | **Stability:** High
 **Màn hình:** SCR-IV-01 (thao tác hàng loạt "Công khai") + SCR-IV-03 (nút header "Công khai lên Cổng pháp luật quốc gia")
 
-**Mô tả:** Đẩy/gỡ TVV cá nhân VÀ Tổ chức tư vấn đã duyệt lên Cổng PLQG qua API outbound trực tiếp. `[CR-02]`
+**Mô tả:** Công khai / gỡ công khai TVV cá nhân VÀ Tổ chức tư vấn đã duyệt trên Cổng PLQG theo mô hình KÉO (PULL): phần mềm chỉ đặt cờ `cong_khai` + chuyển trạng thái CONG_KHAI / HUY_CONG_KHAI; Cổng PLQG **tự kéo** dữ liệu công khai định kỳ qua API outbound (Cổng chủ động gọi sang). Phần mềm KHÔNG đẩy trực tiếp, KHÔNG gọi API ra Cổng. `[CR-02]`
 
 **Tác nhân:** CB NV (có quyền "Công khai mạng lưới tư vấn viên")
 
@@ -654,8 +654,8 @@ graph LR
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 1 | Kiểm tra đối tượng: TVV ở trạng thái CHO_KICH_HOAT HOẶC HOAT_DONG (TVV được công nhận pháp lý ngay sau Cán bộ Phê duyệt duyệt — chưa cần đợi kích hoạt TK); TC TV ở trạng thái HOAT_DONG | SM-TVV, SM-TCTV `[CR-02]` |
-| 2 | Công khai: lưu mo_ta_cong_khai + file_dinh_kem_cong_khai (nếu có), đặt cong_khai = 1, auto fill thoi_gian_dang_tai, gọi API Cổng PLQG | BR-PUBLIC-01 |
-| 3 | Hủy công khai: đặt cong_khai = 0, clear thoi_gian_dang_tai, gọi API gỡ khỏi Cổng. **Giữ lại** mo_ta_cong_khai + file_dinh_kem_cong_khai trong DB để CB tái công khai không cần nhập lại | BR-PUBLIC-02 |
+| 2 | Công khai: lưu mo_ta_cong_khai + file_dinh_kem_cong_khai (nếu có), đặt cong_khai = 1, chuyển trạng thái CONG_KHAI, auto fill thoi_gian_dang_tai. Cổng PLQG tự kéo dữ liệu công khai ở lần đồng bộ định kỳ kế tiếp | BR-PUBLIC-01 |
+| 3 | Hủy công khai: đặt cong_khai = 0, chuyển trạng thái HUY_CONG_KHAI, clear thoi_gian_dang_tai. Cổng PLQG tự cập nhật (ẩn) ở lần kéo định kỳ kế tiếp. **Giữ lại** mo_ta_cong_khai + file_dinh_kem_cong_khai trong DB để CB tái công khai không cần nhập lại | BR-PUBLIC-02 |
 | 4 | Hỗ trợ thao tác hàng loạt | — |
 | 5 | Ghi nhật ký thao tác | BR-DATA-05 |
 
@@ -672,17 +672,15 @@ graph LR
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
 | E1 | TVV không ở trạng thái CHO_KICH_HOAT/HOAT_DONG (TC TV không HOAT_DONG) | ERR-CK-01 | "Chỉ tư vấn viên đã được công nhận (Chờ kích hoạt hoặc Đang hoạt động) hoặc tổ chức đang hoạt động mới được công khai" | ERROR |
-| E2 | Thiếu mô tả công khai khi CONG_KHAI | ERR-CK-02 | "Mô tả công khai là bắt buộc trước khi đẩy lên Cổng pháp luật quốc gia" | ERROR |
-| E3 | API Cổng PLQG lỗi | WRN-CK-01 | "Cập nhật Cổng pháp luật quốc gia thất bại, sẽ thử lại" | WARNING |
+| E2 | Thiếu mô tả công khai khi CONG_KHAI | ERR-CK-02 | "Mô tả công khai là bắt buộc trước khi công khai lên Cổng pháp luật quốc gia" | ERROR |
 
 **Postconditions:**
-- TVV hiển thị/ẩn trên Cổng PLQG
-- API outbound gửi trạng thái
+- TVV được đánh dấu công khai/ẩn (cong_khai = 1/0) + trạng thái CONG_KHAI/HUY_CONG_KHAI
+- Cổng PLQG hiển thị/ẩn TVV tương ứng sau lần kéo định kỳ kế tiếp
 
 **Acceptance Criteria:**
-- **Given** CB NV chọn TVV đang hoạt động **When** nhấn "Công khai" **Then** đẩy lên Cổng PLQG
-- **Given** CB NV hủy công khai **When** xác nhận **Then** TVV bị gỡ khỏi Cổng
-- **Given** API lỗi **When** gọi API **Then** retry 3 lần, ghi log, cảnh báo
+- **Given** CB NV chọn TVV đang hoạt động **When** nhấn "Công khai" **Then** đặt cong_khai = 1 + trạng thái CONG_KHAI; Cổng PLQG tự kéo và hiển thị ở lần đồng bộ định kỳ kế tiếp
+- **Given** CB NV hủy công khai **When** xác nhận **Then** đặt cong_khai = 0 + trạng thái HUY_CONG_KHAI; Cổng PLQG tự ẩn TVV ở lần kéo định kỳ kế tiếp
 
 ---
 
@@ -895,7 +893,7 @@ graph LR
 | 2b | Nếu VO_HIEU_HOA **và trạng thái cũ = CHO_KICH_HOAT** `[v3.5+]`: bỏ qua kiểm vụ việc/hỏi đáp (TVV chưa kích hoạt tài khoản — chưa từng được phân công); chỉ yêu cầu lý do ≥ 10 ký tự để ghi nhận căn cứ vô hiệu hóa khẩn cấp | — |
 | 3 | Cập nhật trạng thái TVV, tăng `version` | — |
 | 3b | Nếu VO_HIEU_HOA **và trạng thái cũ = CHO_KICH_HOAT** `[v3.5+]`: invalidate token kích hoạt (`token_reset_mk = NULL`, `token_het_han = NOW()`), khóa tài khoản TVV (`TAI_KHOAN.trang_thai = VO_HIEU_HOA`), liên kết audit log với mã hành động `EMERGENCY_DEACTIVATE_BEFORE_ACTIVATION` | — |
-| 4 | Nếu VO_HIEU_HOA và đã công khai (`cong_khai = 1`): tự động gỡ khỏi Cổng pháp luật quốc gia (kể cả TVV ở CHO_KICH_HOAT đã được công khai theo FR-IV-08) | — |
+| 4 | Nếu VO_HIEU_HOA và đã công khai (`cong_khai = 1`): đặt `cong_khai = 0` + chuyển trạng thái Hủy công khai (kể cả TVV ở CHO_KICH_HOAT đã được công khai theo FR-IV-08); Cổng pháp luật quốc gia tự ẩn ở lần kéo định kỳ kế tiếp | BR-PUBLIC-02 |
 | 5 | Gửi thông báo: (a) cho TVV/CG (chủ hồ sơ — push realtime nếu đang có session); (b) `[v3.5+]` nếu transition CHO_KICH_HOAT → VO_HIEU_HOA: thêm thông báo cho Cán bộ Phê duyệt cùng đơn vị đã duyệt hồ sơ (vì hành động này đảo ngược phần nào kết quả phê duyệt) | — |
 | 6 | Ghi nhật ký thao tác | BR-DATA-05 |
 
@@ -986,7 +984,7 @@ graph LR
 | 2 | Kiểm tra transition hợp lệ theo SM-TCTV | SM-TCTV |
 | 3 | Nếu VO_HIEU_HOA: kiểm tra **KHÔNG có TVV đang liên kết hoạt động** (TVV_TO_CHUC.trang_thai = 'KICH_HOAT' AND TU_VAN_VIEN.trang_thai = 'HOAT_DONG') | — |
 | 4 | Cập nhật `trang_thai` TC TV, tăng `version` | — |
-| 5 | Nếu VO_HIEU_HOA và đã công khai: tự động gỡ khỏi Cổng PLQG | — |
+| 5 | Nếu VO_HIEU_HOA và đã công khai: đặt `cong_khai = 0` + chuyển trạng thái Hủy công khai; Cổng PLQG tự ẩn ở lần kéo định kỳ kế tiếp | BR-PUBLIC-02 |
 | 6 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Outputs:**
@@ -1115,11 +1113,10 @@ graph LR
 | E1 | Tên tổ chức trống | ERR-TCTV-01 | "Tên tổ chức là bắt buộc" | ERROR |
 | E2 | Xóa TC TV có TVV đang hoạt động | ERR-TCTV-02 | "Tổ chức đang có tư vấn viên hoạt động, không thể xóa" | ERROR |
 | E3 | Công khai khi trạng thái ≠ HOAT_DONG | ERR-TCTV-03 | "Chỉ tổ chức đang hoạt động mới được công khai" | ERROR |
-| E4 | API Cổng PLQG lỗi khi công khai | WRN-TCTV-04 | "Cập nhật Cổng pháp luật quốc gia thất bại, sẽ thử lại" | WARNING |
-| E5 | File vượt 20MB/file | ERR-TCTV-05 | "File tối đa 20MB/file" | ERROR |
-| E6 | Thiếu lĩnh vực | ERR-TCTV-06 | "Chọn ít nhất 1 lĩnh vực pháp lý" | ERROR |
-| E7 | Email sai format | ERR-TCTV-07 | "Email không đúng định dạng" | ERROR |
-| E8 | Virus scan phát hiện | ERR-TCTV-08 | "File {ten_file} chứa mã độc, bị từ chối" | ERROR |
+| E4 | File vượt 20MB/file | ERR-TCTV-05 | "File tối đa 20MB/file" | ERROR |
+| E5 | Thiếu lĩnh vực | ERR-TCTV-06 | "Chọn ít nhất 1 lĩnh vực pháp lý" | ERROR |
+| E6 | Email sai format | ERR-TCTV-07 | "Email không đúng định dạng" | ERROR |
+| E7 | Virus scan phát hiện | ERR-TCTV-08 | "File {ten_file} chứa mã độc, bị từ chối" | ERROR |
 
 **Acceptance Criteria:**
 - **Given** CB NV truy cập "Quản lý tổ chức tư vấn" **When** hiển thị **Then** danh sách TC TV thuộc đơn vị, 3 tab trạng thái
@@ -1402,11 +1399,10 @@ Menu: Quản lý mạng lưới tư vấn viên
 | MD-CONG-KHAI | Công khai lên Cổng pháp luật quốc gia | **Form nhập** trước khi xác nhận: (a) **Mô tả công khai** — text dài, **bắt buộc**, max 5000 ký tự (nội dung hiển thị trên Cổng pháp luật quốc gia); (b) **File đính kèm** — PDF/DOC/DOCX/XLS/XLSX, max 20MB/file, nhiều file, tùy chọn (file giới thiệu cá nhân để DN tham khảo); (c) Cảnh báo: "Sau khi công khai, thông tin **{tên}** sẽ hiển thị toàn quốc trên Cổng pháp luật quốc gia. Bạn có thể hủy công khai bất kỳ lúc nào — mô tả + file vẫn được giữ lại để tái công khai sau." | Công khai |
 | MD-HUY-CONG-KHAI | Xác nhận hủy công khai? | Thông tin **{tên}** sẽ bị gỡ khỏi Cổng pháp luật quốc gia. Bạn có thể công khai lại bất kỳ lúc nào. | Hủy công khai |
 | MD-TAM-DUNG | Xác nhận tạm dừng? | **{tên}** sẽ bị tạm dừng và không thể nhận phân công vụ việc mới. Bạn có thể kích hoạt lại bất kỳ lúc nào. Vui lòng nhập lý do (tối thiểu 10 ký tự). | Tạm dừng |
-| MD-VO-HIEU-HOA | Xác nhận vô hiệu hóa? | **{tên}** sẽ bị vô hiệu hóa và tự động gỡ khỏi Cổng pháp luật quốc gia. Hành động này có thể khôi phục sau. Vui lòng nhập lý do (tối thiểu 10 ký tự). | Vô hiệu hóa |
-| MD-VO-HIEU-HOA-KICH-HOAT `[v3.5+]` | Xác nhận vô hiệu hóa khẩn cấp? | **{tên}** đang ở trạng thái Chờ kích hoạt tài khoản (đã được Cán bộ Phê duyệt duyệt nhưng chưa bấm link kích hoạt). Vô hiệu hóa khẩn cấp sẽ: (1) huỷ link kích hoạt đã gửi qua mail; (2) khóa tài khoản tư vấn viên; (3) tự động gỡ khỏi Cổng pháp luật quốc gia nếu đã công khai; (4) gửi thông báo cho Cán bộ Phê duyệt đã duyệt hồ sơ. Hành động này có thể khôi phục sau. Vui lòng nhập lý do (tối thiểu 10 ký tự — ví dụ: phát hiện gian lận hồ sơ, tư vấn viên mất khả năng nhận, email nhập sai không thể cứu). | Vô hiệu hóa khẩn cấp |
+| MD-VO-HIEU-HOA | Xác nhận vô hiệu hóa? | **{tên}** sẽ bị vô hiệu hóa; nếu đang công khai thì chuyển sang Hủy công khai (Cổng pháp luật quốc gia tự ẩn ở lần kéo kế tiếp). Hành động này có thể khôi phục sau. Vui lòng nhập lý do (tối thiểu 10 ký tự). | Vô hiệu hóa |
+| MD-VO-HIEU-HOA-KICH-HOAT `[v3.5+]` | Xác nhận vô hiệu hóa khẩn cấp? | **{tên}** đang ở trạng thái Chờ kích hoạt tài khoản (đã được Cán bộ Phê duyệt duyệt nhưng chưa bấm link kích hoạt). Vô hiệu hóa khẩn cấp sẽ: (1) huỷ link kích hoạt đã gửi qua mail; (2) khóa tài khoản tư vấn viên; (3) nếu đang công khai thì đặt `cong_khai = 0` + chuyển Hủy công khai (Cổng pháp luật quốc gia tự ẩn ở lần kéo kế tiếp); (4) gửi thông báo cho Cán bộ Phê duyệt đã duyệt hồ sơ. Hành động này có thể khôi phục sau. Vui lòng nhập lý do (tối thiểu 10 ký tự — ví dụ: phát hiện gian lận hồ sơ, tư vấn viên mất khả năng nhận, email nhập sai không thể cứu). | Vô hiệu hóa khẩn cấp |
 | MD-XOA | Xác nhận xóa? | **{tên}** sẽ bị xóa khỏi danh sách. Dữ liệu vẫn được lưu trữ phục vụ tra cứu (xóa mềm). | Xóa |
 | MD-PHE-DUYET-HANG-LOAT | Xác nhận phê duyệt hàng loạt? | Bạn đang phê duyệt **{N}** hồ sơ. Vui lòng nhập Số quyết định cho từng hồ sơ trong bảng dưới đây. | Phê duyệt {N} hồ sơ |
-| MD-CONG-KHAI-PARTIAL-FAIL | Báo cáo kết quả công khai | Đã công khai thành công **{N-K}/{N}** hồ sơ. **{K}** hồ sơ thất bại do lỗi kết nối Cổng pháp luật quốc gia. | Thử lại {K} hồ sơ |
 
 ### SCR-IV-01: Danh sách Tư vấn viên (trang chính)
 
@@ -1458,9 +1454,9 @@ Menu: Quản lý mạng lưới tư vấn viên
 - **Xóa mềm:** chỉ xóa khi không có vụ việc đang xử lý liên quan; nếu có → từ chối với thông báo "Tư vấn viên đang có vụ việc chưa hoàn thành".
 - **Phê duyệt hàng loạt** (vai trò Cán bộ Phê duyệt, tab "Chờ phê duyệt"): chọn nhiều dòng → nút "Phê duyệt hàng loạt" → mở MD-PHE-DUYET-HANG-LOAT (bảng nhập Số quyết định cho từng hồ sơ) → áp dụng cho tất cả.
 - **Từ chối từng dòng** (KHÔNG có hàng loạt): nút "Từ chối" chỉ ở cột Hành động từng dòng — mỗi hồ sơ nhập lý do riêng qua MD-TU-CHOI.
-- **Công khai hàng loạt** (tab "Đang hoạt động"): chọn nhiều dòng → nút "Công khai lên Cổng pháp luật quốc gia" → mở MD-CONG-KHAI → gọi API. Chỉ áp dụng cho dòng có trạng thái Đang hoạt động. Nếu lỗi: thử lại 3 lần; lỗi cục bộ: hiển thị MD-CONG-KHAI-PARTIAL-FAIL với nút thử lại.
-- **Hủy công khai hàng loạt** (tab "Đang hoạt động"): chọn dòng đã công khai → nút "Hủy công khai" → MD-HUY-CONG-KHAI → gọi API gỡ.
-- **Tham chiếu nội bộ:** vai trò + dữ liệu lọc tuân theo BR-AUTH-08 (phân quyền theo đơn vị) + BR-FLOW-02 (phê duyệt hàng loạt / từ chối từng dòng); mã lỗi WRN-TVV-01 (vượt 10.000 dòng), ERR-TVV-05 (xóa khi có VV), ERR-CK-01 (công khai khi không HOAT_DONG), WRN-CK-01 (API lỗi).
+- **Công khai hàng loạt** (tab "Đang hoạt động"): chọn nhiều dòng → nút "Công khai lên Cổng pháp luật quốc gia" → mở MD-CONG-KHAI → đặt `cong_khai = 1` + chuyển trạng thái Công khai cho các dòng đã chọn. Chỉ áp dụng cho dòng có trạng thái Đang hoạt động. Cổng pháp luật quốc gia tự kéo (PULL) dữ liệu công khai ở lần đồng bộ định kỳ kế tiếp; phần mềm KHÔNG gọi API ra Cổng.
+- **Hủy công khai hàng loạt** (tab "Đang hoạt động"): chọn dòng đã công khai → nút "Hủy công khai" → MD-HUY-CONG-KHAI → đặt `cong_khai = 0` + chuyển trạng thái Hủy công khai; Cổng tự ẩn ở lần kéo kế tiếp.
+- **Tham chiếu nội bộ:** vai trò + dữ liệu lọc tuân theo BR-AUTH-08 (phân quyền theo đơn vị) + BR-FLOW-02 (phê duyệt hàng loạt / từ chối từng dòng) + BR-PUBLIC-01/02/03 (mô hình KÉO công khai); mã lỗi WRN-TVV-01 (vượt 10.000 dòng), ERR-TVV-05 (xóa khi có VV), ERR-CK-01 (công khai khi không HOAT_DONG).
 
 ---
 
@@ -1545,11 +1541,11 @@ Menu: Quản lý mạng lưới tư vấn viên
 | 3 | header | Thẻ thông tin chính | thẻ hiển thị | Ảnh chân dung 80x100 + Họ tên (đậm 20px) + Mã tư vấn viên + Trạng thái (badge lớn theo § 3.0) + Điểm đánh giá trung bình (sao) + Ngày công nhận | — | Luôn |
 | 4 | header | Nút **Sửa hồ sơ** | nút phụ | "Sửa hồ sơ" | Click → SCR-IV-02 | Vai trò = Cán bộ Nghiệp vụ HOẶC chủ hồ sơ; trạng thái khác Vô hiệu hóa |
 | 6 | header | Nút **Bắt đầu thẩm định** | nút chính | "Bắt đầu thẩm định" | Click → ngầm chuyển trạng thái Mới đăng ký/Chờ thẩm định → Đang thẩm định + chuyển sang tab Thẩm định | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái ∈ {Mới đăng ký, Chờ thẩm định} |
-| 7 | header | Nút **Cập nhật trạng thái** | nút phụ | "Cập nhật trạng thái" | Click → mở hộp thoại chọn trạng thái mới + lý do (≥ 10 ký tự) → áp dụng MD-TAM-DUNG / MD-VO-HIEU-HOA / MD-VO-HIEU-HOA-KICH-HOAT tương ứng. **Tùy chọn trạng thái mới hiển thị theo trạng thái hiện tại:** (a) Đang hoạt động → hiển thị "Tạm dừng" + "Vô hiệu hóa"; (b) Tạm dừng → hiển thị "Kích hoạt lại (Đang hoạt động)" + "Vô hiệu hóa"; (c) Vô hiệu hóa → hiển thị "Khôi phục (Đang hoạt động)"; (d) **Chờ kích hoạt tài khoản `[v3.5+]` → CHỈ hiển thị "Vô hiệu hóa khẩn cấp"** (KHÔNG có Tạm dừng vì TVV chưa từng hoạt động). Khi vô hiệu hóa: tự động gỡ khỏi Cổng pháp luật quốc gia nếu đã công khai; nếu trạng thái cũ là Chờ kích hoạt → đồng thời huỷ token kích hoạt + khóa tài khoản | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái ∈ {**Chờ kích hoạt tài khoản** `[v3.5+]`, Đang hoạt động, Tạm dừng, Vô hiệu hóa} |
+| 7 | header | Nút **Cập nhật trạng thái** | nút phụ | "Cập nhật trạng thái" | Click → mở hộp thoại chọn trạng thái mới + lý do (≥ 10 ký tự) → áp dụng MD-TAM-DUNG / MD-VO-HIEU-HOA / MD-VO-HIEU-HOA-KICH-HOAT tương ứng. **Tùy chọn trạng thái mới hiển thị theo trạng thái hiện tại:** (a) Đang hoạt động → hiển thị "Tạm dừng" + "Vô hiệu hóa"; (b) Tạm dừng → hiển thị "Kích hoạt lại (Đang hoạt động)" + "Vô hiệu hóa"; (c) Vô hiệu hóa → hiển thị "Khôi phục (Đang hoạt động)"; (d) **Chờ kích hoạt tài khoản `[v3.5+]` → CHỈ hiển thị "Vô hiệu hóa khẩn cấp"** (KHÔNG có Tạm dừng vì TVV chưa từng hoạt động). Khi vô hiệu hóa: nếu đang công khai thì đặt `cong_khai = 0` + chuyển Hủy công khai (Cổng pháp luật quốc gia tự ẩn ở lần kéo kế tiếp); nếu trạng thái cũ là Chờ kích hoạt → đồng thời huỷ token kích hoạt + khóa tài khoản | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái ∈ {**Chờ kích hoạt tài khoản** `[v3.5+]`, Đang hoạt động, Tạm dừng, Vô hiệu hóa} |
 | 8 | header | Nút **Phê duyệt** | nút chính | "Phê duyệt" | Click → mở MD-PHE-DUYET (form: Số quyết định * + Ý kiến phê duyệt) → đặt trạng thái Đang hoạt động + ghi ngày công nhận, người duyệt. Có khóa lạc quan chống 2 người duyệt cùng lúc | Vai trò = Cán bộ Phê duyệt cùng đơn vị với Cán bộ Nghiệp vụ thẩm định; trạng thái = Chờ phê duyệt |
 | 9 | header | Nút **Từ chối** | nút nguy hiểm (đỏ) | "Từ chối" | Click → mở MD-TU-CHOI (lý do bắt buộc ≥ 10 ký tự) → đặt trạng thái Đã từ chối + ghi người từ chối, lý do | Vai trò = Cán bộ Phê duyệt cùng đơn vị; trạng thái = Chờ phê duyệt |
-| 10 | header | Nút **Công khai lên Cổng pháp luật quốc gia** | nút chính | "Công khai" (tooltip: "Đẩy thông tin lên Cổng pháp luật quốc gia") | Click → MD-CONG-KHAI (form nhập mô tả + file đính kèm) → lưu mo_ta_cong_khai + file_dinh_kem_cong_khai → gọi API Cổng pháp luật quốc gia → đặt cong_khai = 1, ghi thời gian đăng tải | Vai trò = Cán bộ Nghiệp vụ có quyền công khai; trạng thái = Chờ kích hoạt tài khoản HOẶC Đang hoạt động (TVV được công khai ngay sau khi Cán bộ Phê duyệt duyệt — không cần đợi kích hoạt TK) AND chưa công khai |
-| 11 | header | Nút **Hủy công khai** | nút phụ (cảnh báo) | "Hủy công khai" | Click → MD-HUY-CONG-KHAI → gọi API gỡ khỏi Cổng pháp luật quốc gia | Vai trò = Cán bộ Nghiệp vụ có quyền công khai; đã công khai (cong_khai = 1) |
+| 10 | header | Nút **Công khai lên Cổng pháp luật quốc gia** | nút chính | "Công khai" (tooltip: "Công khai thông tin lên Cổng pháp luật quốc gia") | Click → MD-CONG-KHAI (form nhập mô tả + file đính kèm) → lưu mo_ta_cong_khai + file_dinh_kem_cong_khai → đặt cong_khai = 1 + chuyển trạng thái Công khai, ghi thời gian đăng tải (Cổng pháp luật quốc gia tự kéo ở lần đồng bộ kế tiếp) | Vai trò = Cán bộ Nghiệp vụ có quyền công khai; trạng thái = Chờ kích hoạt tài khoản HOẶC Đang hoạt động (TVV được công khai ngay sau khi Cán bộ Phê duyệt duyệt — không cần đợi kích hoạt TK) AND chưa công khai |
+| 11 | header | Nút **Hủy công khai** | nút phụ (cảnh báo) | "Hủy công khai" | Click → MD-HUY-CONG-KHAI → đặt cong_khai = 0 + chuyển trạng thái Hủy công khai (Cổng pháp luật quốc gia tự ẩn ở lần kéo kế tiếp) | Vai trò = Cán bộ Nghiệp vụ có quyền công khai; đã công khai (cong_khai = 1) |
 
 #### Thành phần màn hình — 5 Tab
 
@@ -1637,7 +1633,7 @@ Menu: Quản lý mạng lưới tư vấn viên
 | 22 | bảng | Trạng thái | badge | Theo bảng ánh xạ § 3.0 | — |
 | 23 | bảng | Công khai | toggle | "Đã công khai" (xanh) / "Chưa công khai" (xám) | Click → mở MD-CONG-KHAI hoặc MD-HUY-CONG-KHAI; chỉ bật được khi trạng thái = Đang hoạt động |
 | 24 | bảng | Hành động | nhóm icon + dropdown "..." | 2 icon thường: Xem (mắt) → SCR-IV-NEW-03; Sửa (bút chì) → SCR-IV-NEW-02 (ẩn nếu trạng thái Vô hiệu hóa). Dropdown "..." chứa: **"Trình phê duyệt"** (chỉ khi Mới đăng ký hoặc Đã từ chối, có Giấy ĐKHĐ); **"Phê duyệt"** (vai trò Cán bộ Phê duyệt cùng đơn vị, trạng thái Chờ phê duyệt); **"Từ chối"** (vai trò Cán bộ Phê duyệt cùng đơn vị, trạng thái Chờ phê duyệt); **"Cập nhật trạng thái"** (Cán bộ Nghiệp vụ cùng đơn vị, trạng thái Đang hoạt động/Tạm dừng/Vô hiệu hóa); **"Xóa"** (chỉ khi không có tư vấn viên liên kết) | Click → tương ứng (mỗi mục mở modal MD-* tương ứng) |
-| 25 | thao tác hàng loạt | Nút **Công khai** / **Hủy công khai** (tab "Đang hoạt động") | nhóm nút | Hiển thị khi chọn ≥ 1 dòng | Mở MD-CONG-KHAI hoặc MD-HUY-CONG-KHAI; gọi API Cổng pháp luật quốc gia với cơ chế thử lại |
+| 25 | thao tác hàng loạt | Nút **Công khai** / **Hủy công khai** (tab "Đang hoạt động") | nhóm nút | Hiển thị khi chọn ≥ 1 dòng | Mở MD-CONG-KHAI hoặc MD-HUY-CONG-KHAI; đặt `cong_khai = 1/0` + chuyển trạng thái Công khai / Hủy công khai cho các dòng đã chọn (Cổng pháp luật quốc gia tự kéo / tự ẩn ở lần đồng bộ kế tiếp) |
 | 26 | thao tác hàng loạt | Nút **Phê duyệt hàng loạt** (tab "Chờ phê duyệt") | nút | Vai trò Cán bộ Phê duyệt cùng đơn vị | Mở MD-PHE-DUYET-HANG-LOAT (bảng nhập Số quyết định cho từng Tổ chức tư vấn); Từ chối phải từng dòng theo BR-FLOW-02 |
 | 27 | trạng thái rỗng | Empty state | minh họa + label | Khi tab không có bản ghi: hình ảnh + "Chưa có tổ chức tư vấn nào trong mục này" + nút "+ Thêm tổ chức tư vấn" (chỉ ở tab Mới đăng ký) | Click → SCR-IV-NEW-02 |
 | 28 | phân trang | Phân trang | pagination | 20 mục/trang; hiển thị tổng mỗi tab | — |
@@ -1648,7 +1644,7 @@ Menu: Quản lý mạng lưới tư vấn viên
 - **Xóa mềm:** chỉ xóa khi không có tư vấn viên đang liên kết hoạt động.
 - **Phê duyệt hàng loạt** (tab "Chờ phê duyệt"): mở MD-PHE-DUYET-HANG-LOAT (bảng nhập Số quyết định cho từng dòng) → áp dụng tất cả.
 - **Từ chối từng dòng** (KHÔNG có hàng loạt): nút "Từ chối" chỉ ở dropdown Hành động từng dòng — mỗi tổ chức nhập lý do riêng qua MD-TU-CHOI.
-- **Tham chiếu nội bộ:** quy tắc BR-AUTH-08 (phân quyền theo đơn vị), BR-AUTH-05 (Cán bộ Phê duyệt cùng đơn vị), BR-FLOW-02 (phê duyệt hàng loạt / từ chối từng dòng), BR-PUBLIC-01/02/03 (công khai); mã lỗi WRN-TCTV-04 (lỗi API Cổng).
+- **Tham chiếu nội bộ:** quy tắc BR-AUTH-08 (phân quyền theo đơn vị), BR-AUTH-05 (Cán bộ Phê duyệt cùng đơn vị), BR-FLOW-02 (phê duyệt hàng loạt / từ chối từng dòng), BR-PUBLIC-01/02/03 (mô hình KÉO công khai).
 
 ---
 
@@ -1699,7 +1695,7 @@ Menu: Quản lý mạng lưới tư vấn viên
 - Cán bộ Nghiệp vụ: xem + sửa + trình phê duyệt + cập nhật trạng thái + công khai (Tổ chức tư vấn thuộc đơn vị)
 - Cán bộ Phê duyệt cùng đơn vị: xem + phê duyệt / từ chối
 
-**Mô tả:** Hồ sơ chi tiết Tổ chức tư vấn hợp nhất quy trình trên 1 trang: xem thông tin → trình phê duyệt → phê duyệt / từ chối → công khai → cập nhật trạng thái. Khi vô hiệu hóa, hệ thống tự động gỡ khỏi Cổng pháp luật quốc gia nếu đã công khai.
+**Mô tả:** Hồ sơ chi tiết Tổ chức tư vấn hợp nhất quy trình trên 1 trang: xem thông tin → trình phê duyệt → phê duyệt / từ chối → công khai → cập nhật trạng thái. Khi vô hiệu hóa, nếu đang công khai thì hệ thống đặt `cong_khai = 0` + chuyển Hủy công khai (Cổng pháp luật quốc gia tự ẩn ở lần kéo kế tiếp).
 
 #### Thành phần màn hình — Header + Nút hành động
 
@@ -1713,7 +1709,7 @@ Menu: Quản lý mạng lưới tư vấn viên
 | 6 | header | Nút **Phê duyệt** | nút chính | "Phê duyệt" | Click → mở MD-PHE-DUYET (form: Số quyết định * + Ý kiến phê duyệt) → đặt trạng thái Đang hoạt động + ghi ngày công nhận, người duyệt. Có khóa lạc quan chống 2 người duyệt cùng lúc | Vai trò = Cán bộ Phê duyệt cùng đơn vị với Cán bộ Nghiệp vụ tạo; trạng thái = Chờ phê duyệt |
 | 7 | header | Nút **Từ chối** | nút nguy hiểm (đỏ) | "Từ chối" | Click → mở MD-TU-CHOI (lý do bắt buộc ≥ 10 ký tự) → đặt trạng thái Đã từ chối + ghi người từ chối, lý do + thông báo Cán bộ Nghiệp vụ | Vai trò = Cán bộ Phê duyệt cùng đơn vị; trạng thái = Chờ phê duyệt |
 | 8 | header | Nút **Cập nhật trạng thái** | nút phụ | "Cập nhật trạng thái" | Click → mở hộp thoại chọn trạng thái mới (Tạm dừng / Khôi phục / Vô hiệu hóa) + lý do (≥ 10 ký tự) → áp dụng MD-TAM-DUNG hoặc MD-VO-HIEU-HOA. Vô hiệu hóa: kiểm không có tư vấn viên đang liên kết hoạt động; nếu có → từ chối với cảnh báo "Tổ chức đang có {N} tư vấn viên đang hoạt động liên kết, không thể vô hiệu hóa" | Vai trò = Cán bộ Nghiệp vụ cùng đơn vị; trạng thái ∈ {Đang hoạt động, Tạm dừng, Vô hiệu hóa} |
-| 9 | header | Nút **Công khai** / **Hủy công khai** | nút chính / phụ | "Công khai" hoặc "Hủy công khai" tùy trạng thái cong_khai | Click → MD-CONG-KHAI hoặc MD-HUY-CONG-KHAI → gọi API Cổng pháp luật quốc gia (thử lại 3 lần nếu lỗi); thất bại → MD-CONG-KHAI-PARTIAL-FAIL | Vai trò = Cán bộ Nghiệp vụ có quyền công khai; trạng thái = Đang hoạt động |
+| 9 | header | Nút **Công khai** / **Hủy công khai** | nút chính / phụ | "Công khai" hoặc "Hủy công khai" tùy trạng thái cong_khai | Click → MD-CONG-KHAI hoặc MD-HUY-CONG-KHAI → đặt `cong_khai = 1/0` + chuyển trạng thái Công khai / Hủy công khai (Cổng pháp luật quốc gia tự kéo / tự ẩn ở lần đồng bộ kế tiếp) | Vai trò = Cán bộ Nghiệp vụ có quyền công khai; trạng thái = Đang hoạt động |
 
 #### Thành phần màn hình — 3 Tab
 
@@ -1733,12 +1729,12 @@ Menu: Quản lý mạng lưới tư vấn viên
 - **Phê duyệt** (Chờ phê duyệt → Đang hoạt động): Cán bộ Phê duyệt cùng đơn vị với Cán bộ Nghiệp vụ tạo. Bắt buộc nhập Số quyết định công bố. Khóa lạc quan chống 2 người cùng duyệt.
 - **Từ chối** (Chờ phê duyệt → Đã từ chối): bắt buộc lý do tối thiểu 10 ký tự. Sau từ chối, Cán bộ Nghiệp vụ có thể sửa và trình lại.
 - **Cập nhật trạng thái** (sau khi đã Hoạt động): chuyển Tạm dừng / Khôi phục / Vô hiệu hóa. Vô hiệu hóa: kiểm không có tư vấn viên đang liên kết hoạt động.
-- **Khi vô hiệu hóa:** tự động gỡ khỏi Cổng pháp luật quốc gia nếu đã công khai.
-- **Công khai / Hủy công khai:** gọi API với cơ chế thử lại 3 lần; nếu vẫn thất bại → đưa vào hàng đợi thử lại 5 phút, tối đa 10 lần.
+- **Khi vô hiệu hóa:** nếu đang công khai thì đặt `cong_khai = 0` + chuyển Hủy công khai; Cổng pháp luật quốc gia tự ẩn ở lần kéo kế tiếp.
+- **Công khai / Hủy công khai:** phần mềm chỉ đặt `cong_khai = 1/0` + chuyển trạng thái Công khai / Hủy công khai; Cổng pháp luật quốc gia chủ động kéo (PULL) dữ liệu công khai theo chu kỳ đồng bộ định kỳ. Phần mềm KHÔNG gọi API ra Cổng, KHÔNG hàng đợi gửi lại (theo BR-PUBLIC-03).
 
 **Tham chiếu nội bộ:**
 - Quy tắc nghiệp vụ: BR-AUTH-05 (Cán bộ Phê duyệt cùng đơn vị), BR-AUTH-08 (phân quyền theo đơn vị), BR-PUBLIC-01/02/03 (công khai và hủy công khai).
-- Mã lỗi: ERR-TT-TC-02 (vô hiệu hóa khi có TVV liên kết), ERR-PD-TC-04 (xung đột khóa lạc quan), WRN-TCTV-04 (lỗi API Cổng).
+- Mã lỗi: ERR-TT-TC-02 (vô hiệu hóa khi có TVV liên kết), ERR-PD-TC-04 (xung đột khóa lạc quan).
 
 ---
 
@@ -2327,7 +2323,7 @@ stateDiagram-v2
 | DANG_THAM_DINH | TU_CHOI | Cán bộ Nghiệp vụ kết luận KHÔNG ĐẠT | ket_luan = KHONG_DAT, có `ly_do` | Thông báo TVV/CG (chủ hồ sơ) + ghi lý do | FR-IV-06 | BR-FLOW-04 |
 | CHO_PHE_DUYET | CHO_KICH_HOAT | Cán bộ Phê duyệt duyệt | Cùng đơn vị (BR-AUTH-05), có `so_quyet_dinh` | Audit, ngay_cong_nhan, thoi_gian_duyet, nguoi_duyet, **hệ thống tự cấp tài khoản cho TVV (qua FR-VIII-15) + gửi mail kích hoạt** | FR-IV-07 | BR-AUTH-05 |
 | CHO_KICH_HOAT | HOAT_DONG | TVV bấm link kích hoạt + đặt mật khẩu lần đầu | Token kích hoạt hợp lệ | Tài khoản chuyển HOAT_DONG, TVV chuyển HOAT_DONG (đồng thời) | FR-VIII-26 (Quên mật khẩu / Kích hoạt tài khoản lần đầu) | — |
-| CHO_KICH_HOAT | VO_HIEU_HOA | Cán bộ Nghiệp vụ vô hiệu hóa khẩn cấp | Có lý do ≥ 10 ký tự (3 kịch bản: phát hiện gian lận hồ sơ sau khi Cán bộ Phê duyệt duyệt; TVV mất khả năng nhận tài khoản — bệnh, tai nạn, đổi ý; email TVV nhập sai không thể cứu vãn) | Invalidate token kích hoạt (`token_reset_mk` = NULL), khóa tài khoản TVV (TAI_KHOAN.trang_thai = VO_HIEU_HOA), tự động gỡ khỏi Cổng pháp luật quốc gia nếu đã công khai (`cong_khai = 1`), ghi nhật ký thao tác | FR-IV-12 | — |
+| CHO_KICH_HOAT | VO_HIEU_HOA | Cán bộ Nghiệp vụ vô hiệu hóa khẩn cấp | Có lý do ≥ 10 ký tự (3 kịch bản: phát hiện gian lận hồ sơ sau khi Cán bộ Phê duyệt duyệt; TVV mất khả năng nhận tài khoản — bệnh, tai nạn, đổi ý; email TVV nhập sai không thể cứu vãn) | Invalidate token kích hoạt (`token_reset_mk` = NULL), khóa tài khoản TVV (TAI_KHOAN.trang_thai = VO_HIEU_HOA), nếu đang công khai (`cong_khai = 1`) thì đặt `cong_khai = 0` + chuyển Hủy công khai (Cổng pháp luật quốc gia tự ẩn ở lần kéo kế tiếp), ghi nhật ký thao tác | FR-IV-12 | — |
 | CHO_PHE_DUYET | TU_CHOI | Cán bộ Phê duyệt từ chối | Có lý do ≥ 10 ký | thoi_gian_tu_choi, nguoi_tu_choi, ly_do_tu_choi, thông báo Cán bộ Nghiệp vụ + TVV/CG (chủ hồ sơ) | FR-IV-07 | BR-FLOW-04 |
 | TU_CHOI | CHO_THAM_DINH | TVV/CG (chủ hồ sơ) nộp lại hồ sơ | KHÔNG có cooldown (BA chốt 2026-05-03) | Reset kết quả thẩm định cũ, thông báo Cán bộ Nghiệp vụ | FR-IV-03 | — |
 | HOAT_DONG | TAM_DUNG | Cán bộ Nghiệp vụ quyết định | Không theo điều kiện tự động | Audit log | FR-IV-12 | — |
@@ -2490,8 +2486,8 @@ stateDiagram-v2
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm IV) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|---------------------|---------|------------|
 | BR-PUBLIC-01 | TVV cá nhân được công khai khi trạng thái thuộc {CHO_KICH_HOAT, HOAT_DONG}; Tổ chức TV chỉ được công khai khi trạng thái HOAT_DONG. Không cho công khai khi TVV ở MOI_DANG_KY, CHO_THAM_DINH, DANG_THAM_DINH, YEU_CAU_BO_SUNG, CHO_PHE_DUYET, TU_CHOI, TAM_DUNG, VO_HIEU_HOA. | PRD + BA chốt v3.5 | FR-IV-08, FR-IV-NEW-01 | TVV ở CHO_KICH_HOAT đã được công nhận pháp lý nhưng chưa kích hoạt tài khoản lần đầu; vẫn được công khai theo FR-IV-08 | Test TVV CHO_KICH_HOAT/HOAT_DONG công khai được; TVV TAM_DUNG không công khai được; TC TV chỉ HOAT_DONG công khai được |
-| BR-PUBLIC-02 | Khi hủy công khai hoặc vô hiệu hóa: tự động gỡ khỏi Cổng PLQG qua API outbound | PRD | FR-IV-08, FR-IV-12, FR-IV-NEW-02 | — | Test VO_HIEU_HOA → API gọi gỡ Cổng |
-| BR-PUBLIC-03 | API outbound retry 3 lần (backoff 1s/2s/4s), timeout 30s/request. Fail → queue retry 5 phút, max 10 lần, email admin | PRD | FR-IV-08 | — | Test API fail 3 lần → queue |
+| BR-PUBLIC-02 | Khi hủy công khai hoặc vô hiệu hóa: phần mềm đặt `cong_khai = 0` (kèm trạng thái phù hợp); Cổng PLQG tự cập nhật (ẩn) ở lần kéo định kỳ kế tiếp. Phần mềm KHÔNG gọi API gỡ trực tiếp ra Cổng | PRD | FR-IV-08, FR-IV-12, FR-IV-NEW-02 | — | Test VO_HIEU_HOA → cong_khai = 0; Cổng ẩn TVV sau lần kéo kế tiếp |
+| BR-PUBLIC-03 | Mô hình công khai là KÉO (PULL): Cổng PLQG chủ động kéo dữ liệu công khai (`cong_khai = 1`) theo chu kỳ đồng bộ định kỳ qua API outbound. Phần mềm KHÔNG đẩy / gọi API ra Cổng, KHÔNG có hàng đợi gửi lại. Dữ liệu mới công khai hoặc gỡ công khai phản ánh trên Cổng ở lần kéo kế tiếp | PRD + BA chốt v3.5 | FR-IV-08 | — | Test đặt cong_khai = 1 → Cổng kéo và hiển thị ở chu kỳ đồng bộ kế tiếp |
 
 ### BR-DATA-01: Soft delete
 

@@ -37,7 +37,7 @@
 
 - ⚠️ **R7.4.D2b** 🆕 FR-VI-10 read-only cross-co-quan (CB NV `co_quan_duoc_danh_gia_id` xem KQ HOAN_THANH) `[~50% — TC1 FAIL bug BE VPD, TC2 PASS deny]` <a id="r7-4-d2b"></a>
   - **Kết quả:** ⚠️ R22 16:18 seed DG-20260513-0001 HOAN_THANH coQuanId=STP-AG. TC1 FAIL: cb_nv_dp_01 STP-AG bị 403 ERR-AUTH-VPD-00-02 sai SRS BR-AUTH-01. TC2 PASS: cb_nv_dp_02 STP-BG deny đúng.
-  - **Bug:** [bug-report-r22-fr-vi-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/bug-report-r22-fr-vi-10.md) — 0/1 đóng (BUG-FUNC-DG-013 Major Open)
+  - **Bug:** [Pass-bug-report-r22-fr-vi-10.md](../output/qa-reports/round7-2026-05-06/bug-reports/danh-gia/Pass-bug-report-r22-fr-vi-10.md) — 1/1 đóng (BUG-FUNC-DG-013 Major Open)
   - **Spec:** FR-VI-10 line 755-791 (BR-AUTH-01 line 777, ERR-DG-10 line 786)
 
 - ✅ **R7.7.9** ✏️ Đánh giá Hiệu quả HTPL functional 22 TC v3.5 <a id="r7-7-9"></a>

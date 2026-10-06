@@ -64,13 +64,15 @@ graph LR
 **Mô tả:**
 CRUD hợp đồng tư vấn bao gồm: thông tin chung, mốc tiến độ, thanh toán giai đoạn, liên kết vụ việc. Chỉ CRUD, không có phê duyệt, không có mẫu chuẩn.
 
-**Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP)
+**Tác nhân:**
+- Cán bộ Nghiệp vụ (TW/BN/ĐP) — quyền CRUD đầy đủ, phạm vi theo đơn vị (BR-AUTH-08)
+- Tư vấn viên / Chuyên gia — quyền R (chỉ xem), phạm vi theo nhân thân: chỉ HĐ có `HOP_DONG_TU_VAN.tu_van_vien_id` tham chiếu đến TVV của user đang đăng nhập (BA chốt 2026-05-13 — báo cáo review HDSD §6.2 #1)
 
 **Preconditions (Điều kiện tiên quyết):**
 
 - User đã đăng nhập (BR-AUTH-01)
-- User có quyền "Quản lý HĐ tư vấn"
-- phân quyền dữ liệu theo đơn vị
+- CB NV: có quyền "Quản lý HĐ tư vấn" + phân quyền dữ liệu theo đơn vị
+- TVV/CG: liên kết tài khoản qua entity TU_VAN_VIEN (1-1 với TAI_KHOAN)
 
 **Inputs (Dữ liệu đầu vào) -- Thêm mới/Chỉnh sửa:**
 
@@ -113,7 +115,7 @@ CRUD hợp đồng tư vấn bao gồm: thông tin chung, mốc tiến độ, th
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra quyền và phạm vi đơn vị | BR-AUTH-01 |
+| 1 | Kiểm tra quyền. CB NV: áp phân quyền đơn vị (BR-AUTH-08). TVV/CG: chỉ trả HĐ có `tu_van_vien_id` thuộc về user đang đăng nhập; chặn mọi thao tác Create/Update/Delete | BR-AUTH-01, BR-AUTH-08 |
 | 2 | Thêm mới: sinh mã tự động HDTV-{YYYYMMDD}-{SEQ} | BR-DATA-04 |
 | 3 | Kiểm tra: ngày bắt đầu <= ngày kết thúc | — |
 | 4 | Kiểm tra: tổng thanh toán giai đoạn <= giá trị HĐ | — |
@@ -178,6 +180,7 @@ CRUD hợp đồng tư vấn bao gồm: thông tin chung, mốc tiến độ, th
 - **Given** CB NV xóa HĐ có VV liên kết **When** xác nhận **Then** từ chối + thông báo
 - **Given** CB NV xem DS hợp đồng **When** nhấn Xuất Excel **Then** tải file .xlsx theo filter hiện tại `[GAP-X.3-02]`
 - **Given** CB NV tạo hợp đồng mới **When** chọn loại Bên B = "Chuyên gia" và chọn 1 CG đang hoạt động (TU_VAN_VIEN.loai_tvv = 'CG') **Then** lưu hợp đồng với tu_van_vien_id trỏ đến CG đó
+- **Given** TVV/CG đăng nhập **When** mở danh sách HĐ tư vấn **Then** chỉ thấy các HĐ có `tu_van_vien_id` của chính mình; không thấy nút [+ Thêm], [Sửa], [Xóa]; chỉ thấy [Xem chi tiết]
 
 ---
 
@@ -192,12 +195,15 @@ CRUD hợp đồng tư vấn bao gồm: thông tin chung, mốc tiến độ, th
 **Mô tả:**
 Tìm kiếm hợp đồng tư vấn theo nhiều tiêu chí: từ khóa, TVV, khoảng thời gian.
 
-**Tác nhân:** Cán bộ Nghiệp vụ, Cán bộ Phê duyệt (TW/BN/ĐP)
+**Tác nhân:**
+- Cán bộ Nghiệp vụ, Cán bộ Phê duyệt (TW/BN/ĐP) — phạm vi theo đơn vị (BR-AUTH-08)
+- Tư vấn viên / Chuyên gia — phạm vi theo nhân thân, chỉ tìm trong các HĐ thuộc về mình
 
 **Preconditions (Điều kiện tiên quyết):**
 
 - User đã đăng nhập, có quyền xem HĐ tư vấn
-- phân quyền dữ liệu theo đơn vị
+- CB NV/PD: phân quyền dữ liệu theo đơn vị
+- TVV/CG: liên kết tài khoản qua entity TU_VAN_VIEN
 
 **Inputs (Dữ liệu đầu vào):**
 
@@ -212,7 +218,7 @@ Tìm kiếm hợp đồng tư vấn theo nhiều tiêu chí: từ khóa, TVV, kh
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra quyền và phạm vi đơn vị | BR-AUTH-01, BR-AUTH-08 |
+| 1 | Kiểm tra quyền. CB NV/PD: phân quyền đơn vị. TVV/CG: lọc thêm theo nhân thân — chỉ HĐ thuộc về user | BR-AUTH-01, BR-AUTH-08 |
 | 2 | Tìm kiếm toàn văn trên tên HĐ, mã HĐ, bên B | — |
 | 3 | Áp dụng bộ lọc AND logic | — |
 | 4 | Phân trang và trả về | BR-DATA-07 |
@@ -273,16 +279,16 @@ Tìm kiếm hợp đồng tư vấn theo nhiều tiêu chí: từ khóa, TVV, kh
 | # | Vùng | Thành phần | Loại | Dữ liệu / Nội dung | Hành vi | Điều kiện hiển thị |
 |---|------|-----------|------|---------------------|---------|-------------------|
 | 1 | toolbar | Breadcrumb | breadcrumb | "Trang chủ > Tư vấn > Hợp đồng tư vấn" | navigate | luôn hiển thị |
-| 2 | toolbar | Tiêu đề + nút | label + button | "Quản lý Hợp đồng Tư vấn" + [+ Thêm hợp đồng] [Xuất Excel] [Làm mới] | click -> action | luôn hiển thị |
+| 2 | toolbar | Tiêu đề + nút | label + button | "Quản lý Hợp đồng Tư vấn" + [+ Thêm hợp đồng] [Xuất Excel] [Làm mới] | click -> action | luôn hiển thị; **nút [+ Thêm hợp đồng] CHỈ hiển thị với CB NV — ẩn với TVV/CG** |
 | 3 | filter-bar | Thanh lọc (UC159e) | form | Full-text: tên HĐ, mã HĐ, bên B. TVV (searchable). Khoảng ngày | change -> filter | luôn hiển thị |
-| 4 | content | Bảng hợp đồng | table | Mã HĐ (HDTV-{YYYYMMDD}-{SEQ}) / Tên HĐ / Bên A / Bên B / Giá trị (format tiền) / Thời hạn bắt đầu / Thời hạn kết thúc (đỏ nếu <= 30 ngày) / Số VV liên kết (badge) / Tiến độ TT (progress bar %) / Hành động | click -> action | luôn hiển thị |
+| 4 | content | Bảng hợp đồng | table | Mã HĐ (HDTV-{YYYYMMDD}-{SEQ}) / Tên HĐ / Bên A / Bên B / Giá trị (format tiền) / Thời hạn bắt đầu / Thời hạn kết thúc (đỏ nếu <= 30 ngày) / Số VV liên kết (badge) / Tiến độ TT (progress bar %) / Hành động (CB NV thấy Xem/Sửa/Xóa; TVV/CG CHỈ thấy nút Xem) | click -> action | luôn hiển thị |
 | 5 | footer | Phân trang | pagination | 20 mục/trang | click -> chuyển trang | luôn hiển thị |
-| 6 | content (form) | Thông tin chung | form | Mã (auto) / Tên (bắt buộc) / Bên A (auto đơn vị) / Bên B (bắt buộc + TVV dropdown) / Giá trị (bắt buộc) / Thời hạn bắt đầu (bắt buộc) / Thời hạn kết thúc (bắt buộc, >= bắt đầu) / Nội dung / Ghi chú / File đính kèm | input -> validate | trang thêm/sửa |
-| 7 | content (form) | Accordion: Vụ việc liên kết | table + modal | Bảng VV liên kết: Mã VV / Tên DN / Lĩnh vực / Trạng thái / [Bỏ liên kết]. Nút [+ Liên kết VV] -> modal multi-select. N:N | click -> action | trang thêm/sửa |
-| 8 | content (form) | Accordion: Mốc tiến độ | editable-table | Inline-edit: Tên mốc / Ngày dự kiến / Ngày thực tế / Trạng thái mốc (CHUA_BAT_DAU / DANG_THUC_HIEN / HOAN_THANH). [+ Thêm mốc] | inline-edit | trang thêm/sửa |
-| 9 | content (form) | Accordion: Thanh toán giai đoạn | editable-table | Inline-edit: Giai đoạn / Số tiền / Ngày TT / Trạng thái (CHUA_THANH_TOAN / DA_THANH_TOAN). Validate: SUM <= giá trị HĐ. Thanh tiến độ TT phía trên | inline-edit | trang thêm/sửa |
-| 10 | content (form) | Accordion: Nhật ký | timeline | Lịch sử CUD, mốc, thanh toán, liên kết VV | — | trang thêm/sửa |
-| 11 | action-bar | Thanh hành động | button-group | [Hủy] [Lưu] -- KHÔNG cần phê duyệt | click -> action | trang thêm/sửa |
+| 6 | content (form) | Thông tin chung | form | Mã (auto) / Tên (bắt buộc) / Bên A (auto đơn vị) / Bên B (bắt buộc + TVV dropdown) / Giá trị (bắt buộc) / Thời hạn bắt đầu (bắt buộc) / Thời hạn kết thúc (bắt buộc, >= bắt đầu) / Nội dung / Ghi chú / File đính kèm | input -> validate | trang thêm/sửa — **CHỈ vai trò CB NV; TVV/CG không truy cập trang form** |
+| 7 | content (form) | Accordion: Vụ việc liên kết | table + modal | Bảng VV liên kết: Mã VV / Tên DN / Lĩnh vực / Trạng thái / [Bỏ liên kết]. Nút [+ Liên kết VV] -> modal multi-select. N:N | click -> action | trang thêm/sửa — chỉ CB NV |
+| 8 | content (form) | Accordion: Mốc tiến độ | editable-table | Inline-edit: Tên mốc / Ngày dự kiến / Ngày thực tế / Trạng thái mốc (CHUA_BAT_DAU / DANG_THUC_HIEN / HOAN_THANH). [+ Thêm mốc] | inline-edit | trang thêm/sửa — chỉ CB NV |
+| 9 | content (form) | Accordion: Thanh toán giai đoạn | editable-table | Inline-edit: Giai đoạn / Số tiền / Ngày TT / Trạng thái (CHUA_THANH_TOAN / DA_THANH_TOAN). Validate: SUM <= giá trị HĐ. Thanh tiến độ TT phía trên | inline-edit | trang thêm/sửa — chỉ CB NV |
+| 10 | content (form) | Accordion: Nhật ký | timeline | Lịch sử CUD, mốc, thanh toán, liên kết VV | — | trang thêm/sửa (CB NV) hoặc xem chi tiết (TVV/CG xem được lịch sử của HĐ thuộc về mình) |
+| 11 | action-bar | Thanh hành động | button-group | [Hủy] [Lưu] -- KHÔNG cần phê duyệt | click -> action | trang thêm/sửa — chỉ CB NV; TVV/CG ở trang xem chi tiết chỉ thấy nút [Đóng] |
 
 #### Quy tắc tương tác
 

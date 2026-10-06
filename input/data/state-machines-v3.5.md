@@ -1,9 +1,9 @@
 # State Machines Reference — SRS v3.5
 
-> **Trạng thái file:** ⚠️ **DRAFT v1 — 2026-05-13.** Verification breakdown:
-> - **1/14 module ✅ Verified** — FR-08 Đánh giá (8 states, deep-verify 2026-05-13).
-> - **2/14 module ⚠️ Partial** — FR-05 Vụ việc (LICHSU 18 enum + state list verified, line số chưa fill), FR-10 QTHT (enum LOAI_HINH_HO_TRO verified, state machine user/role chưa verify).
-> - **9/14 module ❌ Chưa verified** — skeleton từ trí nhớ + flow-module.md, **CẤM quote trực tiếp trong bug report**.
+> **Trạng thái file:** ⚠️ **DRAFT v2 — 2026-05-16.** Verification breakdown:
+> - **5/14 module ✅ Verified** — FR-05 Vụ việc (12 states, deep-verify 2026-05-16), FR-06 Chi trả (10 states), FR-08 Đánh giá (8 states), FR-12 TVCS (7 states), FR-15 CT HTPLDN (8 states + đợt BC).
+> - **1/14 module ⚠️ Partial** — FR-10 QTHT (enum LOAI_HINH_HO_TRO verified, state machine user/role chưa verify).
+> - **6/14 module ❌ Chưa verified** — skeleton từ trí nhớ + flow-module.md, **CẤM quote trực tiếp trong bug report** (FR-02/03/04/07/09/13/14).
 > - **2/14 module không có SM** — FR-01 Dashboard + FR-11 Báo cáo (read-only).
 >
 > Tester phải tự mở SRS file verify line số TRƯỚC KHI log bug citing state code từ file này.
@@ -33,19 +33,19 @@
 |:-:|---|:-:|---|:-:|:-:|:-:|
 | FR-01 | Dashboard | Không | srs-fr-01-dashboard.md | - | - | - |
 | FR-02 | Hỏi đáp | Có (TV nhanh) | srs-fr-02-hoi-dap.md | ⚠️ Check | ❌ Chưa | ❌ Không — tự verify SRS |
-| FR-03 | Đào tạo | Có (khoá học + bài giảng + học viên) | srs-fr-03-dao-tao.md | ⚠️ Check | ❌ Chưa | ❌ Không — tự verify SRS |
+| FR-03 | Đào tạo | Có (SM-KHOAHOC 9 state + SM-CTDT + SM-KE_HOACH_NAM + HOC_VIEN) | srs-fr-03-dao-tao.md | ✅ Đổi (BA OUT Thay đổi 3 — giữ 9 v3, KHÔNG thêm TU_CHOI) | ⚠️ 2026-05-16 KHOA_HOC verify | ⚠️ KHOA_HOC safe quote — CTDT/HOC_VIEN chưa verify |
 | FR-04 | Chuyên gia / TVV | Có (TVV state + workflow) | srs-fr-04-chuyen-gia-tvv.md | ⚠️ Check | ❌ Chưa | ❌ Không — tự verify SRS |
-| FR-05 | Vụ việc | Có (VV state + LICHSU 18 enum) | srs-fr-05-vu-viec.md | ✅ Đổi (LICHSU 18 enum mới) | ⚠️ Partial 2026-05-13 | ⚠️ Partial — cần verify line số |
-| FR-06 | Chi trả | Có (PHIEU_CT state) | srs-fr-06-chi-tra.md | ⚠️ Check | ❌ Chưa | ❌ Không — tự verify SRS |
+| FR-05 | Vụ việc | Có (VV 12 state + LICHSU 18 enum) | srs-fr-05-vu-viec.md | ✅ Đổi (12 state + LICHSU 18 enum) | ✅ 2026-05-16 deep-verify | ✅ Safe quote |
+| FR-06 | Chi trả | Có (HO_SO_CHI_TRA 10 state) | srs-fr-06-chi-tra.md | ✅ Đổi (7→10 state) | ✅ 2026-05-16 deep-verify | ✅ Safe quote |
 | FR-07 | Doanh nghiệp | Có (DN profile + xác thực) | srs-fr-07-doanh-nghiep.md | ⚠️ Check | ❌ Chưa | ❌ Không — tự verify SRS |
 | FR-08 | Đánh giá | Có **8 states** (đổi từ v3 6 states) | srs-fr-08-danh-gia.md | ✅ Đổi (bỏ DA_DANH_GIA) | ✅ 2026-05-13 deep-verify | ✅ Safe quote |
 | FR-09 | Biểu mẫu | Có (BM state) | srs-fr-09-bieu-mau.md | ⚠️ Check | ❌ Chưa | ❌ Không — tự verify SRS |
 | FR-10 | Quản trị (QTHT) | Có (danh mục + user role) | srs-fr-10-quan-tri.md | ⚠️ Check | ⚠️ Partial 2026-05-13 (enum LOAI_HINH_HO_TRO) | ⚠️ Partial — enum verified, state chưa |
 | FR-11 | Báo cáo | Không (read-only KPI) | srs-fr-11-bao-cao.md | - | - | - |
-| FR-12 | TV chuyên sâu | Có (workflow approve) | srs-fr-12-tv-chuyen-sau.md | ⚠️ Check | ❌ Chưa | ❌ Không — tự verify SRS |
+| FR-12 | TV chuyên sâu | Có (TUVCS 7 state workflow) | srs-fr-12-tv-chuyen-sau.md | ✅ Đổi (5→7 state, Thay đổi 3) | ✅ 2026-05-16 deep-verify | ✅ Safe quote |
 | FR-13 | TV nhanh | Có (Q&A state) | srs-fr-13-tv-nhanh.md | ⚠️ Check | ❌ Chưa | ❌ Không — tự verify SRS |
 | FR-14 | Hợp đồng TV | Có (HD state) | srs-fr-14-hop-dong-tv.md | ⚠️ Check | ❌ Chưa | ❌ Không — tự verify SRS |
-| FR-15 | CT HTPLDN | Có (chương trình + cấp) | srs-fr-15-ct-htpldn.md | ⚠️ Check | ❌ Chưa | ❌ Không — tự verify SRS |
+| FR-15 | CT HTPLDN | Có (SM-KH-CTHTPL 8 state + SM-DOT-BC) | srs-fr-15-ct-htpldn.md | ✅ Đổi (6→8 state, rename DU_THAO/HOAN_THANH) | ✅ 2026-05-16 deep-verify | ✅ Safe quote |
 
 **Verification status legend:**
 - ✅ Verified — Mọi state code + line số đã grep từ SRS thật + cross-check NotebookLM. Safe để quote trực tiếp.
@@ -65,26 +65,40 @@
 
 ## Detail per module — quote line SRS gốc
 
-### FR-05 — Vụ việc (Vu viec) — ⚠️ Partial verified
+### FR-05 — Vụ việc (Vu viec) — ✅ Verified 2026-05-16
 
-> **Status:** State code list verified từ skim SRS 2026-05-13 nhưng line số CHƯA fill. Tester log bug cite VV state phải tự grep `input/srs-update-2026-5-5/srs-fr-05-vu-viec.md` lấy line số chuẩn TRƯỚC khi quote.
+> **Status:** SM-VUVIEC 12 trạng thái + 14 transition. Verified từ `srs-fr-05-vu-viec.md:48-66` (Mermaid diagram). Safe để quote trực tiếp.
 
-**State VV (chưa fill line số — TODO trước R21):**
-| Code | Tên Việt | Quote SRS (TODO) |
-|---|---|---|
-| `DA_TIEP_NHAN` | Đã tiếp nhận | srs-fr-05-vu-viec.md (TODO: grep line) |
-| `DA_PHAN_CONG` | Đã phân công TVV | (TODO: grep line) |
-| `DANG_THUC_HIEN` | Đang thực hiện | (TODO: grep line) |
-| `CHO_DUYET_KQ` | Chờ duyệt kết quả | (TODO: grep line) |
-| `DA_HOAN_THANH` | Đã hoàn thành | (TODO: grep line) |
-| `DA_HUY` | Đã hủy | (TODO: grep line) |
-| `TU_CHOI_PHAN_CONG` | TVV từ chối phân công | (TODO: grep line) |
+**SM-VUVIEC — 12 trạng thái (`srs-fr-05-vu-viec.md:48`):**
 
-**Grep command nhanh:**
-```bash
-grep -n "DA_TIEP_NHAN\|DA_PHAN_CONG\|DANG_THUC_HIEN\|CHO_DUYET_KQ\|DA_HOAN_THANH\|DA_HUY\|TU_CHOI_PHAN_CONG" \
-  input/srs-update-2026-5-5/srs-fr-05-vu-viec.md
+| # | Code | Tên Việt | Quote SRS |
+|:-:|---|---|---|
+| 1 | `MOI_TAO` | Mới tạo (API inbound DVC) | srs-fr-05-vu-viec.md:52 |
+| 2 | `CHO_TIEP_NHAN` | Chờ tiếp nhận | srs-fr-05-vu-viec.md:52,53 |
+| 3 | `DA_TIEP_NHAN` | Đã tiếp nhận | srs-fr-05-vu-viec.md:53,54 |
+| 4 | `DANG_KIEM_TRA` | Đang kiểm tra | srs-fr-05-vu-viec.md:54 |
+| 5 | `YEU_CAU_BO_SUNG` | Yêu cầu bổ sung HS | srs-fr-05-vu-viec.md:55,56 |
+| 6 | `DA_PHAN_CONG` | Đã phân công | srs-fr-05-vu-viec.md:57 |
+| 7 | `TU_CHOI` | Từ chối (CB NV/CB PD) | srs-fr-05-vu-viec.md:58 |
+| 8 | `DANG_XU_LY` | Đang xử lý (TVV) | srs-fr-05-vu-viec.md:59,60 |
+| 9 | `CHO_PHE_DUYET` | Chờ phê duyệt KQ | srs-fr-05-vu-viec.md:61 |
+| 10 | `DA_DUYET` | Đã duyệt KQ | srs-fr-05-vu-viec.md:62,63 |
+| 11 | `HOAN_THANH` | Hoàn thành | srs-fr-05-vu-viec.md:64 |
+| 12 | `DA_DANH_GIA` | DN đã đánh giá | srs-fr-05-vu-viec.md:65 |
+
+**Transition map (Mermaid `srs-fr-05-vu-viec.md:50-66`):**
 ```
+MOI_TAO → CHO_TIEP_NHAN → DA_TIEP_NHAN → DANG_KIEM_TRA
+DANG_KIEM_TRA ↔ YEU_CAU_BO_SUNG (DN bổ sung)
+DANG_KIEM_TRA → DA_PHAN_CONG | TU_CHOI
+DA_PHAN_CONG → DANG_XU_LY | DA_TIEP_NHAN (TVV từ chối, srs:815)
+DANG_XU_LY → CHO_PHE_DUYET → DA_DUYET | DANG_XU_LY (CB PD reject, srs:74-75)
+DA_DUYET → HOAN_THANH → DA_DANH_GIA
+```
+
+**Self-loop CONG_KHAI / HUY_CONG_KHAI:** flag boolean `cong_khai` (CR-01 v3.5), không phải state riêng. Áp dụng khi `trang_thai = HOAN_THANH` (BR-PUBLIC-04).
+
+**Soft-delete:** `is_deleted = 1` chỉ cho phép khi `trang_thai = CHO_TIEP_NHAN` (BR-DATA-01, `srs-fr-05:424`).
 
 **LICHSU enum 18 actions (v3.5 NEW):**
 - `TIEP_NHAN`, `PHAN_CONG`, `DUYET_PC`, `TU_CHOI_PHAN_CONG`, `TU_CHOI_PD`
@@ -173,19 +187,37 @@ grep -n "DA_TIEP_NHAN\|DA_PHAN_CONG\|DANG_THUC_HIEN\|CHO_DUYET_KQ\|DA_HOAN_THANH
 
 ---
 
-### FR-06 — Chi trả (PHIEU_CT)
+### FR-06 — Chi trả (HO_SO_CHI_TRA) — ✅ Verified 2026-05-16
 
-**State PHIEU_CT (verify srs-fr-06-chi-tra.md):**
+> **Status:** SM-CHITRA 10 trạng thái, đồng bộ Entity enum + Section 5 (`srs-fr-06-chi-tra.md:62`). Safe để quote.
 
-| Code | Tên Việt |
-|---|---|
-| `KHOI_TAO` | Khởi tạo |
-| `CHO_DUYET` | Chờ duyệt |
-| `DA_DUYET` | Đã duyệt |
-| `CHO_TT` | Chờ thanh toán |
-| `DA_TT` | Đã thanh toán |
-| `TU_CHOI` | Từ chối duyệt |
-| `HUY` | Hủy |
+**SM-CHITRA — 10 trạng thái (`srs-fr-06-chi-tra.md:62-77`):**
+
+| # | Code | Tên Việt | Quote SRS |
+|:-:|---|---|---|
+| 1 | `CHO_TIEP_NHAN` | Chờ tiếp nhận (API/UI tạo) | srs-fr-06-chi-tra.md:65 |
+| 2 | `DANG_KIEM_TRA` | Đang kiểm tra (CB NV) | srs-fr-06-chi-tra.md:65-69 |
+| 3 | `YEU_CAU_BO_SUNG` | Yêu cầu DN bổ sung | srs-fr-06-chi-tra.md:67,69 |
+| 4 | `DANG_DANH_GIA` | Đang đánh giá mức hỗ trợ | srs-fr-06-chi-tra.md:66,70 |
+| 5 | `DANG_THAM_DINH` | Đang thẩm định | srs-fr-06-chi-tra.md:70-72,74 |
+| 6 | `CHO_PHE_DUYET` | Chờ CB PD duyệt | srs-fr-06-chi-tra.md:71,73-74 |
+| 7 | `DA_DUYET` | CB PD đã duyệt | srs-fr-06-chi-tra.md:73,75 |
+| 8 | `DA_THANH_TOAN` | Đã thanh toán | srs-fr-06-chi-tra.md:75 |
+| 9 | `TU_CHOI` | Từ chối (kiểm tra/thẩm định/thanh toán) | srs-fr-06-chi-tra.md:68,72,75 |
+| 10 | `HUY` | Hủy (DN rút / CB NV hủy ở CHO_TIEP_NHAN) | srs-fr-06-chi-tra.md:76 |
+
+**Transition map:**
+```
+CHO_TIEP_NHAN → DANG_KIEM_TRA | HUY
+DANG_KIEM_TRA ↔ YEU_CAU_BO_SUNG (DN bổ sung)
+DANG_KIEM_TRA → DANG_DANH_GIA | TU_CHOI
+DANG_DANH_GIA → DANG_THAM_DINH
+DANG_THAM_DINH → CHO_PHE_DUYET | TU_CHOI
+CHO_PHE_DUYET → DA_DUYET | DANG_THAM_DINH (CB PD reject, trả về sửa)
+DA_DUYET → DA_THANH_TOAN | TU_CHOI (ly_do = "THANH_TOAN")
+```
+
+**Đổi vs v3 (Major):** v3 = 7 state đơn giản (KHOI_TAO/CHO_DUYET/DA_DUYET/CHO_TT/DA_TT/TU_CHOI/HUY). v3.5 = 10 state phân tách rõ kiểm tra/đánh giá/thẩm định/phê duyệt/thanh toán + thêm YEU_CAU_BO_SUNG cycle. Bug log v3 state sẽ invalid.
 
 ---
 
@@ -204,18 +236,28 @@ grep -n "DA_TIEP_NHAN\|DA_PHAN_CONG\|DANG_THUC_HIEN\|CHO_DUYET_KQ\|DA_HOAN_THANH
 
 ---
 
-### FR-03 — Đào tạo (Khoá học + Bài giảng + Học viên)
+### FR-03 — Đào tạo (Khoá học + Bài giảng + Học viên) — ⚠️ Partial verify 2026-05-16
 
-**State Khoá học:**
-| Code | Tên Việt |
-|---|---|
-| `LAP_KE_HOACH` | Lập kế hoạch |
-| `MO_DANG_KY` | Mở đăng ký |
-| `DANG_DIEN_RA` | Đang diễn ra |
-| `KET_THUC` | Kết thúc |
-| `HUY` | Hủy |
+> **SM-KHOAHOC 9 state** (BA OUT "Thay đổi 3" 2026-05-06; cite `srs-fr-03-dao-tao.md:35` + `:43` + `:64` + `:1889`). DELTA-MAP-FR03 từng nêu 11 state (thêm TU_CHOI/TU_CHOI_KQ) đã OUT — xem [SRS-C-003](../../tasks/srs-contradictions.md#srs-c-003--fr-03-đào-tạo--sm-khoahoc-số-state-9-vs-11--open) chờ BA confirm dẹp DELTA-MAP.
+> **CTDT + KE_HOACH_DAO_TAO** (entity cha): SM riêng có TU_CHOI (refinement Cách 2 — chỉ áp với 2 entity cha, KHÔNG áp KHOA_HOC). Xem `srs-fr-03-dao-tao.md:43` + Processing block FR-III-01.
 
-**State Học viên:**
+**SM-KHOAHOC — 9 trạng thái (`srs-fr-03-dao-tao.md:64` + Section 3.4.3.6):**
+
+| # | Code | Tên Việt | Quote SRS |
+|:-:|---|---|---|
+| 1 | `DU_THAO` | Dự thảo (CB NV tạo, có thể edit; CB PD từ chối quay về đây — gộp, KHÔNG tách TU_CHOI) | srs-fr-03-dao-tao.md:53 + :64 |
+| 2 | `CHO_DUYET` | Chờ duyệt | srs-fr-03-dao-tao.md:53 |
+| 3 | `DA_DUYET` | Đã duyệt | srs-fr-03-dao-tao.md:54 |
+| 4 | `DA_CONG_KHAI` | Đã công khai (mở đăng ký) | srs-fr-03-dao-tao.md:56 |
+| 5 | `DANG_DIEN_RA` | Đang diễn ra | srs-fr-03-dao-tao.md:57 |
+| 6 | `DA_KET_THUC` | Đã kết thúc | srs-fr-03-dao-tao.md:58 |
+| 7 | `CHO_DUYET_KQ` | Chờ duyệt kết quả | srs-fr-03-dao-tao.md:59 |
+| 8 | `HOAN_THANH` | Hoàn thành | srs-fr-03-dao-tao.md:60 |
+| 9 | `DA_HUY` | Đã hủy | srs-fr-03-dao-tao.md:61 + :64 |
+
+**SM-CTDT + SM-KE_HOACH_NAM:** xem `srs-fr-03-dao-tao.md` Processing block FR-III-NEW-02/03 (refinement Cách 2 — có TU_CHOI riêng).
+
+**State Học viên (HOC_VIEN — entity mới v3.5, 1:1 TAI_KHOAN; chưa deep-verify):**
 | Code | Tên Việt |
 |---|---|
 | `DA_DANG_KY` | Đã đăng ký |
@@ -239,16 +281,31 @@ grep -n "DA_TIEP_NHAN\|DA_PHAN_CONG\|DANG_THUC_HIEN\|CHO_DUYET_KQ\|DA_HOAN_THANH
 
 ---
 
-### FR-12 — TV chuyên sâu (workflow approve)
+### FR-12 — TV chuyên sâu (TUVCS) — ✅ Verified 2026-05-16
 
-**State TVCS (verify srs-fr-12-tv-chuyen-sau.md):**
-| Code | Tên Việt |
-|---|---|
-| `BAN_NHAP` | Bản nháp |
-| `CHO_DUYET` | Chờ duyệt |
-| `DA_DUYET` | Đã duyệt |
-| `DA_CONG_KHAI` | Đã công khai |
-| `TU_CHOI` | Từ chối |
+> **Status:** SM-TVCS 7 trạng thái — đồng bộ Entity field `trang_thai` Section 5 (`srs-fr-12-tv-chuyen-sau.md:115`). Safe để quote.
+
+**SM-TVCS — 7 trạng thái (`srs-fr-12-tv-chuyen-sau.md:115`):**
+
+| # | Code | Tên Việt | Quote SRS |
+|:-:|---|---|---|
+| 1 | `TIEP_NHAN` | Tiếp nhận (default khi tạo) | srs-fr-12:115,159,184 |
+| 2 | `PHAN_CONG` | Đã phân công CG | srs-fr-12:154,161,165,170 |
+| 3 | `DANG_TU_VAN` | CG đang tư vấn | srs-fr-12:165,172,188,193,218 |
+| 4 | `HOAN_THANH` | Đã hoàn thành | srs-fr-12:188 |
+| 5 | `CHO_PHE_DUYET` | Chờ phê duyệt | srs-fr-12:196,199,204,211,216 |
+| 6 | `DA_DUYET` | Đã duyệt (CB PD approve) | srs-fr-12:199,204 |
+| 7 | `HUY` | Hủy (từ TIEP_NHAN/PHAN_CONG/DANG_TU_VAN) | srs-fr-12:222,227 |
+
+**Transition map (`srs-fr-12:154-227`):**
+```
+TIEP_NHAN → PHAN_CONG (CB NV phân công CG) | HUY
+PHAN_CONG → DANG_TU_VAN (CG xác nhận) | TIEP_NHAN (CG từ chối) | HUY
+DANG_TU_VAN → CHO_PHE_DUYET (auto khi hoàn thành, BR-FLOW-01) | HUY
+CHO_PHE_DUYET → DA_DUYET (CB PD approve) | DANG_TU_VAN (CB PD reject)
+```
+
+**Đổi vs v3 (Major — Thay đổi 3):** v3 = 5 state Mô hình B (BAN_NHAP/CHO_DUYET/DA_DUYET/DA_CONG_KHAI/TU_CHOI). v3.5 = 7 state workflow phân công CG → tư vấn → phê duyệt. Field cong_khai = boolean flag riêng (BR-PUBLIC-01), không phải state.
 
 ---
 
@@ -282,17 +339,38 @@ grep -n "DA_TIEP_NHAN\|DA_PHAN_CONG\|DANG_THUC_HIEN\|CHO_DUYET_KQ\|DA_HOAN_THANH
 
 ---
 
-### FR-15 — CT HTPLDN (Chương trình hỗ trợ)
+### FR-15 — CT HTPLDN (Chương trình hỗ trợ) — ✅ Verified 2026-05-16
 
-**State Chương trình:**
-| Code | Tên Việt |
-|---|---|
-| `LAP_KE_HOACH` | Lập kế hoạch |
-| `CHO_PHE_DUYET` | Chờ phê duyệt |
-| `DA_PHE_DUYET` | Đã phê duyệt |
-| `DANG_TRIEN_KHAI` | Đang triển khai |
-| `KET_THUC` | Kết thúc |
-| `HUY` | Hủy |
+> **Status:** 2 state machine — (a) SM-KH-CTHTPL kế hoạch chương trình 8 trạng thái + (b) SM-DOT-BC đợt báo cáo. Verified từ `srs-fr-15-ct-htpldn.md:61-75`. Safe để quote.
+
+**(a) SM-KH-CTHTPL — Kế hoạch CT HTPLDN — 8 trạng thái (`srs-fr-15:61`):**
+
+| # | Code | Tên Việt | Quote SRS |
+|:-:|---|---|---|
+| 1 | `DU_THAO` | Dự thảo (default khi tạo) | srs-fr-15:64,74,115,145 |
+| 2 | `CHO_PHE_DUYET` | Chờ phê duyệt | srs-fr-15:64,65 |
+| 3 | `DA_DUYET` | Đã duyệt | srs-fr-15:65-67,69 |
+| 4 | `DA_CONG_BO` | Đã công bố | srs-fr-15:67,68,70 |
+| 5 | `DANG_THUC_HIEN` | Đang thực hiện | srs-fr-15:69-73 |
+| 6 | `TAM_DUNG` | Tạm dừng | srs-fr-15:71,72 |
+| 7 | `HOAN_THANH` | Hoàn thành | srs-fr-15:73 |
+| 8 | `HUY` | Hủy (chỉ từ DU_THAO) | srs-fr-15:74 |
+
+**Transition map (`srs-fr-15:63-75`):**
+```
+DU_THAO → CHO_PHE_DUYET (trình duyệt) | HUY (hủy)
+CHO_PHE_DUYET → DA_DUYET (duyệt) | DU_THAO (từ chối)
+DA_DUYET ↔ DA_CONG_BO (công bố / hủy công bố)
+DA_DUYET → DANG_THUC_HIEN (kích hoạt)
+DA_CONG_BO → DANG_THUC_HIEN (kích hoạt)
+DANG_THUC_HIEN ↔ TAM_DUNG (tạm dừng / tiếp tục)
+DANG_THUC_HIEN → HOAN_THANH (hoàn thành)
+```
+
+**(b) SM-DOT-BC — Đợt báo cáo CT HTPLDN (`srs-fr-15:77`):**
+States: `TAO_DOT` → `DANG_LAP_BC` → `CHO_DUYET_KQ` → `DA_DUYET_KQ` ↔ `DANG_LAP_BC` (từ chối) → `DA_GUI_TW` → `TW_TONG_HOP`. Verify chi tiết `srs-fr-15:77+`.
+
+**Đổi vs v3 (Major):** v3 = 6 state đơn giản (LAP_KE_HOACH/CHO_PHE_DUYET/DA_PHE_DUYET/DANG_TRIEN_KHAI/KET_THUC/HUY). v3.5 đổi tên `LAP_KE_HOACH→DU_THAO`, `DA_PHE_DUYET→DA_DUYET`, `DANG_TRIEN_KHAI→DANG_THUC_HIEN`, `KET_THUC→HOAN_THANH`, thêm `DA_CONG_BO` + `TAM_DUNG`. Bug log v3 state sẽ invalid.
 
 ---
 

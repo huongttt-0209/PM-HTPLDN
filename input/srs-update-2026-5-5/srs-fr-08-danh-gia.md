@@ -13,7 +13,7 @@
 
 | Ngày | Tác giả | Mô tả thay đổi |
 |------|---------|-----------------|
-| 2026-05-06 | BA | Tạo v3.5 cherry-pick từ `srs-v3/srs-fr-08-danh-gia.md`. Apply 8 thay đổi nghiệp vụ: đổi tên module (A-ITEM-08), bổ sung trường `co_quan_duoc_danh_gia_id` (A-ITEM-08, Q-07), bổ sung FR-VI-10 nhận kết quả đánh giá (A-ITEM-08, Q-06, GAP-VI-04), bổ sung trường `file_dinh_kem` (A-ITEM-07), thống nhất 8 trạng thái + thêm HUY (B1, GAP-VI-01), đổi FK `dot_danh_gia_id` → `ke_hoach_danh_gia_id` (B1), mở rộng phạm vi BR-NOTIF-01 (B1, GAP-VI-03), đồng bộ tên SM-DANHGIA + footer (B1). Pending: 5 trường công khai chuyên trang (chờ BA xác nhận FR-08 thuộc 12 DS công khai theo CR-01). KHÔNG apply: bổ sung CB Phê duyệt vào FR-VI-02/06 (v4 sai vs CSV), mâu thuẫn Mẫu 21a/21b (BA chốt giữ nguyên hiện trạng v4). Chi tiết tham chiếu `v3.5-delta-reports/v3.5-delta-fr-08.md` và `srs-v3.5/CHANGELOG-v3-to-v3.5.md`. |
+| 2026-05-06 | BA | Tạo v3.5 cherry-pick từ `srs-v3/srs-fr-08-danh-gia.md`. Apply 8 thay đổi nghiệp vụ: đổi tên module (A-ITEM-08), bổ sung trường `co_quan_duoc_danh_gia_id` (A-ITEM-08, Q-07), bổ sung FR-VI-10 nhận kết quả đánh giá (A-ITEM-08, Q-06, GAP-VI-04), bổ sung trường `file_dinh_kem` (A-ITEM-07), thống nhất 8 trạng thái + thêm HUY (B1, GAP-VI-01), đổi FK `dot_danh_gia_id` → `ke_hoach_danh_gia_id` (B1), mở rộng phạm vi BR-NOTIF-01 (B1, GAP-VI-03), đồng bộ tên SM-DANHGIA + footer (B1). Đã đóng pending (BA chốt 2026-06-22 Lượt 2, C4): FR-08 KHÔNG thuộc 12 danh sách công khai (CR-01) → KHÔNG bổ sung 5 trường công khai cho FR-08. KHÔNG apply: bổ sung CB Phê duyệt vào FR-VI-02/06 (v4 sai vs CSV), mâu thuẫn Mẫu 21a/21b (BA chốt giữ nguyên hiện trạng v4). Chi tiết tham chiếu `v3.5-delta-reports/v3.5-delta-fr-08.md` và `srs-v3.5/CHANGELOG-v3-to-v3.5.md`. |
 | 2026-05-11 | BA + Codex | Chốt xử lý bug DG-012 / vướng mắc quy trình: (1) CB PD chỉ phê duyệt/từ chối phân công người đánh giá; sau khi duyệt, đợt chuyển `CHO_DUYET_PC` → `THUC_HIEN`, CB NV mới chọn vụ việc vào đợt tại Tab Thực hiện. CB PD không chọn vụ việc. (2) Bắt đúng thứ tự: tiêu chí phải đủ tổng trọng số 100% trước khi CB NV thêm người đánh giá; nút thêm người đánh giá bị disabled nếu SUM != 100%, backend validate lại với lỗi rõ ràng. |
 | 2026-05-11 | BA + Codex | **Round 7 BA decision:** QTHT chỉ CRUD danh mục tiêu chí dùng chung ở Nhóm VIII, không sửa tiêu chí đã gắn riêng vào từng đợt FR-08; CB NV quản lý đợt thao tác tiêu chí trong đợt. Đồng bộ `muc_tieu` là bắt buộc ở entity. Đồng bộ chọn VV đánh giá chỉ lấy `HOAN_THANH` theo FR-VI-05. |
 
@@ -1074,7 +1074,7 @@ erDiagram
 | 5 | noi_dung | text (long) | N | | — | Nội dung tổng hợp |
 | 6 | so_lieu_tong_hop | text (long) | N | | — | Số liệu tổng hợp (JSON) |
 | 7 | trang_thai | text | Y | CHECK IN ('DU_THAO','CHO_PHE_DUYET','DA_DUYET','TU_CHOI') | 'DU_THAO' | Trạng thái |
-| 8 | mau_bao_cao | text | N | CHECK IN ('MAU_21A','MAU_21B') | — | Mẫu BC TT17/2025 |
+| 8 | mau_bao_cao | text | N | CHECK IN ('MAU_21A','MAU_21B') | — | Tham chiếu liên kết sang nhóm XI (Chương trình HTPLDN, FR-15) — giữ enum, ở FR-08 chỉ là tham chiếu liên kết |
 | 9 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu theo đơn vị |
 | 10 | created_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày tạo |
 | 11 | updated_at | datetime | Y | DEFAULT NOW() | NOW() | Ngày cập nhật |

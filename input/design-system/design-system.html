@@ -1,0 +1,1402 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>PM HTPLDN — Design System</title>
+<meta name="viewport" content="width=1280">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="design-system/tokens.css?v=6">
+<link rel="stylesheet" href="design-system/styles.css?v=6">
+<style>
+  .anchor-nav {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(245,245,245,0.92);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--color-neutral-5);
+    padding: 10px 48px;
+    display: flex; gap: 4px; overflow-x: auto;
+    font-size: 13px;
+  }
+  .anchor-nav a {
+    padding: 6px 10px;
+    border-radius: 6px;
+    color: var(--color-neutral-8);
+    text-decoration: none;
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .anchor-nav a:hover { background: var(--color-neutral-3); color: var(--color-neutral-11); }
+
+  /* Mock app composition */
+  .app-shell {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    min-height: 680px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--color-neutral-5);
+  }
+  .app-side {
+    background: var(--color-primary-10);
+    color: rgba(255,255,255,0.78);
+    display: flex;
+    flex-direction: column;
+  }
+  .app-side .sect {
+    padding: 14px 20px 6px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    font-weight: 500;
+  }
+  .app-side .it {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 20px;
+    font-size: 14px;
+    line-height: 22px;
+    color: rgba(255,255,255,0.78);
+    cursor: pointer;
+    border-left: 3px solid transparent;
+  }
+  .app-side .it:hover { background: rgba(255,255,255,0.04); color: white; }
+  .app-side .it.active {
+    background: rgba(255,255,255,0.06);
+    color: white;
+    border-left-color: var(--color-accent-5);
+    font-weight: 500;
+  }
+  .app-side .it svg { width: 16px; height: 16px; opacity: 0.7; flex-shrink: 0; }
+  .app-side .it.active svg { opacity: 1; }
+  .app-side .it .ct {
+    margin-left: auto;
+    font-size: 11px;
+    background: rgba(255,255,255,0.12);
+    padding: 0 8px;
+    height: 18px;
+    line-height: 18px;
+    border-radius: 9px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .app-main { background: var(--color-neutral-3); display: flex; flex-direction: column; }
+  .app-top {
+    height: var(--topbar-h);
+    background: #fff;
+    border-bottom: 1px solid var(--color-neutral-5);
+    display: flex; align-items: center; gap: 16px;
+    padding: 0 20px;
+  }
+  .app-top .search {
+    flex: 1; max-width: 420px; position: relative;
+  }
+  .app-top .search svg {
+    position: absolute; left: 11px; top: 50%; transform: translateY(-50%);
+    width: 14px; height: 14px; color: var(--color-neutral-7);
+  }
+  .app-top .search input {
+    width: 100%; height: 32px;
+    border: 1px solid var(--color-neutral-5);
+    border-radius: var(--radius-md);
+    padding: 0 12px 0 32px;
+    background: var(--color-neutral-2);
+    font-size: 14px;
+    font-family: var(--font-sans);
+  }
+  .app-top .search input:focus { outline: none; border-color: var(--color-primary-6); background: #fff; }
+  .app-top .ltag {
+    font-size: 12px;
+    padding: 2px 8px;
+    background: var(--color-primary-1);
+    color: var(--color-primary-8);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-primary-3);
+    font-weight: 500;
+  }
+  .app-top .user {
+    display: flex; align-items: center; gap: 8px;
+    padding-left: 16px; border-left: 1px solid var(--color-neutral-5);
+    font-size: 14px; color: var(--color-neutral-10);
+  }
+  .app-body { padding: 24px; overflow: auto; }
+  .page-head {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    margin-bottom: 20px;
+    gap: 16px;
+  }
+  .page-head h1 { margin: 0; font-size: 22px; font-weight: 600; color: var(--color-neutral-11); line-height: 30px; }
+  .page-head .sub { font-size: 13px; color: var(--color-neutral-7); margin-top: 4px; line-height: 20px; }
+  .kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+
+  /* Icon glyphs — simple line icons */
+  .gicon { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* SLA inline indicator — tabular sans, not mono */
+  .sla-num { font-size: 13px; font-variant-numeric: tabular-nums; font-weight: 500; }
+  .sla-num.ok   { color: var(--color-success-6); }
+  .sla-num.warn { color: var(--color-warn-6); }
+  .sla-num.bad  { color: var(--color-danger-6); }
+  .sla-num.flat { color: var(--color-neutral-7); }
+</style>
+</head>
+<body>
+
+<!-- quick jump -->
+<nav class="anchor-nav">
+  <a href="#overview">01 · Overview</a>
+  <a href="#brand">02 · Brand</a>
+  <a href="#color">03 · Color</a>
+  <a href="#type">04 · Typography</a>
+  <a href="#space">05 · Space &amp; Radius</a>
+  <a href="#elevation">06 · Elevation</a>
+  <a href="#icon">07 · Iconography</a>
+  <a href="#buttons">08 · Buttons</a>
+  <a href="#forms">09 · Forms</a>
+  <a href="#status">10 · Status &amp; Pills</a>
+  <a href="#data">11 · Data Table</a>
+  <a href="#kpi">12 · KPI Cards</a>
+  <a href="#nav">13 · Navigation</a>
+  <a href="#approval">14 · Approval flow</a>
+  <a href="#feedback">15 · Feedback</a>
+  <a href="#composition">16 · App composition</a>
+</nav>
+
+<div class="ds-page">
+
+  <!-- =========================================
+       MASTHEAD
+       ========================================= -->
+  <header class="ds-masthead">
+    <div>
+      <div class="logomark" style="margin-bottom: 28px;">
+        <div class="mark">
+          <span class="glyph">HTPLDN</span>
+        </div>
+        <div class="words">
+          <div class="cq">Bộ Tư pháp</div>
+          <div class="name">Hỗ trợ pháp lý doanh nghiệp</div>
+          <div class="sys">V1.0</div>
+        </div>
+      </div>
+      <div class="eyebrow">Hệ thống thiết kế · v1.0 · 2026</div>
+      <h1>HTPLDN Design System</h1>
+      <p>Thiết kế giao diện cho CMS backend quản trị nghiệp vụ hỗ trợ pháp lý DNNVV theo NĐ55/2019 và NĐ18/2026. Ngôn ngữ thị giác tinh giản, trật tự, chuyên nghiệp — phục vụ 188 use case, 15 tác nhân, 3 cấp phân quyền (TW / BN / ĐP). Component đồng bộ với <strong>Ant Design</strong> (shadcn-like) để đẩy nhanh FE development.</p>
+    </div>
+    <div class="meta">
+      <strong>Phạm vi áp dụng</strong>
+      CMS + 18 API outbound<br>
+      Desktop-only · 1280–1920px<br>
+      Tiếng Việt · UTF-8<br>
+      WCAG 2.1 Level A
+    </div>
+  </header>
+
+  <!-- =========================================
+       01 OVERVIEW — principles
+       ========================================= -->
+  <section id="overview" class="ds-section" style="margin-top: 8px;">
+    <div class="ds-section-header">
+      <span class="num">01</span>
+      <h2>Nguyên tắc thiết kế</h2>
+      <span class="sub">Design principles</span>
+    </div>
+    <p class="ds-lede">Bốn nguyên tắc định hướng mọi quyết định thiết kế trong PM HTPLDN. Khi có mâu thuẫn, ưu tiên theo thứ tự: Rõ ràng → Có thẩm quyền → Dày đặc → Có thể mở rộng.</p>
+
+    <div class="principles">
+      <div class="principle">
+        <div class="num">P-01</div>
+        <h3>Rõ ràng trên hết</h3>
+        <p>Cán bộ nghiệp vụ chịu trách nhiệm pháp lý cho từng thao tác. Trạng thái, quyền, cấp đơn vị, SLA luôn hiển thị rõ ràng trước khi hành động.</p>
+      </div>
+      <div class="principle">
+        <div class="num">P-02</div>
+        <h3>Có thẩm quyền</h3>
+        <p>Ngôn ngữ thị giác trật tự, đọc được ở mọi độ phóng, không trang trí thừa. Màu chủ đạo đồng bộ với Cổng PLQG để tạo liên tục hệ thống Bộ Tư Pháp.</p>
+      </div>
+      <div class="principle">
+        <div class="num">P-03</div>
+        <h3>Dày đặc có chủ đích</h3>
+        <p>Màn hình danh sách / bảng phải hiển thị tối đa thông tin trong 1 lần đọc. Base text 13px, dòng table 40–44px. Ưu tiên bảng phẳng trên card.</p>
+      </div>
+      <div class="principle">
+        <div class="num">P-04</div>
+        <h3>Có thể mở rộng</h3>
+        <p>Mỗi thành phần chịu được nhập tiếng Việt dài có dấu, cấp đơn vị 3 tầng, trạng thái 5–9 enum, và locked filter cho user BN/ĐP.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       02 BRAND
+       ========================================= -->
+  <section id="brand" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">02</span>
+      <h2>Thương hiệu &amp; Logomark</h2>
+      <span class="sub">Brand</span>
+    </div>
+    <p class="ds-lede">Logomark là một khối đặc màu primary chứa chữ viết tắt <strong>HTPLDN</strong> một hàng ngang. Cấu trúc 3 phần cạnh khối: <strong>BỘ TƯ PHÁP</strong> (dòng eyebrow HOA, nhỏ) · <strong>Hỗ trợ pháp lý doanh nghiệp</strong> (tên hệ thống đầy đủ, giữ chữ thường theo văn phong hành chính) · <strong>V1.0</strong> (phiên bản). Khối gợi hình con dấu vuông trên văn bản hành chính, giản lược về hình học thuần typography — không icon trang trí.</p>
+
+    <!-- Primary lockup -->
+    <div class="specimen" style="padding: 48px 40px;">
+      <div class="caption">01 · Logomark chính — cỡ lớn (login, trang giới thiệu)</div>
+      <div class="logomark lg">
+        <div class="mark">
+          <span class="glyph">HTPLDN</span>
+        </div>
+        <div class="words">
+          <div class="cq">Bộ Tư pháp</div>
+          <div class="name">Hỗ trợ pháp lý doanh nghiệp</div>
+          <div class="sys">V1.0</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Variants row -->
+    <div class="split-2" style="margin-top: 16px;">
+      <div class="specimen" style="padding: 32px;">
+        <div class="caption">02 · Mặc định (CMS)</div>
+        <div class="logomark">
+          <div class="mark">
+            <span class="glyph">HTPLDN</span>
+          </div>
+          <div class="words">
+            <div class="cq">Bộ Tư pháp</div>
+            <div class="name">Hỗ trợ pháp lý doanh nghiệp</div>
+            <div class="sys">V1.0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="specimen" style="padding: 32px; background: var(--color-primary-10); border-color: var(--color-primary-10);">
+        <div class="caption" style="color: rgba(255,255,255,0.55);">03 · Trên nền tối</div>
+        <div class="logomark on-dark">
+          <div class="mark">
+            <span class="glyph">HTPLDN</span>
+          </div>
+          <div class="words">
+            <div class="cq">Bộ Tư pháp</div>
+            <div class="name">Hỗ trợ pháp lý doanh nghiệp</div>
+            <div class="sys">V1.0</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="split-3" style="margin-top: 16px;">
+      <div class="specimen" style="padding: 28px;">
+        <div class="caption">04 · Đơn sắc (in trắng đen)</div>
+        <div class="logomark mono sm">
+          <div class="mark">
+            <span class="glyph">HTPLDN</span>
+          </div>
+          <div class="words">
+            <div class="cq">Bộ Tư pháp</div>
+            <div class="name">Hỗ trợ pháp lý doanh nghiệp</div>
+            <div class="sys">V1.0</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="specimen" style="padding: 28px;">
+        <div class="caption">05 · Icon (favicon, app)</div>
+        <div style="display: flex; gap: 16px; align-items: center; margin-top: 14px;">
+          <div class="mark-icon">HTPLDN</div>
+          <div class="mark-icon" style="width: 48px; height: 48px; font-size: 14px;">HTPLDN</div>
+          <div class="mark-icon" style="width: 64px; height: 64px; font-size: 18px;">HTPLDN</div>
+        </div>
+        <div style="font-size: 12px; color: var(--color-neutral-7); margin-top: 14px; line-height: 18px;">36px, 48px, 64px — favicon, taskbar, sidebar thu gọn.</div>
+      </div>
+
+      <div class="specimen" style="padding: 28px;">
+        <div class="caption">06 · Một dòng (footer, email)</div>
+        <div style="margin-top: 16px; display: flex; align-items: center; gap: 10px;">
+          <div class="mark-icon" style="width: 24px; height: 24px; font-size: 8px; border-radius: 4px;">HTPLDN</div>
+          <span style="font-size: 13px; font-weight: 500; color: var(--color-neutral-10);">HTPLDN</span>
+          <span style="font-size: 13px; color: var(--color-neutral-7);">· Bộ Tư pháp</span>
+        </div>
+        <div style="font-size: 12px; color: var(--color-neutral-7); margin-top: 14px; line-height: 20px;">
+          Dùng cho chân email, footer báo cáo xuất PDF, breadcrumb hệ thống.
+        </div>
+      </div>
+    </div>
+
+    <div class="summary-rail" style="border-top:none; margin-top: 24px; padding-top: 0;">
+      <div class="cell"><strong>Cấu tạo</strong>HTPLDN một hàng ngang, kerning +2%, trong khối radius 6px (theo Ant). Tỉ lệ width:height ≈ 2:1.</div>
+      <div class="cell"><strong>Màu</strong>Khối nền Primary 7 (#0958D9) · chữ trắng đặc 100%. Không dùng gradient, không đổ bóng.</div>
+      <div class="cell"><strong>Clear space</strong>Xung quanh logomark tối thiểu bằng chiều cao khối. Không đặt trên ảnh nền.</div>
+      <div class="cell"><strong>Cấm</strong>Không xoay, nghiêng, đổi kerning, tách ký tự, đổi màu khối ngoài palette primary.</div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       03 COLOR
+       ========================================= -->
+  <section id="color" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">03</span>
+      <h2>Hệ màu</h2>
+      <span class="sub">Color system</span>
+    </div>
+    <p class="ds-lede">
+      Primary 7 (#0958D9) — Ant Design Blue-7, đậm hơn Blue-6 một tone để contrast tốt hơn và gần Cổng PLQG. Neutral dùng Ant Gray (cool, trung tính) để card, border, bảng không xung đột thị giác với component của thư viện. Gold-6 (#FAAD14) làm accent — dùng tiết chế cho cấp BN, trạng thái cảnh báo. Thang màu 10 bước theo spec Ant.
+    </p>
+
+    <div class="specimen">
+      <div class="caption">Ant Palette</div>
+      <div class="swatch-grid" style="margin-top: 8px;">
+        <div class="row-label"><span>Primary · Ant Blue</span><span class="desc">Brand, link, focus, CTA · Ant Blue-7 = primary (đậm hơn Blue-6 1 tone)</span></div>
+        <div class="swatch light" style="background: var(--color-primary-1);"><span class="step">1</span><span class="hex">#E6F4FF</span></div>
+        <div class="swatch light" style="background: var(--color-primary-2);"><span class="step">2</span><span class="hex">#BAE0FF</span></div>
+        <div class="swatch light" style="background: var(--color-primary-3);"><span class="step">3</span><span class="hex">#91CAFF</span></div>
+        <div class="swatch light" style="background: var(--color-primary-4);"><span class="step">4</span><span class="hex">#69B1FF</span></div>
+        <div class="swatch dark" style="background: var(--color-primary-5);"><span class="step">5</span><span class="hex">#1677FF</span></div>
+        <div class="swatch dark" style="background: var(--color-primary-6); outline: 2px solid var(--color-accent-5); outline-offset: 2px;"><span class="step">6 ★</span><span class="hex">#0958D9</span></div>
+        <div class="swatch dark" style="background: var(--color-primary-7);"><span class="step">7</span><span class="hex">#003EB3</span></div>
+        <div class="swatch dark" style="background: var(--color-primary-8);"><span class="step">8</span><span class="hex">#002C8C</span></div>
+        <div class="swatch dark" style="background: var(--color-primary-9);"><span class="step">9</span><span class="hex">#001D66</span></div>
+        <div class="swatch dark" style="background: var(--color-primary-10);"><span class="step">10</span><span class="hex">#001448</span></div>
+
+        <div class="row-label"><span>Neutral · Ant Gray</span><span class="desc">Text, borders, app surfaces · cool neutral chuẩn Ant</span></div>
+        <div class="swatch light" style="background: var(--color-neutral-1); border: 1px solid var(--color-neutral-5);"><span class="step">1</span><span class="hex">#FFFFFF</span></div>
+        <div class="swatch light" style="background: var(--color-neutral-2);"><span class="step">2</span><span class="hex">#FAFAFA</span></div>
+        <div class="swatch light" style="background: var(--color-neutral-3);"><span class="step">3</span><span class="hex">#F5F5F5</span></div>
+        <div class="swatch light" style="background: var(--color-neutral-4);"><span class="step">4</span><span class="hex">#F0F0F0</span></div>
+        <div class="swatch light" style="background: var(--color-neutral-5);"><span class="step">5</span><span class="hex">#D9D9D9</span></div>
+        <div class="swatch light" style="background: var(--color-neutral-6);"><span class="step">6</span><span class="hex">#BFBFBF</span></div>
+        <div class="swatch dark" style="background: var(--color-neutral-7);"><span class="step">7</span><span class="hex">#8C8C8C</span></div>
+        <div class="swatch dark" style="background: var(--color-neutral-8);"><span class="step">8</span><span class="hex">#595959</span></div>
+        <div class="swatch dark" style="background: var(--color-neutral-9);"><span class="step">9</span><span class="hex">#434343</span></div>
+        <div class="swatch dark" style="background: var(--color-neutral-11);"><span class="step">11</span><span class="hex">#1F1F1F</span></div>
+      </div>
+    </div>
+
+    <div class="split-2" style="margin-top: 20px;">
+      <div class="specimen">
+        <div class="caption">Semantic (Ant)</div>
+        <div style="font-size: 13px; color: var(--color-neutral-8); margin-bottom: 16px; line-height: 20px;">
+          Semantic color theo Ant Design. Dùng cho Alert, Tag, Message. Không dùng cho UI trang trí.
+        </div>
+        <div class="accent-row">
+          <div class="accent-block" style="background: var(--color-info-1); color: var(--color-primary-7); border: 1px solid var(--color-primary-3);">
+            <span class="label">Info</span>
+            <span>#0958D9 / #E6F4FF</span>
+          </div>
+          <div class="accent-block" style="background: var(--color-success-1); color: var(--color-success-6); border: 1px solid #b7eb8f;">
+            <span class="label">Success</span>
+            <span>#52C41A / #F6FFED</span>
+          </div>
+          <div class="accent-block" style="background: var(--color-warn-1); color: var(--color-warn-6); border: 1px solid #ffe58f;">
+            <span class="label">Warning</span>
+            <span>#FAAD14 / #FFFBE6</span>
+          </div>
+          <div class="accent-block" style="background: var(--color-danger-1); color: var(--color-danger-6); border: 1px solid #ffccc7;">
+            <span class="label">Error</span>
+            <span>#F5222D / #FFF2F0</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="specimen">
+        <div class="caption">Accent · Gold</div>
+        <div style="font-size: 13px; color: var(--color-neutral-8); margin-bottom: 16px; line-height: 20px;">
+          Ant Gold — tiết chế. Cho chỉ mục cấp BN, highlight "Mới", active indicator sidebar.
+        </div>
+        <div class="accent-row" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="accent-block" style="background: var(--color-accent-1); color: var(--color-accent-7); border: 1px solid var(--color-accent-3);">
+            <span class="label">Gold 1</span>
+            <span>#FFFBE6</span>
+          </div>
+          <div class="accent-block" style="background: var(--color-accent-5); color: white;">
+            <span class="label">Gold 6 ★</span>
+            <span>#FAAD14</span>
+          </div>
+          <div class="accent-block" style="background: var(--color-accent-7); color: white;">
+            <span class="label">Gold 7</span>
+            <span>#D48806</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       04 TYPE
+       ========================================= -->
+  <section id="type" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">04</span>
+      <h2>Typography</h2>
+      <span class="sub">Be Vietnam Pro · một font duy nhất</span>
+    </div>
+    <p class="ds-lede">
+      Dùng <strong>một họ font duy nhất</strong> xuyên suốt hệ thống: <strong>Be Vietnam Pro</strong> (400/500/600/700) — xử lý dấu tiếng Việt chính xác, thanh thoát, không gợi cảm giác "code editor" hay "fintech". Với cột số (mã vụ việc, tiền, thời gian), bật <code>font-variant-numeric: tabular-nums</code> để căn cột thẳng hàng mà không cần chuyển sang font mono. Base 13px; label ≥ 11px; hit target ≥ 32px.
+    </p>
+
+    <div class="specimen">
+      <div class="caption">Type scale</div>
+      <div class="type-stack">
+        <div class="type-row">
+          <div class="spec"><strong>Display</strong>48 / 50 · 600</div>
+          <div class="t-display">Phần mềm Hỗ trợ Pháp lý Doanh nghiệp</div>
+        </div>
+        <div class="type-row">
+          <div class="spec"><strong>H1 — Page</strong>32 / 37 · 600</div>
+          <div class="t-h1">Danh sách vụ việc hỗ trợ pháp lý</div>
+        </div>
+        <div class="type-row">
+          <div class="spec"><strong>H2 — Section</strong>22 / 28 · 600</div>
+          <div class="t-h2">Tổng quan 6 tháng đầu năm 2026</div>
+        </div>
+        <div class="type-row">
+          <div class="spec"><strong>H3 — Card</strong>16 / 21 · 600</div>
+          <div class="t-h3">Thẩm định tư vấn viên · Sở Tư pháp Hà Nội</div>
+        </div>
+        <div class="type-row">
+          <div class="spec"><strong>Body LG</strong>14 / 22 · 400</div>
+          <div class="t-body-lg">Doanh nghiệp nhỏ và vừa có thể gửi yêu cầu tư vấn pháp lý qua Cổng dịch vụ công Bộ Tư pháp. Hệ thống tự động phân công theo lĩnh vực.</div>
+        </div>
+        <div class="type-row">
+          <div class="spec"><strong>Body · Base</strong>13 / 20 · 400</div>
+          <div class="t-body">Cán bộ nghiệp vụ tiếp nhận hồ sơ, kiểm tra tài liệu, phân công tư vấn viên theo lĩnh vực và trình cán bộ phê duyệt cùng cấp.</div>
+        </div>
+        <div class="type-row">
+          <div class="spec"><strong>Caption</strong>12 / 18 · 400</div>
+          <div class="t-caption">Bộ lọc đang áp dụng: Cấp đơn vị = Địa phương · Thời gian = 01/04/2026–23/04/2026</div>
+        </div>
+        <div class="type-row">
+          <div class="spec"><strong>Micro · Uppercase</strong>11 / 16 · 500 · ↑0.1em</div>
+          <div class="t-micro">Bộ lọc · Phân quyền · Thống kê</div>
+        </div>
+        <div class="type-row">
+          <div class="spec"><strong>Tabular data</strong>14 · 400 · tnum (sans + tabular-nums)</div>
+          <div class="t-mono-data">VV-HN-20260423-0147 · 1.250.000 đ · 23/04/2026 14:55:12</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       05 SPACE + RADIUS
+       ========================================= -->
+  <section id="space" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">05</span>
+      <h2>Khoảng cách &amp; Bo góc</h2>
+      <span class="sub">Spacing &amp; Radius</span>
+    </div>
+    <p class="ds-lede">Lưới 4px (Ant). Ô nhập 32px (Ant default), khoảng cách giữa các field 12–16px, padding card 20–24px. Bo góc 6px mặc định (Ant borderRadius), 8px cho card ngoài.</p>
+
+    <div class="split-2">
+      <div class="specimen">
+        <div class="caption">Spacing scale · 4px base</div>
+        <div class="spacing-grid" style="margin-top: 12px;">
+          <div class="spacing-cell"><div class="spacing-bar" style="width: 4px;"></div><span class="name">1</span> 4px</div>
+          <div class="spacing-cell"><div class="spacing-bar" style="width: 8px;"></div><span class="name">2</span> 8px</div>
+          <div class="spacing-cell"><div class="spacing-bar" style="width: 12px;"></div><span class="name">3</span> 12px</div>
+          <div class="spacing-cell"><div class="spacing-bar" style="width: 16px;"></div><span class="name">4</span> 16px</div>
+          <div class="spacing-cell"><div class="spacing-bar" style="width: 20px;"></div><span class="name">5</span> 20px</div>
+          <div class="spacing-cell"><div class="spacing-bar" style="width: 24px;"></div><span class="name">6</span> 24px</div>
+          <div class="spacing-cell"><div class="spacing-bar" style="width: 32px;"></div><span class="name">8</span> 32px</div>
+          <div class="spacing-cell"><div class="spacing-bar" style="width: 40px;"></div><span class="name">10</span> 40px</div>
+          <div class="spacing-cell"><div class="spacing-bar" style="width: 48px;"></div><span class="name">12</span> 48px</div>
+          <div class="spacing-cell"><div class="spacing-bar" style="width: 64px;"></div><span class="name">16</span> 64px</div>
+        </div>
+      </div>
+
+      <div class="specimen">
+        <div class="caption">Radius</div>
+        <div class="radius-grid" style="margin-top: 12px;">
+          <div class="radius-cell"><div class="radius-box" style="border-radius: 0;"></div><span class="name">none</span>0</div>
+          <div class="radius-cell"><div class="radius-box" style="border-radius: 4px;"></div><span class="name">sm</span>4px</div>
+          <div class="radius-cell"><div class="radius-box" style="border-radius: 6px;"></div><span class="name">md ★</span>6px</div>
+          <div class="radius-cell"><div class="radius-box" style="border-radius: 8px;"></div><span class="name">lg</span>8px</div>
+          <div class="radius-cell"><div class="radius-box" style="border-radius: 999px; height: 32px; margin-top: 20px;"></div><span class="name">pill</span>full</div>
+        </div>
+        <div style="margin-top: 24px; font-size: 13px; color: var(--color-neutral-8); line-height: 22px;">
+          <strong style="color: var(--color-neutral-10); display:block; margin-bottom: 4px; font-size: 13px;">Quy ước (Ant)</strong>
+          • Button, input, tag → <span style="color:var(--color-primary-7);">md 6px</span><br>
+          • Card ngoài, modal → <span style="color:var(--color-primary-7);">lg 8px</span><br>
+          • Chip nhỏ, tag → <span style="color:var(--color-primary-7);">sm 4px</span><br>
+          • Avatar → <span style="color:var(--color-primary-7);">pill</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       06 ELEVATION
+       ========================================= -->
+  <section id="elevation" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">06</span>
+      <h2>Độ nổi</h2>
+      <span class="sub">Elevation</span>
+    </div>
+    <p class="ds-lede">Rất hạn chế. CMS nội bộ dùng bóng chỉ cho menu dropdown, modal, toast. Cấu trúc chính dựa vào <em>border + background contrast</em>, không phải bóng.</p>
+
+    <div class="specimen">
+      <div class="shadow-grid">
+        <div class="shadow-cell" style="box-shadow: var(--shadow-xs);">
+          <span class="name">xs</span>
+          Divider thin<br>→ table row hover
+        </div>
+        <div class="shadow-cell" style="box-shadow: var(--shadow-sm);">
+          <span class="name">sm</span>
+          Card rest
+        </div>
+        <div class="shadow-cell" style="box-shadow: var(--shadow-md);">
+          <span class="name">md</span>
+          Dropdown, popover
+        </div>
+        <div class="shadow-cell" style="box-shadow: var(--shadow-lg);">
+          <span class="name">lg</span>
+          Modal, toast
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       07 ICONOGRAPHY
+       ========================================= -->
+  <section id="icon" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">07</span>
+      <h2>Iconography</h2>
+      <span class="sub">Line icons · 1.6 stroke · 20/16/14px</span>
+    </div>
+    <p class="ds-lede">Bộ icon line đồng nhất: stroke 1.6, round cap, không fill. Sử dụng Lucide hoặc custom draw theo cùng quy cách. Không dùng emoji trong CMS.</p>
+
+    <div class="specimen">
+      <div class="icon-grid">
+        <!-- Dashboard -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg><span class="name">dashboard</span></div>
+        <!-- File -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 13h6M9 17h4"/></svg><span class="name">hoso</span></div>
+        <!-- Search -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span class="name">search</span></div>
+        <!-- Filter -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h18l-7 9v6l-4 2v-8z"/></svg><span class="name">filter</span></div>
+        <!-- Check -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg><span class="name">duyet</span></div>
+        <!-- X -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6L6 18M6 6l12 12"/></svg><span class="name">tuchoi</span></div>
+        <!-- Clock -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><span class="name">sla</span></div>
+        <!-- Users -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg><span class="name">tvv</span></div>
+        <!-- Building -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20"/><path d="M9 22v-4h6v4M8 6h.01M8 10h.01M8 14h.01M12 6h.01M12 10h.01M12 14h.01M16 6h.01M16 10h.01M16 14h.01"/></svg><span class="name">donvi</span></div>
+        <!-- Book -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg><span class="name">daotao</span></div>
+        <!-- Money -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span class="name">chitra</span></div>
+        <!-- Chat -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span class="name">hoidap</span></div>
+        <!-- Chart -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg><span class="name">baocao</span></div>
+        <!-- Shield -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V6z"/></svg><span class="name">phanquyen</span></div>
+        <!-- Gear -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span class="name">cauhinh</span></div>
+        <!-- Download -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span class="name">export</span></div>
+        <!-- Upload -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span class="name">import</span></div>
+        <!-- Plus -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg><span class="name">them</span></div>
+        <!-- Edit -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span class="name">sua</span></div>
+        <!-- Trash -->
+        <div class="icon-cell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg><span class="name">xoa</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       08 BUTTONS
+       ========================================= -->
+  <section id="buttons" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">08</span>
+      <h2>Buttons</h2>
+      <span class="sub">Variants · Sizes · States</span>
+    </div>
+    <p class="ds-lede">Một "Primary" trên mỗi màn — thường là hành động duyệt / lưu. "Danger" chỉ dùng cho xóa hoặc từ chối. Hit area 32px mặc định, mở rộng 40px cho form đăng nhập + trang chính thức.</p>
+
+    <div class="specimen">
+      <div class="comp-row">
+        <div class="comp-label">Variants</div>
+        <div class="comp-demo">
+          <button class="btn btn-primary">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>
+            Phê duyệt
+          </button>
+          <button class="btn btn-secondary">Trở lại</button>
+          <button class="btn btn-ghost">Xem thêm</button>
+          <button class="btn btn-danger">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            Từ chối
+          </button>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-label">Sizes</div>
+        <div class="comp-demo">
+          <button class="btn btn-primary btn-sm">Nhỏ · 24px</button>
+          <button class="btn btn-primary">Mặc định · 32px</button>
+          <button class="btn btn-primary btn-lg">Lớn · 40px</button>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-label">States</div>
+        <div class="comp-demo">
+          <button class="btn btn-primary">Rest</button>
+          <button class="btn btn-primary" style="background: var(--color-primary-5); border-color: var(--color-primary-5);">Hover</button>
+          <button class="btn btn-primary" style="box-shadow: var(--shadow-ring);">Focus</button>
+          <button class="btn btn-primary" disabled>Disabled</button>
+          <button class="btn btn-secondary">
+            <svg class="gicon" viewBox="0 0 24 24" style="animation: spin 1s linear infinite;"><circle cx="12" cy="12" r="9" stroke-dasharray="40 20" opacity="0.4"/><path d="M21 12a9 9 0 0 0-9-9" /></svg>
+            Đang xử lý
+          </button>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-label">Icon-only (toolbar)</div>
+        <div class="comp-demo">
+          <button class="btn btn-secondary btn-square" aria-label="Xuất Excel">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+          </button>
+          <button class="btn btn-secondary btn-square" aria-label="Bộ lọc">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M4 5h16l-6 8v5l-4 2v-7z"/></svg>
+          </button>
+          <button class="btn btn-secondary btn-square" aria-label="Làm mới">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M4 4v5h5"/><path d="M20 20v-5h-5"/><path d="M4 9a8 8 0 0 1 14.31-1.5M20 15a8 8 0 0 1-14.31 1.5"/></svg>
+          </button>
+          <button class="btn btn-secondary btn-square" aria-label="Tải xuống">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M12 4v12m0 0l-5-5m5 5l5-5"/><path d="M4 20h16"/></svg>
+          </button>
+          <button class="btn btn-secondary btn-square" aria-label="In">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M7 8V3h10v5"/><rect x="4" y="8" width="16" height="8" rx="1"/><path d="M7 14h10v7H7z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       09 FORMS
+       ========================================= -->
+  <section id="forms" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">09</span>
+      <h2>Forms</h2>
+      <span class="sub">Inputs · Selects · Validation</span>
+    </div>
+    <p class="ds-lede">Label trên, bắt buộc đánh dấu bằng dấu hoa thị đỏ. Validate real-time ở ô (viền đỏ + tin nhắn) theo UI-04. Placeholder luôn là mẫu định dạng, không phải hướng dẫn.</p>
+
+    <div class="specimen">
+      <div class="split-3">
+        <div class="field">
+          <label>Mã vụ việc <span class="req">*</span></label>
+          <input class="input" value="VV-HN-20260423-0147">
+          <span class="help">Tự sinh theo quy cách VV-{TINH}-YYYYMMDD-SEQ</span>
+        </div>
+        <div class="field">
+          <label>Lĩnh vực pháp luật <span class="req">*</span></label>
+          <select class="select">
+            <option>Doanh nghiệp</option>
+            <option>Thuế</option>
+            <option>Lao động</option>
+          </select>
+          <span class="help">Đồng bộ từ danh mục dùng chung BTP</span>
+        </div>
+        <div class="field">
+          <label>Ngày tiếp nhận <span class="req">*</span></label>
+          <div class="input-wrap">
+            <svg class="lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <input class="input" value="23/04/2026">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Người phê duyệt</label>
+          <input class="input" value="Nguyễn Thị Phương — CB PD ĐP">
+        </div>
+        <div class="field">
+          <label>Số tiền hỗ trợ <span class="req">*</span></label>
+          <input class="input error" value="abc">
+          <span class="help err">Số tiền phải là số nguyên dương, đơn vị đồng</span>
+        </div>
+        <div class="field">
+          <label>Email thông báo</label>
+          <input class="input" value="phuong.nguyen@moj.gov.vn" disabled style="background: var(--color-neutral-3);">
+          <span class="help">Lấy từ tài khoản, không thể sửa</span>
+        </div>
+
+        <div class="field" style="grid-column: span 3;">
+          <label>Nội dung yêu cầu tư vấn <span class="req">*</span></label>
+          <textarea class="textarea">Doanh nghiệp cần hướng dẫn về thủ tục đăng ký bảo hộ nhãn hiệu theo Luật Sở hữu trí tuệ 2022 và quy định mới nhất của NĐ 65/2023/NĐ-CP. Đề nghị tư vấn viên có chuyên môn về sở hữu trí tuệ.</textarea>
+          <span class="help">Tối đa 5000 ký tự · còn 4812</span>
+        </div>
+
+        <div style="grid-column: span 3; display: flex; gap: 24px; padding-top: 8px;">
+          <label class="check"><input type="checkbox" checked> Yêu cầu khẩn cấp (SLA 3 ngày)</label>
+          <label class="check"><input type="checkbox"> Doanh nghiệp đồng ý công khai</label>
+          <label class="check"><input type="radio" name="kenh" checked> Dịch vụ công</label>
+          <label class="check"><input type="radio" name="kenh"> Cổng PLQG</label>
+          <label class="check"><input type="radio" name="kenh"> Trực tiếp tại trụ sở</label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       10 STATUS
+       ========================================= -->
+  <section id="status" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">10</span>
+      <h2>Status &amp; Badges</h2>
+      <span class="sub">State machine pills</span>
+    </div>
+    <p class="ds-lede">Mỗi state machine (SM-VUVIEC, SM-KHOAHOC, SM-TVV, SM-HOIDAP…) chia trạng thái vào 6 nhóm màu. Không tạo màu mới cho mỗi trạng thái — ánh xạ về 6 ý nghĩa cơ bản để cán bộ đọc nhanh.</p>
+
+    <div class="specimen">
+      <div class="comp-row">
+        <div class="comp-label">Status pills — 6 buckets</div>
+        <div class="comp-demo">
+          <span class="pill draft">Dự thảo</span>
+          <span class="pill pending">Chờ tiếp nhận</span>
+          <span class="pill review">Chờ phê duyệt</span>
+          <span class="pill active">Đang xử lý</span>
+          <span class="pill active">Hoạt động</span>
+          <span class="pill reject">Từ chối</span>
+          <span class="pill closed">Hoàn thành</span>
+          <span class="pill closed">Hủy</span>
+          <span class="pill pending">Yêu cầu bổ sung</span>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-label">Cấp đơn vị · Level chip</div>
+        <div class="comp-demo">
+          <span class="level-chip">TW</span>
+          <span class="level-chip bn">BN</span>
+          <span class="level-chip dp">ĐP</span>
+          <span style="font-size: 12px; color: var(--color-neutral-500);">Dùng cố định trong table cột "Đơn vị" và filter L1</span>
+        </div>
+      </div>
+      <div class="comp-row">
+        <div class="comp-label">Avatars</div>
+        <div class="comp-demo">
+          <span class="avatar sm">NP</span>
+          <span class="avatar">PH</span>
+          <span class="avatar lg">TL</span>
+          <span class="avatar" style="background: var(--color-accent-100); color: var(--color-accent-700); border-color: #e8d098;">TV</span>
+          <span class="avatar" style="background: var(--color-success-50); color: var(--color-success-700); border-color: #bcdac5;">CG</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       11 DATA TABLE
+       ========================================= -->
+  <section id="data" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">11</span>
+      <h2>Data Table</h2>
+      <span class="sub">List management pattern (P-01)</span>
+    </div>
+    <p class="ds-lede">Mẫu P-01 chiếm ~60% use case. Ant Table — row 54px, padding 12×16, header #FAFAFA. Toolbar + tabs có đếm + phân trang.</p>
+
+    <div class="specimen flush">
+      <div class="tabs" style="padding: 0 16px;">
+        <div class="tab">Tất cả <span class="count">1.247</span></div>
+        <div class="tab active">Chờ tiếp nhận <span class="count">42</span></div>
+        <div class="tab">Đang xử lý <span class="count">318</span></div>
+        <div class="tab">Chờ phê duyệt <span class="count">7</span></div>
+        <div class="tab">Hoàn thành <span class="count">872</span></div>
+        <div class="tab">Từ chối <span class="count">8</span></div>
+      </div>
+
+      <div class="toolbar">
+        <div class="input-wrap" style="width: 280px;">
+          <svg class="lead" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input class="input" placeholder="Tìm theo mã, tên, lĩnh vực…">
+        </div>
+        <select class="select" style="width: 160px;"><option>Tất cả lĩnh vực</option></select>
+        <select class="select" style="width: 160px;"><option>01/04 – 23/04/2026</option></select>
+        <div class="grow"></div>
+        <button class="btn btn-secondary btn-sm">
+          <svg class="gicon" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Xuất Excel
+        </button>
+        <div class="vr"></div>
+        <button class="btn btn-primary btn-sm">
+          <svg class="gicon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Tiếp nhận hàng loạt
+        </button>
+      </div>
+
+      <table class="tbl">
+        <thead>
+          <tr>
+            <th style="width: 32px;"><input type="checkbox"></th>
+            <th style="width: 180px;">Mã vụ việc</th>
+            <th>Doanh nghiệp</th>
+            <th>Lĩnh vực</th>
+            <th>Đơn vị</th>
+            <th>Ngày tiếp nhận</th>
+            <th>Trạng thái</th>
+            <th style="width: 80px;">SLA</th>
+            <th style="width: 100px;" class="num">Chi phí</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td class="mono">VV-HN-20260423-0147</td>
+            <td>Công ty CP Giải pháp Số Việt Nam</td>
+            <td>Sở hữu trí tuệ</td>
+            <td><span class="level-chip dp">ĐP</span> Sở TP Hà Nội</td>
+            <td class="mono">23/04/2026</td>
+            <td><span class="pill pending">Chờ tiếp nhận</span></td>
+            <td><span class="sla-num ok">14/15</span></td>
+            <td class="num">—</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td class="mono">VV-HN-20260422-0146</td>
+            <td>Doanh nghiệp TN An Phát</td>
+            <td>Thuế</td>
+            <td><span class="level-chip dp">ĐP</span> Sở TP Hà Nội</td>
+            <td class="mono">22/04/2026</td>
+            <td><span class="pill review">Chờ phê duyệt</span></td>
+            <td><span class="sla-num warn">3/15</span></td>
+            <td class="num">1.250.000</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" checked></td>
+            <td class="mono">VV-HCM-20260421-0891</td>
+            <td>Công ty TNHH Xuân Bình</td>
+            <td>Lao động</td>
+            <td><span class="level-chip dp">ĐP</span> Sở TP HCM</td>
+            <td class="mono">21/04/2026</td>
+            <td><span class="pill active">Đang xử lý</span></td>
+            <td><span class="sla-num bad">−2/15</span></td>
+            <td class="num">2.500.000</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td class="mono">VV-DN-20260421-0112</td>
+            <td>HTX Sản xuất Nông nghiệp Đà Nẵng</td>
+            <td>Đất đai</td>
+            <td><span class="level-chip dp">ĐP</span> Sở TP Đà Nẵng</td>
+            <td class="mono">21/04/2026</td>
+            <td><span class="pill active">Đang xử lý</span></td>
+            <td><span class="sla-num ok">11/15</span></td>
+            <td class="num">1.800.000</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td class="mono">VV-TW-20260420-0034</td>
+            <td>Tổng Công ty Đầu tư Phát triển</td>
+            <td>Doanh nghiệp</td>
+            <td><span class="level-chip">TW</span> Cục BLDS&amp;KT</td>
+            <td class="mono">20/04/2026</td>
+            <td><span class="pill closed">Hoàn thành</span></td>
+            <td><span class="sla-num flat">—</span></td>
+            <td class="num">4.200.000</td>
+          </tr>
+          <tr>
+            <td><input type="checkbox"></td>
+            <td class="mono">VV-CT-20260419-0203</td>
+            <td>Công ty CP Dệt may Cần Thơ</td>
+            <td>Thương mại</td>
+            <td><span class="level-chip dp">ĐP</span> Sở TP Cần Thơ</td>
+            <td class="mono">19/04/2026</td>
+            <td><span class="pill reject">Từ chối</span></td>
+            <td><span class="sla-num flat">—</span></td>
+            <td class="num">—</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-top: 1px solid var(--color-neutral-4); background: #fff;">
+        <div style="font-size: 14px; color: var(--color-neutral-8); line-height: 22px;">
+          Hiển thị <strong style="color: var(--color-neutral-10); font-weight: 500;">1–20</strong> trong <strong style="color: var(--color-neutral-10); font-weight: 500;">42</strong> bản ghi
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+          <button class="btn btn-secondary btn-square" disabled>‹</button>
+          <button class="btn btn-primary btn-square">1</button>
+          <button class="btn btn-secondary btn-square">2</button>
+          <button class="btn btn-secondary btn-square">3</button>
+          <button class="btn btn-secondary btn-square">›</button>
+          <select class="select" style="width: auto; margin-left: 8px;">
+            <option>20 / trang</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       12 KPI
+       ========================================= -->
+  <section id="kpi" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">12</span>
+      <h2>KPI Cards</h2>
+      <span class="sub">Dashboard (Nhóm I · UC 1-9)</span>
+    </div>
+    <p class="ds-lede">Card KPI có thanh màu bên trái phân loại nhóm nghiệp vụ, giá trị lớn căn tabular (không nhảy cột khi refresh), xu hướng ↑↓ theo kỳ so sánh (Flow hoặc Stock theo loại chỉ số), footer nhỏ hiện mã UC tham chiếu.</p>
+
+    <div class="specimen" style="background: var(--color-neutral-50);">
+      <div class="kpi-row">
+        <div class="kpi">
+          <div class="kpi-label">Hỏi đáp pháp luật mới <span class="uc-tag">UC-01</span></div>
+          <div class="kpi-value">1.284</div>
+          <div class="kpi-trend up">▲ 12,5% so với 23 ngày trước</div>
+          <div class="kpi-foot"><span>Tất cả đơn vị</span><span>01/04 – 23/04</span></div>
+        </div>
+        <div class="kpi accent">
+          <div class="kpi-label">Vụ việc tiếp nhận <span class="uc-tag">UC-02</span></div>
+          <div class="kpi-value">347</div>
+          <div class="kpi-trend up">▲ 8,2% so kỳ trước</div>
+          <div class="kpi-foot"><span>Tất cả đơn vị</span><span>01/04 – 23/04</span></div>
+        </div>
+        <div class="kpi warn">
+          <div class="kpi-label">Vụ việc đang hỗ trợ <span class="uc-tag">UC-03</span></div>
+          <div class="kpi-value">128</div>
+          <div class="kpi-trend flat">— Không đổi (stock)</div>
+          <div class="kpi-foot"><span>Snapshot 23/04 17:55</span><span>—</span></div>
+        </div>
+        <div class="kpi success">
+          <div class="kpi-label">Vụ việc hoàn thành <span class="uc-tag">UC-04</span></div>
+          <div class="kpi-value">219</div>
+          <div class="kpi-trend up">▲ 15,1% so kỳ trước</div>
+          <div class="kpi-foot"><span>Tất cả đơn vị</span><span>01/04 – 23/04</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       13 NAVIGATION
+       ========================================= -->
+  <section id="nav" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">13</span>
+      <h2>Navigation</h2>
+      <span class="sub">Breadcrumb · Tabs · Sidebar</span>
+    </div>
+
+    <div class="split-2">
+      <div class="specimen">
+        <div class="caption">Breadcrumb</div>
+        <div class="crumb" style="margin-top: 14px;">
+          <a href="#">Trang chủ</a>
+          <span class="sep">/</span>
+          <a href="#">Quản lý vụ việc</a>
+          <span class="sep">/</span>
+          <a href="#">Danh sách vụ việc</a>
+          <span class="sep">/</span>
+          <span class="here">VV-HN-20260423-0147</span>
+        </div>
+
+        <div style="margin-top: 28px;">
+          <div class="caption" style="position: static; margin-bottom: 10px;">Tabs — chi tiết vụ việc</div>
+          <div class="tabs">
+            <div class="tab active">Thông tin chung</div>
+            <div class="tab">Tài liệu <span class="count">8</span></div>
+            <div class="tab">Hợp đồng tư vấn <span class="count">1</span></div>
+            <div class="tab">Lịch sử thao tác</div>
+            <div class="tab">Phản hồi DN</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="specimen" style="padding: 0; background: transparent; border: none;">
+        <div class="nav-mini">
+          <div class="section-label">Tổng quan</div>
+          <div class="nav-item">
+            <svg class="gicon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Dashboard
+          </div>
+          <div class="section-label">Nghiệp vụ</div>
+          <div class="nav-item">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Hỏi đáp pháp luật
+            <span class="badge">42</span>
+          </div>
+          <div class="nav-item active">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+            Vụ việc hỗ trợ pháp lý
+            <span class="badge">7</span>
+          </div>
+          <div class="nav-item">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            Chuyên gia / TVV
+          </div>
+          <div class="nav-item">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            Đào tạo &amp; Tập huấn
+          </div>
+          <div class="nav-item">
+            <svg class="gicon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Chi trả chi phí
+          </div>
+          <div class="section-label">Quản trị</div>
+          <div class="nav-item">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>
+            Báo cáo thống kê
+          </div>
+          <div class="nav-item">
+            <svg class="gicon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83"/></svg>
+            Hệ thống
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       14 APPROVAL FLOW
+       ========================================= -->
+  <section id="approval" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">14</span>
+      <h2>Approval Flow</h2>
+      <span class="sub">Pattern P-03 · SM-VUVIEC stepper</span>
+    </div>
+    <p class="ds-lede">Luồng phê duyệt rút gọn NĐ55: CB NV tích "Đã xử lý" → auto chuyển Chờ PD → CB PD duyệt. Stepper hiển thị thời điểm, người, trạng thái tại mỗi bước.</p>
+
+    <div class="specimen">
+      <div class="approval-card" style="padding: 0; border: none;">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div>
+            <h4>VV-HN-20260423-0147 · Yêu cầu tư vấn SHTT</h4>
+            <div class="case-meta">
+              <span>DN: CP Giải pháp Số Việt Nam</span>
+              <span>Lĩnh vực: Sở hữu trí tuệ</span>
+              <span>SLA: 14/15 ngày</span>
+            </div>
+          </div>
+          <span class="pill review">Chờ phê duyệt</span>
+        </div>
+
+        <div class="stepper">
+          <div class="step done">
+            <div class="num">1</div>
+            <div>
+              <div class="title">Tiếp nhận</div>
+              <div class="meta">21/04 09:12 · Trần Minh Tú</div>
+            </div>
+          </div>
+          <div class="step done">
+            <div class="num">2</div>
+            <div>
+              <div class="title">Phân công TVV</div>
+              <div class="meta">21/04 10:34 · Phạm Hà</div>
+            </div>
+          </div>
+          <div class="step done">
+            <div class="num">3</div>
+            <div>
+              <div class="title">Xử lý</div>
+              <div class="meta">22/04 16:40 · Lê Văn Đức (TVV)</div>
+            </div>
+          </div>
+          <div class="step now">
+            <div class="num">4</div>
+            <div>
+              <div class="title">Phê duyệt</div>
+              <div class="meta">Chờ CB PD ĐP · 23/04 sắp quá hạn</div>
+            </div>
+          </div>
+          <div class="step">
+            <div class="num">5</div>
+            <div>
+              <div class="title">Hoàn thành</div>
+              <div class="meta">—</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--color-neutral-4);">
+          <button class="btn btn-primary">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg>
+            Phê duyệt &amp; Gửi kết quả
+          </button>
+          <button class="btn btn-secondary">Yêu cầu bổ sung</button>
+          <div style="flex: 1;"></div>
+          <button class="btn btn-danger">
+            <svg class="gicon" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+            Từ chối
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       15 FEEDBACK
+       ========================================= -->
+  <section id="feedback" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">15</span>
+      <h2>Feedback</h2>
+      <span class="sub">Alerts · Toasts · Empty</span>
+    </div>
+
+    <div class="split-2">
+      <div class="specimen" style="display: flex; flex-direction: column; gap: 12px;">
+        <div class="caption">Alerts (trang)</div>
+        <div class="alert info" style="margin-top: 10px;">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+          <div><div class="title">Đồng bộ danh mục từ BTP</div><div class="body">Danh mục lĩnh vực pháp luật đã được cập nhật lúc 23/04/2026 09:00. 3 mục mới, 1 mục ngừng hiệu lực.</div></div>
+          <button class="dismiss" aria-label="Đóng">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          </button>
+        </div>
+        <div class="alert warn">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><path d="M12 17h.01"/></svg>
+          <div><div class="title">Sắp quá hạn SLA</div><div class="body">7 vụ việc còn ≤ 2 ngày để hoàn thành xử lý theo cấu hình SLA (BR-SLA-05). Xem danh sách.</div></div>
+          <button class="dismiss">✕</button>
+        </div>
+        <div class="alert success">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>
+          <div><div class="title">Phê duyệt thành công</div><div class="body">Vụ việc VV-HN-20260423-0147 đã được phê duyệt và gửi về Dịch vụ công Bộ Tư pháp lúc 17:54.</div></div>
+          <button class="dismiss">✕</button>
+        </div>
+        <div class="alert danger">
+          <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4M12 16h.01"/></svg>
+          <div><div class="title">Bản ghi đã bị thay đổi bởi người khác</div><div class="body">Phạm Hà đã cập nhật hồ sơ này lúc 17:55. Vui lòng tải lại trang trước khi lưu (ERR-SYS-02).</div></div>
+          <button class="dismiss">✕</button>
+        </div>
+      </div>
+
+      <div class="specimen" style="display: flex; flex-direction: column; gap: 20px;">
+        <div class="caption">Empty state</div>
+        <div style="text-align: center; padding: 32px 24px; border: 1px dashed var(--color-neutral-5); border-radius: var(--radius-md); margin-top: 10px;">
+          <div style="width: 56px; height: 56px; margin: 0 auto 12px; background: var(--color-primary-1); border-radius: 50%; display: grid; place-items: center; color: var(--color-primary-6);">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+          </div>
+          <div style="font-size: 16px; font-weight: 600; color: var(--color-neutral-11); line-height: 24px;">Chưa có đợt đánh giá nào</div>
+          <div style="font-size: 14px; color: var(--color-neutral-8); margin-top: 4px; max-width: 360px; margin-left: auto; margin-right: auto; line-height: 22px;">Tạo đợt đánh giá mới để phân công cán bộ chấm điểm hiệu quả hỗ trợ pháp lý theo tiêu chí TT17/2025.</div>
+          <button class="btn btn-primary" style="margin-top: 16px;">
+            <svg class="gicon" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Tạo đợt đánh giá
+          </button>
+        </div>
+
+        <div class="caption" style="position: static;">Toast (góc dưới)</div>
+        <div style="display: flex; gap: 10px; padding: 12px 16px; background: var(--color-neutral-11); color: white; border-radius: var(--radius-lg); font-size: 14px; box-shadow: var(--shadow-md); max-width: 400px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-success-5); flex-shrink:0; margin-top: 2px;"><path d="M4 12l5 5L20 6"/></svg>
+          <div style="flex: 1;">
+            <div style="font-weight: 500;">Đã lưu bản nháp</div>
+            <div style="font-size: 11px; color: rgba(255,255,255,0.65); margin-top: 2px;">Tự động lưu lúc 17:55:12</div>
+          </div>
+          <button style="background: transparent; border: none; color: rgba(255,255,255,0.5); cursor: pointer;">✕</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================
+       16 APP COMPOSITION
+       ========================================= -->
+  <section id="composition" class="ds-section">
+    <div class="ds-section-header">
+      <span class="num">16</span>
+      <h2>App Composition</h2>
+      <span class="sub">Cách các token &amp; component ghép lại</span>
+    </div>
+    <p class="ds-lede">Màn hình mẫu: Dashboard sau khi đăng nhập, người dùng là CB Nghiệp vụ Sở TP Hà Nội. Kết hợp sidebar, topbar, KPI, table và toolbar.</p>
+
+    <div class="app-shell">
+      <aside class="app-side">
+        <div style="box-sizing: border-box; padding: 14px 18px; display: flex; align-items: center; gap: 11px; border-bottom: 1px solid rgba(255,255,255,0.08); background: rgba(0,0,0,0.15);">
+          <div style="padding: 6px 9px; background: #fff; color: var(--color-primary-7); border-radius: var(--radius-md); font-weight: 700; font-size: 11px; letter-spacing: 0.02em; flex: none; line-height: 1;">HTPLDN</div>
+          <span style="font-size: 12.5px; font-weight: 600; color: white; line-height: 1.3; min-width: 0; letter-spacing: -0.005em;">Phần mềm hỗ trợ<br>pháp lý doanh nghiệp</span>
+        </div>
+        <div class="sect">Tổng quan</div>
+        <div class="it active">
+          <svg class="gicon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          Dashboard
+        </div>
+        <div class="sect">Nghiệp vụ</div>
+        <div class="it">
+          <svg class="gicon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Hỏi đáp pháp luật <span class="ct">42</span>
+        </div>
+        <div class="it">
+          <svg class="gicon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+          Vụ việc HTPL <span class="ct">7</span>
+        </div>
+        <div class="it">
+          <svg class="gicon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+          Chuyên gia / TVV
+        </div>
+        <div class="it">
+          <svg class="gicon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          Đào tạo, tập huấn
+        </div>
+        <div class="it">
+          <svg class="gicon" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Chi trả chi phí
+        </div>
+        <div class="it">
+          <svg class="gicon" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20"/><path d="M9 22v-4h6v4"/></svg>
+          Doanh nghiệp
+        </div>
+        <div class="sect">Báo cáo &amp; Hệ thống</div>
+        <div class="it">
+          <svg class="gicon" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-6"/></svg>
+          Báo cáo thống kê
+        </div>
+        <div class="it">
+          <svg class="gicon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83"/></svg>
+          Quản trị hệ thống
+        </div>
+        <div style="margin-top: auto; padding: 14px 20px 16px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; align-items: center; justify-content: flex-end; font-size: 11px; line-height: 1.4;">
+          <span style="color: rgba(255,255,255,0.4); font-variant-numeric: tabular-nums;">v1.0</span>
+        </div>
+      </aside>
+
+      <div class="app-main">
+        <div class="app-top">
+          <div class="search">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            <input placeholder="Tìm vụ việc, doanh nghiệp, tư vấn viên…">
+          </div>
+          <div style="flex: 1;"></div>
+          <span class="ltag">CB NV ĐP</span>
+          <span style="font-size: 12px; color: var(--color-neutral-600);">Sở Tư pháp Hà Nội</span>
+          <div class="user">
+            <span class="avatar sm">PH</span>
+            <span>Phạm Hà</span>
+          </div>
+        </div>
+
+        <div class="app-body">
+          <div class="crumb" style="margin-bottom: 14px;">
+            <a href="#">Trang chủ</a>
+            <span class="sep">/</span>
+            <span class="here">Dashboard</span>
+          </div>
+
+          <div class="page-head">
+            <div>
+              <h1>Tổng quan hoạt động HTPLDN</h1>
+              <div class="sub">Cập nhật tự động mỗi 60 giây · Phạm vi: Sở Tư pháp Hà Nội (khóa theo đơn vị)</div>
+            </div>
+            <div style="display:flex; gap: 8px;">
+              <select class="select" style="width: 180px;"><option>01/04 – 23/04/2026</option></select>
+              <button class="btn btn-secondary btn-sm">
+                <svg class="gicon" viewBox="0 0 24 24"><path d="M1 4v6h6"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+                Làm mới
+              </button>
+            </div>
+          </div>
+
+          <div class="kpi-row">
+            <div class="kpi">
+              <div class="kpi-label">Hỏi đáp mới <span class="uc-tag">UC-01</span></div>
+              <div class="kpi-value">142</div>
+              <div class="kpi-trend up">▲ 12,5%</div>
+              <div class="kpi-foot"><span>Sở TP Hà Nội</span><span>23 ngày</span></div>
+            </div>
+            <div class="kpi accent">
+              <div class="kpi-label">Vụ việc tiếp nhận <span class="uc-tag">UC-02</span></div>
+              <div class="kpi-value">47</div>
+              <div class="kpi-trend up">▲ 8,2%</div>
+              <div class="kpi-foot"><span>Sở TP Hà Nội</span><span>23 ngày</span></div>
+            </div>
+            <div class="kpi warn">
+              <div class="kpi-label">Đang hỗ trợ <span class="uc-tag">UC-03</span></div>
+              <div class="kpi-value">18</div>
+              <div class="kpi-trend flat">— Stock</div>
+              <div class="kpi-foot"><span>Snapshot 17:55</span><span>—</span></div>
+            </div>
+            <div class="kpi success">
+              <div class="kpi-label">Hoàn thành <span class="uc-tag">UC-04</span></div>
+              <div class="kpi-value">29</div>
+              <div class="kpi-trend up">▲ 15,1%</div>
+              <div class="kpi-foot"><span>Sở TP Hà Nội</span><span>23 ngày</span></div>
+            </div>
+          </div>
+
+          <div style="background: #fff; border: 1px solid var(--color-neutral-5); border-radius: var(--radius-lg); overflow: hidden;">
+            <div style="padding: 14px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--color-neutral-4);">
+              <div>
+                <div style="font-size: 16px; font-weight: 600; color: var(--color-neutral-11); line-height: 24px;">Vụ việc cần xử lý trong ngày</div>
+                <div style="font-size: 12px; color: var(--color-neutral-7); margin-top: 2px; font-variant-numeric: tabular-nums;">Cập nhật lúc 17:55:12 · hôm nay</div>
+              </div>
+              <a href="#" style="font-size: 14px; color: var(--color-primary-6); text-decoration: none; font-weight: 500;">Xem tất cả 18 →</a>
+            </div>
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th style="width: 180px;">Mã</th>
+                  <th>Doanh nghiệp</th>
+                  <th>Lĩnh vực</th>
+                  <th>Trạng thái</th>
+                  <th style="width: 80px;">SLA</th>
+                  <th style="width: 120px;">Người xử lý</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="mono">VV-HN-20260423-0147</td>
+                  <td>CP Giải pháp Số Việt Nam</td>
+                  <td>Sở hữu trí tuệ</td>
+                  <td><span class="pill review">Chờ phê duyệt</span></td>
+                  <td><span class="sla-num warn">14/15</span></td>
+                  <td><span class="avatar sm">PH</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">VV-HN-20260422-0146</td>
+                  <td>DN TN An Phát</td>
+                  <td>Thuế</td>
+                  <td><span class="pill active">Đang xử lý</span></td>
+                  <td><span class="sla-num ok">3/15</span></td>
+                  <td><span class="avatar sm">TL</span></td>
+                </tr>
+                <tr>
+                  <td class="mono">VV-HN-20260420-0132</td>
+                  <td>Công ty CP Xây dựng Phú Thành</td>
+                  <td>Đất đai</td>
+                  <td><span class="pill pending">Yêu cầu bổ sung</span></td>
+                  <td><span class="sla-num bad">−1/15</span></td>
+                  <td><span class="avatar sm">TM</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer / summary -->
+  <div class="summary-rail">
+    <div class="cell"><strong>Phiên bản</strong>Design System v1.0 · 23/04/2026</div>
+    <div class="cell"><strong>Tham chiếu</strong>SRS v3.2 · UX-Spec · PRD v2.1</div>
+    <div class="cell"><strong>Áp dụng</strong>188 UC · 15 tác nhân · 3 cấp phân quyền</div>
+    <div class="cell"><strong>Phê duyệt</strong>Cục BLDS&amp;KT · Trung tâm CNTT BTP</div>
+  </div>
+
+</div>
+
+<style>
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+</body>
+</html>

@@ -54,14 +54,14 @@ graph LR
     D --> E[CB NV soạn câu trả lời]
     E --> F[Tích Đã trả lời → Auto chuyển Chờ PD]
     F --> G[CB PD duyệt + công khai]
-    G --> H[Đẩy lên Cổng PLQG]
+    G --> H[Đánh dấu công khai — Cổng PLQG tự kéo dữ liệu]
 ```
 
 **Máy trạng thái SM-HOIDAP:**
 ```
 MOI → TIEP_NHAN → DANG_XU_LY → DA_TRA_LOI (thoáng qua) → CHO_PHE_DUYET → DA_DUYET → CONG_KHAI → HOAN_THANH
 CHO_PHE_DUYET → DANG_XU_LY (từ chối, trả lại CB NV)
-DA_DUYET → CONG_KHAI (công khai lên Cổng PLQG)
+DA_DUYET → CONG_KHAI (đánh dấu công khai — Cổng PLQG tự kéo dữ liệu)
 CONG_KHAI → DA_DUYET (hủy công khai)
 DA_DUYET / CONG_KHAI → HOAN_THANH (đóng hồ sơ)
 MOI → HUY (hủy yêu cầu)
@@ -474,7 +474,9 @@ MOI → HUY (hủy yêu cầu)
 **Stability:** High
 **Màn hình:** SCR-II-03 — [Phân công xử lý](#scr-ii-03-phân-công-xử-lý)
 
-**Mô tả:** Phân công câu hỏi cho **cá nhân** (CB Nghiệp vụ / TVV / NHT) hoặc **Tổ chức tư vấn** (theo NĐ77/2008 + NĐ55/2019 Đ.9 — mạng lưới tư vấn pháp luật gồm cá nhân + tổ chức hành nghề luật sư + trung tâm TVPL). Hệ thống auto-filter ứng viên theo 4 tiêu chí (lĩnh vực + đơn vị + workload + FIFO) — không cần cấu hình mapping tĩnh (BA chốt 2026-05-07 Q11). Đáp ứng CSV UC15 "gán/chuyển yêu cầu hỏi đáp đến Người hỗ trợ/Tổ chức tư vấn phù hợp".
+**Mô tả:** Phân công câu hỏi cho **cá nhân nội bộ đơn vị** (Cán bộ Nghiệp vụ / Người hỗ trợ pháp lý) theo CSV UC 16. Hệ thống auto-filter ứng viên theo 3 tiêu chí (lĩnh vực + workload + FIFO trong phạm vi đơn vị). Hỏi đáp là tư vấn ngắn / đơn giản — phạm vi nội bộ Cục, KHÔNG huy động mạng lưới Tư vấn viên / Chuyên gia / Tổ chức tư vấn (phạm vi này dành cho Vụ việc tư vấn chuyên sâu — FR-V — theo NĐ 55/2019 Đ.9 + Đ.10).
+
+> **Sửa theo STT 6 + STT 5 UAT 2026-05-26:** dọn mâu thuẫn nội bộ SRS — bỏ TVV/CG/Tổ chức tư vấn khỏi modal Phân công Hỏi đáp để đồng bộ CSV UC 16.
 
 **Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP)
 
@@ -488,11 +490,9 @@ MOI → HUY (hủy yêu cầu)
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
 |---|----------|-----------|----------|-----------|----------|-------|
 | 1 | hoi_dap_id | identifier | Y | — | — | system |
-| 2 | loai_doi_tuong_xu_ly | text (enum) | Y | CHECK IN ('CA_NHAN','TO_CHUC') | 'CA_NHAN' | user input |
-| 3 | to_chuc_tu_van_id | identifier | Y nếu loai='TO_CHUC' | FK → TO_CHUC_TU_VAN (theo NĐ77/2008 + NĐ55/2019 Đ.9). Áp dụng cho Cty Luật / VP Luật sư / Trung tâm TVPL trong mạng lưới HTPL DN | — | user input |
-| 4 | nguoi_xu_ly_id | identifier | Y (cả 2 loại) | FK → TAI_KHOAN. **Nếu loai='CA_NHAN':** CB/TVV/NHT bất kỳ trạng thái HOAT_DONG. **Nếu loai='TO_CHUC':** PHẢI là TVV thuộc TC TV vừa chọn (`TU_VAN_VIEN.to_chuc_chinh_id = to_chuc_tu_van_id`) | — | user input |
-| 5 | ghi_chu | text | N | — | — | user input |
-| 6 | thoi_han | date | N | Nếu khác SLA mặc định | deadline SLA | user input |
+| 2 | nguoi_xu_ly_id | identifier | Y | FK → TAI_KHOAN. Người được chọn phải là CB Nghiệp vụ hoặc Người hỗ trợ pháp lý nội bộ đơn vị, trạng thái HOAT_DONG | — | user input |
+| 3 | ghi_chu | text | N | — | — | user input |
+| 4 | thoi_han | date | N | Nếu khác SLA mặc định | deadline SLA | user input |
 
 **Processing:**
 
@@ -500,55 +500,43 @@ MOI → HUY (hủy yêu cầu)
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền + phạm vi phân quyền | BR-AUTH-01 |
 | 2 | Kiểm tra trạng thái hợp lệ | SM-HOIDAP |
-| 3 | Validate input theo loai: nếu `loai='CA_NHAN'` phải có `nguoi_xu_ly_id`, `to_chuc_tu_van_id` phải NULL. Nếu `loai='TO_CHUC'` phải có CẢ `to_chuc_tu_van_id` AND `nguoi_xu_ly_id` (TVV cụ thể) | — |
-| 4 | Nếu `loai='TO_CHUC'`: validate `TU_VAN_VIEN[nguoi_xu_ly_id].to_chuc_chinh_id = to_chuc_tu_van_id` (TVV được chọn phải thuộc TC TV được chọn). Nếu fail → ERR-PC-05 | — |
-| 5 | **Auto-filter ứng viên (4 tiêu chí — BA chốt 2026-05-07 Q11):** (a) Nguồn theo tab: nhánh CA_NHAN lấy TAI_KHOAN của CB NV/TVV/CG/NHT trạng thái HOAT_DONG; nhánh TO_CHUC lấy TO_CHUC_TU_VAN HOAT_DONG → load TVV thuộc TC. (b) Lọc cứng theo **lĩnh vực**: TVV/CG dùng `TU_VAN_VIEN.linh_vuc_chuyen_mon`; NHT dùng `NGUOI_HO_TRO.linh_vuc_ids[]` (qua N:N); TC TV dùng lĩnh vực đăng ký; CB Nghiệp vụ bỏ qua filter (xử lý mọi lĩnh vực trong đơn vị). (c) Lọc cứng theo **đơn vị** (BR-AUTH-08): CB NV cùng đơn vị với HOI_DAP; TVV/NHT/CG/TC cùng cấp trong mạng lưới. (d) **Sort `workload ASC`** rồi `ho_ten ASC`, LIMIT 10. workload = COUNT HOI_DAP đang xử lý của TK (`trang_thai IN ('TIEP_NHAN','DANG_XU_LY','CHO_PHE_DUYET')`). | — |
-| 6 | Kiểm tra đối tượng được chọn có trạng thái hoạt động: cá nhân → `TAI_KHOAN.trang_thai='HOAT_DONG'`; tổ chức → `TO_CHUC_TU_VAN.trang_thai='HOAT_DONG'` AND TVV được chọn `TU_VAN_VIEN.trang_thai` hợp lệ | — |
-| 7 | Tính workload hiện tại: đếm số hỏi đáp đang xử lý của cá nhân được chọn (đối với TO_CHUC: workload của TVV được cử) | — |
-| 8 | Nếu workload vượt ngưỡng → hiển thị cảnh báo (không block) | — |
-| 9 | Cập nhật HOI_DAP: SET `loai_doi_tuong_xu_ly` (input) + `nguoi_phan_cong_id = nguoi_xu_ly_id` (input, REQUIRED cả 2 loại) + nếu TO_CHUC: `to_chuc_tu_van_id` (input) else NULL. SET `trang_thai = DANG_XU_LY` | SM-HOIDAP |
-| 10 | Gửi thông báo (trong hệ thống + email) cho cá nhân được phân công (TVV cụ thể, cả 2 loại); nếu loai='TO_CHUC' kèm CC email cho điểm liên hệ chính của tổ chức (TO_CHUC_TU_VAN.email_lien_he) | — |
-| 11 | Ghi nhật ký thao tác (hành động = 'PHAN_CONG', kèm loai_doi_tuong_xu_ly + to_chuc_tu_van_id nếu có) | BR-DATA-05 |
+| 3 | Validate `nguoi_xu_ly_id` phải tồn tại + thuộc đơn vị của HOI_DAP + thuộc nhóm tác nhân cho phép theo CSV UC 16 (CB NV hoặc NHT) | BR-AUTH-08 |
+| 4 | **Auto-filter ứng viên (3 tiêu chí):** (a) **Nguồn**: TAI_KHOAN của CB Nghiệp vụ + Người hỗ trợ pháp lý nội bộ đơn vị, trạng thái HOAT_DONG. (b) Lọc cứng theo **lĩnh vực**: NHT dùng `NGUOI_HO_TRO.linh_vuc_ids[]` (qua N:N); CB Nghiệp vụ bỏ qua filter (xử lý mọi lĩnh vực trong đơn vị). (c) Lọc cứng theo **đơn vị** (BR-AUTH-08): cùng đơn vị với HOI_DAP. (d) **Sort `workload ASC`** rồi `ho_ten ASC`, LIMIT 10. workload = COUNT HOI_DAP đang xử lý của TK. | — |
+| 5 | Kiểm tra đối tượng được chọn có trạng thái hoạt động: `TAI_KHOAN.trang_thai='HOAT_DONG'` | — |
+| 6 | Tính workload hiện tại của cá nhân được chọn | — |
+| 7 | Nếu workload vượt ngưỡng → hiển thị cảnh báo (không block) | — |
+| 8 | Cập nhật HOI_DAP: SET `nguoi_phan_cong_id = nguoi_xu_ly_id` + `trang_thai = DANG_XU_LY` | SM-HOIDAP |
+| 9 | Gửi thông báo (trong hệ thống + email) cho cá nhân được phân công | — |
+| 10 | Ghi nhật ký thao tác (hành động = 'PHAN_CONG') | BR-DATA-05 |
 
 **Error Handling:**
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
-| E1 | NHT/TVV cá nhân không còn hoạt động | ERR-PC-01 | "Người được chọn đã bị vô hiệu hóa" | ERROR |
+| E1 | NHT cá nhân không còn hoạt động | ERR-PC-01 | "Người được chọn đã bị vô hiệu hóa" | ERROR |
 | E2 | Khối lượng công việc vượt ngưỡng | WRN-PC-01 | "Cán bộ {tên} đang xử lý {N} yêu cầu. Xác nhận phân công?" | WARNING |
 | E3 | Trạng thái HOI_DAP không hợp lệ | ERR-PC-02 | "Hỏi đáp ở trạng thái '{tt}' không thể phân công" | ERROR |
-| E4 | Tổ chức tư vấn không còn hoạt động | ERR-PC-03 | "Tổ chức tư vấn '{ten}' đã bị vô hiệu hóa hoặc tạm dừng hoạt động" | ERROR |
-| E5 | Loai='TO_CHUC' nhưng thiếu to_chuc_tu_van_id hoặc nguoi_xu_ly_id (cần cả 2) | ERR-PC-04 | "Phân công cho Tổ chức tư vấn phải chọn đủ 2 thông tin: Tổ chức + Tư vấn viên thuộc tổ chức" | ERROR |
-| E6 | Loai='TO_CHUC' nhưng `TU_VAN_VIEN[nguoi_xu_ly_id].to_chuc_chinh_id` ≠ `to_chuc_tu_van_id` (TVV không thuộc TC được chọn) | ERR-PC-05 | "Tư vấn viên '{ten_tvv}' không thuộc Tổ chức '{ten_tc}'. Vui lòng chọn lại" | ERROR |
-| E7 | Loai='CA_NHAN' nhưng có truyền to_chuc_tu_van_id | ERR-PC-06 | "Phân công cá nhân không cần chọn Tổ chức tư vấn" | ERROR |
+| E4 | Người được chọn không thuộc đơn vị của Hỏi đáp | ERR-PC-08 | "Người được chọn không thuộc đơn vị '{ten_dv}' đang sở hữu Hỏi đáp. Vui lòng chọn lại" | ERROR |
 
 **Outputs:**
 
 | # | Tên | Kiểu logic | Điều kiện | Format |
 |---|-----|-----------|-----------|--------|
 | 1 | hoi_dap_id | identifier | — | — |
-| 2 | loai_doi_tuong_xu_ly | text | — | 'CA_NHAN' / 'TO_CHUC' |
-| 3 | ten_nguoi_phan_cong | text | — | Tên cá nhân được phân công (TAI_KHOAN.ho_ten) — luôn có cho cả 2 loại |
-| 4 | ten_to_chuc_tu_van | text | Khi loai='TO_CHUC' | Tên tổ chức (TO_CHUC_TU_VAN.ten_to_chuc) |
-| 5 | trang_thai | text | — | 'DANG_XU_LY' |
-| 6 | goi_y_list | structured | — | Cá nhân: [{id, ho_ten, linh_vuc, workload}]; Tổ chức: [{tc_id, ten_tc, [{tvv_id, ho_ten, workload}]}] |
+| 2 | ten_nguoi_phan_cong | text | — | Tên cá nhân được phân công (TAI_KHOAN.ho_ten) |
+| 3 | trang_thai | text | — | 'DANG_XU_LY' |
+| 4 | goi_y_list | structured | — | [{id, ho_ten, linh_vuc, workload}] |
 
 **Postconditions:**
 - HOI_DAP.trang_thai = 'DANG_XU_LY'
-- HOI_DAP.loai_doi_tuong_xu_ly + HOI_DAP.nguoi_phan_cong_id được cập nhật (cả 2 loại đều có cá nhân chịu trách nhiệm)
-- Nếu loai='TO_CHUC': HOI_DAP.to_chuc_tu_van_id được cập nhật + đảm bảo TU_VAN_VIEN[nguoi_phan_cong_id].to_chuc_chinh_id = to_chuc_tu_van_id
-- Thông báo gửi cá nhân (TVV được phân công); nếu TO_CHUC kèm CC email TO_CHUC_TU_VAN.email_lien_he
+- HOI_DAP.nguoi_phan_cong_id được cập nhật (cá nhân nội bộ đơn vị chịu trách nhiệm xử lý)
+- Thông báo gửi cá nhân được phân công
 
 **Acceptance Criteria:**
-- **Given** CB NV chọn phân công **When** hiển thị **Then** 2 tabs "Cá nhân / Tổ chức tư vấn" + danh sách gợi ý theo lĩnh vực PL (gợi ý từ cấu hình mapping)
-- **Given** CB NV chọn cá nhân (CB/TVV/NHT tự do) ở tab "Cá nhân" **When** xác nhận **Then** SET `loai_doi_tuong_xu_ly=CA_NHAN`, `nguoi_phan_cong_id=<id>`, `to_chuc_tu_van_id=NULL`, trạng thái → DANG_XU_LY, gửi thông báo cá nhân
-- **Given** CB NV chọn Tổ chức tư vấn ở tab "Tổ chức" **When** dropdown TVV xuất hiện **Then** chỉ hiển thị TVV thuộc tổ chức đó (`TU_VAN_VIEN.to_chuc_chinh_id = to_chuc_tu_van_id`)
-- **Given** CB NV chọn TC TV + TVV thuộc tổ chức **When** xác nhận **Then** SET `loai_doi_tuong_xu_ly=TO_CHUC`, `to_chuc_tu_van_id=<tc_id>`, `nguoi_phan_cong_id=<tvv_id>`, trạng thái → DANG_XU_LY, gửi thông báo TVV được cử + CC email TC TV (theo NĐ77/2008 + NĐ55/2019 Đ.9)
-- **Given** Loai='TO_CHUC' nhưng API client gửi nguoi_xu_ly_id là TVV KHÔNG thuộc TC được chọn (vượt UI validation) **When** server validate **Then** trả ERR-PC-05
-- **Given** Loai='TO_CHUC' nhưng thiếu to_chuc_tu_van_id hoặc nguoi_xu_ly_id **When** server validate **Then** trả ERR-PC-04 ("phải chọn đủ 2 thông tin")
-- **Given** Loai='CA_NHAN' nhưng có truyền to_chuc_tu_van_id **When** server validate **Then** trả ERR-PC-06
-- NHT/TVV cá nhân không còn hoạt động → ERR-PC-01, không cho phép chọn
-- Tổ chức tư vấn bị vô hiệu hóa → ERR-PC-03, không cho phép chọn
+- **Given** CB NV chọn phân công **When** hiển thị **Then** danh sách gợi ý CB NV/NHT cùng đơn vị + lĩnh vực phù hợp với hỏi đáp (auto-filter 3 tiêu chí)
+- **Given** CB NV chọn cá nhân nội bộ đơn vị **When** xác nhận **Then** SET `nguoi_phan_cong_id=<id>`, trạng thái → DANG_XU_LY, gửi thông báo cá nhân
+- **Given** API client gửi `nguoi_xu_ly_id` là user thuộc đơn vị KHÁC với đơn vị HOI_DAP (vượt UI validation) **When** server validate **Then** trả ERR-PC-08
+- NHT cá nhân không còn hoạt động → ERR-PC-01, không cho phép chọn
 - Vượt workload → WRN-PC-01 cảnh báo (không block)
 
 ---
@@ -605,6 +593,7 @@ MOI → HUY (hủy yêu cầu)
 | E1 | Nội dung phản hồi trống | ERR-PH-01 | "Nội dung phản hồi là bắt buộc" | ERROR |
 | E2 | Trạng thái không cho phản hồi | ERR-PH-02 | "Hỏi đáp ở trạng thái '{tt}' không thể phản hồi" | ERROR |
 | E3 | Không phải người được phân công | WRN-PH-01 | "Bạn không phải người được phân công. Vẫn muốn phản hồi?" | WARNING |
+| E4 | Nội dung phản hồi vượt 20.000 ký tự (đếm plain text) | ERR-PH-03 | "Nội dung phản hồi tối đa 20.000 ký tự (đếm plain text, loại bỏ HTML khi đếm)" | ERROR |
 
 **Outputs:**
 
@@ -673,13 +662,9 @@ MOI → HUY (hủy yêu cầu)
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền: CB PD cùng đơn vị với bản ghi (không cho CB NV công khai) | BR-AUTH-05, BR-FLOW-05, F-20 |
 | 2 | Kiểm tra trạng thái = DA_DUYET | SM-HOIDAP |
-| 3 | Lock record với TTL 30s + set `api_in_progress=true` (để chặn Hủy công khai concurrent — F-42). Nếu record đang lock bởi thao tác gọi API khác → trả ERR-PD-07 "Đang có thao tác khác đang xử lý trên bản ghi này, vui lòng thử lại sau" + nút Thử lại | F-42 |
-| 4 | Validate + sanitize dữ liệu input: `mo_ta_cong_khai` chạy XSS sanitize (whitelist tags, ref F-38); file upload đã qua ClamAV | F-38 |
-| 5 | Lưu tạm các field công khai (`anh_dai_dien`, `mo_ta_cong_khai`, `file_dinh_kem_cong_khai`) nhưng CHƯA set `cong_khai=1` và `trang_thai=CONG_KHAI` | EC-04 |
-| 6 | Gọi API trực tiếp → Cổng PLQG: đẩy hỏi đáp + phản hồi + ảnh + mô tả + file đính kèm. Sử dụng idempotency key để tránh duplicate nếu retry. | BR-FLOW-05 |
-| 7 | Nếu API thành công: cập nhật `trang_thai=CONG_KHAI`, `cong_khai=1`, `thoi_gian_dang_tai=NOW()`, `nguoi_cong_khai_id=@user`. Release lock. | — |
-| 8 | Nếu API fail: KHÔNG set CONG_KHAI, giữ DA_DUYET, release lock, trả ERR-PD-04 với message phân biệt (network timeout / server 5xx / business error). Log full request/response vào AUDIT_LOG. | EC-04 |
-| 9 | Ghi nhật ký thao tác (hành động = 'CONG_KHAI', trạng thái API, input fields) | BR-DATA-05 |
+| 3 | Validate + sanitize dữ liệu input: `mo_ta_cong_khai` chạy XSS sanitize (whitelist tags, ref F-38); file upload đã qua ClamAV | F-38 |
+| 4 | Lưu các field công khai (`anh_dai_dien`, `mo_ta_cong_khai`, `file_dinh_kem_cong_khai`); đặt `cong_khai=1`, `trang_thai=CONG_KHAI`, `thoi_gian_dang_tai=NOW()`, `nguoi_cong_khai_id=@user`. Cổng Pháp luật Quốc gia tự kéo (PULL) dữ liệu định kỳ qua giao diện liên thông ra — phần mềm KHÔNG gọi API đẩy trực tiếp. | BR-FLOW-05 |
+| 5 | Ghi nhật ký thao tác (hành động = 'CONG_KHAI', các field công khai) | BR-DATA-05 |
 
 **Processing — Từ chối:**
 
@@ -706,11 +691,8 @@ MOI → HUY (hủy yêu cầu)
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền: CB PD cùng đơn vị với bản ghi | BR-AUTH-01, BR-AUTH-05, F-20 |
 | 2 | Kiểm tra trạng thái = CONG_KHAI | SM-HOIDAP |
-| 3 | Lock record với TTL 30s + set `api_in_progress=true` (để chặn Công khai concurrent — F-42). Nếu record đang lock bởi thao tác gọi API khác → trả ERR-PD-07 "Đang có thao tác khác đang xử lý trên bản ghi này, vui lòng thử lại sau" + nút Thử lại | F-42 |
-| 4 | Gọi API → Cổng PLQG: yêu cầu gỡ hỏi đáp + phản hồi. Sử dụng idempotency key. | BR-FLOW-05 |
-| 5 | Nếu API thành công: cập nhật trạng thái = DA_DUYET, `cong_khai=0`, clear `thoi_gian_dang_tai`. Release lock. | — |
-| 6 | Nếu API fail: giữ CONG_KHAI, release lock, trả lỗi ERR-PD-06 với message phân biệt loại lỗi. Log full request/response vào AUDIT_LOG. | — |
-| 7 | Ghi nhật ký thao tác (hành động = 'HUY_CONG_KHAI', trạng thái API) | BR-DATA-05 |
+| 3 | Đặt `cong_khai=0`, `trang_thai=DA_DUYET`, clear `thoi_gian_dang_tai`. Cổng Pháp luật Quốc gia tự cập nhật/ẩn bản ghi ở lần kéo kế tiếp — phần mềm KHÔNG gọi API gỡ trực tiếp. | BR-FLOW-05 |
+| 4 | Ghi nhật ký thao tác (hành động = 'HUY_CONG_KHAI') | BR-DATA-05 |
 
 **Processing — Đóng hồ sơ:** [GAP-II-02]
 
@@ -736,11 +718,8 @@ MOI → HUY (hủy yêu cầu)
 | E1 | CB PD khác đơn vị với bản ghi | ERR-PD-01 | "Bạn không có quyền phê duyệt bản ghi thuộc đơn vị khác" | ERROR |
 | E2 | Từ chối thiếu lý do | ERR-PD-02 | "Vui lòng nhập lý do từ chối" | ERROR |
 | E3 | Trạng thái không hợp lệ | ERR-PD-03 | "Hỏi đáp không ở trạng thái chờ phê duyệt" | ERROR |
-| E4 | API Cổng PLQG lỗi | ERR-PD-04 | "Lỗi kết nối Cổng Pháp luật Quốc gia. Vui lòng thử công khai lại" | ERROR |
-| E5 | Batch: 1+ lỗi | WRN-PD-01 | "Duyệt thành công {N} bản ghi, {M} lỗi" | WARNING |
-| E6 | API Cổng PLQG lỗi khi hủy | ERR-PD-06 | "Lỗi kết nối Cổng Pháp luật Quốc gia khi hủy. Vui lòng thử lại" | ERROR | [GAP-II-01]
-| E7 | Record đang có thao tác outbound in-progress (lock) | ERR-PD-07 | "Đang có thao tác Công khai/Hủy công khai khác đang xử lý trên bản ghi này bởi {user}. Vui lòng thử lại sau {n}s" | ERROR | [F-42]
-| E8 | Batch vượt 100 bản ghi | ERR-PD-05 | "Mỗi lần phê duyệt tối đa 100 bản ghi. Vui lòng chọn ít hơn." | ERROR | [BR-EC-19]
+| E4 | Batch: 1+ lỗi | WRN-PD-01 | "Duyệt thành công {N} bản ghi, {M} lỗi" | WARNING |
+| E5 | Batch vượt 100 bản ghi | ERR-PD-05 | "Mỗi lần phê duyệt tối đa 100 bản ghi. Vui lòng chọn ít hơn." | ERROR | [BR-EC-19]
 
 **Outputs:**
 
@@ -754,15 +733,15 @@ MOI → HUY (hủy yêu cầu)
 
 **Postconditions:**
 - Phê duyệt: trạng thái → DA_DUYET
-- Công khai: trạng thái → CONG_KHAI, phản hồi đẩy lên Cổng PLQG
+- Công khai: trạng thái → CONG_KHAI, đặt cờ `cong_khai=1`; Cổng Pháp luật Quốc gia tự kéo dữ liệu định kỳ
 - Từ chối: trạng thái quay về DANG_XU_LY, CB NV nhận lý do
-- Hủy công khai: trạng thái → DA_DUYET, gỡ khỏi Cổng
+- Hủy công khai: trạng thái → DA_DUYET, đặt cờ `cong_khai=0`; Cổng tự cập nhật/ẩn ở lần kéo kế tiếp
 
 **Acceptance Criteria:**
 - **Given** có phản hồi trạng thái "Chờ phê duyệt" **When** CB PD xem danh sách **Then** hiển thị danh sách chờ duyệt
 - **Given** CB PD phê duyệt **When** xác nhận **Then** trạng thái → DA_DUYET
-- **Given** CB PD công khai **When** xác nhận **Then** phản hồi gửi qua API lên Cổng PLQG
-- **Given** CB PD hủy công khai **When** xác nhận **Then** phản hồi bị gỡ khỏi Cổng
+- **Given** CB PD công khai **When** xác nhận **Then** trạng thái → CONG_KHAI, đặt cờ `cong_khai=1`; Cổng Pháp luật Quốc gia tự kéo dữ liệu định kỳ
+- **Given** CB PD hủy công khai **When** xác nhận **Then** trạng thái → DA_DUYET, đặt cờ `cong_khai=0`; Cổng tự cập nhật/ẩn ở lần kéo kế tiếp
 - **Given** CB PD chọn nhiều bản ghi **When** phê duyệt hàng loạt **Then** tất cả được duyệt
 - **Given** CB PD từ chối **When** nhập lý do **Then** trả lại CB NV kèm lý do
 - **Given** CB PD đã duyệt phản hồi **When** nhấn "Đóng hồ sơ" **Then** trạng thái → HOAN_THANH [GAP-II-02]
@@ -775,8 +754,7 @@ MOI → HUY (hủy yêu cầu)
 | EC-01 | CHO_PHE_DUYET quá N ngày không xử lý | Tự động nhắc nhở CB PD + escalate lên cấp trên (N cấu hình, mặc định 3 ngày LV) |
 | EC-02 | Batch approve: mảng hoi_dap_ids quá lớn | Tối đa 100 bản ghi/batch (BR-EC-19). ERR-PD-05 nếu vượt |
 | EC-03 | Batch approve: một số thành công, một số lỗi | Xử lý per-record (không all-or-nothing). Trả batch_result chi tiết |
-| EC-04 | Công khai: API Cổng PLQG fail nhưng DB đã cập nhật | KHÔNG set CONG_KHAI trước khi API thành công. Giữ DA_DUYET nếu API fail. Tương tự với Hủy công khai: giữ CONG_KHAI nếu API fail |
-| EC-05 | Race condition: 2 user cùng click Công khai và Hủy công khai trên cùng record đồng thời | DB lock record với TTL 30s + flag `api_in_progress=true` khi bắt đầu API outbound. User thứ hai nhận ERR-PD-07 + nút Retry. UI disable button action trong khi lock + polling 5s để auto-refresh state. Release lock khi API response hoặc TTL hết. Ref F-42 |
+| EC-04 | Race condition: 2 user cùng thao tác Công khai / Hủy công khai trên cùng bản ghi | Công khai và Hủy công khai chỉ là thao tác đặt cờ + chuyển trạng thái nội bộ, không gọi API ra ngoài. Người thứ hai khi submit sẽ thấy trạng thái đã đổi (không còn ở DA_DUYET / CONG_KHAI tương ứng) → thao tác không hợp lệ, nhận ERR-PD-03. Áp dụng optimistic locking chung (kiểm tra version) như mọi chuyển trạng thái khác |
 
 ---
 
@@ -885,7 +863,7 @@ MOI → HUY (hủy yêu cầu)
 
 ### FR-II-NEW-01: ĐÃ BỎ — Cấu hình lĩnh vực ↔ phân công xử lý
 
-> **[ĐÃ BỎ — BA chốt 2026-05-07 Q11]** Cơ chế phân công cũ dựa vào CAU_HINH_PHAN_CONG (mapping tĩnh "lĩnh vực ↔ CB/TVV phụ trách") gặp 2 vấn đề: (1) trùng lặp với FR-V.I-09 (Vụ việc) và FR-XII (TVCS) đã tự dùng auto-filter — gây thiết kế không nhất quán; (2) cấu hình tĩnh không phản ánh workload thực tế. Thay thế: FR-II-06 (Phân công Hỏi đáp) dùng auto-filter 4 tiêu chí (lĩnh vực + đơn vị + workload + FIFO) — đọc trực tiếp từ `TU_VAN_VIEN.linh_vuc_chuyen_mon` / `NGUOI_HO_TRO.linh_vuc_ids[]` / `TO_CHUC_TU_VAN.linh_vuc[]`. Tab 2 SCR-VIII-06 + entity CAU_HINH_PHAN_CONG cũng đã bỏ (xem srs-fr-10 Lịch sử thay đổi 2026-05-07 Q11).
+> **[ĐÃ BỎ — BA chốt 2026-05-07 Q11; thu hẹp scope theo STT 6 UAT 2026-05-26]** Cơ chế phân công cũ dựa vào CAU_HINH_PHAN_CONG (mapping tĩnh "lĩnh vực ↔ CB/TVV phụ trách") gặp 2 vấn đề: (1) trùng lặp với FR-V.I-09 (Vụ việc) và FR-XII (TVCS) đã tự dùng auto-filter — gây thiết kế không nhất quán; (2) cấu hình tĩnh không phản ánh workload thực tế. Thay thế: FR-II-06 (Phân công Hỏi đáp) dùng auto-filter **3 tiêu chí** (lĩnh vực + đơn vị + workload) — đọc trực tiếp từ `NGUOI_HO_TRO.linh_vuc_ids[]` qua N:N. **Sửa theo STT 6 UAT 2026-05-26:** đã bỏ nguồn `TU_VAN_VIEN.linh_vuc_chuyen_mon` + `TO_CHUC_TU_VAN.linh_vuc[]` khỏi auto-filter — Hỏi đáp chỉ phân công cho cán bộ nội bộ đơn vị (CB Nghiệp vụ + Người hỗ trợ pháp lý) theo CSV UC 16. Tab 2 SCR-VIII-06 + entity CAU_HINH_PHAN_CONG cũng đã bỏ.
 
 ---
 
@@ -1042,7 +1020,7 @@ MOI → HUY (hủy yêu cầu)
 | 7 | content | Tab "Đang xử lý" | tab | trang_thai IN ('TIEP_NHAN','DANG_XU_LY') | click → filter | luôn hiển thị |
 | 8 | content | Tab "Chờ phê duyệt" | tab | trang_thai = 'CHO_PHE_DUYET'. Cán bộ Phê duyệt thao tác chính: duyệt đơn/hàng loạt, từ chối. Badge đỏ = số bản ghi chờ duyệt | click → filter | luôn hiển thị |
 | 9 | content | Tab "Đã duyệt" | tab | trang_thai = 'DA_DUYET'. Sẵn sàng công khai. Nút "Công khai" đơn/hàng loạt | click → filter | luôn hiển thị |
-| 10 | content | Tab "Công khai" | tab | trang_thai = 'CONG_KHAI'. Đã đẩy lên Cổng Pháp luật Quốc gia. Nút "Hủy công khai" | click → filter | luôn hiển thị |
+| 10 | content | Tab "Công khai" | tab | trang_thai = 'CONG_KHAI'. Đã đánh dấu công khai; Cổng Pháp luật Quốc gia tự kéo dữ liệu. Nút "Hủy công khai" | click → filter | luôn hiển thị |
 | 11 | content | Tab "Hoàn thành" | tab | trang_thai IN ('HOAN_THANH','HUY'). Chỉ đọc, tra cứu lịch sử (gộp MH-02.5) | click → filter | luôn hiển thị |
 | 12 | filter-bar | Ô tìm kiếm từ khóa | search-box | Tìm kiếm toàn văn (tsvector) trên noi_dung, ma_hoi_dap, nguoi_gui | enter/click → search | luôn hiển thị |
 | 13 | filter-bar | Lọc Lĩnh vực pháp luật | select (searchable) | Danh mục Lĩnh vực pháp luật (UC99) | change → filter | luôn hiển thị |
@@ -1071,7 +1049,7 @@ MOI → HUY (hủy yêu cầu)
 | 32 | action-bar | Nhãn đã chọn | text | "Đã chọn N bản ghi" | — | khi N >= 1 |
 | 33 | action-bar | Nút Xóa hàng loạt | button (danger) | Tab: Tất cả, Mới, Đang xử lý. Soft delete chỉ bản ghi NOT IN (DA_DUYET, CONG_KHAI, HOAN_THANH) — đồng bộ với dòng 29 và BR-FLOW-03 mở rộng (ref F-19). Per-record với optimistic locking. Báo cáo cuối: modal "Đã xử lý {N} bản ghi: thành công {S}, lỗi {E}" với chi tiết: state cấm (`ERR-DELETE-STATE`), conflict version (`ERR-BATCH-CONFLICT` — bị user khác sửa giữa chừng), không quyền (`ERR-AUTH-DEL`). | click → xác nhận | khi chọn >= 1, tab tương ứng |
 | 34 | action-bar | Nút Phê duyệt hàng loạt | button (primary) | Tab: Chờ phê duyệt. Quyền: Cán bộ Phê duyệt cùng đơn vị. Tối đa 100 bản ghi/lần (BR-EC-19, ERR-PD-05 nếu vượt). Per-record với optimistic locking. Báo cáo cuối: modal tổng hợp "Duyệt thành công {S}, lỗi {E}" với chi tiết per-record (ERR-PD-01 khác đơn vị, ERR-BATCH-CONFLICT version mismatch, ERR-PD-03 state đã đổi). Trigger thông báo trong hệ thống cho Cán bộ Nghiệp vụ. | click → xác nhận | khi chọn >= 1, tab Chờ phê duyệt |
-| 35 | action-bar | Nút Công khai hàng loạt | button (primary) | Tab: Đã duyệt. Gọi API trực tiếp per-record. KHÔNG set CONG_KHAI trước khi API thành công (EC-04). **Đơn vị lẫn lộn:** nếu các bản ghi chọn thuộc nhiều đơn vị khác nhau → tooltip "Chỉ có thể công khai bản ghi cùng đơn vị với bạn"; submit vẫn cho phép nhưng filter per-record (skip các bản ghi khác đơn vị + báo `ERR-PD-01` trong báo cáo cuối). Báo cáo người dùng nhìn thấy: modal "Đã công khai {S} bản ghi thành công, {E} bản ghi lỗi" với cột chi tiết hiển thị nhãn tiếng Việt: "Cổng Pháp luật Quốc gia không phản hồi" (ERR-PD-04 nội bộ), "Khác đơn vị" (ERR-PD-01), "Cán bộ khác đã sửa giữa chừng" (ERR-BATCH-CONFLICT), "Đang khóa bản ghi" (ERR-PD-07). | click → xác nhận | khi chọn >= 1, tab Đã duyệt |
+| 35 | action-bar | Nút Công khai hàng loạt | button (primary) | Tab: Đã duyệt. Đặt cờ `cong_khai=1` + trạng thái CONG_KHAI per-record (Cổng Pháp luật Quốc gia tự kéo dữ liệu định kỳ — KHÔNG gọi API đẩy trực tiếp). **Đơn vị lẫn lộn:** nếu các bản ghi chọn thuộc nhiều đơn vị khác nhau → tooltip "Chỉ có thể công khai bản ghi cùng đơn vị với bạn"; submit vẫn cho phép nhưng filter per-record (skip các bản ghi khác đơn vị + báo `ERR-PD-01` trong báo cáo cuối). Báo cáo người dùng nhìn thấy: modal "Đã công khai {S} bản ghi thành công, {E} bản ghi lỗi" với cột chi tiết hiển thị nhãn tiếng Việt: "Khác đơn vị" (ERR-PD-01), "Cán bộ khác đã sửa giữa chừng" (ERR-BATCH-CONFLICT), "Trạng thái đã đổi" (ERR-PD-03). | click → xác nhận | khi chọn >= 1, tab Đã duyệt |
 | 36 | content | Phân trang | pagination | 20 mục/trang. "Hiển thị 1-20 / {total_count} kết quả" | — | luôn hiển thị |
 
 #### Form Thêm mới / Chỉnh sửa (Drawer/Modal — Thành phần 6)
@@ -1099,7 +1077,7 @@ MOI → HUY (hủy yêu cầu)
 - Phân quyền dữ liệu theo đơn vị tự động theo đơn vị đăng nhập (BR-AUTH-08).
 - Nút "Làm mới": tải lại dữ liệu (AJAX) không reload trang, giữ nguyên scroll/filter/trang.
 - Phê duyệt hàng loạt: mỗi bản ghi trigger thông báo riêng. Không hỗ trợ "Từ chối hàng loạt" — chỉ từ chối từng bản ghi.
-- Công khai: KHÔNG set CONG_KHAI trước khi API Cổng Pháp luật Quốc gia thành công (EC-04, BR-EC-20). Áp dụng khóa DB TTL 30 giây để chống race (ref F-42).
+- Công khai/Hủy công khai: chỉ đặt cờ `cong_khai` + chuyển trạng thái nội bộ; Cổng Pháp luật Quốc gia tự kéo (PULL) dữ liệu định kỳ — KHÔNG gọi API đẩy/gỡ trực tiếp. 2 user thao tác đồng thời → người thứ hai thấy trạng thái đã đổi, nhận ERR-PD-03 (optimistic locking chung, EC-04).
 - **Ma trận phân quyền chuẩn (ref F-21)** — các điều kiện quyền trong bảng component dùng expression:
   - "Có quyền tạo" / "Cán bộ Nghiệp vụ cùng đơn vị" → `user.role IN (CB_NV_TW, CB_NV_BN, CB_NV_DP) AND user.don_vi_id = record.don_vi_id`
   - "Cán bộ Phê duyệt cùng đơn vị" → `user.role IN (CB_PD_TW, CB_PD_BN, CB_PD_DP) AND user.don_vi_id = record.don_vi_id` (BR-AUTH-05)
@@ -1136,11 +1114,11 @@ MOI → HUY (hủy yêu cầu)
 | 13a | action-bar | Nút "Đổi mức độ phức tạp" | button (secondary) | Click → modal: radio-group `muc_do_phuc_tap` (THUONG/PHUC_TAP) + textarea lý do bắt buộc (counter `{n}/500`, min 10 ký tự) + warning "Đổi mức độ sẽ tính lại hạn xử lý theo mức độ phức tạp mới". Submit → UPDATE HOI_DAP.muc_do_phuc_tap + tính lại hạn xử lý + ghi audit. Optimistic locking. Theo **BR-CALC-04** + BR-CALC-03 + NĐ55/2019 Đ.8 K.1. | click → mở modal | khi TIEP_NHAN/DANG_XU_LY, user = CB_NV_{cap} AND don_vi_id = record.don_vi_id (BR-CALC-04) |
 | 14 | action-bar | Nút "Phê duyệt" | button (success) | → C12 xác nhận → SET DA_DUYET, nguoi_duyet=@user, ngay_duyet=NOW(). Gửi thông báo trong hệ thống cho Cán bộ Nghiệp vụ. Khác đơn vị → ERR-PD-01 | click → xác nhận | khi CHO_PHE_DUYET, user = CB_PD_{cap} AND user.don_vi_id = record.don_vi_id (BR-AUTH-05) |
 | 15 | action-bar | Nút "Từ chối" | button (danger) | → Modal từ chối: textarea `ly_do_tu_choi` bắt buộc, tối thiểu 10 ký tự, tối đa 1000 ký tự, counter `{n}/1000` (ref FR-II-08 Input "Từ chối" — F-07). Submit validate: trống hoặc <10 ký tự → ERR-PD-02 inline. Thành công → SET DANG_XU_LY, gửi thông báo trong hệ thống + email Cán bộ Nghiệp vụ kèm lý do. | click → mở modal | khi CHO_PHE_DUYET, user = CB_PD_{cap} AND user.don_vi_id = record.don_vi_id |
-| 16 | action-bar | Nút "Công khai" | button (primary) | Click → mở modal "Công khai lên Cổng Pháp luật Quốc gia" (ref F-08, FR-II-08 Input "Công khai"): (a) Tải lên ảnh đại diện (jpg/png/gif, tối đa 5MB) + nút "Dùng ảnh hệ thống mặc định" + preview; (b) Textarea "Mô tả công khai" (tối đa 2000 ký tự **đếm theo plain text sau XSS sanitize loại bỏ HTML tags** — counter hiển thị "{N}/2000 ký tự văn bản"; nếu user paste HTML, counter chỉ đếm phần text còn lại sau sanitize), plain text hoặc HTML đã sanitize qua whitelist policy F-38; (c) file-upload cho file đính kèm công khai (PDF/DOC/DOCX/XLS/XLSX, tối đa 20MB/file, tối đa 10 file, quét ClamAV); (d) Panel preview bên phải hiển thị cách render trên Cổng Pháp luật Quốc gia; (e) Nút "Hủy" + "Xác nhận công khai". Submit → **khóa bản ghi TTL 30 giây (F-42)** → gọi API Cổng Pháp luật Quốc gia → API OK: SET CONG_KHAI + `cong_khai=1` + `thoi_gian_dang_tai=NOW()` + giải phóng khóa; API fail: giữ DA_DUYET + giải phóng khóa + toast persistent với thông báo phân biệt (timeout/5xx/business) + nút "Thử lại" (EC-04). Nếu lock conflict (user khác đang Công khai/Hủy công khai cùng bản ghi) → ERR-PD-07 + tooltip "Đang có thao tác bởi {user}, thử lại sau {n}s". | click → mở modal | khi DA_DUYET, user = CB_PD_{cap} AND user.don_vi_id = record.don_vi_id (ref F-20 + BR-FLOW-05 + BR-AUTH-05) |
-| 17 | action-bar | Nút "Hủy công khai" | button (warning) | → C12 "Gỡ khỏi Cổng Pháp luật Quốc gia? Hành động ảnh hưởng hiển thị công khai." → **khóa bản ghi TTL 30 giây (F-42)** → Gọi API gỡ → OK: SET DA_DUYET + `cong_khai=0` + clear `thoi_gian_dang_tai` + giải phóng khóa; fail: giữ CONG_KHAI + giải phóng khóa + toast persistent + nút "Thử lại" (ERR-PD-06). Lock conflict → ERR-PD-07. | click → xác nhận | khi CONG_KHAI, user = CB_PD_{cap} AND user.don_vi_id = record.don_vi_id (ref F-20) |
+| 16 | action-bar | Nút "Công khai" | button (primary) | Click → mở modal "Công khai lên Cổng Pháp luật Quốc gia" (ref F-08, FR-II-08 Input "Công khai"): (a) Tải lên ảnh đại diện (jpg/png/gif, tối đa 5MB) + nút "Dùng ảnh hệ thống mặc định" + preview; (b) Textarea "Mô tả công khai" (tối đa 2000 ký tự **đếm theo plain text sau XSS sanitize loại bỏ HTML tags** — counter hiển thị "{N}/2000 ký tự văn bản"; nếu user paste HTML, counter chỉ đếm phần text còn lại sau sanitize), plain text hoặc HTML đã sanitize qua whitelist policy F-38; (c) file-upload cho file đính kèm công khai (PDF/DOC/DOCX/XLS/XLSX, tối đa 20MB/file, tối đa 10 file, quét ClamAV); (d) Panel preview bên phải hiển thị cách render trên Cổng Pháp luật Quốc gia; (e) Nút "Hủy" + "Xác nhận công khai". Submit → SET CONG_KHAI + `cong_khai=1` + `thoi_gian_dang_tai=NOW()` + `nguoi_cong_khai_id=@user`. Cổng Pháp luật Quốc gia tự kéo (PULL) dữ liệu định kỳ — phần mềm KHÔNG gọi API đẩy trực tiếp. Nếu khi submit trạng thái không còn DA_DUYET (user khác đã thao tác) → ERR-PD-03. | click → mở modal | khi DA_DUYET, user = CB_PD_{cap} AND user.don_vi_id = record.don_vi_id (ref F-20 + BR-FLOW-05 + BR-AUTH-05) |
+| 17 | action-bar | Nút "Hủy công khai" | button (warning) | → C12 "Gỡ công khai? Hành động ảnh hưởng hiển thị trên Cổng Pháp luật Quốc gia." → SET DA_DUYET + `cong_khai=0` + clear `thoi_gian_dang_tai`. Cổng Pháp luật Quốc gia tự cập nhật/ẩn ở lần kéo kế tiếp — phần mềm KHÔNG gọi API gỡ trực tiếp. Nếu khi submit trạng thái không còn CONG_KHAI → ERR-PD-03. | click → xác nhận | khi CONG_KHAI, user = CB_PD_{cap} AND user.don_vi_id = record.don_vi_id (ref F-20) |
 | 18 | action-bar | Nút "Đóng hồ sơ" | button (secondary) | → C12 "Đóng hồ sơ? Hồ sơ sẽ không thể chỉnh sửa." → SET HOAN_THANH, `ngay_hoan_thanh = NOW()`. **Bắt buộc thủ công** theo BR-FLOW-06 — hệ thống KHÔNG tự đóng hồ sơ sau bất kỳ khoảng thời gian nào. Bản ghi DA_DUYET/CONG_KHAI có thể nằm vô thời hạn cho đến khi CB chủ động click. | click → xác nhận | khi DA_DUYET/CONG_KHAI, user = (CB_NV_{cap} OR CB_PD_{cap}) AND user.don_vi_id = record.don_vi_id — ref F-20, BR-FLOW-06 |
 | 19 | content | Dropdown chèn mẫu | select (searchable, grouped) | MAU_PHAN_HOI WHERE `linh_vuc_id` = câu hỏi đang xử lý AND `trang_thai = 'KICH_HOAT'` AND scope theo MPH_READ (Mô hình B): **TW user** thấy tất cả; **BN user** thấy mẫu `pham_vi=TW_QUOC_GIA` + mẫu `pham_vi=BN_RIENG AND don_vi_id=user.don_vi_id`; **ĐP user** thấy mẫu `pham_vi=TW_QUOC_GIA` + mẫu `pham_vi=DP_RIENG AND don_vi_id=user.don_vi_id`. **Hiển thị nhóm 2 nhóm trong dropdown:** (a) "Mẫu khung quốc gia (TW)" — gom mẫu `pham_vi=TW_QUOC_GIA`, có badge 🟦; (b) "Mẫu của đơn vị bạn" — gom mẫu của đơn vị user, badge theo cấp (🟩 BN / 🟨 ĐP). Chọn → điền sẵn `noi_dung` vào editor + tăng counter `MAU_PHAN_HOI.so_lan_su_dung += 1`. | change → điền sẵn + tăng counter | khi soạn phản hồi, DANG_XU_LY |
-| 20 | content | Nội dung phản hồi * | rich-text-editor | Bắt buộc khi gửi. WYSIWYG, tối đa 5.000 ký tự (đếm plain text, loại bỏ HTML khi đếm). ERR-PH-01 nếu trống. **XSS sanitization policy (ref F-38, BẮT BUỘC):** (a) Danh sách thẻ cho phép: `<p>, <br>, <b>, <strong>, <i>, <em>, <u>, <ul>, <ol>, <li>, <a>, <h3>, <h4>, <blockquote>, <code>`. (b) Danh sách thuộc tính cho phép: `<a href>` chỉ cho phép `http://` hoặc `https://` (loại bỏ `javascript:`, `data:`, `file:`); `<p style>` chỉ cho `text-align`; loại bỏ mọi thuộc tính khác. (c) LOẠI BỎ: `<script>, <style>, <iframe>, <object>, <embed>, <form>, <input>, <button>, event handlers (onclick, onerror, onload, onmouseover, ...)`, CSS expressions. (d) **Phòng thủ nhiều lớp:** sanitize phía client (DOMPurify) + sanitize phía server trước khi save vào PHAN_HOI.noi_dung + sanitize lần thứ 3 trước khi đẩy lên API Cổng Pháp luật Quốc gia (OWASP Java HTML Sanitizer / Python Bleach). (e) Nếu phát hiện thẻ ngoài danh sách cho phép → từ chối với lỗi inline "Nội dung chứa HTML không được phép. Vui lòng chỉ dùng định dạng cơ bản (đậm, nghiêng, danh sách, liên kết)" + highlight phần vi phạm. Ref OWASP XSS Prevention Cheat Sheet. Quan trọng vì nội dung đăng công khai lên Cổng Pháp luật Quốc gia (external) → stored XSS nghiêm trọng. | — | khi soạn phản hồi |
+| 20 | content | Nội dung phản hồi * | rich-text-editor | Bắt buộc khi gửi. WYSIWYG, tối đa **20.000 ký tự** (đếm plain text, loại bỏ HTML khi đếm) — **sửa theo STT 7 UAT 2026-05-26**, nâng từ 5.000 lên 20.000 ký tự cho phản hồi pháp lý chi tiết. ERR-PH-01 nếu trống; ERR-PH-03 nếu vượt 20.000 ký tự. **XSS sanitization policy (ref F-38, BẮT BUỘC):** (a) Danh sách thẻ cho phép: `<p>, <br>, <b>, <strong>, <i>, <em>, <u>, <ul>, <ol>, <li>, <a>, <h3>, <h4>, <blockquote>, <code>`. (b) Danh sách thuộc tính cho phép: `<a href>` chỉ cho phép `http://` hoặc `https://` (loại bỏ `javascript:`, `data:`, `file:`); `<p style>` chỉ cho `text-align`; loại bỏ mọi thuộc tính khác. (c) LOẠI BỎ: `<script>, <style>, <iframe>, <object>, <embed>, <form>, <input>, <button>, event handlers (onclick, onerror, onload, onmouseover, ...)`, CSS expressions. (d) **Phòng thủ nhiều lớp:** sanitize phía client (DOMPurify) + sanitize phía server trước khi save vào PHAN_HOI.noi_dung + sanitize lần thứ 3 trước khi lưu dữ liệu công khai để Cổng Pháp luật Quốc gia kéo (OWASP Java HTML Sanitizer / Python Bleach). (e) Nếu phát hiện thẻ ngoài danh sách cho phép → từ chối với lỗi inline "Nội dung chứa HTML không được phép. Vui lòng chỉ dùng định dạng cơ bản (đậm, nghiêng, danh sách, liên kết)" + highlight phần vi phạm. Ref OWASP XSS Prevention Cheat Sheet. Quan trọng vì nội dung được công khai ra ngoài để Cổng Pháp luật Quốc gia kéo (external) → stored XSS nghiêm trọng. | — | khi soạn phản hồi |
 | 21 | content | Văn bản pháp luật | textarea | Trích dẫn văn bản pháp luật liên quan. Không bắt buộc | — | khi soạn phản hồi |
 | 22 | content | Gợi ý cho doanh nghiệp | textarea | Gợi ý cho doanh nghiệp. Không bắt buộc | — | khi soạn phản hồi |
 | 23 | content | File đính kèm phản hồi | file-upload | Ref F-36 (đồng bộ với SCR-II-01 dòng 45): Tối đa 10 file/lần, tổng tối đa 100MB, mỗi file tối đa 20MB. doc/docx/xls/xlsx/pdf. Drag & drop + nút "Chọn file". Thẻ preview với thanh tiến trình, spinner ClamAV. Filename UTF-8 OK, loại bỏ emoji, tối đa 255 ký tự. Trùng tên tự động đổi tên. Virus/timeout/file 0 byte → từ chối + toast cụ thể. | — | khi soạn phản hồi |
@@ -1159,14 +1137,13 @@ MOI → HUY (hủy yêu cầu)
 - Toàn bộ workflow trên 1 trang: tiếp nhận → phân công → soạn phản hồi → phê duyệt → công khai → đóng hồ sơ.
 - Tất cả chuyển trạng thái sử dụng optimistic locking (kiểm tra version). Conflict → toast persistent + nút "Tải lại".
 - Concurrency: 2 Cán bộ Nghiệp vụ tiếp nhận cùng lúc → khóa bản ghi (optimistic locking), người thứ 2 nhận ERR-TN-03.
-- API outbound (Công khai/Hủy công khai): áp dụng khóa DB TTL 30 giây + flag `api_in_progress=true` → chặn thao tác outbound khác concurrent trên cùng bản ghi, trả ERR-PD-07 (ref F-42).
+- Công khai/Hủy công khai chỉ là thao tác đặt cờ `cong_khai` + chuyển trạng thái nội bộ (Cổng Pháp luật Quốc gia tự kéo dữ liệu, phần mềm KHÔNG gọi API đẩy/gỡ trực tiếp). 2 user thao tác đồng thời trên cùng bản ghi → người thứ 2 thấy trạng thái đã đổi, nhận ERR-PD-03; áp dụng optimistic locking chung như các chuyển trạng thái khác.
 - **Ma trận phân quyền chuẩn (ref F-21)** — các "Điều kiện hiển thị" dùng expression cụ thể thay vì mô tả chung:
   - "Cán bộ Nghiệp vụ cùng đơn vị" → `user.role = CB_NV_{cap} AND user.don_vi_id = record.don_vi_id`
   - "Cán bộ Phê duyệt cùng đơn vị" → `user.role = CB_PD_{cap} AND user.don_vi_id = record.don_vi_id` (BR-AUTH-05)
   - Role IDs: CB_NV_TW, CB_NV_BN, CB_NV_DP, CB_PD_TW, CB_PD_BN, CB_PD_DP, QTHT (đồng bộ với srs-v3.md §3.4.2 ma trận phân quyền). Cross-file alignment: srs-v3.md §3.4.2 SHALL liệt kê 7 roles trên + permission codes cho mỗi action.
 - Cán bộ Phê duyệt chỉ được duyệt/công khai/hủy công khai bản ghi cùng đơn vị (BR-AUTH-05 + F-20). Khác đơn vị → ERR-PD-01.
-- Công khai: KHÔNG set CONG_KHAI trước khi API Cổng Pháp luật Quốc gia thành công (EC-04, BR-EC-20).
-- **XSS sanitization (ref F-38)** áp dụng cho mọi rich-text/HTML-accepting field: dòng 20 (nội dung phản hồi) + dòng 22 gợi ý cho doanh nghiệp (nếu hỗ trợ HTML) + `mo_ta_cong_khai` modal Công khai. DOMPurify phía client + server sanitize + server sanitize lần nữa trước khi gọi API Cổng Pháp luật Quốc gia. OWASP XSS Prevention Cheat Sheet. Nếu chưa có section Security/NFR tổng thể trong srs-v3.md → khuyến nghị cross-file thêm section "NFR Security Rules" có whitelist chung cho toàn hệ thống.
+- **XSS sanitization (ref F-38)** áp dụng cho mọi rich-text/HTML-accepting field: dòng 20 (nội dung phản hồi) + dòng 22 gợi ý cho doanh nghiệp (nếu hỗ trợ HTML) + `mo_ta_cong_khai` modal Công khai. DOMPurify phía client + server sanitize + server sanitize lần nữa trước khi lưu dữ liệu công khai để Cổng Pháp luật Quốc gia kéo. OWASP XSS Prevention Cheat Sheet. Nếu chưa có section Security/NFR tổng thể trong srs-v3.md → khuyến nghị cross-file thêm section "NFR Security Rules" có whitelist chung cho toàn hệ thống.
 
 #### Chuyển trạng thái
 
@@ -1181,8 +1158,8 @@ Toàn bộ workflow chuyển trạng thái HOI_DAP thực hiện trên màn hìn
 | DA_TRA_LOI → CHO_PHE_DUYET | Auto-transition (BR-FLOW-01) | Hệ thống |
 | CHO_PHE_DUYET → DA_DUYET | "Phê duyệt" (dòng 14) | CB PD cùng đơn vị |
 | CHO_PHE_DUYET → DANG_XU_LY | "Từ chối" + lý do (dòng 15) | CB PD cùng đơn vị |
-| DA_DUYET → CONG_KHAI | "Công khai" (dòng 16) | CB PD cùng đơn vị + API Cổng PLQG OK |
-| CONG_KHAI → DA_DUYET | "Hủy công khai" (dòng 17) | CB PD cùng đơn vị + API gỡ OK |
+| DA_DUYET → CONG_KHAI | "Công khai" (dòng 16) | CB PD cùng đơn vị |
+| CONG_KHAI → DA_DUYET | "Hủy công khai" (dòng 17) | CB PD cùng đơn vị |
 | DA_DUYET / CONG_KHAI → HOAN_THANH | "Đóng hồ sơ" (dòng 18) | CB NV hoặc CB PD cùng đơn vị |
 
 #### Thông báo trigger
@@ -1196,8 +1173,8 @@ Mỗi chuyển trạng thái phát sinh thông báo (trong hệ thống + email 
 | Gửi phản hồi + tích "Đã trả lời" (→ CHO_PHE_DUYET) | In-app + email | CB PD cùng đơn vị (BR-AUTH-05) | SLA email ≤ 5 phút |
 | Phê duyệt (→ DA_DUYET) | In-app | CB NV soạn phản hồi | — |
 | Từ chối (→ DANG_XU_LY) | In-app + email | CB NV soạn phản hồi | Kèm `ly_do_tu_choi` |
-| Công khai (→ CONG_KHAI) | API outbound + AUDIT_LOG | Cổng Pháp luật Quốc gia | Không thông báo người dùng |
-| Hủy công khai (→ DA_DUYET) | API outbound + AUDIT_LOG | Cổng Pháp luật Quốc gia | Không thông báo người dùng |
+| Công khai (→ CONG_KHAI) | AUDIT_LOG | — | Đặt cờ `cong_khai=1`; Cổng Pháp luật Quốc gia tự kéo dữ liệu định kỳ. Không thông báo người dùng |
+| Hủy công khai (→ DA_DUYET) | AUDIT_LOG | — | Đặt cờ `cong_khai=0`; Cổng tự cập nhật/ẩn ở lần kéo kế tiếp. Không thông báo người dùng |
 | Hủy yêu cầu (→ HUY) | AUDIT_LOG | — | Lưu `thoi_gian_huy`, `nguoi_huy_id`, `ly_do_huy` |
 | Auto-escalate (CHO_PHE_DUYET > 3 ngày làm việc) | In-app + email + escalate | CB PD cấp trên | EC-01, scheduled job |
 | Cảnh báo SLA (4 mức) | In-app + email | CB NV + CB PD theo mức | BR-SLA-02, BR-SLA-03, FR-II-CROSS-01 |
@@ -1207,8 +1184,11 @@ Mỗi chuyển trạng thái phát sinh thông báo (trong hệ thống + email 
 ### SCR-II-03: Phân công xử lý
 
 **Loại màn hình:** Modal overlay trên SCR-II-02
-**FR sử dụng:** FR-II-06 (auto-filter 4 tiêu chí — BA chốt 2026-05-07 Q11)
-**Mô tả:** Modal overlay cho phép Cán bộ Nghiệp vụ phân công câu hỏi cho cán bộ phụ trách / tư vấn viên / NHT / Tổ chức tư vấn. Hệ thống auto-filter ứng viên theo 4 tiêu chí (lĩnh vực chuyên môn + đơn vị + workload + FIFO) — đọc trực tiếp từ `TU_VAN_VIEN.linh_vuc_chuyen_mon` / `NGUOI_HO_TRO.linh_vuc_ids[]` / `TO_CHUC_TU_VAN.linh_vuc[]`, hiển thị workload hiện tại và cảnh báo quá tải (WRN-PC-01, không chặn). Mở từ nút "Phân công" trên SCR-II-02; khi mở re-fetch state, nếu state đã đổi (VD: user khác đã tích "Đã trả lời" → CHO_PHE_DUYET) → đóng modal + toast ERR-PC-02 (ref F-15).
+**FR sử dụng:** FR-II-06 (auto-filter 3 tiêu chí — sửa theo STT 6 UAT 2026-05-26)
+**Mô tả:** Modal overlay cho phép Cán bộ Nghiệp vụ phân công câu hỏi cho **cá nhân nội bộ đơn vị** (CB Nghiệp vụ hoặc Người hỗ trợ pháp lý cùng đơn vị). Hệ thống auto-filter ứng viên theo 3 tiêu chí (lĩnh vực chuyên môn + đơn vị + workload) — đọc trực tiếp từ `NGUOI_HO_TRO.linh_vuc_ids[]` (qua N:N) + `TAI_KHOAN.don_vi_id`, hiển thị workload hiện tại và cảnh báo quá tải (WRN-PC-01, không chặn). Mở từ nút "Phân công" trên SCR-II-02; khi mở re-fetch state, nếu state đã đổi (VD: user khác đã tích "Đã trả lời" → CHO_PHE_DUYET) → đóng modal + toast ERR-PC-02 (ref F-15).
+
+> **Sửa theo STT 6 UAT 2026-05-26:** modal đơn-tab (chỉ cá nhân nội bộ đơn vị) thay cho thiết kế 2 tabs cũ (Cá nhân tự do / Tổ chức tư vấn). Lý do: Hỏi đáp pháp luật là tư vấn ngắn — không huy động mạng lưới Tư vấn viên / Chuyên gia / Tổ chức tư vấn (phạm vi của Vụ việc — FR-V). Đồng bộ với CSV UC 16.
+
 **URL pattern:** Modal overlay trên `/hoi-dap/:id` (không có URL riêng)
 **Quyền truy cập:** Cán bộ Nghiệp vụ (CB_NV_{cap}) cùng đơn vị bản ghi (`user.don_vi_id = record.don_vi_id`) có quyền `HOI_DAP_ASSIGN`. Hiển thị nút "Phân công" trên SCR-II-02 chỉ khi `trang_thai IN ('TIEP_NHAN', 'DANG_XU_LY')`.
 
@@ -1217,25 +1197,21 @@ Mỗi chuyển trạng thái phát sinh thông báo (trong hệ thống + email 
 | # | Vùng | Thành phần | Loại | Dữ liệu / Nội dung | Hành vi | Điều kiện hiển thị |
 |---|------|-----------|------|--------------------| --------|-------------------|
 | 1 | modal | Tiêu đề modal | text (H2) | Khi `trang_thai=TIEP_NHAN` (lần đầu phân công): "Phân công xử lý — #{ma_hoi_dap}". Khi `trang_thai=DANG_XU_LY` (phân công lại): "Phân công lại — #{ma_hoi_dap}" | — | luôn hiển thị |
-| 2 | modal | Thông tin tóm tắt + Người được phân công hiện tại | label (read-only) | Lĩnh vực pháp luật, nội dung (100 ký tự), trạng thái hiện tại, mức độ phức tạp (badge), hạn xử lý theo cấu hình thời hạn (15/30 ngày làm việc theo mức độ phức tạp). **Khi DANG_XU_LY (phân công lại):** thêm dòng "Đang phân công cho: {ten_nguoi_phan_cong} ({tên Tổ chức tư vấn nếu có})" để cán bộ biết ai đang xử lý hiện tại. | — | luôn hiển thị |
+| 2 | modal | Thông tin tóm tắt + Người được phân công hiện tại | label (read-only) | Lĩnh vực pháp luật, nội dung (100 ký tự), trạng thái hiện tại, mức độ phức tạp (badge), hạn xử lý theo cấu hình thời hạn (15/30 ngày làm việc theo mức độ phức tạp). **Khi DANG_XU_LY (phân công lại):** thêm dòng "Đang phân công cho: {ten_nguoi_phan_cong}" để cán bộ biết ai đang xử lý hiện tại. | — | luôn hiển thị |
 | 3 | modal | Nút đóng | icon-button | Icon X góc trên phải → đóng modal | click → đóng | luôn hiển thị |
-| 4 | modal | Tabs "Cá nhân tự do / Tổ chức tư vấn" | tabs | Tab 1 "Cá nhân tự do": CB/TVV/NHT cá nhân (FK TAI_KHOAN). Tab 2 "Tổ chức tư vấn": Cty Luật / VP LS / TT TVPL (FK TO_CHUC_TU_VAN, theo NĐ77/2008 + NĐ55/2019 Đ.9) — sau khi chọn TC sẽ hiển thị danh sách TVV thuộc TC để chọn người cụ thể. Mặc định active: Tab "Cá nhân tự do" | click → đổi tab + reset selection (set loai_doi_tuong_xu_ly tương ứng) | luôn hiển thị |
-| 4a | modal | Bảng gợi ý — Tab Cá nhân | table (compact) | Hiển thị khi tab "Cá nhân tự do": Radio chọn, Họ tên, Đơn vị, Lĩnh vực chuyên môn, Khối lượng, Mức ưu tiên. Sắp xếp: uu_tien ASC → khối lượng ASC. Loại bỏ TVV đã có `to_chuc_chinh_id` không NULL (đó là TVV thuộc tổ chức, chỉ chọn qua tab Tổ chức). **Loading state:** spinner trong header bảng + disable các radio khi đang tải. **Empty state:** "Chưa có cá nhân nào khớp lĩnh vực. Bạn có thể chọn cán bộ khác ở ô Người xử lý bên dưới." | click radio → tự động điền ô Người xử lý | khi tab Cá nhân active |
-| 4b | modal | Bảng gợi ý — Tab Tổ chức (cấp 1: chọn Tổ chức) | table (compact) | Hiển thị khi tab "Tổ chức tư vấn": Radio chọn, Tên tổ chức, Loại (Cty Luật / VP LS / TT TVPL), Lĩnh vực chuyên môn, Số Tư vấn viên thuộc tổ chức, Khối lượng tổng hợp, Mức ưu tiên. Sắp xếp: uu_tien ASC → khối lượng ASC. **Loading state:** spinner header + disable radio. **Empty state:** "Chưa có Tổ chức tư vấn nào khớp lĩnh vực." | click radio → tải bảng gợi ý cấp 2 (Tư vấn viên thuộc tổ chức vừa chọn) | khi tab Tổ chức active |
-| 4c | modal | Bảng gợi ý — Tab Tổ chức (cấp 2: chọn Tư vấn viên thuộc tổ chức) | table (compact) | Hiển thị sau khi đã chọn tổ chức ở Bảng 4b. Filter: `TU_VAN_VIEN.to_chuc_chinh_id = to_chuc_tu_van_id` (vừa chọn) AND `trang_thai='HOAT_DONG'`. Cột: Radio chọn, Họ tên Tư vấn viên, Lĩnh vực chuyên môn, Khối lượng cá nhân, Số thẻ hành nghề. **Loading state:** skeleton 3 hàng khi đang tải. **Empty state:** "Tổ chức '{ten_tc}' chưa có Tư vấn viên nào ở trạng thái Hoạt động. Vui lòng chọn tổ chức khác." | click radio → tự động điền ô Người xử lý (nguoi_xu_ly_id = Tư vấn viên này) | khi đã chọn tổ chức ở 4b |
+| 4 | modal | Bảng gợi ý ứng viên nội bộ đơn vị | table (compact) | Cột: Radio chọn, Họ tên, Vai trò (CB Nghiệp vụ / Người hỗ trợ pháp lý), Lĩnh vực chuyên môn, Khối lượng. Sắp xếp: workload ASC → ho_ten ASC. Nguồn: TAI_KHOAN của CB Nghiệp vụ + Người hỗ trợ pháp lý cùng đơn vị với HOI_DAP, trạng thái HOAT_DONG. NHT lọc thêm theo lĩnh vực (`NGUOI_HO_TRO.linh_vuc_ids[]` qua N:N); CB Nghiệp vụ bỏ qua filter lĩnh vực (xử lý mọi lĩnh vực trong đơn vị). LIMIT 10. **Loading state:** spinner trong header bảng + disable các radio khi đang tải. **Empty state:** "Chưa có cá nhân nội bộ đơn vị nào khớp lĩnh vực. Bạn có thể chọn cán bộ khác ở ô Người xử lý bên dưới." | click radio → tự động điền ô Người xử lý | luôn hiển thị |
 | 5 | modal | Nhãn cảnh báo quá tải | badge (đỏ) | "Quá tải ({N} yêu cầu)" — KHÔNG chặn phân công (WRN-PC-01, chỉ cảnh báo) | — | khi khối lượng công việc vượt ngưỡng |
-| 6 | modal | Hàng tài khoản/tổ chức bị vô hiệu | text (mờ) | Dòng mờ, disabled, tooltip "Đã bị vô hiệu hóa" (ERR-PC-01 cá nhân hoặc ERR-PC-03 tổ chức) | — | khi trang_thai != HOAT_DONG |
-| 7 | modal | Dropdown Tổ chức tư vấn * (chỉ tab Tổ chức) | select (searchable) | Bắt buộc khi tab Tổ chức. to_chuc_tu_van_id FK TO_CHUC_TU_VAN. Tìm theo tên. Auto-fill khi chọn từ Bảng 4b. Validation: TO_CHUC_TU_VAN.trang_thai='HOAT_DONG' | change → reload Bảng 4c (TVV thuộc TC) | khi tab Tổ chức active |
-| 8 | modal | Dropdown Người xử lý * (cả 2 tab) | select (searchable) | Bắt buộc cả 2 loại. nguoi_xu_ly_id FK TAI_KHOAN. **Tab Cá nhân:** tìm theo tên trong tất cả CB/TVV tự do. **Tab Tổ chức:** chỉ TVV thuộc TC TV vừa chọn (`TU_VAN_VIEN.to_chuc_chinh_id = to_chuc_tu_van_id`). Auto-fill khi chọn từ bảng gợi ý. Validation: trang_thai='HOAT_DONG' | — | luôn hiển thị |
-| 9 | modal | Ghi chú phân công | textarea | Không bắt buộc. Placeholder "Ghi chú cho người được phân công..." | — | luôn hiển thị |
-| 10 | modal | Thời hạn xử lý | date-picker | Không bắt buộc. Mặc định: hạn xử lý của HOI_DAP (theo cấu hình SLA + muc_do_phuc_tap). Cho phép ghi đè | — | luôn hiển thị |
-| 11 | modal | Nút Hủy | button (secondary) | Đóng modal, không thay đổi dữ liệu | click → đóng | luôn hiển thị |
-| 12 | modal | Nút Phân công | button (primary) | Validate (theo Processing FR-II-06): cả 2 loại đều cần `nguoi_xu_ly_id`; loai='TO_CHUC' cần thêm `to_chuc_tu_van_id` AND TVV phải thuộc TC. → UPDATE HOI_DAP SET loai_doi_tuong_xu_ly + nguoi_phan_cong_id (+ to_chuc_tu_van_id nếu loai='TO_CHUC') + trang_thai=DANG_XU_LY. Nếu workload vượt ngưỡng → C12 xác nhận. Thành công → toast + đóng modal + refresh SCR-II-02. **Error feedback:** ERR-PC-02 (state đã đổi giữa chừng) → đóng modal + toast + reload SCR-II-02; ERR-PC-04 (loai='TO_CHUC' nhưng thiếu to_chuc_tu_van_id hoặc nguoi_xu_ly_id) → giữ modal mở + highlight field thiếu (border đỏ) + toast inline "Phân công cho Tổ chức tư vấn phải chọn đủ 2 thông tin: Tổ chức + Tư vấn viên thuộc tổ chức"; ERR-PC-05 (TVV không thuộc TC — vượt UI bypass) → giữ modal + toast "Tư vấn viên '{ten_tvv}' không thuộc Tổ chức '{ten_tc}'. Vui lòng chọn lại"; ERR-PC-06 (loai='CA_NHAN' có truyền to_chuc_tu_van_id thừa) → ngăn từ UI bằng cách ẩn dropdown TC TV ở tab Cá nhân; nếu vẫn nhận từ API → toast "Không hợp lệ" + hủy submit. | click → xử lý | luôn hiển thị |
+| 6 | modal | Hàng tài khoản bị vô hiệu | text (mờ) | Dòng mờ, disabled, tooltip "Đã bị vô hiệu hóa" (ERR-PC-01) | — | khi trang_thai != HOAT_DONG |
+| 7 | modal | Dropdown Người xử lý * | select (searchable) | Bắt buộc. nguoi_xu_ly_id FK TAI_KHOAN. Tìm theo tên trong CB Nghiệp vụ + Người hỗ trợ pháp lý cùng đơn vị. Auto-fill khi chọn từ bảng gợi ý. Validation: `TAI_KHOAN.trang_thai='HOAT_DONG'` AND `TAI_KHOAN.don_vi_id = HOI_DAP.don_vi_id` | — | luôn hiển thị |
+| 8 | modal | Ghi chú phân công | textarea | Không bắt buộc. Placeholder "Ghi chú cho người được phân công..." | — | luôn hiển thị |
+| 9 | modal | Thời hạn xử lý | date-picker | Không bắt buộc. Mặc định: hạn xử lý của HOI_DAP (theo cấu hình SLA + muc_do_phuc_tap). Cho phép ghi đè | — | luôn hiển thị |
+| 10 | modal | Nút Hủy | button (secondary) | Đóng modal, không thay đổi dữ liệu | click → đóng | luôn hiển thị |
+| 11 | modal | Nút Phân công | button (primary) | Validate (theo Processing FR-II-06): cần `nguoi_xu_ly_id` thuộc nhóm tác nhân cho phép (CB NV hoặc NHT) + cùng đơn vị với HOI_DAP. → cập nhật HOI_DAP SET `nguoi_phan_cong_id` + `trang_thai=DANG_XU_LY`. Nếu workload vượt ngưỡng → xác nhận. Thành công → toast + đóng modal + refresh SCR-II-02. **Error feedback:** ERR-PC-02 (state đã đổi giữa chừng) → đóng modal + toast + reload SCR-II-02; ERR-PC-08 (người được chọn không thuộc đơn vị) → giữ modal mở + highlight ô Người xử lý + toast "Người được chọn không thuộc đơn vị '{ten_dv}' đang sở hữu Hỏi đáp. Vui lòng chọn lại". | click → xử lý | luôn hiển thị |
 
 #### Quy tắc tương tác
-- Chuyển trạng thái: TIEP_NHAN → DANG_XU_LY (khi phân công). Nếu đã DANG_XU_LY: giữ DANG_XU_LY, chỉ đổi nguoi_xu_ly_id.
-- **State re-fetch khi mở modal (ref F-15, prevention pattern):** ngay khi user click nút "Phân công" trên SCR-II-02 dòng 10 → trước khi render modal, re-fetch state hiện tại từ server. Nếu state KHÔNG thuộc {TIEP_NHAN, DANG_XU_LY} → KHÔNG mở modal, thay bằng toast ERR-PC-02 "Hỏi đáp ở trạng thái '{tt_moi}' không thể phân công" + reload SCR-II-02 để user thấy state mới. Chỉ khi state hợp lệ mới render modal. Phòng tránh user mất thời gian điền form rồi submit lỗi.
-- Gợi ý phân công auto-filter từ TK trong mạng lưới: chỉ cần TVV/NHT/CG/TC đã có lĩnh vực chuyên môn được gán + có ít nhất 1 TK HOAT_DONG cùng đơn vị → bảng gợi ý sẽ có data. Trường hợp không có TK nào khớp lĩnh vực → bảng trống, CB NV dùng dropdown chọn TK toàn bộ trong đơn vị.
+- Chuyển trạng thái: TIEP_NHAN → DANG_XU_LY (khi phân công). Nếu đã DANG_XU_LY: giữ DANG_XU_LY, chỉ đổi nguoi_phan_cong_id.
+- **State re-fetch khi mở modal (ref F-15, prevention pattern):** ngay khi user click nút "Phân công" trên SCR-II-02 dòng 10 → trước khi render modal, re-fetch state hiện tại từ server. Nếu state KHÔNG thuộc {TIEP_NHAN, DANG_XU_LY} → KHÔNG mở modal, thay bằng toast ERR-PC-02 "Hỏi đáp ở trạng thái '{tt_moi}' không thể phân công" + reload SCR-II-02 để user thấy state mới.
+- Gợi ý phân công auto-filter từ TK nội bộ đơn vị: chỉ cần NHT đã có lĩnh vực chuyên môn được gán + thuộc cùng đơn vị với HOI_DAP → bảng gợi ý sẽ có data. Trường hợp không có NHT nào khớp lĩnh vực → bảng có thể chỉ hiển thị CB Nghiệp vụ; CB NV dùng dropdown chọn TK khác trong đơn vị nếu cần.
 - Cho phép phân công lại khi đang ở DANG_XU_LY.
 - Phân công thành công → Gửi THONG_BAO trong hệ thống + email cho người được phân công + ghi AUDIT_LOG.
 - Vai trò chuẩn (ref F-21): user = CB_NV_{cap} AND don_vi_id = record.don_vi_id (Cán bộ Nghiệp vụ cùng đơn vị với bản ghi).
@@ -1371,9 +1347,7 @@ erDiagram
 | tu_van_nhanh_goc_id | identifier | N | FK → TU_VAN_NHANH(id); chỉ điền khi kenh_tiep_nhan='TVN_BRIDGE' | | Liên kết phiên Tư vấn nhanh gốc khi escalate (ref FR-13 + L0 H-25) |
 | nguoi_tiep_nhan_id | identifier | N | FK → TAI_KHOAN(id) | | CB nghiệp vụ tiếp nhận |
 | ngay_tiep_nhan | datetime | N | | | Ngày tiếp nhận xử lý |
-| loai_doi_tuong_xu_ly | text | N | CHECK IN ('CA_NHAN','TO_CHUC') | 'CA_NHAN' | Loại đối tượng được phân công xử lý: CA_NHAN (CB/TVV/NHT cá nhân tự do) hoặc TO_CHUC (Tổ chức tư vấn — Cty Luật / VP LS / TT TVPL theo NĐ77/2008 + NĐ55/2019 Đ.9; tổ chức cử TVV thuộc tổ chức xử lý cụ thể). Ref FR-II-06 |
-| nguoi_phan_cong_id | identifier | N | FK → TAI_KHOAN(id); REQUIRED khi đã phân công (cả 2 loại) — vì TC TV không có TAI_KHOAN trực tiếp, phải chỉ định TVV thuộc tổ chức xử lý cụ thể | | Cá nhân được phân công xử lý: CA_NHAN = CB/TVV/NHT tự do; TO_CHUC = TVV thuộc TC TV (pattern tương đồng HOP_DONG_TU_VAN case 2 — CR-02) |
-| to_chuc_tu_van_id | identifier | N | FK → TO_CHUC_TU_VAN(id); REQUIRED khi loai_doi_tuong_xu_ly='TO_CHUC'; NULL khi loai='CA_NHAN'. **Validation:** Nếu có `to_chuc_tu_van_id`, thì `TU_VAN_VIEN[nguoi_phan_cong_id].to_chuc_chinh_id` PHẢI = `to_chuc_tu_van_id` (TVV được chọn phải thuộc TC TV được chọn) | | Tổ chức tư vấn được phân công (theo NĐ77/2008 + NĐ55/2019 Đ.9 — mạng lưới TV pháp luật) |
+| nguoi_phan_cong_id | identifier | N | FK → TAI_KHOAN(id); REQUIRED khi đã phân công. Người được chọn phải thuộc nhóm tác nhân CSV UC 16 (CB Nghiệp vụ hoặc Người hỗ trợ pháp lý) + cùng đơn vị với HOI_DAP (BR-AUTH-08) | | Cá nhân nội bộ đơn vị được phân công xử lý. **Sửa theo STT 6 UAT 2026-05-26:** đã bỏ 2 field `loai_doi_tuong_xu_ly` + `to_chuc_tu_van_id` — Hỏi đáp không huy động mạng lưới TVV/CG/TC TV (phạm vi của Vụ việc — FR-V) |
 | deadline | datetime | N | | | Hạn xử lý (= ngay_tiep_nhan + SLA ngày LV) |
 | muc_do_canh_bao | text | N | CHECK IN ('BINH_THUONG','SAP_HET','QUA_HAN','QUA_HAN_NGHIEM_TRONG') | 'BINH_THUONG' | Mức cảnh báo SLA |
 | cong_khai | boolean | N | | 0 | Switch Công khai/Hủy công khai `[CR-01]` |
@@ -1385,7 +1359,6 @@ erDiagram
 | thoi_gian_huy | datetime | N | | | Thời điểm hủy (ghi khi chuyển → HUY) |
 | nguoi_huy_id | identifier | N | FK → TAI_KHOAN(id) | | Người thực hiện hủy yêu cầu |
 | ly_do_huy | text | N | Max 1000 ký tự | | Lý do hủy (optional, hiển thị trên banner HUY state theo F-24) |
-| api_in_progress | boolean | N | | 0 | Flag lock outbound API (Công khai/Hủy CK) để chống race condition theo F-42. Server set khi bắt đầu API call, clear khi response/timeout TTL 30s |
 | external_id | text | N | UNIQUE; nullable. Chỉ điền khi `kenh_tiep_nhan = CONG_PLQG` (= ID gốc của câu hỏi trên Cổng Pháp luật Quốc gia). NULL cho bản ghi nguồn nội bộ (DVC, TRUC_TIEP, HE_THONG_KHAC, TVN_BRIDGE). | — | ID gốc trên Cổng PLQG. Dùng cho idempotency của inbound API FR-XII-19 — khi Cổng retry, server UPSERT theo `external_id` thay vì tạo bản ghi mới. |
 
 **Relationships:**
@@ -1412,7 +1385,7 @@ erDiagram
 |---|-----|-----------|----------|-----------|----------|-------|
 | 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
 | 2 | hoi_dap_id | identifier | Y | FK → HOI_DAP(id) | — | Câu hỏi được phản hồi |
-| 3 | noi_dung | text (long) | Y | | — | Nội dung phản hồi (max 5000 ký tự logic) |
+| 3 | noi_dung | text (long) | Y | | — | Nội dung phản hồi (max 20.000 ký tự logic — đếm plain text, loại bỏ HTML khi đếm; nâng từ 5.000 lên 20.000 theo STT 7 UAT 2026-05-26) |
 | 4 | nguoi_tra_loi_id | identifier | Y | FK → TAI_KHOAN(id) | — | CB/NHT/TVV trả lời |
 | 5 | ngay_tra_loi | datetime | N | | — | Thời điểm trả lời chính thức (click "Gửi phản hồi"). **Convention phân biệt draft vs đã gửi sau khi bỏ cột `trang_thai` (F-FR02-04 lượt trước):** `ngay_tra_loi IS NULL` ↔ bản nháp (Lưu nháp / Auto-save 60s — chưa tích "Đã trả lời"); `ngay_tra_loi IS NOT NULL` ↔ đã gửi (CB NV click "Gửi phản hồi", trigger SM-HOIDAP transition DANG_XU_LY → DA_TRA_LOI). Mỗi `hoi_dap_id` chỉ active 1 PHAN_HOI có `ngay_tra_loi IS NULL` (draft mới nhất); các PHAN_HOI cũ có `ngay_tra_loi IS NOT NULL` lưu lịch sử. |
 | 6 | nguoi_phe_duyet_id | identifier | N | FK → TAI_KHOAN(id) | — | CB phê duyệt phản hồi |
@@ -1461,7 +1434,7 @@ erDiagram
 
 ### CAU_HINH_PHAN_CONG: ĐÃ BỎ — entity không còn dùng
 
-> **[ĐÃ BỎ — BA chốt 2026-05-07 Q11]** Entity CAU_HINH_PHAN_CONG đã được gỡ. FR-II-06 (Phân công Hỏi đáp) chuyển sang dùng auto-filter 4 tiêu chí (lĩnh vực + đơn vị + workload + FIFO) — đọc trực tiếp từ TAI_KHOAN.don_vi_id, TU_VAN_VIEN.linh_vuc_chuyen_mon, NGUOI_HO_TRO.linh_vuc_ids[], TO_CHUC_TU_VAN.linh_vuc[]. Đồng bộ pattern với FR-V.I-09 (Vụ việc) và FR-XII (TVCS).
+> **[ĐÃ BỎ — BA chốt 2026-05-07 Q11; thu hẹp scope theo STT 6 UAT 2026-05-26]** Entity CAU_HINH_PHAN_CONG đã được gỡ. FR-II-06 (Phân công Hỏi đáp) chuyển sang dùng auto-filter **3 tiêu chí** (lĩnh vực + đơn vị + workload) — đọc trực tiếp từ `TAI_KHOAN.don_vi_id` + `NGUOI_HO_TRO.linh_vuc_ids[]` (qua N:N). **Phạm vi ứng viên giới hạn ở cán bộ nội bộ đơn vị (CB Nghiệp vụ + Người hỗ trợ pháp lý) theo CSV UC 16** — đã bỏ nguồn TVV/CG/TC TV khỏi auto-filter. Phân biệt với FR-V.I-09 (Vụ việc): Vụ việc vẫn huy động TVV/CG/TC TV toàn quốc — Hỏi đáp không.
 
 ### TAI_KHOAN (referenced)
 
@@ -1532,7 +1505,7 @@ stateDiagram-v2
 | Đã trả lời | DA_TRA_LOI | CB NV tích hoàn thành (thoáng qua) | — |
 | Chờ phê duyệt | CHO_PHE_DUYET | Auto-transition, chờ CB PD duyệt | Cam |
 | Đã duyệt | DA_DUYET | CB PD đã duyệt, sẵn sàng công khai | Xanh lá đậm |
-| Công khai | CONG_KHAI | Đã đẩy lên Cổng PLQG | Tím |
+| Công khai | CONG_KHAI | Đã đánh dấu công khai; Cổng PLQG tự kéo dữ liệu | Tím |
 | Hoàn thành | HOAN_THANH | Đóng hồ sơ | Xám |
 
 **Bảng chuyển trạng thái:**
@@ -1546,8 +1519,8 @@ stateDiagram-v2
 | DA_TRA_LOI | CHO_PHE_DUYET | Auto | — | Gửi thông báo CB PD | FR-II-07 | BR-FLOW-01 |
 | CHO_PHE_DUYET | DA_DUYET | CB PD phê duyệt | CB PD cùng đơn vị | Ghi audit | FR-II-08 | BR-AUTH-05 |
 | CHO_PHE_DUYET | DANG_XU_LY | CB PD từ chối | Có lý do từ chối | Gửi thông báo CB NV | FR-II-08 | BR-FLOW-04 |
-| DA_DUYET | CONG_KHAI | CB PD cùng đơn vị nhấn "Công khai" | CB_PD_{cap} AND user.don_vi_id = record.don_vi_id; không có API outbound đang in-progress trên record này (F-42) | Lock record (TTL 30s) → Gửi API trực tiếp lên Cổng PLQG → release lock | FR-II-08 | BR-FLOW-05, BR-AUTH-05, F-20, F-42 |
-| CONG_KHAI | DA_DUYET | CB PD cùng đơn vị nhấn "Hủy công khai" | CB_PD_{cap} AND user.don_vi_id = record.don_vi_id; không có API outbound đang in-progress trên record này (F-42) | Lock record (TTL 30s) → Gỡ khỏi Cổng qua API → release lock | FR-II-08 | BR-FLOW-05, BR-AUTH-05, F-20, F-42 |
+| DA_DUYET | CONG_KHAI | CB PD cùng đơn vị nhấn "Công khai" | CB_PD_{cap} AND user.don_vi_id = record.don_vi_id | Đặt cờ `cong_khai=1`, `thoi_gian_dang_tai=NOW()`, ghi audit. Cổng PLQG tự kéo dữ liệu định kỳ — KHÔNG gọi API đẩy trực tiếp | FR-II-08 | BR-FLOW-05, BR-AUTH-05, F-20 |
+| CONG_KHAI | DA_DUYET | CB PD cùng đơn vị nhấn "Hủy công khai" | CB_PD_{cap} AND user.don_vi_id = record.don_vi_id | Đặt cờ `cong_khai=0`, clear `thoi_gian_dang_tai`, ghi audit. Cổng PLQG tự cập nhật/ẩn ở lần kéo kế tiếp — KHÔNG gọi API gỡ trực tiếp | FR-II-08 | BR-FLOW-05, BR-AUTH-05, F-20 |
 | MOI | HUY | CB NV cùng đơn vị hủy yêu cầu | Không có phản hồi đang soạn; CB_NV_{cap} AND don_vi_id = record.don_vi_id | Soft delete, ghi audit (lưu `thoi_gian_huy`, `nguoi_huy_id`, `ly_do_huy` nếu có) | FR-II-01 (nút Hủy trên SCR-II-02 row 12) | BR-DATA-01, BR-DATA-05 |
 | DA_DUYET | HOAN_THANH | **CB NV hoặc CB PD cùng đơn vị thủ công click "Đóng hồ sơ"** (KHÔNG auto-close — BR-FLOW-06) | (CB_NV_{cap} OR CB_PD_{cap}) AND user.don_vi_id = record.don_vi_id | Ghi audit | FR-II-08 | BR-AUTH-05, F-20, BR-FLOW-06 |
 | CONG_KHAI | HOAN_THANH | **CB NV hoặc CB PD cùng đơn vị thủ công click "Đóng hồ sơ"** (KHÔNG auto-close — BR-FLOW-06) | (CB_NV_{cap} OR CB_PD_{cap}) AND user.don_vi_id = record.don_vi_id | Ghi audit | FR-II-08 | BR-AUTH-05, F-20, BR-FLOW-06 |
@@ -1556,7 +1529,7 @@ stateDiagram-v2
 > - Tất cả chuyển trạng thái SHALL sử dụng optimistic locking (kiểm tra version).
 > - Crash recovery: scheduled job mỗi 5 phút detect bản ghi ở trạng thái trung gian > 5 phút và retry auto-transition.
 > - **Trạng thái HUY render UI:** khi `trang_thai = HUY`, stepper bình thường (MOI → ... → HOAN_THANH) **ẩn**; thay bằng banner lớn "🚫 Đã hủy" với thời điểm hủy (`thoi_gian_huy` từ AUDIT_LOG), người hủy, lý do hủy. Mọi action-bar button ẩn (read-only view). Timeline (Lịch sử xử lý) vẫn hiển thị đầy đủ đến thời điểm hủy. Ref F-24.
-> - **Các transition có gọi API outbound (Công khai/Hủy công khai):** phải apply cơ chế DB lock (TTL 30s, flag `api_in_progress=true`). User thứ hai click action trên cùng record trong khi đang lock → UI disable button + tooltip "Đang xử lý bởi {user}, vui lòng đợi"; server trả HTTP 409 `ERR-PD-07` "Đang có thao tác outbound khác trên bản ghi này, vui lòng thử lại sau {n}s". Release lock khi API response (thành công/thất bại) hoặc khi TTL hết. Ref F-42.
+> - **Công khai/Hủy công khai:** chỉ đặt cờ `cong_khai` + chuyển trạng thái nội bộ; Cổng Pháp luật Quốc gia tự kéo (PULL) dữ liệu định kỳ qua giao diện liên thông ra — phần mềm KHÔNG gọi API đẩy/gỡ trực tiếp. 2 user thao tác đồng thời trên cùng bản ghi → người thứ hai thấy trạng thái đã đổi, nhận ERR-PD-03; áp dụng optimistic locking chung như mọi chuyển trạng thái khác.
 
 ---
 
@@ -1645,11 +1618,11 @@ stateDiagram-v2
 |----|-------------------|-------|---------------------|---------|------------|
 | BR-FLOW-04 | Mọi hành động "Từ chối" phải nhập lý do. Lý do hiển thị cho người tạo ban đầu | Pattern IP-02 | FR-II-08 | — | Test reject without reason = validation error |
 
-### BR-FLOW-05: Công khai qua API Cổng PLQG
+### BR-FLOW-05: Công khai theo mô hình KÉO (Cổng PLQG tự kéo)
 
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm II) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|---------------------|---------|------------|
-| BR-FLOW-05 | Chỉ bản ghi đã duyệt mới được công khai lên Cổng PLQG (REST trực tiếp, không qua LGSP). Hủy công khai gỡ khỏi Cổng. **Role:** (a) Công khai và Hủy công khai **chỉ CB PD cùng đơn vị với bản ghi** (`user.don_vi_id = record.don_vi_id` — BR-AUTH-05); (b) Đóng hồ sơ: CB NV hoặc CB PD cùng đơn vị với bản ghi (hành động archival, ít impact public). **Concurrency:** gọi API outbound phải khóa DB record với TTL 30s + flag `api_in_progress=true` để tránh race giữa Công khai và Hủy công khai (F-42). | Pattern IP-03, F-20, F-42 | FR-II-08 | — | Test publish undrafted = error; test role matrix: CB_NV bị chặn Công khai/Hủy CK; CB PD đơn vị khác bị chặn; test race condition: 2 user concurrent → người thứ 2 bị block bởi lock |
+| BR-FLOW-05 | Chỉ bản ghi đã duyệt mới được công khai. **Mô hình KÉO:** Công khai = đặt cờ `cong_khai=1` + trạng thái CONG_KHAI; Hủy công khai = đặt `cong_khai=0` + trạng thái DA_DUYET. Cổng Pháp luật Quốc gia tự kéo (PULL) dữ liệu định kỳ qua giao diện liên thông ra — phần mềm KHÔNG gọi API đẩy/gỡ trực tiếp. **Role:** (a) Công khai và Hủy công khai **chỉ CB PD cùng đơn vị với bản ghi** (`user.don_vi_id = record.don_vi_id` — BR-AUTH-05); (b) Đóng hồ sơ: CB NV hoặc CB PD cùng đơn vị với bản ghi (hành động archival, ít impact public). **Concurrency:** 2 user thao tác đồng thời → người thứ hai thấy trạng thái đã đổi, nhận ERR-PD-03; áp dụng optimistic locking chung. | Pattern IP-03, F-20 | FR-II-08 | — | Test publish undrafted = error; test role matrix: CB_NV bị chặn Công khai/Hủy CK; CB PD đơn vị khác bị chặn; test concurrency: 2 user → người thứ 2 nhận ERR-PD-03 |
 
 ### BR-FLOW-06: Đóng hồ sơ thủ công, không auto-close
 

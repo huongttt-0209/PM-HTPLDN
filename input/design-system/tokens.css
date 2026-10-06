@@ -1,0 +1,224 @@
+/* ============================================================
+   PM HTPLDN — Design System Tokens
+   Phần mềm Hỗ trợ Pháp lý Doanh nghiệp
+   Ant Design-aligned (shadcn-like discipline applied to Ant spec)
+   ============================================================ */
+
+:root {
+  /* ---------- Brand + Primary (Ant Blue-7, đậm 1 tone so với mặc định) ----------
+     Primary = Ant Blue-7 (#0958D9) — gần Cổng PLQG hơn, contrast tốt hơn Blue-6.
+     Hover dùng Blue-6 (sáng hơn), active dùng Blue-8 (đậm hơn).                */
+  --color-primary-1:  #e6f4ff;   /* Blue-1  hover bg */
+  --color-primary-2:  #bae0ff;   /* Blue-2  */
+  --color-primary-3:  #91caff;   /* Blue-3  */
+  --color-primary-4:  #69b1ff;   /* Blue-4  */
+  --color-primary-5:  #1677ff;   /* Blue-6 (Ant) — hover của primary mới */
+  --color-primary-6:  #0958d9;   /* Blue-7 (Ant) — PRIMARY ★ đậm 1 tone */
+  --color-primary-7:  #003eb3;   /* Blue-8 (Ant) — active/pressed */
+  --color-primary-8:  #002c8c;   /* Blue-9  */
+  --color-primary-9:  #001d66;   /* Blue-10 */
+  --color-primary-10: #001448;   /* Blue-11 sidebar/hero */
+
+  /* Backwards-compat aliases (existing CSS references --color-primary-50..900) */
+  --color-primary-50:  var(--color-primary-1);
+  --color-primary-100: var(--color-primary-2);
+  --color-primary-200: var(--color-primary-3);
+  --color-primary-300: var(--color-primary-4);
+  --color-primary-400: var(--color-primary-5);
+  --color-primary-500: var(--color-primary-6);
+  --color-primary-600: var(--color-primary-6);
+  --color-primary-700: var(--color-primary-7);
+  --color-primary-800: var(--color-primary-9);
+  --color-primary-900: var(--color-primary-10);
+
+  /* ---------- Neutral (Ant Gray) ----------
+     Warm-slate of v0 was replaced with Ant's cool grayscale so that
+     components pulled from Ant ecosystem match our surface.                  */
+  --color-neutral-1:  #ffffff;
+  --color-neutral-2:  #fafafa;
+  --color-neutral-3:  #f5f5f5;
+  --color-neutral-4:  #f0f0f0;
+  --color-neutral-5:  #d9d9d9;
+  --color-neutral-6:  #bfbfbf;
+  --color-neutral-7:  #8c8c8c;
+  --color-neutral-8:  #595959;
+  --color-neutral-9:  #434343;
+  --color-neutral-10: #262626;
+  --color-neutral-11: #1f1f1f;
+  --color-neutral-12: #141414;
+
+  /* Aliases for legacy scale */
+  --color-neutral-0:   var(--color-neutral-1);
+  --color-neutral-50:  var(--color-neutral-2);
+  --color-neutral-100: var(--color-neutral-3);
+  --color-neutral-200: var(--color-neutral-4);
+  --color-neutral-300: var(--color-neutral-5);
+  --color-neutral-400: var(--color-neutral-6);
+  --color-neutral-500: var(--color-neutral-7);
+  --color-neutral-600: var(--color-neutral-8);
+  --color-neutral-700: var(--color-neutral-9);
+  --color-neutral-800: var(--color-neutral-10);
+  --color-neutral-900: var(--color-neutral-12);
+
+  /* ---------- Accent (Ant Gold — subtle, for emphasis only) ---------- */
+  --color-accent-1:   #fffbe6;
+  --color-accent-3:   #ffe58f;
+  --color-accent-5:   #faad14;   /* Gold-6 */
+  --color-accent-7:   #d48806;   /* Gold-7 */
+  --color-accent-100: var(--color-accent-1);
+  --color-accent-500: var(--color-accent-5);
+  --color-accent-700: var(--color-accent-7);
+
+  /* ---------- Semantic (Ant colors) ---------- */
+  --color-success-1:  #f6ffed;
+  --color-success-5:  #52c41a;   /* Green-6 */
+  --color-success-6:  #389e0d;   /* Green-7 */
+  --color-success-7:  #237804;   /* Green-8 */
+  --color-success-50:  var(--color-success-1);
+  --color-success-500: var(--color-success-6);
+  --color-success-700: var(--color-success-7);
+
+  --color-warn-1:  #fffbe6;
+  --color-warn-5:  #faad14;      /* Gold-6 */
+  --color-warn-6:  #d48806;      /* Gold-7 */
+  --color-warn-7:  #ad6800;      /* Gold-8 */
+  --color-warn-50:  var(--color-warn-1);
+  --color-warn-500: var(--color-warn-6);
+  --color-warn-700: var(--color-warn-7);
+
+  --color-danger-1:  #fff2f0;
+  --color-danger-5:  #ff4d4f;    /* Red-5 */
+  --color-danger-6:  #f5222d;    /* Red-6 */
+  --color-danger-7:  #cf1322;    /* Red-7 */
+  --color-danger-50:  var(--color-danger-1);
+  --color-danger-500: var(--color-danger-6);
+  --color-danger-700: var(--color-danger-7);
+
+  --color-info-1:  #e6f4ff;
+  --color-info-500: #0958d9;
+  --color-info-700: #003eb3;
+  --color-info-50:  var(--color-info-1);
+
+  /* Status pill tints — matched to Ant Tag presets */
+  --state-draft-bg:   #f0f0f0;   --state-draft-fg:   #595959;
+  --state-pending-bg: #fffbe6;   --state-pending-fg: #ad6800;
+  --state-review-bg:  #e6f4ff;   --state-review-fg:  #0958d9;
+  --state-active-bg:  #f6ffed;   --state-active-fg:  #389e0d;
+  --state-reject-bg:  #fff2f0;   --state-reject-fg:  #cf1322;
+  --state-closed-bg:  #fafafa;   --state-closed-fg:  #8c8c8c;
+
+  /* ---------- Typography ---------- */
+  --font-sans: 'Be Vietnam Pro', 'Segoe UI', -apple-system, system-ui, sans-serif;
+  --font-mono: 'Be Vietnam Pro', 'Segoe UI', system-ui, sans-serif; /* alias → sans */
+  --font-display: 'Be Vietnam Pro', system-ui, sans-serif;
+  --font-code: ui-monospace, 'SF Mono', Consolas, monospace;
+
+  /* Ant Design size scale (rounded to px) */
+  --text-xs:   12px;    --lh-xs: 20px;   /* caption  */
+  --text-sm:   12px;    --lh-sm: 20px;   /* Ant sm  */
+  --text-base: 14px;    --lh-base: 22px; /* Ant base — default */
+  --text-md:   14px;    --lh-md: 22px;
+  --text-lg:   16px;    --lh-lg: 24px;   /* Ant lg  */
+  --text-xl:   20px;    --lh-xl: 28px;
+  --text-2xl:  24px;    --lh-2xl: 32px;
+  --text-3xl:  30px;    --lh-3xl: 38px;
+  --text-4xl:  38px;    --lh-4xl: 46px;
+  --text-5xl:  46px;    --lh-5xl: 54px;
+
+  --weight-regular: 400;
+  --weight-medium:  500;
+  --weight-semibold: 600;
+  --weight-bold:    700;
+
+  /* ---------- Spacing (Ant 4/8/16/24) ---------- */
+  --space-0: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+
+  /* ---------- Radius (Ant: 6px base, 8px for outer, 2px for small chips) ---------- */
+  --radius-none: 0;
+  --radius-sm: 4px;   /* Ant sm */
+  --radius-md: 6px;   /* Ant base ★ */
+  --radius-lg: 8px;   /* Ant lg — modal, large card */
+  --radius-xl: 12px;
+  --radius-pill: 999px;
+
+  /* ---------- Component heights (Ant spec) ---------- */
+  --control-sm: 24px;
+  --control-md: 32px;  /* default */
+  --control-lg: 40px;
+  --row-h-sm:  40px;
+  --row-h-md:  54px;
+  --row-h-lg:  72px;
+
+  /* ---------- Shadow (Ant elevation) ---------- */
+  --shadow-xs: 0 1px 2px 0 rgba(0,0,0,0.03);
+  --shadow-sm: 0 1px 2px 0 rgba(0,0,0,0.03),
+               0 1px 6px -1px rgba(0,0,0,0.02),
+               0 2px 4px 0 rgba(0,0,0,0.02);                /* Ant boxShadowTertiary */
+  --shadow-md: 0 6px 16px 0 rgba(0,0,0,0.08),
+               0 3px 6px -4px rgba(0,0,0,0.12),
+               0 9px 28px 8px rgba(0,0,0,0.05);             /* Ant boxShadow */
+  --shadow-lg: 0 6px 16px 0 rgba(0,0,0,0.08),
+               0 9px 28px 8px rgba(0,0,0,0.05);
+  --shadow-ring: 0 0 0 2px rgba(9,88,217,0.18);             /* Ant controlOutline — Blue-7 */
+
+  /* ---------- Layout ---------- */
+  --topbar-h: 56px;
+  --sidebar-w: 256px;
+  --sidebar-collapsed-w: 64px;
+  --content-max: 1440px;
+
+  /* ---------- Borders ---------- */
+  --border-subtle: 1px solid var(--color-neutral-5);
+  --border-strong: 1px solid var(--color-neutral-6);
+  --border-focus:  1px solid var(--color-primary-6);
+  --border-color:  var(--color-neutral-5);
+
+  /* ---------- Motion ---------- */
+  --motion-fast: 100ms;
+  --motion-base: 200ms;
+  --motion-slow: 300ms;
+  --ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+  --ease-in-out: cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+/* ---------- Base reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--lh-base);
+  color: var(--color-neutral-10);
+  background: var(--color-neutral-3);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+code, pre, kbd, samp { font-family: var(--font-code); }
+
+/* Tabular number contexts — sans stack + tnum (no monospace feel) */
+.t-tabular,
+.t-mono-data,
+.tbl .mono,
+.tbl .num,
+.mono,
+.stepper .step .meta,
+.kpi .uc-tag,
+.kpi .kpi-value,
+.kpi .kpi-trend,
+.t-micro,
+.level-chip,
+[data-tabular] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}

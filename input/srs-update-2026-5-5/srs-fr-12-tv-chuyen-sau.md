@@ -111,7 +111,7 @@ Quản lý toàn bộ vòng đời nội dung tư vấn chuyên sâu: ghi nhận
 | 3 | chuyen_gia_id | identifier | Y | FK -> TU_VAN_VIEN, phải đang hoạt động | — | người dùng chọn |
 | 4 | linh_vuc_id | identifier | Y | FK -> DANH_MUC, phải tồn tại | — | người dùng chọn |
 | 5 | noi_dung_tu_van | text (long) | Y | Không rỗng, max 50KB | — | người dùng nhập |
-| 6 | tom_tat | text | N | Max 500 ký tự | — | người dùng nhập |
+| 6 | tieu_de | text | Y | Max 255 ký tự. Bắt buộc (chính thức hóa từ `tom_tat` — STT68/STT11) | — | người dùng nhập |
 | 7 | trang_thai | text | Y | TIEP_NHAN / PHAN_CONG / DANG_TU_VAN / HOAN_THANH / CHO_PHE_DUYET / DA_DUYET / HUY (SM-TVCS Section 5) | TIEP_NHAN | hệ thống |
 | 8 | ngay_tu_van | date | Y | — | — | người dùng chọn |
 | 9 | ghi_chu | text (long) | N | Max 2000 ký tự | — | người dùng nhập |
@@ -239,7 +239,7 @@ Quản lý toàn bộ vòng đời nội dung tư vấn chuyên sâu: ghi nhận
 | 2 | Kiểm tra trạng thái hiện tại = DA_DUYET (chỉ TVCS đã duyệt mới được công khai) | BR-PUBLIC-01, SM-TVCS |
 | 3 | Yêu cầu CB NV nhập `mo_ta_cong_khai`; tùy chọn `anh_dai_dien` (default ảnh HT), `file_dinh_kem_cong_khai` | — |
 | 4 | Set `cong_khai = 1`; auto fill `thoi_gian_dang_tai = NOW()` | BR-PUBLIC-03 |
-| 5 | Gọi API trực tiếp Cổng PLQG: push TVCS lên chuyên trang (kèm mô tả công khai + ảnh + file) | — |
+| 5 | Set `cong_khai = 1` trên CSDL CMS (thao tác nội bộ). Cổng PLQG tự pull bản ghi công khai qua API FR-XII-13 định kỳ — CMS KHÔNG push trực tiếp (mô hình a, BA chốt 2026-05-10) | — |
 | 6 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Processing — Hủy công khai chuyên trang** (cong_khai = 1 → 0) `[CR-01]`
@@ -249,7 +249,7 @@ Quản lý toàn bộ vòng đời nội dung tư vấn chuyên sâu: ghi nhận
 | 1 | Kiểm tra quyền CB NV và phạm vi đơn vị | BR-AUTH-01, BR-AUTH-08 |
 | 2 | Kiểm tra `cong_khai = 1` hiện tại | — |
 | 3 | Set `cong_khai = 0`; clear `thoi_gian_dang_tai = NULL` | BR-PUBLIC-02 |
-| 4 | Gọi API trực tiếp Cổng PLQG: gỡ TVCS khỏi chuyên trang | BR-PUBLIC-02 |
+| 4 | Set `cong_khai = 0` trên CSDL CMS (thao tác nội bộ). Cổng PLQG tự cập nhật (gỡ khỏi hiển thị) qua pull định kỳ — CMS KHÔNG push trực tiếp (mô hình a) | BR-PUBLIC-02 |
 | 5 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Xem tổng hợp (dashboard):**
@@ -288,7 +288,7 @@ Quản lý toàn bộ vòng đời nội dung tư vấn chuyên sâu: ghi nhận
 | 3 | ten_doanh_nghiep | text | luôn | — |
 | 4 | ten_chuyen_gia | text | luôn | — |
 | 5 | ten_linh_vuc | text | luôn | — |
-| 6 | tom_tat | text | luôn | — |
+| 6 | tieu_de | text | luôn | — |
 | 7 | trang_thai | text | luôn | — |
 | 8 | ngay_tu_van | date | luôn | dd/mm/yyyy |
 | 9 | ngay_tao | datetime | luôn | dd/mm/yyyy HH:mm |
@@ -309,11 +309,14 @@ Quản lý toàn bộ vòng đời nội dung tư vấn chuyên sâu: ghi nhận
 | E3 | Lĩnh vực không tồn tại | ERR-TVCS-03 | "Lĩnh vực PL không tồn tại" | ERROR |
 | E4 | Chuyển trạng thái không hợp lệ (SM-TVCS) | ERR-TVCS-04 | "Không thể chuyển trạng thái từ '{current}' sang '{target}'. Xem SM-TVCS" | ERROR |
 | E5 | Mã nội dung trùng | ERR-TVCS-05 | "Mã nội dung '{ma}' đã tồn tại" | ERROR |
+| E6 | Tiêu đề trống | ERR-TVCS-06 | "Tiêu đề là bắt buộc" | ERROR |
+| E7 | Tiêu đề vượt 255 ký tự | ERR-TVCS-07 | "Tiêu đề tối đa 255 ký tự" | ERROR |
 
 **Acceptance Criteria:**
 
 - **Given** CB NV truy cập "Nội dung tư vấn chuyên sâu" **When** hệ thống hiển thị **Then** danh sách nội dung tư vấn thuộc đơn vị, phân trang
 - **Given** CB NV ghi nhận nội dung tư vấn **When** nhập DN, chuyên gia, lĩnh vực, nội dung + nhấn Lưu **Then** validate và lưu bản ghi mới
+- **Given** CB NV tạo/sửa TVCS thiếu Tiêu đề **When** nhấn Lưu **Then** hệ thống từ chối với lỗi "Tiêu đề là bắt buộc" (ERR-TVCS-06) `[STT11]`
 - **Given** CB NV cập nhật nội dung **When** sửa thông tin + nhấn Lưu **Then** cập nhật bản ghi
 - **Given** CB NV cập nhật trạng thái xử lý **When** chọn trạng thái mới **Then** validate transition + cập nhật
 - **Given** CB NV xem tổng hợp **When** truy cập dashboard **Then** hiển thị thống kê tổng hợp theo lĩnh vực, chuyên gia, trạng thái
@@ -343,7 +346,7 @@ Tìm kiếm nội dung tư vấn chuyên sâu theo nhiều tiêu chí: từ khó
 
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
 |---|----------|-----------|----------|-----------|----------|-------|
-| 1 | tu_khoa | text | N | Tìm theo mã nội dung, tên DN, nội dung tư vấn | — | người dùng nhập |
+| 1 | tu_khoa | text | N | Tìm theo tiêu đề, mã nội dung, tên DN, nội dung tư vấn | — | người dùng nhập |
 | 2 | tu_ngay | date | N | — | — | người dùng chọn |
 | 3 | den_ngay | date | N | >= tu_ngay | — | người dùng chọn |
 | 4 | chuyen_gia_id | identifier | N | FK -> TU_VAN_VIEN | — | người dùng chọn |
@@ -358,7 +361,7 @@ Tìm kiếm nội dung tư vấn chuyên sâu theo nhiều tiêu chí: từ khó
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền và phạm vi đơn vị (áp dụng cho cả CB NV, CB PD và NHT — cùng scope đơn vị) | BR-AUTH-01, BR-AUTH-08 |
 | 2 | Lọc bản ghi chưa xóa | BR-DATA-01 |
-| 3 | Nếu có từ khóa: tìm kiếm toàn văn trên nội dung tư vấn, hoặc tìm gần đúng trên mã nội dung, tên DN | BR-DATA-08 |
+| 3 | Nếu có từ khóa: tìm kiếm toàn văn trên tiêu đề + nội dung tư vấn, hoặc tìm gần đúng trên mã nội dung, tên DN | BR-DATA-08 |
 | 4 | Nếu có khoảng ngày: lọc theo ngày tư vấn trong khoảng | — |
 | 5 | Nếu có chuyên gia: lọc theo chuyên gia | — |
 | 6 | Nếu có lĩnh vực: lọc theo lĩnh vực | — |
@@ -379,7 +382,7 @@ Tìm kiếm nội dung tư vấn chuyên sâu theo nhiều tiêu chí: từ khó
 | 3 | ten_doanh_nghiep | text | luôn | — |
 | 4 | ten_chuyen_gia | text | luôn | — |
 | 5 | ten_linh_vuc | text | luôn | — |
-| 6 | tom_tat | text | luôn | 200 ký tự đầu |
+| 6 | tieu_de | text | luôn | — |
 | 7 | trang_thai | text | luôn | — |
 | 8 | ngay_tu_van | date | luôn | dd/mm/yyyy |
 | 9 | total_count | number | luôn | — |
@@ -438,7 +441,7 @@ Tiếp nhận nội dung tư vấn chuyên sâu từ Cổng Pháp luật quốc 
 |---|----------|-----------|----------|-----------|----------|-------|
 | 1 | ma_noi_dung_cong | text | Y | Mã trên Cổng PLQG, dùng check trùng + đối chiếu | — | Cổng PLQG |
 | 2 | noi_dung_tu_van | text (long) | Y | Max 50KB | — | Cổng PLQG |
-| 3 | thong_tin_dn | structured | Y | {ten, ma_so_thue, dia_chi, nguoi_dai_dien, sdt, email}. ma_so_thue: 10-13 chữ số | — | Cổng PLQG |
+| 3 | thong_tin_dn | structured | Y | **Schema 18 trường DN (entity DOANH_NGHIEP):** `{ten_doanh_nghiep, ma_so_thue, email?, dia_chi?, tinh_thanh_id?, loai_doanh_nghiep_id?, quy_mo?, nganh_nghe?, nguoi_dai_dien?, so_dien_thoai?, giay_cndk?, chuc_vu_dd?, so_lao_dong?, doanh_thu_nam?, tong_nguon_von?, linh_vuc_ids?, ghi_chu?, file_dinh_kem?}`. **Bắt buộc TỐI THIỂU 2 trường (BA chốt 2026-05-30)**: `ten_doanh_nghiep` + `ma_so_thue` (10 chữ số TT 105/2020). 16 trường còn lại tùy chọn — Cổng PLQG có thì lưu, không có thì để trống. `tinh_thanh_id` nếu thiếu → tự suy diễn từ 2 chữ số đầu MST. | — | Cổng PLQG |
 | 4 | linh_vuc_id | identifier | N | FK -> DANH_MUC nếu có | — | Cổng PLQG |
 | 5 | chuyen_gia_info | structured | N | {ho_ten, chuyen_mon, ma_chuyen_gia} | — | Cổng PLQG |
 | 6 | tai_lieu_dinh_kem | structured | N | Mảng [{ten_file, loai_file, dung_luong, noi_dung_base64}]. Max 10 files, mỗi file max 20MB, tổng max 100MB | — | Cổng PLQG |
@@ -452,7 +455,7 @@ Tiếp nhận nội dung tư vấn chuyên sâu từ Cổng Pháp luật quốc 
 |------|-------------|-----------|
 | 1 | Xác thực request: kiểm tra API key + kết nối bảo mật | BR-AUTH-01 |
 | 2 | Kiểm tra cấu trúc dữ liệu: trường bắt buộc (nội dung TV, thông tin DN, mã nội dung Cổng) | — |
-| 3 | Kiểm tra format: mã số thuế (10-13 chữ số), email hợp lệ, nội dung max 50KB | — |
+| 3 | Kiểm tra format: mã số thuế (10 chữ số, TT 105/2020), email hợp lệ, nội dung max 50KB | — |
 | 3a | Kiểm tra don_vi_id: nếu có thì phải là DON_VI hợp lệ và đang hoạt động; nếu không có hoặc không hợp lệ → áp default Sở TP tỉnh DN theo địa chỉ/MST | BR-ROUTE-TVCS-01 |
 
 **Bước 2 -- Kiểm tra đầy đủ, hợp lệ:**
@@ -460,16 +463,19 @@ Tiếp nhận nội dung tư vấn chuyên sâu từ Cổng Pháp luật quốc 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 4 | Kiểm tra thông tin DN: tên và mã số thuế bắt buộc; lĩnh vực nếu có phải hợp lệ | — |
-| 5 | Kiểm tra trùng: đã tồn tại nội dung với cùng mã Cổng chưa | — |
+| 5 | Kiểm tra idempotency theo `ma_noi_dung_cong`: đã tồn tại + cùng payload → trả bản ghi cũ (idempotent, không tạo mới); đã tồn tại + khác payload → conflict ERR-TVCS-API-03 `[STT11]` | — |
 | 6 | Kiểm tra tài liệu đính kèm: max 10 files, mỗi file max 20MB, tổng max 100MB | EC-FILE-01 |
 
 **Bước 3 -- Tạo hồ sơ tư vấn chuyên sâu:**
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 7 | Tạo hoặc liên kết doanh nghiệp theo mã số thuế (upsert) | BR-DATA-03 |
+| 7 | Tạo hoặc liên kết doanh nghiệp theo mã số thuế (upsert). **Sửa theo BA chốt 2026-05-30:** Nếu DN chưa tồn tại → tạo `DOANH_NGHIEP` với **bắt buộc tối thiểu 2 trường** (`ma_so_thue` + `ten_doanh_nghiep`); các trường khác trong payload Cổng PLQG có thì lưu. | BR-DATA-03 |
+| ~~7a~~ | ~~Tạo TAI_KHOAN cho DN~~ — **BỎ theo BA chốt 2026-05-30 (override 2026-05-10).** API Cổng PLQG chỉ tạo `DOANH_NGHIEP` từ Schema 18 trường. KHÔNG tạo TAI_KHOAN, KHÔNG gửi mail. Lý do: theo CSV UC 149 actor là Cổng Pháp luật quốc gia, KHÔNG phải DN — DN không tương tác phần mềm tại bước này. Khi DN muốn theo dõi nội dung tư vấn chuyên sâu → DN tự đăng ký TK qua FR-VIII-22 + FR-VIII-26 (Quên mật khẩu) làm Claim Flow nếu MST đã có. | — |
 | 8 | Liên kết chuyên gia nếu có thông tin (match theo mã chuyên gia) | — |
 | 9 | Sinh mã tự động TVCS-{YYYYMMDD}-{SEQ} | BR-DATA-04 |
+| 9a | Tự sinh `tieu_de = "TVCS {tên lĩnh vực} – {tên DN}"` (fallback `"TVCS – {tên DN}"` nếu Cổng không gửi lĩnh vực; cắt tối đa 255 ký tự). Cán bộ chỉnh lại được sau khi tiếp nhận `[STT11]` | — |
+| 9b | Lưu `ma_noi_dung_cong` (= mã hồ sơ Cổng từ payload) vào bản ghi để đối chiếu/idempotency (logic kiểm tra ở bước 5) `[STT11]` | — |
 | 10 | Tạo bản ghi tư vấn chuyên sâu, trạng thái = TIEP_NHAN (SM-TVCS [*]→TIEP_NHAN), nguồn = CONG_PLQG | BR-DATA-03 |
 | 11 | Lưu file đính kèm (nếu có): giải mã, quét virus, lưu trữ | EC-FILE-01 |
 | 12 | Ghi nhật ký thao tác | BR-DATA-05 |
@@ -504,7 +510,7 @@ Tiếp nhận nội dung tư vấn chuyên sâu từ Cổng Pháp luật quốc 
 |---|--------------|--------|-------------------|----------|
 | E1 | API key không hợp lệ | ERR-TVCS-API-01 | HTTP 401 "Unauthorized" | ERROR |
 | E2 | Cấu trúc dữ liệu không hợp lệ | ERR-TVCS-API-02 | "Dữ liệu không hợp lệ: {chi_tiet_loi}" | ERROR |
-| E3 | Nội dung trùng (mã Cổng) | ERR-TVCS-API-03 | "Nội dung '{mã}' đã tồn tại (mã: {ma_noi_dung})" | ERROR |
+| E3 | Trùng mã Cổng nhưng payload khác (conflict) | ERR-TVCS-API-03 | "Nội dung '{mã}' đã tồn tại với dữ liệu khác (mã: {ma_noi_dung})" | ERROR |
 | E4 | File đính kèm vượt 20MB | ERR-FILE-SIZE-01 | "Tệp '{ten_file}' vượt quá 20MB" | ERROR |
 | E5 | File chứa mã độc | ERR-FILE-02 | "Tệp '{ten_file}' chứa mã độc, không thể tiếp nhận" | ERROR |
 | E6 | Rate limit vượt ngưỡng | ERR-TVCS-API-04 | HTTP 429 + header Retry-After | WARNING |
@@ -514,7 +520,8 @@ Tiếp nhận nội dung tư vấn chuyên sâu từ Cổng Pháp luật quốc 
 
 - **Given** Cổng PLQG gửi nội dung tư vấn qua API **When** dữ liệu hợp lệ **Then** HT tạo hồ sơ tư vấn + trả mã hồ sơ
 - **Given** Cổng gửi kèm thông tin DN, lĩnh vực, tài liệu **When** HT kiểm tra **Then** validate đầy đủ + hợp lệ trước khi lưu
-- **Given** Cổng gửi nội dung trùng (mã Cổng) **When** kiểm tra **Then** trả lỗi ERR-TVCS-API-03
+- **Given** Cổng gửi lại cùng mã Cổng + cùng payload **When** kiểm tra **Then** idempotent — trả bản ghi đã tồn tại, không tạo trùng `[STT11]`
+- **Given** Cổng gửi cùng mã Cổng nhưng payload khác **When** kiểm tra **Then** trả lỗi ERR-TVCS-API-03
 - **Given** Cổng nhận phản hồi **When** xử lý hoàn tất **Then** nhận kết quả (thành công/thất bại) kèm mã hồ sơ
 
 ---
@@ -710,7 +717,7 @@ Tiếp nhận hồ sơ pháp lý DN từ Cổng PLQG qua API inbound. Hệ thố
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
 |---|----------|-----------|----------|-----------|----------|-------|
 | 1 | ma_ho_so_cong | text | Y | Mã hồ sơ trên Cổng PLQG, dùng check trùng | — | Cổng PLQG |
-| 2 | thong_tin_dn | structured | Y | {ten, ma_so_thue, dia_chi, nguoi_dai_dien, sdt, email}. ma_so_thue: 10-13 chữ số | — | Cổng PLQG |
+| 2 | thong_tin_dn | structured | Y | **Schema 18 trường DN (entity DOANH_NGHIEP, đồng bộ với FR-X.1-03):** `{ten_doanh_nghiep, ma_so_thue, email?, dia_chi?, tinh_thanh_id?, loai_doanh_nghiep_id?, quy_mo?, nganh_nghe?, nguoi_dai_dien?, so_dien_thoai?, giay_cndk?, chuc_vu_dd?, so_lao_dong?, doanh_thu_nam?, tong_nguon_von?, linh_vuc_ids?, ghi_chu?, file_dinh_kem?}`. **Bắt buộc TỐI THIỂU 2 trường (BA chốt 2026-05-30)**: `ten_doanh_nghiep` + `ma_so_thue`. 16 trường còn lại tùy chọn. `tinh_thanh_id` nếu thiếu → tự suy diễn từ 2 chữ số đầu MST. | — | Cổng PLQG |
 | 3 | ten_ho_so | text | Y | — | — | Cổng PLQG |
 | 4 | loai_ho_so | text | Y | GIAY_PHEP / HOP_DONG / GIAY_CN / QUYET_DINH / KHAC | — | Cổng PLQG |
 | 5 | noi_dung | text (long) | N | — | — | Cổng PLQG |
@@ -725,7 +732,7 @@ Tiếp nhận hồ sơ pháp lý DN từ Cổng PLQG qua API inbound. Hệ thố
 |------|-------------|-----------|
 | 1 | Xác thực request: kiểm tra API key + kết nối bảo mật | BR-AUTH-01 |
 | 2 | Kiểm tra cấu trúc dữ liệu: trường bắt buộc, format | — |
-| 3 | Kiểm tra thông tin DN: mã số thuế (10-13 chữ số), tên không rỗng | — |
+| 3 | Kiểm tra thông tin DN: mã số thuế (10 chữ số, TT 105/2020), tên không rỗng | — |
 | 4 | Kiểm tra tính đầy đủ: tên hồ sơ, loại hồ sơ bắt buộc | — |
 
 **Tạo mới hồ sơ pháp lý DN:**
@@ -733,7 +740,8 @@ Tiếp nhận hồ sơ pháp lý DN từ Cổng PLQG qua API inbound. Hệ thố
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 5 | Kiểm tra trùng: đã tồn tại hồ sơ với cùng mã Cổng chưa | — |
-| 6 | Tạo hoặc liên kết doanh nghiệp theo mã số thuế (upsert) | BR-DATA-03 |
+| 6 | Tạo hoặc liên kết doanh nghiệp theo mã số thuế (upsert). **Sửa theo BA chốt 2026-05-30:** Nếu DN chưa tồn tại → tạo `DOANH_NGHIEP` với **bắt buộc tối thiểu 2 trường** (`ma_so_thue` + `ten_doanh_nghiep`); các trường khác trong payload Cổng PLQG có thì lưu. | BR-DATA-03 |
+| ~~6a~~ | ~~Tạo TAI_KHOAN cho DN~~ — **BỎ theo BA chốt 2026-05-30 (override 2026-05-10).** API Cổng PLQG chỉ tạo `DOANH_NGHIEP` từ Schema 18 trường. KHÔNG tạo TAI_KHOAN, KHÔNG gửi mail. Lý do: theo CSV UC 151 actor là Cổng Pháp luật quốc gia, KHÔNG phải DN. Khi DN muốn theo dõi hồ sơ pháp lý → DN tự đăng ký TK qua FR-VIII-22 + FR-VIII-26 (Quên mật khẩu) làm Claim Flow nếu MST đã có. | — |
 | 7 | Sinh mã tự động HSPL-{YYYYMMDD}-{SEQ} | BR-DATA-04 |
 | 8 | Tạo bản ghi hồ sơ pháp lý DN, nguồn = CONG_PLQG, trạng thái = HIEU_LUC | BR-DATA-03 |
 | 9 | Lưu file đính kèm (nếu có): giải mã, quét virus, lưu trữ | EC-FILE-01 |
@@ -795,13 +803,13 @@ Tiếp nhận hồ sơ pháp lý DN từ Cổng PLQG qua API inbound. Hệ thố
 **Mô tả:**
 CRUD tư liệu pháp lý gắn với vụ việc tư vấn chuyên sâu. Hỗ trợ upload/xóa/preview file, công khai/hủy công khai tư liệu lên Cổng PLQG.
 
-**Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP)
+**Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP) — CRUD đầy đủ. **Chuyên gia (CG)** — `[STT63 UAT 2026-06-02]` chỉ ĐỌC (R-only), scope đích danh theo TVCS được phân công (BR-AUTH-14).
 
 **Preconditions (Điều kiện tiên quyết):**
 
 - User đã đăng nhập (BR-AUTH-01)
 - User có quyền truy cập chức năng "Quản lý tư liệu pháp lý"
-- User thuộc đơn vị có quyền (phân quyền theo đơn vị -- BR-AUTH-08)
+- **Phân quyền theo vai trò:** CB NV → phân quyền theo đơn vị (BR-AUTH-08, CRUD). **CG → BR-AUTH-14** `[STT63 UAT 2026-06-02]`: chỉ đọc/tải tư liệu của TVCS có `chuyen_gia_id = CG đang đăng nhập` và trạng thái ≥ PHAN_CONG; chặn mọi thao tác CUD + công khai
 
 **Inputs (Dữ liệu đầu vào) -- Thêm mới / Chỉnh sửa:**
 
@@ -828,8 +836,8 @@ CRUD tư liệu pháp lý gắn với vụ việc tư vấn chuyên sâu. Hỗ t
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra quyền và phạm vi đơn vị | BR-AUTH-01, BR-AUTH-08 |
-| 2 | Truy vấn tư liệu pháp lý chưa xóa, thuộc đơn vị | BR-DATA-01 |
+| 1 | Kiểm tra quyền theo vai trò: CB NV → phạm vi đơn vị (BR-AUTH-08); **CG → đích danh TVCS được phân công (BR-AUTH-14)** `[STT63 UAT 2026-06-02]` | BR-AUTH-01, BR-AUTH-08, BR-AUTH-14 |
+| 2 | Truy vấn tư liệu pháp lý chưa xóa: CB NV theo đơn vị; **CG chỉ tư liệu của TVCS có `chuyen_gia_id=CG` và trạng thái ≥ PHAN_CONG** | BR-DATA-01 |
 | 3 | Phân trang (mặc định 20/trang) | BR-DATA-07 |
 
 **Thêm mới:**
@@ -859,7 +867,7 @@ CRUD tư liệu pháp lý gắn với vụ việc tư vấn chuyên sâu. Hỗ t
 | 2 | Kiểm tra: tư liệu phải có ít nhất 1 file đính kèm | — |
 | 3 | Yêu cầu CB NV nhập `mo_ta_cong_khai`; tùy chọn `anh_dai_dien` (default ảnh HT), `file_dinh_kem_cong_khai` | — |
 | 4 | Set `cong_khai = 1`; cập nhật `trang_thai = CONG_KHAI`; auto fill `thoi_gian_dang_tai = NOW()` | BR-PUBLIC-03 |
-| 5 | Gọi API trực tiếp Cổng PLQG: push tư liệu (kèm mô tả công khai + ảnh + file) | BR-FLOW-07 |
+| 5 | Set `cong_khai = 1` trên CSDL CMS (thao tác nội bộ, kèm mô tả công khai + ảnh + file). Cổng PLQG tự kéo bản ghi công khai qua API outbound Nhóm XII định kỳ — CMS KHÔNG push trực tiếp (mô hình a) | BR-FLOW-07 |
 | 6 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Hủy công khai:**
@@ -868,7 +876,7 @@ CRUD tư liệu pháp lý gắn với vụ việc tư vấn chuyên sâu. Hỗ t
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền và phạm vi đơn vị | BR-AUTH-01, BR-AUTH-08 |
 | 2 | Set `cong_khai = 0`; cập nhật `trang_thai = NHAP`; clear `thoi_gian_dang_tai = NULL` | BR-PUBLIC-02 |
-| 3 | Gọi API trực tiếp Cổng PLQG: gỡ tư liệu | BR-FLOW-07, BR-PUBLIC-02 |
+| 3 | Set `cong_khai = 0` trên CSDL CMS (thao tác nội bộ). Cổng PLQG tự cập nhật (ẩn khỏi hiển thị) qua kéo định kỳ — CMS KHÔNG push/gỡ trực tiếp (mô hình a) | BR-FLOW-07, BR-PUBLIC-02 |
 | 4 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Processing — Chỉnh sửa tư liệu** `[GAP-X.1-02]`
@@ -888,7 +896,7 @@ CRUD tư liệu pháp lý gắn với vụ việc tư vấn chuyên sâu. Hỗ t
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền và phạm vi đơn vị | BR-AUTH-01, BR-AUTH-08 |
 | 2 | Kiểm tra tư liệu tồn tại và chưa xóa | BR-DATA-01 |
-| 3 | Nếu trạng thái = CONG_KHAI: gọi API Cổng PLQG gỡ tư liệu trước (hủy CK) | BR-FLOW-07 |
+| 3 | Nếu trạng thái = CONG_KHAI: set `cong_khai = 0` trên CSDL CMS trước (hủy CK); Cổng PLQG tự ẩn qua kéo định kỳ — không push/gỡ trực tiếp | BR-FLOW-07 |
 | 4 | Hiển thị xác nhận: "Bạn có chắc chắn muốn xóa tư liệu '{tên}'?" | — |
 | 5 | Soft delete: set is_deleted = 1 | BR-DATA-01 |
 | 6 | Ghi nhật ký thao tác | BR-DATA-05 |
@@ -908,10 +916,10 @@ CRUD tư liệu pháp lý gắn với vụ việc tư vấn chuyên sâu. Hỗ t
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra quyền và phạm vi đơn vị | BR-AUTH-01, BR-AUTH-08 |
+| 1 | Kiểm tra quyền: CB NV theo đơn vị (BR-AUTH-08); **CG đích danh TVCS được phân công (BR-AUTH-14)** `[STT63 UAT 2026-06-02]` | BR-AUTH-01, BR-AUTH-08, BR-AUTH-14 |
 | 2 | Nhận tiêu chí: keyword (tên tư liệu, mô tả), lĩnh vực, loại tư liệu, trạng thái | — |
 | 3 | Full-text search trên ten_tu_lieu + mo_ta (hỗ trợ tiếng Việt unaccent) | BR-DATA-08 |
-| 4 | Lọc bản ghi chưa xóa, thuộc đơn vị | BR-DATA-01 |
+| 4 | Lọc bản ghi chưa xóa: CB NV theo đơn vị (BR-AUTH-08); **CG chỉ tư liệu của TVCS có `chuyen_gia_id=CG` và trạng thái ≥ PHAN_CONG (BR-AUTH-14)** `[STT63 UAT 2026-06-02]` | BR-DATA-01, BR-AUTH-14 |
 | 5 | AND logic cho tất cả điều kiện | — |
 | 6 | Phân trang (mặc định 20/trang) và trả về kết quả | BR-DATA-07 |
 
@@ -934,7 +942,7 @@ CRUD tư liệu pháp lý gắn với vụ việc tư vấn chuyên sâu. Hỗ t
 
 - Tư liệu được tạo/cập nhật/xóa mềm
 - File được tải lên/xóa/preview
-- Tư liệu có thể công khai/gỡ khỏi Cổng PLQG
+- Tư liệu có thể công khai/hủy công khai (đặt cờ trên CSDL CMS; Cổng PLQG tự kéo/ẩn qua API outbound Nhóm XII)
 - AUDIT_LOG ghi nhận mọi thao tác
 
 **Error Handling (Xử lý lỗi):**
@@ -946,7 +954,6 @@ CRUD tư liệu pháp lý gắn với vụ việc tư vấn chuyên sâu. Hỗ t
 | E3 | File vượt 20MB | ERR-TLPL-03 | "File tối đa 20MB" | ERROR |
 | E4 | File chứa mã độc | ERR-TLPL-04 | "File '{ten_file}' chứa mã độc" | ERROR |
 | E5 | Công khai tư liệu không có file | ERR-TLPL-05 | "Tư liệu chưa có file đính kèm, không thể công khai" | ERROR |
-| E6 | API Cổng PLQG lỗi | ERR-TLPL-06 | "Lỗi kết nối Cổng PLQG. Vui lòng thử lại sau" | ERROR |
 | E7 | Tư liệu đã công khai | WRN-TLPL-01 | "Tư liệu đã ở trạng thái công khai" | WARNING |
 
 **Acceptance Criteria:**
@@ -955,9 +962,11 @@ CRUD tư liệu pháp lý gắn với vụ việc tư vấn chuyên sâu. Hỗ t
 - **Given** CB NV xem chi tiết **When** chọn tư liệu **Then** hiển thị thông tin + danh sách file
 - **Given** CB NV thêm mới tư liệu **When** nhập thông tin + nhấn Lưu **Then** validate + lưu
 - **Given** CB NV tải lên file **When** chọn file hợp lệ **Then** upload + quét virus + lưu
+- **[STT63 UAT 2026-06-02] Given** Chuyên gia được phân công mở section "Tư liệu pháp lý" của TVCS mình phụ trách (trạng thái ≥ PHAN_CONG) **When** xem/tải tư liệu **Then** hiển thị chế độ chỉ đọc (xem + tải/preview), ẩn nút Thêm/Sửa/Xóa/Công khai (BR-AUTH-14); ghi AUDIT_LOG hành vi đọc/tải (BR-DATA-05)
+- **[STT63 UAT 2026-06-02] Given** Chuyên gia truy cập tư liệu của TVCS KHÔNG phải mình phụ trách **When** mở section **Then** từ chối (không hiển thị / 403 xử lý ở tầng quyền), không phải lỗi hệ thống
 - **Given** CB NV xem file trực tuyến **When** chọn file **Then** hiển thị preview
-- **Given** CB NV công khai tư liệu **When** nhấn "Công khai" **Then** push lên Cổng PLQG
-- **Given** CB NV hủy công khai **When** xác nhận **Then** gỡ khỏi Cổng PLQG
+- **Given** CB NV công khai tư liệu **When** nhấn "Công khai" **Then** đặt cờ công khai (`cong_khai = 1`) trên CSDL CMS; Cổng PLQG tự kéo qua API outbound Nhóm XII
+- **Given** CB NV hủy công khai **When** xác nhận **Then** đặt cờ `cong_khai = 0` trên CSDL CMS; Cổng PLQG tự ẩn qua kéo định kỳ
 
 ---
 
@@ -1080,13 +1089,13 @@ Breadcrumb > Tiêu đề + nút hành động > Tab phân loại (3 tab) > Thanh
 | 1 | toolbar | Breadcrumb | breadcrumb | "Trang chủ > Tư vấn > Tư vấn pháp luật chuyên sâu" | navigate | luôn hiển thị |
 | 2 | toolbar | Tiêu đề trang | label | "Quản lý Tư vấn pháp luật chuyên sâu" + [+ Thêm yêu cầu TV] [Xuất Excel] [Làm mới] | — | luôn hiển thị |
 | 3 | filter-bar | Tab phân loại | tab | 3 tab với số đếm: Chờ xử lý (TIEP_NHAN + PHAN_CONG) / Đang tư vấn (DANG_TU_VAN + HOAN_THANH + CHO_PHE_DUYET) / Hoàn thành (DA_DUYET + HUY) | click -> filter theo nhóm trạng thái | luôn hiển thị |
-| 4 | filter-bar | Ô tìm kiếm | search-box | Full-text (tìm kiếm toàn văn trên noi_dung_tu_van + ma_noi_dung + ten DN) | change -> filter | luôn hiển thị |
+| 4 | filter-bar | Ô tìm kiếm | search-box | Full-text (tìm kiếm toàn văn trên tieu_de + noi_dung_tu_van + ma_noi_dung + ten DN) | change -> filter | luôn hiển thị |
 | 5 | filter-bar | Dropdown Chuyên gia | select (searchable) | Danh sách chuyên gia | change -> filter | luôn hiển thị |
 | 6 | filter-bar | Dropdown DN | select (searchable) | Danh sách doanh nghiệp | change -> filter | luôn hiển thị |
 | 7 | filter-bar | Dropdown Lĩnh vực | select | Từ DANH_MUC | change -> filter | luôn hiển thị |
 | 8 | filter-bar | Dropdown Trạng thái | select | TIEP_NHAN / PHAN_CONG / DANG_TU_VAN / HOAN_THANH / CHO_PHE_DUYET / DA_DUYET / HUY | change -> filter | luôn hiển thị |
 | 9 | filter-bar | Khoảng ngày | date-picker | Từ ngày - Đến ngày | change -> filter | luôn hiển thị |
-| 10 | content | Bảng nội dung TVCS | table | Checkbox / Mã (TVCS-{YYYYMMDD}-{SEQ}) / Tên DN / Tên CG / Lĩnh vực PL / Tóm tắt (cắt 100 ký tự) / Trạng thái SM-TVCS (badge) / Ngày tư vấn / Ngày tạo / Hành động (Xem / Sửa / Phân công CG / Hủy) | click hàng -> xem chi tiết | luôn hiển thị |
+| 10 | content | Bảng nội dung TVCS | table | Checkbox / Mã (TVCS-{YYYYMMDD}-{SEQ}) / Tiêu đề / Tên DN / Tên CG / Lĩnh vực PL / Trạng thái SM-TVCS (badge) / Ngày tư vấn / Ngày tạo / Hành động (Xem / Sửa / Phân công CG / Hủy) | click hàng -> xem chi tiết | luôn hiển thị |
 | 11 | content | Trạng thái trống | empty | "Chưa có nội dung tư vấn. [+ Thêm yêu cầu TV]" | — | khi không có dữ liệu |
 | 12 | action-bar | Thanh hành động hàng loạt | button-group | [Phân công CG hàng loạt] (chỉ bản ghi TIEP_NHAN) / [Công khai chuyên trang hàng loạt] + [Hủy công khai hàng loạt] (chỉ bản ghi DA_DUYET — BR-PUBLIC-01) | click -> action nhiều bản ghi | khi >= 1 checkbox chọn; nút enable theo trạng thái dòng được chọn |
 | 13 | footer | Phân trang | pagination | 20 mục/trang | click -> chuyển trang | luôn hiển thị |
@@ -1131,7 +1140,7 @@ Breadcrumb > Tiêu đề + nhãn trạng thái > Thanh tiến trình SM-TVCS (st
 | 2 | toolbar | Tiêu đề trang | label | Thêm mới: "Thêm yêu cầu Tư vấn pháp luật chuyên sâu" / Chi tiết: "Chi tiết TVCS-20260403-001" + nhãn trạng thái (badge) | — | luôn hiển thị |
 | 3 | content | Thanh tiến trình SM-TVCS | stepper | [TIEP_NHAN]--[PHAN_CONG]--[DANG_TU_VAN]--[HOAN_THANH]--[CHO_PHE_DUYET]--[DA_DUYET]. HUY hiện nhánh riêng (dấu X đỏ). | — | mode chi tiết |
 | 4 | content | Accordion: Thông tin cơ bản | form | Mã nội dung (auto TVCS-{YYYYMMDD}-{SEQ}, read-only) / DN (dropdown searchable, bắt buộc — khi chọn hiện MST, địa chỉ, người đại diện) / Chuyên gia (dropdown searchable WHERE hoạt động, bắt buộc — khi chọn hiện chuyên môn, SĐT, email) / Lĩnh vực PL (dropdown, bắt buộc) / Ngày tư vấn (date, bắt buộc) / Ghi chú (textarea, max 2000) | input -> validate | luôn hiển thị |
-| 5 | content | Accordion: Nội dung tư vấn | form | Nội dung TV chi tiết (Rich Text Editor, bắt buộc, max 50KB) / Tóm tắt (textarea, max 500) | input -> validate | luôn hiển thị |
+| 5 | content | Accordion: Nội dung tư vấn | form | Tiêu đề (text, bắt buộc, max 255) / Nội dung TV chi tiết (Rich Text Editor, bắt buộc, max 50KB) | input -> validate | luôn hiển thị |
 | 6 | content | Accordion: Tư liệu PL liên kết (UC152) | table | Bảng tư liệu: Tên / Loại / Trạng thái / Số file / Hành động. Nút [+ Thêm tư liệu] (inline trong tab này) | click -> modal/inline | luôn hiển thị |
 | 7 | content | Accordion: Đánh giá chất lượng (UC153) | table (read-only) | Bảng: Mã đánh giá / Điểm (1-5 sao) / Nhận xét DN / Ngày. Tổng hợp: Điểm TB + Số lượng. API inbound Cổng PLQG | — | mode chi tiết |
 | 8 | content | Accordion: Nhật ký thao tác | timeline | Lịch sử chuyển trạng thái + CUD. "dd/mm/yyyy HH:mm -- {User} -- {Hành động}" | — | mode chi tiết |
@@ -1145,7 +1154,7 @@ Breadcrumb > Tiêu đề + nhãn trạng thái > Thanh tiến trình SM-TVCS (st
 - Xác nhận CG (gộp từ MH-12.5): khi user là CG được phân công, hiện [Chấp nhận] / [Từ chối] trên thanh hành động. Timeout 2 ngày LV -> banner cảnh báo
 - Phê duyệt TVCS (gộp từ MH-12.6): khi user là CB Phê duyệt cùng đơn vị, hiện [Phê duyệt] (modal xác nhận + ghi chú optional, SET DA_DUYET) / [Từ chối] (modal lý do bắt buộc BR-FLOW-04, SET DANG_TU_VAN)
 - Tư liệu PL (gộp từ MH-12.7): tab "Tư liệu PL" trong accordion. CRUD tư liệu inline. Nút [Công khai lên Cổng PLQG] khi NHAP + >= 1 file
-- Công khai chuyên trang (CR-01): Accordion "Công khai chuyên trang" chỉ hiển thị khi `trang_thai = DA_DUYET` (BR-PUBLIC-01). Switch [Công khai] mở modal yêu cầu nhập `mo_ta_cong_khai` (bắt buộc) + `anh_dai_dien` (optional, default ảnh HT) + `file_dinh_kem_cong_khai` (optional). Khi xác nhận: set `cong_khai = 1`, auto fill `thoi_gian_dang_tai = NOW()` (BR-PUBLIC-03), gọi API push Cổng PLQG. Switch [Hủy công khai] xác nhận → set `cong_khai = 0`, clear `thoi_gian_dang_tai`, gọi API gỡ Cổng PLQG (BR-PUBLIC-02)
+- Công khai chuyên trang (CR-01): Accordion "Công khai chuyên trang" chỉ hiển thị khi `trang_thai = DA_DUYET` (BR-PUBLIC-01). Switch [Công khai] mở modal MD-CONG-KHAI yêu cầu nhập `mo_ta_cong_khai` (bắt buộc) + `anh_dai_dien` (optional, default ảnh HT) + `file_dinh_kem_cong_khai` (optional), **kèm cảnh báo: "Khi công khai, Tiêu đề, Nội dung yêu cầu và Kết quả tư vấn sẽ được chia sẻ qua Cổng PLQG (Cổng hiển thị cho DN sở hữu)"** `[STT11]`. Khi xác nhận: set `cong_khai = 1`, auto fill `thoi_gian_dang_tai = NOW()` (BR-PUBLIC-03) trên CSDL CMS — Cổng PLQG tự pull qua FR-XII-13 (mô hình a, không push trực tiếp). Switch [Hủy công khai] xác nhận → set `cong_khai = 0`, clear `thoi_gian_dang_tai` (BR-PUBLIC-02); Cổng tự cập nhật qua pull
 
 ---
 
@@ -1291,6 +1300,8 @@ erDiagram
 | Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
 |-----------|-----------|----------|------------|---------|-------|
 | ma_tu_van | text | Y | UNIQUE | Auto-gen | Mã yêu cầu TV |
+| tieu_de | text | Y | Max 255 ký tự | | Tiêu đề yêu cầu TV (STT68). Inbound từ Cổng tự sinh `"TVCS {lĩnh vực} – {tên DN}"`, cán bộ chỉnh được. Chính thức hóa field `tom_tat` cũ (vốn chỉ có ở giao diện, thiếu cột entity). Bản ghi cũ: backfill theo cùng quy tắc tự sinh trước khi áp NOT NULL `[STT11]` |
+| ma_noi_dung_cong | text | N | UNIQUE (khi non-null) | | Mã hồ sơ trên Cổng PLQG — echo để Cổng đối chiếu + idempotency. Trống nếu cán bộ nhập tay `[STT11]` |
 | doanh_nghiep_id | identifier | Y | FK → DOANH_NGHIEP(id) | | DN yêu cầu |
 | linh_vuc_id | identifier | Y | FK → DANH_MUC(id) | | Lĩnh vực PL |
 | noi_dung | text (long) | Y | | | Nội dung yêu cầu TV |
@@ -1517,6 +1528,7 @@ stateDiagram-v2
 |-------|-----|----------------------|
 | BR-AUTH-01 | Xác thực trước truy cập | FR-X.1-01 đến FR-X.1-07 |
 | BR-AUTH-08 | chính sách phân quyền dữ liệu | FR-X.1-01, FR-X.1-02, FR-X.1-04, FR-X.1-06 |
+| BR-AUTH-14 | CG đọc tư liệu TVCS đích danh (R-only) `[STT63 UAT 2026-06-02]` | FR-X.1-06 |
 | BR-DATA-01 | Soft delete | FR-X.1-01, FR-X.1-04, FR-X.1-06 |
 | BR-DATA-03 | Common fields | FR-X.1-01, FR-X.1-03, FR-X.1-04, FR-X.1-05, FR-X.1-06, FR-X.1-07 |
 | BR-DATA-04 | Auto-gen mã | FR-X.1-01 (TVCS-), FR-X.1-04 (HSPL-) |
@@ -1542,6 +1554,7 @@ stateDiagram-v2
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm này) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|----------------------|---------|------------|
 | BR-AUTH-08 | Chính sách phân quyền dữ liệu áp dụng cho MỌI bảng có cột `don_vi_id`. Không có exception ngoại trừ QTHT | Architecture AD-07 | FR-X.1-01, FR-X.1-02, FR-X.1-04, FR-X.1-06 | AUDIT_LOG không có phân quyền (immutable) | Verify phân quyền |
+| BR-AUTH-14 | `[STT63 UAT 2026-06-02]` Chuyên gia (CG) chỉ ĐỌC/tải tư liệu pháp lý của TVCS mà mình là `chuyen_gia_id` và trạng thái ≥ PHAN_CONG (đích danh, không theo đơn vị). Chặn mọi thao tác Thêm/Sửa/Xóa/Công khai. Pattern lọc đích danh tương tự BR-AUTH-10 (NHT) | STT63 UAT 2026-06-02 | FR-X.1-06 | — | Verify CG chỉ thấy tư liệu TVCS được giao + chặn CUD |
 
 ### BR-DATA-01: Soft delete
 
@@ -1565,7 +1578,7 @@ stateDiagram-v2
 
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm này) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|----------------------|---------|------------|
-| BR-DATA-05 | Mọi thao tác CUD + phê duyệt + đăng nhập/xuất đều ghi vào AUDIT_LOG. Log là immutable, không sửa/xóa | NFR-06 | FR-X.1-01 đến FR-X.1-07 | — | Verify INSERT-only trên AUDIT_LOG |
+| BR-DATA-05 | Mọi thao tác CUD + phê duyệt + đăng nhập/xuất đều ghi vào AUDIT_LOG. Log là immutable, không sửa/xóa. **`[STT63 UAT 2026-06-02]` Bổ sung: ghi AUDIT_LOG cả hành vi ĐỌC/TẢI tư liệu pháp lý của Chuyên gia (CG)** — hành vi đọc nhạy cảm của mạng lưới ngoài, phục vụ truy vết | NFR-06 | FR-X.1-01 đến FR-X.1-07 | — | Verify INSERT-only trên AUDIT_LOG + log read của CG |
 
 ### BR-DATA-07: Pagination
 
@@ -1589,7 +1602,7 @@ stateDiagram-v2
 
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm này) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|----------------------|---------|------------|
-| BR-FLOW-07 | Tư liệu pháp lý nhóm X.1: công khai trực tiếp lên Cổng PLQG, KHÔNG cần phê duyệt. CB NV tự chịu trách nhiệm nội dung | PRD, CĐT xác nhận | FR-X.1-06 | — | Test publish without approve step |
+| BR-FLOW-07 | Tư liệu pháp lý nhóm X.1: công khai (đặt cờ `cong_khai = 1` trên CSDL CMS) — Cổng PLQG tự kéo qua API outbound Nhóm XII, KHÔNG cần phê duyệt. CB NV tự chịu trách nhiệm nội dung | PRD, CĐT xác nhận | FR-X.1-06 | — | Test publish without approve step |
 
 ### BR-NOTIF-01: Thông báo tự động
 
@@ -1613,7 +1626,7 @@ stateDiagram-v2
 
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm này) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|----------------------|---------|------------|
-| BR-PUBLIC-02 | Khi set `cong_khai = 0`: clear `thoi_gian_dang_tai` về NULL; gọi API gỡ khỏi Cổng PLQG; ghi audit | CR-01 | FR-X.1-01, FR-X.1-06 | — | Test cong_khai 1→0: Cổng PLQG nhận lệnh gỡ + thoi_gian_dang_tai = NULL |
+| BR-PUBLIC-02 | Khi set `cong_khai = 0`: clear `thoi_gian_dang_tai` về NULL; ghi audit. Cổng PLQG tự cập nhật (gỡ khỏi hiển thị) qua pull định kỳ — CMS KHÔNG push trực tiếp (mô hình a, BA chốt 2026-05-10). *(FR-X.1-06 (Tư liệu pháp lý) nay đã đồng nhất mô hình KÉO — C-INT-01; toàn nhóm X.1 dùng chung pull, không còn push/gỡ trực tiếp.)* | CR-01 | FR-X.1-01, FR-X.1-06 | — | Test cong_khai 1→0: thoi_gian_dang_tai = NULL; bản ghi không còn xuất hiện ở API outbound |
 
 ### BR-PUBLIC-03: Thời gian đăng tải chuyên trang `[CR-01]`
 

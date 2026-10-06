@@ -269,17 +269,17 @@ Module **Đào tạo, Tập huấn (Nhóm III)** theo SRS FR-III gồm **5 màn 
 
 ### SUB-MENU 1: CHƯƠNG TRÌNH ĐÀO TẠO & KHÓA HỌC (SM-KHOAHOC)
 
-> **⚠️ CẬP NHẬT 2026-05-05 (apply SRS update srs-update-2026-5-5/srs-fr-03-dao-tao.md):**
-> - **SM-KHOAHOC 9 → 11 state** — thêm 2 state mới `TU_CHOI` + `TU_CHOI_KQ` (Cách 2 + refinement). Nhánh rẽ "bounce-back" cũ (line 267-274) KHÔNG còn đúng — KHOA_HOC giờ có state `TU_CHOI` riêng (giống SM-TVV).
+> **⚠️ CẬP NHẬT 2026-05-05 → 2026-05-16 (align SRS final srs-update-2026-5-5/srs-fr-03-dao-tao.md):**
+> - **SM-KHOAHOC giữ 9 state v3** (BA OUT "Thay đổi 3" lượt 2026-05-06; cite `srs-fr-03-dao-tao.md:35` + `:43` + `:1863`). DELTA-MAP-FR03 từng nêu 11 state (thêm `TU_CHOI` + `TU_CHOI_KQ`) là draft trước BA OUT — KHÔNG áp dụng. Xem [`tasks/srs-contradictions.md` SRS-C-003](../../tasks/srs-contradictions.md#srs-c-003--fr-03-đào-tạo--sm-khoahoc-số-state-9-vs-11--open) chờ BA confirm dẹp DELTA-MAP.
 > - **SM-CTDT mới hoàn toàn** — Entity `CHUONG_TRINH_DAO_TAO` không còn CRUD thường, có quy trình phê duyệt riêng `DU_THAO → CHO_DUYET → DA_DUYET` (giải quyết spec contradiction R6.4.B2/B2.5/B7).
-> - **Mô hình A 3 cấp:** `KE_HOACH_DAO_TAO` (kế hoạch năm — entity mới) 1:N `CHUONG_TRINH_DAO_TAO` 1:N `KHOA_HOC`. Workflow seed phải theo thứ tự: KH năm → CTĐT (qua SM-CTDT mới) → KH (qua SM-KHOAHOC 11 state).
+> - **Mô hình A 3 cấp:** `KE_HOACH_DAO_TAO` (kế hoạch năm — entity mới) 1:N `CHUONG_TRINH_DAO_TAO` 1:N `KHOA_HOC`. Workflow seed phải theo thứ tự: KH năm → CTĐT (qua SM-CTDT mới) → KH (qua SM-KHOAHOC 9 state).
 > - **Entity HOC_VIEN mới** — 1:1 với TAI_KHOAN qua `tai_khoan_id`. Khi seed học viên, tạo TK đồng thời.
 > - **Điểm danh enum 3-value:** `CO_MAT/VANG_PHEP/VANG_KHONG_PHEP` (đổi từ boolean cũ).
 > - **FR-III-19 Hướng B:** BỎ cấp chứng nhận PDF, chỉ công bố KQ vào TK học viên + chuyên trang.
 > - **5 FR mới:** III-20 (Xuất docx ký số), III-21 (Phê duyệt khóa học), III-22 (Lịch học), III-NEW-01/02/03 (Đề kiểm tra).
-> - Chi tiết delta: [`_DELTA-MAP-FR03.md`](../srs-update-2026-5-5/_DELTA-MAP-FR03.md). Bảng workflow dưới (Bước 1-10) là **R6 cũ** — KHÔNG refactor lại trong session này, sẽ update khi test phase R7 chạm tới.
+> - Chi tiết delta: [`_DELTA-MAP-FR03.md`](../srs-update-2026-5-5/_DELTA-MAP-FR03.md) (draft — số state 11 trong DELTA-MAP đã bị BA OUT, dùng SRS final 9 state). Bảng workflow dưới (Bước 1-10) là **R6 cũ** — KHÔNG refactor lại trong session này, sẽ update khi test phase R7 chạm tới.
 
-**Entity chính:** `KHOA_HOC` (SRS §3.4.3.6) — **9 state** theo DB ENUM `KHOA_HOC.trang_thai`: `DU_THAO`, `CHO_DUYET`, `DA_DUYET`, `DA_CONG_KHAI`, `DANG_DIEN_RA`, `DA_KET_THUC`, `CHO_DUYET_KQ`, `HOAN_THANH`, `HUY`. **⚠️ R7:** thêm `TU_CHOI` + `TU_CHOI_KQ` = 11 state. Entity cha `CHUONG_TRINH_DAO_TAO` (CTĐT) là CRUD thường (không có workflow phê duyệt trên chính CTĐT — xem FR-III-01 §Processing). **⚠️ R7:** CTĐT có SM-CTDT mới với phê duyệt.
+**Entity chính:** `KHOA_HOC` (SRS §3.4.3.6) — **9 state** theo DB ENUM `KHOA_HOC.trang_thai`: `DU_THAO`, `CHO_DUYET`, `DA_DUYET`, `DA_CONG_KHAI`, `DANG_DIEN_RA`, `DA_KET_THUC`, `CHO_DUYET_KQ`, `HOAN_THANH`, `DA_HUY` (BA OUT "Thay đổi 3" 2026-05-06 — giữ v3, KHÔNG thêm TU_CHOI/TU_CHOI_KQ; cite `srs-fr-03-dao-tao.md:64`). Entity cha `CHUONG_TRINH_DAO_TAO` (CTĐT) là CRUD thường (không có workflow phê duyệt trên chính CTĐT — xem FR-III-01 §Processing). **⚠️ R7:** CTĐT có SM-CTDT mới với phê duyệt.
 
 > **⚠️ Lưu ý mâu thuẫn nội bộ SRS:** `DA_CONG_KHAI` có trong DB ENUM (§3.4.3.6) và là guard cho FR-III-04 PRE-02 ("Khóa học đang mở đăng ký — trạng thái DA_CONG_KHAI"), nhưng bảng State Transition Table tại Phụ lục C.2 **bỏ sót** transition dẫn đến state này. Theo logic nghiệp vụ + schema (`la_cong_khai` flag), transition đúng: `DA_DUYET → DA_CONG_KHAI` do CB NV kích hoạt (xem Bước 4 bên dưới). Test plan cần ghi nhận mâu thuẫn này và xác nhận với BA.
 
@@ -548,7 +548,7 @@ Bảng dưới tóm tắt Bước 1 thủ công (thay cho bước đồng bộ) 
 | 8.1 | Khóa ĐT (SM-KHOAHOC) | 3 | ✅ | `DU_THAO` (Khóa học) + `CHỜ DUYỆT` (Đăng ký) | DN/NHT đăng ký từ Cổng PLQG | `SCR-III-01/02` |
 | 8.2 | Bài giảng | 3 | ✅ | `KICH_HOAT` | — (thuần thủ công) | Tab Bài giảng |
 | 8.3 | Ngân hàng câu hỏi/Đề KT | 3 | ✅ | `KICH_HOAT` / `DU_THAO` | — (thuần thủ công) | Tab NH câu hỏi |
-| 8.4 | Giảng viên | 3 | ✅ | `DANG_HOAT_DONG` | — (thuần thủ công) | Tab Giảng viên |
+| 8.4 | Giảng viên | 3 | ✅ | `HOAT_DONG` | — (thuần thủ công) | Tab Giảng viên |
 | 9 | Hợp đồng tư vấn | 4 | ✅ | `DANG_THUC_HIEN` (enum default §3.4.3.13) | — (thuần thủ công) | `SCR-X3-01` |
 | 10 | **Chi trả (SM-CHITRA)** | 4 | ❌ | — **(không cho phép thủ công)** | DN nộp Mẫu 01 qua DVC/LGSP | — |
 | 11 | Theo dõi Đánh giá Hiệu quả HTPL (SM-DANHGIA, FR-08 v3.5) | 4 | ✅ | `LAP_KE_HOACH` (8 state + HUY) | — (thuần thủ công) | `SCR-VI-01` |
@@ -582,7 +582,7 @@ Bảng dưới tóm tắt Bước 1 thủ công (thay cho bước đồng bộ) 
 | :--- | :--- | :--- | :--- | :--- |
 | 1 | §1 DN | `DOANH_NGHIEP` | (CRUD, không SM) | Gốc — master |
 | 2 | §7 TV CS | `HO_SO_PHAP_LY_DN` | `HIEU_LUC` | Gắn `doanh_nghiep_id` của DN bước 1 → phủ Tab #2 |
-| 3 | §2 TVV | `TU_VAN_VIEN` | `ĐANG HOẠT ĐỘNG` | Resource gán VV / Chi trả |
+| 3 | §2 TVV | `TU_VAN_VIEN` | `HOẠT ĐỘNG` (`HOAT_DONG` v3.5 — rename từ DANG_HOAT_DONG) | Resource gán VV / Chi trả |
 | 4 | §5 VV | `VU_VIEC` | `HOÀN THÀNH` (full 7 state) | Gắn DN + TVV → phủ Tab #3 KPI "1 VV / 1 hoàn thành" |
 | 5 | §10 Chi trả | `HO_SO_CHI_TRA` | `DA_THANH_TOAN` (`so_tien_thuc_tra > 0`) | Gắn VV + DN → phủ Tab #3 KPI "Tổng chi phí" + Tab #4 |
 

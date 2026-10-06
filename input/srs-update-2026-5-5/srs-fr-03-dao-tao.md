@@ -3,8 +3,8 @@
 **Dự án:** Phần mềm hỗ trợ pháp lý doanh nghiệp
 **Phiên bản SRS:** 3.5 (kế thừa v3 + áp 11 thay đổi nghiệp vụ duyệt 2026-05-06; chi tiết tại `v3.5-delta-reports/v3.5-delta-fr-03.md`)
 **Nhóm:** III — Quản lý Đào tạo, Tập huấn
-**UC range:** UC 20 – UC 38 + UC mới (FR-III-22 quản lý lịch học buổi dạy)
-**Số FR:** 24 (FR-III-01 → FR-III-20 + FR-III-NEW-01/02/03 + FR-III-22)
+**UC range:** UC 20 – UC 38 + UC mới (FR-III-22 quản lý lịch học buổi dạy) + UC phantom (FR-III-NEW-04 — BA chốt 2026-05-13)
+**Số FR:** 25 (FR-III-01 → FR-III-20 + FR-III-NEW-01/02/03/04 + FR-III-22)
 **File chính:** `srs-v3.md` Section 3.2
 
 ---
@@ -130,6 +130,8 @@ graph LR
 | 15 | thoi_gian_dang_tai | datetime | N | Auto fill khi cong_khai=1; clear khi cong_khai=0 | — |
 | 16 | mo_ta_cong_khai | text (long) | N | Mô tả hiển thị trên chuyên trang | — |
 | 17 | file_dinh_kem_cong_khai | structured | N | PDF/DOC/DOCX/XLS/XLSX, max 20MB/file | — |
+| 18 | mo_dang_ky_tu | date | N | **[STT56 UAT 2026-06-02]** Ngày mở đăng ký. Bắt buộc nhập khi mở đăng ký (chuyển DA_CONG_KHAI) | — |
+| 19 | mo_dang_ky_den | date | N | **[STT56 UAT 2026-06-02]** Ngày đóng đăng ký. Ràng buộc `mo_dang_ky_den > mo_dang_ky_tu`. KHÔNG ràng buộc với `ngay_bat_dau` (cho ghi danh trễ). Bắt buộc khi mở đăng ký | — |
 
 **Processing — Xem danh sách:**
 
@@ -276,6 +278,7 @@ graph LR
 | E12 | CB PD phê duyệt Khóa học khác đơn vị | ERR-KH-PD-03 | "Không có quyền phê duyệt Khóa học của đơn vị khác" | ERROR |
 | E13 | Khóa học không ở trạng thái Chờ duyệt khi CB PD thao tác | ERR-KH-PD-04 | "Khóa học không ở trạng thái chờ phê duyệt" | ERROR |
 | E14 | Từ chối Khóa học không nhập lý do hoặc lý do < 10 ký tự | ERR-KH-PD-05 | "Lý do từ chối là bắt buộc và tối thiểu 10 ký tự" | ERROR |
+| E15 | CB NV công khai (mở đăng ký) Khóa học khi chưa nhập đủ khoảng mở đăng ký (`mo_dang_ky_tu`/`mo_dang_ky_den`) hoặc `den ≤ tu` | ERR-KH-DK-WINDOW-01 | "Phải nhập khoảng thời gian mở đăng ký (từ/đến, đến sau từ) trước khi mở đăng ký khóa học" `[STT56 UAT 2026-06-02]` | ERROR |
 
 **Acceptance Criteria `[v3.5 — Thay đổi 2 cổng duyệt 2026-05-06: thêm 4 AC cho phê duyệt CTDT]`:**
 - **Given** CB NV truy cập CTDT **When** hiển thị **Then** danh sách CTDT thuộc đơn vị, phân trang
@@ -445,7 +448,7 @@ graph LR
 | # | Điều kiện |
 |---|----------|
 | PRE-01 | DN/NHT đã đăng nhập trên chuyên trang |
-| PRE-02 | Khóa học đang mở đăng ký (trạng thái DA_CONG_KHAI) |
+| PRE-02 | Khóa học đang nhận đăng ký: trạng thái ∈ **{DA_CONG_KHAI, DANG_DIEN_RA}** VÀ (nếu có cửa sổ) `NOW ∈ [mo_dang_ky_tu, mo_dang_ky_den]` `[STT56 UAT 2026-06-02 — cửa sổ ngày là quyền chính; cho ghi danh trễ tới ngày đóng dù khóa đã DANG_DIEN_RA]` |
 
 **Inputs:**
 
@@ -463,7 +466,7 @@ graph LR
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra khóa học đang mở (DA_CONG_KHAI) | SM-KHOAHOC |
+| 1 | Kiểm tra khóa học đang nhận đăng ký: trạng thái ∈ {DA_CONG_KHAI, DANG_DIEN_RA} VÀ (nếu có cửa sổ) `NOW ∈ [mo_dang_ky_tu, mo_dang_ky_den]`; sai → **`ERR-DK-DT-01`** `[STT56 UAT 2026-06-02]` | SM-KHOAHOC |
 | 2 | Kiểm tra chưa đăng ký trùng | — |
 | 3 | Xác nhận dữ liệu đầu vào | — |
 | 4 | Tạo bản ghi DANG_KY_DAO_TAO, trạng thái = CHO_DUYET | — |
@@ -702,7 +705,7 @@ graph LR
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc |
 |---|----------|-----------|----------|-----------|
 | 1 | ten_bai_giang | text | Y | — |
-| 2 | mo_ta | text (long) | Y | — |
+| 2 | mo_ta | text (long) | N | **[STT22 UAT 2026-06-02 — đối tác: chuyển bắt buộc→tùy chọn]** |
 | 3 | loai_tai_lieu | text | Y | SLIDE / PDF / VIDEO |
 | 4 | file_bai_giang | structured | Cond | Max 20MB, .pptx/.pdf (bắt buộc nếu SLIDE/PDF) |
 | 5 | url_youtube | text | Cond | URL YouTube (bắt buộc nếu VIDEO) |
@@ -782,6 +785,7 @@ graph LR
 | 2 | loai_tai_lieu | text | N | PDF / VIDEO |
 | 3 | tu_ngay | date | N | Từ ngày tạo |
 | 4 | den_ngay | date | N | Đến ngày tạo |
+| 5 | cong_khai | select | N | **[STT66 UAT 2026-06-02]** Lọc trạng thái công khai: Tất cả / Đã công khai (`cong_khai=1`) / Chưa công khai (`cong_khai=0`) |
 
 **Processing:**
 
@@ -801,7 +805,8 @@ graph LR
 | 4 | ten_khoa_hoc | text | Khóa học liên kết |
 | 5 | kich_thuoc | number | Kích thước file (bytes) |
 | 6 | ngay_tao | datetime | Ngày tạo |
-| 7 | total_count | number | Tổng bản ghi |
+| 7 | cong_khai | boolean | **[STT66 UAT 2026-06-02]** Trạng thái công khai (badge: Đã công khai / Chưa công khai) |
+| 8 | total_count | number | Tổng bản ghi |
 
 **Postconditions:** Không thay đổi dữ liệu (read-only).
 
@@ -809,6 +814,7 @@ graph LR
 - **Given** CB NV nhập từ khóa **When** tìm kiếm **Then** hiển thị tài liệu phù hợp, phân trang
 - **Given** CB NV lọc theo loại (PDF/Video) **When** chọn **Then** hiển thị tương ứng
 - **Given** CB NV kết hợp nhiều điều kiện **When** tìm kiếm **Then** áp dụng AND
+- **[STT66 UAT 2026-06-02] Given** CB NV lọc theo trạng thái Công khai (Đã/Chưa công khai) **When** chọn **Then** danh sách lọc tương ứng; cột "Công khai" hiển thị badge cho từng bản ghi
 
 **Cross-ref:** Entity BAI_GIANG
 
@@ -960,7 +966,7 @@ graph LR
 
 **Processing:** Kiểm tra quyền → Xác nhận dữ liệu → Tạo/cập nhật GIANG_VIEN → Ghi nhật ký. Xóa: kiểm tra phân công → cảnh báo nếu đang dạy → xóa mềm.
 
-**Outputs:** id, ho_ten, chuyen_nganh, vai_tro, so_khoa_da_day, linh_vuc. Tab Lịch sử: khoa_hoc_id, ten_khoa_hoc, thoi_gian, vai_tro (từ KHOA_HOC_GIANG_VIEN — vai trò gắn cấp khóa, override `GIANG_VIEN.loai`; xem Thay đổi 13), trang_thai_khoa.
+**Outputs:** id, ho_ten, chuyen_nganh, vai_tro, so_khoa_da_day, linh_vuc. Tab Lịch sử: khoa_hoc_id, ten_khoa_hoc, thoi_gian, so_buoi_giang_day (count LICH_HOC_GIANG_VIEN trong khóa), vai_tro_dac_trung (vai trò xuất hiện nhiều nhất ở các buổi GV dạy trong khóa — derive từ `LICH_HOC_GIANG_VIEN` join `LICH_HOC` per khóa; sửa theo STT 26 UAT 2026-05-26 — vai trò gắn cấp buổi, không gắn cấp khóa nữa), trang_thai_khoa.
 
 **Postconditions:** GV được tạo/cập nhật/xóa mềm. Nhật ký ghi nhận.
 
@@ -1194,7 +1200,7 @@ graph LR
 **UC Reference:** UC 35 | **Priority:** Essential | **Stability:** High
 **Màn hình:** SCR-III-01 (workflow actions)
 
-**Mô tả:** Công khai/hủy công khai kế hoạch đào tạo lên Cổng PLQG qua API trực tiếp.
+**Mô tả:** Công khai/hủy công khai kế hoạch đào tạo lên Cổng PLQG theo mô hình KÉO — phần mềm đặt cờ + trạng thái; Cổng PLQG tự kéo định kỳ.
 
 **Tác nhân:** CB NV
 
@@ -1202,15 +1208,16 @@ graph LR
 
 **Inputs:** ke_hoach_id (identifier, Y), hanh_dong (text, Y: CONG_KHAI/HUY_CONG_KHAI).
 
-**Processing:** Kiểm tra trạng thái → Gọi API Cổng PLQG → Cập nhật trạng thái → Ghi nhật ký.
+**Processing:** Kiểm tra trạng thái → đặt cờ công khai + chuyển trạng thái (DA_CONG_KHAI/DA_DUYET) → Ghi nhật ký. Cổng PLQG tự kéo (PULL) định kỳ qua API outbound Nhóm XII.
 
-**Outputs:** ke_hoach_id, trang_thai (DA_CONG_KHAI/DA_DUYET), api_response.
+**Outputs:** ke_hoach_id, trang_thai (DA_CONG_KHAI/DA_DUYET).
 
-**Postconditions:** KH được công khai/gỡ khỏi Cổng PLQG.
+**Postconditions:** KH được đặt công khai/đặt hủy công khai trên CMS; Cổng PLQG hiển thị/ẩn ở lần kéo định kỳ kế tiếp.
 
 **Acceptance Criteria:**
-- **Given** CB NV chọn KH đã duyệt **When** nhấn "Công khai" **Then** trạng thái → DA_CONG_KHAI
-- **Given** CB NV chọn KH đã công khai **When** nhấn "Hủy công khai" **Then** gỡ khỏi chuyên trang
+- **Given** CB NV chọn KH đã duyệt **When** nhấn "Công khai" **Then** trạng thái → DA_CONG_KHAI; Cổng PLQG hiển thị ở lần kéo kế tiếp
+- **Given** CB NV chọn KH đã công khai **When** nhấn "Hủy công khai" **Then** trạng thái → DA_DUYET; Cổng PLQG ẩn ở lần kéo kế tiếp
+- **Given** thao tác công khai/hủy công khai **When** hệ thống xử lý **Then** hiển thị Toast success theo **Phụ lục E Mục I** (`srs-v3.5.md`). Mô hình KÉO không gọi API đồng bộ nên KHÔNG có nhánh lỗi API / nút "Thử lại" (mã `ERR-CK-API-01/02` đã RETIRE — C-INT-01). **STT 10 UAT 2026-05-26 về UX lỗi API đồng bộ không còn áp dụng cho FR-III-16 sau khi chuyển KÉO.**
 
 ---
 
@@ -1268,7 +1275,7 @@ graph LR
 **UC Reference:** UC 38 | **Priority:** Essential | **Stability:** Medium
 **Màn hình:** SCR-III-02 (Tab "Công bố kết quả")
 
-**Mô tả:** Công bố kết quả đào tạo lên tài khoản học viên + đẩy lên chuyên trang Cổng Pháp luật Quốc gia để HV / DN xem. **Hướng B — KHÔNG cấp chứng nhận PDF, KHÔNG sinh entity CHUNG_NHAN.** Phần mềm chỉ thực hiện đúng scope CSV UC38: "công bố kết quả, cập nhật vào tài khoản học viên".
+**Mô tả:** Công bố kết quả đào tạo lên tài khoản học viên + đánh dấu công bố để Cổng Pháp luật Quốc gia tự kéo (PULL) hiển thị trên chuyên trang cho HV / DN xem. **Hướng B — KHÔNG cấp chứng nhận PDF, KHÔNG sinh entity CHUNG_NHAN.** Phần mềm chỉ thực hiện đúng scope CSV UC38: "công bố kết quả, cập nhật vào tài khoản học viên".
 
 > **Cơ sở pháp lý:** NĐ55/2019 không trao thẩm quyền cấp chứng nhận đào tạo PL DNNVV cho phần mềm này. Việc cấp chứng nhận điện tử có giá trị pháp lý phải tuân quy chế nội bộ Bộ Tư pháp riêng (chưa có ở thời điểm 2026). Sinh PDF với số chứng nhận tự sinh có thể gây hiểu nhầm là chứng nhận chính thức — rủi ro pháp lý.
 
@@ -1288,7 +1295,7 @@ graph LR
 |---|----------|-----------|----------|-----------|
 | 1 | khoa_hoc_id | identifier | Y | FK → KHOA_HOC, trạng thái HOAN_THANH |
 | 2 | hoc_vien_ids | identifier[] | N | FK → HOC_VIEN, mặc định = tất cả học viên có KQ DA_DUYET trong khóa |
-| 3 | day_chuyen_trang | boolean | N | Đẩy KQ lên chuyên trang Cổng PLQG | true |
+| 3 | day_chuyen_trang | boolean | N | Đánh dấu công bố KQ để Cổng PLQG kéo (cờ "đã công bố", không đẩy trực tiếp) | true |
 
 **Inputs — Hủy công bố:**
 
@@ -1305,7 +1312,7 @@ graph LR
 | 1 | Kiểm tra quyền + trạng thái khóa = HOAN_THANH | BR-AUTH-01, SM-KHOAHOC |
 | 2 | Lọc học viên có KET_QUA_DAO_TAO trạng thái DA_DUYET | — |
 | 3 | Cập nhật KET_QUA_DAO_TAO field cong_bo = true + thoi_gian_cong_bo = NOW() cho từng học viên | — |
-| 4 | Nếu day_chuyen_trang = true: gọi API Cổng PLQG đẩy KQ với pattern lock + idempotency | BR-FLOW-05, BR-INTG-05 |
+| 4 | Nếu day_chuyen_trang = true: đặt cờ công bố lên chuyên trang (KQ ở trạng thái đã công bố); Cổng PLQG tự kéo định kỳ qua API outbound Nhóm XII | BR-FLOW-05 |
 | 5 | Tạo thông báo "KQ đào tạo đã có" cho từng học viên (in-app + email theo TK doanh nghiệp / NHT đã đăng ký HV) | BR-NOTIF-01 |
 | 6 | Ghi nhật ký công bố (KHOA_HOC + danh sách HV) | BR-DATA-05 |
 
@@ -1315,7 +1322,7 @@ graph LR
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền + lý do ≥10 ký tự | BR-AUTH-01, BR-FLOW-04 |
 | 2 | Cập nhật KET_QUA_DAO_TAO field cong_bo = false + ly_do_huy_cong_bo = ly_do | — |
-| 3 | Nếu đã đẩy chuyên trang: gọi API Cổng PLQG gỡ KQ | BR-FLOW-05 |
+| 3 | Nếu đã công bố lên chuyên trang: đặt cờ công bố về false; Cổng PLQG tự ẩn KQ ở lần kéo kế tiếp | BR-FLOW-05 |
 | 4 | Tạo thông báo "KQ đào tạo đã được điều chỉnh" cho từng học viên bị ảnh hưởng | BR-NOTIF-01 |
 | 5 | Ghi nhật ký hủy công bố | BR-DATA-05 |
 
@@ -1327,12 +1334,11 @@ graph LR
 | 2 | so_hv_cong_bo | number | Số học viên đã công bố |
 | 3 | so_hv_loi | number | Số học viên bị lỗi (nếu có) |
 | 4 | thoi_gian_cong_bo | datetime | Timestamp |
-| 5 | api_response | structured | Kết quả gọi API chuyên trang (status, message) |
 
 **Postconditions:**
 - Mỗi KET_QUA_DAO_TAO của học viên được duyệt có cong_bo = true + thoi_gian_cong_bo set
 - Học viên thấy KQ trên TK chuyên trang (qua TK doanh nghiệp / NHT đã đăng ký HV)
-- Chuyên trang Cổng PLQG hiển thị KQ (nếu day_chuyen_trang = true)
+- Chuyên trang Cổng PLQG hiển thị KQ theo cơ chế kéo định kỳ (nếu day_chuyen_trang = true)
 - AUDIT_LOG ghi nhận
 - Học viên nhận thông báo
 
@@ -1342,17 +1348,15 @@ graph LR
 |---|--------------|--------|-------------------|----------|
 | E1 | Khóa không ở HOAN_THANH | ERR-CB-KQ-01 | "Chỉ công bố KQ khi khóa đã HOAN_THANH" | ERROR |
 | E2 | Không có HV nào có KQ DA_DUYET | ERR-CB-KQ-02 | "Chưa có kết quả đã được phê duyệt" | ERROR |
-| E3 | API Cổng PLQG lỗi | ERR-CB-KQ-03 | "Lỗi đẩy KQ lên chuyên trang, vui lòng thử lại" — retry tự động (BR-INTG-05) | ERROR |
 | E4 | Hủy công bố không nhập lý do hoặc <10 ký tự | ERR-CB-KQ-04 | "Lý do hủy bắt buộc, ≥10 ký tự" | ERROR |
 | E5 | Hủy công bố nhưng chưa từng công bố | ERR-CB-KQ-05 | "Chưa có kết quả công bố để hủy" | ERROR |
 
 **Acceptance Criteria:**
 - **Given** CB NV chọn khóa HOAN_THANH có ≥1 KQ DA_DUYET **When** nhấn "Công bố KQ" **Then** tất cả HV đạt KQ DA_DUYET có cong_bo = true + nhận thông báo
-- **Given** CB NV bật day_chuyen_trang **When** công bố **Then** KQ được đẩy lên Cổng PLQG (sau khi xử lý lock + idempotency)
-- **Given** CB NV nhấn "Hủy công bố" + nhập lý do ≥10 ký **Then** KQ được gỡ khỏi TK học viên + chuyên trang + HV nhận thông báo điều chỉnh
-- **Given** API Cổng PLQG fail **When** retry 3 lần (BR-INTG-05) **Then** alert QTHT nếu fail tiếp
+- **Given** CB NV bật day_chuyen_trang **When** công bố **Then** KQ được đánh dấu công bố để Cổng PLQG kéo và hiển thị trên chuyên trang ở lần kéo định kỳ kế tiếp
+- **Given** CB NV nhấn "Hủy công bố" + nhập lý do ≥10 ký **Then** KQ được gỡ khỏi TK học viên + đặt cờ công bố về false (Cổng PLQG tự ẩn ở lần kéo kế tiếp) + HV nhận thông báo điều chỉnh
 
-**Cross-ref:** Entity KET_QUA_DAO_TAO §4 (cần thêm field cong_bo, thoi_gian_cong_bo, ly_do_huy_cong_bo trong sprint dev), SM-KHOAHOC §5, BR-FLOW-04/05, BR-INTG-05, BR-NOTIF-01.
+**Cross-ref:** Entity KET_QUA_DAO_TAO §4 (cần thêm field cong_bo, thoi_gian_cong_bo, ly_do_huy_cong_bo trong sprint dev), SM-KHOAHOC §5, BR-FLOW-04/05, BR-NOTIF-01.
 
 ---
 
@@ -1408,48 +1412,88 @@ graph LR
 ### FR-III-NEW-02: Quản lý đề kiểm tra (UC mới)
 
 **UC Reference:** UC mới | **Priority:** Essential | **Stability:** High
-**Màn hình:** SCR-III-04 (tab "De kiem tra")
+**Màn hình:** SCR-III-04 (tab "Đề kiểm tra")
 
-**Mô tả:** Xem, chỉnh sửa (chỉ khi NHAP), xóa (chỉ khi chưa sử dụng) đề kiểm tra.
+**Mô tả:** Quản lý vòng đời đề kiểm tra như một đối tượng độc lập với Khóa học. CB NV soạn đề, kích hoạt để dùng được, tạm dừng khi không phù hợp, chỉnh sửa khi đang ở trạng thái nháp, xóa khi chưa sử dụng. Đề kiểm tra **không tự gán vào Khóa học** — việc chọn đề cho từng Khóa học thuộc luồng "Khóa học chọn Đề" tại SCR-III-02 Tab "Đề kiểm tra" (xem STT 25 UAT 2026-05-26 + FR-III-NEW-04 — Thêm/gỡ đề vào Khóa học).
 
 **Tác nhân:** CB NV / CB PD
 
 **Preconditions:** User đã đăng nhập.
 
-**Processing:** Xem danh sách → Xem chi tiết → Chỉnh sửa (NHAP) → Xóa (chưa sử dụng, xóa mềm).
+**State Machine — `DE_KIEM_TRA.trang_thai`** (sửa theo STT 25 UAT 2026-05-26 — **đơn giản hoá: bỏ trạng thái `DA_PHAN_PHOI`**):
 
-**Outputs:** de_kiem_tra_id, ten_de, so_cau, khoa_hoc, trang_thai.
+| Từ trạng thái | Đến trạng thái | Hành động | Điều kiện |
+|----------------|-----------------|------------|-----------|
+| (mới tạo) | NHAP | Lưu đề lần đầu | — |
+| NHAP | KICH_HOAT | Kích hoạt | Đề đã đủ thông tin (tên, số câu, lĩnh vực) |
+| KICH_HOAT | TAM_DUNG | Tạm dừng | Đề tạm thời không phù hợp |
+| TAM_DUNG | KICH_HOAT | Kích hoạt lại | — |
+| NHAP | (xóa mềm) | Xóa | Đề chưa được gán Khóa học nào |
 
-**Postconditions:** Đề được cập nhật/xóa mềm khi đủ điều kiện.
+**Inputs (chỉnh sửa):** de_kiem_tra_id, ten_de, so_cau, linh_vuc_id, danh_sach_cau_hoi_ids.
+
+**Processing:** Xem danh sách → Xem chi tiết → Chỉnh sửa (chỉ khi NHAP) → Kích hoạt/Tạm dừng (workflow buttons) → Xóa (chỉ khi NHAP + chưa được gán Khóa học, xóa mềm).
+
+**Outputs:** de_kiem_tra_id, ten_de, so_cau, linh_vuc, trang_thai (NHAP/KICH_HOAT/TAM_DUNG).
+
+**Postconditions:** Đề chuyển trạng thái đúng SM. Lịch sử thao tác ghi nhật ký.
 
 **Acceptance Criteria:**
-- **Given** CB NV chỉnh sửa đề chưa phân phối **When** thay đổi **Then** validate + lưu
-- **Given** CB NV xóa đề chưa sử dụng **When** xác nhận **Then** xóa thành công
+- **Given** Đề ở NHAP **When** CB NV nhấn "Kích hoạt" **Then** đề → KICH_HOAT, hiển thị trong dropdown chọn đề ở Tab "Đề kiểm tra" của Khóa học (SCR-III-02)
+- **Given** Đề ở KICH_HOAT **When** CB NV nhấn "Tạm dừng" **Then** đề → TAM_DUNG, ẩn khỏi dropdown chọn đề
+- **Given** Đề chưa từng gán Khóa học nào **When** CB NV xóa **Then** xóa mềm thành công
+- **Given** Đề đã gán ≥1 Khóa học **When** CB NV cố xóa **Then** chặn + báo "Đề đã gán cho Khóa học. Vui lòng gỡ khỏi tất cả Khóa học trước khi xóa"
 
 ---
 
-### FR-III-NEW-03: Phân phối đề + map bài giảng (UC mới)
+### FR-III-NEW-03: ĐÃ BỎ — Phân phối đề + map bài giảng
 
-**UC Reference:** UC mới | **Priority:** Essential | **Stability:** High
-**Màn hình:** SCR-III-04 (tab "De kiem tra")
+> **[ĐÃ BỎ — STT 25 UAT 2026-05-26]** Cơ chế "Phân phối đề từ phía đề" đảo chiều liên kết: trước đây CB NV vào màn Đề kiểm tra → bấm "Phân phối" → chọn Khóa học + Bài giảng để gán. Đối tác UAT phản hồi: việc đề "tự phân phối vào khóa" không trực quan — cần đảo lại pattern giống Bài giảng (CB NV vào màn Khóa học → tab "Đề kiểm tra" → chọn đề từ danh sách đề KICH_HOAT). Thay thế: FR-III-NEW-04 — Thêm/gỡ đề kiểm tra trong Khóa học (xem SCR-III-02 Tab "Đề kiểm tra"). Đồng thời SM Đề kiểm tra bỏ trạng thái `DA_PHAN_PHOI` (xem FR-III-NEW-02 ở trên). Junction entity `KHOA_HOC_DE_KIEM_TRA(khoa_hoc_id, de_kiem_tra_id, thoi_diem_them, nguoi_them_id)` giữ nguyên.
 
-**Mô tả:** Gán đề kiểm tra cho khóa học và mapping bài giảng.
+---
 
-**Tác nhân:** CB NV / CB PD
+### FR-III-NEW-04: Thêm/gỡ đề kiểm tra trong Khóa học (UC mới — STT 25 UAT 2026-05-26)
 
-**Preconditions:** User đã đăng nhập. Đề kiểm tra ở NHAP. Khóa học tồn tại.
+**UC Reference:** UC mới (STT 25) | **Priority:** Essential | **Stability:** Medium
+**Màn hình:** SCR-III-02 (Tab "Đề kiểm tra")
 
-**Inputs:** de_kiem_tra_id (identifier, Y), khoa_hoc_id (identifier, Y), bai_giang_ids (identifier[], N).
+**Mô tả:** CB NV mở chi tiết một Khóa học → vào Tab "Đề kiểm tra" → chọn 1 đề trong danh sách đề ở trạng thái KICH_HOAT để gán vào Khóa học. Có thể gắn nhiều đề (N:N — junction `KHOA_HOC_DE_KIEM_TRA`). Có thể gỡ đề khỏi Khóa học nếu chưa có học viên làm bài. Pattern thao tác giống Tab "Bài giảng" cùng SCR.
 
-**Processing:** Kiểm tra quyền → Tạo liên kết đề ↔ khóa → Tạo liên kết đề ↔ bài giảng → Đề → DA_PHAN_PHOI → Ghi nhật ký.
+**Tác nhân:** CB NV (người quản lý khóa học) / CB PD
 
-**Outputs:** de_kiem_tra_id, khoa_hoc_id, trang_thai (DA_PHAN_PHOI).
+**Preconditions:** User đã đăng nhập. Khóa học tồn tại. Đề kiểm tra ở trạng thái `KICH_HOAT`.
 
-**Postconditions:** Đề được gán cho khóa học. Liên kết đề-bài giảng thiết lập. Đề → DA_PHAN_PHOI.
+**Inputs:**
+
+| # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Nguồn |
+|---|----------|-----------|----------|-----------|-------|
+| 1 | khoa_hoc_id | identifier | Y | FK → KHOA_HOC | system (URL) |
+| 2 | de_kiem_tra_id | identifier | Y | FK → DE_KIEM_TRA(`trang_thai='KICH_HOAT'`) | user input (dropdown searchable) |
+
+**Processing:**
+1. Kiểm tra quyền + phạm vi.
+2. Validate đề ở KICH_HOAT (nếu TAM_DUNG/NHAP → ERR-DKT-AP-01).
+3. Validate cặp `(khoa_hoc_id, de_kiem_tra_id)` chưa tồn tại trong `KHOA_HOC_DE_KIEM_TRA` (tránh trùng).
+4. Tạo bản ghi `KHOA_HOC_DE_KIEM_TRA(khoa_hoc_id, de_kiem_tra_id, thoi_diem_them=NOW(), nguoi_them_id=user.id)`.
+5. Ghi nhật ký thao tác.
+
+**Outputs:** khoa_hoc_id, de_kiem_tra_id, ten_de.
+
+**Postconditions:** Đề được liệt kê tại Tab "Đề kiểm tra" của Khóa học. Học viên thấy đề khi Khóa học DA_KET_THUC (luồng đánh giá kết quả).
+
+**Error Handling:**
+
+| # | Điều kiện | Mã lỗi | Phản hồi |
+|---|-----------|--------|----------|
+| E1 | Đề không ở KICH_HOAT | ERR-DKT-AP-01 | "Chỉ chọn được đề kiểm tra đang ở trạng thái Kích hoạt" |
+| E2 | Đề đã gán Khóa học này | ERR-DKT-AP-02 | "Đề kiểm tra '{ten_de}' đã có trong Khóa học này" |
+| E3 | Cố gỡ đề mà đã có học viên làm bài | ERR-DKT-AP-03 | "Không thể gỡ — đã có học viên làm bài đề này. Vui lòng dùng chức năng Tạm dừng" |
 
 **Acceptance Criteria:**
-- **Given** CB NV chọn đề **When** nhấn "Phân phối" + chọn khóa **Then** đề được gán
-- **Given** CB NV mapping bài giảng **When** chọn bài giảng **Then** lưu mapping
+- **Given** CB NV vào Tab "Đề kiểm tra" **When** nhấn "Thêm đề" **Then** mở dropdown chỉ liệt kê đề KICH_HOAT
+- **Given** chọn đề trong dropdown **When** xác nhận **Then** ghi vào `KHOA_HOC_DE_KIEM_TRA` + refresh bảng
+- **Given** đề đã được gán trước đó **When** chọn lại đề ấy **Then** trả ERR-DKT-AP-02
+- **Given** đề đã có học viên làm bài **When** CB NV gỡ **Then** trả ERR-DKT-AP-03
 
 ---
 
@@ -1483,7 +1527,7 @@ graph LR
 | 8 | noi_dung | text | N | Nội dung buổi dạy |
 | 9 | ghi_chu | text (long) | N | Ghi chú, max 2000 ký tự |
 
-> **Lưu ý:** Giảng viên KHÔNG gắn cấp buổi — derive từ KHOA_HOC.giang_vien_ids (giảng viên gắn cấp Khóa, không gắn theo từng buổi).
+> **Lưu ý:** **Giảng viên / Trợ giảng gắn cấp buổi qua entity `LICH_HOC_GIANG_VIEN(lich_hoc_id, giang_vien_id, vai_tro)`** — sửa theo STT 26 UAT 2026-05-26. Khi CB NV mở form Sửa buổi dạy, có thể chọn 1+ giảng viên (từ danh sách giảng viên đã được phân vào Khóa qua `KHOA_HOC_GIANG_VIEN`) và đặt `vai_tro` per-buổi (GIANG_VIEN / TRO_GIANG). Một giảng viên có thể có vai trò khác nhau ở các buổi khác nhau.
 
 **Processing — Thêm mới buổi:**
 
@@ -1544,6 +1588,66 @@ graph LR
 | E5 | Xóa buổi đã có điểm danh | ERR-LH-05 | "Không thể xóa buổi đã có dữ liệu điểm danh" | ERROR |
 
 **Cross-ref:** FR-III-05 (Điểm danh gắn lich_hoc_id), Entity LICH_HOC §4 master.
+
+---
+
+### FR-III-NEW-04: DN tra cứu đăng ký đào tạo của mình `[v3.5 — BA chốt 2026-05-13, gap SRS]`
+
+**UC Reference:** — (phantom FR, gap SRS phát hiện từ báo cáo review HDSD §6.4 #2)
+**Source:** BA chốt 2026-05-13
+**Priority:** Essential
+**Stability:** High
+**Màn hình:** Render trong chuyên trang DN — gắn cùng cụm với SCR-V.III-04 ở `srs-fr-07-doanh-nghiep.md` (không tách SCR riêng cho UC này)
+
+**Mô tả:**
+Doanh nghiệp tra cứu các đăng ký đào tạo của chính mình qua chuyên trang. Read-only: xem danh sách + chi tiết + trạng thái + lý do từ chối (nếu có) + kết quả khóa học (nếu công bố). KHÔNG sửa/hủy đăng ký từ trang này.
+
+**Tác nhân:** Doanh nghiệp (đăng nhập VNeID Tier 2)
+
+**Preconditions:**
+
+- User đã đăng nhập VNeID Tier 2
+- User là loại Doanh nghiệp
+
+**Inputs (Bộ lọc):**
+
+| # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc |
+|---|----------|-----------|----------|-----------|
+| 1 | tu_khoa | text | N | Tìm theo tên khóa học |
+| 2 | trang_thai | text | N | CHO_DUYET / DA_DUYET / TU_CHOI / DA_HUY (multi-select) |
+| 3 | tu_ngay | date | N | Ngày đăng ký từ |
+| 4 | den_ngay | date | N | Ngày đăng ký đến; ≥ tu_ngay |
+
+**Processing:**
+
+| Bước | Mô tả xử lý |
+|------|-------------|
+| 1 | Kiểm tra quyền DN + xác thực Tier 2 |
+| 2 | Lọc DANG_KY_DAO_TAO theo nhân thân: chỉ các bản ghi mà người đăng ký là user đang đăng nhập. **Theo CSV UC22/UC23 v1.1:** chỉ DN/NHT mới tạo đăng ký (UC23 — qua chuyên trang); CB NV chỉ duyệt/từ chối (UC22), KHÔNG có luồng "CB NV nhập tay đăng ký" hoặc "import Excel danh sách đăng ký" → `nguoi_dang_ky_id` luôn có giá trị, filter này bao phủ đủ. (Note: baseline entity §3.4.3.26 cho `nguoi_dang_ky_id` field là `N` nullable kèm chú thích "CB NV nhập tay → null" — không khớp CSV v1.1; là baseline cần làm chặt riêng, ngoài scope FR này) |
+| 3 | Áp các bộ lọc Inputs (AND) |
+| 4 | Với mỗi đăng ký: join KHOA_HOC để lấy tên khóa + thời gian + đơn vị tổ chức |
+| 5 | Với đăng ký đã được duyệt và khóa học có kết quả công bố: hiển thị thêm điểm danh + điểm kiểm tra |
+| 6 | Phân trang mặc định 20 bản ghi/trang, sắp xếp ngày đăng ký mới nhất trước |
+
+**Outputs:**
+
+| # | Tên | Mô tả |
+|---|-----|-------|
+| 1 | id | ID đăng ký |
+| 2 | khoa_hoc | Thông tin khóa học (tên, thời gian, đơn vị) |
+| 3 | ngay_dang_ky | Ngày DN đăng ký |
+| 4 | trang_thai | Chờ duyệt / Đã duyệt / Từ chối / Đã hủy |
+| 5 | ly_do_tu_choi | Hiển thị khi trang_thai=TU_CHOI |
+| 6 | ket_qua | Hiển thị khi đăng ký được duyệt VÀ khóa học đã công bố kết quả |
+
+**Acceptance Criteria:**
+
+- **Given** DN đăng nhập **When** mở "Đăng ký đào tạo của tôi" **Then** chỉ thấy đăng ký của chính mình
+- **Given** DN có đăng ký bị từ chối **When** xem chi tiết **Then** hiển thị lý do từ chối
+- **Given** DN có đăng ký được duyệt và khóa đã công bố kết quả **When** xem chi tiết **Then** hiển thị tỉ lệ điểm danh + điểm kiểm tra + kết luận
+- **Given** DN cố truy vấn đăng ký của DN khác **When** gửi request **Then** ERR-AUTH-FORBIDDEN
+
+**Cross-ref:** FR-III-04 (luồng tạo đăng ký), FR-III-19 (công bố kết quả), Entity DANG_KY_DAO_TAO + KHOA_HOC + KET_QUA_DAO_TAO.
 
 ---
 
@@ -1620,7 +1724,7 @@ graph LR
 | Mô tả công khai | Vùng nhập văn bản dài, hiển thị trên Cổng PLQG |
 | Ảnh đại diện | Tải ảnh, JPG/PNG/GIF ≤ 5MB, mặc định ảnh hệ thống |
 | File đính kèm công khai | Tải tệp, PDF/DOC/DOCX/XLS/XLSX ≤ 20MB/file |
-| Nút "Công khai" (chính) | Đẩy lên Cổng PLQG; chuyển sang "Đã công khai" |
+| Nút "Công khai" (chính) | Đặt cờ công khai; chuyển sang "Đã công khai" — Cổng PLQG tự kéo hiển thị |
 | Nút "Hủy" (mờ) | Đóng hộp thoại |
 
 **Thông báo:**
@@ -1707,19 +1811,20 @@ graph LR
 
 ---
 
-### SCR-III-02: Khóa học (sub-menu 3 — drill-down từ SCR-III-01) `[v3.5 — sửa theo Thay đổi 4+7+9]`
+### SCR-III-02: Khóa học (sub-menu 3 — drill-down từ SCR-III-01) `[v3.5 — sửa theo Thay đổi 4+7+9; bổ sung Tab Đề kiểm tra theo STT 25 UAT 2026-05-26]`
 
-**Loại màn hình:** Chi tiết với **7 tabs** (Thay đổi 4 thêm Tab Lịch học; Thay đổi 9 thay Tab Chứng nhận v3 bằng Tab Công bố kết quả):
+**Loại màn hình:** Chi tiết với **8 tabs** (Thay đổi 4 thêm Tab Lịch học; Thay đổi 9 thay Tab Chứng nhận v3 bằng Tab Công bố kết quả; STT 25 UAT 2026-05-26 thêm Tab Đề kiểm tra):
 
-1. **Tab 1 — Thông tin:** Thông tin cơ bản của khóa (CTDT cha, hình thức, thời gian, đối tượng, địa điểm, số HV tối đa, tỷ lệ chuyên cần tối thiểu — Thay đổi 10, ghi chú)
-2. **Tab 2 — Lịch học** `[v3.5 — Thay đổi 4 mới]`: Danh sách buổi dạy thuộc khóa (CRUD qua FR-III-22). Cột: Ngày · Khung giờ · Hình thức · Địa điểm/Đường dẫn · Nội dung · Số HV điểm danh · Trạng thái buổi (Chưa/Đang/Đã diễn ra) · Hành động (Sửa/Xóa). Giảng viên gắn cấp khóa, không gắn theo từng buổi.
+1. **Tab 1 — Thông tin:** Thông tin cơ bản của khóa (CTDT cha, hình thức, thời gian, đối tượng, địa điểm, số HV tối đa, tỷ lệ chuyên cần tối thiểu — Thay đổi 10, ghi chú). **`[STT56 UAT 2026-06-02]` Bổ sung 2 trường "Mở đăng ký từ" (`mo_dang_ky_tu`) + "Mở đăng ký đến" (`mo_dang_ky_den`):** hiển thị + **sửa được ở mọi trạng thái trừ DU_THAO / CHO_DUYET / DA_HUY** (cho CB NV gia hạn/điều chỉnh thời gian đăng ký không cần duyệt lại). **Guard mở đăng ký:** khi CB NV "Công khai" khóa (DA_DUYET → DA_CONG_KHAI = mở đăng ký HV), bắt buộc đã nhập cả `mo_dang_ky_tu` + `mo_dang_ky_den` (ràng buộc `den > tu`); thiếu → chặn kèm **`ERR-KH-DK-WINDOW-01`** "Phải nhập khoảng thời gian mở đăng ký trước khi mở đăng ký khóa học".
+2. **Tab 2 — Lịch học** `[v3.5 — Thay đổi 4 mới; STT 26 UAT 2026-05-26 bổ sung cột Giảng viên/Trợ giảng]`: Danh sách buổi dạy thuộc khóa (CRUD qua FR-III-22). Cột: Ngày · Khung giờ · Hình thức · Địa điểm/Đường dẫn · Nội dung · **Giảng viên / Trợ giảng (per-buổi qua LICH_HOC_GIANG_VIEN — sửa theo STT 26)** · Số HV điểm danh · Trạng thái buổi (Chưa/Đang/Đã diễn ra) · Hành động (Sửa/Xóa). **Giảng viên gắn cấp buổi qua LICH_HOC_GIANG_VIEN** — sửa theo STT 26 UAT 2026-05-26.
 3. **Tab 3 — Học viên** `[v3.5 — Thay đổi 7 — bổ sung cột HV cơ bản]`: Cột STT · **Họ tên** · **Email** · **Số điện thoại** · **Đơn vị** · Trạng thái đăng ký · Ngày đăng ký · Hành động (Duyệt/Từ chối/Hủy đăng ký).
 4. **Tab 4 — Điểm danh** `[v3.5 — Thay đổi 7+11]`: Cột STT · **Họ tên** · **Email** · **Số điện thoại** · **Đơn vị** · Buổi học (FK lich_hoc_id) · Trạng thái điểm danh (**Có mặt** / **Vắng có phép** / **Vắng không phép** — enum 3 trạng thái) · Ghi chú. Hỗ trợ Import Excel hàng loạt.
 5. **Tab 5 — Kết quả kiểm tra** `[v3.5 — Thay đổi 7+10]`: Cột STT · **Họ tên** · **Email** · **Số điện thoại** · **Đơn vị** · Đề kiểm tra · Điểm · Xếp loại (Giỏi/Khá/Trung bình/Không đạt — auto BR-KQ-01) · Kết quả (Đạt/Không đạt — auto BR-KQ-02) · Ghi chú.
 6. **Tab 6 — Bài giảng:** Quản lý bài giảng gắn với khóa (3 loại Slide/PDF/Video). Có nút "Thêm từ bài giảng có sẵn" để dùng lại.
-7. **Tab 7 — Công bố kết quả** `[v3.5 — Thay đổi 9 — thay Tab Chứng nhận v3]`: Nút "Công bố tất cả" + công tắc "Đẩy lên Cổng PLQG" + nút "Hủy công bố tất cả". Bảng HV có kết quả: Cột Chọn dòng · **Họ tên · Email · Số điện thoại · Đơn vị** · Đề kiểm tra · Điểm · Kết quả · Trạng thái công bố · Thời điểm công bố · Hành động (Công bố/Hủy công bố cá nhân). Hộp thoại xác nhận hủy công bố yêu cầu lý do ≥10 ký tự (BR-FLOW-04). **KHÔNG cấp chứng nhận PDF** theo Hướng B Thay đổi 9.
+7. **Tab 7 — Đề kiểm tra** `[v3.5 — STT 25 UAT 2026-05-26 mới — đảo chiều liên kết Đề ↔ Khóa]`: Quản lý đề kiểm tra gắn với khóa. Pattern thao tác giống Tab 6 Bài giảng. Cột: STT · Mã đề · Tên đề · Số câu · Lĩnh vực · Người thêm · Thời điểm thêm · Hành động (Xem chi tiết · Gỡ khỏi khóa). Nút "Thêm đề kiểm tra" → dropdown searchable chỉ liệt kê `DE_KIEM_TRA.trang_thai='KICH_HOAT'` (FR-III-NEW-04). Gỡ đề: chặn nếu đã có học viên làm bài (ERR-DKT-AP-03). **Đảo chiều so với v3 cũ:** trước đây CB NV phân phối đề từ phía Đề (FR-III-NEW-03 đã BỎ); nay chọn đề từ phía Khóa.
+8. **Tab 8 — Công bố kết quả** `[v3.5 — Thay đổi 9 — thay Tab Chứng nhận v3]`: Nút "Công bố tất cả" + công tắc "Công bố lên Cổng PLQG (Cổng tự kéo)" + nút "Hủy công bố tất cả". Bảng HV có kết quả: Cột Chọn dòng · **Họ tên · Email · Số điện thoại · Đơn vị** · Đề kiểm tra · Điểm · Kết quả · Trạng thái công bố · Thời điểm công bố · Hành động (Công bố/Hủy công bố cá nhân). Hộp thoại xác nhận hủy công bố yêu cầu lý do ≥10 ký tự (BR-FLOW-04). **KHÔNG cấp chứng nhận PDF** theo Hướng B Thay đổi 9.
 
-**FR sử dụng:** FR-III-01, FR-III-05, FR-III-06, FR-III-17, FR-III-18, FR-III-19, FR-III-22
+**FR sử dụng:** FR-III-01, FR-III-05, FR-III-06, FR-III-17, FR-III-18, FR-III-19, FR-III-22, FR-III-NEW-04
 **UX-Spec ref:** dac-ta-man-hinh-chuc-nang-v3.5.md — MH-03.2
 
 **Tab v3 cũ "Chứng nhận" đã LOẠI BỎ:** Thay đổi 9 chuyển sang Hướng B — phần mềm KHÔNG cấp chứng nhận PDF, chỉ công bố KQ vào TK học viên + chuyên trang. Tab Chứng nhận thay bằng Tab 7 Công bố kết quả.
@@ -1732,12 +1837,14 @@ graph LR
 **FR su dung:** FR-III-07, FR-III-08
 **UX-Spec ref:** dac-ta-man-hinh-chuc-nang-v2.md — MH-03.3
 
+**`[STT66 UAT 2026-06-02]`** Danh sách bổ sung **cột "Công khai"** (badge Đã/Chưa công khai — từ `cong_khai`) và **bộ lọc "Công khai"** (Tất cả / Đã / Chưa). Panel chi tiết/preview hiển thị thêm **Ảnh đại diện** (`anh_dai_dien`) và **Ngày công khai** (`thoi_gian_dang_tai` — lần công khai gần nhất theo BR-PUBLIC-03). Tất cả là trường đã có ở entity BAI_GIANG — chỉ bổ sung hiển thị, không đổi cấu trúc.
+
 ---
 
 ### SCR-III-04: Ngan hang Cau hoi & De Kiem tra (sub-menu 5) `[v3.5 — đẩy số sub-menu]`
 
-**Loai man hinh:** 2 tabs: Tab 1 — Cau hoi. Tab 2 — De kiem tra
-**FR su dung:** FR-III-09, FR-III-10, FR-III-NEW-01, FR-III-NEW-02, FR-III-NEW-03
+**Loai man hinh:** 2 tabs: Tab 1 — Cau hoi. Tab 2 — De kiem tra. **Sửa theo STT 25 UAT 2026-05-26:** Tab 2 bỏ nút "Phân phối" (chuyển luồng gán đề về SCR-III-02 Tab 7 "Đề kiểm tra"); chỉ còn thao tác Soạn / Kích hoạt / Tạm dừng / Sửa nội dung đề (NHAP) / Xóa.
+**FR su dung:** FR-III-09, FR-III-10, FR-III-NEW-01, FR-III-NEW-02 (FR-III-NEW-03 đã BỎ theo STT 25)
 **UX-Spec ref:** dac-ta-man-hinh-chuc-nang-v2.md — MH-03.4
 
 ---
@@ -1770,10 +1877,11 @@ graph LR
 | 10 | HOC_VIEN | owned | Học viên tham gia khóa học (giữ nguyên v3 với 4 trường — Thay đổi 12 OUT). |
 | 11 | DANG_KY_DAO_TAO | owned | Đăng ký tham gia khóa học (giữ nguyên v3 — Thay đổi 15 OUT). |
 | 12 | DE_XUAT_DAO_TAO | owned | Đề xuất đào tạo từ DN / NHT (giữ workflow 3 trạng thái v3 — Thay đổi 15 OUT). |
-| 13 | KHOA_HOC_GIANG_VIEN | owned | **[v3.5 — Thay đổi 13]** Junction N-N KHOA_HOC ↔ GIANG_VIEN, có thuộc tính `vai_tro` per-khóa override `GIANG_VIEN.loai`. |
-| 14 | TAI_KHOAN | referenced | Tài khoản người dùng |
-| 15 | DON_VI | referenced | Đơn vị quản lý |
-| 16 | DANH_MUC | referenced | Danh mục dùng chung (lĩnh vực PL) |
+| 13 | KHOA_HOC_GIANG_VIEN | owned | **[v3.5 — Thay đổi 13; STT 26 UAT 2026-05-26 bỏ thuộc tính `vai_tro`]** Junction N-N KHOA_HOC ↔ GIANG_VIEN — danh sách giảng viên được phân vào Khóa. Không còn thuộc tính `vai_tro` (chuyển sang `LICH_HOC_GIANG_VIEN` cấp buổi). |
+| 14 | LICH_HOC_GIANG_VIEN | owned | **[STT 26 UAT 2026-05-26 — entity mới]** Junction N-N LICH_HOC ↔ GIANG_VIEN, có thuộc tính `vai_tro` per-buổi (GIANG_VIEN/TRO_GIANG). Cho phép cùng 1 giảng viên đảm nhận vai trò khác nhau ở các buổi khác nhau trong cùng Khóa. |
+| 15 | TAI_KHOAN | referenced | Tài khoản người dùng |
+| 16 | DON_VI | referenced | Đơn vị quản lý |
+| 17 | DANH_MUC | referenced | Danh mục dùng chung (lĩnh vực PL) |
 
 > **Đã bỏ entity CHUNG_NHAN** (Thay đổi 9 Hướng B — phần mềm KHÔNG cấp chứng nhận PDF, chỉ công bố KQ vào TK học viên + chuyên trang).
 
@@ -1838,23 +1946,40 @@ graph LR
 | ghi_chu | text (long) | N | Ghi chú | Max 2000 ký tự |
 | Common Fields (7) | | | | created_at, updated_at, created_by, updated_by, is_deleted, nguoi_tao_id, nguoi_cap_nhat_id |
 
-> **Lưu ý:** Giảng viên KHÔNG gắn cấp buổi — derive từ KHOA_HOC.giang_vien_ids qua KHOA_HOC_GIANG_VIEN.
+> **Lưu ý (cập nhật theo STT 26 UAT 2026-05-26):** **Giảng viên / Trợ giảng gắn cấp buổi qua `LICH_HOC_GIANG_VIEN`.** Junction `KHOA_HOC_GIANG_VIEN` vẫn được giữ để lưu danh sách giảng viên được phân vào Khóa (làm nguồn cho dropdown chọn giảng viên ở Tab "Lịch học"), nhưng KHÔNG còn thuộc tính `vai_tro` — vai_tro chuyển hẳn xuống cấp buổi.
 
-### KHOA_HOC_GIANG_VIEN (junction) `[v3.5 — Thay đổi 13 — schema rõ ràng]`
+### KHOA_HOC_GIANG_VIEN (junction) `[v3.5 — Thay đổi 13; STT 26 UAT 2026-05-26 — bỏ thuộc tính vai_tro]`
 
 | Field | Type | Required | Description | Constraint |
 |-------|------|----------|-------------|------------|
 | khoa_hoc_id | identifier | Y | Khóa học | PK composite, FK → KHOA_HOC |
-| giang_vien_id | identifier | Y | Giảng viên / trợ giảng | PK composite, FK → GIANG_VIEN |
-| vai_tro | text | Y | Vai trò trong khóa | CHECK IN ('GIANG_VIEN','TRO_GIANG'). **Override `GIANG_VIEN.loai`** — vai trò gắn cấp khóa, không cố định trong hồ sơ. |
-| ngay_phan_cong | datetime | N | Ngày phân công | Auto NOW() |
+| giang_vien_id | identifier | Y | Giảng viên được phân vào Khóa | PK composite, FK → GIANG_VIEN |
+| ngay_phan_cong | datetime | N | Ngày phân công GV vào Khóa | Auto NOW() |
 | nguoi_phan_cong_id | identifier | N | CB phân công | FK → TAI_KHOAN |
 
-**Quan hệ:** N-N giữa KHOA_HOC ↔ GIANG_VIEN. Một giảng viên có thể có vai trò khác nhau ở các khóa khác nhau.
+**Quan hệ:** N-N giữa KHOA_HOC ↔ GIANG_VIEN. Đây là **tập danh sách giảng viên cấp Khóa** — làm nguồn dropdown cho cấp buổi. **Vai trò (GIANG_VIEN/TRO_GIANG) gắn cấp buổi qua `LICH_HOC_GIANG_VIEN`**, không gắn cấp Khóa nữa.
 
 **Quy tắc nghiệp vụ:**
-- Khi tạo KHOA_HOC + chọn `giang_vien_ids[]`: hệ thống mặc định `vai_tro = GIANG_VIEN` cho người đầu, `vai_tro = TRO_GIANG` cho các người sau (CB có thể chỉnh trước khi lưu).
-- Tab "Lịch sử giảng dạy" của hồ sơ Giảng viên (FR-III-11) hiển thị cột "Vai trò" derive từ junction này, KHÔNG từ `GIANG_VIEN.loai`.
+- Khi tạo KHOA_HOC + chọn `giang_vien_ids[]`: hệ thống tạo các bản ghi KHOA_HOC_GIANG_VIEN tương ứng (chỉ ghi nhận GV thuộc Khóa, KHÔNG đặt vai trò).
+- Tab "Lịch sử giảng dạy" của hồ sơ Giảng viên (FR-III-11) hiển thị mỗi Khóa GV đã dạy + **vai trò đặc trưng** (vai_tro xuất hiện nhiều nhất ở các buổi GV dạy trong Khóa — derive từ `LICH_HOC_GIANG_VIEN` join `LICH_HOC` theo `khoa_hoc_id`).
+
+### LICH_HOC_GIANG_VIEN (junction) `[STT 26 UAT 2026-05-26 — entity mới]`
+
+**Mô tả:** Junction N-N giữa LICH_HOC (buổi dạy) và GIANG_VIEN. Mỗi buổi dạy có 1+ giảng viên + vai trò per-buổi. Một giảng viên có thể đảm nhận vai trò khác nhau ở các buổi khác nhau trong cùng một Khóa.
+
+| Field | Type | Required | Description | Constraint |
+|-------|------|----------|-------------|------------|
+| lich_hoc_id | identifier | Y | Buổi dạy | PK composite, FK → LICH_HOC |
+| giang_vien_id | identifier | Y | Giảng viên / trợ giảng đảm nhận buổi | PK composite, FK → GIANG_VIEN |
+| vai_tro | text | Y | Vai trò trong buổi | CHECK IN ('GIANG_VIEN','TRO_GIANG'). **Vai trò gắn cấp buổi** — có thể khác nhau giữa các buổi cùng Khóa. |
+| ngay_phan_cong | datetime | N | Ngày phân công GV vào buổi | Auto NOW() |
+| nguoi_phan_cong_id | identifier | N | CB phân công | FK → TAI_KHOAN |
+
+**Quy tắc nghiệp vụ:**
+- Khi CB NV mở form Sửa buổi dạy, dropdown chọn GV chỉ liệt kê GV đã có mặt trong `KHOA_HOC_GIANG_VIEN` của Khóa cha (đảm bảo GV đã thuộc Khóa trước khi gán buổi).
+- Một buổi dạy có thể có nhiều GV — mỗi GV 1 bản ghi với vai_tro riêng.
+- Khi xóa GV khỏi Khóa (xóa KHOA_HOC_GIANG_VIEN): cascade xóa các bản ghi LICH_HOC_GIANG_VIEN tương ứng + cảnh báo CB NV trước khi xác nhận.
+- **Migration dữ liệu UAT (DEV):** nhân bản record `KHOA_HOC_GIANG_VIEN(vai_tro)` cũ sang `LICH_HOC_GIANG_VIEN` cho từng buổi trong Khóa — tận dụng `vai_tro` cấp Khóa cũ làm default cho mọi buổi (CB NV chỉnh sau).
 
 ---
 
@@ -1972,8 +2097,7 @@ stateDiagram-v2
 | BR-DATA-07 | Pagination | FR-III-01, FR-III-02, FR-III-06, FR-III-14 |
 | BR-FLOW-03 | Không sửa / xóa sau phê duyệt | FR-III-01 (CTDT — Thay đổi 2), FR-III-14, FR-III-15, FR-III-18 |
 | BR-FLOW-04 | Từ chối yêu cầu lý do (refinement Cách 2) | FR-III-01 (CTDT — Thay đổi 2), FR-III-15, FR-III-18, FR-III-19 (hủy công bố KQ) |
-| BR-FLOW-05 | Công khai qua API Cổng PLQG | FR-III-16, FR-III-19 (đẩy KQ chuyên trang) |
-| BR-INTG-05 | Retry policy 3 lần backoff | FR-III-16, FR-III-19 (lock + idempotency push API) |
+| BR-FLOW-05 | Công khai theo mô hình KÉO (Cổng PLQG tự kéo) | FR-III-16, FR-III-19 (công bố KQ để Cổng kéo) |
 | BR-NOTIF-01 | Thông báo phê duyệt + sự kiện workflow | FR-III-01 (CTDT), FR-III-14, FR-III-15, FR-III-17, FR-III-18, FR-III-19 |
 | BR-PUBLIC-01..03 | Trường công khai chuyên trang (5 CPF) | FR-III-01 (CTDT), FR-III-07 (BAI_GIANG), FR-III-14 (KH năm), FR-III-16 (công khai KH năm) |
 | BR-KQ-01 | Auto-classify xếp loại từ điểm | FR-III-05, FR-III-17 |

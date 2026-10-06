@@ -1,6 +1,30 @@
 # Chrome browser profiles & QA automation temp files
 .tmp-qa/
 
+# Thư mục tạm khi chạy QA (dọn 2026-08-12 — xem lý do bên dưới)
+# .tmp/        = snapshot DOM, export nháp, output Playwright MCP
+# .tmp-*/      = fixture upload, frame video, note reverify 1 lần
+.tmp/
+.tmp-*/
+
+# DOM dump ở gốc repo (tmp-vuviec-list.json, tmp-admin-menu.json...)
+# Neo bằng "/" để không ảnh hưởng file cùng tên trong thư mục con
+/tmp-*.json
+
+# File nháp trung gian khi soạn report (seed-checklist-X.md.tmp)
+*.md.tmp
+
+# Bản backup thủ công trước khi sửa file
+*.bak
+*.bak-*
+
+# Session id / lock của agent — máy nào riêng máy đó
+.context/
+.claude/scheduled_tasks.lock
+
+# Output test runner
+test-results/
+
 # macOS system files
 .DS_Store
 **/.DS_Store
@@ -16,3 +40,63 @@
 
 # Node modules (if any)
 node_modules/
+.gstack/
+
+# ══ Không đẩy lên git (rà 2026-10-06) ══
+
+# Bí mật — token OAuth / JWT / header có cookie
+**/token*.json
+**/credentials.json
+**/.private/
+*.headers
+
+# Video + bằng chứng gốc của đối tác (nặng; bản gốc ở Drive / sheet đối tác)
+*.webm
+*.mp4
+*.mov
+**/partner-evidence/
+
+# File nén (đã có thư mục giải nén bên cạnh)
+*.zip
+*.rar
+
+# Repo SRS riêng (github.com/Dopai-JSC/Docs-PM-HTPLDN) — clone riêng, không lồng vào repo này
+/Docs-PM-HTPLDN/
+
+# Tài liệu cá nhân / chưa phân loại / công cụ máy riêng
+/Test_trainning/
+/aaaa/
+/Dac-ta-giao-dien-tich-hop-HTDG-BCA-Cong-DGTSQG-v1.2.pdf
+/doi_soat_bug*.xlsx
+.claude/skills-parked/
+output/design/
+output/test-cases/huong/huong/filedata/
+
+# Ảnh trong output/: chỉ đẩy ảnh nằm trong thư mục bug-report(s)
+output/**/*.png
+output/**/*.jpg
+output/**/*.jpeg
+!output/**/[Bb]ug-report*/**/*.png
+!output/**/[Bb]ug-report*/**/*.jpg
+!output/**/[Bb]ug-report*/**/*.jpeg
+
+# File làm việc của đợt UAT: script chạy 1 lần, log, cache, prompt cho phiên AI
+*.log
+output/UAT_doi-tac/tools/*
+!output/UAT_doi-tac/tools/README.md
+!output/UAT_doi-tac/tools/toast-capture.js
+!output/UAT_doi-tac/tools/sheet_auth.py
+!output/UAT_doi-tac/tools/sheet_write.py
+!output/UAT_doi-tac/tools/sheet_verify_write.py
+!output/UAT_doi-tac/tools/fetch_evidence.py
+output/**/*[Pp][Rr][Oo][Mm][Pp][Tt]*.md
+output/**/NGU-CANH*.md
+output/**/*handoff*.md
+
+# File bằng chứng có chứa JWT thật — không đẩy
+output/UAT_doi-tac/thu-QLTLPLCVV_15-2026-08-06/testfiles/admin-verify.json
+output/qa-reports/report-dot-3-rerun-2026-06-25/doanh-nghiep/evidence/dn-remaining-api-evidence2-20260625-234759.json
+output/qa-reports/report-dot-3-rerun-2026-06-25/doanh-nghiep/evidence/dn-unblock-final-api2-20260626.json
+output/qa-reports/report-dot-3-rerun-2026-06-25/hop-dong-tv/evidence/rerun-44-2026-06-25.json
+output/qa-reports/report-dot-3-rerun-2026-06-25/hop-dong-tv/evidence/rerun-44-roles-2026-06-25.json
+output/qa-reports/report-dot-3-rerun-2026-06-25/hop-dong-tv/evidence/rerun-44-unlink-audit-2026-06-25.json

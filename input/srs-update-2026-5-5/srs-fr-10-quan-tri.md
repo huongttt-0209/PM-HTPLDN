@@ -398,11 +398,11 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 |---|----------|-----------|----------|-----------|----------|-------|
 | 1 | ma | text | Y | VD: SIEU_NHO, NHO, VUA | — | user input |
 | 2 | ten | text | Y | — | — | user input |
-| 3 | tieu_chi_doanh_thu | text | N | Tiêu chí doanh thu (NĐ39/2018) | — | user input |
+| 3 | tieu_chi_doanh_thu | text | N | Tiêu chí doanh thu (NĐ80/2021) | — | user input |
 | 4 | tieu_chi_lao_dong | text | N | Tiêu chí số lao động | — | user input |
 | 5 | loai_danh_muc | text | Y (system) | = 'LOAI_DOANH_NGHIEP' | LOAI_DOANH_NGHIEP | system |
 
-**Seed Data:** DN siêu nhỏ, DN nhỏ, DN vừa (theo Luật DNNVV 2017 + NĐ39/2018)
+**Seed Data:** DN siêu nhỏ, DN nhỏ, DN vừa (theo Luật DNNVV 2017 + NĐ80/2021)
 
 ---
 
@@ -471,6 +471,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 7 | qua_han_he_so | number | Y | CHECK > 1 (hệ số quá hạn nghiêm trọng — không hiển thị UI, dùng nội bộ tính cờ cảnh báo) | 2.0 | user input |
 | 8 | gui_email_canh_bao | boolean | Y | Gửi email khi chuyển mức | 1 | user input |
 | 9 | gui_thong_bao_app | boolean | Y | Gửi thông báo in-app | 1 | user input |
+| 10 | so_ngay_bo_sung_toi_da | number | N | Số ngày làm việc DN được phép gửi bổ sung sau khi CB NV ra yêu cầu; CHECK > 0; NULL với HOI_DAP (không có luồng bổ sung). Theo cấu hình QTHT — BA chốt 2026-05-13 | 5 | user input |
 
 **Processing:**
 
@@ -478,10 +479,11 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền QTHT | BR-AUTH-01 |
 | 2 | Kiểm tra dữ liệu: thoi_han_ngay > 0, canh_bao_1 < canh_bao_2 < 100, qua_han_he_so > 1 | BR-SLA-01 |
-| 3 | Kiểm tra loai_yeu_cau unique | — |
-| 4 | Tạo hoặc cập nhật bản ghi CAU_HINH_SLA | — |
-| 5 | Ghi nhật ký thao tác | BR-DATA-05 |
-| 6 | Tác vụ kiểm tra SLA sẽ sử dụng cấu hình này để tính deadline | BR-CALC-03 |
+| 3 | Với loai_yeu_cau ≠ HOI_DAP: validate so_ngay_bo_sung_toi_da > 0 | BR-SLA-01 |
+| 4 | Kiểm tra loai_yeu_cau unique | — |
+| 5 | Tạo hoặc cập nhật bản ghi CAU_HINH_SLA | — |
+| 6 | Ghi nhật ký thao tác | BR-DATA-05 |
+| 7 | Tác vụ kiểm tra SLA sẽ sử dụng cấu hình này để tính deadline xử lý + deadline bổ sung | BR-CALC-03 |
 
 **Outputs:**
 
@@ -493,6 +495,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 4 | thoi_han_ngay | number | — | — |
 | 5 | canh_bao_1_phan_tram | number | — | % |
 | 6 | canh_bao_2_phan_tram | number | — | % |
+| 7 | so_ngay_bo_sung_toi_da | number | loai_yeu_cau ≠ HOI_DAP | ngày LV |
 
 **Postconditions:**
 - Cấu hình SLA được lưu/cập nhật
@@ -506,20 +509,21 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | E1 | thoi_han_ngay <= 0 | ERR-SLA-01 | "Thời hạn xử lý phải là số nguyên dương" | ERROR |
 | E2 | canh_bao_1 >= canh_bao_2 | ERR-SLA-02 | "Mức cảnh báo 1 phải nhỏ hơn mức cảnh báo 2" | ERROR |
 | E3 | loai_yeu_cau trùng | ERR-SLA-03 | "Loại yêu cầu đã có cấu hình SLA" | ERROR |
+| E4 | loai_yeu_cau ≠ HOI_DAP mà so_ngay_bo_sung_toi_da ≤ 0 hoặc trống | ERR-SLA-04 | "Số ngày bổ sung tối đa phải là số nguyên dương" | ERROR |
 
 **Acceptance Criteria:**
-- **Given** QTHT truy cập "Cấu hình SLA" **When** hệ thống hiển thị **Then** danh sách cấu hình SLA theo loại yêu cầu
+- **Given** QTHT truy cập "Cấu hình SLA" **When** hệ thống hiển thị **Then** danh sách cấu hình SLA theo loại yêu cầu, kèm cột "Số ngày bổ sung tối đa" (rỗng với HOI_DAP)
 - **Given** QTHT thêm mới cấu hình **When** nhập đủ trường **Then** lưu thành công
 - **Given** QTHT chỉnh sửa **When** thay đổi thời hạn hoặc mức cảnh báo **Then** validate + lưu
 
 **Seed Data:**
 
-| Loại YC | Thời hạn (ngày LV) | CB1 (%) | CB2 (%) | Quá hạn (%) |
-|---------|-------------------|---------|---------|-------------|
-| VU_VIEC | 10 | 50 | 90 | 100 |
-| HO_SO_HT | 15 | 50 | 90 | 100 |
-| HO_SO_TT | 10 | 50 | 90 | 100 |
-| HOI_DAP | 5 | 50 | 90 | 100 |
+| Loại YC | Thời hạn (ngày LV) | CB1 (%) | CB2 (%) | Quá hạn (%) | Số ngày BS tối đa |
+|---------|-------------------|---------|---------|-------------|-------------------|
+| VU_VIEC | 10 | 50 | 90 | 100 | 5 |
+| HO_SO_HT | 15 | 50 | 90 | 100 | 5 |
+| HO_SO_TT | 10 | 50 | 90 | 100 | 5 |
+| HOI_DAP | 5 | 50 | 90 | 100 | — |
 
 ---
 
@@ -683,11 +687,12 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 2 | email | text | Y | Unique, format email hợp lệ | — | user input |
 | 3 | ho_ten | text | Y | — | — | user input |
 | 4 | dien_thoai | text | N | — | — | user input |
-| 5 | mat_khau | text | Y (tạo mới) | Ít nhất 8 ký tự, gồm chữ hoa + chữ thường + số + ký tự đặc biệt `[GAP-VIII-04]` | — | user input |
-| 6 | vai_tro_ids | identifier[] | Y | Danh sách ID vai trò | — | user input |
-| 7 | don_vi_id | identifier | Y | Tham chiếu DON_VI | — | user input |
-| 8 | loai_tai_khoan | text | Y | Loại TK (từ UC111) | — | user input |
-| 9 | trang_thai | text | Y | CHO_KICH_HOAT / HOAT_DONG / TAM_KHOA / VO_HIEU_HOA | CHO_KICH_HOAT | system |
+| 5 | vai_tro_ids | identifier[] | Y | Danh sách ID vai trò | — | user input |
+| 6 | don_vi_id | identifier | Y | Tham chiếu DON_VI | — | user input |
+| 7 | loai_tai_khoan | text | Y | Loại TK (từ UC111) | — | user input |
+| 8 | trang_thai | text | Y | CHO_KICH_HOAT / HOAT_DONG / TAM_KHOA / VO_HIEU_HOA | CHO_KICH_HOAT | system |
+
+> **[STT80 UAT 2026-06-02]** Đã BỎ field `mat_khau` khỏi Inputs: quản trị viên KHÔNG đặt mật khẩu khi tạo tài khoản. Người dùng tự đặt mật khẩu lần đầu qua link kích hoạt gửi về email (đồng bộ SM-TAIKHOAN `CHO_KICH_HOAT → HOAT_DONG` + FR-VIII-26). Lý do: an toàn thông tin — quản trị viên không biết mật khẩu người dùng.
 
 **Processing:**
 
@@ -695,12 +700,10 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền QTHT | BR-AUTH-01 |
 | 2 | Kiểm tra dữ liệu: username unique, email unique, format hợp lệ | — |
-| 3 | Kiểm tra mật khẩu đủ độ mạnh: >= 8 ký tự, chứa chữ hoa + chữ thường + số + ký tự đặc biệt `[GAP-VIII-04]` | — |
-| 4 | Mã hóa mật khẩu (hash) | — |
-| 5 | Tạo bản ghi TAI_KHOAN | BR-DATA-03 |
-| 6 | Tạo liên kết tài khoản ↔ vai trò (N-N) cho mỗi vai trò được chọn | — |
-| 7 | Gửi email kích hoạt (nếu tạo mới) | — |
-| 8 | Ghi nhật ký thao tác | BR-DATA-05 |
+| 3 | Tạo bản ghi TAI_KHOAN ở trạng thái `CHO_KICH_HOAT` (KHÔNG đặt mật khẩu — `[STT80 UAT 2026-06-02]`) | BR-DATA-03 |
+| 4 | Tạo liên kết tài khoản ↔ vai trò (N-N) cho mỗi vai trò được chọn | — |
+| 5 | Gửi email kích hoạt (link để người dùng tự đặt mật khẩu lần đầu) | — |
+| 6 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Outputs:**
 
@@ -723,7 +726,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 |---|--------------|--------|-------------------|----------|
 | E1 | Username trùng | ERR-TK-01 | "Username '{username}' đã tồn tại" | ERROR |
 | E2 | Email trùng | ERR-TK-02 | "Email '{email}' đã được sử dụng" | ERROR |
-| E3 | Mật khẩu yếu | ERR-TK-03 | "Mật khẩu phải >= 8 ký tự, chứa chữ hoa, chữ thường, số và ký tự đặc biệt" `[GAP-VIII-04]` | ERROR |
+| ~~E3~~ | ~~Mật khẩu yếu~~ | ~~ERR-TK-03~~ | **BỎ [STT80 UAT 2026-06-02]** — admin không nhập mật khẩu khi tạo TK nên không còn lỗi này ở FR-VIII-15. Lỗi mật khẩu yếu khi user đặt MK đã có ở **FR-VIII-26 `ERR-PWD-05`** (dòng 1324) | — |
 | E4 | Username chứa ký tự đặc biệt | ERR-TK-04 | "Username chỉ chấp nhận chữ cái, số và dấu gạch dưới" | ERROR |
 | E5 | Đơn vị không tồn tại | ERR-TK-05 | "Đơn vị không tồn tại hoặc đã bị vô hiệu hóa" | ERROR |
 | E6 | Vai trò không tồn tại | ERR-TK-06 | "Vai trò ID {id} không tồn tại" | ERROR |
@@ -908,7 +911,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 |---|----------|-----------|----------|-----------|----------|-------|
 | 1 | username | text | Y | Tên đăng nhập | — | user input |
 | 2 | mat_khau | text | Y | Mật khẩu | — | user input |
-| 3 | otp_code | text | Y (bước 2) | Mã TOTP 6 số gửi qua email, hiệu lực 5 phút | — | user input |
+| 3 | otp_code | text | Y (bước 2) | Mã TOTP 6 số sinh bởi ứng dụng xác thực (mã một lần theo thời gian) | — | user input |
 
 **Processing — Tier 1 (MVP):**
 
@@ -921,7 +924,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 5 | So sánh mật khẩu đã mã hóa | — |
 | 6 | Nếu sai: tăng số lần đăng nhập sai. Nếu >= 5 → tạm khóa tài khoản | BR-AUTH-07 |
 | 7 | Nếu đúng: reset số lần đăng nhập sai = 0 | — |
-| 8 | Gửi mã TOTP 6 số qua email (hiệu lực 5 phút) | BR-AUTH-01 |
+| 8 | Yêu cầu user nhập mã TOTP 6 số từ ứng dụng xác thực | BR-AUTH-01 |
 | 9 | User nhập mã TOTP. Nếu sai hoặc hết hạn → lỗi | — |
 | 10 | Tạo phiên làm việc (API: 15 phút, CMS: 30 phút idle timeout) | BR-AUTH-06 |
 | 11 | Cập nhật thời gian đăng nhập cuối | — |
@@ -1036,14 +1039,14 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 4 | dia_chi | text | Y | Không rỗng | — | user input |
 | 5 | tinh_thanh_id | identifier | Y | FK → DANH_MUC (loai='TINH_THANH', mã GSO 01-63 theo QĐ 124/2004/QĐ-TTg) | — | user input |
 | 6 | loai_doanh_nghiep_id | identifier | Y | FK → DANH_MUC (UC105) | — | user input |
-| 7 | quy_mo | text | Y | SIEU_NHO / NHO / VUA (theo NĐ 39/2018) | — | user input |
+| 7 | quy_mo | text | Y | SIEU_NHO / NHO / VUA (theo NĐ 80/2021) | — | user input |
 | 8 | nganh_nghe | text | Y | NONG_LAM / CONG_NGHIEP / THUONG_MAI | — | user input |
 | 9 | so_lao_dong | number | N | ≥ 0 | — | user input |
 | 10 | doanh_thu_nam | number | N | ≥ 0 | — | user input |
 | 11 | tong_nguon_von | number | N | ≥ 0 | — | user input |
 | 12 | nguoi_dai_dien | text | Y | Họ tên người đại diện pháp luật | — | user input |
 | 13 | chuc_vu_dd | text | N | Chức vụ người đại diện | — | user input |
-| 14 | email | text | Y | RFC 5322, unique trên TAI_KHOAN.email (toàn hệ thống). Khi đăng ký, hệ thống lưu cùng giá trị vào cả TAI_KHOAN.email (kênh login + nhận mail kích hoạt + reset MK + 2FA + workflow notification) và DOANH_NGHIEP.email (email liên hệ DN). Sau đăng ký có thể đổi độc lập 2 trường (BR-AUTH-EMAIL-01) | — | user input |
+| 14 | email | text | Y | RFC 5322, unique trên TAI_KHOAN.email (toàn hệ thống). Khi đăng ký, hệ thống lưu cùng giá trị vào cả TAI_KHOAN.email (kênh login + nhận mail kích hoạt + reset MK + workflow notification) và DOANH_NGHIEP.email (email liên hệ DN). Sau đăng ký có thể đổi độc lập 2 trường (BR-AUTH-EMAIL-01) | — | user input |
 | 15 | so_dien_thoai | text | Y | Số điện thoại liên hệ | — | user input |
 | 16 | linh_vuc_ids | structured | N | Multi-select FK → DANH_MUC (loai='LINH_VUC_KINH_DOANH', mã VSIC cấp 4 theo QĐ 36/2025/QĐ-TTg, quản lý ở FR-VIII-31); lưu thành DOANH_NGHIEP_LINH_VUC (M-N). DN có thể chọn 1 hoặc nhiều ngành kinh doanh | — | user input |
 | 17 | ghi_chu | text (long) | N | — | — | user input |
@@ -1057,7 +1060,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra mã số thuế đúng định dạng `^\d{10}$` + chưa tồn tại trong hệ thống (unique). Vì username DN auto = MST nên unique MST cũng đảm bảo unique username DN. | BR-DATA-02, BR-AUTH-USERNAME-01 |
+| 1 | Kiểm tra mã số thuế đúng định dạng `^\d{10}$`. Check **MST đã tồn tại trong DOANH_NGHIEP chưa** (không chỉ TAI_KHOAN). **Sửa theo BA chốt 2026-05-30:** Nếu MST đã có trong DOANH_NGHIEP (do CB NV / Cổng DVC / Cổng PLQG tạo trước đó, hoặc DN đã tự đăng ký trước) → trả `ERR-REG-MST-EXIST` + nút "Quên mật khẩu" dẫn sang FR-VIII-26. FR-VIII-26 đóng vai trò Claim Flow: nếu DN chưa có TK liên kết → tạo TK + link DN cũ; nếu đã có TK → reset password. | BR-DATA-02, BR-AUTH-USERNAME-01 |
 | 2 | Kiểm tra email chưa tồn tại trong TAI_KHOAN.email (unique) | BR-DATA-02, BR-AUTH-EMAIL-01 |
 | 3 | Set username = ma_so_thue (auto-derived, không cần kiểm tra unique riêng vì đã đảm bảo từ bước 1) | BR-AUTH-USERNAME-01 |
 | 4 | Kiểm tra mật khẩu đủ độ mạnh + khớp xác nhận | BR-AUTH-01 |
@@ -1075,7 +1078,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
 | E1 | Mã số thuế sai định dạng (không phải 10 chữ số) | ERR-REG-01a | "Mã số thuế phải đúng 10 chữ số (theo TT 105/2020/TT-BTC). Chi nhánh không tự đăng ký riêng." | ERROR |
-| E2 | Mã số thuế đã tồn tại | ERR-REG-01 | "Mã số thuế này đã đăng ký trong hệ thống" | ERROR |
+| E2 | MST đã tồn tại trong DOANH_NGHIEP (đã đăng ký trước hoặc đã có hồ sơ do CB NV/Cổng DVC/Cổng PLQG tạo) | ERR-REG-MST-EXIST | "Mã số thuế này đã có trong hệ thống. Vui lòng dùng chức năng [Quên mật khẩu] với chính mã số thuế của bạn để khôi phục hoặc nhận lại quyền truy cập tài khoản." Kèm nút **"Quên mật khẩu"** dẫn sang FR-VIII-26 (form chỉ 1 trường — DN nhập MST của mình → hệ thống tự xử lý Claim Flow hoặc reset password). **Sửa theo BA chốt 2026-05-30 — thay `ERR-REG-01` cũ.** | ERROR |
 | E3 | Email đã tồn tại trong TAI_KHOAN.email | ERR-REG-02 | "Email đã được sử dụng" | ERROR |
 | E4 | Mật khẩu yếu | ERR-REG-04 | "Mật khẩu chưa đủ mạnh" | ERROR |
 | E5 | Mật khẩu xác nhận không khớp | ERR-REG-05 | "Mật khẩu xác nhận không khớp" | ERROR |
@@ -1096,7 +1099,8 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 - **Given** DN nhập MST sai định dạng (chữ, dấu, hoặc không đủ 10 số) **When** submit **Then** từ chối với ERR-REG-01a
 - **Given** DN điền đủ thông tin + tích cam kết thông tin đúng sự thật **When** submit **Then** tạo TAI_KHOAN (username = MST, email = email DN khai) ở CHO_KICH_HOAT + DOANH_NGHIEP (email = email DN khai, cùng giá trị) + gửi mail kích hoạt đến TAI_KHOAN.email
 - **Given** DN bấm link kích hoạt + đặt mật khẩu **When** lưu thành công **Then** TAI_KHOAN chuyển HOAT_DONG, DN đăng nhập bằng MST + mật khẩu
-- **Given** mã số thuế hoặc email đã tồn tại **When** DN submit **Then** từ chối với ERR-REG-01 hoặc ERR-REG-02
+- **Given** mã số thuế đã tồn tại trong DOANH_NGHIEP **When** DN submit **Then** từ chối với `ERR-REG-MST-EXIST` + nút "Quên mật khẩu" dẫn sang FR-VIII-26 (Claim Flow). **Sửa theo BA chốt 2026-05-30 — thay `ERR-REG-01` cũ.**
+- **Given** email đã tồn tại trong TAI_KHOAN.email **When** DN submit **Then** từ chối với `ERR-REG-02`
 - **Given** DN không tích cam kết thông tin đúng sự thật **When** submit **Then** từ chối với ERR-REG-06
 - **Given** DN chọn 3 lĩnh vực kinh doanh ở dropdown multi-select **When** đăng ký thành công **Then** 3 bản ghi DOANH_NGHIEP_LINH_VUC được tạo, mỗi bản ghi liên kết DOANH_NGHIEP vừa tạo với 1 trong 3 `linh_vuc_id` DN đã chọn (UNIQUE per cặp `doanh_nghiep_id × linh_vuc_id`)
 - **Given** DN bỏ trống lĩnh vực kinh doanh (`linh_vuc_ids = []`) **When** submit **Then** đăng ký vẫn được chấp nhận, 0 bản ghi DOANH_NGHIEP_LINH_VUC được tạo (Inputs row 16 không bắt buộc)
@@ -1260,21 +1264,24 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 **Priority:** Essential | **Stability:** High
 **Màn hình:** SCR đăng nhập (link "Quên mật khẩu") + form đặt mật khẩu mới (qua link gửi mail)
 
-**Mô tả:** User bất kỳ có email trong hệ thống tự yêu cầu reset mật khẩu hoặc đặt mật khẩu lần đầu (kích hoạt tài khoản mới do hệ thống cấp). Workflow chung cho 2 trường hợp:
+**Mô tả:** User bất kỳ có **tên đăng nhập** (email hoặc MST — theo BR-AUTH-USERNAME-01 username DN = MST 10 chữ số) tự yêu cầu reset mật khẩu, đặt mật khẩu lần đầu, hoặc nhận lại quyền truy cập hồ sơ doanh nghiệp đã có. Workflow chung cho **3 trường hợp**:
 - Tài khoản mới ở trạng thái CHO_KICH_HOAT (chưa có mật khẩu) — TVV/CG sau khi CB Phê duyệt duyệt; NHT sau khi CB Nghiệp vụ tạo
 - Tài khoản đang HOAT_DONG nhưng user quên mật khẩu
+- **(STT 39 UAT 2026-05-26 + BA chốt 2026-05-30) Claim Flow** — DN có hồ sơ `DOANH_NGHIEP` đã tồn tại trong hệ thống (do CB NV / Cổng DVC / Cổng PLQG tạo trước) nhưng chưa có `TAI_KHOAN` liên kết. DN gặp tình huống này khi tự đăng ký qua FR-VIII-22 và nhận `ERR-REG-MST-EXIST`.
+
+**Nguyên tắc thiết kế (BA chốt 2026-05-30):** **Email và MST đều là tên đăng nhập hợp lệ.** Form chỉ có 1 trường input "Tên đăng nhập" — hệ thống tự phân loại theo định dạng (10 chữ số = MST; có ký tự `@` = email). Không cần 2 trường riêng email/MST, không cần check email khớp DOANH_NGHIEP.email.
 
 **Tác nhân:** User bất kỳ có email trong hệ thống (DN/NHT/TVV/CG/CB)
 
 **Preconditions:**
-- Email nhập tồn tại trong hệ thống
-- Tài khoản không ở trạng thái TAM_KHOA hoặc VO_HIEU_HOA
+- User nhập 1 trường "Tên đăng nhập" có định dạng hợp lệ (email theo RFC 5322 hoặc MST 10 chữ số theo TT 105/2020/TT-BTC)
+- Sau khi lookup: tài khoản tương ứng (nếu có) không ở TAM_KHOA/VO_HIEU_HOA
 
 **Inputs:**
 
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
 |---|----------|-----------|----------|-----------|----------|-------|
-| 1 | email | text | Y | RFC 5322 | — | user input (form "Quên mật khẩu") |
+| 1 | ten_dang_nhap | text | Y | **Sửa theo BA chốt 2026-05-30 — gộp `email` + `ma_so_thue` thành 1 trường.** Email theo RFC 5322 (chứa `@`) HOẶC MST 10 chữ số theo TT 105/2020/TT-BTC (regex `^\d{10}$`). Hệ thống tự phân loại theo định dạng. | — | user input (form "Quên mật khẩu") |
 | 2 | reset_token | text | Y | Token sinh từ bước 3 Processing — gắn vào URL mail | — | system (qua URL) |
 | 3 | mat_khau_moi | text | Y | Ít nhất 8 ký tự, gồm chữ hoa + chữ thường + số + ký tự đặc biệt | — | user input (form đặt mật khẩu) |
 | 4 | mat_khau_xac_nhan | text | Y | Phải khớp mat_khau_moi | — | user input |
@@ -1283,31 +1290,41 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | User bấm link "Quên mật khẩu" ở SCR đăng nhập → nhập email | — |
-| 2 | Hệ thống kiểm tra email tồn tại + tài khoản không ở TAM_KHOA/VO_HIEU_HOA | — |
-| 3 | Sinh token reset (chuỗi ngẫu nhiên), lưu vào `token_reset_mk` + `token_het_han` của TAI_KHOAN. Hạn token: **vĩnh viễn nếu là kích hoạt lần đầu** (TK ở CHO_KICH_HOAT) — phù hợp với TVV/NHT có thể chậm kích hoạt; **30 phút nếu là reset** (TK đang HOAT_DONG) | — |
-| 4 | Gửi mail cho user kèm link đặt mật khẩu (URL chứa token). Note: nếu là TK do hệ thống cấp lần đầu (TVV/CG/NHT) thì mail kích hoạt được gửi tự động ngay khi tạo TK — user không cần bấm "Quên mật khẩu" trừ khi mail thất lạc | — |
-| 5 | User bấm link → form đặt mật khẩu mới mở | — |
-| 6 | User nhập mật khẩu mới + xác nhận → submit | — |
-| 7 | Kiểm tra token còn hợp lệ (chưa hết hạn, chưa dùng) | — |
-| 8 | Kiểm tra mật khẩu đủ độ mạnh + khớp xác nhận | — |
-| 9 | Mã hóa mật khẩu (hash 1 chiều) → cập nhật vào TAI_KHOAN | — |
-| 10 | Hủy token (token chỉ dùng 1 lần) | — |
-| 11 | **Chuyển trạng thái tài khoản:** Nếu TK đang CHO_KICH_HOAT → chuyển HOAT_DONG (vai trò luôn được gán sẵn khi tạo TK — BA chốt 2026-05-07 Q3 bỏ CHO_PHAN_QUYEN, mọi luồng tạo TK đều gán role trước); Nếu TK đang HOAT_DONG → giữ nguyên (chỉ cập nhật mật khẩu) | SM-TAIKHOAN |
-| 12 | **Trigger cập nhật entity liên quan:** Nếu TK của TVV và TK chuyển từ CHO_KICH_HOAT → HOAT_DONG → đồng thời chuyển TU_VAN_VIEN.trang_thai từ CHO_KICH_HOAT → HOAT_DONG. Nếu TK của NHT — tương tự, chuyển NGUOI_HO_TRO.trang_thai từ CHO_KICH_HOAT → HOAT_DONG | SM-TVV, SM-NHT |
-| 13 | Hiển thị thông báo "Đặt mật khẩu thành công, vui lòng đăng nhập" → redirect SCR đăng nhập | — |
-| 14 | Ghi nhật ký thao tác (hành động = 'PASSWORD_RESET' hoặc 'ACCOUNT_ACTIVATE') | BR-DATA-05 |
+| 1 | User bấm link "Quên mật khẩu" ở SCR đăng nhập → nhập **1 trường "Tên đăng nhập"** (email hoặc MST) | — |
+| 2 | **Phân loại đầu vào (BA chốt 2026-05-30):** Nếu `ten_dang_nhap` khớp regex `^\d{10}$` → coi là **MST** (loại DN). Nếu chứa `@` + khớp RFC 5322 → coi là **email** (loại CB/TVV/NHT hoặc DN đã có TK với email). Định dạng khác → trả `ERR-PWD-FORMAT`. | — |
+| 3 | **Lookup TAI_KHOAN:** | — |
+| 3a | Nếu là MST → tìm `TAI_KHOAN` theo `username = ten_dang_nhap` | BR-AUTH-USERNAME-01 |
+| 3b | Nếu là email → tìm `TAI_KHOAN` theo `email = ten_dang_nhap` | — |
+| 4 | **Phân nhánh xử lý theo kết quả lookup:** | — |
+| 4a | Lookup found TAI_KHOAN + không TAM_KHOA/VO_HIEU_HOA → **Reset password thông thường**: tiếp tục bước 5 (sinh token). Mail gửi tới `TAI_KHOAN.email` đã lưu. Hạn token: 30 phút nếu TK ở HOAT_DONG; vĩnh viễn nếu CHO_KICH_HOAT (lần đầu). | — |
+| 4b | Lookup KHÔNG found + đầu vào là MST → **Claim Flow**: tra `DOANH_NGHIEP` theo `ma_so_thue = ten_dang_nhap`. Nếu CÓ → tự tạo `TAI_KHOAN` mới (`username = ma_so_thue`, `email = DOANH_NGHIEP.email`, `trang_thai = CHO_KICH_HOAT`, vai trò `DN`) + link vào DOANH_NGHIEP cũ → tiếp tục bước 5 (sinh token vĩnh viễn 1 lần). Mail gửi tới `DOANH_NGHIEP.email` (DN có quyền truy cập email này — đây là điểm xác minh chủ sở hữu MST). Nếu KHÔNG → trả thông báo trung tính (chống enumerate MST). | BR-AUTH-USERNAME-01 |
+| 4c | Lookup KHÔNG found + đầu vào là email → trả thông báo trung tính (chống enumerate email). | — |
+| 5 | Sinh token reset (chuỗi ngẫu nhiên), lưu vào `token_reset_mk` + `token_het_han` của TAI_KHOAN. Hạn token: **vĩnh viễn** nếu TK ở CHO_KICH_HOAT (gồm TK mới tạo ở Claim Flow + TK kích hoạt lần đầu TVV/NHT); **30 phút** nếu TK đang HOAT_DONG (reset password thường) | — |
+| 6 | Gửi mail kèm link đặt mật khẩu (URL chứa token). Mail gửi tới `TAI_KHOAN.email` (nhánh 4a) hoặc `DOANH_NGHIEP.email` cho TK mới tạo Claim Flow (nhánh 4b — cùng giá trị do bước 4b set `TAI_KHOAN.email = DOANH_NGHIEP.email`). Ghi chú: TK do hệ thống cấp lần đầu (TVV/CG/NHT) đã nhận mail kích hoạt tự động khi tạo TK — chỉ vào "Quên mật khẩu" nếu mail thất lạc. | — |
+| 7 | User bấm link → form đặt mật khẩu mới mở | — |
+| 8 | User nhập mật khẩu mới + xác nhận → submit | — |
+| 9 | Kiểm tra token còn hợp lệ (chưa hết hạn, chưa dùng) | — |
+| 10 | Kiểm tra mật khẩu đủ độ mạnh + khớp xác nhận | — |
+| 11 | Mã hóa mật khẩu (hash 1 chiều) → cập nhật vào TAI_KHOAN | — |
+| 12 | Hủy token (token chỉ dùng 1 lần) | — |
+| 13 | **Chuyển trạng thái tài khoản:** Nếu TK đang CHO_KICH_HOAT → chuyển HOAT_DONG (vai trò luôn được gán sẵn khi tạo TK — BA chốt 2026-05-07 Q3 bỏ CHO_PHAN_QUYEN, mọi luồng tạo TK đều gán role trước); Nếu TK đang HOAT_DONG → giữ nguyên (chỉ cập nhật mật khẩu) | SM-TAIKHOAN |
+| 14 | **Trigger cập nhật entity liên quan:** Nếu TK của TVV và TK chuyển từ CHO_KICH_HOAT → HOAT_DONG → đồng thời chuyển `TU_VAN_VIEN.trang_thai` từ CHO_KICH_HOAT → HOAT_DONG. Nếu TK của NHT — tương tự, chuyển `NGUOI_HO_TRO.trang_thai` từ CHO_KICH_HOAT → HOAT_DONG. Nếu TK của DN qua Claim Flow — không cần thêm trigger (DOANH_NGHIEP đã active sẵn). | SM-TVV, SM-NHT |
+| 15 | Hiển thị thông báo "Đặt mật khẩu thành công, vui lòng đăng nhập" → redirect SCR đăng nhập | — |
+| 16 | Ghi nhật ký thao tác (hành động = 'PASSWORD_RESET' hoặc 'ACCOUNT_ACTIVATE' hoặc 'DN_CLAIM' cho nhánh 4b) | BR-DATA-05 |
 
 **Error Handling:**
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
-| E1 | Email không tồn tại | ERR-PWD-01 | Vẫn hiển thị thông báo trung tính "Nếu email đã đăng ký, link đặt mật khẩu sẽ được gửi đến hộp thư của bạn" (chống enumerate email) | INFO |
+| E1 | Tên đăng nhập (email/MST) không tồn tại trong TAI_KHOAN và không thuộc DOANH_NGHIEP nào cần Claim | ERR-PWD-01 | Vẫn hiển thị thông báo trung tính "Nếu tên đăng nhập đã đăng ký, link đặt mật khẩu sẽ được gửi đến hộp thư của bạn" (chống enumerate cả MST + email) | INFO |
+| E1a | Tên đăng nhập không khớp định dạng (không phải email RFC 5322 và không phải MST 10 chữ số) | ERR-PWD-FORMAT | "Tên đăng nhập phải là email hợp lệ hoặc Mã số thuế 10 chữ số" | ERROR |
 | E2 | Tài khoản đang TAM_KHOA hoặc VO_HIEU_HOA | ERR-PWD-02 | "Tài khoản đã bị khóa hoặc vô hiệu hóa. Liên hệ quản trị viên để được hỗ trợ" | ERROR |
 | E3 | Token hết hạn (chỉ áp dụng cho reset 30 phút) | ERR-PWD-03 | "Link đặt mật khẩu đã hết hạn. Vui lòng yêu cầu link mới" | ERROR |
 | E4 | Token đã sử dụng | ERR-PWD-04 | "Link đặt mật khẩu đã được sử dụng. Vui lòng yêu cầu link mới" | ERROR |
 | E5 | Mật khẩu yếu | ERR-PWD-05 | "Mật khẩu chưa đủ mạnh" | ERROR |
 | E6 | Mật khẩu xác nhận không khớp | ERR-PWD-06 | "Mật khẩu xác nhận không khớp" | ERROR |
+| ~~E7~~ | ~~Claim Flow MST + email không khớp DOANH_NGHIEP.email~~ | ~~ERR-PWD-MST-EMAIL-MISMATCH~~ | **BỎ theo BA chốt 2026-05-30 — đơn giản hoá: form chỉ 1 trường "Tên đăng nhập"**. Không còn yêu cầu DN nhập email riêng để khớp DOANH_NGHIEP.email. Mail xác thực gửi trực tiếp tới `DOANH_NGHIEP.email` lưu trong hệ thống — DN có quyền truy cập email đó mới hoàn tất được Claim Flow. | — |
+| E7-NEW | Email lưu trong DOANH_NGHIEP không khả dụng (mail bounce, DN không truy cập được email cũ) | ERR-PWD-DN-NO-MAIL | Phản hồi qua nhật ký gửi mail thất bại; DN không nhận được link. Cách giải quyết: DN liên hệ hỗ trợ kỹ thuật → CB NV xác minh CNĐKKD thủ công → cập nhật `DOANH_NGHIEP.email` → DN làm lại "Quên mật khẩu". Đây là fallback ngoài luồng tự động — KHÔNG hiển thị mã lỗi cho DN trên UI (chỉ ghi vào audit log gửi mail). | INFO |
 
 **Outputs:** thông báo kết quả + redirect
 
@@ -1321,8 +1338,12 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 **Acceptance Criteria:**
 - **Given** TVV mới được CB Phê duyệt duyệt và nhận mail kích hoạt **When** bấm link + đặt mật khẩu lần đầu **Then** TAI_KHOAN và TU_VAN_VIEN đồng thời chuyển HOAT_DONG, TVV đăng nhập được
 - **Given** NHT mới được CB Nghiệp vụ tạo và nhận mail kích hoạt **When** bấm link + đặt mật khẩu lần đầu **Then** TAI_KHOAN và NGUOI_HO_TRO đồng thời chuyển HOAT_DONG, NHT đăng nhập được + xuất hiện trong UC59 phân công vụ việc
-- **Given** user đang HOAT_DONG quên mật khẩu **When** nhập email + bấm "Quên mật khẩu" **Then** nhận mail link reset 30 phút, đặt mật khẩu mới thành công, đăng nhập lại được
-- **Given** email không tồn tại trong hệ thống **When** user nhập **Then** vẫn hiển thị thông báo trung tính (chống enumerate email)
+- **Given** user đang HOAT_DONG quên mật khẩu **When** nhập email (hoặc MST đã có TK) + bấm "Quên mật khẩu" **Then** nhận mail link reset 30 phút (gửi tới TAI_KHOAN.email), đặt mật khẩu mới thành công, đăng nhập lại được
+- **Given** tên đăng nhập không tồn tại trong hệ thống (cả TAI_KHOAN và DOANH_NGHIEP) **When** user nhập **Then** vẫn hiển thị thông báo trung tính (chống enumerate cả email lẫn MST)
+- **Given** user nhập định dạng sai (không phải email cũng không phải MST 10 chữ số) **When** submit **Then** trả `ERR-PWD-FORMAT`
+- **(STT 39 + BA chốt 2026-05-30)** **Given** DN nhập **MST** (10 chữ số) vào form Quên mật khẩu; MST đã có trong `DOANH_NGHIEP` (do CB NV/Cổng tạo trước) + chưa có `TAI_KHOAN.username = MST` **When** submit **Then** hệ thống tự tạo TAI_KHOAN mới (`username = MST`, `email = DOANH_NGHIEP.email`, `trang_thai = CHO_KICH_HOAT`) + link vào DOANH_NGHIEP cũ + gửi mail đặt mật khẩu lần đầu tới `DOANH_NGHIEP.email`. DN có quyền truy cập email đó → bấm link đặt password lần đầu → đăng nhập + thấy hồ sơ DN sẵn có.
+- **(STT 39 + BA chốt 2026-05-30)** **Given** DN nhập MST đã có trong DOANH_NGHIEP + đã có TAI_KHOAN liên kết **When** submit **Then** reset password thường (lookup theo username = MST) — mail gửi tới TAI_KHOAN.email, hạn 30 phút.
+- **(STT 39 + BA chốt 2026-05-30 fallback)** **Given** Email lưu trong DOANH_NGHIEP không khả dụng (DN đã đổi email công ty hoặc CB NV gõ nhầm) **When** DN không nhận được mail Claim Flow **Then** DN liên hệ hỗ trợ kỹ thuật → CB NV xác minh CNĐKKD thủ công → cập nhật `DOANH_NGHIEP.email` → DN làm lại "Quên mật khẩu" với MST.
 
 ---
 
@@ -1548,7 +1569,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 3 | toolbar | Nút thêm mới | button | [+ Thêm mới] | click → mở modal CRUD | luôn hiển thị |
 | 4 | filter-bar | Ô tìm kiếm | search-box | Tìm theo mã hoặc tên | change → filter | luôn hiển thị |
 | 5 | content | Cột Mã | table-column | Mã danh mục (unique, max 20 ký tự) | — | luôn hiển thị |
-| 6 | content | Cột Tên | table-column | Tên hiển thị | — | luôn hiển thị |
+| 6 | content | Cột Tên | table-column | Tên hiển thị | **sort** (click tiêu đề → đổi sắp xếp theo `ten` ASC↔DESC). **[STT69 UAT 2026-06-02]** Chỉ cột Tên cho sắp xếp tương tác; các cột Mã / Mô tả / Thứ tự KHÔNG sortable (không hiển thị mũi tên / `aria-sort` / `sortBy` URL) | luôn hiển thị |
 | 7 | content | Cột Mô tả | table-column | Mô tả (truncate) | — | luôn hiển thị |
 | 8 | content | Cột Thứ tự | table-column | Thứ tự hiển thị | — | luôn hiển thị |
 | 9 | content | Cột Trạng thái | toggle | Hoạt động / Không | toggle → cập nhật | luôn hiển thị |
@@ -1584,7 +1605,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 
 #### Quy tắc tương tác
 - Phân trang 20 mục/trang cho mỗi tab
-- Sắp xếp mặc định theo thu_tu ASC, ten ASC
+- Sắp xếp mặc định theo thu_tu ASC, ten ASC. **[STT69 UAT 2026-06-02]** Người dùng có thể nhấp tiêu đề cột **Tên** để sắp xếp lại theo `ten` (ASC↔DESC); khi không sắp theo Tên thì quay về mặc định thu_tu ASC. Các cột khác (Mã, Mô tả, Thứ tự) không cho sắp xếp tương tác
 
 ---
 
@@ -1636,7 +1657,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 13 | content | Cột Đơn vị | table-column | Tên đơn vị | — | luôn hiển thị |
 | 14 | content | Cột Vai trò | table-column | Nhãn tag màu cho mỗi vai trò | — | luôn hiển thị |
 | 15 | content | Cột Trạng thái | badge | HOAT_DONG (xanh) / CHO_KICH_HOAT (vàng) / TAM_KHOA (đỏ) / VO_HIEU_HOA (đen) | — | luôn hiển thị |
-| 16 | content | Cột Hành động | button | Xem / Sửa / Mở khóa / Khóa / Gửi lại email / Đổi MK | click → hành động tương ứng | tùy trạng thái |
+| 16 | content | Cột Hành động | button | Xem / Sửa / Mở khóa / Khóa / Gửi lại email kích hoạt | click → hành động tương ứng | tùy trạng thái. **[STT80 UAT 2026-06-02]** Bỏ "Đổi MK" — admin không đặt/đổi mật khẩu user; reset MK qua "Gửi lại email kích hoạt" |
 
 #### Form tạo/sửa TK
 
@@ -1645,7 +1666,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 17 | form | Username | text-input | Bắt buộc, 4-50 ký tự, chữ+số+gạch dưới, unique | — | trang tạo/sửa |
 | 18 | form | Email | text-input | Bắt buộc, RFC 5322, unique | — | trang tạo/sửa |
 | 19 | form | Họ tên | text-input | Bắt buộc | — | trang tạo/sửa |
-| 20 | form | Mật khẩu | password | Bắt buộc khi tạo mới, ≥ 8 ký tự, chữ hoa + chữ thường + số + ký tự đặc biệt `[GAP-VIII-04]` | — | trang tạo |
+| ~~20~~ | ~~form~~ | ~~Mật khẩu~~ | — | **BỎ [STT80 UAT 2026-06-02]** — admin KHÔNG nhập mật khẩu khi tạo TK; user tự đặt qua link kích hoạt (FR-VIII-26). Ràng buộc độ mạnh MK áp ở màn đặt MK của user | — | — |
 | 21 | form | Vai trò | multi-select | Bắt buộc, chọn nhiều vai trò | — | trang tạo/sửa |
 | 22 | form | Đơn vị | select (tree) | Bắt buộc, cây đơn vị phân cấp | — | trang tạo/sửa |
 | 23 | form | Loại tài khoản | select | Bắt buộc | — | trang tạo/sửa |
@@ -1732,6 +1753,7 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 9 | tab-1 | Cot Qua han (%) | table-column (readonly) | Luon = 100% | — | tab 1 active |
 | 10 | tab-1 | Cot Gui email | toggle | Gui email khi chuyen muc | toggle | tab 1 active |
 | 11 | tab-1 | Cot Gui TB app | toggle | Gui thong bao in-app | toggle | tab 1 active |
+| 11a | tab-1 | Cot So ngay BS toi da | text-input (inline) | Bat buoc cho loai_yeu_cau != HOI_DAP (default 5); disabled + blank cho HOI_DAP. ERR-SLA-04 | inline edit | tab 1 active |
 | 12 | tab-1 | Nut Luu | button | [Luu cau hinh] | click → luu | tab 1 active |
 | 13 | tab-1 | Canh bao snapshot | alert | "Ho so MOI ap dung cau hinh moi. Ho so dang xu ly giu deadline cu (snapshot SLA)" | — | tab 1 active |
 | 14 | tab-1 | Note hệ số nội bộ | tooltip-info | "Quá hạn nghiêm trọng: hệ số `qua_han_he_so = 2.0` (ngầm, không UI) — vụ việc trễ vượt 2× thời hạn sẽ tự kích cảnh báo escalate. Sửa qua DB hoặc API nếu cần đổi (BA chốt 2026-05-07 Q5)." | — | tab 1 active |
@@ -1819,14 +1841,14 @@ Nhóm VIII cung cấp nền tảng quản trị cho toàn bộ hệ thống: qu�
 | 4 | content | Địa chỉ | text-input | Bắt buộc | — | luôn |
 | 5 | content | Tỉnh / Thành phố | select | Bắt buộc, từ Danh mục Tỉnh/TP (63 mã GSO 01-63 theo QĐ 124/2004/QĐ-TTg, FK → DANH_MUC loai='TINH_THANH') | — | luôn |
 | 6 | content | Loại hình doanh nghiệp | select | Bắt buộc, từ Danh mục loại hình DN (UC105) | — | luôn |
-| 7 | content | Quy mô doanh nghiệp | select | Bắt buộc: Siêu nhỏ / Nhỏ / Vừa (theo NĐ 39/2018) | — | luôn |
+| 7 | content | Quy mô doanh nghiệp | select | Bắt buộc: Siêu nhỏ / Nhỏ / Vừa (theo NĐ 80/2021) | — | luôn |
 | 8 | content | Ngành nghề | select | Bắt buộc: Nông Lâm / Công nghiệp / Thương mại | — | luôn |
 | 9 | content | Số lao động | number | Tùy chọn, ≥ 0 | — | luôn |
 | 10 | content | Doanh thu năm | number | Tùy chọn, ≥ 0 | — | luôn |
 | 11 | content | Tổng nguồn vốn | number | Tùy chọn, ≥ 0 | — | luôn |
 | 12 | content | Người đại diện pháp luật | text-input | Bắt buộc, họ tên | — | luôn |
 | 13 | content | Chức vụ người đại diện | text-input | Tùy chọn | — | luôn |
-| 14 | content | Email | text-input | Bắt buộc, RFC 5322, unique trên TAI_KHOAN.email. Tooltip: "Email này dùng đăng ký tài khoản (login + nhận mail kích hoạt + reset MK + 2FA + thông báo) đồng thời là email liên hệ của DN. Sau khi đăng ký, có thể đổi 2 trường này độc lập trong phần Cập nhật thông tin." | Lỗi trùng: "Email đã được sử dụng" | luôn |
+| 14 | content | Email | text-input | Bắt buộc, RFC 5322, unique trên TAI_KHOAN.email. Tooltip: "Email này dùng đăng ký tài khoản (login + nhận mail kích hoạt + reset MK + thông báo) đồng thời là email liên hệ của DN. Sau khi đăng ký, có thể đổi 2 trường này độc lập trong phần Cập nhật thông tin." | Lỗi trùng: "Email đã được sử dụng" | luôn |
 | 15 | content | Số điện thoại liên hệ | text-input | Bắt buộc | — | luôn |
 | 16 | content | Lĩnh vực kinh doanh | multi-select có search | Tùy chọn, multi `linh_vuc_ids` — chọn 1 hoặc nhiều ngành VSIC cấp 4 (FK → DANH_MUC `loai='LINH_VUC_KINH_DOANH'`, quản lý ở FR-VIII-31). Dropdown chỉ cho chọn bản ghi cấp 4 đang `KICH_HOAT`; bản ghi cấp 1 A–V chỉ dùng làm group header, không chọn được. Option cấp 4 hiển thị dạng "mã cấp 4 — tên cấp 4" (vd "2610 — Sản xuất linh kiện điện tử"). Header cấp 1 hiển thị dạng "mã cấp 1 — tên cấp 1" (vd "C — Công nghiệp chế biến, chế tạo") theo `danh_muc_cha_id`. Search không phân biệt hoa/thường, hỗ trợ có dấu/không dấu, match theo mã/tên cấp 4 và mã/tên cấp 1 cha; nếu query match cấp 1 cha thì hiển thị toàn bộ cấp 4 con đang `KICH_HOAT` thuộc nhóm đó | — | luôn |
 | 17 | content | Ghi chú | textarea | Tùy chọn | — | luôn |
@@ -2000,7 +2022,7 @@ erDiagram
 | Attribute | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
 |-----------|-----------|----------|------------|---------|-------|
 | username | text | Y | UNIQUE, CHECK REGEXP `^[a-z0-9_]{4,50}$` | | Tên đăng nhập. Quy ước sinh theo BR-AUTH-USERNAME-01: (a) DN tự đăng ký auto = `ma_so_thue` (10 chữ số); (b) Cán bộ nội bộ — QTHT đặt tay theo quy ước nội bộ; (c) TVV/CG — auto = local-part email; (d) NHT — CB NV nhập tay |
-| email | text | Y | UNIQUE | | Email cá nhân của người login. Kênh nhận: mail kích hoạt + reset MK + 2FA + workflow notification. KHÁC `DOANH_NGHIEP.email` (xem BR-AUTH-EMAIL-01) |
+| email | text | Y | UNIQUE | | Email cá nhân của người login. Kênh nhận: mail kích hoạt + reset MK + workflow notification. KHÁC `DOANH_NGHIEP.email` (xem BR-AUTH-EMAIL-01) |
 | mat_khau_hash | text | Y | | | Bcrypt hash mật khẩu |
 | ho_ten | text | Y | | | Họ tên đầy đủ |
 | dien_thoai | text | N | | | SĐT |
@@ -2143,8 +2165,9 @@ erDiagram
 | qua_han_he_so | number | Y | CHECK > 1 | 2.0 | Hệ số quá hạn nghiêm trọng (BA chốt 2026-05-07 Q5: bắt buộc lưu, không hiển thị UI, có default 2.0) |
 | gui_email_canh_bao | boolean | N | | 1 | Có gửi email khi cảnh báo? |
 | gui_thong_bao_app | boolean | N | | 1 | Có gửi thông báo in-app? |
+| so_ngay_bo_sung_toi_da | number | N | CHECK > 0; NULL với HOI_DAP (không có luồng bổ sung) | 5 | Số ngày làm việc DN được phép gửi bổ sung sau khi CB NV ra yêu cầu — BA chốt 2026-05-13 (xem FR-VIII-10) |
 
-**Seed Data:** VU_VIEC=10 ngày (NĐ55 Điều 9), HOI_DAP=5 ngày LV, HO_SO_CHI_TRA=15 ngày.
+**Seed Data:** VU_VIEC=10 ngày (NĐ55 Điều 9), HOI_DAP=5 ngày LV, HO_SO_CHI_TRA=15 ngày. `so_ngay_bo_sung_toi_da` mặc định 5 ngày LV cho các loại có luồng bổ sung; NULL cho HOI_DAP.
 
 ### 3.4.3.51 NGAY_LE (owned)
 
@@ -2243,7 +2266,7 @@ stateDiagram-v2
 
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm này) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|----------------------|---------|------------|
-| BR-AUTH-01 | Mọi user phải xác thực trước khi truy cập hệ thống. **Mô hình 2-tier:** Tier 1 (nội bộ qua mạng kín) = Username/password + TOTP 2FA qua email, áp cho cán bộ nội bộ. Tier 2 (Internet-facing) = SSO VNeID qua OIDC Authorization Code flow (NĐ69/2024/NĐ-CP), áp cho tác nhân bên ngoài (DN, TVV, CG, NHT). **Không có VNPT eKYC.** | PRD A6, FR-VIII-20, NĐ69/2024 | FR-VIII-15 đến FR-VIII-21 | API outbound không yêu cầu session | Test đăng nhập Tier 1 + TOTP, test SSO VNeID Tier 2 |
+| BR-AUTH-01 | Mọi user phải xác thực trước khi truy cập hệ thống. **Mô hình 2-tier:** Tier 1 (nội bộ qua mạng kín) = Username/password + TOTP 2FA (mã một lần theo thời gian, dùng ứng dụng xác thực), áp cho cán bộ nội bộ. Tier 2 (Internet-facing) = SSO VNeID qua OIDC Authorization Code flow (NĐ69/2024/NĐ-CP), áp cho tác nhân bên ngoài (DN, TVV, CG, NHT). **Không có VNPT eKYC.** | PRD A6, FR-VIII-20, NĐ69/2024 | FR-VIII-15 đến FR-VIII-21 | API outbound không yêu cầu session | Test đăng nhập Tier 1 + TOTP, test SSO VNeID Tier 2 |
 
 ### BR-AUTH-02: Cấu trúc 2 tầng TW → {BN, ĐP}
 
@@ -2297,7 +2320,7 @@ stateDiagram-v2
 
 | ID | Phát biểu quy tắc | Nguồn | Áp dụng FR (nhóm này) | Ngoại lệ | Kiểm chứng |
 |----|-------------------|-------|----------------------|---------|------------|
-| BR-AUTH-EMAIL-01 | **Phân biệt 2 trường email:** **(a) `TAI_KHOAN.email`** = email cá nhân của người login. UNIQUE toàn hệ thống. Là kênh nhận: mail kích hoạt TK, link reset mật khẩu, OTP 2FA, mọi notification cá nhân + workflow. **(b) `DOANH_NGHIEP.email`** = email liên hệ tổ chức (in trên công văn, báo cáo, công bố). KHÔNG UNIQUE (cùng kế toán dịch vụ có thể là email của nhiều DN). **Khi DN tự đăng ký** (FR-VIII-22): UI hiển thị **1 ô email** duy nhất; hệ thống lưu cùng giá trị vào CẢ 2 cột. **Sau đăng ký:** 2 trường có thể đổi độc lập, **không cần OTP / không cần duyệt**: đổi `TAI_KHOAN.email` qua chức năng "Đổi email TK" (cập nhật trực tiếp); đổi `DOANH_NGHIEP.email` qua FR-V.III-02 (cập nhật thông tin DN). **Mọi notification gắn workflow** (kết quả vụ việc, thanh toán, phê duyệt) gửi đến `TAI_KHOAN.email` (vì người login là người xử lý đọc). | BA chốt 2026-05-06 | FR-VIII-22, FR-V.III-02; áp dụng entity TAI_KHOAN.email + DOANH_NGHIEP.email | — | Test đăng ký: 1 ô email → 2 cột có cùng giá trị; test đổi DOANH_NGHIEP.email không ảnh hưởng login; test đổi TAI_KHOAN.email không cần OTP |
+| BR-AUTH-EMAIL-01 | **Phân biệt 2 trường email:** **(a) `TAI_KHOAN.email`** = email cá nhân của người login. UNIQUE toàn hệ thống. Là kênh nhận: mail kích hoạt TK, link reset mật khẩu, mọi notification cá nhân + workflow. **(b) `DOANH_NGHIEP.email`** = email liên hệ tổ chức (in trên công văn, báo cáo, công bố). KHÔNG UNIQUE (cùng kế toán dịch vụ có thể là email của nhiều DN). **Khi DN tự đăng ký** (FR-VIII-22): UI hiển thị **1 ô email** duy nhất; hệ thống lưu cùng giá trị vào CẢ 2 cột. **Sau đăng ký:** 2 trường có thể đổi độc lập, **không cần OTP / không cần duyệt**: đổi `TAI_KHOAN.email` qua chức năng "Đổi email TK" (cập nhật trực tiếp); đổi `DOANH_NGHIEP.email` qua FR-V.III-02 (cập nhật thông tin DN). **Mọi notification gắn workflow** (kết quả vụ việc, thanh toán, phê duyệt) gửi đến `TAI_KHOAN.email` (vì người login là người xử lý đọc). | BA chốt 2026-05-06 | FR-VIII-22, FR-V.III-02; áp dụng entity TAI_KHOAN.email + DOANH_NGHIEP.email | — | Test đăng ký: 1 ô email → 2 cột có cùng giá trị; test đổi DOANH_NGHIEP.email không ảnh hưởng login; test đổi TAI_KHOAN.email không cần OTP |
 
 ### BR-DATA-01: Soft delete
 

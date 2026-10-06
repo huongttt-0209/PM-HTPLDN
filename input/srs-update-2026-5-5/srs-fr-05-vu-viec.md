@@ -70,7 +70,7 @@ graph TD
 2. Ưu tiên DN sử dụng nhiều lao động nữ (+2 điểm)
 3. Ưu tiên DN sử dụng ≥30% lao động khuyết tật (+2 điểm)
 4. Ưu tiên FIFO (+1 điểm)
-5. Kết hợp: lĩnh vực + địa bàn + workload cân bằng
+5. Kết hợp: lĩnh vực + workload cân bằng (**STT 33 UAT 2026-05-26: bỏ "địa bàn"** — sót lại từ phiên bản cũ; Thẻ TVV PL có hiệu lực toàn quốc theo NĐ 77/2008 Đ.19, chỉ lọc theo đơn vị quản lý cho Người hỗ trợ pháp lý nội bộ — xem BR-AUTH-08)
 
 **Auto-transition AT-03:** CB NV nhấn "Trình phê duyệt" → auto CHO_PHE_DUYET + thông báo CB PD
 
@@ -179,20 +179,20 @@ graph TD
 | 6 | vu_viec_vuong_mac | text (long) | N | Mô tả chi tiết vướng mắc, max 10.000 ký tự |
 | 7 | file_dinh_kem | FILE[] | N | PDF/DOC/DOCX/XLS/XLSX, max 20MB/file, tổng 100MB, max 10 file (quét virus) |
 
-> **Ghi chú Inputs DN:** Thông tin DN (ten_doanh_nghiep, ma_so_thue, dia_chi, nguoi_dai_dien, tinh_thanh_id, loai_dn_id, quy_mo, nganh_nghe, so_lao_dong, doanh_thu_nam, chuc_vu_dd, email, so_dien_thoai, **la_nu_lam_chu, so_lao_dong_nu, so_lao_dong_khuyet_tat**) được đọc từ DOANH_NGHIEP theo `doanh_nghiep_id`. Các field đậm là **input bắt buộc của BR-CALC-07** (ưu tiên phân công). Nếu DN thiếu các field này, Processing bước 2 sẽ trả lỗi yêu cầu DN cập nhật thông tin DN trước khi tạo VV.
+> **Ghi chú Inputs DN (BA chốt 2026-05-30):** Thông tin DN được đọc từ DOANH_NGHIEP theo `doanh_nghiep_id`. **DN cần tồn tại trong hệ thống là đủ** (tối thiểu có `ma_so_thue` + `ten_doanh_nghiep` theo schema entity). Các trường khác (`quy_mo`, `nganh_nghe`, `la_nu_lam_chu`, `so_lao_dong_nu`, `so_lao_dong_khuyet_tat`, `so_lao_dong`, `doanh_thu_nam`, `email`, `dia_chi`, `nguoi_dai_dien`...) đều **tùy chọn** — nếu thiếu thì BR-CALC-07 trả `uu_tien = 1` (FIFO), không chặn tạo VV. CB NV có thể bổ sung thông tin DN qua SCR-V.III-02 khi xử lý nghiệp vụ.
 
 **Processing:**
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 1 | Xác nhận dữ liệu đầu vào | — |
-| 2 | Lookup DOANH_NGHIEP theo `doanh_nghiep_id` từ session; nếu thiếu field BR-CALC-07 (la_nu_lam_chu, so_lao_dong_nu, so_lao_dong_khuyet_tat, quy_mo, nganh_nghe, so_lao_dong, doanh_thu_nam) → trả lỗi `ERR-GHS-03`, yêu cầu DN cập nhật DN trước | BR-CALC-07 |
+| 2 | Lookup DOANH_NGHIEP theo `doanh_nghiep_id` từ session. **Sửa theo BA chốt 2026-05-30:** DN chỉ cần tồn tại trong hệ thống (có `ma_so_thue` + `ten_doanh_nghiep`) — không yêu cầu thêm trường nào khác. **KHÔNG chặn** khi thiếu `quy_mo` / `nganh_nghe` / 5 trường ưu tiên BR-CALC-07 — bỏ ràng buộc cũ. ERR-GHS-03 chỉ trả khi `doanh_nghiep_id` không tồn tại trong DOANH_NGHIEP. | — |
 | 3 | Tự động sinh mã: VV-{TINH}-{YYYYMMDD}-{SEQ} | BR-DATA-04 |
-| 4 | Auto-calc `uu_tien` theo BR-CALC-07 (điểm ưu tiên DN) | BR-CALC-07 |
+| 4 | Auto-calc `uu_tien` theo BR-CALC-07: chấm điểm dựa trên các trường ưu tiên có sẵn (`la_nu_lam_chu` +3 nếu = 1; `so_lao_dong_nu` +2 nếu vượt ngưỡng; `so_lao_dong_khuyet_tat` +2 nếu ≥30% `so_lao_dong`; FIFO +1). **Nếu trường nào NULL/0 thì điểm tương ứng = 0** (không chặn). Tối thiểu `uu_tien=1` (FIFO) cho mọi VV. | BR-CALC-07 |
 | 5 | Tạo bản ghi VU_VIEC, trạng thái = MOI_TAO | SM-VUVIEC |
 | 6 | Lưu tài liệu đính kèm | — |
 | 7 | Ghi LICH_SU_VU_VIEC: hanh_dong='TAO_VV', vai_tro='DN' | BR-DATA-05 |
-| 8 | Gửi thông báo cho CB NV đơn vị theo tinh_thanh_id của DN | BR-NOTIF-01 |
+| 8 | Gửi thông báo cho CB NV đơn vị theo `DOANH_NGHIEP.tinh_thanh_id`. **Sửa theo BA chốt 2026-05-30:** Nếu DN tạo qua 5 kênh CB NV/API có thể chưa có `tinh_thanh_id` — khi thiếu, fallback sang đơn vị tạo DN cuối (`DOANH_NGHIEP.created_by.don_vi_id`) để gửi thông báo. Nếu vẫn không xác định được (vd: DN do API LGSP tạo) → gửi cho TW (Bộ Tư pháp) phân loại lại. | BR-NOTIF-01 |
 
 **Outputs:** Không có output trực tiếp (xác nhận gửi thành công).
 
@@ -206,7 +206,7 @@ graph TD
 |---|--------------|--------|-------------------|----------|
 | E1 | Nội dung yêu cầu trống | ERR-GHS-01 | "Nội dung yêu cầu là bắt buộc" | ERROR |
 | E2 | MST không hợp lệ | ERR-GHS-02 | "Mã số thuế không hợp lệ" | ERROR |
-| E3 | DN thiếu thông tin BR-CALC-07 | ERR-GHS-03 | "Vui lòng cập nhật thông tin DN (lao động, doanh thu, ngành nghề, quy mô) trước khi gửi yêu cầu" | ERROR |
+| E3 | DOANH_NGHIEP không tồn tại theo `doanh_nghiep_id` (BA chốt 2026-05-30 — bỏ check `quy_mo`/`nganh_nghe`) | ERR-GHS-03 | "Doanh nghiệp không tồn tại trong hệ thống. Vui lòng đăng ký lại hoặc liên hệ hỗ trợ kỹ thuật" | ERROR |
 | E4 | File vi phạm constraint | ERR-GHS-04 | "File vượt quá dung lượng/số lượng cho phép hoặc sai định dạng" | ERROR |
 
 **Acceptance Criteria:**
@@ -309,7 +309,7 @@ graph TD
 
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc |
 |---|----------|-----------|----------|-----------|
-| 1 | ma_so_thue | text | Y | Lookup DOANH_NGHIEP; nếu chưa có → mở modal tạo DN mới với đủ field BR-CALC-07 |
+| 1 | ma_so_thue | text | Y | Lookup DOANH_NGHIEP; nếu chưa có → mở modal tạo DN mới với **bắt buộc TỐI THIỂU 2 trường** (`ma_so_thue` + `ten_doanh_nghiep`) — `tinh_thanh_id` tự suy diễn theo đơn vị CB NV. 15 trường khác tùy chọn. **Sửa theo BA chốt 2026-05-30:** Modal chỉ tạo `DOANH_NGHIEP`, KHÔNG tạo TAI_KHOAN, KHÔNG gửi mail. Khi DN muốn theo dõi vụ việc → DN tự đăng ký TK qua FR-VIII-22 với MST + dùng FR-VIII-26 (Quên mật khẩu) làm Claim Flow nếu MST đã tồn tại. |
 | 2 | doanh_nghiep_id | identifier | Y | FK → DOANH_NGHIEP(id); set sau khi lookup/tạo ở field 1 |
 | 3 | tieu_de | text | Y | max 500 ký tự — tiêu đề/tóm tắt VV |
 | 4 | loai_hinh_ht_id | identifier | Y | FK → DANH_MUC (loai='LOAI_HINH_HT') |
@@ -321,7 +321,7 @@ graph TD
 | 10 | uu_tien | number | N | BETWEEN 1 AND 5; mặc định auto-calc BR-CALC-07, CB NV có thể override |
 | 11 | ly_do_uu_tien | text | N | Bắt buộc khi `uu_tien` được override khác giá trị BR-CALC-07; max 500 ký tự |
 
-> **Ghi chú Inputs DN:** Các field DN (tinh_thanh_id, loai_dn_id, quy_mo, nganh_nghe, so_lao_dong, doanh_thu_nam, chuc_vu_dd, email, so_dien_thoai, **la_nu_lam_chu, so_lao_dong_nu, so_lao_dong_khuyet_tat**) quản lý bởi DOANH_NGHIEP (Nhóm V.III). Modal tạo DN mới (khi MST chưa có) BẮT BUỘC nhập đủ các field đậm để BR-CALC-07 hoạt động.
+> **Ghi chú Inputs DN (BA chốt 2026-05-30):** Modal tạo DN mới (khi MST chưa có) áp **schema bắt buộc TỐI THIỂU 2 trường**: `ma_so_thue` + `ten_doanh_nghiep`. `tinh_thanh_id` tự suy diễn theo đơn vị CB NV đăng nhập. 15 trường khác (`email`, `dia_chi`, `loai_doanh_nghiep_id`, `quy_mo`, `nganh_nghe`, `nguoi_dai_dien`, `so_dien_thoai`, `giay_cn_dkkd`, `chuc_vu_dd`, `so_lao_dong`, `doanh_thu_nam`, `tong_nguon_von`, `la_nu_lam_chu`, `so_lao_dong_nu`, `so_lao_dong_khuyet_tat`, `linh_vuc_ids`, `ghi_chu`, `file_dinh_kem`) đều **tùy chọn** — CB NV nhập khi có thông tin. Nếu thiếu các trường ưu tiên BR-CALC-07 → trả `uu_tien = 1` (FIFO), không chặn. Sau khi tạo DN, hệ thống **KHÔNG tạo TAI_KHOAN, KHÔNG gửi mail**. Khi DN muốn theo dõi vụ việc → DN tự đăng ký TK qua FR-VIII-22 + dùng FR-VIII-26 (Quên mật khẩu) làm Claim Flow nếu MST đã tồn tại.
 
 **Processing:**
 
@@ -329,10 +329,11 @@ graph TD
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền | BR-AUTH-01 |
 | 2 | Xác nhận dữ liệu đầu vào | — |
-| 3 | Lookup DOANH_NGHIEP theo `ma_so_thue`; nếu chưa có → mở modal tạo DN mới (cross-ref Nhóm V.III) với đủ field BR-CALC-07 | — |
-| 4 | Verify DOANH_NGHIEP đủ field BR-CALC-07 (la_nu_lam_chu, so_lao_dong_nu, so_lao_dong_khuyet_tat, quy_mo, nganh_nghe, so_lao_dong, doanh_thu_nam); nếu thiếu → ERR-NH-04 | BR-CALC-07 |
+| 3 | Lookup DOANH_NGHIEP theo `ma_so_thue`; nếu chưa có → mở modal tạo DN mới (cross-ref Nhóm V.III FR-V.III-NEW-03 — STT 39) với schema **tối thiểu 2 trường bắt buộc** (`ma_so_thue` + `ten_doanh_nghiep`) | — |
+| ~~3a~~ | ~~Tạo TAI_KHOAN cho DN~~ — **BỎ theo BA chốt 2026-05-30 (override 2026-05-10).** FR này chỉ tạo `DOANH_NGHIEP`. Khi DN muốn theo dõi vụ việc → DN tự đăng ký TK qua FR-VIII-22 với MST. Nếu MST đã có sẵn → FR-VIII-26 (Quên mật khẩu) làm Claim Flow tự động kết nối lại hồ sơ. | — |
+| 4 | Verify DN tồn tại (có `ma_so_thue` + `ten_doanh_nghiep`). **Sửa theo BA chốt 2026-05-30:** KHÔNG chặn khi thiếu các trường khác (`quy_mo`, `nganh_nghe`, ưu tiên BR-CALC-07...). CB NV có thể bổ sung sau qua SCR-V.III-02. | — |
 | 5 | Tự động sinh mã vụ việc | BR-DATA-04 |
-| 6 | Auto-calc `uu_tien` theo BR-CALC-07; nếu CB NV override phải có `ly_do_uu_tien` | BR-CALC-07 |
+| 6 | Auto-calc `uu_tien` theo BR-CALC-07 (FIFO +1 + các trường ưu tiên nếu có); nếu CB NV override phải có `ly_do_uu_tien` | BR-CALC-07 |
 | 7 | Tạo VU_VIEC, trạng thái = DA_TIEP_NHAN | SM-VUVIEC |
 | 8 | Tính deadline SLA: ngày tiếp nhận + 15 ngày làm việc (NĐ55/2019 Điều 8 Khoản 1) | BR-SLA-01 |
 | 9 | Lưu tài liệu đính kèm | — |
@@ -352,7 +353,7 @@ graph TD
 | E1 | Nội dung trống | ERR-NH-01 | "Nội dung yêu cầu là bắt buộc" | ERROR |
 | E2 | MST format lỗi | ERR-NH-02 | "Mã số thuế không hợp lệ" | ERROR |
 | E3 | File vi phạm constraint | ERR-NH-03 | "File vượt quá dung lượng/số lượng cho phép hoặc sai định dạng" | ERROR |
-| E4 | DN thiếu thông tin BR-CALC-07 | ERR-NH-04 | "DN thiếu thông tin bắt buộc (lao động/doanh thu/ngành nghề/quy mô). Cập nhật DN trước" | ERROR |
+| ~~E4~~ | ~~DN thiếu `quy_mo`/`nganh_nghe`~~ | ~~ERR-NH-04~~ | **BỎ theo BA chốt 2026-05-30** — chỉ kiểm tra DN tồn tại theo MST + tên DN; không chặn nếu thiếu các trường khác (BR-CALC-07 trả `uu_tien = 1` FIFO). | — |
 | E5 | `uu_tien` override thiếu `ly_do_uu_tien` | ERR-NH-05 | "Phải nhập lý do ưu tiên khi override giá trị hệ thống" | ERROR |
 
 **Acceptance Criteria:**
@@ -498,7 +499,7 @@ graph TD
 **UC Reference:** UC 56 | **Priority:** Essential | **Stability:** High
 **Màn hình:** SCR-V.I-03 (Accordion 4 — Kết quả Kiểm tra)
 
-**Mô tả:** CB NV kiểm tra tính đầy đủ và hợp lệ của HS theo checklist UC106 (6 hạng mục Mẫu 01 NĐ55).
+**Mô tả:** CB NV kiểm tra tính đầy đủ và hợp lệ của HS theo checklist UC106 (6 hạng mục Mẫu 01 (Phụ lục NĐ18/2026)).
 
 **Preconditions:**
 
@@ -517,9 +518,9 @@ graph TD
 | 4 | ly_do | text | Cond | Bắt buộc nếu KHONG_DAT hoặc YEU_CAU_BO_SUNG |
 
 **Hạng mục kiểm tra (UC106):**
-1. Văn bản đề nghị hỗ trợ (Mẫu 01 NĐ55)
+1. Văn bản đề nghị hỗ trợ (Mẫu 01 (Phụ lục NĐ18/2026))
 2. Bản chụp Giấy CNĐKKD
-3. Tờ khai xác định quy mô DN (NĐ39/2018)
+3. Tờ khai xác định quy mô DN (NĐ80/2021)
 4. Hợp đồng dịch vụ TVPL
 5. Văn bản TVPL (bản đầy đủ)
 6. Văn bản TVPL (bản loại bỏ bí mật KD)
@@ -947,9 +948,9 @@ graph TD
 ### FR-V.I-13: Phê duyệt hồ sơ vụ việc (UC63)
 
 **UC Reference:** UC 63 | **Priority:** Essential | **Stability:** High
-**Màn hình:** SCR-V.I-03 (Action Phê duyệt) + SCR-V.I-01 (Batch PD)
+**Màn hình:** SCR-V.I-03 (Action Phê duyệt)
 
-**Mô tả:** CB PD phê duyệt hoặc từ chối VV. Hỗ trợ phê duyệt hàng loạt.
+**Mô tả:** CB PD phê duyệt hoặc từ chối VV theo từng vụ việc. KHÔNG hỗ trợ phê duyệt hàng loạt cho UC63 (BA chốt 2026-05-13 — báo cáo review HDSD §6.2 #3).
 
 **Tác nhân:** CB PD (cùng cấp, BR-FLOW-03)
 
@@ -1311,7 +1312,7 @@ graph TD
 **UC Reference:** — (CR-01 + Q-NEW-02 chốt 2026-04-16) | **Priority:** Essential | **Stability:** High
 **Màn hình:** SCR-V.I-03 (action bar — nút [Công khai] / [Hủy công khai] context theo trạng thái)
 
-**Mô tả:** CB Phê duyệt cùng cấp đẩy vụ việc đã duyệt lên Cổng Pháp luật Quốc gia hoặc gỡ vụ việc đã công khai. Áp danh sách trắng cột BR-PUBLIC-04 trước khi gửi để tránh rò rỉ dữ liệu cá nhân DN (NĐ13/2023).
+**Mô tả:** CB Phê duyệt cùng cấp công khai vụ việc đã duyệt lên Cổng Pháp luật Quốc gia hoặc gỡ vụ việc đã công khai. Công khai theo mô hình KÉO (PULL): hệ thống chỉ đặt cờ `cong_khai = 1` cho bản ghi (vụ việc giữ nguyên trạng thái workflow DA_DUYET/HOAN_THANH; `cong_khai` là cờ overlay); Cổng PLQG tự kéo định kỳ các vụ việc công khai qua API outbound FR-XII-07. Hệ thống KHÔNG đẩy trực tiếp sang Cổng. Áp danh sách trắng cột BR-PUBLIC-04 để giới hạn dữ liệu chia sẻ, tránh rò rỉ dữ liệu cá nhân DN (NĐ13/2023).
 
 **Tác nhân:** Cán bộ Phê duyệt cùng cấp đơn vị với bản ghi (BR-AUTH-05).
 
@@ -1347,13 +1348,11 @@ graph TD
 | 1 | Kiểm tra quyền: CB PD cùng cấp với đơn vị sở hữu bản ghi (chặn CB NV và CB PD khác cấp) | BR-AUTH-05 |
 | 2 | Kiểm tra trạng thái: `trang_thai ∈ {DA_DUYET, HOAN_THANH}` AND `cong_khai = 0` | SM-VUVIEC, BR-PUBLIC-01 |
 | 3 | Validate + sanitize: `mo_ta_cong_khai` chạy XSS sanitize whitelist; ảnh + file đã quét virus | — |
-| 4 | Áp **whitelist BR-PUBLIC-04 (Q-NEW-02)**: chỉ gửi 9 fields whitelist (linh_vuc_phap_luat, loai_hinh_ho_tro, mo_ta_cong_khai, thoi_gian_xu_ly, don_vi, ket_qua, thoi_gian_dang_tai, anh_dai_dien, file_dinh_kem_cong_khai). KHÔNG gửi 6 fields nhạy cảm (tên DN, người đại diện, CCCD/MST, mo_ta nội bộ, file_dinh_kem nghiệp vụ, noi_dung_tu_van, SĐT/email/địa chỉ DN) — tuân NĐ13/2023 BVDLCN | BR-PUBLIC-04 |
-| 5 | Lưu tạm các field công khai (`anh_dai_dien`, `mo_ta_cong_khai`, `file_dinh_kem_cong_khai`) nhưng CHƯA set `cong_khai = 1` | BR-EC-20 |
-| 6 | Gọi API trực tiếp Cổng PLQG: đẩy payload đã whitelist | BR-PUBLIC-04 |
-| 7 | API thành công → SET `cong_khai = 1`, `thoi_gian_dang_tai = NOW()` | BR-EC-20 |
-| 8 | API fail → KHÔNG set, giữ trạng thái cũ, trả ERR-CK-VV-07 (timeout/5xx) hoặc ERR-CK-VV-08 (4xx). Toast persistent + nút "Thử lại" | BR-EC-20 |
-| 9 | Ghi LICH_SU_VU_VIEC: hanh_dong='CONG_KHAI', vai_tro='CB_PD' | BR-DATA-05 |
-| 10 | Gửi thông báo DN: "Vụ việc {ma_vu_viec} đã được công khai trên Cổng Pháp luật Quốc gia" | BR-NOTIF-01 |
+| 4 | Áp **whitelist BR-PUBLIC-04 (Q-NEW-02)**: chỉ gửi 10 fields whitelist (linh_vuc_phap_luat, loai_hinh_ho_tro, mo_ta_cong_khai, thoi_gian_xu_ly, don_vi, ket_qua, thoi_gian_dang_tai, anh_dai_dien, file_dinh_kem_cong_khai, tieu_de `[STT15]`). KHÔNG gửi 6 fields nhạy cảm (tên DN, người đại diện, CCCD/MST, mo_ta nội bộ, file_dinh_kem nghiệp vụ, noi_dung_tu_van, SĐT/email/địa chỉ DN) — tuân NĐ13/2023 BVDLCN | BR-PUBLIC-04 |
+| 5 | Lưu các field công khai (`anh_dai_dien`, `mo_ta_cong_khai`, `file_dinh_kem_cong_khai`) | — |
+| 6 | SET `cong_khai = 1`, `thoi_gian_dang_tai = NOW()`. Vụ việc giữ nguyên trạng thái workflow (DA_DUYET / HOAN_THANH); `cong_khai` là cờ overlay đánh dấu bản ghi đủ điều kiện công khai. Cổng PLQG tự kéo (PULL) bản ghi này theo định kỳ qua API outbound FR-XII-07 — hệ thống KHÔNG đẩy trực tiếp sang Cổng | BR-PUBLIC-01, BR-PUBLIC-04, BR-EC-20 |
+| 7 | Ghi LICH_SU_VU_VIEC: hanh_dong='CONG_KHAI', vai_tro='CB_PD' | BR-DATA-05 |
+| 8 | Gửi thông báo DN: "Vụ việc {ma_vu_viec} đã được công khai trên Cổng Pháp luật Quốc gia" | BR-NOTIF-01 |
 
 **Processing — Hủy công khai:**
 
@@ -1362,11 +1361,9 @@ graph TD
 | 1 | Kiểm tra quyền: CB PD cùng cấp | BR-AUTH-05 |
 | 2 | Kiểm tra: `cong_khai = 1` | — |
 | 3 | Validate `ly_do_huy` (min 20, max 1000 ký tự) | BR-FLOW-04 |
-| 4 | Gọi API Cổng PLQG: yêu cầu gỡ bản ghi | — |
-| 5 | API thành công → SET `cong_khai = 0`, clear `mo_ta_cong_khai` + `anh_dai_dien` + `file_dinh_kem_cong_khai` + `thoi_gian_dang_tai` | BR-EC-20 |
-| 6 | API fail → giữ `cong_khai = 1`, trả ERR-CK-VV-07/08. Toast persistent + nút "Thử lại" | BR-EC-20 |
-| 7 | Ghi LICH_SU_VU_VIEC: hanh_dong='HUY_CONG_KHAI', vai_tro='CB_PD', noi_dung chứa `ly_do_huy` | BR-DATA-05 |
-| 8 | Gửi thông báo DN: "Vụ việc {ma_vu_viec} đã bị gỡ khỏi Cổng PLQG. Lý do: {ly_do_huy}" | BR-NOTIF-01 |
+| 4 | SET `cong_khai = 0`, clear `mo_ta_cong_khai` + `anh_dai_dien` + `file_dinh_kem_cong_khai` + `thoi_gian_dang_tai`. Ở lượt kéo (PULL) tiếp theo, Cổng PLQG tự loại bản ghi khỏi response FR-XII-07 (filter `cong_khai = 1`) — hệ thống KHÔNG gọi API gỡ trực tiếp | BR-EC-20 |
+| 5 | Ghi LICH_SU_VU_VIEC: hanh_dong='HUY_CONG_KHAI', vai_tro='CB_PD', noi_dung chứa `ly_do_huy` | BR-DATA-05 |
+| 6 | Gửi thông báo DN: "Vụ việc {ma_vu_viec} đã bị gỡ khỏi Cổng PLQG. Lý do: {ly_do_huy}" | BR-NOTIF-01 |
 
 **Outputs:**
 
@@ -1386,22 +1383,19 @@ graph TD
 | E3 | mo_ta_cong_khai chứa thẻ HTML ngoài whitelist | ERR-CK-VV-03 | "Mô tả công khai chứa định dạng không cho phép" | ERROR |
 | E4 | Ảnh đại diện vượt 5MB hoặc sai định dạng | ERR-CK-VV-04 | "Ảnh đại diện không vượt 5MB và chỉ chấp nhận jpg/png/gif" | ERROR |
 | E5 | File đính kèm vượt giới hạn hoặc nhiễm virus | ERR-CK-VV-05 | "Tệp '{name}' [vượt dung lượng / sai định dạng / chứa mã độc], đã bị từ chối" | ERROR |
-| E6 | API Cổng PLQG timeout/5xx/network fail | ERR-CK-VV-07 | "Cổng Pháp luật Quốc gia tạm thời không phản hồi. Vụ việc giữ ở trạng thái cũ. Vui lòng thử lại sau ít phút" + nút "Thử lại" | ERROR |
-| E7 | API Cổng PLQG trả lỗi nghiệp vụ (4xx) | ERR-CK-VV-08 | "Cổng Pháp luật Quốc gia từ chối yêu cầu: {api_message}" | ERROR |
-| E8 | Hủy công khai khi cong_khai = 0 | ERR-CK-VV-09 | "Vụ việc chưa được công khai, không thể hủy công khai" | ERROR |
-| E9 | ly_do_huy < 20 ký tự | ERR-CK-VV-10 | "Lý do hủy công khai phải tối thiểu 20 ký tự" | ERROR |
+| E6 | Hủy công khai khi cong_khai = 0 | ERR-CK-VV-09 | "Vụ việc chưa được công khai, không thể hủy công khai" | ERROR |
+| E7 | ly_do_huy < 20 ký tự | ERR-CK-VV-10 | "Lý do hủy công khai phải tối thiểu 20 ký tự" | ERROR |
 
 **Postconditions:**
-- Công khai thành công: `cong_khai = 1`, `thoi_gian_dang_tai = NOW()`, vụ việc hiển thị trên Cổng PLQG
-- Hủy công khai thành công: `cong_khai = 0`, các cột công khai được clear, vụ việc gỡ khỏi Cổng PLQG
+- Công khai thành công: `cong_khai = 1`, `thoi_gian_dang_tai = NOW()`; vụ việc hiển thị trên Cổng PLQG sau lượt Cổng tự kéo (PULL) qua FR-XII-07
+- Hủy công khai thành công: `cong_khai = 0`, các cột công khai được clear; vụ việc bị loại khỏi response Cổng PLQG ở lượt kéo tiếp theo
 - LICH_SU_VU_VIEC có entry mới
 - DN nhận thông báo qua in-app + email
 
 **Acceptance Criteria:**
 - **Given** CB PD cùng cấp xem VV ở DA_DUYET **When** click "Công khai" **Then** mở modal Công khai với form ảnh + mô tả + file
-- **Given** form hợp lệ **When** xác nhận **Then** gọi API Cổng PLQG. Nếu OK → SET cong_khai=1 + thoi_gian_dang_tai + thông báo DN
-- **Given** API Cổng PLQG fail (timeout/5xx) **When** thực hiện **Then** giữ nguyên trạng thái + toast persistent với nút "Thử lại"
-- **Given** VV đang công khai **When** CB PD click "Hủy công khai" + nhập lý do ≥ 20 ký tự **Then** API gỡ thành công → SET cong_khai=0 + clear cột công khai + thông báo DN
+- **Given** form hợp lệ **When** xác nhận **Then** SET cong_khai=1 + thoi_gian_dang_tai + thông báo DN; Cổng PLQG tự kéo (PULL) bản ghi qua FR-XII-07 ở lượt sau
+- **Given** VV đang công khai **When** CB PD click "Hủy công khai" + nhập lý do ≥ 20 ký tự **Then** SET cong_khai=0 + clear cột công khai + thông báo DN; lượt kéo tiếp theo Cổng tự loại bản ghi khỏi response
 
 **Pháp luật:** NĐ13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân — bắt buộc whitelist BR-PUBLIC-04 trước khi gửi ra Cổng PLQG để tránh rò rỉ thông tin DN/người đại diện.
 
@@ -1506,6 +1500,18 @@ Khi render UI, dev **phải dịch** mã DB (snake_case enum) sang nhãn tiếng
 | `QUA_HAN` | Quá hạn | Đỏ |
 | `QUA_HAN_NGHIEM_TRONG` | Quá hạn nghiêm trọng | Đen |
 
+**Mức ưu tiên (`VU_VIEC.uu_tien`):**
+
+> Thang số 1–5 (auto-calc theo BR-CALC-07; CB NV có thể override kèm `ly_do_uu_tien`). Bảng dưới chỉ dịch số sang nhãn hiển thị, **KHÔNG** đổi nghĩa thang số hiện có. Nhãn là **đề xuất, cần CĐT xác nhận** (hoặc chốt hiển thị số kèm tooltip).
+
+| Giá trị | Nhãn UI | Màu badge |
+|---------|---------|-----------|
+| `1` | Thấp | Xám nhạt |
+| `2` | Thấp | Xám nhạt |
+| `3` | Bình thường | Xanh lá |
+| `4` | Cao | Cam |
+| `5` | Khẩn cấp | Đỏ |
+
 **Kênh tiếp nhận (`VU_VIEC.kenh_tiep_nhan`):**
 
 | Mã DB | Nhãn UI |
@@ -1571,7 +1577,6 @@ Khi render UI, dev **phải dịch** mã DB (snake_case enum) sang nhãn tiếng
 | Không có quyền truy cập | Toast error | "Bạn không có quyền thực hiện thao tác này" |
 | Xóa hồ sơ | Confirm modal | Tiêu đề: "Xác nhận xóa vụ việc". Nội dung: "Bạn có chắc chắn xóa vụ việc {ma_vu_viec}? Hồ sơ sẽ được lưu trong thùng rác và quản trị viên có thể khôi phục." Nút: [Xóa] / [Hủy] |
 | Xóa hàng loạt | Confirm modal | "Bạn sắp xóa {N} vụ việc. Tiếp tục?" |
-| Phê duyệt hàng loạt có lỗi | Toast warning | "Đã phê duyệt {M}/{N} vụ việc. {N-M} vụ việc gặp lỗi (nhấn để xem chi tiết)." |
 | Xung đột optimistic lock | Modal | "Vụ việc đã được {ho_ten} cập nhật lúc {dd/mm HH:mm}. Vui lòng tải lại để xem thông tin mới nhất." + nút [Tải lại] |
 
 Chi tiết message riêng cho từng SCR ghi tại mục "Thông báo riêng" cuối mỗi SCR.
@@ -1603,8 +1608,8 @@ Mỗi SCR chứa các phần sau (theo thứ tự):
 
 ### SCR-V.I-01: Danh sách Hồ sơ Vụ việc
 
-**Loại màn hình:** Danh sách (6 tab trạng thái + batch actions)
-**FR sử dụng:** FR-V.I-01, FR-V.I-08, FR-V.I-13 (batch PD)
+**Loại màn hình:** Danh sách (6 tab trạng thái + thao tác xóa hàng loạt)
+**FR sử dụng:** FR-V.I-01, FR-V.I-08
 **UX-Spec ref:** dac-ta-man-hinh-chuc-nang-v2.md — MH-05.1
 
 #### Thành phần màn hình
@@ -1632,7 +1637,7 @@ Mỗi SCR chứa các phần sau (theo thứ tự):
 | 19 | table | Deadline SLA | date | dd/mm/yyyy (110px) | — | Luôn |
 | 20 | table | Cảnh báo SLA | C07 | 4 mức màu: 🟢 BINH_THUONG / 🟡 SAP_HET / 🔴 QUA_HAN / ⚫ QUA_HAN_NGHIEM_TRONG (80px) | — | Luôn |
 | 21 | table | Hành động | icon buttons | 👁 Xem → MH-05.3 / ✏ Sửa → MH-05.2 / 🗑 Xóa (C12 confirm) (100px) | click → tương ứng | Luôn |
-| 22 | action-bar | Thanh hành động hàng loạt | buttons | ☐ Chọn tất cả + [Trình PD hàng loạt] [Xóa hàng loạt]. Trình PD chỉ áp dụng VV ở DANG_XU_LY | click → batch | Khi >= 1 checkbox |
+| 22 | action-bar | Thanh hành động hàng loạt | buttons | ☐ Chọn tất cả + [Xóa hàng loạt]. KHÔNG có Trình PD hàng loạt (BA chốt 2026-05-13 — UC63 phê duyệt từng VV) | click → batch | Khi >= 1 checkbox |
 | 23 | pagination | Phân trang | C05 | "Hiển thị 1-20 / N kết quả". Mặc định 20/trang | click → chuyển trang | Luôn |
 
 #### Quy tắc tương tác
@@ -1658,16 +1663,16 @@ Mỗi SCR chứa các phần sau (theo thứ tự):
 | 2 | header | Tiêu đề trang | C02 | "Thêm mới Hồ sơ Vụ việc" | — | Luôn |
 | 3 | accordion-1 | Thông tin Doanh nghiệp | C23 | Mở rộng mặc định | — | Luôn |
 | 4 | accordion-1 | Nút [Tìm DN] | C08 Secondary | Mở modal tìm DN theo MST/tên. Nếu DN đã tồn tại → auto-fill các trường bên dưới | click → modal search | Luôn |
-| 5 | accordion-1 | ten_doanh_nghiep | C09 Text | Bắt buộc | — | Luôn |
-| 6 | accordion-1 | ma_so_thue | C09 Text | Bắt buộc. Validate format (10 hoặc 13 ký số). Kiểm tra unique | — | Luôn |
-| 7 | accordion-1 | dia_chi | C09 Text | Bắt buộc | — | Luôn |
-| 8 | accordion-1 | tinh_thanh_id | C10 Dropdown | Bắt buộc. FK → DON_VI. Auto-filter theo phân quyền | — | Luôn |
-| 9 | accordion-1 | loai_doanh_nghiep_id | C10 Dropdown | Bắt buộc. FK → DANH_MUC (UC105) | — | Luôn |
-| 10 | accordion-1 | quy_mo | C10 Dropdown | Bắt buộc. SIEU_NHO / NHO / VUA. Auto-suggest theo NĐ39/2018 | — | Luôn |
-| 11 | accordion-1 | nganh_nghe | C10 Dropdown | Bắt buộc. NONG_LAM / CONG_NGHIEP / THUONG_MAI | — | Luôn |
-| 12 | accordion-1 | so_lao_dong | C09 Number | Không bắt buộc. Kiểm tra quy_mo phù hợp | — | Luôn |
-| 13 | accordion-1 | doanh_thu_nam | C09 Number | Không bắt buộc. Dấu chấm phân cách hàng nghìn | — | Luôn |
-| 14 | accordion-1 | nguoi_dai_dien | C09 Text | Bắt buộc | — | Luôn |
+| 5 | accordion-1 | ten_doanh_nghiep | C09 Text | **Bắt buộc** (định danh DN) | — | Luôn |
+| 6 | accordion-1 | ma_so_thue | C09 Text | **Bắt buộc** (định danh DN). Validate format (10 ký số theo TT 105/2020). Kiểm tra unique | — | Luôn |
+| 7 | accordion-1 | dia_chi | C09 Text | Tùy chọn. **Sửa theo BA chốt 2026-05-30** — modal chỉ cần 2 trường định danh; CB NV bổ sung sau qua SCR-V.III-02 | — | Luôn |
+| 8 | accordion-1 | tinh_thanh_id | C10 Dropdown | Tùy chọn. FK → DANH_MUC (loại TINH_THANH). **Tự suy diễn**: default theo đơn vị CB NV đăng nhập (BR-AUTH-08); CB NV có thể chỉnh nếu DN ở tỉnh khác | — | Luôn |
+| 9 | accordion-1 | loai_doanh_nghiep_id | C10 Dropdown | Tùy chọn. FK → DANH_MUC (UC105) | — | Luôn |
+| 10 | accordion-1 | quy_mo | C10 Dropdown | Tùy chọn. SIEU_NHO / NHO / VUA. Auto-suggest theo NĐ80/2021 nếu CB NV nhập đủ Nhóm C. Nếu trống → BR-CALC-07 trả `uu_tien = 1` (FIFO) khi phân công VV | — | Luôn |
+| 11 | accordion-1 | nganh_nghe | C10 Dropdown | Tùy chọn. NONG_LAM / CONG_NGHIEP / THUONG_MAI | — | Luôn |
+| 12 | accordion-1 | so_lao_dong | C09 Number | Tùy chọn. Cho BR-CALC-05 + BR-CALC-07 | — | Luôn |
+| 13 | accordion-1 | doanh_thu_nam | C09 Number | Tùy chọn. Dấu chấm phân cách hàng nghìn | — | Luôn |
+| 14 | accordion-1 | nguoi_dai_dien | C09 Text | Tùy chọn | — | Luôn |
 | 15 | accordion-1 | chuc_vu_dd, email, so_dien_thoai | C09 Text/Email | Không bắt buộc | — | Luôn |
 | 16 | accordion-1 | la_nu_lam_chu | Checkbox | Không bắt buộc. DN do phụ nữ làm chủ (NĐ55 Điều 4 ưu tiên) | — | Luôn |
 | 17 | accordion-1 | so_lao_dong_nu, so_lao_dong_khuyet_tat | C09 Number | Không bắt buộc. NĐ55 Điều 4 ưu tiên | — | Luôn |
@@ -1694,7 +1699,7 @@ Mỗi SCR chứa các phần sau (theo thứ tự):
 - Mã VV auto-gen: VV-{TINH}-{YYYYMMDD}-{SEQ} (BR-DATA-04)
 - Nhập thủ công (UC54): trang_thai mặc định = DA_TIEP_NHAN (bỏ qua MOI_TAO và CHO_TIEP_NHAN)
 - Từ chuyên trang (UC52): trang_thai = MOI_TAO
-- Validate quy_mo DN: warning WRN-DN-01 nếu quy_mo không khớp so_lao_dong/doanh_thu (NĐ39/2018). Vẫn cho phép lưu
+- Validate quy_mo DN: warning WRN-DN-01 nếu quy_mo không khớp so_lao_dong/doanh_thu (NĐ80/2021). Vẫn cho phép lưu
 - Nút [Tìm DN] mở modal: nhập MST hoặc tên DN → kết quả từ DOANH_NGHIEP. Chọn → auto-fill. Không tìm thấy → nhập mới
 
 ---
@@ -1736,8 +1741,8 @@ Mỗi SCR chứa các phần sau (theo thứ tự):
 | CHO_PHE_DUYET | [Phê duyệt] [Từ chối] (gộp MH-05.8) | CB PD | Phê duyệt → DA_DUYET. Từ chối → DANG_XU_LY (quay về người được phân công sửa kết quả theo BR-FLOW-04 — KHÔNG đóng VV; modal lý do bắt buộc ≥ 10 ký tự) |
 | DA_DUYET | [Cập nhật KQ cuối] | CB NV | → HOAN_THANH + ngay_hoan_thanh |
 | HOAN_THANH | [Đánh giá] (gộp MH-05.9) | CB NV/DN | Mở Accordion 8. Gửi → DA_DANH_GIA |
-| DA_DUYET / HOAN_THANH (cong_khai=0) | [Công khai] | CB Phê duyệt cùng cấp | Mở modal Công khai (form ảnh đại diện + mô tả công khai + file đính kèm). Khi xác nhận: hệ thống đẩy vụ việc lên Cổng Pháp luật Quốc gia (FR-V.I-NEW-05). Nếu API OK → SET cong_khai=1, thoi_gian_dang_tai=NOW() |
-| DA_DUYET / HOAN_THANH (cong_khai=1) | [Hủy công khai] | CB Phê duyệt cùng cấp | Mở modal nhập lý do (≥ 20 ký tự). Khi xác nhận: hệ thống gỡ vụ việc khỏi Cổng PLQG (FR-V.I-NEW-05). Nếu API OK → SET cong_khai=0 + clear cột công khai |
+| DA_DUYET / HOAN_THANH (cong_khai=0) | [Công khai] | CB Phê duyệt cùng cấp | Mở modal Công khai (form ảnh đại diện + mô tả công khai + file đính kèm). Khi xác nhận: hệ thống SET cong_khai=1, thoi_gian_dang_tai=NOW() (FR-V.I-NEW-05); Cổng PLQG tự kéo (PULL) bản ghi qua FR-XII-07 ở lượt sau |
+| DA_DUYET / HOAN_THANH (cong_khai=1) | [Hủy công khai] | CB Phê duyệt cùng cấp | Mở modal nhập lý do (≥ 20 ký tự). Khi xác nhận: hệ thống SET cong_khai=0 + clear cột công khai (FR-V.I-NEW-05); lượt kéo tiếp theo Cổng tự loại bản ghi khỏi response |
 | TU_CHOI | [Mở lại hồ sơ] | QTHT/CB NV | → DA_TIEP_NHAN. Bắt buộc lý do. Ghi AUDIT_LOG action='MO_LAI'. (FR formal hoá ở lượt review tiếp theo — hiện giữ placeholder FR-V.I-xx) |
 
 **Quy ước hiển thị nút thao tác:**
@@ -1767,7 +1772,7 @@ Mỗi SCR chứa các phần sau (theo thứ tự):
 | Phê duyệt thành công | Toast success | "Đã phê duyệt vụ việc {mã}" |
 | CB PD từ chối phê duyệt | Toast info | "Đã từ chối phê duyệt vụ việc {mã}. Vụ việc quay về trạng thái 'Đang xử lý' để cán bộ Nghiệp vụ điều chỉnh kết quả (BR-FLOW-04)." |
 | Cập nhật kết quả cuối → Hoàn thành | Toast success | "Vụ việc {mã} đã hoàn thành. Doanh nghiệp đã nhận thông báo." |
-| Công khai — Cổng Pháp luật Quốc gia không phản hồi | Toast persistent | "Cổng Pháp luật Quốc gia tạm thời không phản hồi. Vụ việc giữ nguyên trạng thái. Vui lòng thử lại sau ít phút." + nút [Thử lại] |
+| Công khai thành công | Toast success | "Đã công khai vụ việc {mã} lên Cổng Pháp luật Quốc gia. Cổng sẽ hiển thị ở lượt cập nhật tiếp theo." |
 | Hai cán bộ thao tác cùng lúc trên 1 vụ việc | Toast error | "Vụ việc đang được {tên cán bộ khác} thao tác. Vui lòng thử lại sau {n} giây." |
 | Mở lại hồ sơ — thiếu lý do | Inline error | "Lý do mở lại phải có ít nhất 20 ký tự" |
 
@@ -1878,7 +1883,7 @@ Mỗi SCR chứa các phần sau (theo thứ tự):
 | # | Entity | Vai trò | Mô tả |
 |---|--------|---------|-------|
 | 1 | VU_VIEC | owned | Vụ việc Trợ giúp Pháp lý — entity trung tâm nhóm V.I |
-| 2 | HO_SO_VU_VIEC | owned | Tài liệu đính kèm vụ việc (Mẫu 01 NĐ55, CNĐKKD...) |
+| 2 | HO_SO_VU_VIEC | owned | Tài liệu đính kèm vụ việc (Mẫu 01 (Phụ lục NĐ18/2026), CNĐKKD...) |
 | 3 | KET_QUA_VU_VIEC | owned | Kết quả xử lý vụ việc (VB tư vấn, kết luận). 1:1 với VU_VIEC |
 | 4 | PHAN_CONG_VU_VIEC | owned | Bản ghi phân công xử lý VV cho cá nhân (TVV/CG/NHT) hoặc Tổ chức tư vấn (FR-V.I-09/10) |
 | 5 | DANH_GIA_VU_VIEC | owned | Đánh giá chất lượng hỗ trợ VV (FR-V.I-17). 1:1 với VU_VIEC per loại người đánh giá |
@@ -2034,7 +2039,7 @@ erDiagram
 
 ### HO_SO_VU_VIEC (owned)
 
-**Mô tả:** Tài liệu đính kèm vụ việc HTPL (Mẫu 01 NĐ55, CNĐKKD, HĐ TVPL, VB TVPL...).
+**Mô tả:** Tài liệu đính kèm vụ việc HTPL (Mẫu 01 (Phụ lục NĐ18/2026), CNĐKKD, HĐ TVPL, VB TVPL...).
 **Module:** Nhóm V.I — Vụ việc
 
 | # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
@@ -2285,9 +2290,9 @@ stateDiagram-v2
 | YEU_CAU_BO_SUNG | DANG_KIEM_TRA | DN bổ sung hồ sơ | DN upload đủ tài liệu, chưa quá hạn bổ sung | Lưu file vào HO_SO_VU_VIEC, TB CB NV, audit | FR-V.I-NEW-02 | BR-EC-16 |
 | TU_CHOI | DA_TIEP_NHAN | QTHT/CB NV mở lại | Admin override | Audit log, ghi lý do | FR-V.I-xx | — |
 | YEU_CAU_BO_SUNG | TU_CHOI | Auto: quá N ngày LV | elapsed > cau_hinh_sla.bo_sung_timeout | TB DN, ghi audit | BR-EC-16 | — |
-| DA_DUYET | DA_DUYET (cong_khai 0→1) | CB PD công khai + API OK | CB PD cùng cấp + API success | SET cong_khai=1, thoi_gian_dang_tai=NOW(), TB DN | FR-V.I-NEW-05 | BR-PUBLIC-01, BR-EC-20 |
-| HOAN_THANH | HOAN_THANH (cong_khai 0→1) | CB PD công khai + API OK | Tương tự | Tương tự (giữ trạng thái workflow, chỉ flip cờ cong_khai) | FR-V.I-NEW-05 | BR-PUBLIC-01 |
-| DA_DUYET / HOAN_THANH (cong_khai 1→0) | (giữ trạng thái) | CB PD hủy công khai + API OK | CB PD cùng cấp + ly_do_huy ≥ 20 ký tự + API success | SET cong_khai=0, clear cột công khai, TB DN | FR-V.I-NEW-05 | — |
+| DA_DUYET | DA_DUYET (cong_khai 0→1) | CB PD công khai | CB PD cùng cấp | SET cong_khai=1, thoi_gian_dang_tai=NOW(), TB DN; Cổng PLQG tự kéo (PULL) qua FR-XII-07 | FR-V.I-NEW-05 | BR-PUBLIC-01, BR-EC-20 |
+| HOAN_THANH | HOAN_THANH (cong_khai 0→1) | CB PD công khai | Tương tự | Tương tự (giữ trạng thái workflow, chỉ flip cờ cong_khai) | FR-V.I-NEW-05 | BR-PUBLIC-01 |
+| DA_DUYET / HOAN_THANH (cong_khai 1→0) | (giữ trạng thái) | CB PD hủy công khai | CB PD cùng cấp + ly_do_huy ≥ 20 ký tự | SET cong_khai=0, clear cột công khai, TB DN; lượt kéo tiếp theo Cổng tự loại bản ghi | FR-V.I-NEW-05 | — |
 
 > **Lưu ý:** Tối đa 3 lần bổ sung (BR-EC-15). Sau lần thứ 3 nếu vẫn KHONG_DAT → tự động TU_CHOI. Tất cả chuyển trạng thái SHALL sử dụng optimistic locking.
 
@@ -2318,9 +2323,9 @@ stateDiagram-v2
 | BR-CALC-06 | Cập nhật điểm TVV TB | FR-V.I-17 (tham chiếu sang FR-IV-CROSS-01) |
 | BR-EC-15 | YCBS tối đa 3 lần | FR-V.I-06 |
 | BR-EC-16 | Quá hạn bổ sung auto-reject | FR-V.I-NEW-02, CROSS-01 |
-| BR-EC-20 | KHÔNG set CONG_KHAI trước khi API thành công | FR-V.I-NEW-05 |
+| BR-EC-20 | Công khai vụ việc theo mô hình KÉO (không đẩy API) | FR-V.I-NEW-05 |
 | BR-PUBLIC-01 | Điều kiện công khai (chỉ bản ghi hoàn thành) | FR-V.I-NEW-05 |
-| BR-PUBLIC-04 | Whitelist 9 fields công khai VU_VIEC (Q-NEW-02) | FR-V.I-NEW-05 |
+| BR-PUBLIC-04 | Whitelist 10 fields công khai VU_VIEC (Q-NEW-02; +tieu_de `[STT15]`) | FR-V.I-NEW-05 |
 | BR-NOTIF-01 | Quy tắc gửi thông báo | FR-V.I-04, 09, 10, 12, 13, 15, 16, NEW-02, NEW-05, CROSS-01 |
 | BR-SLA-01 | SLA 15 ngày làm việc (NĐ55/2019 Điều 8 Khoản 1) | FR-V.I-01, 04, CROSS-01 |
 | BR-SLA-02 | 4 mức cảnh báo SLA | FR-V.I-CROSS-01 |
@@ -2454,9 +2459,9 @@ Mọi sự kiện workflow (phân công, xác nhận, từ chối, phê duyệt,
 
 **Applied in (nhóm V.I):** FR-V.I-04, FR-V.I-09, FR-V.I-10, FR-V.I-12, FR-V.I-13, FR-V.I-15, FR-V.I-16, FR-V.I-NEW-02, FR-V.I-NEW-05, FR-V.I-CROSS-01
 
-### BR-EC-20: KHÔNG set CONG_KHAI trước khi API thành công
+### BR-EC-20: Công khai vụ việc theo mô hình KÉO (không đẩy API)
 
-Khi gọi API outbound Cổng Pháp luật Quốc gia để công khai hoặc hủy công khai vụ việc: KHÔNG cập nhật `cong_khai = 1` (hoặc `0`) trong DB cho đến khi API trả thành công. Nếu API fail → giữ nguyên trạng thái cũ + toast persistent với nút "Thử lại". Đảm bảo state DB và Cổng PLQG luôn đồng bộ.
+Công khai / hủy công khai vụ việc là thao tác nội bộ: hệ thống chỉ đặt cờ `cong_khai = 1` (hoặc `0`) cho bản ghi VU_VIEC trong DB (vụ việc giữ nguyên trạng thái workflow DA_DUYET/HOAN_THANH). Hệ thống KHÔNG gọi API đẩy bản ghi sang Cổng Pháp luật Quốc gia. Cổng PLQG tự kéo (PULL) các vụ việc có `cong_khai = 1` theo định kỳ qua API outbound FR-XII-07; khi hủy công khai (`cong_khai = 0`), lượt kéo tiếp theo của Cổng tự loại bản ghi khỏi response (filter `cong_khai = 1`). KHÔNG có hàng đợi thử lại / đồng bộ trạng thái phía hệ thống.
 
 **Applied in (nhóm V.I):** FR-V.I-NEW-05
 
@@ -2466,9 +2471,9 @@ Entity có quy trình (SM): chỉ bản ghi ở trạng thái cuối (Đã duy�
 
 **Applied in (nhóm V.I):** FR-V.I-NEW-05
 
-### BR-PUBLIC-04: Whitelist 9 fields công khai VU_VIEC (Q-NEW-02)
+### BR-PUBLIC-04: Whitelist 10 fields công khai VU_VIEC (Q-NEW-02)
 
-Khi gửi VU_VIEC ra Cổng PLQG, chỉ gửi 9 fields whitelist: linh_vuc_phap_luat, loai_hinh_ho_tro, mo_ta_cong_khai, thoi_gian_xu_ly (tính từ ngay_tiep_nhan đến ngay_hoan_thanh), don_vi (tên Sở TP), ket_qua, thoi_gian_dang_tai, anh_dai_dien, file_dinh_kem_cong_khai. KHÔNG gửi 6 fields nhạy cảm: tên DN/người đại diện (anonymize theo NQ 03/2017 pattern), CCCD/MST, mo_ta nội bộ, file_dinh_kem nghiệp vụ, noi_dung_tu_van, SĐT/email/địa chỉ DN. CB Phê duyệt soạn `mo_ta_cong_khai` riêng (không auto-extract từ `mo_ta` nội bộ) — chỉ nội dung đã review mới lên chuyên trang.
+Khi gửi VU_VIEC ra Cổng PLQG, chỉ gửi 10 fields whitelist: linh_vuc_phap_luat, loai_hinh_ho_tro, mo_ta_cong_khai, thoi_gian_xu_ly (tính từ ngay_tiep_nhan đến ngay_hoan_thanh), don_vi (tên Sở TP), ket_qua, thoi_gian_dang_tai, anh_dai_dien, file_dinh_kem_cong_khai, **tieu_de** (mô tả nội dung pháp lý, không chứa định danh DN — BA chốt 2026-06-19 `[STT15]`). KHÔNG gửi 6 fields nhạy cảm: tên DN/người đại diện (anonymize theo NQ 03/2017 pattern), CCCD/MST, mo_ta nội bộ, file_dinh_kem nghiệp vụ, noi_dung_tu_van, SĐT/email/địa chỉ DN. CB Phê duyệt soạn `mo_ta_cong_khai` riêng (không auto-extract từ `mo_ta` nội bộ) — chỉ nội dung đã review mới lên chuyên trang.
 
 **Pháp luật:** NĐ 13/2023/NĐ-CP về bảo vệ dữ liệu cá nhân; NQ 03/2017/NQ-HĐTP pattern mã hoá danh tính khi công bố bản án.
 

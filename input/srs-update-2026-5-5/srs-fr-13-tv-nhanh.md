@@ -197,7 +197,7 @@ Xử lý luồng tư vấn nhanh: DN gửi câu hỏi -> CB NV mở phiên -> CB
 | 2 | CB NV mở chi tiết phiên; khu vực "Tra cứu Kho câu hỏi" hiển thị ô tìm kiếm rỗng, không tự động tìm kiếm và không prefill từ câu hỏi DN | — |
 | 3 | CB NV nhập từ khóa / nội dung câu hỏi / cụm từ pháp lý và nhấn "Tìm kiếm" | — |
 | 4 | Hệ thống tìm kiếm toàn văn trong `KHO_CAU_HOI.cau_hoi`, `KHO_CAU_HOI.cau_tra_loi`, `KHO_CAU_HOI.tu_khoa`; điều kiện bắt buộc: `trang_thai IN ('DA_DUYET','CONG_KHAI')` và `hieu_luc = true`; áp dụng phân quyền dữ liệu theo `don_vi_id` nếu có | BR-DATA-08 |
-| 5 | Kết quả hiển thị theo điểm relevance giảm dần; CB NV có thể lọc theo lĩnh vực pháp lý | — |
+| 5 | Kết quả hiển thị theo điểm relevance giảm dần; CB NV có thể lọc theo lĩnh vực pháp lý. **[STT58 UAT 2026-06-02]** Điểm relevance hiển thị cho cán bộ dạng **% chuẩn hoá 0–100%** (100% = khớp cao nhất; không vượt quá 100%) | — |
 | 6 | CB NV chọn một Q&A phù hợp -> copy `cau_tra_loi` vào ô soạn; CB NV được chỉnh sửa trước khi gửi. Nếu không chọn Q&A, CB NV soạn thủ công | — |
 | 7 | Gửi trả lời: lưu `noi_dung_tra_loi` cuối cùng, `cb_xu_ly_id = current_user.id`, `ngay_tra_loi = NOW()`, tự tính `thoi_gian_xu_ly_phut` | — |
 | 8 | Tạo/cập nhật bản ghi tư vấn nhanh (liên kết hỏi đáp nếu có) | — |
@@ -335,7 +335,7 @@ DN tự tìm kiếm câu hỏi/trả lời trong kho Q&A đã duyệt + hiệu l
 
 | # | Tên | Kiểu logic | Điều kiện | Format |
 |---|-----|-----------|-----------|--------|
-| 1 | danh_sach_qa | structured | luôn | [{cau_hoi, cau_tra_loi, linh_vuc, relevance_score}] |
+| 1 | danh_sach_qa | structured | luôn | [{cau_hoi, cau_tra_loi, linh_vuc, relevance_score}] — **`[STT58 UAT 2026-06-02]` `relevance_score` hiển thị dạng % chuẩn hoá 0–100% (100% = khớp cao nhất, không vượt 100%)** |
 
 **Postconditions (Trạng thái sau thực hiện):**
 
@@ -436,7 +436,7 @@ Hệ thống CMS tiếp nhận đánh giá chất lượng câu trả lời (đi
 **Màn hình:** SCR-X2-01 — [Quản lý Kho Câu hỏi](#scr-x2-01-quan-ly-kho-cau-hoi) (action trên từng dòng Q&A đã duyệt: nút "Công khai" / "Hủy công khai")
 
 **Mô tả:**
-CB Nghiệp vụ thực hiện công khai hoặc hủy công khai câu hỏi/phản hồi đã duyệt lên Cổng Pháp luật quốc gia thông qua API. Khi công khai, dữ liệu được đẩy ra Cổng để DN tra cứu; khi hủy, dữ liệu được gỡ khỏi Cổng. Trạng thái CONG_KHAI là kết quả thành công của lệnh đẩy ra Cổng — KHÔNG phải switch UI nội bộ. Hai biến `cong_khai` (boolean — switch UI nhanh) và `trang_thai='CONG_KHAI'` (kết quả thực sự sau khi gọi API thành công) tách biệt: cong_khai=1 nhưng trang_thai≠CONG_KHAI = đang chờ API; cong_khai=0 nhưng trang_thai=CONG_KHAI = đang chờ hủy.
+CB Nghiệp vụ thực hiện công khai hoặc hủy công khai câu hỏi/phản hồi đã duyệt để Doanh nghiệp tra cứu trên Cổng Pháp luật quốc gia. Công khai theo **mô hình KÉO (PULL)**: hệ thống chỉ đặt cờ `cong_khai = 1` + chuyển `trang_thai = CONG_KHAI` + lưu nội dung công khai (ảnh + mô tả + file đính kèm); Cổng PLQG **tự kéo (PULL)** các câu hỏi công khai theo định kỳ qua API outbound. Hệ thống **KHÔNG** gọi API đẩy/gỡ trực tiếp sang Cổng. Khi hủy công khai (`cong_khai = 0`, `trang_thai = DA_DUYET`), lượt kéo tiếp theo của Cổng tự loại bản ghi khỏi response. KHÔNG có hàng đợi thử lại / đồng bộ trạng thái phía hệ thống.
 
 **Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP)
 
@@ -460,10 +460,9 @@ CB Nghiệp vụ thực hiện công khai hoặc hủy công khai câu hỏi/ph�
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền CB NV + phạm vi phân quyền theo đơn vị | BR-AUTH-01 |
 | 2 | Kiểm tra Q&A đang ở trạng thái DA_DUYET (BR-PUBLIC-01: chỉ bản ghi đã duyệt mới được công khai) | BR-PUBLIC-01 |
-| 3 | Gọi API ra Cổng Pháp luật quốc gia: đẩy nội dung câu hỏi + phản hồi + ảnh đại diện + mô tả công khai + file đính kèm công khai | BR-FLOW-05 |
-| 4 | Nếu API thành công: cập nhật trang_thai = CONG_KHAI, ghi thời gian đăng tải = thời điểm hiện tại (BR-PUBLIC-03) | BR-PUBLIC-03 |
-| 5 | Nếu API thất bại: giữ trang_thai = DA_DUYET, trả lỗi ERR-TVN-CK-01 cho người dùng thử lại | — |
-| 6 | Ghi nhật ký thao tác (hành động = 'CONG_KHAI') | BR-DATA-05 |
+| 3 | Lưu nội dung công khai: ảnh đại diện + mô tả công khai + file đính kèm công khai | — |
+| 4 | SET `cong_khai = 1` + `trang_thai = CONG_KHAI` + `thoi_gian_dang_tai = NOW()` (BR-PUBLIC-03). Cổng PLQG tự kéo (PULL) câu hỏi công khai này theo định kỳ qua API outbound — hệ thống KHÔNG đẩy trực tiếp sang Cổng | BR-PUBLIC-01, BR-PUBLIC-03 |
+| 5 | Ghi nhật ký thao tác (hành động = 'CONG_KHAI') | BR-DATA-05 |
 
 **Processing — Hủy công khai:**
 
@@ -471,15 +470,12 @@ CB Nghiệp vụ thực hiện công khai hoặc hủy công khai câu hỏi/ph�
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền CB NV + phạm vi phân quyền theo đơn vị | BR-AUTH-01 |
 | 2 | Kiểm tra Q&A đang ở trạng thái CONG_KHAI | — |
-| 3 | Gọi API ra Cổng Pháp luật quốc gia: gỡ nội dung khỏi chuyên trang | BR-FLOW-05 |
-| 4 | Nếu API thành công: cập nhật trang_thai = DA_DUYET, xóa thời gian đăng tải (BR-PUBLIC-02) | BR-PUBLIC-02 |
-| 5 | Nếu API thất bại: giữ trang_thai = CONG_KHAI, trả lỗi ERR-TVN-CK-02 cho người dùng thử lại | — |
-| 6 | Ghi nhật ký thao tác (hành động = 'HUY_CONG_KHAI') | BR-DATA-05 |
+| 3 | SET `cong_khai = 0` + `trang_thai = DA_DUYET` + clear `thoi_gian_dang_tai` (BR-PUBLIC-02). Ở lượt kéo (PULL) tiếp theo, Cổng PLQG tự loại bản ghi khỏi response (filter `cong_khai = 1`) — hệ thống KHÔNG gọi API gỡ trực tiếp | BR-PUBLIC-02 |
+| 4 | Ghi nhật ký thao tác (hành động = 'HUY_CONG_KHAI') | BR-DATA-05 |
 
 **Business Rules áp dụng:**
 - **BR-AUTH-01**: Xác thực người dùng — Xem Phụ lục B (file chính)
 - **BR-DATA-05**: Ghi nhật ký thao tác — Xem Phụ lục B (file chính)
-- **BR-FLOW-05**: Gọi API ra Cổng PLQG — Xem Phụ lục B (file chính)
 - **BR-PUBLIC-01**: Điều kiện công khai — chỉ bản ghi đã duyệt mới được công khai. Xem Phụ lục B (file chính)
 - **BR-PUBLIC-02**: Hủy công khai — clear thoi_gian_dang_tai khi hủy. Xem Phụ lục B (file chính)
 - **BR-PUBLIC-03**: Thời gian đăng tải — auto fill khi công khai thành công. Xem Phụ lục B (file chính)
@@ -494,23 +490,20 @@ CB Nghiệp vụ thực hiện công khai hoặc hủy công khai câu hỏi/ph�
 
 **Postconditions (Trạng thái sau thực hiện):**
 
-- KHO_CAU_HOI.trang_thai được cập nhật (CONG_KHAI hoặc DA_DUYET)
-- Nội dung đã đẩy/gỡ trên Cổng Pháp luật quốc gia
+- KHO_CAU_HOI.cong_khai + KHO_CAU_HOI.trang_thai được cập nhật (cong_khai=1 + CONG_KHAI khi công khai; cong_khai=0 + DA_DUYET khi hủy)
+- Công khai: Cổng PLQG hiển thị câu hỏi sau lượt tự kéo (PULL) định kỳ; Hủy: lượt kéo tiếp theo Cổng tự loại bản ghi khỏi response
 - AUDIT_LOG ghi nhận
 
 **Error Handling (Xử lý lỗi):**
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
-| E1 | API Cổng PLQG lỗi khi công khai | ERR-TVN-CK-01 | "Lỗi kết nối Cổng PLQG khi công khai. Vui lòng thử lại" | ERROR |
-| E2 | API Cổng PLQG lỗi khi hủy công khai | ERR-TVN-CK-02 | "Lỗi kết nối Cổng PLQG khi hủy công khai. Vui lòng thử lại" | ERROR |
-| E3 | Trạng thái không hợp lệ cho hành động (vd: muốn công khai bản ghi đang CHO_DUYET) | ERR-TVN-CK-03 | "Không thể thực hiện. Trạng thái hiện tại không cho phép" | ERROR |
+| E1 | Trạng thái không hợp lệ cho hành động (vd: muốn công khai bản ghi đang CHO_DUYET) | ERR-TVN-CK-03 | "Không thể thực hiện. Trạng thái hiện tại không cho phép" | ERROR |
 
 **Acceptance Criteria:**
 
-- **Given** CB NV chọn câu hỏi DA_DUYET **When** nhấn "Công khai" **Then** nội dung được đẩy lên Cổng PLQG + trạng thái chuyển CONG_KHAI + ghi thời gian đăng tải
-- **Given** CB NV chọn câu hỏi CONG_KHAI **When** nhấn "Hủy công khai" **Then** nội dung được gỡ khỏi Cổng + trạng thái chuyển DA_DUYET + xóa thời gian đăng tải
-- **Given** API Cổng PLQG lỗi **When** thực hiện công khai/hủy **Then** giữ trạng thái cũ + hiển thị thông báo lỗi để người dùng thử lại
+- **Given** CB NV chọn câu hỏi DA_DUYET **When** nhấn "Công khai" **Then** SET cong_khai=1 + trang_thai=CONG_KHAI + ghi thời gian đăng tải; Cổng PLQG tự kéo (PULL) câu hỏi qua API outbound ở lượt sau
+- **Given** CB NV chọn câu hỏi CONG_KHAI **When** nhấn "Hủy công khai" **Then** SET cong_khai=0 + trang_thai=DA_DUYET + xóa thời gian đăng tải; lượt kéo tiếp theo Cổng tự loại bản ghi khỏi response
 - **Given** CB NV cố công khai bản ghi CHO_DUYET (chưa duyệt) **When** nhấn "Công khai" **Then** chặn + thông báo "Trạng thái hiện tại không cho phép"
 
 ---
@@ -542,7 +535,7 @@ CB Nghiệp vụ thực hiện công khai hoặc hủy công khai câu hỏi/ph�
 | 9 | modal | Import Excel | modal (C15) | Upload .xlsx -> validate -> preview 10 dong dau -> ket qua "N thanh cong, M loi". Tat ca -> CHO_DUYET | upload -> process | khi nhan Nhap Excel |
 | 10 | content | Duyet don le (v2.1 gop tu MH-13.2) | button-group + modal | Tab "Cho duyet": [Duyet] SET DA_DUYET + hieu_luc=1 + TB CB NV. [Tu choi] modal ly do bat buoc + SET NHAP + TB CB NV | click -> action | tab Cho duyet |
 | 11 | content | Duyet hang loat (v2.1 gop tu MH-13.2) | button | [Duyet hang loat] -> modal xac nhan. Khong tu choi hang loat | click -> action | khi >= 1 checkbox trong tab Cho duyet |
-| 12 | content | Hanh dong Cong khai / Huy cong khai (FR-X.2-06) | button-group + modal | Tren tung dong Q&A: trang_thai = DA_DUYET -> hien nut [Cong khai]; trang_thai = CONG_KHAI -> hien nut [Huy cong khai]. Click [Cong khai] -> modal xac nhan + hien thi anh dai dien / mo ta cong khai / file dinh kem cong khai sap day; xac nhan -> goi API ra Cong PLQG (BR-FLOW-05); thanh cong -> SET trang_thai = CONG_KHAI + thoi_gian_dang_tai = thoi diem hien tai (BR-PUBLIC-03). Click [Huy cong khai] -> modal xac nhan; xac nhan -> goi API go khoi Cong; thanh cong -> SET trang_thai = DA_DUYET + xoa thoi_gian_dang_tai (BR-PUBLIC-02). Loi API -> giu trang_thai cu + hien thong bao loi. Quy tac BR-PUBLIC-01: chi cho cong khai khi trang_thai = DA_DUYET. | click -> action | trang_thai IN (DA_DUYET, CONG_KHAI) |
+| 12 | content | Hanh dong Cong khai / Huy cong khai (FR-X.2-06) | button-group + modal | Tren tung dong Q&A: trang_thai = DA_DUYET -> hien nut [Cong khai]; trang_thai = CONG_KHAI -> hien nut [Huy cong khai]. Click [Cong khai] -> modal xac nhan + hien thi anh dai dien / mo ta cong khai / file dinh kem cong khai sap cong khai; xac nhan -> SET cong_khai = 1 + trang_thai = CONG_KHAI + thoi_gian_dang_tai = thoi diem hien tai (BR-PUBLIC-03); Cong PLQG tu keo (PULL) cau hoi cong khai theo dinh ky qua API outbound (he thong KHONG day truc tiep). Click [Huy cong khai] -> modal xac nhan; xac nhan -> SET cong_khai = 0 + trang_thai = DA_DUYET + xoa thoi_gian_dang_tai (BR-PUBLIC-02); luot keo tiep theo Cong tu loai ban ghi khoi response. Quy tac BR-PUBLIC-01: chi cho cong khai khi trang_thai = DA_DUYET. | click -> action | trang_thai IN (DA_DUYET, CONG_KHAI) |
 | 13 | footer | Phan trang | pagination | 20 muc/trang | click -> chuyen trang | luon hien thi |
 
 #### Quy tac tuong tac
@@ -694,13 +687,13 @@ erDiagram
 | linh_vuc_id | identifier | Y | FK → DANH_MUC(id) | | Lĩnh vực PL |
 | nguon | text | Y | CHECK IN ('TU_DONG','THU_CONG','IMPORT') | | Nguồn: tự động từ nhóm II / thủ công / import |
 | hoi_dap_goc_id | identifier | N | FK → HOI_DAP(id) | | Liên kết hỏi đáp gốc (nếu nguồn tự động) |
-| trang_thai | text | Y | CHECK IN ('CHO_DUYET','DA_DUYET','CONG_KHAI','HET_HIEU_LUC') | 'CHO_DUYET' | Trạng thái — CONG_KHAI là kết quả thành công của lệnh đẩy ra Cổng PLQG ở FR-X.2-06 |
+| trang_thai | text | Y | CHECK IN ('CHO_DUYET','DA_DUYET','CONG_KHAI','HET_HIEU_LUC') | 'CHO_DUYET' | Trạng thái — CONG_KHAI = đã công khai (FR-X.2-06): Cổng PLQG tự kéo (PULL) các bản ghi này theo định kỳ qua API outbound; hệ thống KHÔNG đẩy trực tiếp |
 | diem_danh_gia_tb | number | N | | | Điểm đánh giá TB từ DN |
 | so_luot_xem | number | N | | 0 | Counter lượt xem |
 | tu_khoa | text | N | | | Từ khóa tìm kiếm (phân cách bằng dấu phẩy) |
-| cong_khai | boolean | N | | 0 | Switch UI nội bộ (CB NV bật/tắt nhanh trong danh sách). Tách biệt với trang_thai='CONG_KHAI' (là kết quả sau khi gọi API thành công). cong_khai=1 nhưng trang_thai≠CONG_KHAI = đang chờ API xử lý; cong_khai=0 nhưng trang_thai=CONG_KHAI = đang chờ hủy. Tham chiếu CR Item-01 + BR-PUBLIC-01/02. |
+| cong_khai | boolean | N | | 0 | Cờ công khai (mô hình KÉO). Khi công khai: cong_khai=1 + trang_thai=CONG_KHAI được đặt cùng lúc; khi hủy: cong_khai=0 + trang_thai=DA_DUYET. Cổng PLQG tự kéo (PULL) các bản ghi cong_khai=1 theo định kỳ qua API outbound; hệ thống KHÔNG đẩy/gỡ trực tiếp. Tham chiếu CR Item-01 + BR-PUBLIC-01/02. |
 | anh_dai_dien | file (ảnh) | N | jpg/png/gif, max 5MB; mặc định ảnh hệ thống | ảnh hệ thống | Ảnh đại diện hiển thị trên Cổng PLQG khi công khai (CR Item-01 INS-17) |
-| thoi_gian_dang_tai | datetime | N | | | Thời điểm đăng tải lên Cổng PLQG. Auto fill khi cong_khai=1 và API thành công (BR-PUBLIC-03). Clear khi cong_khai=0 (BR-PUBLIC-02). Định dạng dd/mm/yyyy hh:mm. Không cho phép sửa tay. (CR Item-01 INS-18) |
+| thoi_gian_dang_tai | datetime | N | | | Thời điểm công khai. Auto fill = NOW() khi đặt cong_khai=1 (BR-PUBLIC-03). Clear khi cong_khai=0 (BR-PUBLIC-02). Định dạng dd/mm/yyyy hh:mm. Không cho phép sửa tay. (CR Item-01 INS-18) |
 | mo_ta_cong_khai | text (long) | N | | | Mô tả hiển thị trên chuyên trang Cổng PLQG, khác cau_hoi/cau_tra_loi nội bộ. (CR Item-01 INS-19) |
 | file_dinh_kem_cong_khai | file[] | N | PDF/DOC/DOCX/XLS/XLSX, max 20MB/file, nhiều file | | File đính kèm khi công khai. (CR Item-01 INS-20) |
 
@@ -841,7 +834,6 @@ stateDiagram-v2
 | BR-AUTH-01 | Xác thực người dùng | FR-X.2-01, FR-X.2-02, FR-X.2-06 |
 | BR-DATA-05 | Ghi nhật ký thao tác (audit trail) | FR-X.2-01, FR-X.2-06 |
 | BR-DATA-08 | Tìm kiếm toàn văn (Full-text search) | FR-X.2-01, FR-X.2-02, FR-X.2-04 |
-| BR-FLOW-05 | Gọi API ra Cổng Pháp luật quốc gia | FR-X.2-06 |
 | BR-FLOW-10 | Kho câu hỏi TV nhanh: 3 nguồn bổ sung | FR-X.2-01 |
 | BR-PUBLIC-01 | Điều kiện công khai — chỉ bản ghi đã hoàn thành quy trình phê duyệt mới được công khai | FR-X.2-06 |
 | BR-PUBLIC-02 | Hủy công khai — clear thoi_gian_dang_tai khi cong_khai = 0 | FR-X.2-06 |
@@ -887,16 +879,6 @@ stateDiagram-v2
 | **Ngoại lệ** | — |
 | **Kiểm chứng** | Test auto-import from HOI_DAP |
 
-### BR-FLOW-05: Gọi API ra Cổng Pháp luật quốc gia
-
-| Thuộc tính | Giá trị |
-|-----------|---------|
-| **Phát biểu** | Khi đẩy/gỡ nội dung công khai, hệ thống CMS gọi API ra Cổng PLQG. Nếu API thất bại, giữ nguyên trạng thái hiện tại và thông báo lỗi cho người dùng thử lại — KHÔNG tự cập nhật trạng thái nội bộ trước khi xác nhận thành công từ Cổng. |
-| **Nguồn** | PRD A.7, FR-X.2-06, các FR công khai khác |
-| **Applied in (nhóm X.2)** | FR-X.2-06 (công khai/hủy công khai) |
-| **Ngoại lệ** | — |
-| **Kiểm chứng** | Test fail-API: trạng thái nội bộ giữ nguyên, người dùng nhận thông báo lỗi |
-
 ### BR-PUBLIC-01: Điều kiện công khai
 
 | Thuộc tính | Giá trị |
@@ -911,21 +893,21 @@ stateDiagram-v2
 
 | Thuộc tính | Giá trị |
 |-----------|---------|
-| **Phát biểu** | Khi hủy công khai: cong_khai = 0, trang_thai chuyển từ CONG_KHAI về DA_DUYET, xóa thoi_gian_dang_tai, gọi API gỡ khỏi Cổng PLQG. |
+| **Phát biểu** | Khi hủy công khai: cong_khai = 0, trang_thai chuyển từ CONG_KHAI về DA_DUYET, xóa thoi_gian_dang_tai. Hệ thống KHÔNG gọi API gỡ trực tiếp; ở lượt kéo (PULL) tiếp theo, Cổng PLQG tự loại bản ghi khỏi response (filter cong_khai = 1). |
 | **Nguồn** | CR Item-01 INS-18 |
 | **Applied in (nhóm X.2)** | FR-X.2-06 |
 | **Ngoại lệ** | — |
-| **Kiểm chứng** | Test hủy công khai → thoi_gian_dang_tai = NULL, nội dung không còn trên Cổng |
+| **Kiểm chứng** | Test hủy công khai → thoi_gian_dang_tai = NULL, cong_khai = 0; lượt kéo tiếp theo Cổng không còn trả bản ghi |
 
 ### BR-PUBLIC-03: Thời gian đăng tải
 
 | Thuộc tính | Giá trị |
 |-----------|---------|
-| **Phát biểu** | thoi_gian_dang_tai auto fill = thời điểm cong_khai chuyển từ 0 → 1 và API ra Cổng PLQG thành công. Không cho phép người dùng sửa tay. Định dạng dd/mm/yyyy hh:mm. |
+| **Phát biểu** | thoi_gian_dang_tai auto fill = NOW() tại thời điểm cong_khai chuyển từ 0 → 1 (đồng thời trang_thai chuyển sang CONG_KHAI). Không cho phép người dùng sửa tay. Định dạng dd/mm/yyyy hh:mm. |
 | **Nguồn** | CR Item-01 INS-18 |
 | **Applied in (nhóm X.2)** | FR-X.2-06 |
 | **Ngoại lệ** | — |
-| **Kiểm chứng** | Test công khai thành công → thoi_gian_dang_tai được set đúng thời điểm gọi API |
+| **Kiểm chứng** | Test công khai → thoi_gian_dang_tai được set đúng thời điểm đặt cờ cong_khai=1 |
 
 ---
 

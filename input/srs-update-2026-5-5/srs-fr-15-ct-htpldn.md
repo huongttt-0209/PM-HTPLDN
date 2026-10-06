@@ -224,7 +224,7 @@ CRUD chương trình HTPLDN: tạo mới (tự sinh mã, trạng thái DU_THAO),
 | E1 | Không có quyền | ERR-XI-01-TD-01 | "Bạn không có quyền tạm dừng CT" | ERROR |
 | E2 | CT không ở DANG_THUC_HIEN | ERR-XI-01-TD-02 | "CT phải ở trạng thái Đang thực hiện để tạm dừng" | ERROR |
 | E3 | Thiếu lý do tạm dừng | ERR-XI-01-TD-03 | "Vui lòng nhập lý do tạm dừng" | ERROR |
-| W1 | Có đợt BC đang lập | WRN-XI-01-TD-01 | "CT có đợt báo cáo đang trong quá trình lập. Xác nhận tạm dừng?" | WARNING |
+| ~~W1~~ | ~~Có đợt BC đang lập~~ | ~~WRN-XI-01-TD-01~~ | **BỎ theo STT 52 UAT 2026-05-26** — đợt BC độc lập với CT, tạm dừng CT không ảnh hưởng đợt BC đã có | — |
 
 **Acceptance Criteria:**
 
@@ -262,7 +262,7 @@ CRUD chương trình HTPLDN: tạo mới (tự sinh mã, trạng thái DU_THAO),
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền CB PD | BR-AUTH-01 |
 | 2 | Kiểm tra trạng thái = DANG_THUC_HIEN | SM-KH-CTHTPL |
-| 3 | Kiểm tra: tất cả đợt báo cáo đã hoàn thành | — |
+| 3 | ~~Kiểm tra: tất cả đợt báo cáo đã hoàn thành~~ — **BỎ theo STT 52 UAT 2026-05-26** (đợt BC độc lập với CT) | — |
 | 4 | Cập nhật trạng thái = HOAN_THANH, ngày hoàn thành = hiện tại | — |
 | 5 | Ghi nhật ký | BR-DATA-05 |
 
@@ -272,12 +272,11 @@ CRUD chương trình HTPLDN: tạo mới (tự sinh mã, trạng thái DU_THAO),
 |---|--------------|--------|-------------------|----------|
 | E1 | Không có quyền CB PD | ERR-XI-01-HT-01 | "Chỉ CB Phê duyệt mới được hoàn thành CT" | ERROR |
 | E2 | CT không ở DANG_THUC_HIEN | ERR-XI-01-HT-02 | "CT phải ở trạng thái Đang thực hiện để hoàn thành" | ERROR |
-| E3 | Còn đợt BC chưa hoàn thành | ERR-XI-01-HT-03 | "Vui lòng hoàn thành tất cả đợt báo cáo trước khi hoàn thành CT" | ERROR |
+| ~~E3~~ | ~~Còn đợt BC chưa hoàn thành~~ | ~~ERR-XI-01-HT-03~~ | **BỎ theo STT 52 UAT 2026-05-26** — đợt BC độc lập với CT, không còn ràng buộc này | — |
 
 **Acceptance Criteria:**
 
-- **Given** CB PD chọn CT ở DANG_THUC_HIEN, tất cả đợt BC đã hoàn thành **When** nhấn "Hoàn thành" **Then** CT → HOAN_THANH, ghi audit
-- **Given** còn đợt BC chưa hoàn thành **When** nhấn "Hoàn thành" **Then** hiển thị lỗi
+- **Given** CB PD chọn CT ở DANG_THUC_HIEN **When** nhấn "Hoàn thành" **Then** CT → HOAN_THANH, ghi audit (KHÔNG ràng buộc trạng thái đợt báo cáo — đợt BC độc lập với CT theo STT 52 UAT 2026-05-26)
 
 #### Processing — Hủy CT
 
@@ -548,7 +547,7 @@ CB PD xem CT chờ duyệt, quyết định phê duyệt (→ DA_DUYET) hoặc t
 **Màn hình:** SCR-XI-01 — [Quản lý CT HTPLDN (tổng hợp)](#scr-xi-01-quan-ly-ct-htpldn-tong-hop) (v2.1: action button "Công bố" trong chi tiết CT)
 
 **Mô tả:**
-Công bố kế hoạch CT đã duyệt lên Cổng PLQG qua API. Hỗ trợ hủy công bố để gỡ khỏi Cổng.
+Công khai kế hoạch CT đã duyệt theo mô hình KÉO (PULL): phần mềm chỉ đặt cờ `la_cong_bo = 1` và chuyển CT sang trạng thái DA_CONG_BO; Cổng PLQG chủ động kéo dữ liệu định kỳ qua API outbound. Hủy công bố = đặt cờ `la_cong_bo = 0` và đưa CT về DA_DUYET; Cổng ngừng hiển thị ở kỳ kéo kế tiếp. Phần mềm KHÔNG gọi API đẩy/gỡ trực tiếp lên Cổng.
 
 **Tác nhân:** Cán bộ Nghiệp vụ
 
@@ -570,8 +569,8 @@ Công bố kế hoạch CT đã duyệt lên Cổng PLQG qua API. Hỗ trợ h�
 |------|-------------|-----------|
 | 1 | Kiểm tra quyền truy cập | BR-AUTH-01 |
 | 2 | Kiểm tra CT ở trạng thái DA_DUYET | SM-KH-CTHTPL |
-| 3 | Chuyển trạng thái sang DA_CONG_BO | SM-KH-CTHTPL |
-| 4 | Đẩy kế hoạch qua API → Cổng PLQG (FR-XII-15) | — |
+| 3 | Đặt cờ `la_cong_bo = 1`, ghi `ngay_cong_bo`; chuyển trạng thái sang DA_CONG_BO | SM-KH-CTHTPL |
+| 4 | Cổng PLQG chủ động kéo (PULL) dữ liệu kế hoạch đã công bố định kỳ qua API outbound — phần mềm KHÔNG gọi API đẩy lên Cổng | BR-FLOW-05 |
 | 5 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Hủy công bố:**
@@ -579,8 +578,8 @@ Công bố kế hoạch CT đã duyệt lên Cổng PLQG qua API. Hỗ trợ h�
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 1 | CB NV nhấn "Hủy công bố" | — |
-| 2 | Chuyển trạng thái sang DA_DUYET | SM-KH-CTHTPL |
-| 3 | Gửi API gỡ khỏi Cổng | — |
+| 2 | Đặt cờ `la_cong_bo = 0`; chuyển trạng thái sang DA_DUYET | SM-KH-CTHTPL |
+| 3 | Cổng PLQG ngừng hiển thị ở kỳ kéo kế tiếp (kéo theo cờ `la_cong_bo`) — phần mềm KHÔNG gọi API gỡ | BR-FLOW-05 |
 
 **Business Rules áp dụng:**
 - **SM-KH-CTHTPL**: Transition DA_DUYET → DA_CONG_BO / DA_CONG_BO → DA_DUYET → Xem Phụ lục C (file chính)
@@ -593,142 +592,158 @@ Công bố kế hoạch CT đã duyệt lên Cổng PLQG qua API. Hỗ trợ h�
 
 **Postconditions (Trạng thái sau thực hiện):**
 
-- Công bố: CT → DA_CONG_BO, kế hoạch hiển thị trên Cổng PLQG
-- Hủy: CT → DA_DUYET, gỡ khỏi Cổng
+- Công bố: CT → DA_CONG_BO, `la_cong_bo = 1`; Cổng PLQG kéo và hiển thị kế hoạch ở kỳ đồng bộ kế tiếp
+- Hủy: CT → DA_DUYET, `la_cong_bo = 0`; Cổng PLQG ngừng hiển thị ở kỳ kéo kế tiếp
 
 **Error Handling (Xử lý lỗi):**
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
 | E1 | CT không ở DA_DUYET | ERR-XI-05-01 | "CT chưa được phê duyệt" | ERROR |
-| E2 | Lỗi API Cổng PLQG | ERR-XI-05-02 | "Không thể kết nối Cổng PLQG. Vui lòng thử lại" | ERROR |
 
 **Acceptance Criteria:**
 
-- **Given** CB NV chọn CT đã duyệt **When** nhấn "Công bố" **Then** đẩy API lên Cổng, trạng thái → DA_CONG_BO
-- **Given** CB NV hủy công bố **When** xác nhận **Then** gỡ khỏi Cổng, trạng thái → DA_DUYET
+- **Given** CB NV chọn CT đã duyệt **When** nhấn "Công bố" **Then** đặt `la_cong_bo = 1`, trạng thái → DA_CONG_BO; Cổng PLQG tự kéo ở kỳ đồng bộ kế tiếp
+- **Given** CB NV hủy công bố **When** xác nhận **Then** đặt `la_cong_bo = 0`, trạng thái → DA_DUYET; Cổng ngừng hiển thị ở kỳ kéo kế tiếp
 
 ---
 
-### FR-XI-05a: Quản lý đợt báo cáo CT HTPLDN (UC165)
+### FR-XI-05a: Quản lý đợt báo cáo định kỳ (UC165) `[STT 52 UAT 2026-05-26 — đảo mô hình đợt báo cáo độc lập]`
 
 **UC Reference:** UC 165
-**Source:** TT17/2025/TT-BTP — CSV v1.1 (C1-8, STT 165)
+**Source:** TT17/2025/TT-BTP — CSV v1.1 (C1-8, STT 165) + STT 52 UAT 2026-05-26
 **Priority:** Essential
-**Stability:** High
-**Màn hình:** SCR-XI-01 — [Quản lý CT HTPLDN (tổng hợp)](#scr-xi-01-quan-ly-ct-htpldn-tong-hop) (v2.1: tab "Đợt báo cáo" trong chi tiết CT)
+**Stability:** Medium (mới đảo mô hình)
+**Màn hình:** SCR-XI-01 — [Quản lý CT HTPLDN (tổng hợp)](#scr-xi-01-quan-ly-ct-htpldn-tong-hop) (v3.5.2: tab "Đợt báo cáo" độc lập, không drill-down từ CT)
 
-**Mô tả:**
-CRUD đợt báo cáo cho CT HTPLDN: tạo đợt BC (tự sinh mã, gán trạng thái TAO_DOT), chỉnh sửa/xóa (chỉ khi TAO_DOT), xem danh sách phân trang.
+**Mô tả (sửa theo STT 52 UAT 2026-05-26):**
+**TW (Bộ Tư pháp) tạo đợt báo cáo định kỳ độc lập** (không gắn cứng với một CT HTPL cụ thể). Mỗi đợt báo cáo có phạm vi nộp = danh sách đơn vị (63 Sở Tư pháp ĐP + Bộ ngành đang có CT HTPLDN). Sau khi tạo đợt, hệ thống tự sinh `DOT_BAO_CAO_DON_VI_NOP` cho từng đơn vị trong phạm vi (trạng thái CHUA_NOP). CB NV cấp ĐP/BN của các đơn vị nộp được thông báo, vào tab "Đợt báo cáo" của đơn vị mình để lập + nộp báo cáo theo Mẫu 21a/21b TT 17/2025/TT-BTP. CB NV TW theo dõi tiến độ nộp ở chi tiết Đợt BC (bảng đơn vị + trạng thái nộp).
 
-**Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP)
+> **Sửa theo STT 52 UAT 2026-05-26:** đợt báo cáo không còn gắn cứng `chuong_trinh_id`; báo cáo là tổng hợp toàn bộ HOẠT ĐỘNG HTPL của một đơn vị trong kỳ. **Giữ tên entity `BAO_CAO_CT_HTPL`** (không đổi tên — BA chốt 2026-05-30).
+
+**Tác nhân:** **Chỉ CB Nghiệp vụ cấp TW (Bộ Tư pháp)** — sửa theo STT 52 UAT 2026-05-26 (thu hẹp từ "CB NV TW/BN/ĐP" cũ). Lý do: TT 17/2025 quy định kỳ + đối tượng nộp định kỳ; TW là điểm phát hành đợt định kỳ cho cả nước.
 
 **Preconditions (Điều kiện tiên quyết):**
 
-- User đã đăng nhập (BR-AUTH-01)
-- User có quyền "Quản lý đợt báo cáo CT HTPLDN"
-- Phạm vi dữ liệu áp dụng theo đơn vị
-- CT HTPL ở trạng thái DANG_THUC_HIEN hoặc HOAN_THANH
+- User đã đăng nhập (BR-AUTH-01) và là CB Nghiệp vụ cấp TW
+- User có quyền "Quản lý đợt báo cáo định kỳ" (cấp TW)
+- **Sửa theo STT 52 UAT 2026-05-26:** **Bỏ điều kiện** "CT HTPL ở DANG_THUC_HIEN/HOAN_THANH" — đợt BC không gắn CT nên không kiểm tra trạng thái CT.
 
-**Inputs (Dữ liệu đầu vào):**
+**Inputs (Dữ liệu đầu vào — sửa theo STT 52 UAT 2026-05-26):**
 
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
 |---|----------|-----------|----------|-----------|----------|-------|
-| 1 | ma_dot | text | Y (auto) | DOT-{CT_ID}-{SEQ} | Auto | Hệ thống |
+| 1 | ma_dot | text | Y (auto) | DOT-{kỳ}-{YYYY}-{SEQ} (vd: DOT-SBNAM-2026-01) | Auto | Hệ thống |
 | 2 | ten_dot | text | Y | — | — | Nhập tay |
-| 3 | chuong_trinh_id | identifier | Y | FK → CHUONG_TRINH_HTPL | — | Chọn |
+| 3 | ~~chuong_trinh_id~~ | — | — | **BỎ** (STT 52 UAT 2026-05-26) — đợt BC độc lập với CT | — | — |
 | 4 | ky_bao_cao | text | Y | SO_BO_6_THANG / SO_BO_NAM / TRON_NAM | — | Chọn |
 | 5 | han_nop | date | Y | Theo deadline TT17/2025 | — | Chọn |
 | 6 | tu_ngay | date | Y | Kỳ từ ngày | — | Chọn |
 | 7 | den_ngay | date | Y | Kỳ đến ngày | — | Chọn |
 | 8 | ghi_chu | text (long) | N | — | — | Nhập tay |
-| 9 | bieu_mau_su_dung | text | Y | MAU_21A / MAU_21B / CA_HAI | — | Chọn |
+| 9 | bieu_mau_su_dung | text | Y | MAU_21A / MAU_21B / CA_HAI — đơn vị nộp tự chọn mẫu phù hợp hoạt động | — | Chọn |
+| 10 | pham_vi_don_vi_nop_ids[] | identifier[] | Y | **THÊM MỚI (STT 52 UAT 2026-05-26):** Multi-select FK → DON_VI. Mặc định bao gồm 63 Sở Tư pháp ĐP + Bộ ngành đang có CT HTPLDN. TW có thể chỉnh thủ công. | Toàn bộ ĐP + BN | Chọn |
 
-**Processing (Xử lý):**
+**Processing (Xử lý — sửa theo STT 52 UAT 2026-05-26):**
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
 | 1 | Xác nhận dữ liệu đầu vào theo ràng buộc bảng Inputs | — |
-| 2 | Kiểm tra quyền và phạm vi đơn vị | BR-AUTH-01 |
-| 3 | Thêm mới: tự sinh mã, gán trạng thái TAO_DOT | SM-DOT-BC |
-| 4 | Kiểm tra CT phải ở DANG_THUC_HIEN hoặc HOAN_THANH | SM-KH-CTHTPL |
-| 5 | Kiểm tra không trùng đợt (cùng CT + kỳ + khoảng thời gian) | — |
-| 6 | Chỉnh sửa: chỉ khi trạng thái TAO_DOT | SM-DOT-BC |
-| 7 | Xóa: chỉ khi trạng thái TAO_DOT, xóa mềm | BR-DATA-01 |
-| 8 | Hiển thị danh sách phân trang (20 mục/trang) | BR-DATA-07 |
-| 9 | Ghi nhật ký thao tác | BR-DATA-05 |
+| 2 | Kiểm tra quyền: chỉ CB NV cấp TW (Bộ Tư pháp) — sửa theo STT 52 | BR-AUTH-01 |
+| 3 | Thêm mới: tự sinh mã đợt + gán trạng thái TAO_DOT | SM-DOT-BC |
+| 4 | **BỎ kiểm tra trạng thái CT (STT 52 UAT 2026-05-26)** — đợt BC độc lập với CT | — |
+| 5 | Kiểm tra không trùng đợt (cùng `ky_bao_cao` + năm) | — |
+| 6 | **THÊM MỚI (STT 52 UAT 2026-05-26):** Sau khi tạo đợt thành công → auto-sinh N bản ghi `DOT_BAO_CAO_DON_VI_NOP` cho từng đơn vị trong `pham_vi_don_vi_nop_ids[]` (mỗi đơn vị 1 record, `trang_thai_nop = CHUA_NOP`, `bao_cao_id = NULL`) | — |
+| 7 | Chỉnh sửa: chỉ khi đợt ở trạng thái TAO_DOT và chưa có đơn vị nào nộp BC | SM-DOT-BC |
+| 8 | Xóa: chỉ khi TAO_DOT và chưa có DOT_BAO_CAO_DON_VI_NOP nào ở trạng thái ≠ CHUA_NOP, xóa mềm + cascade xóa DOT_BAO_CAO_DON_VI_NOP | BR-DATA-01 |
+| 9 | Gửi thông báo cho CB NV của các đơn vị trong `pham_vi_don_vi_nop_ids[]` về đợt BC mới | BR-NOTIF-01 |
+| 10 | Hiển thị danh sách phân trang (20 mục/trang) | BR-DATA-07 |
+| 11 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Business Rules áp dụng:**
 - **SM-DOT-BC**: Máy trạng thái Đợt báo cáo → Xem Phụ lục C (file chính)
+- **BR-NOTIF-01**: Thông báo tự động đến đơn vị nộp
 
 **Outputs (Dữ liệu đầu ra):**
 
 | # | Tên | Kiểu logic | Điều kiện | Format |
 |---|-----|-----------|-----------|--------|
 | 1 | Đợt BC mới/cập nhật | structured | Khi tạo/sửa | DOT_BAO_CAO |
-| 2 | Danh sách đợt BC | structured[] | Khi xem DS | Phân trang 20/page |
+| 2 | Danh sách DOT_BAO_CAO_DON_VI_NOP auto-sinh | structured[] | Khi tạo đợt mới | N record per đợt |
+| 3 | Danh sách đợt BC | structured[] | Khi xem DS | Phân trang 20/page |
 
 **Postconditions (Trạng thái sau thực hiện):**
 
-- DOT_BAO_CAO record created/updated/deleted
+- DOT_BAO_CAO record created/updated/deleted (TW thao tác)
+- N record DOT_BAO_CAO_DON_VI_NOP auto-sinh khi tạo đợt mới
+- CB NV cấp ĐP/BN của các đơn vị nộp nhận thông báo
 - AUDIT_LOG ghi nhận
 
 **Error Handling (Xử lý lỗi):**
 
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
-| E1 | CT không ở DANG_THUC_HIEN/HOAN_THANH | ERR-XI-05a-01 | "Chỉ tạo đợt BC cho CT đang thực hiện hoặc đã hoàn thành" | ERROR |
-| E2 | Đợt BC trùng kỳ | ERR-XI-05a-02 | "Đã tồn tại đợt báo cáo cho kỳ này" | ERROR |
-| E3 | Xóa đợt không ở TAO_DOT | ERR-XI-05a-03 | "Chỉ xóa đợt BC ở trạng thái Tạo đợt" | ERROR |
+| E1 | User không phải CB NV cấp TW | ERR-XI-05a-00 | "Chỉ Cán bộ Nghiệp vụ cấp Trung ương (Bộ Tư pháp) mới có thể tạo đợt báo cáo định kỳ" | ERROR |
+| E2 | Đợt BC trùng kỳ + năm | ERR-XI-05a-02 | "Đã tồn tại đợt báo cáo cho kỳ '{ky}' năm {YYYY}" | ERROR |
+| E3 | Xóa đợt không ở TAO_DOT hoặc đã có đơn vị nộp BC | ERR-XI-05a-03 | "Không thể xóa — đợt báo cáo đã có đơn vị nộp báo cáo. Vui lòng huỷ riêng từng bản ghi nộp trước" | ERROR |
+| E4 | Phạm vi đơn vị nộp trống | ERR-XI-05a-04 | "Vui lòng chọn ít nhất 1 đơn vị thuộc phạm vi nộp báo cáo" | ERROR |
 
 **Acceptance Criteria:**
 
-- **Given** CB NV truy cập "Đợt báo cáo" **When** hiển thị **Then** DS đợt BC thuộc đơn vị, phân trang
-- **Given** CB NV thêm đợt BC mới **When** chọn CT + kỳ + hạn nộp **Then** validate + tạo đợt BC, trạng thái TAO_DOT
-- **Given** CB NV sửa đợt BC ở TAO_DOT **When** thay đổi **Then** validate + lưu
-- **Given** CB NV xóa đợt BC ở TAO_DOT **When** xác nhận **Then** soft delete
+- **Given** CB NV TW truy cập "Đợt báo cáo" **When** hiển thị **Then** DS đợt BC toàn quốc, phân trang
+- **Given** CB NV TW thêm đợt BC mới **When** chọn kỳ + hạn nộp + phạm vi đơn vị **Then** validate + tạo đợt BC + auto-sinh N record `DOT_BAO_CAO_DON_VI_NOP` + gửi thông báo
+- **Given** CB NV ĐP/BN cố tạo đợt **When** submit **Then** trả ERR-XI-05a-00
+- **Given** CB NV TW xóa đợt BC có đơn vị đã nộp **When** xác nhận **Then** trả ERR-XI-05a-03
 
 ---
 
-### FR-XI-06: Lập BC kết quả thực hiện CT (UC166)
+### FR-XI-06: Lập BC kết quả thực hiện đơn vị (UC166) `[STT 52 UAT 2026-05-26 — sửa lại theo mô hình đơn vị nộp]`
 
 **UC Reference:** UC 166
-**Source:** TT17/2025/TT-BTP — Thiết kế cơ sở
+**Source:** TT17/2025/TT-BTP — Thiết kế cơ sở + STT 52 UAT 2026-05-26
 **Priority:** Essential
-**Stability:** High
-**Màn hình:** SCR-XI-01 — [Quản lý CT HTPLDN (tổng hợp)](#scr-xi-01-quan-ly-ct-htpldn-tong-hop) (v2.1: form lập BC trong tab "Đợt báo cáo")
+**Stability:** Medium (đảo mô hình)
+**Màn hình:** SCR-XI-01 — [Quản lý CT HTPLDN (tổng hợp)](#scr-xi-01-quan-ly-ct-htpldn-tong-hop) (v3.5.2: form lập BC trong tab "Đợt báo cáo" của đơn vị)
 
-**Mô tả:**
-CB NV lập báo cáo kết quả thực hiện CT theo mẫu TT17/2025 (21a/21b). Hệ thống gợi ý số liệu từ dữ liệu hiện có.
+**Mô tả (sửa theo STT 52 UAT 2026-05-26):**
+CB NV cấp ĐP/BN của đơn vị nộp lập báo cáo kết quả thực hiện theo mẫu TT 17/2025 (21a/21b) cho **đợt báo cáo định kỳ TW đã phát hành**. Số liệu tổng hợp **toàn bộ hoạt động HTPL của đơn vị trong kỳ** (không gắn 1 CT cụ thể). Đơn vị nộp tự chọn `bieu_mau_su_dung` (MAU_21A / MAU_21B / CA_HAI). Hệ thống gợi ý số liệu từ dữ liệu hiện có (đếm VV, đếm hoạt động đào tạo, tổng chi phí…).
 
-**Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP)
+**Tác nhân (sửa theo STT 52 UAT 2026-05-26):** **CB Nghiệp vụ cấp ĐP/BN** (đơn vị thuộc phạm vi đợt BC). Thu hẹp từ "CB NV TW/BN/ĐP" — TW không tự lập BC vì TW chỉ là điểm phát hành đợt + nhận báo cáo từ đơn vị.
 
 **Preconditions (Điều kiện tiên quyết):**
 
-- CT đã/đang thực hiện
-- Đợt BC đã tạo
+- User đã đăng nhập là CB NV cấp ĐP/BN
+- Đợt BC định kỳ đã tạo (FR-XI-05a) và đơn vị user nằm trong `pham_vi_don_vi_nop_ids[]`
+- `DOT_BAO_CAO_DON_VI_NOP` của (đợt, đơn vị) ở trạng thái CHUA_NOP hoặc DANG_LAP
 
-**Inputs (Dữ liệu đầu vào):**
+**Inputs (Dữ liệu đầu vào — sửa theo STT 52 UAT 2026-05-26):**
 
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
 |---|----------|-----------|----------|-----------|----------|-------|
-| 1 | chuong_trinh_id | identifier | Y | FK → CHUONG_TRINH_HTPL | — | Context |
-| 2 | ky_bao_cao | text | Y | SO_BO_6_THANG / SO_BO_NAM / TRON_NAM | — | Context |
-| 3 | tu_ngay | date | Y | Kỳ từ ngày | — | Context |
-| 4 | den_ngay | date | Y | Kỳ đến ngày | — | Context |
-| 5 | so_lieu | structured | Y | Số liệu theo cột 21a/21b | Gợi ý từ HT | Nhập tay / Auto |
-| 6 | nhan_xet | text (long) | N | Max 5000 ký tự | — | Nhập tay |
+| 1 | ~~chuong_trinh_id~~ | — | — | **BỎ** (STT 52 UAT 2026-05-26) — báo cáo không gắn 1 CT | — | — |
+| 2 | dot_id | identifier | Y | **THÊM MỚI (STT 52):** FK → DOT_BAO_CAO. Đợt báo cáo định kỳ đang nộp | — | Auto-detect từ context |
+| 3 | don_vi_nop_id | identifier | Y | **THÊM MỚI (STT 52):** FK → DON_VI. Đơn vị nộp = đơn vị user đăng nhập | — | Auto-detect từ user.don_vi_id |
+| 4 | ky_bao_cao | text | Y | SO_BO_6_THANG / SO_BO_NAM / TRON_NAM | — | Context (từ DOT_BAO_CAO) |
+| 5 | tu_ngay | date | Y | Kỳ từ ngày | — | Context (từ DOT_BAO_CAO) |
+| 6 | den_ngay | date | Y | Kỳ đến ngày | — | Context (từ DOT_BAO_CAO) |
+| 7 | bieu_mau_su_dung | text | Y | MAU_21A / MAU_21B / CA_HAI — **GIỮ NGUYÊN enum** (STT 52 UAT 2026-05-26 BA chốt giữ tuỳ chọn 3 mẫu, đơn vị tự chọn theo loại hoạt động) | — | Chọn |
+| 8 | so_lieu | structured | Y | Số liệu theo cột 21a/21b. **Sửa theo STT 52:** tổng hợp toàn bộ HOẠT ĐỘNG HTPL của đơn vị trong kỳ (không phải chỉ 1 CT) | Gợi ý từ HT | Nhập tay / Auto |
+| 9 | ct_htpl_ids_lien_quan[] | identifier[] | N | **THÊM MỚI (STT 52):** Multi-select FK → CHUONG_TRINH_HTPL — truy vết các CT đơn vị đã triển khai trong kỳ (tham khảo, không bắt buộc) | — | Chọn |
+| 10 | nhan_xet | text (long) | N | Max 5000 ký tự | — | Nhập tay |
 
-**Processing (Xử lý):**
+**Processing (Xử lý — sửa theo STT 52 UAT 2026-05-26):**
 
 | Bước | Mô tả xử lý | BR áp dụng |
 |------|-------------|-----------|
-| 1 | Kiểm tra quyền truy cập | BR-AUTH-01 |
-| 2 | Hiển thị form BC theo mẫu TT17/2025 (21a/21b) | — |
-| 3 | Gợi ý số liệu từ dữ liệu hệ thống (đếm VV, tổng chi phí...) nếu có | — |
-| 4 | CB NV nhập/chỉnh sửa số liệu + nhận xét, kiến nghị | — |
-| 5 | Lưu bản ghi báo cáo CT | — |
-| 6 | Ghi nhật ký thao tác | BR-DATA-05 |
+| 1 | Kiểm tra quyền truy cập + user là CB NV cấp ĐP/BN | BR-AUTH-01 |
+| 2 | Auto-detect `dot_id` (đợt đang lập BC) + `don_vi_nop_id = user.don_vi_id` | — |
+| 3 | Verify `DOT_BAO_CAO_DON_VI_NOP[dot_id, user.don_vi_id]` tồn tại + ở CHUA_NOP/DANG_LAP | — |
+| 4 | Hiển thị form BC theo mẫu TT17/2025 (21a/21b) — đơn vị chọn mẫu phù hợp | — |
+| 5 | **Gợi ý số liệu (sửa theo STT 52):** tổng hợp từ TẤT CẢ hoạt động HTPL của đơn vị trong kỳ — đếm VV (FR-V), đếm hoạt động đào tạo (FR-III), tổng chi phí (FR-VI), Hỏi đáp (FR-II)… KHÔNG lọc theo 1 CT cụ thể | — |
+| 6 | CB NV nhập/chỉnh sửa số liệu + nhận xét, kiến nghị; có thể chọn `ct_htpl_ids_lien_quan[]` để truy vết | — |
+| 7 | Lưu bản ghi `BAO_CAO_CT_HTPL` (giữ tên entity theo BA chốt 2026-05-30) với `dot_id` + `don_vi_nop_id` + `ct_htpl_ids_lien_quan[]` | — |
+| 8 | Cập nhật `DOT_BAO_CAO_DON_VI_NOP.trang_thai_nop = DANG_LAP` + `bao_cao_id = <bao_cao mới>` | — |
+| 9 | Ghi nhật ký thao tác | BR-DATA-05 |
 
 **Outputs (Dữ liệu đầu ra):**
 
@@ -918,6 +933,7 @@ CB NV BN/ĐP gửi BC kết quả đã duyệt lên TW để tổng hợp. BC hi
 | 1 | Kiểm tra quyền: CB NV BN/ĐP | BR-AUTH-01 |
 | 2 | Kiểm tra đợt BC ở trạng thái DA_DUYET_KQ | SM-DOT-BC |
 | 3 | Chuyển trạng thái đợt BC sang DA_GUI_TW, đánh dấu da_gui_tw, ghi thời điểm gửi | SM-DOT-BC |
+| 3a | **Sửa theo STT 52 UAT 2026-05-26:** Cập nhật `DOT_BAO_CAO_DON_VI_NOP[dot_id, don_vi_nop_id].trang_thai_nop = DA_NOP` + `ngay_nop = NOW()`. Tiến độ nộp hiển thị trực tiếp ở chi tiết Đợt BC. | — |
 | 4 | BC hiển thị trong danh sách "Tổng hợp" của cấp TW | — |
 | 5 | Gửi thông báo CB NV TW | — |
 | 6 | Ghi nhật ký thao tác | BR-DATA-05 |
@@ -1020,6 +1036,50 @@ CB NV TW xem danh sách BC từ BN/ĐP đã gửi, chọn các BC cần tổng h
 
 ---
 
+### FR-XI-NEW-01: Đôn đốc tự động đơn vị chưa nộp báo cáo `[STT 52 UAT 2026-05-26 — FR mới]`
+
+**UC Reference:** UC mới (STT 52) | **Priority:** Essential | **Stability:** Medium
+**Màn hình:** Không có giao diện trực tiếp — job lịch chạy tự động + Notification gửi tới CB NV ĐP/BN
+**Source:** STT 52 UAT 2026-05-26 — Q4 "Tiến độ nộp hiển thị 2 nơi"
+
+**Mô tả:** Job lịch tự động chạy hằng ngày kiểm tra `DOT_BAO_CAO_DON_VI_NOP` cho mỗi đợt báo cáo đang mở. Khi đơn vị ở trạng thái `CHUA_NOP` hoặc `DANG_LAP` và sắp đến/qua hạn theo `DOT_BAO_CAO.han_nop`, hệ thống tự động gửi notification (trong hệ thống + email) tới CB NV của đơn vị nộp tại 3 mốc:
+
+| Mốc | Điều kiện kích hoạt | Nội dung notification |
+|-----|---------------------|------------------------|
+| **Trước hạn 7 ngày** | `han_nop − today = 7` AND `trang_thai_nop IN ('CHUA_NOP','DANG_LAP')` | "Đợt báo cáo '{ten_dot}' sẽ đến hạn vào {dd/mm/yyyy} (còn 7 ngày). Đơn vị '{ten_dv}' vui lòng hoàn tất báo cáo." |
+| **Trước hạn 3 ngày** | `han_nop − today = 3` AND `trang_thai_nop IN ('CHUA_NOP','DANG_LAP')` | "Đợt báo cáo '{ten_dot}' đến hạn trong 3 ngày tới ({dd/mm/yyyy}). Vui lòng nộp gấp." |
+| **Sau hạn** | `today > han_nop` AND `trang_thai_nop IN ('CHUA_NOP','DANG_LAP')` | "Đợt báo cáo '{ten_dot}' đã quá hạn từ {dd/mm/yyyy}. Vui lòng nộp ngay để tránh ảnh hưởng đến công tác tổng hợp toàn quốc của Bộ Tư pháp." → Đồng thời `DOT_BAO_CAO_DON_VI_NOP.trang_thai_nop = QUA_HAN` |
+
+**Tác nhân:** Hệ thống (cron job)
+
+**Preconditions:** Tồn tại đợt BC ở `trang_thai != DA_TONG_HOP` và có ít nhất 1 đơn vị `CHUA_NOP/DANG_LAP`.
+
+**Processing:**
+
+| Bước | Mô tả xử lý | BR áp dụng |
+|------|-------------|-----------|
+| 1 | Cron chạy lúc 06:00 hằng ngày (giờ Hà Nội) | — |
+| 2 | Lấy tất cả `DOT_BAO_CAO` chưa kết thúc + danh sách `DOT_BAO_CAO_DON_VI_NOP` của từng đợt | — |
+| 3 | Tính delta = `han_nop − today` cho mỗi cặp | — |
+| 4 | Nếu delta = 7, 3, hoặc < 0 (quá hạn) AND `trang_thai_nop IN ('CHUA_NOP','DANG_LAP')` AND chưa gửi notification cùng loại trong 24h gần nhất → gửi notification (trong hệ thống + email) tới CB NV đơn vị | BR-NOTIF-01 |
+| 5 | Khi quá hạn lần đầu (delta < 0) → cập nhật `DOT_BAO_CAO_DON_VI_NOP.trang_thai_nop = QUA_HAN` + `so_lan_nhac_nho += 1` | — |
+| 6 | Ghi nhật ký gửi notification (chống lặp) | BR-DATA-05 |
+
+**Postconditions:**
+- CB NV của đơn vị chưa nộp nhận notification đôn đốc đúng mốc
+- `DOT_BAO_CAO_DON_VI_NOP.so_lan_nhac_nho` tăng + `trang_thai_nop` chuyển QUA_HAN khi sau hạn
+
+**Acceptance Criteria:**
+- **Given** đợt BC `han_nop = 2026-06-20`, today = 2026-06-13, đơn vị ĐP `trang_thai_nop = CHUA_NOP` **When** cron chạy **Then** CB NV đơn vị nhận notification mốc "trước hạn 7 ngày"
+- **Given** today vượt `han_nop` 1 ngày **When** cron chạy lần đầu sau quá hạn **Then** `trang_thai_nop = QUA_HAN` + gửi notification quá hạn
+- **Given** đã gửi notification cùng loại trong 24h gần nhất **When** cron lặp **Then** KHÔNG gửi trùng
+
+> **Lưu ý theo BA chốt 2026-05-30 (STT 52):** **Bỏ Dashboard TW tổng quan toàn quốc** — thuộc phạm vi chức năng Dashboard riêng, không trong scope STT 52. Tiến độ nộp xem trực tiếp ở **chi tiết Đợt BC** (bảng đơn vị + trạng thái nộp từ `DOT_BAO_CAO_DON_VI_NOP`, đã có ở FR-XI-05a).
+
+**Cross-ref:** FR-XI-05a (auto-sinh DOT_BAO_CAO_DON_VI_NOP), FR-XI-06 (CB NV ĐP/BN lập BC), FR-XI-08 (gửi BC = DA_NOP), Entity DOT_BAO_CAO_DON_VI_NOP.
+
+---
+
 ---
 
 ## 3. Màn hình chức năng
@@ -1070,9 +1130,9 @@ CB NV TW xem danh sách BC từ BN/ĐP đã gửi, chọn các BC cần tổng h
 | 20 | action-bar | [DU_THAO] Thanh hanh dong | button-group (C22) | [Huy] [Luu nhap] [Gui phe duyet] -> auto AT-05: validate -> SET CHO_PHE_DUYET -> TB CB PD | click -> action | khi DU_THAO |
 | 21 | action-bar | [CHO_PHE_DUYET] Phe duyet (gop tu MH-15.2) | button (primary) + modal | "Phe duyet" -> modal xac nhan + ghi chu -> SET DA_DUYET -> TB CB NV | click -> approve | khi CHO_PHE_DUYET, user la CB PD cung cap (BR-AUTH-05) |
 | 22 | action-bar | [CHO_PHE_DUYET] Tu choi (gop tu MH-15.2) | button (danger) + modal | "Tu choi" -> modal ly do (bat buoc) -> SET DU_THAO (KHONG phai HOAN_CHINH) -> TB CB NV + ly do | click -> reject | khi CHO_PHE_DUYET, user la CB PD cung cap |
-| 23 | action-bar | [DA_DUYET] Cong bo (gop tu MH-15.3) | button + modal | "Cong bo len Cong PLQG" -> modal xac nhan -> SET DA_CONG_BO + API push FR-XII-15. Error: Toast + rollback DA_DUYET | click -> publish | khi DA_DUYET |
+| 23 | action-bar | [DA_DUYET] Cong bo (gop tu MH-15.3) | button + modal | "Cong bo len Cong PLQG" -> modal xac nhan -> SET DA_CONG_BO + la_cong_bo=1. Cong PLQG tu keo (PULL) dinh ky, phan mem KHONG goi API day | click -> publish | khi DA_DUYET |
 | 24 | action-bar | [DA_DUYET/DA_CONG_BO] Kich hoat (gop tu MH-15.4) | button + modal | "Bat dau thuc hien" -> modal: "Chuyen sang thuc hien? Sau do co the tao dot BC." -> SET DANG_THUC_HIEN | click -> activate | khi DA_DUYET hoac DA_CONG_BO |
-| 25 | action-bar | [DA_CONG_BO] Huy cong bo | button + modal | "Huy cong bo" -> SET DA_DUYET + API go khoi Cong | click -> unpublish | khi DA_CONG_BO |
+| 25 | action-bar | [DA_CONG_BO] Huy cong bo | button + modal | "Huy cong bo" -> SET DA_DUYET + la_cong_bo=0. Cong PLQG ngung hien thi o ky keo ke tiep | click -> unpublish | khi DA_CONG_BO |
 | 26 | action-bar | [DANG_THUC_HIEN] Tam dung | button (warning) + modal | Modal ly do -> SET TAM_DUNG | click -> pause | khi DANG_THUC_HIEN |
 | 27 | action-bar | [TAM_DUNG] Tiep tuc | button + modal | Modal xac nhan -> SET DANG_THUC_HIEN | click -> resume | khi TAM_DUNG |
 | 28 | action-bar | [DANG_THUC_HIEN] Hoan thanh | button (success) + modal | Modal xac nhan -> SET HOAN_THANH | click -> complete | khi DANG_THUC_HIEN |
@@ -1136,9 +1196,9 @@ CB NV TW xem danh sách BC từ BN/ĐP đã gửi, chọn các BC cần tổng h
 | DU_THAO | [Huy CT] | HUY | Modal xac nhan |
 | CHO_PHE_DUYET | [Rut trinh] | DU_THAO | CB NV nguoi trinh |
 | CHO_PHE_DUYET | [Phe duyet] / [Tu choi] | DA_DUYET / DU_THAO | CB PD cung cap |
-| DA_DUYET | [Cong bo] | DA_CONG_BO | API push Cong PLQG |
+| DA_DUYET | [Cong bo] | DA_CONG_BO | Set la_cong_bo=1, Cong PLQG tu keo (PULL) |
 | DA_DUYET | [Kich hoat] | DANG_THUC_HIEN | -- |
-| DA_CONG_BO | [Huy cong bo] | DA_DUYET | + go Cong |
+| DA_CONG_BO | [Huy cong bo] | DA_DUYET | Set la_cong_bo=0 |
 | DA_CONG_BO | [Kich hoat] | DANG_THUC_HIEN | -- |
 | DANG_THUC_HIEN | [Tam dung] | TAM_DUNG | Modal ly do |
 | DANG_THUC_HIEN | [Hoan thanh] | HOAN_THANH | Modal xac nhan |
@@ -1150,8 +1210,8 @@ CB NV TW xem danh sách BC từ BN/ĐP đã gửi, chọn các BC cần tổng h
 - Gui phe duyet: auto validate -> SET CHO_PHE_DUYET -> gui thong bao CB PD
 - Rejection CT -> trang thai DU_THAO (KHONG phai HOAN_CHINH)
 - Tu choi bat buoc nhap ly do
-- Cong bo: day ke hoach qua API -> Cong PLQG (FR-XII-15). Error: Toast + rollback DA_DUYET
-- Huy cong bo: go khoi Cong + rollback DA_DUYET
+- Cong bo: set la_cong_bo=1 + SET DA_CONG_BO. Cong PLQG chu dong keo (PULL) dinh ky, phan mem KHONG goi API day
+- Huy cong bo: set la_cong_bo=0 + SET DA_DUYET. Cong PLQG ngung hien thi o ky keo ke tiep, phan mem KHONG goi API go
 - Sua/Xoa dot BC: chi khi TAO_DOT
 - Validate dot BC: khong trung dot (cung CT + ky + khoang thoi gian)
 - CT phai o DANG_THUC_HIEN hoac HOAN_THANH moi tao dot BC
@@ -1198,7 +1258,6 @@ erDiagram
         identifier id PK
         text ma_dot UK
         text ten_dot
-        identifier chuong_trinh_id FK
         text ky_bao_cao
         date han_nop
         text bieu_mau_su_dung
@@ -1207,11 +1266,20 @@ erDiagram
     BAO_CAO_CT_HTPL {
         identifier id PK
         text ma_bao_cao UK
-        identifier ct_htpl_id FK
+        identifier dot_id FK
+        identifier don_vi_nop_id FK
         text tieu_de
         text ky_bao_cao
+        text bieu_mau_su_dung
         text so_lieu_tong_hop
         text trang_thai
+    }
+    DOT_BAO_CAO_DON_VI_NOP {
+        identifier dot_id FK
+        identifier don_vi_id FK
+        text trang_thai_nop
+        datetime ngay_nop
+        identifier bao_cao_id FK
     }
     TAI_KHOAN {
         identifier id PK
@@ -1227,10 +1295,14 @@ erDiagram
 
     CHUONG_TRINH_HTPL }o--|| DON_VI : "don_vi_id"
     CHUONG_TRINH_HTPL }o--o| TAI_KHOAN : "nguoi_phe_duyet_id"
-    CHUONG_TRINH_HTPL ||--o{ DOT_BAO_CAO : "chuong_trinh_id"
-    CHUONG_TRINH_HTPL ||--o{ BAO_CAO_CT_HTPL : "ct_htpl_id"
-    DOT_BAO_CAO }o--|| DON_VI : "don_vi_id"
-    BAO_CAO_CT_HTPL }o--|| DON_VI : "don_vi_id"
+    %% Sửa theo STT 52 UAT 2026-05-26: bỏ liên kết CHUONG_TRINH_HTPL ||--o{ DOT_BAO_CAO
+    %% Thêm 3 liên kết mới: DOT_BAO_CAO ||--o{ DOT_BAO_CAO_DON_VI_NOP }o--|| DON_VI
+    %% Sửa BAO_CAO_CT_HTPL: gắn qua DOT_BAO_CAO_DON_VI_NOP thay vì gắn trực tiếp CT
+    DOT_BAO_CAO ||--o{ DOT_BAO_CAO_DON_VI_NOP : "dot_id"
+    DOT_BAO_CAO_DON_VI_NOP }o--|| DON_VI : "don_vi_id"
+    DOT_BAO_CAO_DON_VI_NOP }o--o| BAO_CAO_CT_HTPL : "bao_cao_id"
+    BAO_CAO_CT_HTPL }o--|| DOT_BAO_CAO : "dot_id"
+    BAO_CAO_CT_HTPL }o--|| DON_VI : "don_vi_nop_id"
 ```
 
 ### KE_HOACH_CT_HTPL (owned)
@@ -1263,35 +1335,57 @@ erDiagram
 
 **Volume & Growth:** ~200 records/năm.
 
-### DOT_BAO_CAO (owned)
+### DOT_BAO_CAO (owned) `[STT 52 UAT 2026-05-26 — đảo mô hình đợt báo cáo độc lập]`
 
-**Mô tả:** Đợt báo cáo theo kỳ (6 tháng / năm / tròn năm) của chương trình HTPLDN. Mỗi đợt có vòng đời riêng (SM-DOT-BC).
+**Mô tả (sửa theo STT 52 UAT 2026-05-26):** Đợt báo cáo định kỳ (6 tháng / năm / tròn năm) **do TW phát hành cho cả nước** — KHÔNG gắn cứng với 1 CT HTPL cụ thể. Mỗi đợt có phạm vi đơn vị nộp + vòng đời riêng (SM-DOT-BC).
 **Module:** Nhóm XI — Quản lý kế hoạch thực hiện CT HTPLDN
 **Tham chiếu FR:** FR-XI-05a, FR-XI-06, FR-XI-07, FR-XI-07a, FR-XI-08, FR-XI-09
 
 | # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
 |---|-----|-----------|----------|-----------|----------|-------|
 | 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
-| 2 | ma_dot | text | Y | UNIQUE | Auto-gen | Mã đợt (DOT-{CT_ID}-{SEQ}) |
+| 2 | ma_dot | text | Y | UNIQUE | Auto-gen | Mã đợt (DOT-{ky}-{YYYY}-{SEQ} — vd: DOT-SBNAM-2026-01) |
 | 3 | ten_dot | text | Y | | — | Tên đợt báo cáo |
-| 4 | chuong_trinh_id | identifier | Y | FK → CHUONG_TRINH_HTPL(id) | — | CT HTPL liên kết |
+| 4 | ~~chuong_trinh_id~~ | — | — | **BỎ theo STT 52 UAT 2026-05-26** — đợt BC độc lập, không gắn 1 CT cụ thể | — | — |
 | 5 | ky_bao_cao | text | Y | CHECK IN ('SO_BO_6_THANG','SO_BO_NAM','TRON_NAM') | — | Kỳ báo cáo |
 | 6 | han_nop | date | Y | | — | Hạn nộp BC (theo TT17) |
 | 7 | tu_ngay | date | Y | | — | Kỳ từ ngày |
 | 8 | den_ngay | date | Y | | — | Kỳ đến ngày |
-| 9 | bieu_mau_su_dung | text | Y | CHECK IN ('MAU_21A','MAU_21B','CA_HAI') | — | Biểu mẫu sử dụng |
-| 10 | trang_thai | text | Y | CHECK IN ('TAO_DOT','DANG_LAP_BC','CHO_DUYET_KQ','DA_DUYET_KQ','DA_GUI_TW','DA_TONG_HOP') | 'TAO_DOT' | Trạng thái lifecycle (SM-DOT-BC: 6 states) |
-| 11 | ghi_chu | text (long) | N | | — | Ghi chú |
-| 12 | don_vi_id | identifier | Y | FK → DON_VI(id) | — | Đơn vị sở hữu theo đơn vị |
-| 13 | created_at | datetime | Y | Auto | NOW() | Ngày tạo |
-| 14 | updated_at | datetime | Y | Auto | NOW() | Ngày cập nhật |
-| 15 | created_by | identifier | N | FK → TAI_KHOAN | — | Người tạo |
-| 16 | updated_by | identifier | N | FK → TAI_KHOAN | — | Người cập nhật |
-| 17 | is_deleted | boolean | Y | | 0 | Soft delete |
+| 9 | bieu_mau_su_dung | text | Y | CHECK IN ('MAU_21A','MAU_21B','CA_HAI') — đơn vị nộp tự chọn ở FR-XI-06 | — | Mẫu được phép cho đợt |
+| 10 | pham_vi_don_vi_nop_ids[] | identifier[] | Y | **THÊM MỚI (STT 52 UAT 2026-05-26):** FK[] → DON_VI. Danh sách đơn vị thuộc phạm vi nộp BC (63 ĐP + BN đang có CT HTPLDN, mặc định). Auto-sinh `DOT_BAO_CAO_DON_VI_NOP` khi tạo đợt. | Toàn bộ ĐP + BN | — |
+| 11 | trang_thai | text | Y | CHECK IN ('TAO_DOT','DANG_LAP_BC','CHO_DUYET_KQ','DA_DUYET_KQ','DA_GUI_TW','DA_TONG_HOP') | 'TAO_DOT' | Trạng thái lifecycle (SM-DOT-BC: 6 states) |
+| 12 | ghi_chu | text (long) | N | | — | Ghi chú |
+| 13 | don_vi_id | identifier | Y | FK → DON_VI(id) — **luôn = TW** theo STT 52 UAT 2026-05-26 (chỉ TW tạo đợt) | TW | Đơn vị tạo đợt |
+| 14 | created_at | datetime | Y | Auto | NOW() | Ngày tạo |
+| 15 | updated_at | datetime | Y | Auto | NOW() | Ngày cập nhật |
+| 16 | created_by | identifier | N | FK → TAI_KHOAN | — | Người tạo |
+| 17 | updated_by | identifier | N | FK → TAI_KHOAN | — | Người cập nhật |
+| 18 | is_deleted | boolean | Y | | 0 | Soft delete |
 
-**Volume:** ~400 records/năm (2 đợt/CT x ~200 CT) | **Growth:** 10%/năm
+**Volume (cập nhật theo STT 52 UAT 2026-05-26):** ~3 đợt/năm (Sơ bộ 6T + Sơ bộ năm + Tròn năm) → ~3 records/năm. **Giảm so với mô hình cũ** (~400/năm) vì đợt BC nay độc lập với CT. Các bản ghi nộp + báo cáo chi tiết nằm ở `DOT_BAO_CAO_DON_VI_NOP` + `BAO_CAO_CT_HTPL`.
 
-### BAO_CAO_CT_HTPL (owned)
+### DOT_BAO_CAO_DON_VI_NOP (owned) `[STT 52 UAT 2026-05-26 — entity mới]`
+
+**Mô tả:** Bảng nối N-N giữa Đợt báo cáo và Đơn vị nộp. Mỗi cặp (đợt, đơn vị) = 1 record theo dõi trạng thái nộp BC của đơn vị trong đợt. Nguồn cho bảng tiến độ nộp ở chi tiết Đợt BC (FR-XI-05a) và logic đôn đốc tự động (FR-XI-NEW-01).
+**Module:** Nhóm XI — Quản lý kế hoạch thực hiện CT HTPLDN
+**Tham chiếu FR:** FR-XI-05a, FR-XI-06, FR-XI-08, FR-XI-NEW-01
+
+| # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
+|---|-----|-----------|----------|-----------|----------|-------|
+| 1 | dot_id | identifier | Y | PK composite, FK → DOT_BAO_CAO | — | Đợt báo cáo |
+| 2 | don_vi_id | identifier | Y | PK composite, FK → DON_VI | — | Đơn vị nộp (ĐP/BN trong phạm vi) |
+| 3 | trang_thai_nop | text | Y | CHECK IN ('CHUA_NOP','DANG_LAP','CHO_DUYET','DA_DUYET','DA_NOP','QUA_HAN') | 'CHUA_NOP' | Trạng thái nộp của đơn vị trong đợt |
+| 4 | ngay_nop | datetime | N | Auto fill khi `trang_thai_nop = DA_NOP` | — | Thời điểm DA_NOP |
+| 5 | bao_cao_id | identifier | N | FK → BAO_CAO_CT_HTPL — null cho đến khi đơn vị bắt đầu lập | — | Bản BC đang/đã lập |
+| 6 | so_lan_nhac_nho | number | N | Tăng mỗi lần auto-gửi notification đôn đốc | 0 | Số lần nhắc nhở |
+| 7 | created_at | datetime | Y | Auto khi DOT_BAO_CAO được tạo | NOW() | — |
+| 8 | updated_at | datetime | Y | Auto | NOW() | — |
+
+**Quan hệ:** N-N giữa DOT_BAO_CAO ↔ DON_VI; 1:1 quy đổi sang BAO_CAO_CT_HTPL (1 cặp đợt+đơn vị tối đa 1 BC).
+
+**Volume:** ~3 đợt/năm × ~70 đơn vị (63 ĐP + ~7 BN) = ~210 records/năm.
+
+### BAO_CAO_CT_HTPL (owned) `[STT 52 UAT 2026-05-26 — GIỮ tên entity; sửa fields theo mô hình đơn vị nộp]`
 
 **Mô tả:** Báo cáo kết quả thực hiện chương trình HTPLDN (theo kỳ).
 **Module:** Nhóm XI — Quản lý kế hoạch thực hiện CT HTPLDN
@@ -1299,15 +1393,21 @@ erDiagram
 | # | Tên | Kiểu logic | Bắt buộc | Ràng buộc nghiệp vụ | Mặc định | Mô tả |
 |---|-----|-----------|----------|-----------|----------|-------|
 | 1 | id | identifier | Y | PK, SEQ | — | Khóa chính |
-| 2 | ct_htpl_id | identifier | Y | FK → CHUONG_TRINH_HTPL(id) | — | CT HTPL |
-| 3 | ma_bao_cao | text | Y | UNIQUE | Auto-gen | Mã báo cáo |
-| 4 | tieu_de | text | Y | | — | Tiêu đề |
-| 5 | noi_dung | text (long) | N | | — | Nội dung |
-| 6 | ky_bao_cao | text | N | CHECK IN ('SO_BO_6_THANG','SO_BO_NAM','TRON_NAM') | — | Kỳ báo cáo (đồng bộ DOT_BAO_CAO) |
-| 7 | so_lieu_tong_hop | text (long) | N | | — | Số liệu (JSON) |
-| 8 | trang_thai | text | Y | CHECK IN ('DU_THAO','CHO_PHE_DUYET','DA_DUYET','TU_CHOI') | 'DU_THAO' | Trạng thái |
+| 2 | ~~ct_htpl_id~~ | — | — | **BỎ theo STT 52 UAT 2026-05-26** — báo cáo gắn vào đơn vị nộp + đợt, không gắn 1 CT cụ thể | — | — |
+| 3 | dot_id | identifier | Y | **THÊM MỚI (STT 52):** FK → DOT_BAO_CAO(id) | — | Đợt báo cáo TW phát hành |
+| 4 | don_vi_nop_id | identifier | Y | **THÊM MỚI (STT 52):** FK → DON_VI(id). Đơn vị nộp BC (ĐP/BN) | — | Đơn vị nộp |
+| 5 | ma_bao_cao | text | Y | UNIQUE | Auto-gen | Mã báo cáo (BC-{ky}-{donvi}-{YYYY}-{SEQ}) |
+| 6 | bieu_mau_su_dung | text | Y | **THÊM MỚI (STT 52):** CHECK IN ('MAU_21A','MAU_21B','CA_HAI') — đơn vị tự chọn theo loại hoạt động | — | Mẫu BC đơn vị chọn |
+| 7 | tieu_de | text | Y | | — | Tiêu đề |
+| 8 | noi_dung | text (long) | N | | — | Nội dung |
+| 9 | ky_bao_cao | text | N | CHECK IN ('SO_BO_6_THANG','SO_BO_NAM','TRON_NAM') — derive từ `DOT_BAO_CAO.ky_bao_cao` | — | Kỳ báo cáo |
+| 10 | so_lieu_tong_hop | text (long) | N | Số liệu tổng hợp **toàn bộ HOẠT ĐỘNG HTPL của đơn vị trong kỳ** (không phải 1 CT) — sửa theo STT 52 | — | Số liệu (JSON) |
+| 11 | ct_htpl_ids_lien_quan[] | identifier[] | N | **THÊM MỚI (STT 52):** Mảng FK → CHUONG_TRINH_HTPL(id) — truy vết các CT đơn vị đã triển khai trong kỳ. KHÔNG phải FK bắt buộc, chỉ để tham khảo. | [] | Các CT liên quan trong kỳ |
+| 12 | trang_thai | text | Y | CHECK IN ('DU_THAO','CHO_PHE_DUYET','DA_DUYET','TU_CHOI') | 'DU_THAO' | Trạng thái |
 
-**Volume:** ~200 records/năm | **Growth:** 10%/năm
+> **Lưu ý đổi tên (STT 52 UAT 2026-05-26 — BA chốt 2026-05-30):** GIỮ tên entity `BAO_CAO_CT_HTPL`, KHÔNG đổi thành `BAO_CAO_HTPLDN`. Bản chất "báo cáo CT HTPL" vẫn đúng — báo cáo là tổng hợp các hoạt động CT HTPL của đơn vị trong kỳ; tên cũ tương thích với định danh đã văn bản hoá và mã `BAO_CAO_CT_HTPL` đã dùng ở các artefact dev khác.
+
+**Volume (cập nhật theo STT 52 UAT 2026-05-26):** ~3 đợt × ~70 đơn vị = ~210 records/năm (1 BC per cặp đợt+đơn vị). Giảm so với mô hình cũ "1 BC per CT per kỳ" do đảo mô hình về cấp đơn vị.
 
 ### TAI_KHOAN (referenced)
 
@@ -1366,11 +1466,11 @@ stateDiagram-v2
 | DU_THAO | CHO_PHE_DUYET | CB NV trình | Đủ thông tin | TB CB PD | FR-XI-03 | BR-AUTH-05 |
 | CHO_PHE_DUYET | DA_DUYET | CB PD duyệt | Cùng đơn vị | Audit | FR-XI-04 | BR-AUTH-05 |
 | CHO_PHE_DUYET | DU_THAO | CB PD từ chối | Có lý do | TB CB NV | FR-XI-04 | BR-FLOW-04 |
-| DA_DUYET | DA_CONG_BO | CB NV công bố | — | API trực tiếp lên Cổng PLQG | FR-XI-05 | BR-FLOW-05 |
-| DA_CONG_BO | DA_DUYET | CB NV hủy công bố | — | Gỡ khỏi Cổng | FR-XI-05 | BR-FLOW-05 |
+| DA_DUYET | DA_CONG_BO | CB NV công bố | — | Đặt `la_cong_bo=1`; Cổng PLQG chủ động kéo (PULL) | FR-XI-05 | BR-FLOW-05 |
+| DA_CONG_BO | DA_DUYET | CB NV hủy công bố | — | Đặt `la_cong_bo=0`; Cổng ngừng hiển thị ở kỳ kéo kế tiếp | FR-XI-05 | BR-FLOW-05 |
 | DA_DUYET | DANG_THUC_HIEN | CB NV kích hoạt | Có kế hoạch chi tiết | Ghi audit | FR-XI-01 (Kích hoạt CT) | — |
 | DA_CONG_BO | DANG_THUC_HIEN | CB NV kích hoạt | Có kế hoạch chi tiết | Ghi audit | FR-XI-01 (Kích hoạt CT) | — |
-| DANG_THUC_HIEN | HOAN_THANH | CB PD hoàn thành | Tất cả đợt BC hoàn thành | Ghi audit, ghi ngày HT | FR-XI-01 (Hoàn thành CT) | BR-DATA-05 |
+| DANG_THUC_HIEN | HOAN_THANH | CB PD hoàn thành | — (KHÔNG ràng buộc đợt BC — độc lập với CT, STT 52) | Ghi audit, ghi ngày HT | FR-XI-01 (Hoàn thành CT) | BR-DATA-05 |
 | DANG_THUC_HIEN | TAM_DUNG | CB NV tạm dừng CT | Có lý do | Ghi audit, cảnh báo đợt BC | FR-XI-01 (Tạm dừng CT) | BR-DATA-05 |
 | TAM_DUNG | DANG_THUC_HIEN | CB NV tiếp tục | — | Ghi audit | FR-XI-01 (Tiếp tục CT) | BR-DATA-05 |
 | DU_THAO | HUY | CB NV hủy | Xác nhận | Ghi audit | FR-XI-01 (Hủy CT) | BR-DATA-05 |
@@ -1478,11 +1578,11 @@ stateDiagram-v2
 | **Phát biểu** | Mọi hành động "Từ chối" phải nhập lý do. Lý do hiển thị cho người tạo ban đầu |
 | **Applied in (nhóm XI)** | FR-XI-04 (từ chối CT), FR-XI-07a (từ chối BC KQ) |
 
-### BR-FLOW-05: Công khai qua API trực tiếp
+### BR-FLOW-05: Công khai theo mô hình KÉO (Cổng PLQG tự kéo)
 
 | Thuộc tính | Giá trị |
 |-----------|---------|
-| **Phát biểu** | Chỉ bản ghi đã duyệt mới được công khai lên Cổng PLQG (REST trực tiếp, không qua LGSP). Hủy công khai gỡ khỏi Cổng |
+| **Phát biểu** | Chỉ CT đã duyệt mới được công khai. Công khai = đặt cờ `la_cong_bo = 1` + chuyển trạng thái DA_CONG_BO; Cổng PLQG chủ động kéo (PULL) dữ liệu định kỳ qua API outbound. Hủy công khai = đặt cờ `la_cong_bo = 0` + về DA_DUYET; Cổng ngừng hiển thị ở kỳ kéo kế tiếp. Phần mềm KHÔNG gọi API đẩy/gỡ trực tiếp lên Cổng |
 | **Applied in (nhóm XI)** | FR-XI-05 (công bố kế hoạch CT lên Cổng PLQG) |
 
 ### BR-FLOW-08: BC CT HTPLDN: ĐP+BN → TW tổng hợp

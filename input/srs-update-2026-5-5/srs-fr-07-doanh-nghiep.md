@@ -3,8 +3,8 @@
 **Dự án:** Phần mềm hỗ trợ pháp lý doanh nghiệp
 **Phiên bản SRS:** 3.5
 **Nhóm:** V.III — Quản lý DN được Hỗ trợ
-**UC range:** UC 81 – UC 82
-**Số FR:** 2
+**UC range:** UC 81 – UC 82 + UC phantom (FR-V.III-NEW-02 — DN tự xem/sửa hồ sơ DN của mình — BA chốt 2026-05-13) + UC 81 thao tác "Thêm" (FR-V.III-NEW-03 — CB NV thêm mới DN — STT 39 UAT 2026-05-26)
+**Số FR:** 4 (FR-V.III-01 + FR-V.III-02 + FR-V.III-NEW-02 + FR-V.III-NEW-03)
 **File chính:** `srs-v3.md` Section 3.2
 
 ---
@@ -36,9 +36,9 @@
 
 **Entity chính:** DOANH_NGHIEP, DOANH_NGHIEP_LINH_VUC, VU_VIEC (liên kết)
 
-**Tác nhân chính:** Cán bộ Nghiệp vụ (CB NV), Cán bộ Phê duyệt (CB PD)
+**Tác nhân chính:** Cán bộ Nghiệp vụ (CB NV), Cán bộ Phê duyệt (CB PD), Doanh nghiệp (chuyên trang DN — FR-V.III-NEW-02)
 
-**Tiêu chí DNNVV (Luật DNNVV 2017, NĐ39/2018/NĐ-CP):**
+**Tiêu chí DNNVV (Luật DNNVV 2017, NĐ80/2021/NĐ-CP):**
 
 | Quy mô | Lao động | Doanh thu/năm | Tổng nguồn vốn |
 |--------|---------|---------------|-----------------|
@@ -65,6 +65,7 @@ graph LR
 |----|-----|-------|----------|
 | UC81 | Quản lý DN được HTPL | FR-V.III-01 | Essential |
 | UC82 | Tìm kiếm DN | FR-V.III-02 | Essential |
+| — (phantom) | DN xem/cập nhật hồ sơ DN của chính mình | FR-V.III-NEW-02 | Essential |
 
 ---
 
@@ -81,7 +82,7 @@ graph LR
 **Màn hình:** SCR-V.III-01 — [Danh sách Doanh nghiệp](#scr-v-iii-01-danh-sách-doanh-nghiệp), SCR-V.III-02 — [Chi tiết / Chỉnh sửa Doanh nghiệp](#scr-v-iii-02-chi-tiết--chỉnh-sửa-doanh-nghiệp)
 
 **Mô tả:**
-Quản lý hồ sơ doanh nghiệp nhỏ và vừa đã/đang được hỗ trợ pháp lý. Hỗ trợ Xem / Tìm / Cập nhật / Xóa mềm + xem lịch sử hỗ trợ + xuất Excel. **KHÔNG có chức năng "Thêm mới"** — DN được tạo qua self-registration (FR-VIII-22 ở srs-fr-10) hoặc qua các luồng nghiệp vụ khác (vd: tạo vụ việc cho DN mới đăng ký xong).
+Quản lý hồ sơ doanh nghiệp nhỏ và vừa đã/đang được hỗ trợ pháp lý. Hỗ trợ **Thêm mới (FR-V.III-NEW-03)** / Xem / Tìm / Cập nhật / Xóa mềm + xem lịch sử hỗ trợ + xuất Excel. **Sửa theo STT 39 UAT 2026-05-26:** đã bổ sung chức năng "Thêm mới DN" cho CB NV (FR-V.III-NEW-03 + SCR-V.III-03 — đảm bảo CSV UC 81 có thao tác "Thêm" mà SRS v3.5 cũ ghi nhầm là không có). DN có thể đến hệ thống qua 5 kênh: (1) DN tự đăng ký FR-VIII-22; (2) CB NV bấm "Thêm mới" tại SCR-V.III-01 → SCR-V.III-03 (FR-V.III-NEW-03); (3) Modal tạo DN khi nhập vụ việc thủ công (FR-V.I-04); (4) API LGSP từ DVC chi trả (FR-VI-01); (5) Cổng PLQG đẩy sang (FR-XII outbound).
 
 **Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP)
 
@@ -96,18 +97,18 @@ Quản lý hồ sơ doanh nghiệp nhỏ và vừa đã/đang được hỗ tr�
 | # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Mặc định | Nguồn |
 |---|----------|-----------|----------|-----------|----------|-------|
 | 1 | ma_doanh_nghiep | text | Y (auto) | Auto-gen: DN-{TINH}-{SEQ} | — | Hệ thống |
-| 2 | ten_doanh_nghiep | text | Y | Không rỗng | — | Người dùng |
-| 3 | ma_so_thue | text | Y | Unique toàn hệ thống | — | Người dùng |
+| 2 | ten_doanh_nghiep | text | Y | Không rỗng (định danh DN) | — | Người dùng |
+| 3 | ma_so_thue | text | Y | Unique toàn hệ thống (định danh DN) | — | Người dùng |
 | 4 | giay_cn_dkkd | text | N | — | — | Người dùng |
-| 5 | dia_chi | text | Y | Không rỗng | — | Người dùng |
-| 6 | tinh_thanh_id | identifier | Y | FK → DANH_MUC (loai='TINH_THANH', mã GSO 01-63 theo QĐ 124/2004/QĐ-TTg) | — | Người dùng |
-| 7 | loai_dn_id | identifier | Y | FK → DANH_MUC (UC105) | — | Người dùng |
-| 8 | quy_mo | text | Y | SIEU_NHO / NHO / VUA | — | Người dùng |
-| 9 | nganh_nghe | text | Y | NONG_LAM / CONG_NGHIEP / THUONG_MAI | — | Người dùng |
+| 5 | dia_chi | text | **N** | **Sửa theo BA chốt 2026-05-30:** Tùy chọn cho 5 kênh không tạo TK (CB NV / API). Bắt buộc khi DN tự đăng ký qua FR-VIII-22 — quy định tại srs-fr-10. | — | Người dùng |
+| 6 | tinh_thanh_id | identifier | **N** | FK → DANH_MUC (loai='TINH_THANH'). **Sửa theo BA chốt 2026-05-30:** Tùy chọn — nếu thiếu, hệ thống tự suy diễn theo đơn vị CB NV đăng nhập (BR-AUTH-08) hoặc 2 chữ số đầu MST cho kênh API. Bắt buộc khi DN tự đăng ký (FR-VIII-22). | — | Người dùng |
+| 7 | loai_dn_id | identifier | **N** | FK → DANH_MUC (UC105). **Tùy chọn** cho 5 kênh CB NV/API; bắt buộc khi DN tự đăng ký. | — | Người dùng |
+| 8 | quy_mo | text | **N** | SIEU_NHO / NHO / VUA. **Tùy chọn** — nếu trống, BR-CALC-07 trả `uu_tien = 1` (FIFO) không chặn. Bắt buộc khi DN tự đăng ký. | — | Người dùng |
+| 9 | nganh_nghe | text | **N** | NONG_LAM / CONG_NGHIEP / THUONG_MAI. **Tùy chọn** cho 5 kênh; bắt buộc khi DN tự đăng ký. | — | Người dùng |
 | 10 | so_lao_dong | number | N | ≥ 0 | — | Người dùng |
 | 11 | doanh_thu_nam | number | N | ≥ 0 | — | Người dùng |
 | 12 | tong_nguon_von | number | N | ≥ 0 | — | Người dùng |
-| 13 | nguoi_dai_dien | text | Y | Không rỗng | — | Người dùng |
+| 13 | nguoi_dai_dien | text | **N** | **Tùy chọn** cho 5 kênh; bắt buộc khi DN tự đăng ký. | — | Người dùng |
 | 14 | chuc_vu_dai_dien | text | N | — | — | Người dùng |
 | 15 | email | text | N | Format email hợp lệ | — | Người dùng |
 | 16 | dien_thoai | text | N | — | — | Người dùng |
@@ -156,7 +157,7 @@ Quản lý hồ sơ doanh nghiệp nhỏ và vừa đã/đang được hỗ tr�
 - **BR-DATA-01**: Xóa mềm (is_deleted)
 - **BR-DATA-04**: Tự động sinh mã
 - **BR-DATA-05**: Ghi nhật ký thao tác
-- **BR-CALC-05**: Kiểm tra quy mô DNNVV theo NĐ39/2018
+- **BR-CALC-05**: Kiểm tra quy mô DNNVV theo NĐ80/2021
 
 **Outputs (Dữ liệu đầu ra):**
 
@@ -166,8 +167,8 @@ Quản lý hồ sơ doanh nghiệp nhỏ và vừa đã/đang được hỗ tr�
 | 2 | ma_doanh_nghiep | text | Luôn có | DN-{TINH}-{SEQ} |
 | 3 | ten_doanh_nghiep | text | Luôn có | — |
 | 4 | ma_so_thue | text | Luôn có | — |
-| 5 | quy_mo | text | Luôn có | Siêu nhỏ/Nhỏ/Vừa |
-| 6 | dia_chi | text | Luôn có | — |
+| 5 | quy_mo | text | **Có thể trống** (BA chốt 2026-05-30 — kênh CB NV/API không bắt buộc) | Siêu nhỏ/Nhỏ/Vừa hoặc "—" nếu chưa có |
+| 6 | dia_chi | text | **Có thể trống** (kênh CB NV/API không bắt buộc) | — |
 | 7 | so_lan_ho_tro | number | Luôn có | — |
 | 8 | tong_chi_phi | money | Luôn có | VND, dấu chấm phân cách |
 | 9 | total_count | number | Luôn có | — |
@@ -183,7 +184,7 @@ Quản lý hồ sơ doanh nghiệp nhỏ và vừa đã/đang được hỗ tr�
 | # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
 |---|--------------|--------|-------------------|----------|
 | E1 | Tên DN trống | ERR-DN-01 | "Tên doanh nghiệp là bắt buộc" | ERROR |
-| E2 | MST trùng | ERR-DN-02 | "Mã số thuế đã tồn tại" | ERROR |
+| E2 | MST trùng (CB NV bấm "Thêm mới" hoặc cập nhật MST) | ERR-DN-DUPLICATE | Modal block: "Doanh nghiệp có mã số thuế '{ma_so_thue}' đã tồn tại trong hệ thống: {ten_dn_hien_co}. Bạn muốn mở chi tiết DN hiện có?" + 2 nút **"Mở chi tiết"** (chuyển SCR-V.III-02) / **"Hủy"**. **Sửa theo STT 39 UAT 2026-05-26 — thay `ERR-DN-02` cũ thành modal hành động.** | ERROR |
 | E3 | Quy mô không phù hợp | WRN-DN-01 | "Quy mô {X} không khớp với số liệu lao động/doanh thu. Vẫn lưu?" | WARNING |
 | E4 | Xóa DN có VV đang xử lý | ERR-DN-03 | "Không thể xóa DN đang có vụ việc xử lý" | ERROR |
 
@@ -266,13 +267,150 @@ Tìm kiếm doanh nghiệp theo nhiều tiêu chí: từ khóa (tên/MST), quy m
 
 ---
 
+### FR-V.III-NEW-03: CB NV thêm mới Doanh nghiệp (UC81 thao tác "Thêm") `[STT 39 UAT 2026-05-26 — mới]`
+
+**UC Reference:** UC 81 (thao tác "Thêm") | **Priority:** Essential | **Stability:** High
+**Màn hình:** SCR-V.III-03 — Form Thêm mới Doanh nghiệp (cho CB NV)
+**Source:** STT 39 UAT 2026-05-26
+
+**Mô tả:** CB Nghiệp vụ chủ động tạo hồ sơ DN trong các tình huống nghiệp vụ (vd: DN đến trực tiếp nộp Mẫu 01, DN gọi điện thoại, hoặc CB cần tạo trước để chuẩn bị xử lý vụ việc). Form 18 trường (entity DOANH_NGHIEP), **bắt buộc TỐI THIỂU 2 trường định danh**: `ma_so_thue` (10 chữ số TT 105/2020/TT-BTC) + `ten_doanh_nghiep`. **`tinh_thanh_id` tự suy diễn** theo đơn vị CB NV đăng nhập (BR-AUTH-08). 15 trường còn lại tùy chọn — CB NV bổ sung dần khi xử lý nghiệp vụ. **Sửa theo BA chốt 2026-05-30:** FR này CHỈ tạo `DOANH_NGHIEP`, **KHÔNG tạo `TAI_KHOAN`** và không gửi mail kích hoạt. Khi DN muốn theo dõi hồ sơ của mình, DN tự đăng ký TK qua **FR-VIII-22** với MST + dùng **FR-VIII-26 (Quên mật khẩu) làm Claim Flow** khi MST đã tồn tại. Lý do bắt buộc tối thiểu 2 trường: theo CSV UC 120 DN không tương tác phần mềm tại kênh này; không cần email/mật khẩu/đầy đủ hồ sơ để tạo DN — chỉ cần định danh đủ để CB NV làm việc.
+
+**Tác nhân:** Cán bộ Nghiệp vụ (TW/BN/ĐP)
+
+**Preconditions:**
+- User đã đăng nhập, có quyền "Quản lý DN" (UC115)
+- MST 10 chữ số định dạng hợp lệ (TT 105/2020/TT-BTC Điều 5)
+
+**Inputs:** 18 trường DN như bảng FR-V.III-01 (mục 95–117) — **bắt buộc TỐI THIỂU 2 trường định danh**: `ma_so_thue` + `ten_doanh_nghiep`. **`tinh_thanh_id`**: hệ thống tự suy diễn (default theo đơn vị CB NV đăng nhập); nếu CB NV biết DN ở tỉnh khác thì chọn lại. 15 trường còn lại tùy chọn (CB NV nhập khi có thông tin): `email`, `dia_chi`, `loai_dn_id`, `quy_mo`, `nganh_nghe`, `nguoi_dai_dien`, `so_dien_thoai`, `giay_cn_dkkd`, `chuc_vu_dai_dien`, `so_lao_dong`, `doanh_thu_nam`, `tong_nguon_von`, `linh_vuc_ids`, `ghi_chu`, `file_dinh_kem`.
+
+**Processing:**
+
+| Bước | Mô tả xử lý | BR áp dụng |
+|------|-------------|-----------|
+| 1 | Kiểm tra quyền | BR-AUTH-01 |
+| 2 | Validate 2 trường bắt buộc (`ma_so_thue` + `ten_doanh_nghiep`) + định dạng MST (10 chữ số TT 105/2020). Nếu `tinh_thanh_id` chưa nhập → set default = `tinh_thanh_id` của đơn vị CB NV đăng nhập | — |
+| 3 | Lookup MST trong DOANH_NGHIEP. Nếu **đã tồn tại** → trả modal `ERR-DN-DUPLICATE` với nút "Mở chi tiết DN hiện có" (chuyển SCR-V.III-02) / "Hủy". KHÔNG tạo trùng. | — |
+| 4 | Tự động sinh `ma_doanh_nghiep`: DN-{TINH}-{SEQ} | BR-DATA-04 |
+| 5 | Auto-calc `quy_mo` theo BR-CALC-05 (nếu CB NV không nhập + có đủ 3 trường `so_lao_dong`, `doanh_thu_nam`, `tong_nguon_von`); CB NV có thể override | BR-CALC-05 |
+| 6 | Tạo bản ghi `DOANH_NGHIEP`, `is_deleted = false`, `created_by = user.id` | — |
+| 7 | ~~Tạo TAI_KHOAN cho DN~~ — **BỎ theo BA chốt 2026-05-30** (override quyết định 2026-05-10). FR này chỉ tạo `DOANH_NGHIEP`, không tạo TK. Khi DN muốn theo dõi hồ sơ → DN tự đăng ký TK qua FR-VIII-22 + dùng FR-VIII-26 (Quên mật khẩu) làm Claim Flow nếu MST đã tồn tại. | — |
+| 8 | ~~Gửi mail kích hoạt~~ — **BỎ theo BA chốt 2026-05-30**. Không gửi mail bất ngờ tới DN. | — |
+| 9 | Ghi nhật ký thao tác (audit log: hành động = 'CREATE_DN'). **Sửa theo BA chốt 2026-05-30:** không còn ghi "thông tin TK tạo kèm" vì FR này không tạo TK. | BR-DATA-05 |
+
+**Outputs:**
+
+| # | Tên | Kiểu logic | Mô tả |
+|---|-----|-----------|-------|
+| 1 | doanh_nghiep_id | identifier | ID DN mới |
+| 2 | ma_doanh_nghiep | text | Mã DN sinh tự động |
+| 3 | ~~tai_khoan_id~~ | — | **BỎ theo BA chốt 2026-05-30** — FR này không tạo TK |
+| 4 | ~~da_gui_mail_kich_hoat~~ | — | **BỎ theo BA chốt 2026-05-30** — FR này không gửi mail |
+
+**Postconditions:** DN được tạo. CB NV được redirect về SCR-V.III-01 (theo Phụ lục E §H7). **Không tạo TK, không gửi mail** (override 2026-05-30 theo CSV UC 120).
+
+**Error Handling:**
+
+| # | Điều kiện | Mã lỗi | Phản hồi |
+|---|-----------|--------|----------|
+| E1 | Thiếu trường bắt buộc | ERR-DN-01..N | Highlight ô thiếu + inline message |
+| E2 | MST sai định dạng (≠10 chữ số) | ERR-DN-MST-FORMAT | "Mã số thuế phải gồm 10 chữ số theo Thông tư 105/2020/TT-BTC" |
+| E3 | MST đã tồn tại | ERR-DN-DUPLICATE | Modal block với 2 nút "Mở chi tiết" / "Hủy" (xem FR-V.III-01 Error Handling) |
+| ~~E4~~ | ~~Email DN trùng TAI_KHOAN.email~~ | ~~ERR-DN-EMAIL-DUP~~ | **BỎ theo BA chốt 2026-05-30** — FR không tạo TK nên không cần check trùng email TK. `DOANH_NGHIEP.email` là email liên hệ DN, có thể dùng chung giữa nhiều DN (vd: email kế toán dịch vụ chung). |
+| ~~E5~~ | ~~Gửi mail kích hoạt thất bại~~ | ~~WRN-DN-MAIL-FAIL~~ | **BỎ theo BA chốt 2026-05-30** — FR không gửi mail kích hoạt nữa |
+
+**Acceptance Criteria:**
+- **Given** CB NV ở SCR-V.III-01 **When** bấm nút "Thêm mới" **Then** mở SCR-V.III-03
+- **Given** CB NV nhập đủ 2 trường bắt buộc tối thiểu (`ma_so_thue` + `ten_doanh_nghiep`) + MST chưa tồn tại **When** lưu **Then** tạo DOANH_NGHIEP (không tạo TK, không gửi mail) + về danh sách
+- **Given** CB NV nhập MST đã tồn tại **When** lưu **Then** modal ERR-DN-DUPLICATE
+- **Given** Bấm "Mở chi tiết" trong modal trùng MST **When** xác nhận **Then** chuyển SCR-V.III-02 của DN hiện có
+- **(BA chốt 2026-05-30 — FR không gửi mail nữa)** **Given** CB NV nhập email DN tùy chọn vào form **When** lưu DN **Then** Email lưu vào `DOANH_NGHIEP.email` để CB NV liên hệ + làm điểm xác minh khi DN sau này tự đăng ký TK qua FR-VIII-22 + Claim Flow FR-VIII-26. KHÔNG gửi mail kích hoạt.
+
+**Cross-ref:** FR-VIII-22 (pattern schema 9 trường + Claim Flow khi DN tự đăng ký với MST đã tồn tại), FR-VIII-26 (Quên mật khẩu — fallback CB NV verify thủ công khi email không khớp), BR-AUTH-USERNAME-01, BR-CALC-05.
+
+---
+
+### FR-V.III-NEW-02: DN xem/cập nhật hồ sơ doanh nghiệp của mình `[v3.5 — BA chốt 2026-05-13, gap SRS]`
+
+**UC Reference:** — (phantom FR, gap SRS phát hiện từ báo cáo review HDSD vs SRS §6.4 #1)
+**Source:** BA chốt 2026-05-13
+**Priority:** Essential
+**Stability:** High
+**Màn hình:** SCR-V.III-04 — [Hồ sơ doanh nghiệp của tôi (chuyên trang DN)](#scr-v-iii-04-hồ-sơ-doanh-nghiệp-của-tôi-chuyên-trang-dn)
+
+> **Lưu ý đặt tên:** Tên `FR-V.III-NEW-01` đã từng dùng cho chức năng "Import DN từ Excel" (v3) — đã xoá khỏi v3.5 (CHANGELOG-v3-to-v3.5.md mục 1). Tên `SCR-V.III-03` từng dùng cho Wizard Import. FR/SCR mới dùng `NEW-02` và `-04` để tránh nhầm với history.
+
+**Mô tả:**
+Doanh nghiệp tự xem + cập nhật hồ sơ doanh nghiệp của chính mình qua chuyên trang sau khi đăng nhập VNeID Tier 2.
+
+- **Trường định danh (chỉ đọc):** ma_doanh_nghiep, ten_doanh_nghiep, ma_so_thue, giay_cn_dkkd, ngay_cap_dkkd, loai_dn_id, nganh_nghe, tinh_thanh_id — phải đề nghị CB NV sửa qua kênh chính thức (NĐ 168/2025 Đ.7).
+- **Trường DN tự cập nhật:** dia_chi, dien_thoai, email, fax, nguoi_dai_dien, chuc_vu_dai_dien, la_nu_lam_chu, so_lao_dong, so_lao_dong_nu, so_lao_dong_khuyet_tat, doanh_thu_nam, tong_nguon_von, linh_vuc_ids (multi-select VSIC cấp 4), ghi_chu.
+- **Trường auto-calc:** quy_mo (auto-tính theo BR-CALC-05 NĐ 80/2021 từ so_lao_dong + doanh_thu_nam + tong_nguon_von; DN không sửa trực tiếp). **Persist:** giá trị quy_mo (SIEU_NHO/NHO/VUA) ánh xạ về `DOANH_NGHIEP.loai_dn_id` FK lookup tới DANH_MUC (`loai_danh_muc='LOAI_DOANH_NGHIEP'` theo UC105, AND `ma=<quy_mo>`) — entity DOANH_NGHIEP §3.4.3.3 lưu cột `loai_dn_id` chứ không có cột `quy_mo` riêng; trường `quy_mo` ở Inputs/Outputs là alias UI giữ nhất quán với FR-V.III-01.
+
+**Tác nhân:** Doanh nghiệp (đăng nhập VNeID Tier 2)
+
+**Preconditions (Điều kiện tiên quyết):**
+
+- User đã đăng nhập VNeID Tier 2 (BR-AUTH-01 + FR-VIII-23 + FR-VIII-25)
+- User là loại Doanh nghiệp (BR-AUTH-USERNAME-01: username DN = MST)
+- Tồn tại bản ghi `DOANH_NGHIEP` có `ma_so_thue` khớp username của user
+
+**Inputs — Cập nhật hồ sơ:**
+
+| # | Tên field | Kiểu logic | Bắt buộc | Ràng buộc | Nguồn |
+|---|----------|-----------|----------|-----------|-------|
+| 1 | dia_chi | text | Y | Không rỗng | DN nhập |
+| 2 | dien_thoai | text | N | — | DN nhập |
+| 3 | email | text | N | Format email hợp lệ; không cần OTP đổi (BR-AUTH-EMAIL-01) | DN nhập |
+| 4 | fax | text | N | — | DN nhập |
+| 5 | nguoi_dai_dien | text | Y | Không rỗng | DN nhập |
+| 6 | chuc_vu_dai_dien | text | N | — | DN nhập |
+| 7 | la_nu_lam_chu | boolean | N | — | DN chọn |
+| 8 | so_lao_dong | number | N | ≥ 0 | DN nhập |
+| 9 | so_lao_dong_nu | number | N | ≥ 0; ≤ so_lao_dong | DN nhập |
+| 10 | so_lao_dong_khuyet_tat | number | N | ≥ 0; ≤ so_lao_dong | DN nhập |
+| 11 | doanh_thu_nam | number | N | ≥ 0 | DN nhập |
+| 12 | tong_nguon_von | number | N | ≥ 0 | DN nhập |
+| 13 | linh_vuc_ids | structured | N | Multi-select VSIC cấp 4 | DN chọn |
+| 14 | ghi_chu | text (long) | N | — | DN nhập |
+
+**Processing:**
+
+| Bước | Mô tả xử lý | BR áp dụng |
+|------|-------------|-----------|
+| 1 | Kiểm tra quyền DN + Tier 2 + xác định bản ghi DOANH_NGHIEP của user (qua MST) | BR-AUTH-01, BR-AUTH-USERNAME-01 |
+| 2 | Validate trường DN edit; chặn payload chứa trường định danh | — |
+| 3 | Auto-tính `quy_mo` theo BR-CALC-05 (NĐ 80/2021 Đ.5). Nếu 2 tiêu chí cho mức khác nhau → lấy mức cao hơn | BR-CALC-05 |
+| 4 | Cập nhật DOANH_NGHIEP + đồng bộ DOANH_NGHIEP_LINH_VUC | BR-DATA-02 |
+| 5 | Ghi nhật ký thao tác | BR-DATA-05 |
+| 6 | Nếu `quy_mo` thay đổi: gửi thông báo CB NV phụ trách đơn vị | BR-NOTIF-01 |
+
+**Error Handling:**
+
+| # | Điều kiện lỗi | Mã lỗi | Phản hồi hệ thống | Severity |
+|---|--------------|--------|-------------------|----------|
+| E1 | Không tìm thấy DOANH_NGHIEP khớp MST | ERR-DN-OWN-01 | "Không tìm thấy hồ sơ doanh nghiệp gắn với tài khoản này. Vui lòng liên hệ quản trị viên." | ERROR |
+| E2 | Payload chứa thay đổi trường định danh | ERR-DN-OWN-02 | "Các trường định danh phải đề nghị cán bộ nghiệp vụ sửa qua kênh chính thức." | ERROR |
+| E3 | so_lao_dong_nu/khuyet_tat > so_lao_dong | ERR-DN-OWN-03 | "Số lao động nữ/khuyết tật không được vượt số lao động tổng." | ERROR |
+| E4 | DN cố truy cập hồ sơ DN khác | ERR-AUTH-FORBIDDEN | "Bạn không có quyền truy cập hồ sơ doanh nghiệp này." | ERROR |
+
+**Acceptance Criteria:**
+
+- **Given** DN đăng nhập VNeID Tier 2 **When** mở "Hồ sơ DN của tôi" **Then** hiển thị 5 tab (Thông tin / Hồ sơ pháp lý / Lịch sử hỗ trợ / Hồ sơ chi trả / Đăng ký đào tạo của tôi — tab cuối render FR-III-NEW-04) với dữ liệu của DN mình
+- **Given** DN sửa địa chỉ + số lao động + doanh thu **When** lưu **Then** record cập nhật, `quy_mo` auto-tính, audit log ghi nhận, CB NV phụ trách nhận thông báo nếu `quy_mo` đổi
+- **Given** DN cố sửa MST hoặc tên DN qua form **When** gửi **Then** ERR-DN-OWN-02
+- **Given** DN A đăng nhập **When** gọi API sửa DN B **Then** ERR-AUTH-FORBIDDEN
+
+**Cross-ref:** Entity DOANH_NGHIEP, DOANH_NGHIEP_LINH_VUC, BR-CALC-05, BR-AUTH-USERNAME-01, BR-AUTH-EMAIL-01, BR-NOTIF-01; SCR-V.III-04.
+
+---
+
 ## 3. Màn hình chức năng
 
 ### SCR-V.III-01: Danh sách Doanh nghiệp
 
 **Loại màn hình:** Danh sách
 **FR sử dụng:** FR-V.III-01, FR-V.III-02
-**Mô tả:** Hiển thị danh sách doanh nghiệp được hỗ trợ pháp lý; hỗ trợ tìm kiếm/lọc đa tiêu chí (từ khóa, quy mô, tỉnh/thành, lĩnh vực, khoảng thời gian hỗ trợ). DN được tạo qua DN tự đăng ký FR-VIII-22 ở `srs-fr-10` — màn hình này chỉ Xem / Tìm / Sửa / Xóa.
+**Mô tả:** Hiển thị danh sách doanh nghiệp được hỗ trợ pháp lý; hỗ trợ tìm kiếm/lọc đa tiêu chí (từ khóa, quy mô, tỉnh/thành, lĩnh vực, khoảng thời gian hỗ trợ). **Sửa theo BA chốt 2026-05-30:** màn hình hỗ trợ thao tác **Thêm mới DN** (FR-V.III-NEW-03 + SCR-V.III-03) + Xem / Tìm / Sửa / Xóa. DN có thể đến hệ thống qua 5 kênh (xem mô tả FR-V.III-01): CB NV bấm "Thêm mới"; Modal tạo DN khi nhập VV; API LGSP từ DVC; Cổng PLQG; DN tự đăng ký FR-VIII-22.
 **URL:** `/doanh-nghiep/danh-sach`
 **Quyền truy cập:** Cán bộ nghiệp vụ và cán bộ phê duyệt (TW / Bộ ngành / Địa phương). Phạm vi dữ liệu theo BR-AUTH-08 (TW xem toàn quốc; BN/ĐP xem theo `tinh_thanh_id` thuộc đơn vị).
 
@@ -282,6 +420,7 @@ Tìm kiếm doanh nghiệp theo nhiều tiêu chí: từ khóa (tên/MST), quy m
 |---|------|-----------|------|--------------------| --------|-------------------|
 | 1 | breadcrumb | Breadcrumb | breadcrumb | "Trang chủ > Doanh nghiệp > Danh sách" | navigate | Luôn hiển thị |
 | 2 | toolbar | Tiêu đề trang | label | "Quản lý Doanh nghiệp" | — | Luôn hiển thị |
+| 3 | toolbar | Nút Thêm mới | button (primary) | "Thêm mới" | click → SCR-V.III-03 (form thêm DN). **Sửa theo BA chốt 2026-05-30** — bổ sung theo CSV UC 81 + FR-V.III-NEW-03. | Luôn hiển thị |
 | 5 | toolbar | Nút Xuất Excel | button | "Xuất Excel" | click → export danh sách | Luôn hiển thị |
 | 6 | toolbar | Nút Làm mới | button | "Làm mới" | click → reload danh sách | Luôn hiển thị |
 | 7 | filter-bar | Từ khóa | search-box | Tìm theo tên DN / MST | change → filter | Luôn hiển thị |
@@ -315,7 +454,7 @@ Tìm kiếm doanh nghiệp theo nhiều tiêu chí: từ khóa (tên/MST), quy m
 
 **Loại màn hình:** Chi tiết (4 tab) / Chỉnh sửa
 **FR sử dụng:** FR-V.III-01
-**Mô tả:** Xem/chỉnh sửa chi tiết doanh nghiệp với 4 tab — Thông tin cơ bản (28 trường + auto-suggest quy mô NĐ39/2018), Hồ sơ pháp lý DN (CRUD entity HO_SO_PHAP_LY_DN, 5 loại × 3 trạng thái), Lịch sử Hỗ trợ (3 KPI + danh sách vụ việc liên kết), Hồ sơ Chi trả (danh sách hồ sơ chi trả liên kết). **KHÔNG có chế độ tạo mới** — DN được tạo qua self-registration FR-VIII-22 ở srs-fr-10.
+**Mô tả:** Xem/chỉnh sửa chi tiết doanh nghiệp với 4 tab — Thông tin cơ bản (28 trường + auto-suggest quy mô NĐ80/2021), Hồ sơ pháp lý DN (CRUD entity HO_SO_PHAP_LY_DN, 5 loại × 3 trạng thái), Lịch sử Hỗ trợ (3 KPI + danh sách vụ việc liên kết), Hồ sơ Chi trả (danh sách hồ sơ chi trả liên kết). **Sửa theo BA chốt 2026-05-30:** Tạo mới DN dùng SCR-V.III-03 riêng (FR-V.III-NEW-03), mở từ nút "Thêm mới" ở SCR-V.III-01.
 **URL:** `/doanh-nghiep/:id` (xem chi tiết) HOẶC `/doanh-nghiep/:id/sua` (chỉnh sửa).
 **Quyền truy cập:** Cán bộ nghiệp vụ (TW / Bộ ngành / Địa phương) có quyền CRUD doanh nghiệp. Phạm vi dữ liệu theo BR-AUTH-08; BN/ĐP chỉ thao tác DN thuộc `tinh_thanh_id` của đơn vị mình.
 
@@ -356,11 +495,117 @@ Tìm kiếm doanh nghiệp theo nhiều tiêu chí: từ khóa (tên/MST), quy m
 
 #### Quy tắc tương tác
 
-- Auto-suggest quy mô: khi nhập số lao động và doanh thu, hệ thống gợi ý quy mô theo NĐ39/2018
+- Auto-suggest quy mô: khi nhập số lao động và doanh thu, hệ thống gợi ý quy mô theo NĐ80/2021
 - Nếu 2 tiêu chí cho kết quả khác nhau → lấy mức cao hơn và hiển thị warning
 - Tab Hồ sơ PL DN (MỚI v2.1, gộp MH-12.3): CRUD hồ sơ pháp lý DN, phân loại: GIAY_PHEP/HOP_DONG/GIAY_CN/QUYET_DINH/KHAC. Trạng thái: HIEU_LUC/HET_HAN/THU_HOI
 - Tab Lịch sử Hỗ trợ hiển thị 3 KPI: Tổng VV, VV hoàn thành, Tổng chi phí
 - Tab Hồ sơ Chi trả hiển thị danh sách HS chi trả liên kết
+
+---
+
+### SCR-V.III-04: Hồ sơ doanh nghiệp của tôi (chuyên trang DN) `[v3.5 — BA chốt 2026-05-13]`
+
+**Loại màn hình:** Chi tiết (5 tab) / Chỉnh sửa
+**FR sử dụng:** FR-V.III-NEW-02 (Tab 1-4), FR-III-NEW-04 (Tab 5)
+**Mô tả:** Chuyên trang DN tự xem + cập nhật hồ sơ doanh nghiệp của chính mình sau khi đăng nhập VNeID Tier 2. Bố cục 4 tab giống SCR-V.III-02 nhưng phân quyền theo nhân thân (chỉ thấy hồ sơ DN có MST khớp username); các trường định danh hiển thị readonly, chỉ các trường DN edit theo FR-V.III-NEW-02 mới chỉnh sửa được.
+**URL:** `/doanh-nghiep/ho-so-cua-toi`
+**Quyền truy cập:** Doanh nghiệp (Tier 2 VNeID). Phạm vi dữ liệu theo nhân thân — chỉ DOANH_NGHIEP có MST khớp username. Vai trò khác KHÔNG truy cập trang này.
+
+#### Thành phần màn hình
+
+| # | Vùng | Thành phần | Loại | Dữ liệu / Nội dung | Điều kiện hiển thị |
+|---|------|-----------|------|--------------------|-------------------|
+| 1 | breadcrumb | Breadcrumb | breadcrumb | "Trang chủ > Hồ sơ doanh nghiệp của tôi" | Luôn |
+| 2 | toolbar | Tiêu đề + nút Chỉnh sửa | label + button | "Hồ sơ doanh nghiệp của tôi" + [Chỉnh sửa thông tin] | Luôn |
+| 3 | tab | Tab 1 — Thông tin doanh nghiệp | tab | Form thông tin DN (trường định danh readonly + trường DN edit) | Luôn |
+| 4 | tab | Tab 2 — Hồ sơ pháp lý DN | tab | Read-only danh sách HO_SO_PHAP_LY_DN | Luôn |
+| 5 | tab | Tab 3 — Lịch sử hỗ trợ | tab | Read-only: 3 KPI + danh sách VV | Luôn |
+| 6 | tab | Tab 4 — Hồ sơ chi trả | tab | Read-only danh sách HO_SO_CHI_TRA | Luôn |
+| 6a | tab | Tab 5 — Đăng ký đào tạo của tôi | tab | Render FR-III-NEW-04 (Read-only danh sách DANG_KY_DAO_TAO của DN + bộ lọc trạng thái/ngày + kết quả khi khóa đã công bố) | Luôn |
+| 7 | content | Trường định danh (readonly) | text-input (readonly) | Mã DN / Tên DN / MST / Giấy CN ĐKKD / Ngày cấp / Loại DN / Tỉnh thành / Ngành nghề | Tab 1 |
+| 8 | content | Quy mô (auto-calc) | badge (readonly) | SIEU_NHO / NHO / VUA — auto-tính theo BR-CALC-05 | Tab 1 |
+| 9 | content | Trường DN edit | form fields | Địa chỉ / Điện thoại / Email / Fax / Người ĐD / Chức vụ ĐD / Phụ nữ làm chủ / Số LĐ / Số LĐ nữ / Số LĐ khuyết tật / Doanh thu / Tổng vốn / Lĩnh vực KD multi-select / Ghi chú | Tab 1, edit mode |
+| 10 | action-bar | Hủy / Lưu thay đổi | button-group | — | Edit mode |
+
+#### Quy tắc tương tác
+
+- Trường định danh xám + tooltip "Đề nghị cán bộ nghiệp vụ cập nhật qua kênh chính thức"
+- Auto-calc quy_mo realtime khi thay đổi so_lao_dong / doanh_thu_nam / tong_nguon_von (BR-CALC-05)
+- Khi quy_mo đổi sau Lưu: toast "Quy mô doanh nghiệp đã cập nhật: {cũ} → {mới}. Cán bộ nghiệp vụ phụ trách đã nhận thông báo."
+- Tab 2/3/4 read-only — DN không sửa được
+- KHÔNG có "Thêm mới" hoặc "Xóa hồ sơ"
+
+---
+
+### SCR-V.III-03: Form Thêm mới Doanh nghiệp (cho CB NV) `[STT 39 UAT 2026-05-26 — mới]`
+
+**Loại màn hình:** Form đầy đủ, mở từ nút "Thêm mới" trên SCR-V.III-01.
+**FR sử dụng:** FR-V.III-NEW-03 (Thêm mới DN cho CB NV)
+**URL pattern:** `/quan-ly-dn/them-moi`
+**Quyền truy cập:** CB Nghiệp vụ (TW/BN/ĐP) có quyền "Quản lý DN" (UC115).
+
+#### Bố cục form
+
+Form 2 cột (1280px+) hoặc 1 cột (mobile/<1024px), gồm 3 nhóm trường:
+
+**Nhóm A — Định danh cơ bản (bắt buộc):**
+
+| # | Trường | Loại | Ràng buộc |
+|---|--------|------|-----------|
+| 1 | Tên doanh nghiệp | text | **Bắt buộc**, ≤ 500 ký tự |
+| 2 | Mã số thuế | text (10 chữ số) | **Bắt buộc**, regex `^[0-9]{10}$` (TT 105/2020/TT-BTC Đ.5), check trùng khi blur |
+| 3 | Email doanh nghiệp | text (email) | Tùy chọn. Format email hợp lệ nếu có nhập. **Sửa theo BA chốt 2026-05-30:** Email lưu vào DOANH_NGHIEP để CB NV liên hệ + làm điểm xác minh khi DN sau này tự đăng ký TK qua FR-VIII-22 + dùng FR-VIII-26 Claim Flow. FR này KHÔNG gửi mail. Nếu DN có email nhưng CB không biết → để trống, bổ sung sau qua SCR-V.III-02. |
+| 4 | Người đại diện | text | Tùy chọn |
+| 5 | Số điện thoại | text | Tùy chọn |
+
+**Nhóm B — Địa lý + Phân loại (tùy chọn, có gợi ý mặc định):**
+
+| # | Trường | Loại | Ràng buộc |
+|---|--------|------|-----------|
+| 6 | Tỉnh/Thành phố | dropdown searchable | Tùy chọn. FK → DANH_MUC loại `TINH_THANH` (63 tỉnh). **Default tự suy diễn**: theo đơn vị CB NV đăng nhập (BR-AUTH-08). CB NV có thể chỉnh nếu DN ở tỉnh khác. |
+| 7 | Địa chỉ chi tiết | text | Tùy chọn, ≤ 500 ký tự |
+| 8 | Loại doanh nghiệp | dropdown | Tùy chọn, FK → DANH_MUC (UC105) |
+| 9 | Quy mô | dropdown | Tùy chọn, enum SIEU_NHO/NHO/VUA. Auto-suggest theo BR-CALC-05 nếu CB NV nhập đủ Nhóm C, có thể override. Nếu trống → BR-CALC-07 trả `uu_tien = 1` (FIFO) khi phân công VV. |
+| 10 | Ngành nghề chính | dropdown | Tùy chọn, enum NONG_LAM/CONG_NGHIEP/THUONG_MAI |
+
+**Nhóm C — Thông tin bổ sung (tùy chọn):**
+
+| # | Trường | Loại | Ghi chú |
+|---|--------|------|---------|
+| 11 | Chức vụ người đại diện | text | — |
+| 12 | Giấy chứng nhận ĐKKD | text | Số GPKD |
+| 13 | Số lao động | number | ≥ 0. Dùng cho BR-CALC-05 auto-calc quy_mo + BR-CALC-07 điểm ưu tiên VV |
+| 14 | Doanh thu năm gần nhất | money (VNĐ) | ≥ 0. Cho BR-CALC-05 |
+| 15 | Tổng nguồn vốn | money (VNĐ) | ≥ 0. Cho BR-CALC-05 |
+| 16 | DN do phụ nữ làm chủ | checkbox | BR-CALC-07 ưu tiên +3 nếu tick |
+| 17 | Số lao động nữ | number | ≥ 0. BR-CALC-07 ưu tiên +2 nếu vượt ngưỡng |
+| 18 | Số lao động khuyết tật | number | ≥ 0. BR-CALC-07 ưu tiên +2 nếu ≥30% `so_lao_dong` |
+| 19 | Lĩnh vực kinh doanh (VSIC) | multi-select | FK → DANH_MUC loại `LINH_VUC_KINH_DOANH` (mã VSIC cấp 4 — FR-VIII-31) |
+| 20 | Ghi chú | text (long) | Ghi chú nội bộ CB NV |
+| 21 | File đính kèm | file[] | Tài liệu pháp lý (Giấy ĐKKD, CMND người đại diện…). PDF/DOC/DOCX/JPG/PNG, max 20MB/file |
+
+> **Lưu ý nguyên tắc bắt buộc (BA chốt 2026-05-30):** Form chỉ yêu cầu **2 trường bắt buộc tối thiểu**: `ma_so_thue` (Nhóm A #2) + `ten_doanh_nghiep` (Nhóm A #1). `tinh_thanh_id` (Nhóm B #6) tự suy diễn theo đơn vị CB NV đăng nhập — CB NV có thể chỉnh nếu cần. **15 trường còn lại tùy chọn** — CB NV nhập khi có thông tin (vd: gọi điện DN biết tên + MST thôi cũng đủ tạo; bổ sung email/địa chỉ/loại DN/ngành nghề/quy mô khi xử lý nghiệp vụ cụ thể qua SCR-V.III-02). Lý do bắt buộc tối thiểu: DN không tương tác phần mềm tại kênh này, không cần đầy đủ hồ sơ để tạo DN — chỉ cần định danh đủ để CB NV làm việc.
+
+#### Thông báo + Hành động
+
+| # | Vùng | Thành phần | Hành vi |
+|---|------|-----------|---------|
+| 1 | header | Tiêu đề "Thêm mới Doanh nghiệp" + breadcrumb "Quản lý DN > Thêm mới" | — |
+| 2 | nhóm A field 2 | Validation realtime MST | Khi blur: nếu chưa đủ 10 chữ số → inline lỗi `ERR-DN-MST-FORMAT`; nếu đủ 10 chữ số → AJAX check trùng → nếu trùng → modal block `ERR-DN-DUPLICATE` (xem dưới) |
+| 3 | nhóm B field 9 | Auto-suggest Quy mô | Khi nhập đủ #13 (so_lao_dong) + #14 (doanh_thu_nam) + #15 (tong_nguon_von) → auto-fill `quy_mo` theo BR-CALC-05; hiển thị icon ℹ + tooltip "Hệ thống đề xuất quy mô '{X}' theo Nghị định 80/2021. Bạn có thể chỉnh nếu cần" |
+| 4 | footer | Nút "Hủy" | Xác nhận nếu có thay đổi → quay về SCR-V.III-01 |
+| 5 | footer | Nút "Lưu" (primary) | Validate đầy đủ → submit FR-V.III-NEW-03 → toast "Đã tạo hồ sơ doanh nghiệp '{ten_dn}' (MST {mst})." → redirect SCR-V.III-01 (theo Phụ lục E §H7). **Sửa theo BA chốt 2026-05-30:** Không tạo TK, không gửi mail kích hoạt. Khi DN muốn theo dõi hồ sơ, DN tự đăng ký TK qua FR-VIII-22. |
+| 6 | modal | Modal `ERR-DN-DUPLICATE` | Block khi MST trùng. Nội dung: "Doanh nghiệp có mã số thuế '{mst}' đã tồn tại trong hệ thống: **{ten_dn_hien_co}**. Bạn muốn mở chi tiết DN hiện có?" + 2 nút **"Mở chi tiết"** (chuyển SCR-V.III-02 của DN hiện có) / **"Hủy"** (đóng modal, ở lại form, ô MST highlight đỏ) |
+| ~~7~~ | ~~error~~ | ~~Toast cảnh báo WRN-DN-MAIL-FAIL~~ | **BỎ theo BA chốt 2026-05-30** — FR không gửi mail nên không có toast này. |
+
+#### Quy tắc tương tác
+
+- Mặc định CB NV chỉ cần nhập 2 trường bắt buộc (`ma_so_thue` + `ten_doanh_nghiep`); 15 trường còn lại tùy chọn — CB NV nhập khi có thông tin.
+- **Sửa theo BA chốt 2026-05-30:** CB NV chỉ tạo hồ sơ DN. KHÔNG tạo TAI_KHOAN. Khi DN cần theo dõi hồ sơ → DN tự đăng ký TK qua FR-VIII-22 với MST; nếu MST đã tồn tại → DN dùng FR-VIII-26 (Quên mật khẩu) làm Claim Flow để nhận lại quyền truy cập.
+- Sau khi lưu thành công: redirect về SCR-V.III-01 theo Phụ lục E §H7 ("Sau khi thêm mới quay về danh sách").
+- DN mới luôn có `created_by = CB NV.id` để truy vết kênh tạo.
+
+**UX-Spec ref:** `dac-ta-man-hinh-chuc-nang-v3.5.md` — MH-VII-03 (sẽ bổ sung).
 
 ---
 
@@ -454,7 +699,7 @@ erDiagram
 | chuc_vu_dai_dien | text | N | | | Chức vụ người đại diện |
 | doanh_thu | number | N | | | Doanh thu (để xác định quy mô) |
 | so_lao_dong | number | N | | | Số lao động (để xác định quy mô) |
-| tong_nguon_von | number | N | | | Tổng nguồn vốn (để xác định quy mô theo NĐ 39/2018) |
+| tong_nguon_von | number | N | | | Tổng nguồn vốn (để xác định quy mô theo NĐ 80/2021) |
 | so_lao_dong_nu | number | N | | | Số LĐ nữ (NĐ55 Điều 4 ưu tiên) |
 | so_lao_dong_khuyet_tat | number | N | | | Số LĐ khuyết tật (NĐ55 Điều 4 ưu tiên) |
 | la_nu_lam_chu | boolean | N | | 0 | DN do phụ nữ làm chủ (NĐ55 Điều 4 ưu tiên) |
@@ -531,7 +776,7 @@ Nhóm này không có state machine. Entity DOANH_NGHIEP không có vòng đời
 | BR-DATA-04 | Auto-gen mã | FR-V.III-01 |
 | BR-DATA-05 | Audit trail | FR-V.III-01 |
 | BR-DATA-07 | Pagination | FR-V.III-01, 02 |
-| BR-CALC-05 | Kiểm tra quy mô DNNVV NĐ39/2018 | FR-V.III-01 |
+| BR-CALC-05 | Kiểm tra quy mô DNNVV NĐ80/2021 | FR-V.III-01 |
 
 ### BR-AUTH-01: Xác thực truy cập
 
@@ -581,7 +826,7 @@ Default: 20 rows/page, max: 100 rows/page.
 
 **Applied in (nhóm V.III):** FR-V.III-01, FR-V.III-02
 
-### BR-CALC-05: Kiểm tra quy mô DNNVV (NĐ39/2018)
+### BR-CALC-05: Kiểm tra quy mô DNNVV (NĐ80/2021)
 
 Ưu tiên phân công: (1) DN phụ nữ làm chủ, (2) DN nhiều LĐ nữ, (3) DN ≥30% LĐ khuyết tật, (4) FIFO. Trong nhóm V.III, rule này dùng để kiểm tra quy mô DN phù hợp với số lao động/doanh thu khi cập nhật hồ sơ.
 

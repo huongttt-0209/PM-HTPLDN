@@ -40,9 +40,11 @@ Tất cả 23 FR báo cáo kế thừa chung template TPL-REPORT-FULL (input, pr
 
 | Cấp | Phạm vi dữ liệu |
 |-----|----------------|
-| ĐP | Chỉ dữ liệu đơn vị ĐP |
-| BN | Dữ liệu BN + ĐP thuộc quản lý |
+| ĐP | Chỉ dữ liệu của chính đơn vị ĐP đó (cùng đơn vị) |
+| BN | Chỉ dữ liệu của chính đơn vị BN đó (cùng đơn vị) |
 | TW | Toàn quốc |
+
+> BN và ĐP là 2 loại đơn vị ngang cấp song song; BN không có ĐP trực thuộc. Mỗi đơn vị chỉ xem dữ liệu của chính đơn vị mình (`user.don_vi_id = record.don_vi_id`); BN và ĐP không thấy dữ liệu của nhau. Chỉ TW thấy toàn hệ thống.
 
 **Nguồn dữ liệu:** Đọc từ tất cả entity nghiệp vụ (HOI_DAP, VU_VIEC, KHOA_HOC, TU_VAN_VIEN, HO_SO_CHI_TRA, KE_HOACH_DANH_GIA, CHUONG_TRINH_HTPL...). CHỈ bản ghi đã duyệt.
 
@@ -82,7 +84,7 @@ Tất cả 23 FR báo cáo kế thừa chung template TPL-REPORT-FULL (input, pr
 | 6 | Định dạng kết quả: bảng dữ liệu + biểu đồ (nếu FR yêu cầu) | — |
 | 7 | Nếu xuất Excel: tạo file .xlsx theo TT17/2025 | — |
 | 8 | Nếu xuất PDF: tạo file .pdf giữ nguyên định dạng trình bày theo Thông tư 17/2025 (khổ A4, font Times New Roman cỡ 13) | — |
-| 9 | Giới hạn tối đa 50.000 dòng xuất; nếu vượt thì cắt + cảnh báo | BR-DATA-06 |
+| 9 | Giới hạn tối đa 10.000 dòng xuất; nếu vượt thì cắt + cảnh báo | BR-DATA-06 |
 | 10 | Ghi nhật ký thao tác (xem/xuất báo cáo) | BR-DATA-05 |
 
 **Output chung:**
@@ -109,7 +111,7 @@ Tất cả 23 FR báo cáo kế thừa chung template TPL-REPORT-FULL (input, pr
 | E1 | tu_ngay > den_ngay | ERR-RPT-01 | "Ngày bắt đầu phải trước hoặc bằng ngày kết thúc" | ERROR |
 | E2 | Khoảng thời gian > 366 ngày (trừ NAM) | ERR-RPT-02 | "Khoảng thời gian tối đa 1 năm. Sử dụng kỳ 'NAM' cho BC dài hơn" | ERROR |
 | E3 | Không có dữ liệu | INF-RPT-01 | "Không có dữ liệu báo cáo cho kỳ và đơn vị đã chọn" | INFO |
-| E4 | Export vượt 50.000 rows | WRN-RPT-01 | "Dữ liệu vượt 50.000 dòng. Hệ thống xuất 50.000 dòng đầu tiên" | WARNING |
+| E4 | Export vượt 10.000 rows | WRN-RPT-01 | "Dữ liệu vượt 10.000 dòng. Hệ thống xuất 10.000 dòng đầu tiên" | WARNING |
 | E5 | Timeout truy vấn > 30s | ERR-RPT-03 | "Truy vấn quá thời gian. Vui lòng thu hẹp khoảng thời gian hoặc bộ lọc" | ERROR |
 | E6 | Lỗi xuất file | ERR-RPT-04 | "Không thể tạo file xuất. Vui lòng thử lại" | ERROR |
 | E7 | Không có quyền | ERR-RPT-05 | "Bạn không có quyền xem báo cáo này" | ERROR |
@@ -433,7 +435,7 @@ Báo cáo khóa học đã kết thúc trong kỳ, phân theo hình thức, đơ
 **Màn hình:** SCR-IX-01 — [Trang Báo cáo Thống kê](#scr-ix-01-trang-báo-cáo-thống-kê)
 
 **Mô tả:**
-Báo cáo snapshot số lượng chuyên gia/tư vấn viên/người hỗ trợ đang hoạt động, phân theo loại, lĩnh vực, địa bàn, đơn vị.
+Báo cáo snapshot số lượng chuyên gia/tư vấn viên (CG/TVV) đang hoạt động, phân theo loại, lĩnh vực, đơn vị. `[STT96 UAT 2026-06-02: (1) bỏ chiều "địa bàn" — TVV/CG hoạt động toàn quốc theo NĐ 77/2008 Đ.19, thống kê theo đơn vị quản lý/công nhận; (2) bỏ NHT khỏi báo cáo này — NHT là cán bộ nội bộ, thống kê riêng]`
 
 **Tác nhân:** CB Nghiệp vụ / CB Phê duyệt (TW/BN/ĐP)
 
@@ -458,13 +460,13 @@ Báo cáo snapshot số lượng chuyên gia/tư vấn viên/người hỗ trợ
 | 1 | tong_tvv | number | Luôn | Tổng CG/TVV đang hoạt động |
 | 2 | so_tvv | number | Luôn | Số TVV |
 | 3 | so_cg | number | Luôn | Số CG |
-| 4 | so_nht | number | Luôn | Số NHT |
-| 5 | theo_don_vi[] | structured | Luôn | {don_vi, ten, tvv, cg, nht} |
+| ~~4~~ | ~~so_nht~~ | — | — | **BỎ [STT96 UAT 2026-06-02]** — báo cáo này chỉ đếm TVV/CG (đúng Công thức + tên báo cáo). NHT là cán bộ nội bộ, lưu entity riêng → thống kê ở báo cáo riêng |
+| 5 | theo_don_vi[] | structured | Luôn | {don_vi, ten, tvv, cg} `[STT96 UAT 2026-06-02: bỏ nht]` |
 | 6 | theo_linh_vuc[] | structured | Luôn | {linh_vuc, ten, so_luong} |
-| 7 | theo_dia_ban[] | structured | Luôn | {dia_ban, ten, so_luong} |
+| ~~7~~ | ~~theo_dia_ban[]~~ | — | — | **BỎ [STT96 UAT 2026-06-02]** — TVV/CG không có field địa bàn (NĐ 77/2008 Đ.19). Thống kê đơn vị dùng `theo_don_vi[]` (field 5 đã có) |
 
 **Acceptance Criteria (bổ sung):**
-- **Given** CB tạo BC snapshot **When** hiển thị **Then** tổng TVV/CG/NHT phân theo đơn vị + lĩnh vực + địa bàn
+- **Given** CB tạo BC snapshot **When** hiển thị **Then** tổng TVV/CG phân theo đơn vị + lĩnh vực + loại `[STT96 UAT 2026-06-02: bỏ "địa bàn"]`
 - **Given** CB lọc loại CG **When** filter **Then** chỉ hiển thị Chuyên gia
 
 ---
@@ -1062,7 +1064,7 @@ Một trang báo cáo thống nhất cho tất cả 23 loại BC. Dropdown chọ
 | | UC128 | BC Vụ việc theo thời gian | — | Line chart trend |
 | **Đào tạo** | UC129 | BC Lớp đào tạo đang diễn ra | Hình thức, Lĩnh vực | Bar (snapshot) |
 | | UC130 | BC Lớp đào tạo đã diễn ra | Hình thức | Bar + Trend |
-| **CG/TVV** | UC131 | BC Số lượng CG/TVV | Loại TVV, Lĩnh vực CM, Địa bàn | Donut + Bar |
+| **CG/TVV** | UC131 | BC Số lượng CG/TVV | Loại TVV, Lĩnh vực CM, Đơn vị (quản lý/công nhận) | Donut + Bar |
 | **Đánh giá** | UC132 | BC Đánh giá hiệu quả HTPL | Đợt đánh giá | Bar + Radar |
 | | UC133 | BC Chất lượng đào tạo | Khóa học cụ thể | Bar + Line |
 | **VV theo chiều phân tích** | UC134 | BC Vụ việc theo đơn vị quản lý | — | Stacked bar |
@@ -1085,7 +1087,7 @@ Một trang báo cáo thống nhất cho tất cả 23 loại BC. Dropdown chọ
 - Bảng cuộn ngang trên màn hình 1024-1279px
 - Export XLSX/PDF chèn tiêu đề BC + thông tin kỳ + đơn vị + ngày tạo vào header file
 - Biểu đồ có nút toggle "Hiện/Ẩn" để tối ưu không gian cho bảng lớn
-- Max 50.000 rows xuất; nếu vượt: cảnh báo + xuất 50.000 dòng đầu
+- Max 10.000 rows xuất; nếu vượt: cảnh báo + xuất 10.000 dòng đầu
 - Timeout 30s: hiển thị thông báo quá thời gian
 
 ---

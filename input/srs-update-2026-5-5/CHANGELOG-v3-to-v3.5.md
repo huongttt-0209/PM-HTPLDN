@@ -619,9 +619,9 @@
 
 **Ngày apply:** 2026-05-06
 **Delta report nguồn:** `v3.5-delta-reports/v3.5-delta-fr-16.md`
-**Cách tiếp cận:** Seed từ `srs-v3/srs-fr-16-api.md` (1.175 dòng) → cherry-pick 8 thay đổi từ `srs-v4/srs-fr-16-api.md` (BA quyết định OUT Thay đổi 9 = block bookkeeping/Lịch sử thay đổi/GAP-XII-01,03/ghi chú "2 luồng API"). File v3.5 cuối cùng = 1.219 dòng.
+**Cách tiếp cận:** Seed từ `srs-v3/srs-fr-16-api.md` (1.175 dòng) → cherry-pick 8 thay đổi từ `srs-v4/srs-fr-16-api.md` (BA quyết định OUT Thay đổi 9 = block bookkeeping/Lịch sử thay đổi/GAP-XII-01,03/ghi chú "2 luồng API"). Sau cập nhật STT14 ngày 2026-06-25, số dòng file thay đổi theo nội dung phát sinh; không dùng số dòng 1.219 làm baseline kiểm duyệt nữa.
 
-**Số thay đổi đã apply:** 8 thay đổi cherry-pick + 1 quyết định OUT (Thay đổi 9) + 2 phát hiện V4-CHƯA-SỬA hoãn xử lý (Thay đổi 10, 11)
+**Số thay đổi đã apply:** 8 thay đổi cherry-pick + 1 quyết định OUT (Thay đổi 9) + 1 phát hiện V4-CHƯA-SỬA còn hoãn xử lý (Thay đổi 11) + cập nhật bổ sung STT14 ngày 2026-06-25 đã apply Thay đổi 10 (cặp API `TO_CHUC_TU_VAN` FR-XII-22/23)
 
 ### Danh sách thay đổi nghiệp vụ
 
@@ -733,7 +733,7 @@
 
 ### Phát hiện V4-CHƯA-SỬA hoãn xử lý (cần lượt review tiếp theo)
 
-- **Thay đổi 10** (Cặp API chia sẻ + tìm kiếm TO_CHUC_TU_VAN — Yêu cầu mục 02 yêu cầu): KHÔNG apply ở v3.5 vì v4 chưa có pattern. Cần CĐT cấp 2 số UC mới cho cặp này (UC189/190 đã free sau Thay đổi 5). FR-XII-XX hiện vẫn chỉ có 18 FR (9 cặp), không có TO_CHUC_TU_VAN.
+- **Thay đổi 10** (Cặp API chia sẻ + tìm kiếm TO_CHUC_TU_VAN — Yêu cầu mục 02 yêu cầu): **Đã apply sau STT14 API review 2026-06-25** vào `srs-fr-16-api.md` theo phương án đã duyệt: thêm FR-XII-22 `GET /api/v1/to-chuc-tu-van` và FR-XII-23 `GET /api/v1/to-chuc-tu-van/search`; chỉ trả `TO_CHUC_TU_VAN.trang_thai = HOAT_DONG`, `cong_khai = 1`, `is_deleted = false`; filter theo `linh_vuc_id[]`, `loai_hinh[]`, `don_vi_id[]`; output dùng đúng field entity + Common Public Fields. Do FR-XII-22 trước đó đang dùng cho chi tiết biểu mẫu, chi tiết biểu mẫu được đổi sang FR-XII-24 trong cùng lượt cập nhật.
 - **Thay đổi 11** (4 fields BTP `chuc_vu`, `noi_cong_tac`, `so_qd_cong_bo`, `ngay_qd_cong_bo` + đổi `kinh_nghiem` → `so_nam_kinh_nghiem` trong outputs FR-XII-05 — Yêu cầu mục 03 yêu cầu): KHÔNG apply ở v3.5 vì v4 chưa có pattern. Outputs FR-XII-05 (line 388-396) vẫn 7 fields cũ (id, ho_ten, loai, linh_vuc, dia_ban, to_chuc_hanh_nghe, trang_thai). Phụ thuộc FR-04 v3.5 đã thêm 5 trường này vào entity TU_VAN_VIEN — khi review tiếp theo có thể đồng bộ outputs FR-XII-05.
 
 ### Cảnh báo & phụ thuộc cross-FR (Pha 3 reconcile)
@@ -747,7 +747,7 @@
 7. **Phụ thuộc FR-09 hoặc srs-v3.md §3.4.3.55** (HO_SO_PHAP_LY_DN owner): Thay đổi 5 reference entity HO_SO_PHAP_LY_DN với 9 attributes. F-11 lượt 6 (2026-05-02) đã thiết kế entity này. FR-16 chỉ reference. Pha 3 verify entity owner thực sự ở đâu (FR-09 hay srs-v3.md gốc).
 8. **Phụ thuộc FR-09** (BIEU_MAU owner): Thay đổi 1.6 rename `la_cong_khai` → `cong_khai`. FR-09 v3.5 phải đồng bộ rename trong entity gốc. Pha 3 verify.
 9. **Outputs FR-XII-05 thiếu 4 fields BTP** (Thay đổi 11 hoãn): khi đồng bộ outputs với FR-04 entity TU_VAN_VIEN sau lượt review tiếp theo, dev cần biết outputs API có thể thay đổi.
-10. **Cặp API TO_CHUC_TU_VAN chưa có** (Thay đổi 10 hoãn): khi BA chấp nhận thêm cặp API này ở lượt review tiếp theo, sẽ thành FR-XII-19/20 với UC189/190 (đã free sau Thay đổi 5).
+10. **Cặp API TO_CHUC_TU_VAN**: đã bổ sung theo STT14 vào FR-XII-22/23; cần đồng bộ baseline transaction/UC chính thức theo quyết định đã duyệt khi xuất bản bộ SRS.
 
 
 #### Drift fix sau deep review (rev. 2 — 2026-05-06)

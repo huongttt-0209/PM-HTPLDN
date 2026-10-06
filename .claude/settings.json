@@ -53,51 +53,51 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-todo-concise.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-todo-concise.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-todo-coverage-tag.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-todo-coverage-tag.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-todo-counts-sync.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-todo-counts-sync.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-todo-green-strict.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-todo-green-strict.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-todo-pass-strict.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-todo-pass-strict.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-bug-template-sections.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-bug-template-sections.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-bug-test-method.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-bug-test-method.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-report-path-convention.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-report-path-convention.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-bug-report-ordering.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-bug-report-ordering.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-bug-report-date-time.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-bug-report-date-time.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-bug-report-severity-sync.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-bug-report-severity-sync.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/check-retest-no-duplicate.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-retest-no-duplicate.py\""
           }
         ]
       }
@@ -108,43 +108,43 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/usr/bin/python3 $CLAUDE_PROJECT_DIR/.claude/hooks/auto-bump-bug-report-date.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/auto-bump-bug-report-date.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/auto-rescan-todo.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/auto-rescan-todo.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/sync-todo-deps.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/sync-todo-deps.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-todo-ready-flip.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-todo-ready-flip.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-todo-stale-bug-closure.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-todo-stale-bug-closure.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/auto-rename-pass-prefix.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/auto-rename-pass-prefix.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/auto-sync-todo-bug-status.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/auto-sync-todo-bug-status.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/check-bug-report-image-discipline.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check-bug-report-image-discipline.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/auto-regen-master-index.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/auto-regen-master-index.py\""
           },
           {
             "type": "command",
-            "command": "/usr/bin/python3 /Users/teamai/Downloads/antigravity/QA/skilkk/.claude/hooks/auto-regen-module-summary.py"
+            "command": "/usr/bin/python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/auto-regen-module-summary.py\""
           }
         ]
       }
